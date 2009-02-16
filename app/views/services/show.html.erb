@@ -1,3 +1,4 @@
+
 <% content_for :title do %><%=h @service.name %> - <%=h @service.upc %><% end %>
 
 <div class="column3-unit-left">
@@ -46,11 +47,17 @@
 			<div class="table_row">
 				<div class="table_cell_80"><%=link_to location.name, :controller => "movements", :search => @service.upc %></div>
 				<div class="table_cell">
-					<% if location.inventory(@service) > 0 %> 
-						Si
+					<%= puts location.price_groups.inspect %>
+					<% if location.price_groups.find_by_price_group_name_id(User.current_user.price_group_name.id) %>
+						<% if @service.available(location.price_groups.find_by_price_group_name_id(User.current_user.price_group_name.id))%>
+							Si
+						<% else %>
+							No
+						<% end %>
 					<% else %>
-						No
+							No
 					<% end %>
+				</div>
 			</div>
 		<% end %>
 	</div>

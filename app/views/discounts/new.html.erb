@@ -1,4 +1,6 @@
-<% form_for(@discount, :url => {:action => 'create'}) do |f| %>
+
+
+<% form_for(@discount, :url => {:controller => 'discounts', :action => 'create'}) do |f| %>
 <%= render   :partial    => "fields",
             :locals     => {:f => f,
             								:button_text => "Guardar Nuevo Discuento",
@@ -6,5 +8,5 @@
                             :mode         => "new" }
 %>
 <% end %>
-<%= link_to "Añadir otro producto | ", new_line_path(:order_id => @discount.id), :id => "add_new_requirement", :class => 'action'  %>	  
+<%= link_to "Añadir otro producto | ", new_requirement_path(:discount_id => @discount.id), :id => "add_new_requirement", :class => 'action'  %>	  
 <%= render :partial => 'new_req_form' %>

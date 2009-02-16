@@ -1,1 +1,2 @@
+
 page.insert_html :bottom, :requirements, :partial => 'discounts/requirement', :object => @requirement

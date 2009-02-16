@@ -1,3 +1,20 @@
+# Jade Inventory Control System
+#Copyright (C) 2009  Jared T. Martin
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 class RequirementsController < ApplicationController
   # GET /requirements
   # GET /requirements.xml
@@ -34,9 +51,11 @@ class RequirementsController < ApplicationController
   
   def new
     @requirement = Requirement.new()
+    logger.debug "Were ready to save the requirement"
     @requirement.bar_code = params[:requirement][:bar_code]
     @requirement.product_id = params[:requirement][:product_id]
     @requirement.quantity = 1
+    logger.debug "Were ready to go back to the client"
     respond_to do |wants|
       wants.html do
         redirect_to '/discounts/' + @requirement.product_id.to_s + '/edit'

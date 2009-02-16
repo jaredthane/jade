@@ -1,3 +1,22 @@
+# Jade Inventory Control System
+#Copyright (C) 2009  Jared T. Martin
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Filters added to this controller apply to all controllers in the application.
+# Likewise, all the methods added will be available for all controllers.
+
 class Product < ActiveRecord::Base
 
 	HUMANIZED_ATTRIBUTES = {
@@ -111,8 +130,12 @@ class Product < ActiveRecord::Base
 		end
 	end
 	def quantity(location_id = User.current_user.location_id)
-		i=inventories.find_by_entity_id(location_id)
-		return i.quantity if i
+		if self.product_type_id!=4
+			i=inventories.find_by_entity_id(location_id)
+			return i.quantity if i
+		else
+			return nil
+		end
 	end
 	def to_order(location_id = User.current_user.location_id)
 		i=inventories.find_by_entity_id(location_id)
@@ -131,84 +154,147 @@ class Product < ActiveRecord::Base
 	def unit_name
  	 unit.name if unit
 	end
-
 	def unit_name=(name)
 		self.unit = Unit.find_or_create_by_name(name) unless name.blank?
 	end
-	
-	def price(price_group = User.current_user.current_price_group)
+	def available(price_group = User.current_user.current_price_group)
 		priceobj = price_group.prices.find_by_product_id(self.id)
-		relative_price = priceobj.relative
-		static_price = priceobj.fixed
-		return (cost||0) * (relative_price||0) + (static_price||0)
+		if priceobj
+			return priceobj.available
+		end
 	end
-	
+	def price(price_group = User.current_user.current_price_group)
+		if self.product_type_id == 2 # For calculating price of a discount
+			logger.info "Getting price from requirements"
+			priceobj = price_group.prices.find_by_product_id(self.id)
+			if priceobj
+				logger.info "found priceobj"
+				relative_price = (priceobj.relative||0)
+				static_price = (priceobj.fixed||0)
+			else
+				logger.info "unable to find priceobj"
+				relative_price =0
+				static_price =0
+			end
+			sum = 0
+			for req in self.requirements
+				logger.info "checking a req"
+				sum += req.price(price_group)
+			end
+			logger.info "sum=#{sum.to_s}"
+			price = (sum * relative_price) - static_price
+			logger.debug "price1=#{price.to_s}"
+		else
+			priceobj = price_group.prices.find_by_product_id(self.id)
+			relative_price = priceobj.relative
+			static_price = priceobj.fixed
+			price = (cost||0) * (relative_price||0) + (static_price||0)
+		end
+		logger.debug "price2=#{price.to_s}"
+		return price
+	end
 	def relative_price(price_group = User.current_user.current_price_group)
 		priceobj = price_group.prices.find_by_product_id(self.id)
-		return priceobj.relative
+		if priceobj
+			return priceobj.relative
+		end
 	end
 	def relative_price=(new_price, price_group = User.current_user.current_price_group)
 		priceobj = price_group.prices.find_by_product_id(self.id)
-		priceobj.relative=new_price
-		priceobj.save
+		if priceobj
+			priceobj.relative=new_price
+			priceobj.save
+		end
 	end
 	def static_price(price_group = User.current_user.current_price_group)
 		priceobj = price_group.prices.find_by_product_id(self.id)
-		return priceobj.fixed
+		if priceobj
+			return priceobj.fixed
+		end
 	end
 	def static_price=(new_price, price_group = User.current_user.current_price_group)
 		priceobj = price_group.prices.find_by_product_id(self.id)
-		priceobj.fixed=new_price
-		priceobj.save
-	end
-	def new_requirement_attributes=(new_attributes)
-		#puts "saving new attributes"
-		#puts "new_attributes we received has "+ new_attributes.to_s
-		new_attributes.each do |attributes|
-			#puts "ready to save attributes=" + attributes.to_s 
-			requirement=requirements.new(attributes)
-			requirement.product_id = self.id
-			requirement.save()
+		if priceobj
+			priceobj.fixed=new_price
+			priceobj.save
 		end
 	end
-	def requirement_attributes=(new_attributes)
-		##puts "new_attributes we received has "+ new_attributes.to_s
-		requirements.reject(&:new_record?).each do |requirement|													#Go through each existing attribute
-			##puts "ready to save attributes requirement=" + requirement.to_s 
-			##puts "requirement.id=" + requirement.id.to_s 
-			attributes = new_attributes[requirement.id.to_s]												#Grab new values
-			if attributes
-				##puts "saving attributes" + attributes.to_s
-				requirement.attributes = attributes																						#stick them in the requirement
-				new_attributes.delete(requirement) 																		#remove requirement from the list
-			else																																						#if its not in the list, delte it.
-				##puts "deleting requirement " + requirement.required.name
-				requirements.delete(requirement)
-			end
-		end
-		puts new_attributes.inspect
-		for req_attributes in new_attributes																		#Go through all the leftover ones
-			#puts "ready to save attributes=" + attributes.to_s 
-			requirement=requirements.new(req_attributes)																				# and create them
-			requirement.product_id = self.id
-			requirement.save()
-		end
-	end
-	def existing_requirement_attributes=(new_attributes)
-		#puts "new_attributes we received has "+ new_attributes.to_s
-		requirements.reject(&:new_record?).each do |requirement|
-			#puts "ready to save attributes requirement=" + requirement.to_s 
-			#puts "requirement.id=" + requirement.id.to_s 
-			attributes = new_attributes[requirement.id.to_s]
-			if attributes
-				#puts "saving attributes" + attributes.to_s
-				requirement.attributes = attributes
-			else
-				#puts "deleting requirement " + requirement.required.name
-				requirements.delete(requirement)
-			end
-		end
-	end
+#	def new_requirement_attributes=(incoming_reqs)
+#		#puts "saving new attributes"
+#		#puts "incoming_reqs we received has "+ incoming_reqs.to_s
+#		incoming_reqs.each do |incoming_req|
+#			#puts "ready to save incoming_req=" + incoming_req.to_s 
+#			requirement=requirements.new(incoming_req)
+#			requirement.product_id = self.id
+#			requirement.save()
+#		end
+#	end
+#def requirement_attributes=(new_attributes)
+#		##puts "new_attributes we received has "+ new_attributes.to_s
+#		requirements.reject(&:new_record?).each do |requirement|													#Go through each existing attribute
+#			##puts "ready to save attributes requirement=" + requirement.to_s 
+#			##puts "requirement.id=" + requirement.id.to_s 
+#			attributes = new_attributes[requirement.id.to_s]												#Grab new values
+#			if attributes
+#				##puts "saving attributes" + attributes.to_s
+#				requirement.attributes = attributes																						#stick them in the requirement
+#				new_attributes.delete(requirement.id.to_s) 																		#remove requirement from the list
+#			else																																						#if its not in the list, delte it.
+#				##puts "deleting requirement " + requirement.required.name
+#				requirements.delete(requirement)
+#			end
+#		end
+#		#puts requirement_attributes.inspect
+##		requirement_attributes.each_value do |attributes|																				#Go through all the leftover ones
+##			#puts "ready to save attributes=" + attributes.to_s 
+##			requirement=requirements.new(attributes)																				# and create them
+##			requirement.product_id = self.id
+##			requirement.save()
+##		end
+#	end
+#	def requirement_attributes=(incoming_reqs)
+#		#puts "incoming_reqs we received has "+ incoming_reqs.to_s
+#		logger.info "--incoming_reqs we received has=#{incoming_reqs.inspect}"
+#		requirements.reject(&:new_record?).each do |requirement|												#	Go through each existing attribute
+#			logger.info "=ready to save incoming_req requirement=" + requirement.to_s 
+#			logger.info "requirement.id=" + requirement.id.to_s 
+#			incoming_req = incoming_reqs[requirement.id.to_s]												#Grab new values
+#			logger.info "incoming_req=#{incoming_req.inspect}"
+#			if incoming_req
+#				logger.info "UPDATE=saving incoming_req" + incoming_req.to_s
+#				requirement.attributes = incoming_req																						#stick them in the requirement
+#				incoming_reqs.delete(requirement.id.to_s)   
+#				logger.info "incoming_req.id.to_s=#{incoming_req.id.to_s.to_s}"
+#				logger.info "--incoming_reqs=#{incoming_reqs.inspect}"															#remove requirement from the list
+#			else																																					#	if its not in the list, delte it.
+#				logger.info "DELETE=deleting requirement " + requirement.required.name
+#				requirements.delete(requirement)
+#			end
+#		end
+#		logger.info "--incoming_reqs=#{incoming_reqs.inspect}"
+#		for incoming_req in incoming_reqs																			#Go through all the leftover ones
+#			logger.info "NEW=saving new incoming_req=#{incoming_req.inspect}"
+#			
+#			new_requirement=requirements.new(incoming_req)																				# and create them
+#			new_requirement.product_id = self.id
+#			new_requirement.save()
+#		end
+#	end
+#	def existing_requirement_attributes=(incoming_reqs)
+#		#puts "incoming_reqs we received has "+ incoming_reqs.to_s
+#		requirements.reject(&:new_record?).each do |requirement|
+#			#puts "ready to save incoming_req requirement=" + requirement.to_s 
+#			#puts "requirement.id=" + requirement.id.to_s 
+#			incoming_req = incoming_reqs[requirement.id.to_s]
+#			if incoming_req
+#				#puts "saving incoming_req" + incoming_req.to_s
+#				requirement.attributes = incoming_req
+#			else
+#				#puts "deleting requirement " + requirement.required.name
+#				requirements.delete(requirement)
+#			end
+#		end
+#	end
 	def create_requirements
 		requirements.each do |requirement|
 			requirement.product_id = self.id

@@ -1,3 +1,6 @@
+
+
+
 <% content_for :title do %>Detalles del <%= @entity.entity_type.name %> "<%= @entity.name %>"<% end %>
 
   <% if @entity.entity_type_id !=3 and @entity.birthday? %>  
@@ -11,7 +14,10 @@
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
 		<p>
 			<b>Nacimiento</b><br />		
-			<%=h @entity.birth.strftime('%B %d') %>
+			<% if @entity.birth %>
+				<%=h @entity.birth.strftime('%B %d') %>
+			<% end %>
+			
 		</p>
 	<% end %>
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
@@ -29,13 +35,19 @@
 		</p>
 		<p>
 			<b>Grupo de Precios</b><br />		
-			<%=h @entity.price_group_name.name %>
+			<% if @entity.price_group_name %>
+				<%=h @entity.price_group_name.name %>
+			<% end %>
+			
 		</p>
 	<% end %>
 	<% if @entity.entity_type.id == 3 %>
 		<p>
 			<b>Grupo de Precios por Defecto</b><br />		
-			<%=h @entity.price_group.price_group_name.name %>
+				<% if @entity.price_group %>
+					<%=h @entity.price_group.price_group_name.name %>
+				<% end %>
+			
 		</p>
 	<% end %>
 </div>

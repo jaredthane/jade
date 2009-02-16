@@ -1,3 +1,20 @@
+# Jade Inventory Control System
+#Copyright (C) 2009  Jared T. Martin
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
 class ProductsController < ApplicationController
   # GET /products
   # GET /products.xml
@@ -60,7 +77,9 @@ class ProductsController < ApplicationController
     	i=Inventory.new(:entity=>e, :product=>@product, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
     	i.save
     end
-    for g in PriceGroup.all; Price.create(:product_id=>@product.id, :price_group_id => g.id); end
+    logger.debug "params:product:static_price= #{params[:product][:static_price].to_s}"
+    logger.debug "params[:product][:relative_price]=#{params[:product][:relative_price].to_s}"
+    for g in PriceGroup.all; Price.create(:product_id=>@product.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price]); end
     Warranty.create(:product=>@product, :price => 0, :months =>0)
     respond_to do |format|
       if @product.save

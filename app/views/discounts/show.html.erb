@@ -1,9 +1,18 @@
-<% content_for :title do %><%=h @discount.name %> - <%=h @discount.upc %><% end %>
 
+
+
+<% content_for :title do %><%=h @discount.name %> - <%=h @discount.upc %><% end %>
+<h2>
+	<div class="table_cell">Mostrando precios del grupo: <%= current_user.current_price_group.price_group_name.name %></div>
+</h2>
 <div class="column2-unit-left">
 	<p>
-	  <b>Precio</b><br />
-	    <%=h number_to_currency(@discount.price) %>
+	  <b>Discuento Fijo</b><br />
+	    <%=h number_to_currency(@discount.static_price) %>
+	</p>
+	<p>
+	  <b>Discuento Relativo</b><br />
+	    <%=h number_to_currency(@discount.relative_price) %>
 	</p>
 	<p>
     <b>Catagoría</b><br />
@@ -14,8 +23,8 @@
 </div>
 <div class="column2-unit-right">
 	<p>
-		<b>Costo</b><br />
-		  <%=h number_to_currency(@discount.cost) %>
+	  <b>Discuento Total Actual</b><br />
+	    <%=h number_to_currency(@discount.price) %>
 	</p>
 </div>
 <hr class="clear-contentunit" />
@@ -27,17 +36,21 @@
 	<b>Requisitos:</b>
 	<div>
 		<div class="table_header_row">
-			<div class="table_cell_20">UPC</div>
-			<div class="table_cell_20">Nombre de Producto</div>
-			<div class="table_cell_10">Cantidad</div>
-			<div class="table_cell">Acciones </div>
+			<div class="table_cell_25">Nombre de Producto</div>
+			<div class="table_cell_15">Cantidad</div>
+			<div class="table_cell_15">Discuento Fijo</div>
+			<div class="table_cell_15">Discuento Relativo</div>
+			<div class="table_cell_15">Total de Discuento</div>
+			<div class="table_cell">UPC</div>
 		</div>
 		<% for requirement in @discount.requirements %>
 			<div class="table_row">
-				<div class="table_cell_20"><%=link_to requirement.required.upc, requirement.required %></div>
-				<div class="table_cell_20"><%=link_to requirement.required.name, edit_discount_path(requirement.required) %></div>
-				<div class="table_cell_10"><%=h requirement.quantity %></div>
-				<div class="table_cell"><%=link_to 'Remover', requirement.product %></div>
+				<div class="table_cell_25"><%=link_to requirement.required.name, edit_discount_path(requirement.required) %></div>
+				<div class="table_cell_15"><%=h requirement.quantity %></div>
+				<div class="table_cell_15"><%=h requirement.static_price %></div>
+				<div class="table_cell_15"><%=h requirement.relative_price %></div>
+				<div class="table_cell_15"><%=h requirement.price %></div>
+				<div class="table_cell"><%=link_to requirement.required.upc, requirement.required %></div>
 			</div>
 		<% end %>
 	</div>

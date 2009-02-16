@@ -1,3 +1,22 @@
+# Jade Inventory Control System
+#Copyright (C) 2009  Jared T. Martin
+
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU General Public License as published by
+#    the Free Software Foundation, either version 3 of the License, or
+#    (at your option) any later version.
+
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU General Public License for more details.
+
+#    You should have received a copy of the GNU General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Filters added to this controller apply to all controllers in the application.
+# Likewise, all the methods added will be available for all controllers.
+
 class Order < ActiveRecord::Base
 	has_many :lines, :dependent => :destroy
 	has_many :products, :through => :lines
@@ -9,7 +28,6 @@ class Order < ActiveRecord::Base
     :vendor => "Proveedor",
     :client => "Cliente"
   }
-	attr_accessor :comments
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
@@ -65,31 +83,7 @@ class Order < ActiveRecord::Base
 		end #discount in get_discounts
 	end #check_for_discounts
 	
-	def new_line_attributes=(line_attributes)
-		#puts "trying to save lines"
-		if !self.new_record?
-			line_attributes.each do |attributes|
-				line=lines.new(attributes)
-				line.order_id = self.id
-				line.save()
-				##puts "line order_id set to " + line.order_id.to_s
-				##puts "line product name is " + line.product.name
-			end
-		end
-	end
-	
-	def existing_line_attributes=(line_attributes)
-		#puts "line attributes=" + line_attributes.to_s
-		lines.reject(&:new_record?).each do |line|
-			attributes = line_attributes[line.id.to_s]
-			if attributes
-				line.attributes = attributes
-				line.save
-			else
-				lines.delete(line)
-			end
-		end
-	end
+
 	
 	def total_price
 		total=0

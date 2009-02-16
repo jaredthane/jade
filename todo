@@ -1,7 +1,10 @@
-================= Goals:  =======================================
-
+================= Required:  =======================================
+Fix Discounts
+Make discounts calculate prices based on sum of reqs
+================= Desired:   =======================================
 make combos work
-================= To Do =======================================
+License Agreement
+================= PostPoned: =======================================
 should be able to delete sites
 price_group must be set for every site when created
 price_group_name must be set for every client when created
@@ -30,8 +33,6 @@ Create pedidos/compras/ventas pendientes for ones that haven't been received/pai
 Need view "outstanding accounts"
 Add cancel button to each edit page.
 Make column headers links to sort 
-From Orders page should be able to click on Pagos -> Anadir Pago para este Pedido
-Should add Catagories to Products
 Need to make controller search for combos and warranties when submitting sales
 need to create form to create and edit combos
 make show and edit the same on as many models as possible, only enabling the feilds the user has permission to change
@@ -43,14 +44,12 @@ Should be able to serch products on orders
 must be able to find order by date
 format show user page
 make buttons and link have same text size on edit order form
-replace most selects with autocomplete fields
-make autocompletes work on inserted lines
 replace selects for serial numbers with autocomplete fields - new should be able to create
 get date slider from the guy that made restful auth, need double slider.
 should be able to see serial numbers on product show, and order show&edit should be clickable
 need to format show serialized product page
 need to make sure serial number is for correct product
-new entity doesn't work
+
 need to remove discounts when products are removed from an order
 add forget and change password functionality as per http://railsonedge.blogspot.com/2008/03/rails-forum-restful-authenticationpart.html
 show flash message on previous page if they don't have permissions
@@ -69,22 +68,15 @@ different costs for each location
 need to be able to modify price groups
  - should create prices for every product when creating a new group
  - should be able to copy prices in view to another group
-PDFs
-services
-calculate cost of products dynamicaly
 pay aheads
-print receipts
-types of clients - consumidor final, credito fiscal
 logs with security
-need page to add and remove availablility of services in locations (create movements for the services in the locations)
 products show should show inventory for each location and links to a list of movements for that product in those locations
-do not allow changing lines on order that have been marked as received.
+
 have link on the bottom to permit saving a comment with movements made on submit
 set title at top of firefox tab to something nice
 need to add control to change whether or not a product is serialized from the product edit page or at least the new page
 redirect users somewher when they are not authorized to access the requested page.
 		(can I remove links they don't have rights to?)
-hide costs from unauthorized users
 ========================= Double Check before done =================================
 Check that all text fields are using class=field and buttons too
 	Users, entities  -Done
@@ -112,8 +104,22 @@ internal consumption should be entity #1 and should not have an entity type.
 Make names in index views clickable bringing to show
 How do I get money formatted text?
 Format Payments
+do not allow changing lines on order that have been marked as received.
+PDFs
+services
+calculate cost of products dynamicaly
 Format orders index
+need page to add and remove availablility of services in locations (create movements for the services in the locations)
+
+From Orders page should be able to click on Pagos -> Anadir Pago para este Pedido
+Should add Catagories to Products
+hide costs from unauthorized users
+print receipts
+types of clients - consumidor final, credito fiscal
+replace most selects with autocomplete fields
+make autocompletes work on inserted lines
 Need views that show just Compras or Ventas
+new entity doesn't work
 How do I get client.orders to work:
 	no field entitiy_id (its client or vendor) 
 	how do I specify?
@@ -217,3 +223,7 @@ names for numbers on facturas
 fixed formating of prices on create order forms
 added returned and presented to payments
 updated index, edit, new and show payments
+--- Version 0.62 ---
+Made link to create new entity at bottom of entitiy index direct to right entity type
+fixed creation of products to set price correctly
+added fixed and relative fields for rquirements and discounts

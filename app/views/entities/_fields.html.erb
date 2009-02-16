@@ -1,3 +1,5 @@
+
+
 <div class="column2-unit-left">
 	<p>
 		<b>Nombre</b><br />
@@ -67,13 +69,8 @@
 		<%= f.text_field :giro, :class => 'field' %>
 	</p>
 	<% end %>
-	<% if mode == 'new'  %>
-		<p>
-			<b>Tipo</b><br />
-			<%= f.collection_select(:entity_type_id, get_entity_types, :id, :name) %>
-		</p>
-	<% end %>
-	<% if mode == 'edit' and (@entity.entity_type_id == 2 or @entity.entity_type_id == 5) %>
+<br/>
+	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>
 			<b>Tipo</b><br />
 			<%= f.collection_select(:entity_type_id, get_client_types, :id, :name) %>

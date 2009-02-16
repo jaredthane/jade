@@ -1,3 +1,5 @@
+
+
 <% case @entity_type
 	when 'all' %>
 		<% content_for :title do %>Lista de Entidades<% end %>
@@ -22,10 +24,14 @@
     <div class="table_cell_30">
     <% if entity.entity_type %>
 		  <% case entity.entity_type.id
-					 when 3 %>
-					<%= h entity.price_group.price_group_name.name[0..25] %>
+				when 3 %>
+					<% if entity.price_group %>
+						<%= h entity.price_group.price_group_name.name[0..25] %>
+					<% end %>
 				<% when 2,5 %>
-					<%= h entity.price_group_name.name[0..25] %>
+					<% if entity.price_group_name %>
+						<%= h entity.price_group_name.name[0..25] %>
+					<% end %>
 			<% end %>
 		<% end %>
     </div>
@@ -35,5 +41,11 @@
 </div>
 
 <br />
-
-<%= link_to 'Nueva entidad', new_entity_path, :class => 'action' %>
+<% case @entity_type
+	 when 'sites' %>
+		<%= link_to 'Nuevo sitio', "/sites/new", :class => 'action' %>
+	<% when 'vendors' %>
+		<%= link_to 'Nuevo proveedor', "/vendors/new", :class => 'action' %>
+	<% when 'clients' %>
+		<%= link_to 'Nuevo cliente', "/clients/new", :class => 'action' %>
+<% end %>

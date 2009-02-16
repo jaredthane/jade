@@ -1,9 +1,11 @@
+
+
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "discount_edit" %>
 <% end %>
 <% content_for :title do %><%= heading %><% end %>
 
-<%= error_messages_for :product %>
+<%= error_messages_for :discount %>
 		
 	  <%= f.hidden_field :unit_id, :value => 1 %>
 	  <%= f.hidden_field :product_type_id, :value => 2 %>
@@ -14,7 +16,7 @@
 		  <%= f.text_field :name, :class => 'field' %>
 		</p>
 		 <p>
-		  <b>Precio</b><br />
+		  <b>Discuento Fijo</b><br />
 		  <%= f.text_field :static_price, :class => 'field' %>
 		</p>
 		<p><b>Catagoría</b><br />
@@ -22,6 +24,7 @@
 					{:class => 'field', :size=>30 }, 
 					{:url => '/product_catagories.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 		</p>
+		
 	</div>
 	<div class="column2-unit-right">
 		
@@ -30,6 +33,10 @@
 	  <%= f.text_field :upc, :class => 'field' %>
 	</p>
 
+		 <p>
+		  <b>Discuento Relativo</b><br />
+		  <%= f.text_field :relative_price, :class => 'field' %>
+		</p>
 		<p>
 		  <b>Costo</b><br />
 		  <%= f.text_field :cost, :class => 'field' %>
@@ -38,16 +45,14 @@
 	</div>
 	
 	<hr class="clear-contentunit" />
-	<p>
-	  <b>Descripcion</b><br />
-	  <%= f.text_area :description %>
-	</p>
+
 	
 	<div>			
 		<div class="table_header_row">
-			<div class="table_cell_20">UPC</div>
 			<div class="table_cell_20">Nombre de Producto</div>
 			<div class="table_cell_10">Cantidad</div>
+			<div class="table_cell_10">Discuento Fijo</div>
+			<div class="table_cell_10">Discuento Relativo</div>
 			<div class="table_cell">Acciones </div>
 		</div>
 		<div id="requirements">
@@ -62,5 +67,3 @@
 		<%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %>
 	<% end %>
   
-
-
