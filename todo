@@ -190,7 +190,6 @@ added states and table to list the states
 Added tax field to line
 controller for new payment should check to see if search contains a valid order_id and use it.
 should be able to click on product > movements
-fixed costs calculation.
-NOTE: if there are several serial numbers on a purchase, the system will only check the cost of the first one.
 --- Version 0.59 ---
-
+added receipts
+each order has one receipt which is always generated on demand

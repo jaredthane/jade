@@ -98,6 +98,13 @@ class Order < ActiveRecord::Base
 		end
 		return total
 	end
+	def total_tax
+		total=0
+		for l in self.lines
+			total = total + (l.tax)
+		end
+		return total
+	end
 	def total_price_with_tax
 		total=0
 		for l in self.lines

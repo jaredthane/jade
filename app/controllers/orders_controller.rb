@@ -21,18 +21,25 @@ class OrdersController < ApplicationController
   def show_receipt
   	@receipt = Order.find(params[:id])
 		params[:format] = 'pdf'
-		prawnto :prawn => { :page_size => 'RECEIPT',
-					              :page_layout => :landscape,
-					              :left_margin=>27,
-										    :right_margin=>36,
-										    :top_margin=>90,
+		prawnto :prawn => { :page_size => 'RECEIPT_LAND',
+					              :left_margin=>27,# was 27
+										    :right_margin=>5,
+										    :top_margin=>90, #was 90
 										    :bottom_margin=>18 }
 		@data=[]
 		total=0
 		for l in @receipt.lines
-			@data<< [l.quantity, l.product.name, l.price, "", l.total_price]
+			x = Object.new.extend(ActionView::Helpers::NumberHelper)
+			if l.product.serialized
+				if l.serialized_product
+					@data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
+				end
+			else
+				@data << [l.quantity.to_s, l.product.name, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
+			end
 			total += l.total_price
 		end
+		logger.debug @data.inspect
     respond_to do |format|
       format.pdf { render :layout => false }
     end
@@ -194,11 +201,16 @@ class OrdersController < ApplicationController
     for l in @order.lines
 			#logger.debug "l.id=" + l.id.to_s
 			##logger.debug "params['existing_lines'][l.id.to_s]=" + params['existing_lines'][l.id.to_s].to_s
-			if params['existing_lines'][l.id.to_s]
-				logger.debug "setting attribs for line #{l.id}"
-				logger.debug "l.warranty before=#{l.warranty.to_s}"
-				l.attributes = params['existing_lines'][l.id.to_s]
-				logger.debug "l.warranty afterz=#{l.warranty.to_s}"
+			if params['existing_lines']
+				if params['existing_lines'][l.id.to_s]
+					logger.debug "setting attribs for line #{l.id}"
+					logger.debug "l.warranty before=#{l.warranty.to_s}"
+					l.attributes = params['existing_lines'][l.id.to_s]
+					logger.debug "l.warranty afterz=#{l.warranty.to_s}"
+				else
+					logger.debug "deleting line #{l.id}"
+					@order.lines.delete(l)
+				end
 			else
 				logger.debug "deleting line #{l.id}"
 				@order.lines.delete(l)

@@ -115,9 +115,11 @@
 
 <% case @order.order_type
 	when 'sales' %>
+		<%= link_to 'Añadir Pago | ', new_payment_path(:order_id=>@order.id), :class => 'action' %>
 		<%= link_to 'Facturar | ', show_receipt_path(:order_id => @order.id), :class => 'action' %>
 		<%= link_to 'Lista de Ventas', sales_path, :class => 'action' %> 
 	<% when 'purchases' %>
+		<%= link_to 'Añadir Pago | ', new_payment_path(:order_id=>@order.id), :class => 'action' %>
 		<%= link_to 'Lista de Compras', purchases_path, :class => 'action' %> 
 	<% else %>
 		<%= link_to 'Añadir Pago | ', new_payment_path(:order_id=>@order.id), :class => 'action' %>

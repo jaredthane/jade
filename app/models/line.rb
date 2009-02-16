@@ -84,7 +84,7 @@ class Line < ActiveRecord::Base
 	end
 	def create_movements_on_save
 		
-		self.product.cost=self.product.calculate_cost## <-------------- Remove this line for production!!!
+		#self.product.cost=self.product.calculate_cost## <-------------- Remove this line for production!!!
 		self.product.save
 		@movements_to_create = [] if !@movements_to_create
 		#logger.debug  "movements_to_create has " + @movements_to_create.length.to_s
