@@ -12,6 +12,8 @@ class OrdersController < ApplicationController
 			@orders = Order.search_sales(params[:search], params[:page])
 		when 'purchases'
 			@orders = Order.search_purchases(params[:search], params[:page])
+		when 'internal'
+			@orders = Order.search_internal(params[:search], params[:page])
 		end
     respond_to do |format|
       format.html # index.html.erb

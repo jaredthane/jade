@@ -25,6 +25,7 @@ class Price < ActiveRecord::Base
 		paginate :per_page => 20, :page => page,
 			       :conditions => ['(products.name like :search 
 			       									OR products.description like :search 
+			       									OR products.upc like :search 
 			       									OR vendors.name like :search )
 			       									AND (prices.price_group_id = :price_group_id)',
 			       			 {:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],

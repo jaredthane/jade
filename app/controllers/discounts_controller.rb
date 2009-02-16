@@ -44,7 +44,7 @@ class DiscountsController < ApplicationController
   # POST /discounts
   # POST /discounts.xml
   def create
-    @discount = Product.new(params[:discount])
+    @discount = Product.new(params[:product])
 		for e in Entity.find_all_by_entity_type_id(3)
     	i=Inventory.new(:entity=>e, :product=>@discount, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
     	i.save

@@ -1,14 +1,14 @@
 ================= Goals:  =======================================
-make facturas
-make services work
+
 make combos work
 ================= To Do =======================================
-
+should be able to delete sites
+price_group must be set for every site when created
+price_group_name must be set for every client when created
 icon only showing up on some pages not on signin or new compra
 should make sure serial purchased is unique
 serials should only need to be unique to their product
 replenish should take into consideration the orders that have been created but not yet received
-should be able to search for serial number
 when doing a transfer, price should be set to the cost.
 we can change movements. disable that.
 make sites page show products instead of movements
@@ -64,6 +64,11 @@ reports
 credit
 returns
 price quotes
+
+different costs for each location
+need to be able to modify price groups
+ - should create prices for every product when creating a new group
+ - should be able to copy prices in view to another group
 PDFs
 services
 calculate cost of products dynamicaly
@@ -102,6 +107,7 @@ Unit of measure of Product cannot be changed. Create new product and create coun
 Cuenta Fisica uses Vendor field to store entity
 have Devolucion product and use it to charge people for returns(See: If I feel like it)
 you can't delete products. Period.
+internal consumption should be entity #1 and should not have an entity type.
 ==================== Done ======================================
 Make names in index views clickable bringing to show
 How do I get money formatted text?
@@ -120,7 +126,7 @@ add delete to edit views
 Have to translate the created successfully message
 Add line to orders puts it in the wrong place. 
 -Probably have to rebuild entire table
-- Try FireBug
+
 Format Show Order View
 User should be able to Go to a Location and click on Set this as my current location. or defualt... somehting like that.
 unidad out of place on edit product
@@ -195,11 +201,19 @@ should be able to click on product > movements
 added receipts
 each order has one receipt which is always generated on demand
 --- Version 0.60 ---
-different price groups for users
-different costs for each location
-services
-need to be able to modify price groups
-should create prices for every product when creating a new group
-should be able to copy prices in view to another group
+allows different price groups for users
+services now working
+now able to search for serial number
 able to change availablity on products and services
 made purchases show up for credito fiscal clients 
+created and formatted second receipt layout
+--- Version 0.61 ---
+make it so internals dont show up 
+consumo interno
+made new entity # 1 -Consumo Interno
+made new order_type = 'internal'
+made it so internals dont show up with sales
+names for numbers on facturas
+fixed formating of prices on create order forms
+added returned and presented to payments
+updated index, edit, new and show payments

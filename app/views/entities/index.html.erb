@@ -11,14 +11,25 @@
 		
 <div>
   <div class="table_header_row">
-    <div class="table_cell_50">Nombre</div>
+    <div class="table_cell_30">Nombre</div>
+    <div class="table_cell_30">Grupo de Precios por Defecto</div>
     <div class="table_cell">Tipo</div>
   </div>
 
 <% for entity in @entities %>
   <div class="table_row">
-    <div class="table_cell_50"><%= link_to entity.name[0..25], entity %></div>
-    <div class="table_cell"><%=h entity.entity_type.name %></div>
+    <div class="table_cell_30"><%= link_to entity.name[0..25], entity %></div>
+    <div class="table_cell_30">
+    <% if entity.entity_type %>
+		  <% case entity.entity_type.id
+					 when 3 %>
+					<%= h entity.price_group.price_group_name.name[0..25] %>
+				<% when 2,5 %>
+					<%= h entity.price_group_name.name[0..25] %>
+			<% end %>
+		<% end %>
+    </div>
+    <div class="table_cell"><% if entity.entity_type %><%=h entity.entity_type.name %><% end %></div>
 	</div>
 <% end %>
 </div>

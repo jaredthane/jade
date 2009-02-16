@@ -1,7 +1,9 @@
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "order_edit" %>
 <% end %>
+
 <%= error_messages_for :order, :header_message => "Tratelo otra vez, por favor!", :message => "Habian algunas difcultades guardando los cambios al pedido:" %>
+
 <% case @order_type
 	when 'purchases' %>
 		<div class="column3-unit-left">
@@ -22,7 +24,7 @@
 			<p>
 				<b>Cliente</b><br />
 				<%= text_field_with_auto_complete :order, :client_name, 
-									{:class => 'field', :size=>20, :onchange=>'set_client_name(value)' }, 
+									{:class => 'field', :size=>20, :onblur=>'set_client_name(value)' }, 
 									{:url => '/clients.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 			</p>
 			<p>
@@ -31,6 +33,9 @@
 			</p>
 			<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 		</div>
+	<% when 'internal' %>
+		<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
+		<%= f.hidden_field :client_id, :value => 1 %>
 	<% else %>
 		<div class="column3-unit-left">
 			<p>
@@ -74,7 +79,7 @@
 		<div class="table_cell">Acciones</div>
 	</div>
 	<div id="lines">
-		<%= render :partial => 'line', :collection => @order.lines, :locals => { :order_type => @order_type} %>
+		<%= render :partial => 'line', :collection => @order.lines %>
 	</div>
 	<div id="lines_errors"></div>
 	<%= link_to "Añadir otro producto | ", new_line_path(:order_id => @order.id), :id => "add_new_line", :class => 'action'  %>	  

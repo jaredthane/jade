@@ -4,7 +4,7 @@ function handleErr(msg,url,l) {
 	return true;
 }
 function set_client_name(value){
-	document.getElementById("client_name").value=value
+		$("client_name").value=value
 }
 function disableEnterKey(e){
      var key;
@@ -23,6 +23,9 @@ function disableEnterKey(e){
 Event.addBehavior({
 	'body' : function() {
 		$('add_new_line').hide();
+//		if ($('order_type_field').value == 'sales' or $('order_type_field').value == 'internal') {
+//			$("client_name").value='_cost_'
+//		}
   },
   'form:keydown' : Event.delegate({
   	'#serial': function(e) {

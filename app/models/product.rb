@@ -49,6 +49,7 @@ class Product < ActiveRecord::Base
 		logger.info "location_id=#{location_id.to_s}"
 		moves=connection.select_all("select movements.* from (select max(movements.id) as id from movements where product_id=#{self.id.to_s} group by order_id) as list left join movements on list.id=movements.id where movement_type_id=2;")
 		#moves = movements.find_all_by_entity_id(location_id, :order => 'created_at desc')
+		logger.info "self.quantity(location_id)=" + self.quantity(location_id).to_s
 		
 		stock = self.quantity(location_id)
 		items_counted = 0
@@ -56,20 +57,22 @@ class Product < ActiveRecord::Base
 		totalcost=0
 		taken=0
 		while	(moves[movement_counter]) do
-			#puts moves[movement_counter].id
-			#puts "stock" + stock.inspect
-			#puts "items_counted" + items_counted.inspect
-			#logger.info "moves[movement_counter][:quantity]" + moves[movement_counter][:quantity].inspect
-			#logger.info "stock-items_counted" + (stock-items_counted).inspect
-			#puts "[stock-items_counted, movements[movement_counter].quantity].min=" + [stock-items_counted, movements[movement_counter].quantity].min.inspect
-			
+			logger.info moves[movement_counter].id
+			logger.info "stock" + stock.inspect
+			logger.info "items_counted" + items_counted.inspect
+			logger.info "moves[movement_counter][:quantity]" + moves[movement_counter][:quantity].inspect
+			logger.info "stock-items_counted" + (stock-items_counted).inspect
+			logger.info "[stock-items_counted, movements[movement_counter].quantity].min=" + [stock-items_counted, movements[movement_counter].quantity].min.inspect
+			puts moves[movement_counter]["quantity"].to_i
+			puts stock
+			puts items_counted
 			take = [stock-items_counted, moves[movement_counter]["quantity"].to_i].min
 			l=Line.find_by_id(moves[movement_counter]["line_id"].to_i)
 			if l
 				logger.info "take=#{take.to_s}"
 				logger.info "l.price=#{l.price.to_s}"
 				totalcost += l.price*take
-				#puts items_counted.inspect
+				logger.info items_counted.inspect
 				items_counted = items_counted + take
 			end
 			movement_counter = movement_counter + 1
@@ -139,45 +142,64 @@ class Product < ActiveRecord::Base
 		static_price = priceobj.fixed
 		return (cost||0) * (relative_price||0) + (static_price||0)
 	end
-	def new_requirement_attributes=(requirement_attributes)
+	
+	def relative_price(price_group = User.current_user.current_price_group)
+		priceobj = price_group.prices.find_by_product_id(self.id)
+		return priceobj.relative
+	end
+	def relative_price=(new_price, price_group = User.current_user.current_price_group)
+		priceobj = price_group.prices.find_by_product_id(self.id)
+		priceobj.relative=new_price
+		priceobj.save
+	end
+	def static_price(price_group = User.current_user.current_price_group)
+		priceobj = price_group.prices.find_by_product_id(self.id)
+		return priceobj.fixed
+	end
+	def static_price=(new_price, price_group = User.current_user.current_price_group)
+		priceobj = price_group.prices.find_by_product_id(self.id)
+		priceobj.fixed=new_price
+		priceobj.save
+	end
+	def new_requirement_attributes=(new_attributes)
 		#puts "saving new attributes"
-		#puts "requirement_attributes we received has "+ requirement_attributes.to_s
-		requirement_attributes.each do |attributes|
+		#puts "new_attributes we received has "+ new_attributes.to_s
+		new_attributes.each do |attributes|
 			#puts "ready to save attributes=" + attributes.to_s 
 			requirement=requirements.new(attributes)
 			requirement.product_id = self.id
 			requirement.save()
 		end
 	end
-	def requirement_attributes=(requirement_attributes)
-		##puts "requirement_attributes we received has "+ requirement_attributes.to_s
+	def requirement_attributes=(new_attributes)
+		##puts "new_attributes we received has "+ new_attributes.to_s
 		requirements.reject(&:new_record?).each do |requirement|													#Go through each existing attribute
 			##puts "ready to save attributes requirement=" + requirement.to_s 
 			##puts "requirement.id=" + requirement.id.to_s 
-			attributes = requirement_attributes[requirement.id.to_s]												#Grab new values
+			attributes = new_attributes[requirement.id.to_s]												#Grab new values
 			if attributes
 				##puts "saving attributes" + attributes.to_s
 				requirement.attributes = attributes																						#stick them in the requirement
-				requirement_attributes.delete(requirement) 																		#remove requirement from the list
+				new_attributes.delete(requirement) 																		#remove requirement from the list
 			else																																						#if its not in the list, delte it.
 				##puts "deleting requirement " + requirement.required.name
 				requirements.delete(requirement)
 			end
 		end
-		#puts requirement_attributes.inspect
-		requirement_attributes.each_value do |attributes|																				#Go through all the leftover ones
+		puts new_attributes.inspect
+		for req_attributes in new_attributes																		#Go through all the leftover ones
 			#puts "ready to save attributes=" + attributes.to_s 
-			requirement=requirements.new(attributes)																				# and create them
+			requirement=requirements.new(req_attributes)																				# and create them
 			requirement.product_id = self.id
 			requirement.save()
 		end
 	end
-	def existing_requirement_attributes=(requirement_attributes)
-		#puts "requirement_attributes we received has "+ requirement_attributes.to_s
+	def existing_requirement_attributes=(new_attributes)
+		#puts "new_attributes we received has "+ new_attributes.to_s
 		requirements.reject(&:new_record?).each do |requirement|
 			#puts "ready to save attributes requirement=" + requirement.to_s 
 			#puts "requirement.id=" + requirement.id.to_s 
-			attributes = requirement_attributes[requirement.id.to_s]
+			attributes = new_attributes[requirement.id.to_s]
 			if attributes
 				#puts "saving attributes" + attributes.to_s
 				requirement.attributes = attributes

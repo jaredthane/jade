@@ -6,14 +6,28 @@ module ApplicationHelper
   def get_entity_types
     @entity_types = EntityType.find(:all, :order => "name")
   end
+  def get_client_types
+    @client_types = EntityType.find(:all, :conditions => 'id=2 or id=5', :order => "name")
+  end
   def get_privileges
     @privileges = Privilege.find(:all, :order => "name")
   end
   def get_price_group_names
-    @price_group_names = PriceGroupName.find(:all, 
-    					:conditions => ['price_groups.entity_id=:site_id', {:site_id => "#{current_user.location.id}"}], 
-    					:order => "name", 
-    					:joins => 'inner join price_groups on price_groups.price_group_name_id=price_group_names.id')
+    @price_group_names = PriceGroupName.find(:all, :conditions => ['price_groups.entity_id=:site_id', {:site_id => "#{current_user.location.id}"}], :order => "name", :joins => 'inner join price_groups on price_groups.price_group_name_id=price_group_names.id')
+  end
+  def get_price_groups
+#    @price_groups = PriceGroup.connection.execute(['SELECT price_groups.id, price_group_names.name FROM price_groups
+#    					inner join price_group_names on price_groups.price_group_name_id=price_group_names.id
+#    					where price_groups.entity_id=:site_id
+#    					order_by name
+#    					', {:site_id => "#{current_user.location.id}"}])
+#@price_groups = PriceGroup.connection.select_all('select * from price_groups inner join price_group_names on price_groups.price_group_name_id=price_group_names.id where price_groups.entity_id=49')
+    list = PriceGroup.find(:all, :conditions => ['price_groups.entity_id=:site_id', {:site_id => "#{current_user.location.id}"}])
+#    @price_groups=[]
+#    for pg in list
+#    	new=PriceGroupWithNames.new()
+#    	new.attributes=
+#    end
   end
   def get_states
     @states = State.find(:all, :order => "name")

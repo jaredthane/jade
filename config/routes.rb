@@ -17,6 +17,7 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :prices
 
+
   #map.resources :entity_types
 
   map.resources :entities
@@ -39,8 +40,8 @@ ActionController::Routing::Routes.draw do |map|
   #map.connect 'locations/:id/purchases', :controller => 'entities', :order_type => 'purchases', :action => 'movements'
   #map.connect 'locations/:id/movements', :controller => 'entities', :order_type => 'all', :action => 'movements'
   #map.connect 'locations/:id/products', :controller => 'entities', :action => 'products'
-  map.edit_prices 'products/edit_prices', :controller => 'products', :action => 'edit_prices'
-  map.update_prices 'products/update_prices', :controller => 'products', :action => 'update_prices'
+  #map.edit_prices 'products/edit_prices', :controller => 'products', :action => 'edit_prices'
+  #map.update_prices 'products/update_prices', :controller => 'products', :action => 'update_prices'
   map.recommend_quantities 'products/recommend_quantities', :controller => 'products', :action => 'recommend_quantities'
   map.clear_quantities 'products/clear_quantities', :controller => 'products', :action => 'clear_quantities'
   map.resources :products, :collection => { :bulk_edit => :get, :bulk_update => :post }, :product_type => 'simple'
@@ -67,7 +68,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :orders
   map.connect 	'purchases/new', :controller => 'orders', :action => 'new', :order_type => 'purchases'
   map.connect 	'sales/new', :controller => 'orders', :action => 'new', :order_type => 'sales'
+  map.connect 	'internal/new', :controller => 'orders', :action => 'new', :order_type => 'internal'
   map.purchases 'purchases/', :controller => 'orders', :order_type => 'purchases'
+  map.internal 'internal/', :controller => 'orders', :order_type => 'internal'
   map.sales 'sales/', :controller => 'orders', :order_type => 'sales'
 
 	map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate', :activation_code => nil

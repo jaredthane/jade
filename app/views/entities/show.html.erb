@@ -8,28 +8,39 @@
 		<b>Nombre</b>
 		<%=h @entity.name %>
 	</p>
-	<p>
-		<b>Nacimiento</b><br />		
-		<%=h @entity.birth.strftime('%B %d') %>
-	</p>
-	<p>
-		<b>Direcion</b><br />
-		<%=h @entity.address %>
-	</p>
-	<p>
-		<b>Departamento</b><br />		
-		<%=h @entity.state.name %>
-	</p>
-	<p>
-		<b>Municipio</b><br />		
-		<%=h @entity.city %>
-	</p>
-	<p>
-		<b>Grupo de Precios</b><br />		
-		<%=h @entity.price_group_name.name %>
-	</p>
+	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
+		<p>
+			<b>Nacimiento</b><br />		
+			<%=h @entity.birth.strftime('%B %d') %>
+		</p>
+	<% end %>
+	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
+		<p>
+			<b>Direcion</b><br />
+			<%=h @entity.address %>
+		</p>
+		<p>
+			<b>Departamento</b><br />		
+			<%=h @entity.state.name %>
+		</p>
+		<p>
+			<b>Municipio</b><br />		
+			<%=h @entity.city %>
+		</p>
+		<p>
+			<b>Grupo de Precios</b><br />		
+			<%=h @entity.price_group_name.name %>
+		</p>
+	<% end %>
+	<% if @entity.entity_type.id == 3 %>
+		<p>
+			<b>Grupo de Precios por Defecto</b><br />		
+			<%=h @entity.price_group.price_group_name.name %>
+		</p>
+	<% end %>
 </div>
 <div class="column2-unit-right">
+	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
 	<p>
 		<b>Telefono Fijo</b><br />
 		<%=h @entity.home_phone_number %>
@@ -47,21 +58,26 @@
 		<b>Correo E</b>
 		<%=h @entity.email %>
 	</p>
-	<p>
-		<b>Registro</b>
-		<%=h @entity.register %>
-	</p>
-	<p>
-		<b>NIT</b><br />
-		<%=h @entity.nit_number %>
-	</p>
-	<p>
-		<b>Giro</b><br />
-		<%=h @entity.giro %>
-	</p>
+	<% end %>
+	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
+		<p>
+			<b>Registro</b>
+			<%=h @entity.register %>
+		</p>
+		<p>
+			<b>NIT</b><br />
+			<%=h @entity.nit_number %>
+		</p>
+		<p>
+			<b>Giro</b><br />
+			<%=h @entity.giro %>
+		</p>
+	<% end %>
 	<p>
 		<b>Tipo</b><br />
-		<%=h @entity.entity_type.name %>
+		<% if @entity.entity_type %>
+			<%=h @entity.entity_type.name %>
+		<% end %>
 	</p>
 </div>
 <hr class="clear-contentunit" />

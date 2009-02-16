@@ -112,6 +112,9 @@ class Order < ActiveRecord::Base
 		end
 		return total
 	end
+	def total_price_with_tax_in_spanish
+		return number_to_spanish(self.total_price_with_tax)
+	end
 	def amount_paid
 		return self.payments.sum(:amount, :conditions => ['order_id = :order_id', {:order_id => self.id}])
 	end
@@ -135,6 +138,9 @@ class Order < ActiveRecord::Base
 	end
 	
 	def order_type
+		if self.client.id==1
+			return 'internal'
+		end
 		if self.vendor.entity_type.id == 3 
 			 if self.client.entity_type.id == 3 
 				 'transfers' 
@@ -188,7 +194,7 @@ class Order < ActiveRecord::Base
 	end
 	def self.search_sales(search, page)
 		paginate :per_page => 20, :page => page,
-						 :conditions => ['(vendors.entity_type_id = 3 and clients.name like :search) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+						 :conditions => ['(vendors.entity_type_id = 3 and clients.name like :search) AND (vendors.id=:current_location OR clients.id=:current_location) AND (clients.id != 1)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
@@ -197,6 +203,12 @@ class Order < ActiveRecord::Base
 						 :conditions => ['(vendors.name like :search and clients.entity_type_id = 3) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
+	end
+	def self.search_internal(search, page)
+		paginate :per_page => 20, :page => page,
+						 :conditions => ['vendors.name like :search AND orders.client_id = 1 AND orders.vendor_id=:current_location', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+						 :order => 'created_at desc',
+						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id"
 	end
 	def self.search_batch(search, page)
 		paginate :per_page => 20, :page => page,
@@ -224,61 +236,115 @@ class Order < ActiveRecord::Base
 				return 'ochenta'
 			when 90
 				return 'noventa'
+			else
+				return ''
 		end
 	end
-	def digit_to_spanish (num)
-		if num > 19
-#			puts "tens_to_spanish:" + tens_to_spanish((num/10).to_i%10*10)
-#			puts "searching for " + (num%10).to_i.to_s
-			if (num%10).to_i > 0
-				return tens_to_spanish((num/10).to_i%10*10) + ' y ' + digit_to_spanish((num%10).to_i)
+	def hundreds_to_spanish(num)
+		# handles only hundreds place
+#		puts "received:" + num.to_s
+		case num
+			when 100
+				return 'ciento'
+			when 200
+				return 'doscientos'
+			when 300
+				return 'trescientos'
+			when 400
+				return 'cuatrocientos'
+			when 500
+				return 'quinientos'
+			when 600
+				return 'seiscientos'
+			when 700
+				return 'setecientos'
+			when 800
+				return 'ochocientos'
+			when 900
+				return 'novecientos'
 			else
-				return tens_to_spanish((num/10).to_i%10*10)
-			end
+				return ''
+		end
+	end
+	def number_to_spanish (num)
+ 		# depends on tens_to_spanish(num) and hundreds_to_spanish() and number_to_spanish() 
+ 		# to handle  numbers 0-999,999,999
+		answer=""
+		millions = digits_to_spanish((num/1000000).to_i)		
+		thousands = digits_to_spanish((num/1000).to_i%1000)
+		ones = digits_to_spanish((num%1000).to_i)
+		cents = digits_to_spanish((num*100).to_i%100)
+		answer = millions + ' milliones,' if (num/1000000).to_i > 1
+		answer = 'un million,' if (num/1000000).to_i == 1
+		answer += ' ' if answer != '' and (num/1000).to_i%1000 > 0
+		answer += thousands + ' mil,' if (num/1000).to_i%1000 > 0
+		answer += ' ' if answer != '' and (num%1000).to_i > 0
+		answer += ones + ' dolares' if (num%1000).to_i > 1
+		answer += 'un dolar' if (num%1000).to_i == 1
+		answer = 'cero dolares' if answer == '' or answer == nil
+		answer += ' con un centavo' if (num*100).to_i%100 == 1
+		answer += ' con '+ cents + ' centavos' if (num*100).to_i%100 > 1
+		return answer
+	end
+	def digits_to_spanish(num)
+		if num == 100
+			return 'cien'
+		end
+ 		# depends on tens_to_spanish(num) and hundreds_to_spanish() to handle  numbers 1-999
+		answer = hundreds_to_spanish((num/100).to_i%10*100)
+		answer += ' ' if answer != '' and (num%100 > 0)
+		answer += tens_to_spanish((num/10).to_i%10*10) if ((num%100).to_i > 19)
+		answer += ' y ' if ((num/10).to_i%10*10 > 19) and (num%10 > 0)
+		if (num%100).to_i < 20
+			answer += ones_to_spanish((num%100).to_i)
 		else
-			case num
-				when 0
-					return 'cero'
-				when 1
-					return 'uno'
-				when 2
-					return 'dos'
-				when 3
-					return 'tres'
-				when 4
-					return 'cuatro'
-				when 5
-					return 'cinco'
-				when 6
-					return 'seis'
-				when 7
-					return 'siete'
-				when 8
-					return 'ocho'
-				when 9
-					return 'nueve'
-				when 10
-					return 'diez'
-				when 11
-					return 'once'
-				when 12
-					return 'doce'
-				when 13
-					return 'trece'
-				when 14
-					return 'catorse'
-				when 15
-					return 'quince'
-				when 16
-					return 'dieciseis'
-				when 17
-					return 'dieciseite'
-				when 18
-					return 'dieciocho'
-				when 19
-					return 'diecinueve'
-				
-			end
+			answer += ones_to_spanish((num%10).to_i)
+		end
+		#answer = 'cero' if answer == ''
+	end
+	def ones_to_spanish (num)
+	
+		case num
+			when 1
+				return 'un'
+			when 2
+				return 'dos'
+			when 3
+				return 'tres'
+			when 4
+				return 'cuatro'
+			when 5
+				return 'cinco'
+			when 6
+				return 'seis'
+			when 7
+				return 'siete'
+			when 8
+				return 'ocho'
+			when 9
+				return 'nueve'
+			when 10
+				return 'diez'
+			when 11
+				return 'once'
+			when 12
+				return 'doce'
+			when 13
+				return 'trece'
+			when 14
+				return 'catorse'
+			when 15
+				return 'quince'
+			when 16
+				return 'dieciseis'
+			when 17
+				return 'dieciseite'
+			when 18
+				return 'dieciocho'
+			when 19
+				return 'diecinueve'
+			else
+				return ''
 		end
 	end
 end

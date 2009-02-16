@@ -18,7 +18,7 @@
 		  <%= f.text_field :static_price, :class => 'field' %>
 		</p>
 		<p><b>Catagoría</b><br />
-			<%= text_field_with_auto_complete :product, :catagory_name, 
+			<%= text_field_with_auto_complete :product, :category_name, 
 					{:class => 'field', :size=>30 }, 
 					{:url => '/product_catagories.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 		</p>

@@ -5,6 +5,8 @@
 		<% content_for :title do %>Cambiar Venta #<%= @order.id %><% end %>
 	<% when 'purchases' %>
 		<% content_for :title do %>Cambiar Compra #<%= @order.id %><% end %>
+	<% when 'internal' %>
+		<% content_for :title do %>Cambiar Consumo Interno #<%= @order.id %><% end %>
 	<% else %>
 		<% content_for :title do %>Cambiar Pedido #<%= @order.id %><% end %>
 <% end %>

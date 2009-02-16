@@ -9,4 +9,7 @@ class PriceGroup < ActiveRecord::Base
 		         :order => 'payments.created_at',
 		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id'
 	end
+	def name
+		return self.price_group_name.name
+	end
 end

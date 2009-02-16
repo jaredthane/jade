@@ -1,8 +1,10 @@
 <% case @order_type
 	when 'sales' %>
-		<% content_for :title do %>Nueva Venta<% end %>
+		<% content_for :title do %>Nueva Venta en <%= current_user.location.name %><% end %>
 	<% when 'purchases' %>
-		<% content_for :title do %>Nueva Compra<% end %>
+		<% content_for :title do %>Nueva Compra para <%= current_user.location.name %><% end %>
+	<% when 'internal' %>
+		<% content_for :title do %>Nuevo Consumo Interno de <%= current_user.location.name %><% end %>
 	<% else %>
 		<% content_for :title do %>Nuevo Pedido<% end %>
 <% end %>

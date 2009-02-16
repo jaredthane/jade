@@ -1,5 +1,7 @@
 <% content_for :title do %><%= heading %><% end %>
-
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "payment_edit" %>
+<% end %>
 <%= error_messages_for :payment %>
 
 <% form_for(@payment) do |f| %>
@@ -14,15 +16,25 @@
 		<%= f.hidden_field :order_id, :value =>@payment.order_id %>
 	<% end %>
 		<p>
-		  <b>Cantidad</b><br />
-		  <%= f.text_field :amount, :class => 'field' %>
+		  <b>Cantidad Presentado</b><br />
+		  <%= f.text_field :presented, :class => 'field', :id=>"presented_field", :onblur=>'calculate_total()' %>
 		</p>
+		<p>
+		  <b>Vuelto</b><br />
+		  <%= f.text_field :returned, :class => 'field', :id=>"returned_field", :onblur=>'calculate_total()' %>
+		</p>
+		
 	</div>
 	<div class="column2-unit-right">
 	<%= f.hidden_field :user_id, :value =>@current_user.id %>
 		<p>
 		  <b>Metodo de pago</b><br />
 		  <%= f.collection_select(:payment_method_id, get_payment_methods, :id, :name) %>
+		</p>
+		<p>
+		  <b>Total Cancelado</b><br />
+		  <input disabled=True class="field" id="total_paid" value=<%= number_to_currency((@payment.presented || 0)-(@payment.returned || 0)) %>> 
+		  <input type="button" value="Actualizar Total" onclick="calculate_total()" class="field"> 
 		</p>
 
 	</div>

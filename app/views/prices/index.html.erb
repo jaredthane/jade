@@ -1,8 +1,7 @@
-<% content_for :title do %>Lista de Precios<% end %>
+<% content_for :title do %>Lista de Precios para <%= current_user.location.name %><% end %>
 
 <h2>
-	<div class="table_cell_50">Mostrando Productos de: <%= current_user.current_price_group.entity.name %></div>
-	<div class="table_cell" align="right">Con precios del grupo: <%= current_user.current_price_group.price_group_name.name %></div>
+	<div class="table_cell">Con precios del grupo: <%= current_user.current_price_group.price_group_name.name %></div>
 </h2>
 
 <% form_for :@prices, :url => {:action => 'update'}, id => 1 do |f| %>

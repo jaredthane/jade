@@ -1,25 +1,35 @@
+<% content_for :title do %>Detalles de Pago<% end %>
 <div class="column2-unit-left">
 <p>
-  <b>Order Number:</b>
-  <%=h @payment.order.id %>
+  <b>Numero de Pedido:</b>
+  <%=link_to @payment.order.id, @payment.order %>
+</p>
+
+<p>
+  <b>Cantidad Presentado:</b>
+  <%=h number_to_currency(@payment.presented) %>
 </p>
 <p>
-  <b>Amount:</b>
-  <%=h @payment.amount %>
+  <b>Vuelto:</b>
+  <%=h number_to_currency(@payment.returned) %>
 </p>
 <p>
-  <b>User:</b>
-  <%=h @payment.user.login %>
+  <b>Total Cancelado:</b>
+  <%=h number_to_currency(@payment.amount) %>
 </p>
 
 </div>
 <div class="column2-unit-right">
 <p>
-  <b>Date:</b>
+  <b>Usuario:</b>
+  <%=link_to @payment.user.login,@payment.user %>
+</p>
+<p>
+  <b>Fecha:</b>
   <%=h @payment.created_at.to_s(:long) %>
 </p>
 <p>
-  <b>Method:</b>
+  <b>Metodo:</b>
   <%=h @payment.payment_method.name %>
 </p>
 
@@ -31,7 +41,7 @@
 
 
 
-<%= link_to 'Edit', edit_payment_path(@payment), :class => 'action' %> |
+<%= link_to 'Cambiar', edit_payment_path(@payment), :class => 'action' %> |
 
-<%= link_to 'Facturar | ', show_receipt_path(:order_id => @order.id), :class => 'action' %>
-<%= link_to 'Back', payments_path, :class => 'action' %>
+<%= link_to 'Facturar | ', show_receipt_path(:order_id => @payment.order.id), :class => 'action' %>
+<%= link_to 'Lista de Pagos', payments_path, :class => 'action' %>

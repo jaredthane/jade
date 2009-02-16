@@ -18,14 +18,22 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.xml
   def new
+  	puts 'creating new line'
+  	puts params[:line][:order_type]
+  	puts params[:line][:client_name]
+	  @line = Line.new()
   	@client=Entity.find_by_name(params[:line][:client_name])
-    if @client
+    if @client and params[:line][:order_type]=='sales'
+    	
     	current_user.price_group_name_id = @client.price_group_name_id
     end
-    @line = Line.new()
+    puts "before:" + @line.order_type.to_s
+    @line.order_type = params[:line][:order_type]
+    puts "after:" + @line.order_type.to_s
     @line.bar_code = params[:line][:bar_code]
+    puts "after:" + @line.order_type.to_s
     @line.quantity = 1
-    @line.price = 
+    
     
 		#if @line.product
 		  if !@line.product.serialized

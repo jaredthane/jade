@@ -12,7 +12,7 @@
 <% for payment in @payments %>
   <tr>
 	  <td><%= link_to payment.order.id, payment.order %></td>
-		<td><%= link_to '$'+payment.amount.to_s, payment %></td>
+		<td><%= link_to number_to_currency(payment.amount), payment %></td>
     <td><%=h payment.created_at.to_date %></td>
     <td><%=h payment.payment_method.name %></td>
     <td><%= link_to payment.user.login, payment.user %></td>

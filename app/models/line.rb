@@ -19,6 +19,7 @@ class Line < ActiveRecord::Base
 	validates_presence_of(:product, :message => " debe ser valido")
 	attr_accessor :movements_to_create
 	attr_accessor :client_name
+	attr_accessor :order_type
 	belongs_to :serialized_product
 	def check_create_movements
 	#	#logger.debug  self.order.client_id
@@ -87,7 +88,7 @@ class Line < ActiveRecord::Base
 	def create_movements_on_save
 		
 		#self.product.cost=self.product.calculate_cost## <-------------- Remove this line for production!!!
-		self.product.save
+		#self.product.save
 		@movements_to_create = [] if !@movements_to_create
 		#logger.debug  "movements_to_create has " + @movements_to_create.length.to_s
 		for m in @movements_to_create
@@ -95,15 +96,22 @@ class Line < ActiveRecord::Base
 			# Save movement from the list
 			m.line_id=self.id
 			m.save
-			# Update inventory levels
-			p=Product.find(self.product_id)
-			p.cost=p.calculate_cost
-			p.save
-			i=p.inventories.find_by_entity_id(m.entity_id)
-			#logger.debug  "old qty was" + i.quantity.to_s
 			qty=m.quantity || 0
+
+			p=Product.find(self.product_id)
+			i=p.inventories.find_by_entity_id(m.entity_id)
 			i.quantity=i.quantity + m.quantity
 			i.save
+			# Update inventory levels
+			logger.info "about to calc the cost"
+			p.cost=p.calculate_cost
+			logger.info "the calculated cost is #{p.calculate_cost}"
+			logger.info "the cost is #{p.cost}"
+			p.save
+			logger.info "the cost was saved as #{Product.find(self.product_id).cost}"
+			
+			#logger.debug  "old qty was" + i.quantity.to_s
+			
 			#logger.debug  "new qty is " + i.quantity.to_s
 			
 		end
@@ -144,6 +152,12 @@ class Line < ActiveRecord::Base
 				else
 					return 5
 				end
+			when 'internal'
+				if direction==1
+					return 8
+				else
+					return 9
+				end
 			when 'purchases'
 				if direction==1
 					return 2
@@ -179,6 +193,10 @@ class Line < ActiveRecord::Base
 			when 7
 				create_movement_for(order.client_id, 7, -self.quantity)
 				create_movement_for(order.vendor_id, 7, self.quantity)	
+			when 8
+				create_movement_for(order.vendor_id, 8, -self.quantity)
+			when 9
+				create_movement_for(order.vendor_id, 9, self.quantity)
 		end
 	end
 	def isreceived_str
@@ -327,6 +345,25 @@ class Line < ActiveRecord::Base
 			logger.info "Product.find_by_upc(upc).id=#{Product.find_by_upc(upc).id.to_s}"
 		end
 		logger.info "found self.product_id=#{self.product_id.to_s}"
-		self.price = self.product.price if self.product
+		if self.order
+			puts "we have an order"
+			if self.order.order_type = 'sales'
+				puts self.order.order_type
+				self.price = self.product.price if self.product
+			else
+				puts self.order.order_type
+				self.price = self.product.cost if self.product
+			end
+		else
+			puts "we dont have an order"
+			puts "before again "+self.order_type.to_s
+			if self.order_type == 'sales'
+				puts self.order_type
+				self.price = self.product.price if self.product
+			else
+				puts self.order_type
+				self.price = self.product.cost if self.product
+			end
+		end
 	end
 end

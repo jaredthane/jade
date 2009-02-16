@@ -120,21 +120,22 @@ class Entity < ActiveRecord::Base
   	#puts "search=" + search
   	case entity_type
 			when 'clients'
-				condition = "entities.name like '%" + search +"%' AND (entity_type_id = 2 OR entity_type_id = 5)"
+				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%') AND (entity_type_id = 2 OR entity_type_id = 5)"
 			when 'end_users'
-				condition = "entities.name like '%" + search +"%' AND entity_type_id = 2"
+				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%') AND entity_type_id = 2"
 			when 'wholesale_clients'
-				condition = "entities.name like '%" + search +"%' AND entity_type_id = 5"
+				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%') AND entity_type_id = 5"
 			when 'vendors'
 				condition = "entities.name like '%" + search +"%' AND entity_type_id = 1"
 			when 'sites'
-				condition = "entities.name like '%" + search +"%' AND entity_type_id = 3"
+				condition = "(entities.name like '%" + search +"%' OR site_group.name like '%" + search +"%') AND entity_type_id = 3"
 			else
-				condition = "entities.name like '%" + search +"%'"
+				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR site_group.name like '%" + search +"%') AND entities.id!=1"
   	end
   	#puts "condition=" + condition
 		paginate :per_page => 20, :page => page,
 		       :conditions => condition,
+		       :joins => 'left join price_group_names as client_group on client_group.id=entities.price_group_name_id left join price_groups on entities.price_group_id=price_groups.id left join price_group_names as site_group on site_group.id = price_groups.price_group_name_id',
 		       :order => 'name'
 	end
 	def self.search_birthdays(search)
