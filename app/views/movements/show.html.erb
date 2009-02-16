@@ -1,5 +1,10 @@
 
 <% content_for :title do %>Detalle de Movimiento<% end %>
+<% content_for :actions do %>
+	<dt><%= link_to 'Cambiar | ', edit_movement_path(@movement), :class => 'action' %></dt>
+	<dt><%= link_to 'Movimientos Para Este Producto | ', :controller => "movements", :search => @movement.product.upc, :class => 'action' %></dt>
+	<dt><%= link_to 'Movimientos Recientes', movements_path, :class => 'action' %></dt>
+<% end %>
 
 <p>
   <b>Producto:</b>
@@ -29,8 +34,3 @@
   <b>Fecha:</b>
   <%=h @movement.created_at.to_s(:long) %>
 </p>
-
-
-<%= link_to 'Cambiar | ', edit_movement_path(@movement), :class => 'action' %>
-<%= link_to 'Movimientos Para Este Producto | ', :controller => "movements", :search => @movement.product.upc, :class => 'action' %>
-<%= link_to 'Movimientos Recientes', movements_path, :class => 'action' %>

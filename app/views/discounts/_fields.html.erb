@@ -4,7 +4,15 @@
   <%= javascript_include_tag "discount_edit" %>
 <% end %>
 <% content_for :title do %><%= heading %><% end %>
-
+<% content_for :actions do %>
+	<% if current_user.has_rights(['admin','compras','gerente']) %>
+		<% if mode == 'edit' %>
+			<dt> <%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
+		<% end %>
+  <% end %>
+  <dt> <%= link_to 'Ver |', edit_discount_path(@discount), :class => 'action' %> </dt>
+  <dt><%= link_to 'Lista | ', discounts_path, :class => 'action' %></dt>
+<% end %>
 <%= error_messages_for :discount %>
 		
 	  <%= f.hidden_field :unit_id, :value => 1 %>
@@ -59,11 +67,7 @@
 			<%= render :partial => 'requirement', :collection => @discount.requirements %>
 		</div>
 	</div>
+	<%= f.submit button_text, :class => 'action'  %>
 	
-	<%= f.submit button_text + " | ", :class => 'action'  %>
-	<%= link_to 'Lista | ', discounts_path, :class => 'action' %>
-	<% if mode == 'edit' %>
-		<%= link_to 'Ver |', edit_discount_path(@discount), :class => 'action' %>
-		<%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %>
-	<% end %>
+	
   

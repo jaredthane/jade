@@ -1,10 +1,16 @@
-
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "product_edit" %>
 <% end %>
 
 <% content_for :title do %><%= heading %><% end %>
-
+<% content_for :actions do %>
+	<% if current_user.has_rights(['admin','compras','gerente']) %>
+		<% if mode == 'edit' %>
+			<dt> <%=link_to 'Lista', products_path, :class => 'action' %></dt>
+		<% end %>
+  <dt> <%= link_to 'Cancelar', @product, :class => 'action' %>  </dt>
+  <% end %>
+<% end %>
 <%= error_messages_for :product %>
 
 <% form_for(@product) do |f| %>
@@ -87,11 +93,8 @@
 	  <b>Descripcion</b><br />
 	  <%= f.text_area :description %>
 	</p>
-	<%= f.submit "Guardar Producto | ", :class => 'action'  %>
-	<% if mode == 'edit' %>
-		<%= link_to 'Ver |', @product, :class => 'action' %>
-	<% end %>
-  <%= link_to 'Cancelar', products_path, :class => 'action' %> 
+	<%= f.submit "Guardar Producto", :class => 'action'  %>
+	
 <% end %>
 
 

@@ -364,6 +364,13 @@ class Product < ActiveRecord::Base
 		         :joins => 'left join product_categories on product_categories.id=products.product_category_id',
 		         :group => 'products.id'
 	end
+	def self.search_for_combos(search, page)
+  	paginate :per_page => 20, :page => page,
+		         :conditions => ['(products.name like :search OR description like :search OR product_categories.name like :search) AND (products.product_type_id=3)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+		         :order => 'name',
+		         :joins => 'left join product_categories on product_categories.id=products.product_category_id',
+		         :group => 'products.id'
+	end
 	def self.search_all_wo_pagination(search, page)
   	find 		 :all,
 		         :conditions => ['(products.name like :search OR products.model like :search OR products.upc like :search OR description like :search OR vendors.name like :search OR product_categories.name like :search)', {:search => "%#{search}%"}],

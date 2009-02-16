@@ -31,7 +31,7 @@ module ApplicationHelper
     @privileges = Privilege.find(:all, :order => "name")
   end
   def get_price_group_names
-    @price_group_names = PriceGroupName.find(:all, :conditions => ['price_groups.entity_id=:site_id', {:site_id => "#{current_user.location.id}"}], :order => "name", :joins => 'inner join price_groups on price_groups.price_group_name_id=price_group_names.id')
+    @price_group_names = PriceGroupName.find(:all, :conditions => ['price_groups.entity_id=:site_id', {:site_id => "#{current_user.location_id}"}], :order => "name", :joins => 'inner join price_groups on price_groups.price_group_name_id=price_group_names.id')
   end
   def get_price_groups
 #    @price_groups = PriceGroup.connection.execute(['SELECT price_groups.id, price_group_names.name FROM price_groups

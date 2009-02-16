@@ -1,4 +1,8 @@
-
+<% content_for :actions do %>
+	<% if current_user.has_rights(['admin','gerente']) %>
+		<dt> <%= link_to 'Nuevo discuento', new_discount_path, :class => 'action' %> </dt>
+	<% end %>
+<% end %>
 
 <% content_for :title do %>Lista de Discuentos<% end %>
 <h2>
@@ -19,8 +23,6 @@
    </div>
 <% end %>
 <br />
-<%= link_to 'Nuevo discuento', new_discount_path, :class => 'action' %>
-
 <%= will_paginate @discounts %>
 </div>
 

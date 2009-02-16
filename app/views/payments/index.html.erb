@@ -1,4 +1,6 @@
-
+<% if current_user.has_rights(['admin','gerente','compras','ventas']) %>
+	<% content_for :new do %><%= link_to 'Nuevo Pago', new_payment_path, :class => 'action' %><% end %>
+<% end %>
 <% content_for :title do %>Lista de Pagos<% end %>
 
 <table>
@@ -22,5 +24,6 @@
 </table>
 
 <br />
-
-<%= link_to 'Nuevo Pago', new_payment_path, :class => 'action' %>
+<% if current_user.has_rights(['admin','gerente','compras','ventas']) %>
+	<%= link_to 'Nuevo Pago', new_payment_path, :class => 'action' %>
+<% end %>

@@ -13,9 +13,11 @@
 
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-
-
+	
 class PricesController < ApplicationController
+	before_filter :login_required
+	access_control [:new, :show, :index, :create, :update, :edit] => '(gerente | admin)' 
+	access_control [:destroy] => '(admin)'
   # GET /prices
   # GET /prices.xml
   def index

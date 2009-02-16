@@ -1,5 +1,3 @@
-
-
 <% if @action=='bulk'%>
 	<%= render( 
 		:file          => "layouts/_header.html.erb", 
@@ -28,9 +26,13 @@
 		}
 	) %>
 <% end %>
-<% if flash[:notice] != nil %>
-	<p style="background: #008597; color: white; padding:2px;"> <%=  flash[:notice] %></p>
+<% if flash[:notice] %>
+	<p class="notice_message"><%= flash[:notice] %></p>
 <% end %>
+<% if flash[:error] %>
+	<p class="error_message"><%= flash[:error] %></p>
+<% end %>
+<div><%= yield :new %></div>
 <h1 class="block"><%= yield :title %></h1>
 <%= yield  %>
 <hr class="clear-contentunit" />

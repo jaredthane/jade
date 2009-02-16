@@ -1,5 +1,3 @@
-
-
 <% case @entity_type
 	when 'all' %>
 		<% content_for :title do %>Lista de Entidades<% end %>
@@ -8,44 +6,46 @@
 	<% when 'vendors' %>
 		<% content_for :title do %>Lista de Proveedores<% end %>
 	<% when 'clients' %>
-		<% content_for :title do %>Lista de Clientes<% end %>
-<% end %>
+		<% if @user_id %>
+			<% content_for :title do %>Lista de Mis Clientes<% end %>
+		<% else %>
+			<% content_for :title do %>Lista de Clientes<% end %>
+		<% end %>
 		
+<% end %>
+<% content_for :actions do %>
+	<% case @entity_type
+		 when 'sites' %>
+		 	<% if current_user.has_rights(['admin','gerente']) %>
+				<dt><%= link_to 'Nuevo sitio', "/sites/new", :class => 'action' %></dt>
+			<% end %>
+		<% when 'vendors' %>
+		 	<% if current_user.has_rights(['admin','compras','gerente']) %>
+				<dt><%= link_to 'Nuevo proveedor', "/vendors/new", :class => 'action' %></dt>
+			<% end %>
+		<% when 'clients' %>
+		 	<% if current_user.has_rights(['admin','compras','gerente','ventas']) %>
+				<dt><%= link_to 'Nuevo cliente', "/clients/new", :class => 'action' %></dt>
+			<% end %>
+	<% end %>
+<% end %>
+
 <div>
   <div class="table_header_row">
+    <div class="table_cell_30">Numero</div>
     <div class="table_cell_30">Nombre</div>
-    <div class="table_cell_30">Grupo de Precios por Defecto</div>
     <div class="table_cell">Tipo</div>
   </div>
 
 <% for entity in @entities %>
   <div class="table_row">
+    <div class="table_cell_30"><%= link_to entity.id, entity %></div>
     <div class="table_cell_30"><%= link_to entity.name[0..25], entity %></div>
-    <div class="table_cell_30">
-    <% if entity.entity_type %>
-		  <% case entity.entity_type.id
-				when 3 %>
-					<% if entity.price_group %>
-						<%= h entity.price_group.price_group_name.name[0..25] %>
-					<% end %>
-				<% when 2,5 %>
-					<% if entity.price_group_name %>
-						<%= h entity.price_group_name.name[0..25] %>
-					<% end %>
-			<% end %>
-		<% end %>
-    </div>
+    
     <div class="table_cell"><% if entity.entity_type %><%=h entity.entity_type.name %><% end %></div>
 	</div>
 <% end %>
 </div>
-
+<%= will_paginate @products %>
 <br />
-<% case @entity_type
-	 when 'sites' %>
-		<%= link_to 'Nuevo sitio', "/sites/new", :class => 'action' %>
-	<% when 'vendors' %>
-		<%= link_to 'Nuevo proveedor', "/vendors/new", :class => 'action' %>
-	<% when 'clients' %>
-		<%= link_to 'Nuevo cliente', "/clients/new", :class => 'action' %>
-<% end %>
+

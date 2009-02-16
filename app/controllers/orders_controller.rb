@@ -15,6 +15,52 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class OrdersController < ApplicationController
 	before_filter :login_required
+	access_control [:create_batch, :create_orders, :show_batch, :new_purchase] => '(gerente | admin | compras)' 
+	access_control [:new_sale] => '(gerente | admin | ventas)'
+	access_control [:destroy] => '(admin)'
+	def allowed(order_type, action)
+		case (order_type)
+		  when 'all'
+		  	if !current_user.has_rights(['admin','gerente'])
+		  		render :template=>'sessions/rejected'
+		  		return false
+		  	end
+		  when 'sales'
+		  	if action=="edit"
+					if !current_user.has_rights(['admin','gerente','ventas'])
+						render :template=>'sessions/rejected'
+						return false
+					end
+				elsif action=="view"
+					if !current_user.has_rights(['admin','gerente','ventas','compras'])
+						render :template=>'sessions/rejected'
+						return false
+					end
+				end
+		  when 'purchases'
+		  	if !current_user.has_rights(['admin','compras','gerente'])
+		  		render :template=>'sessions/rejected'
+		  		return false
+		  	end
+		  when 'internal'
+		  	if action=="edit"
+					if !current_user.has_rights(['admin','gerente','gerente'])
+						render :template=>'sessions/rejected'
+						return false
+					end
+				elsif action=="view"
+					if !current_user.has_rights(['admin','gerente','ventas','compras'])
+						render :template=>'sessions/rejected'
+						return false
+					end
+				end
+		  else
+		  	render :template=>'sessions/rejected'
+		  	return false
+    end  
+    return true  
+	end
+	
   # GET /orders
   # GET /orders.xml
   def index
@@ -30,6 +76,13 @@ class OrdersController < ApplicationController
 		when 'internal'
 			@orders = Order.search_internal(params[:search], params[:page])
 		end
+		if @orders.length == 1
+			@order=@orders[0]
+			return false if !allowed(@order.order_type, 'view')
+			render :action => 'show'
+			return false
+		end
+		return false if !allowed(@order_type, 'view')
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @orders }
@@ -37,6 +90,7 @@ class OrdersController < ApplicationController
   end
   def show_receipt
   	@receipt = Order.find(params[:id])
+  	return false if !allowed(@receipt.order_type, 'view')
 		params[:format] = 'pdf'
 		if @receipt.client.entity_type.id == 2
 			prawnto :prawn => { :page_size => 'RECEIPT',
@@ -138,7 +192,7 @@ class OrdersController < ApplicationController
   # GET /orders/1.xml
   def show
     @order = Order.find(params[:id])
-
+		return false if !allowed(@order.order_type, 'view')
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @order }
@@ -146,7 +200,7 @@ class OrdersController < ApplicationController
   end
 	def show_history
     @order = Order.find(params[:id])
-		
+		return false if !allowed(@order.order_type, 'view')
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @order }
@@ -158,6 +212,7 @@ class OrdersController < ApplicationController
   def new
     @order = Order.new
 		@order_type = params[:order_type] || 'all'
+		return false if !allowed(params[:order_type], 'edit')
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @order }
@@ -182,12 +237,14 @@ class OrdersController < ApplicationController
   # GET /orders/1/edit
   def edit
     @order = Order.find(params[:id])
+    return false if !allowed(@order.order_type, 'edit')
   end
 
   # POST /orders
   # POST /orders.xml
   def create
     @order = Order.new(params["order"])
+    return false if !allowed(@order.order_type, 'edit')
     respond_to do |format|
       if @order.save
       	list= params['new_lines'] || []
@@ -221,6 +278,7 @@ class OrdersController < ApplicationController
   # PUT /orders/1.xml
   def update
     @order = Order.find(params[:id])
+    return false if !allowed(@order.order_type, 'edit')
     
     #Update existing lines
     for l in @order.lines

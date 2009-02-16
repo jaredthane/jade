@@ -1,14 +1,24 @@
+<% if @entity.id==1 %>
+	<% content_for :title do %>Detalles de <%= @entity.name %><% end %>
+<% else %>
+	<% content_for :title do %>Detalles del <%= @entity.entity_type.name %> "<%= @entity.name %>" #<%= @entity.id %><% end %>
+<% end %>
 
-
-
-<% content_for :title do %>Detalles del <%= @entity.entity_type.name %> "<%= @entity.name %>"<% end %>
+<% content_for :actions do %>
+	<% if @entity.entity_type.id == 3 %>
+		<dt><%= link_to 'Compras para este Sitio', purchases_path, :class => 'action' %>  </dt>
+		<dt><%= link_to 'Ventas de este Sitio', sales_path, :class => 'action' %>  </dt>
+	<% end %>
+	<dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
+	<dt><%= link_to 'Atras', entities_path, :class => 'action' %></dt>
+<% end %>
 
   <% if @entity.entity_type_id !=3 and @entity.birthday? %>  
   	<% flash[:error] = 'Este cliente esta cumpliendo anos..' %> 
   <% end %>
 <div class="column2-unit-left">
 	<p>
-		<b>Nombre</b>
+		<b>Nombre</b><br />		
 		<%=h @entity.name %>
 	</p>
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
@@ -48,6 +58,14 @@
 					<%=h @entity.price_group.price_group_name.name %>
 				<% end %>
 			
+		</p>
+	<% end %>
+	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
+		<p>
+			<b>Asesor de Cliente</b><br />		
+				<% if @entity.user %>
+					<%=link_to @entity.user.login, @entity.user %>
+				<% end %>
 		</p>
 	<% end %>
 </div>
@@ -159,8 +177,6 @@
 				<% end %>
 			</div>
 		</p>
-		<%= link_to 'Compras para este Sitio |', purchases_path, :class => 'action' %>  
-		<%= link_to 'Ventas de este Sitio |', sales_path, :class => 'action' %>  
+
 <% end %>
-<%= link_to 'Cambiar |', edit_entity_path(@entity), :class => 'action' %>
-<%= link_to 'Atras', entities_path, :class => 'action' %>
+

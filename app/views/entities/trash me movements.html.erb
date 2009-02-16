@@ -1,0 +1,58 @@
+<% content_for :actions do %>
+		<dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
+		<dt><%= link_to 'Compras para esta Sitio', entities_path, :class => 'action' %>  </dt>
+		<dt><%= link_to 'Ventas de esta Sitio', entities_path, :class => 'action' %>  </dt>
+		<dt><%= link_to 'Lista', entities_path, :class => 'action' %></dt>
+<% end %>
+
+
+<div class="column2-unit-left">
+<p>
+  <b>Nombre:</b>
+  <%=h @entity.name %>
+</p>
+
+</div>
+<div class="column2-unit-right">
+<p>
+  <b>Tipo:</b>
+  <%=h @entity.entity_type.name %>
+</p>
+
+</div>
+<hr class="clear-contentunit" />
+<% if @entity.entity_type_id == 3 %>
+<% end %>
+
+<% case @entity.entity_type_id 
+	when 1 %>
+		<%= link_to 'Cambiar Nombre |', edit_entity_path(@entity), :class => 'action' %>
+		<%= link_to 'Compras de este Vendedor |', purchases_path, :class => 'action' %> 
+	<% when 2 %>
+		<%= link_to 'Cambiar Nombre |', edit_entity_path(@entity), :class => 'action' %>
+		<%= link_to 'Ventas a este Cliente |', entities_path, :class => 'action' %>
+	<% when 3 %>
+		<p>
+			<b>Movimientos:</b>
+			<div>
+				<div class="table_header_row">
+					<div class="table_cell_20">Movimiento</div>
+					<div class="table_cell_30">Producto</div>
+					<div class="table_cell_15">Cantidad</div>
+					<div class="table_cell_20">Usuario</div>
+					<div class="table_cell">Fecha</div>
+				</div>
+				<% for movement in @entity.movements %>
+					<div class="table_row">
+						<div class="table_cell_20"><%=h movement.movement_type.name %></div>
+						<div class="table_cell_30"><%=link_to movement.product.name, movement.product %></div>
+						<div class="table_cell_15"><%=h movement.quantity %> </div>
+						<div class="table_cell_20"><%=link_to movement.user.login, movement.user %> </div>
+						<div class="table_cell"><%=h movement.created_at.to_date.to_s %> </div>
+					</div>
+				<% end %>
+			</div>
+		</p>
+
+<% end %>
+

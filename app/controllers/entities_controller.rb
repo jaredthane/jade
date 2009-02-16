@@ -16,13 +16,83 @@
 class EntitiesController < ApplicationController
 	before_filter :login_required
 	access_control [:new, :create, :update, :edit, :destroy] => '(gerente | admin | ventas | compras)' 
-	
+	def allowed(entity_type)
+		case (entity_type)
+		  when 'sites'
+		  	if !current_user.has_rights(['admin','compras','gerente','ventas'])
+		  		render :template=>'sessions/rejected'
+		  		return false
+		  	end
+		  when 'clients'
+		  	if !current_user.has_rights(['admin','gerente','ventas'])
+		  		render :template=>'sessions/rejected'
+		  		return false
+		  	end
+		  when 'vendors'
+		  	if !current_user.has_rights(['admin','compras','gerente'])
+		  		render :template=>'sessions/rejected'
+		  		return false
+		  	end
+		  when 'entities'
+		  	if !current_user.has_rights(['admin','gerente'])
+		  		render :template=>'sessions/rejected'
+		  		return false
+		  	end
+		  when 1
+		  	if !current_user.has_rights(['admin','compras','gerente'])
+		  		render :template=>'sessions/rejected'
+		  		return false
+		  	end
+		  when 2
+		  	if !current_user.has_rights(['admin','gerente','ventas'])
+		  		render :template=>'sessions/rejected'
+		  		return false
+		  	end
+		  when 3
+		  	if !current_user.has_rights(['admin','compras','gerente','ventas'])
+		  		render :template=>'sessions/rejected'
+		  		return false
+		  	end
+		  when 5
+		  	if !current_user.has_rights(['admin','gerente','ventas'])
+		  		render :template=>'sessions/rejected'
+		  		return false
+		  	end
+		  else
+		  	render :template=>'sessions/rejected'
+		  	return false
+    end  
+    return true  
+	end
+	def my_clients
+		@user_id = User.current_user.id
+		@entity_type = 'clients'
+    return false if !allowed((params[:entity_type] || 'entities'))
+    puts "entity type = " + @entity_type
+    @entities = Entity.search(params[:search], params[:page], @entity_type, @user_id)
+    if @entities.length == 1
+			@entity=@entities[0]
+			render :action => 'show'
+			return false
+		end
+    respond_to do |format|
+      format.html { render :action => 'index' }
+      format.xml  { render :xml => @entities }
+      format.js
+    end
+	end
   # GET /entities
   # GET /entities.xml
   def index
     @entity_type = params[:entity_type] || 'all'
+    return false if !allowed((params[:entity_type] || 'entities'))
     puts "entity type = " + @entity_type
     @entities = Entity.search(params[:search], params[:page], @entity_type)
+    if @entities.length == 1
+			@entity=@entities[0]
+			render :action => 'show'
+			return false
+		end
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @entities }
@@ -44,6 +114,7 @@ class EntitiesController < ApplicationController
   def show
     @entity = Entity.find(params[:id])
 		@entity_type = @entity.entity_type_id
+		return if !allowed(@entity.entity_type_id || 'entities')
 		if @entity_type == 3
 			current_user.location_id = params[:id]
 			current_user.save
@@ -103,6 +174,7 @@ class EntitiesController < ApplicationController
     when 'entities'
     	@entity = Entity.new()
     end    
+    @entity.user=current_user
 		@entity_type=params[:entity_type]
     respond_to do |format|
       format.html # new.html.erb

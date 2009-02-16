@@ -1,5 +1,11 @@
 
 <h1><%= heading %></h1>
+<% content_for :actions do %>
+	<% if mode == 'edit' %>
+		<dt><%= link_to 'Ver', @movement %></dt>
+	<% end %>
+	<dt><%= link_to 'Lista', movements_path %></dt>
+<% end %>
 
 <%= error_messages_for :movement %>
 
@@ -42,7 +48,4 @@
   </p>
 <% end %>
 
-<% if mode == 'edit' %>
-<%= link_to 'Ver', @movement %> |
-<% end %>
-<%= link_to 'Atras', movements_path %>
+

@@ -2,6 +2,11 @@
 
 
 <% content_for :title do %><%=h @discount.name %> - <%=h @discount.upc %><% end %>
+<% content_for :actions do %>
+	<dt> <%= link_to 'Cambiar', edit_discount_path(@discount), :class =>'action' %>  </dt>
+	<dt> <%= link_to 'Lista', discounts_path, :class =>'action' %> </dt>
+<% end %>
+
 <h2>
 	<div class="table_cell">Mostrando precios del grupo: <%= current_user.current_price_group.price_group_name.name %></div>
 </h2>
@@ -72,5 +77,4 @@
 	</div>
 </p>
 
-<%= link_to 'Cambiar | ', edit_discount_path(@discount), :class =>'action' %> 
-<%= link_to 'Lista', discounts_path, :class =>'action' %>
+

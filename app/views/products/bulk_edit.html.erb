@@ -1,5 +1,12 @@
 
 <% content_for :title do %>Lista de Productos<% end %>
+<% content_for :actions do %>
+	<% if current_user.has_rights(['admin','compras','gerente']) %>
+		<dt><%= link_to "Generar Pedidos", '/orders/create_batch', :class => 'action' %></dt>
+		<dt><%= link_to "Dar Recomendaciones", '/products/recommend_quantities?search=' + @search, :class => 'action' %></dt>
+		<dt><%= link_to "Borrar Recomendaciones", '/products/clear_quantities?search=' + @search, :class => 'action' %></dt>
+	<% end %>
+<% end %>
 
 <% form_for :@products, :url => {:action => 'bulk_update'}, id => 1 do |f| %>
 <div>
@@ -15,11 +22,9 @@
 			<%= render :partial => 'line', :collection => @products %>
 		</div>
 	</div>
-	<%= link_to "Generar Pedidos | ", '/orders/create_batch', :class => 'action' %>
+	
 	<%= submit_tag "Guardar Cambios", :class => 'action' %>
 	<br />
-	<%= link_to "Dar Recomendaciones | ", '/products/recommend_quantities?search=' + @search, :class => 'action' %>
-	<%= link_to "Borrar Recomendaciones | ", '/products/clear_quantities?search=' + @search, :class => 'action' %>
 	<%= will_paginate @products %>
 <% end %>
 <br />

@@ -13,103 +13,97 @@
 
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
-class DiscountsController < ApplicationController
-  # GET /discounts
-  # GET /discounts.xml
+class CombosController < ApplicationController
+  # GET /combos
+  # GET /combos.xml
   
 	before_filter :login_required
 	access_control [:new, :create, :update, :edit, :destroy] => '(gerente | admin)' 
   def index
-    #@discounts = Product.find(:all)
-		@discounts = Product.search_for_discounts(params[:search], params[:page])
-		if @discounts.length == 1
-			@discount=@discounts[0]
-			render :action => 'show'
-			return false
-				#redirect_to('/products/' + @products[0].to_s)
-		end
+    #@combos = Product.find(:all)
+		@combos = Product.search_for_combos(params[:search], params[:page])
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @discounts }
+      format.xml  { render :xml => @combos }
       format.js
     end
   end
 
-  # GET /discounts/1
-  # GET /discounts/1.xml
+  # GET /combos/1
+  # GET /combos/1.xml
   def show
-    @discount = Product.find(params[:id])
+    @combo = Product.find(params[:id])
 
     respond_to do |format|
       format.html # show.html.erb
-      format.xml  { render :xml => @discount }
+      format.xml  { render :xml => @combo }
     end
   end
 
-  # GET /discounts/new
-  # GET /discounts/new.xml
+  # GET /combos/new
+  # GET /combos/new.xml
   def new
-    @discount = Product.new
-		@discount.relative=1
-		@discount.fixed=0
+    @combo = Product.new
+		@combo.relative=1
+		@combo.fixed=0
     respond_to do |format|
       format.html # new.html.erb
-      format.xml  { render :xml => @discount }
+      format.xml  { render :xml => @combo }
     end
   end
 
-  # GET /discounts/1/edit
+  # GET /combos/1/edit
   def edit
-    @discount = Product.find(params[:id])
+    @combo = Product.find(params[:id])
   end
 
-  # POST /discounts
-  # POST /discounts.xml
+  # POST /combos
+  # POST /combos.xml
   def create
-    @discount = Product.new(params[:product])
+    @combo = Product.new(params[:product])
 		for e in Entity.find_all_by_entity_type_id(3)
-    	i=Inventory.new(:entity=>e, :product=>@discount, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
+    	i=Inventory.new(:entity=>e, :product=>@combo, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
     	i.save
     end
-    for g in PriceGroup.all; Price.create(:product_id=>@discount.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price]); end
+    for g in PriceGroup.all; Price.create(:product_id=>@combo.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price]); end
     respond_to do |format|
-      if @discount.save
+      if @combo.save
       	list= params['new_reqs'] || []
       	for l in list
-      		new_req = Requirement.new(:product_id=>@discount.id)
+      		new_req = Requirement.new(:product_id=>@combo.id)
       		new_req.update_attributes(l)
-      		@discount.requirements << new_req
+      		@combo.requirements << new_req
       	end
         flash[:notice] = 'Discuento ha sido creado exitosamente.'
-        format.html { redirect_to(discounts_url) }
-        format.xml  { render :xml => @discount, :status => :created, :location => @discount }
+        format.html { redirect_to(combos_url) }
+        format.xml  { render :xml => @combo, :status => :created, :location => @combo }
       else
         format.html { render :action => "new" }
-        format.xml  { render :xml => @discount.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @combo.errors, :status => :unprocessable_entity }
       end
       
     end
   end
 
-  # PUT /discounts/1
-  # PUT /discounts/1.xml
+  # PUT /combos/1
+  # PUT /combos/1.xml
   
   def update
 		logger.info "==============running discioutns update====================="
-		@discount = Product.find(params[:id])
+		@combo = Product.find(params[:id])
 		#Update existing reqs
-    for l in @discount.requirements
+    for l in @combo.requirements
 			if params['existing_reqs']
 				if params['existing_reqs'][l.id.to_s]
 					logger.debug "UPDATING l=#{l.inspect}"
 					l.attributes = params['existing_reqs'][l.id.to_s]
 				else
 					logger.debug "DELETING l=#{l.inspect}"
-					@discount.requirements.delete(l)
+					@combo.requirements.delete(l)
 				end
 			else
 				logger.debug "DELETING l=#{l.inspect}"
-				@discount.requirements.delete(l)
+				@combo.requirements.delete(l)
 			end
 		end
 		
@@ -117,26 +111,26 @@ class DiscountsController < ApplicationController
 		list= params['new_reqs'] || []
   	for l in list
   		logger.debug "ADDING l=#{l.inspect}"
-  		new_req = Requirement.new(:product_id=>@discount.id)
+  		new_req = Requirement.new(:product_id=>@combo.id)
   		new_req.update_attributes(l)
-  		@discount.requirements.push( new_req)
+  		@combo.requirements.push( new_req)
   	end
-		if  @discount.update_attributes(params[:product])
+		if  @combo.update_attributes(params[:product])
 			flash[:notice] = 'Discuento ha sido actualizado exitosamente.'
 		end
-	redirect_to(discount_path(@discount))
+	redirect_to(combo_path(@combo))
 
   end
   
   
-  # DELETE /discounts/1
-  # DELETE /discounts/1.xml
+  # DELETE /combos/1
+  # DELETE /combos/1.xml
   def destroy
-    @discount = Product.find(params[:id])
-    @discount.destroy
+    @combo = Product.find(params[:id])
+    @combo.destroy
 
     respond_to do |format|
-      format.html { redirect_to(discounts_url) }
+      format.html { redirect_to(combos_url) }
       format.xml  { head :ok }
     end
   end

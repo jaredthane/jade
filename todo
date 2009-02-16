@@ -1,10 +1,14 @@
 ================= Required:  =======================================
-Fix Discounts
-Make discounts calculate prices based on sum of reqs
+
+
 ================= Desired:   =======================================
-make combos work
-License Agreement
+
+
 ================= PostPoned: =======================================
+make combos work
+setting a product to use serial numbers after its already been used causes inconsitancies in the database.
+- disallow changing serialized on products
+add and remove payment types
 should be able to delete sites
 price_group must be set for every site when created
 price_group_name must be set for every client when created
@@ -55,15 +59,12 @@ add forget and change password functionality as per http://railsonedge.blogspot.
 show flash message on previous page if they don't have permissions
 translate Logged in successfully
 use Google Chart API for charts on reports
-product combos / garentees
-internal consumption of products
-specials
+product combos
 physical counts
 reports
 credit
-returns
 price quotes
-
+create client on the fly in sales
 different costs for each location
 need to be able to modify price groups
  - should create prices for every product when creating a new group
@@ -100,6 +101,16 @@ Cuenta Fisica uses Vendor field to store entity
 have Devolucion product and use it to charge people for returns(See: If I feel like it)
 you can't delete products. Period.
 internal consumption should be entity #1 and should not have an entity type.
+to set auto increment value do this-> 
+ALTER TABLE entities AUTO_INCREMENT = 1264
+update entities set id=id+1200;
+update products set vendor_id=vendor_id+1200 where vendor_id>1;
+update orders set client_id=client_id+1200 where client_id>1;
+update orders set vendor_id=vendor_id+1200 where vendor_id>1;
+update price_groups set entity_id=entity_id+1200 where entity_id>1;
+update movements set entity_id=entity_id+1200 where entity_id>1;
+update inventories set entity_id=entity_id+1200 where entity_id>1;
+update users set location_id=location_id+1200;
 ==================== Done ======================================
 Make names in index views clickable bringing to show
 How do I get money formatted text?
@@ -119,6 +130,9 @@ types of clients - consumidor final, credito fiscal
 replace most selects with autocomplete fields
 make autocompletes work on inserted lines
 Need views that show just Compras or Ventas
+garentees
+internal consumption of products
+specials
 new entity doesn't work
 How do I get client.orders to work:
 	no field entitiy_id (its client or vendor) 
@@ -132,7 +146,7 @@ add delete to edit views
 Have to translate the created successfully message
 Add line to orders puts it in the wrong place. 
 -Probably have to rebuild entire table
-
+returns
 Format Show Order View
 User should be able to Go to a Location and click on Set this as my current location. or defualt... somehting like that.
 unidad out of place on edit product
@@ -176,7 +190,7 @@ allow mass changing of prices
 allow relative pricing
 make it validate qunatities available and serial numbers
 MUST!! add inventories each time add product or site
---- Version 0.55 --- (stable)
+========================================  Version 0.55 ========================================  (stable)
 Made links for location and vendor on serial product view
 Made warranties redirect to index after create and update
 added remove column on warranties index
@@ -185,7 +199,7 @@ made models show on new, edit and show and made it searchable
 added audit logger. we can now audit actions
 found "ghost" that checkboxes arn't compatible with arrays
 changed to textbox for now later can use javascript
---- Version 0.56 ---
+========================================  Version 0.56 ======================================== 
 disabled enter on serial number and upc fields
 made serialized product view show movements in reverse order
 made order text box bigger on bulk edit (if its still too small might have to edit css)
@@ -195,25 +209,25 @@ put version numbers in headers
 added detail fields to entities
 added birthday view
 fixed huminized description for upc
---- Version 0.57 ---
+========================================  Version 0.57 ======================================== 
 added email, giro, cell phone number, nit and others
 made them so you can use hyphens and spaces.
 added states and table to list the states
---- Version 0.58 ---
+========================================  Version 0.58 ======================================== 
 Added tax field to line
 controller for new payment should check to see if search contains a valid order_id and use it.
 should be able to click on product > movements
---- Version 0.59 ---
+========================================  Version 0.59 ======================================== 
 added receipts
 each order has one receipt which is always generated on demand
---- Version 0.60 ---
+========================================  Version 0.60 ======================================== 
 allows different price groups for users
 services now working
 now able to search for serial number
 able to change availablity on products and services
 made purchases show up for credito fiscal clients 
 created and formatted second receipt layout
---- Version 0.61 ---
+========================================  Version 0.61 (UNSTABLE) ======================================== 
 make it so internals dont show up 
 consumo interno
 made new entity # 1 -Consumo Interno
@@ -223,7 +237,21 @@ names for numbers on facturas
 fixed formating of prices on create order forms
 added returned and presented to payments
 updated index, edit, new and show payments
---- Version 0.62 ---
+========================================  Version 0.62 (STABLE) ======================================== 
 Made link to create new entity at bottom of entitiy index direct to right entity type
 fixed creation of products to set price correctly
 added fixed and relative fields for rquirements and discounts
+Fix Discounts
+Make discounts calculate prices based on sum of reqs
+Added License
+fixed showing availability of services on service show
+======================================== Version 0.63 ===================================================
+show show page when search returns only one item
+show pagination at end of clients list
+add 'new' link at top of indecies
+show Pagination on index clients
+show and search by client #s
+hide vendors from sales group
+assign a salesperson for each client
+client index shouldnt show pricegroup
+======================================== Version 0.64 ===================================================

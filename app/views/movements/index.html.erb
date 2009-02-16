@@ -1,5 +1,8 @@
 
 <% content_for :title do %>Lista de Movimientos en <%= current_user.location.name %><% end %>
+<% content_for :actions do %>
+	<dt><%= link_to 'Inventario', products_url, :class => 'action' %></dt>
+<% end %>
 
 <div>
   <div class="table_header_row">
@@ -28,5 +31,4 @@
 </div>
 <br />
 <%= will_paginate @movements %>
-<%= link_to 'Inventario | ', products_url, :class => 'action' %>
-<%= link_to 'Movimiento Nuevo', new_movement_path, :class => 'action' %>
+

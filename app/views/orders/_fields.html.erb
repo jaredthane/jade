@@ -2,6 +2,10 @@
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "order_edit" %>
 <% end %>
+<% content_for :actions do %>
+	<dt><%= link_to 'Remover', @order, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+	<dt><%= link_to 'Cancelar', orders_url, :class => 'action' %></dt>
+<% end %>
 
 <%= error_messages_for :order, :header_message => "Tratelo otra vez, por favor!", :message => "Habian algunas difcultades guardando los cambios al pedido:" %>
 
@@ -89,7 +93,6 @@
   <b>Comentarios para los Movimientos</b><br />
   <%= f.text_area :comments, :class => 'comments' %>
 </p>
-<%= f.submit "Guardar Pedido | ", :class => 'action' %>
-<%= link_to 'Remover | ', @order, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %>
-<%= link_to 'Cancelar', orders_url, :class => 'action' %>
+<%= f.submit "Guardar Pedido", :class => 'action' %>
+
 	

@@ -14,8 +14,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
 
 class Entity < ActiveRecord::Base
 	validates_presence_of(:name, :message => "Debe introducir el nombre de la entidad.")
@@ -34,6 +32,8 @@ class Entity < ActiveRecord::Base
   # This is the default price group to be used if a clients normal price group isn't available here
   # to be used with Sites
   belongs_to :price_group
+  
+  belongs_to :user
   
 	has_many :orders, :order => 'created_at'
 	has_many :products, :through => :inventories
@@ -133,28 +133,29 @@ class Entity < ActiveRecord::Base
   def nit_number=(number)
   	self.nit=strip(number, ['-',' '])
   end
-  def self.search(search, page, entity_type='all')
+  def self.search(search, page, entity_type='all', user_id=0)
   	#puts "search=" + search
   	search = search || ""
   	#puts "search=" + search
   	case entity_type
 			when 'clients'
-				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%') AND (entity_type_id = 2 OR entity_type_id = 5)"
+				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND (entity_type_id = 2 OR entity_type_id = 5)"
 			when 'end_users'
-				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%') AND entity_type_id = 2"
+				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entity_type_id = 2"
 			when 'wholesale_clients'
-				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%') AND entity_type_id = 5"
+				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entity_type_id = 5"
 			when 'vendors'
-				condition = "entities.name like '%" + search +"%' AND entity_type_id = 1"
+				condition = "(entities.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entity_type_id = 1"
 			when 'sites'
-				condition = "(entities.name like '%" + search +"%' OR site_group.name like '%" + search +"%') AND entity_type_id = 3"
+				condition = "(entities.name like '%" + search +"%' OR site_group.name like '%" + search +"%' OR entities.id like '%" + search +"%') AND entity_type_id = 3"
 			else
-				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR site_group.name like '%" + search +"%') AND entities.id!=1"
+				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR site_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entities.id!=1"
   	end
+  	condition += ' AND entities.user_id = ' + user_id.to_s if user_id != 0 
   	#puts "condition=" + condition
 		paginate :per_page => 20, :page => page,
 		       :conditions => condition,
-		       :joins => 'left join price_group_names as client_group on client_group.id=entities.price_group_name_id left join price_groups on entities.price_group_id=price_groups.id left join price_group_names as site_group on site_group.id = price_groups.price_group_name_id',
+		       :joins => 'left join price_group_names as client_group on client_group.id=entities.price_group_name_id left join price_groups on entities.price_group_id=price_groups.id left join price_group_names as site_group on site_group.id = price_groups.price_group_name_id left join users on users.id=entities.user_id',
 		       :order => 'name'
 	end
 	def self.search_birthdays(search)

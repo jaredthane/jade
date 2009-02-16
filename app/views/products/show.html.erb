@@ -1,12 +1,18 @@
-
 <% content_for :title do %><%=h @product.name %> - <%=h @product.upc %><% end %>
-
+<% content_for :actions do %>
+	<% if current_user.has_rights(['admin','compras','gerente']) %>
+		<dt><%= link_to 'Cambiar', edit_product_path(@product), :class =>'action' %> </dt>
+  <% end %>
+  <dt><%= link_to 'Lista', products_path, :class =>'action' %></dt>
+<% end %>
 <div class="column3-unit-left">
+	<% if current_user.has_rights(['admin','compras','gerente']) %>
 	<p><b>Proveedor</b><br />
     <% if @product.vendor %>
     	<%=h @product.vendor.name %>	
     <% end %>
   </p>
+  <% end %>
 	<p>
     <b>Minimo</b><br />
     <%=h @product.min(current_user.location_id) %>
@@ -73,7 +79,4 @@
 		<% end %>
 	</div>
 </p>
-<% if current_user.has_rights(['admin','compras','gerente']) %>
-	<%= link_to 'Cambiar | ', edit_product_path(@product), :class =>'action' %> 	
-<% end %>
-<%= link_to 'Lista', products_path, :class =>'action' %>
+

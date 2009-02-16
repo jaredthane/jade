@@ -1,6 +1,10 @@
-
 <% content_for :title do %>Lista de Clientes Cumpliendo Anos Este Dia<% end %>
-		
+<% content_for :actions do %>
+	<% if current_user.has_rights(['admin','compras','gerente','ventas']) %>
+		<dt> <%= link_to 'Nuevo cliente', "/clients/new", :class => 'action' %> </dt>
+	<% end %>
+<% end %>
+
 <div>
   <div class="table_header_row">
     <div class="table_cell_20">Nombre</div>
@@ -27,6 +31,5 @@
 
 <br />
 
-<%= link_to 'Nueva entidad', new_entity_path, :class => 'action' %>
 
 

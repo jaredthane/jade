@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
@@ -16,9 +15,25 @@
   <meta http-equiv="expires" content="3600" />
   <meta name="revisit-after" content="2 days" />
   <meta name="robots" content="index,follow" />
-  <meta name="publisher" content="Your publisher infos here ..." />
-  <meta name="copyright" content="Your copyright infos here ..." />
-  <meta name="author" content="Design: Wolfgang (www.1-2-3-4.info) / Modified: Your Name" />
+  <meta name="publisher" content="Thane Media" />
+  <meta name="copyright" content="    
+    Jade Inventory Control System
+    Copyright (C) 2009 Thane Media
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses.
+    " />
+  <meta name="author" content="Design: Wolfgang (www.1-2-3-4.info) / Modified: Jared Martin" />
   <meta name="distribution" content="global" />
   <meta name="description" content="Your page description here ..." />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
@@ -48,7 +63,7 @@
         <!-- Sitelogo and sitename -->
         <a class="sitelogo" href="#" title="Pagina de Inicio"></a>
         <div class="sitename">
-          <h1><a href="/products" title="Pagina de Inicio">Jade<span style="font-weight:normal;font-size:50%;">&nbsp;version 0.62</span></a></h1>
+          <h1><a href="/products" title="Pagina de Inicio">Jade<span style="font-weight:normal;font-size:50%;">&nbsp;version 0.63</span></a></h1>
           <h2>Sistema de Control de Inventario</h2>
         </div>
 
@@ -74,38 +89,47 @@
       
         <!-- Navigation Level 2 (Drop-down menus) -->
         <div class="nav2">
+        <% if current_user.has_rights(['admin','ventas','gerente','compras']) %>
         	<ul>
     <li><a title="Nuevo">Nuevo</a>
 			<ul>
-	  		<li><a href="/sales/new" title="Venta">Venta</a></li>
+				<% if current_user.has_rights(['admin','ventas','gerente']) %>
+	  			<li><a href="/sales/new" title="Venta">Venta</a></li>
+	  			<li><a href="/clients/new" title="Cliente">Cliente</a></li>
+	  		<% end %>
+	  		<% if current_user.has_rights(['admin','compras','gerente']) %>
 	  		<li><a href="/purchases/new" title="Compra">Compra</a></li>
 				<li><a href="/products/new" title="Producto">Producto</a></li>
-	  		<li><a href="/clients/new" title="Cliente">Cliente</a></li>
-	  		<li><a href="/discounts/new" title="Discuento">Discuento</a></li>
-	  		<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
-	  		<li><a href="/internal/new" title="Consumo Interno">Consumo Interno</a></li>
-	  		<li><a href="/sites/new" title="Sitio">Sitio</a></li>
+	  			<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
+	  		<% end %>
+  			<li><a href="/discounts/new" title="Discuento">Discuento</a></li>
+  			<li><a href="/internal/new" title="Consumo Interno">Consumo Interno</a></li>
+  			<li><a href="/sites/new" title="Sitio">Sitio</a></li>
   			</ul>
 		</li>
 		<li><a href="/products" title="Productos">Productos</a>
 			<ul>
-	  		<li><a href="/products" title="Productos">Productos</a></li>
-	  		<li><a href="/services" title="Servicios">Servicios</a></li>
-	  		<li><a href="/serialized_products" title="Numeros de Serie">Numeros de Serie</a></li>
-	  		<li><a href="/warranties" title="Garantías">Garantías</a></li>
-	  		<li><a href="/discounts" title="Discuentos">Discuentos</a></li>
-	  		<li><a href="/movements" title="Movimientos">Movimientos</a></li>
-	  		<li><a href="/prices" title="Cambiar Precios">Cambiar Precios</a></li>
-	  		<li><a href="/units" title="Unidades">Unidades</a></li>
-	  	</ul>
+				<li><a href="/products" title="Productos">Productos</a></li>
+				<li><a href="/services" title="Servicios">Servicios</a></li>
+				<li><a href="/serialized_products" title="Numeros de Serie">Numeros de Serie</a></li>
+				<li><a href="/warranties" title="Garantías">Garantías</a></li>
+				<li><a href="/discounts" title="Descuentos">Descuentos</a></li>
+				<li><a href="/movements" title="Movimientos">Movimientos</a></li>
+				<% if current_user.has_rights(['admin','gerente']) %>
+					<li><a href="/prices" title="Cambiar Precios">Cambiar Precios</a></li>
+				<% end %>
+				<li><a href="/units" title="Unidades">Unidades</a></li>
+			</ul>
 		</li>
-	  <li><a href="/purchases" title="Compras">Compras</a>
-	  	<ul>
-	  		<li><a href="/purchases" title="Compras">Compras</a></li>
-	  		<li><a href="/orders/show_batch" title="Últimas Compras">Últimas Compras</a></li>
-	  		<li><a href="/products/bulk_edit" title="Reaprovisionar">Reaprovisionar</a></li>
-	  	</ul>
-	  </li>
+		<% if current_user.has_rights(['admin','gerente','compras']) %>
+			<li><a href="/purchases" title="Compras">Compras</a>
+				<ul>
+					<li><a href="/purchases" title="Compras">Compras</a></li>
+					<li><a href="/orders/show_batch" title="Últimas Compras">Últimas Compras</a></li>
+					<li><a href="/products/bulk_edit" title="Reaprovisionar">Reaprovisionar</a></li>
+				</ul>
+			</li>
+	 	<% end %>
 	  <li><a href="/sales" title="Ventas">Ventas</a>		
 	  	<ul>
 	  		<li><a href="/sales" title="Ventas">Ventas</a></li>
@@ -114,10 +138,17 @@
 	  </li>												
 	  <li><a href="/entities" title="Entidades">Entidades</a>
 	  	<ul>
-	  		<li><a href="/vendors" title="Proveedores">Proveedores</a></li>
-	  		<li><a href="/clients" title="Clientes">Clientes</a></li>
-	  		<li><a href="/sites" title="Sitios">Sitios</a></li>
-	  		<li><a href="/birthdays" title="Cumpleanos">Cumpleanos</a></li>
+	  		<% if current_user.has_rights(['admin','gerente','compras']) %>
+	  			<li><a href="/vendors" title="Proveedores">Proveedores</a></li>
+	  		<% end %>
+	  		<% if current_user.has_rights(['admin','gerente','ventas']) %>
+	  			<li><a href="/clients" title="Clientes">Clientes</a></li>
+	  			<li><a href="/entities/my_clients" title="Mis Clientes">Mis Clientes</a></li>
+	  		<% end %>
+	  			<li><a href="/sites" title="Sitios">Sitios</a></li>
+	  		<% if current_user.has_rights(['admin','gerente','ventas']) %>
+	  			<li><a href="/birthdays" title="Cumpleanos">Cumpleanos</a></li>
+	  		<% end %>
 	  	</ul>
 	  </li>
 	  <li><a href="/locations" title="Inventario">Inventario</a>
@@ -127,8 +158,11 @@
   			<% end %>
   		</ul>
   	</li>
-	  <li><a href="/payments" title="Pagos">Pagos</a></li>
+  	<% if current_user.has_rights(['admin','gerente','ventas']) %>
+	  	<li><a href="/payments" title="Pagos">Pagos</a></li>
+	  <% end %>
 	</ul>
+	<% end %>
 					<%= yield :nav2 %>	
         </div>
 	  </div>
@@ -152,40 +186,62 @@
         <!-- Navigation Level 3 -->
         <div class="round-border-topright"></div>
         <div class="round-border-topright"></div>
-  <h1 class="first">Enlaces</h1>
+  <h1 class="first">Acciones</h1>
+		<dl class="nav3-bullet">
+		   <%= yield :actions %>
+		</dl>      
+  <h1>Enlaces</h1>
 	<dl class="nav3-grid">
+	<% if current_user.has_rights(['admin','ventas','gerente','compras']) %>
 		<dt><a href="/products">Productos</a></dt>
 			<dd><a href="/products">Productos</a></dd>
 			<dd><a href="/services">Servicios</a></dd>
 			<dd><a href="/serialized_products">Numeros de Serie</a></dd>
-			<dd><a href="/discounts">Discuentos</a></dd>
+			<dd><a href="/discounts">Descuentos</a></dd>
 			<dd><a href="/warranties">Garantías</a></dd>
-			<dd><a href="/prices">Cambiar Precios</a></dd>
-			<dd><a href="/products/bulk_edit">Reaprovisionar</a></dd>
+			<% if current_user.has_rights(['admin','gerente']) %>
+				<dd><a href="/prices">Cambiar Precios</a></dd>
+			<% end %>
+			<% if current_user.has_rights(['admin','gerente','compras']) %>
+				<dd><a href="/products/bulk_edit">Reaprovisionar</a></dd>
+			<% end %>
 			<dd><a href="/units">Unidades</a></dd>
 		<dt><a href="/orders">Pedidos</a></dt>
+			<% if current_user.has_rights(['admin','gerente','compras']) %>
 		  <dd><a href="/purchases">Compras</a></dd>
+		  <dd><a href="/orders/show_batch">Últimas Compras</a></dd>
+		 <% end %>
 		  <dd><a href="/sales">Ventas</a></dd>
 		  <dd><a href="/internal">Consumo Interno</a></dd>
-		  <dd><a href="/orders">Por Fecha</a></dd>		
-		  <dd><a href="/orders/show_batch">Últimas Compras</a></dd>
 		<dt><a href="/products">Inventario</a></dt>
 		<% for location in get_locations %>
 			<dd><a href="/entities/<%= location.id %>"><%= location.name %></a></dd>		
   	<% end %>
   	<dt><a href="/entities">Entidades</a></dt>
+  		<% if current_user.has_rights(['admin','gerente','ventas']) %>
 	  	<dd><a href="/clients/">Clientes</a></dd>		
+	  	<dd><a href="/entities/my_clients">Mis Clientes</a></dd>		
+	  	
+	  <% end %>
+	  	<% if current_user.has_rights(['admin','gerente','compras']) %>
 	  	<dd><a href="/vendors/">Proveedores</a></dd>		
+	  <% end %>
 	  	<dd><a href="/sites/">Sitios</a></dd>		
 	  <dt><a href="/product_categories">Categorías</a></dt>
 	  <% for category in get_product_categories %>
 			<dd><a href="/product_categories/<%= category.id %>"><%= category.name %></a></dd>		
   	<% end %>
+  	<% if current_user.has_rights(['admin','gerente','ventas']) %>
   	<dt><a href="/payments">Pagos</a></dt>
+  	<% end %>
+  	<% if current_user.has_rights(['admin','gerente']) %>
 		<dt><a href="/users">Usuarios</a></dt>
+		<% end %>
 		<dt><a href="/logout">Salir</a></dt>
+		<% end %>
 	</dl>        
-        <%= yield :nav3 %>
+        
+		   <%= yield :nav3 %>
 
 
 

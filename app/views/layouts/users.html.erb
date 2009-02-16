@@ -10,7 +10,13 @@
 ) %>
 
 
-<p style="color: green"><%= flash[:notice] %></p>
+<% if flash[:notice] %>
+	<p class="notice_message"><%= flash[:notice] %></p>
+<% end %>
+<% if flash[:error] %>
+	<p class="error_message"><%= flash[:error] %></p>
+<% end %>
+<div><%= yield :new %></div>
 <h1 class="block"><%= yield :title %></h1>
 <%= yield  %>
 <hr class="clear-contentunit" />

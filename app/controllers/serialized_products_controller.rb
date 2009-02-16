@@ -20,7 +20,12 @@ class SerializedProductsController < ApplicationController
   # GET /serialized_products.xml
   def index
     @serialized_products = SerializedProduct.search(params[:search], params[:page])
-
+		if @serialized_products.length == 1
+			@serialized_product=@serialized_products[0]
+			render :action => 'show'
+			return false
+				#redirect_to('/products/' + @products[0].to_s)
+		end
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @serialized_products }

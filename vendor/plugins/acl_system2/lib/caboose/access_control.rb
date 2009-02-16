@@ -31,7 +31,7 @@ module Caboose
             if c.respond_to?:permission_denied
               c.send(:permission_denied)
             else  
-            	c.send(:render, :text => "No tiene derechos suficientes para usar esta funccion. (#{c.controller_name}/#{c.action_name})")
+            	c.send(:render, :template => "sessions/rejected")
             end
           end
         end

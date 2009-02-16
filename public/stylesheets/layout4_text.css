@@ -18,6 +18,7 @@
 		515147					
 		7cb4a9			
 		96c09c	
+		008597
 			
 */
 /* MAIN NAVIGATION */
@@ -28,17 +29,17 @@
 .nav1 .searchform input.button {float:right; width:5.0em;  padding:1px; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:120%;}
 .nav1 .searchform input.button:hover {cursor:pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:#96c09c;}
 
-
 .nav3-grid {width:199px; border-bottom:solid 1px rgb(200,200,200);}
 .nav3-grid dt a, .nav3-grid dt a:visited {display:block; min-height:2.0em /*Non-IE6*/; height:auto !important; height:2.0em /*IE6*/; line-height:2.0em; padding:0px 10px 0px 20px;  border-top: solid 1px rgb(200,200,200); text-decoration:none; color:#369472; font-weight:bold; font-size:120%;}
 .nav3-grid dd a, .nav3-grid dd a:visited {display:block; min-height:1.7em /*Non-IE6*/; height:auto !important; height:1.7em /*IE6*/; line-height:1.7em; padding:0px 10px 0px 40px; border:none; font-weight:normal; text-decoration:none; color:#515147; font-size:120%;}
-.nav3-grid dt a:hover, .nav3-grid dd a:hover {background-color:rgb(225,225,225); color:#96c09c; text-decoration:none;}
+.nav3-grid dt a:hover, .nav3-grid dd a:hover {background-color:rgb(225,225,225); color:#96c09c; text-decoration:bold; font-size:135%;}
+/*.nav3-grid dd a.action {font-size:150%; font-weight:bold;background:none;border:0;color:#515147}*/
 
 .nav3-bullet {width:170px; margin:10px 0 0 20px;}
 .nav3-bullet dt a, .nav3-bullet dt a:visited {line-height:2.0em; padding:0 0 0 10px; background:url(../images/img/bg_bullet_full_1.gif) no-repeat 0px 50%; text-decoration:none; color:#515147; font-weight:bold; font-size:120%;}
 .nav3-bullet dd a, .nav3-bullet dd a:visited {line-height:1.7em; margin:0 0 0 15px; padding:0 0 0 10px; background:url(../images/img/bg_bullet_half_1.gif) no-repeat 0px 50%; text-decoration:none; color:#515147; font-weight:normal; font-size:120%;}
-.nav3-bullet dt a:hover {background:url(../images/img/bg_bullet_full_2.gif) no-repeat 0px 50%; text-decoration:underline; color:#96c09c;}
-.nav3-bullet dd a:hover {background:url(../images/img/bg_bullet_half_2.gif) no-repeat 0px 50%; text-decoration:underline; color:#96c09c;}
+.nav3-bullet dt a:hover {background:url(../images/img/bg_bullet_full_2.gif) no-repeat 0px 50%; text-decoration:none; color:#96c09c;font-size:125%;}
+.nav3-bullet dd a:hover {background:url(../images/img/bg_bullet_half_2.gif) no-repeat 0px 50%; text-decoration:none; color:#96c09c;font-size:125%;}
 
 .nav3-nobullet {width:170px; margin:10px 0 0 20px;}
 .nav3-nobullet dt a, .nav3-nobullet dt a:visited {line-height:2.0em; text-decoration:none; color:#515147; font-weight:bold; font-size:120%;}
@@ -77,13 +78,16 @@
 
 /* MAIN CONTENT */
 .main-content h1.pagetitle {margin:0 0 0.4em 0; padding:0 0 2px 0; border-bottom:solid 7px rgb(225,225,225); font-family:"trebuchet ms",arial,sans-serif; color:rgb(100,100,100); font-weight:bold; font-size:220%;}
-.main-content h1.block {clear:both; margin:1.0em 0 0em 0; padding:2px 0 2px 2px; background:#7cb4a9; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:220%;}
+.main-content h1.block {clear:both; margin:.25em 0 0em 0; padding:2px 0 2px 2px; background:#008597; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:220%;}
 .main-content h1 {clear:both; margin:1.0em 0 0.5em 0; font-family:"trebuchet ms",arial,sans-serif; color:rgb(80,80,80); font-weight:normal; font-size:210%;}
 .main-content h2 {clear:both; margin:0.0em 0 0.5em 0; font-family:"trebuchet ms",arial,sans-serif; color:rgb(80,80,80); font-weight:normal; font-size:170%;}
 .main-content h3 {clear:both; margin:-1.0em 0 0.5em 0; font-family:"trebuchet ms",arial,sans-serif; color:rgb(125,125,125); font-weight:normal; font-size:130%;}
 .main-content h1.side {clear:none;}
 .main-content h2.side {clear:none;}
 .main-content h3.side {clear:none;}
+.main-content p.notice_message {background: #7cb4a9; color: white; padding:2px;}
+.main-content p.error_message {background: #e31c1c; color: white; padding:2px;}
+.main-content p.rejected {clear:both; margin:.25em 0 0em 0; padding:2px 0 2px 2px; background:#e31c1c; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:220%;}
 
 .main-content h4 {margin:1.5em 0 1.0em 0; color:rgb(80,80,80); font-family:"trebuchet ms",arial,sans-serif; font-weight:normal; font-size:170%;}
 .main-content h5 {margin:1.5em 0 1.0em 0; color:rgb(80,80,80); font-family:"trebuchet ms",arial,sans-serif; font-size:140%;}

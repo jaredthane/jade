@@ -1,18 +1,21 @@
-
 <% content_for :title do %>Lista de Unidades<% end %>
-
-<table>
-  <tr>
-    <th class="top" scope="col">Nombre</th>
-  </tr>
-
-<% for unit in @units %>
-  <tr>
-    <td><%= link_to unit.name, unit %></td>
-  </tr>
+<% if current_user.has_rights(['admin','compras','gerente','ventas']) %>
+	<% content_for :new do %><%= link_to 'Nueva unidad', new_unit_path, :class => 'action' %><% end %>
 <% end %>
-</table>
-
+<div>
+  <div class="table_header_row">
+    <div class="table_cell">Nombre de Unidad</div>
+  </div>
+<% for unit in @units %>
+  <div class="table_row"> 
+    <div class="table_cell"><%= h unit.name %></div>
+  </div>
+<% end %>
+<%= will_paginate @units %>
 <br />
+<% if current_user.has_rights(['admin','compras','gerente']) %>
+	<%= link_to 'Nueva unidad', new_unit_path, :class => 'action' %>
+<% end %>
+</div>
 
-<%= link_to 'Nueva unidad', new_unit_path %>
+
