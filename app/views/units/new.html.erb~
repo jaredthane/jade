@@ -1,0 +1,16 @@
+<h1>New unit</h1>
+
+<%= error_messages_for :unit %>
+
+<% form_for(@unit) do |f| %>
+  <p>
+    <b>Name</b><br />
+    <%= f.text_field :name %>
+  </p>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', units_path %>

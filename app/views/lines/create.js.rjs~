@@ -1,0 +1,2 @@
+
+page.insert_html :bottom, :lines, :partial => 'orders/line', :object => Line.new, :order_id => @order_id

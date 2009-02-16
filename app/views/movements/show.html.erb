@@ -1,0 +1,35 @@
+<% content_for :title do %>Detalle de Movimiento<% end %>
+
+<p>
+  <b>Producto:</b>
+  <%=link_to @movement.product.name, @movement.product %>
+</p>
+
+<p>
+  <b>Cantidad:</b>
+  <%=h @movement.quantity %>
+</p>
+
+<p>
+  <b>Sitio:</b>
+  <%=link_to @movement.entity.name, @movement.entity %>
+</p>
+<p>
+  <b>Tipo:</b>
+  <%=h @movement.movement_type.name %>
+</p>
+
+<p>
+  <b>Usuario:</b>
+  <%=link_to @movement.user.login, @movement.user %>
+</p>
+
+<p>
+  <b>Fecha:</b>
+  <%=h @movement.created_at.to_s(:long) %>
+</p>
+
+
+<%= link_to 'Cambiar | ', edit_movement_path(@movement), :class => 'action' %>
+<%= link_to 'Movimientos Para Este Producto | ', :controller => "movements", :search => @movement.product.upc, :class => 'action' %>
+<%= link_to 'Movimientos Recientes', movements_path, :class => 'action' %>

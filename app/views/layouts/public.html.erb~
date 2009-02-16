@@ -1,0 +1,51 @@
+<%= render( :file          => "layouts/_header.html.erb",
+            :use_full_path => true,
+            :locals        => { :title => "Blog on Rails" } )
+%>
+ 
+<div id="header">
+      <div id="header_inner" class="fixed">
+            <div id="logo">
+                  <h1><span>Blog on Rails</span>1.0</h1>
+                  <h2>Taller Estiu 2.0</h2>
+            </div>
+            <div id="menu">
+                  <ul>
+                        <li><a href="/" class="active">Inicio</a></li>
+                        <li><%#= link_to "Admin", admin_posts_path %></li>
+                  </ul>
+            </div>
+      </div>
+</div>
+                       
+<div id="main">
+<div id="main_inner" class="fixed">                     
+            <div id="primaryContent_2columns">
+                  <div id="columnA_2columns">
+                  <p style="color: green">
+                      <%= flash[:notice] %>
+                  </p>
+                       
+                  <%= yield %>
+                       
+                  </div>
+</div>
+            <div id="secondaryContent_2columns">
+                  <div id="columnC_2columns">
+                        <h4>Vendors</h4>
+                        <ul class="links">
+                        <% get_vendors.each do |vend| %>
+                             <li>
+                                <a href="/vendors/<%=vend.id%>/products">
+                                    <%=vend.name%> (<%=vend.products.count%>)
+                                </a>
+                             </li>
+                        <% end %>
+                        </ul>
+                  </div>
+            </div>
+      </div>
+</div>
+<br class="clear" />
+           
+<%= render(:file => "layouts/_footer.html.erb", :use_full_path => true ) %>

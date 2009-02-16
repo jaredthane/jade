@@ -1,0 +1,51 @@
+<% content_for :title do %>Lista de Productos<% end %>
+
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_20">Nombre</div>
+    <div class="table_cell_20">Proveedor</div>
+    <div class="table_cell_5">Min</div>
+    <div class="table_cell_5">Max</div>
+    <div class="table_cell_10">Cantidad</div>
+    <div class="table_cell_10">Precio</div>
+    <% if current_user.has_rights(['admin','compras','gerente']) %>
+    	<div class="table_cell_10">Costo</div>
+    <% end %>
+    <div class="table_cell">Upc</div>
+  </div>
+
+<% for product in @products %>
+  <div class="table_row">
+    <div class="table_cell_20"><%= link_to product.name[0..25], product %></div>
+    <div class="table_cell_20"><%= link_to product.vendor.name[0..25], product.vendor %></div>
+    <div class="table_cell_5"><%=h product.min(current_user.location_id) %></div>
+    <div class="table_cell_5"><%=h product.max(current_user.location_id) %></div>
+    <div class="table_cell_10">
+    	<% if product.product_type_id==4 %>
+    		<h>Servicio </h>
+    	<% else %>
+    		<%=h current_user.location.inventory(product) %>
+    	<% end %>  
+    </div>
+    <div class="table_cell_10"><%=h number_to_currency(product.price) %></div>
+    <% if current_user.has_rights(['admin','compras','gerente']) %>
+	    <div class="table_cell_10"><%=h number_to_currency(product.cost) %></div>
+    <% end %>
+    <div class="table_cell"><%=h product.upc %></div>
+   </div>
+<% end %>
+<br />
+<% if current_user.has_rights(['admin','compras','gerente']) %>
+	<%= link_to 'Nuevo producto | ', new_product_path, :class => 'action' %>
+	<%= link_to 'Reaprovisionar | ', '/products/bulk_edit?search=' + @search, :class => 'action' %>
+	<%= link_to "Cambiar Precios | ", '/products/edit_prices?search=' + @search, :class => 'action' %>
+<% end %>
+
+<%= link_to 'Movimientos', movements_url, :class => 'action' %>
+
+
+<%= will_paginate @products %>
+</div>
+
+
+

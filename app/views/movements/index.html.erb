@@ -1,0 +1,31 @@
+<% content_for :title do %>Lista de Movimientos<% end %>
+
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_20">Tipo</div>
+    <div class="table_cell_20">Producto</div>
+    <div class="table_cell_20">Cantidad <br /> (Numero Serie)</div>
+    <div class="table_cell_20">Usuario</div>
+    <div class="table_cell">Fecha</div>
+  </div>
+
+
+<% for movement in @movements %>
+  <div class="table_row">
+    <div class="table_cell_20"><%= link_to movement.movement_type.name, movement.order %></div>
+    <div class="table_cell_20"><%= link_to movement.product.name[0..20], movement.product %></div>
+  	<% if movement.serialized_product %>
+  		<div class="table_cell_20"><%= link_to "("+movement.serialized_product.serial_number.to_s+")", movement.serialized_product %></div>
+  	<% else %>
+  		<div class="table_cell_20"><%= h movement.quantity %></div>
+  	<% end %>
+    <div class="table_cell_20"><%= link_to movement.user.login, movement.user %></div>
+    <div class="table_cell"><%=h movement.created_at.to_date.to_s %></div>
+	</div>
+  <div class="table_row"><div class="table_cell"><%=h movement.comments %></div></div>
+<% end %>
+</div>
+<br />
+<%= will_paginate @movements %>
+<%= link_to 'Inventario | ', products_url, :class => 'action' %>
+<%= link_to 'Movimiento Nuevo', new_movement_path, :class => 'action' %>

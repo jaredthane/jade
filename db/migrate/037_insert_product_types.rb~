@@ -1,0 +1,9 @@
+class InsertProductTypes < ActiveRecord::Migration
+  def self.up
+  	ProductType.create(:name => "Simple")  	
+  	EntityType.create(:name => "Combo")  	
+  end
+
+  def self.down
+  end
+end

@@ -1,0 +1,18 @@
+<h1><%= heading %></h1>
+
+<%= error_messages_for :payment_method %>
+
+<% form_for(@payment_method) do |f| %>
+  <p>
+    <b>Nombre</b><br />
+    <%= f.text_field :name %>
+  </p>
+
+  <p>
+    <%= f.submit button_text %>
+  </p>
+<% end %>
+<% if mode == 'edit' %>
+<%= link_to 'Ver', @payment_method %> |
+<% end %>
+<%= link_to 'Atras', payment_methods_path %>

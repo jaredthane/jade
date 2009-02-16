@@ -1,0 +1,18 @@
+<div class="column2-unit-left">
+<p>
+  <b>Nombre:</b>
+  <%=h @entity.name %>
+</p>
+
+</div>
+<div class="column2-unit-right">
+<p>
+  <b>Tipo:</b>
+  <%=h @entity.entity_type.name %>
+</p>
+
+</div>
+
+<hr class="clear-contentunit" />
+<%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %> |
+<%= link_to 'Atras', entities_path, :class => 'action' %>

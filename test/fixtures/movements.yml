@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  entity: 
+  product: 
+  quantity: 1
+  movement_type: 
+  user: 
+  date: 2008-11-06
+
+two:
+  entity: 
+  product: 
+  quantity: 1
+  movement_type: 
+  user: 
+  date: 2008-11-06

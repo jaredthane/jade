@@ -1,0 +1,16 @@
+img.latex { vertical-align: middle; border: none; }
+
+form.contact-form { width: 100%; text-align: left; }
+form.contact-form textarea { width: 96%; }
+form.contact-form label { float: none; display: inline; }
+.form-error, form.contact-form p label.form-error { color: maroon; }
+
+.video-player { margin: auto; padding: 5px; text-align:center; border: 0px;}
+.wpvidavee_title { text-align:left; font-weight:bold; font-family:Tahoma,Arial,sans-serif; font-size:10px; line-height:12px; padding: 2px 5px; }
+.wpvidavee_footer { text-align:right; font-family:Tahoma,Arial,sans-serif; font-size:9px; line-height:11px; padding: 2px 5px; }
+.wpvidavee_footer a { text-decoration: none; }
+.wpvidavee_p { color: red; }
+
+.hidden { display: none; }
+
+.possibly-related { clear: both; }

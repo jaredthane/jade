@@ -1,0 +1,32 @@
+<h1>Editing combo_line</h1>
+
+<%= error_messages_for :combo_line %>
+
+<% form_for(@combo_line) do |f| %>
+  <p>
+    <b>Product</b><br />
+    <%= f.text_field :product %>
+  </p>
+
+  <p>
+    <b>Combo</b><br />
+    <%= f.text_field :combo %>
+  </p>
+
+  <p>
+    <b>Quantity</b><br />
+    <%= f.text_field :quantity %>
+  </p>
+
+  <p>
+    <b>Serialized product</b><br />
+    <%= f.text_field :serialized_product %>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @combo_line %> |
+<%= link_to 'Back', combo_lines_path %>

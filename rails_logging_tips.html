@@ -1,0 +1,454 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html><head>
+
+
+  <meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+  
+  <title>Maintainable Software: Rails Logging Tips</title>
+
+    <link rel="alternate" type="application/atom+xml" title="Maintainable Software Articles" href="http://maintainable.com/articles/feed.xml">
+  
+  <!--[if !IE]><!-->
+  <link href="rails_logging_tips_files/all.css" media="screen" rel="stylesheet" type="text/css">
+  <!--<![endif]-->
+
+  <!--[if IE]>
+  <link href="http://assets2.maintainable.com/stylesheets/cache/all_ie.css?1229019477" media="screen" rel="stylesheet" type="text/css" />
+  <![endif]-->
+
+  
+
+</head><body id="articles_show">
+  <div id="wrapper">
+
+  <div id="header" class="clr">
+    <div id="logo" class="left">
+      <span>
+      <a href="http://maintainable.com/"><img alt="Maintainable Software" src="rails_logging_tips_files/logo_white.gif"></a>
+      </span>
+    </div>
+    <span class="right">
+      <a href="http://maintainable.com/clients">Client Login</a>
+    </span>
+  </div>
+
+  <div id="edge_wrapper_right"><div id="edge_wrapper_left">
+    <div id="nav" class="clr with_subnav">
+      <ul id="main_nav" class="left">
+                <li>
+          <a href="http://maintainable.com/">Home</a>
+        </li>
+                <li>
+          <a href="http://maintainable.com/services">Services</a>
+        </li>
+                <li>
+          <a href="http://maintainable.com/case_studies">Our Work</a>
+        </li>
+                <li>
+          <a href="http://maintainable.com/about">About Us</a>
+        </li>
+                <li class="sel">
+          <a href="http://maintainable.com/articles">Resources</a>
+        </li>
+              </ul>
+
+      <ul id="aux_nav" class="right">
+        <li>
+          <a href="http://maintainable.com/news">News</a>
+        </li>        
+        <li>
+          <a href="http://maintainable.com/contact">Contact Us</a>
+        </li>
+      </ul>
+    </div>
+    
+<div id="sub_nav">
+<ul class="clr">
+  
+
+  
+  <li class="sel">
+    <a href="http://maintainable.com/articles">Articles</a>
+  </li>
+  
+  <li class="">
+    <a href="http://maintainable.com/software">Software</a>
+  </li>
+  
+  <li class="">
+    <a href="http://maintainable.com/books">Books</a>
+  </li>
+  
+</ul>
+</div>
+
+
+    <div id="content" class="clr">
+          
+
+  
+  <h1>Rails Logging Tips</h1>
+  <div class="snippet">
+Ruby on Rails comes prewired for logging using Logger from the Ruby
+Standard Library. This article demonstrates how to use the Rails
+logger, how to create your own logs, and offers some tips for debugging
+with console logging. </div>
+
+    <div id="main">
+    <p class="top">
+      In this article, we'll take a look at how to use the logging facilities
+      built into Rails and then share a few tips:
+      </p><ul>
+        <li><a href="#rails-logger">Accessing the Rails Logger</a></li>
+        <li><a href="#log-levels">Log Levels</a></li>
+        <li><a href="#reducing-log-file-size">Reducing Log File Size</a></li>
+        <li><a href="#filtering">Filtering Sensitive Parameters</a></li>
+        <li><a href="#audit-logs">Creating Audit Logs</a></li>
+        <li><a href="#activerecord-console">ActiveRecord Logging to the Console</a></li>
+        <li><a href="#actioncontroller-console">ActionController Logging to the Console</a></li>
+        <li><a href="#firebug-console">Firebug Console</a></li>
+      </ul>
+    
+
+    <h2 id="rails-logger">Accessing the Rails Logger</h2>
+    <p>
+      Rails automatically sets up logging to a file in the <code>log/</code>
+      directory using <a href="http://www.ruby-doc.org/stdlib/libdoc/logger/rdoc/">Logger</a>
+      from the Ruby Standard Library.  Do not confuse this with 
+      <a href="http://log4r.sourceforge.net/">Log4r</a>, a completely different library.  The
+      logfile will be named corresponding to your environment, e.g. <code>log/development.log</code>.
+    </p>
+
+    <p>
+      To log a message from either a controller or a model, access the Rails logger instance
+      with the <code>logger</code> method:
+    </p>
+
+    <div class="syntax syntax_ruby">
+    <pre><span class="keyword">class </span><span class="class">HomeController</span> <span class="punct">&lt;</span> <span class="constant">ActionController</span><span class="punct">::</span><span class="constant">Base</span>
+  <span class="keyword">def </span><span class="method">index</span>
+    <span class="ident">logger</span><span class="punct">.</span><span class="ident">info</span> <span class="punct">'</span><span class="string">informational message</span><span class="punct">'</span>
+  <span class="keyword">end</span>
+<span class="keyword">end</span></pre>
+    </div>
+
+    <p>
+      From outside a controller or model, you can pass the logger instance or access it
+      with the constant <code>RAILS_DEFAULT_LOGGER</code>.
+    </p>
+
+    <h2 id="log-levels">Log Levels</h2>
+    <p>
+      In the snippet above, a message is logged at the <code>INFO</code> level
+      by calling a method of the same name (<code>info</code>).  
+    </p>
+
+    <p>
+      The <a href="http://www.ruby-doc.org/stdlib/libdoc/logger/rdoc/">levels
+      available</a> on the logger are (in ascending order):
+      <code>debug</code>, <code>info</code>, <code>warn</code>,
+      <code>error</code>, and <code>fatal</code>.
+    </p>
+
+    <p>
+      Ruby's Logger supports masking levels so the types of messages recorded
+      in the log can be controlled. By default, Rails will log all levels
+      (<code>debug</code> and higher) in every environment except
+      <code>production</code>. In the <code>production</code> environment, it
+      will only log <code>info</code> and higher.  This behavior can be
+      changed in the configuration for each environment.
+    </p>
+
+    <h2 id="reducing-log-file-size">Reducing Log File Size</h2>
+    <p>
+      As noted above, the <code>production</code> environment logs at the
+      <code>info</code> level and higher by default. This means that for every
+      request received, messages will be written to the log about the request.
+    </p>
+      
+    <p>
+      As your traffic increases, the amount of log data can become
+      overwhelming and in some cases, writing the log to disk will begin 
+      to impact your server performance.
+    </p>
+
+    <p>
+      You can choose to log only at the <code>warn</code> level and higher. 
+      To do this, add a line to your <code>environments/production.rb</code>:
+    </p>
+    
+    <div class="syntax syntax_ruby">
+    <pre><span class="ident">config</span><span class="punct">.</span><span class="ident">log_level</span> <span class="punct">=</span> <span class="symbol">:warn</span></pre>
+    </div>          
+
+    <p>
+      Your log file size will be significantly reduced, with the tradeoff being
+      less visibility into your application server's operation.
+    </p>
+
+    <p>
+      A common cause of log bloat is the exception traces written to the log
+      when clients make requests that result in 404 Not Found.  Humans and robots
+      alike will request all kinds of bogus things, so this happens often.  Add 
+      this snippet to your <code>ApplicationController</code>:
+    </p>
+      
+    <div class="syntax syntax_ruby">
+    <pre><span class="constant">EXCEPTIONS_NOT_LOGGED</span> <span class="punct">=</span> <span class="punct">['</span><span class="string">ActionController::UnknownAction</span><span class="punct">',</span>
+                         <span class="punct">'</span><span class="string">ActionController::RoutingError</span><span class="punct">']</span>
+
+<span class="ident">protected</span>
+  <span class="keyword">def </span><span class="method">log_error</span><span class="punct">(</span><span class="ident">exc</span><span class="punct">)</span>
+    <span class="keyword">super</span> <span class="keyword">unless</span> <span class="constant">EXCEPTIONS_NOT_LOGGED</span><span class="punct">.</span><span class="ident">include?</span><span class="punct">(</span><span class="ident">exc</span><span class="punct">.</span><span class="ident">class</span><span class="punct">.</span><span class="ident">name</span><span class="punct">)</span>
+  <span class="keyword">end</span>
+</pre>
+    </div>    
+
+    <p>
+      With the snippet above installed, <code>UnknownAction</code>
+      and <code>RoutingError</code> errors will not be logged but all others will.
+    </p>
+
+
+    <h2 id="filtering">Filtering Sensitive Parameters</h2>
+    <p>
+      When Rails receives a request, <code>ActionController</code> logs 
+      the request parameters. This is very handy for debugging but sometimes
+      it's not desirable to have certain parameters, such as passwords, stored
+      as plain text in the log.
+    </p>
+    
+    <p>
+      <a href="http://weblog.rubyonrails.org/2006/11/26/1-2-new-in-actionpack">Rails 1.2</a>
+      introduced the <code>filter_parameter_logging</code> class method to remedy this:
+    </p>
+    
+    <div class="syntax syntax_ruby">
+    <pre><span class="keyword">class </span><span class="class">ApplicationController</span> <span class="punct">&lt;</span> <span class="constant">ActionController</span><span class="punct">::</span><span class="constant">Base</span>
+  <span class="ident">filter_parameter_logging</span> <span class="symbol">:password</span>
+<span class="keyword">end</span></pre>
+    </div>      
+
+    <p>
+      The above will cause any parameter name matching <code>/password/i</code> to have
+      its value replaced with <code>[FILTERED]</code> in the log.  To filter multiple
+      parameters, simply add them as extra arguments to <code>filter_parameter_logging</code> 
+      by separating them with commas. For other uses of
+      <code>filter_parameter_logging</code>, see the 
+      <code>ActionController</code>
+      <a href="http://api.rubyonrails.org/classes/ActionController/Base.html#M000260">documentation</a>.
+    </p>
+    
+    <p>
+      Note: it's important to remember that <code>filter_parameter_logging</code> will
+      only filter <code>ActionController</code> request information.  The parameters
+      could still appear in any SQL queries being logged by <code>ActiveRecord</code>.  
+      However, SQL queries are not logged in the <code>production</code> environment by default.
+    </p>
+
+    <h2 id="audit-logs">Creating Audit Logs</h2>
+    <p>
+      Sometimes logging is required but putting the messages in the Rails log
+      isn't desirable. One such case is when keeping a separate logfile for
+      auditing is a business requirement.
+    </p>
+
+    <p>
+      To create an audit log, simply create a new instance of
+      <code>Logger</code> and pass it a <code>File</code> instance for your
+      own logfile.
+    </p>
+
+    <p>
+      One possible source of confusion is the formatting of
+      the log message due to a patch Rails makes to <code>Logger</code>. This can be seen
+      when using <code>irb</code> as opposed to <code>script/console</code>:
+    </p>
+    <div class="syntax syntax_shell">
+    <pre>$ irb
+irb(main):001:0&gt; require 'logger'
+=&gt; true
+irb(main):002:0&gt; Logger.new(STDOUT).info('message')
+I, [2007-02-24T09:45:51.236763 #557]  INFO -- : message
+
+
+$ script/console
+Loading development environment.
+&gt;&gt; Logger.new(STDOUT).info('message')
+message
+</pre>
+    </div>
+
+    <p>
+      As you can see, the message formatting is lost when run in the Rails environment.
+      To format a log message when using Rails, create your own Logger subclass and
+      implement the <code>format_message</code> method:
+    </p>
+
+    <div class="syntax syntax_ruby">
+    <pre><span class="keyword">class </span><span class="class">AuditLogger</span> <span class="punct">&lt;</span> <span class="constant">Logger</span>
+  <span class="keyword">def </span><span class="method">format_message</span><span class="punct">(</span><span class="ident">severity</span><span class="punct">,</span> <span class="ident">timestamp</span><span class="punct">,</span> <span class="ident">progname</span><span class="punct">,</span> <span class="ident">msg</span><span class="punct">)</span>
+    <span class="punct">"</span><span class="string"><span class="expr">#{timestamp.to_formatted_s(:db)}</span> <span class="expr">#{severity}</span> <span class="expr">#{msg}</span><span class="escape">\n</span></span><span class="punct">"</span> 
+  <span class="keyword">end</span> 
+<span class="keyword">end</span> </pre>
+    </div>
+
+    <p>
+      To use the new <code>AuditLogger</code>, instantiate it with a <code>File</code>
+      instance:
+    </p>
+    <div class="syntax syntax_ruby">
+    <pre><span class="ident">logfile</span> <span class="punct">=</span> <span class="constant">File</span><span class="punct">.</span><span class="ident">open</span><span class="punct">('</span><span class="string">/path/to/audit.log</span><span class="punct">',</span> <span class="punct">'</span><span class="string">a</span><span class="punct">')</span>    
+<span class="ident">audit_log</span> <span class="punct">=</span> <span class="constant">AuditLogger</span><span class="punct">.</span><span class="ident">new</span><span class="punct">(</span><span class="ident">logfile</span><span class="punct">)</span> </pre>
+    </div>
+
+    <p>
+      Your new log is now ready to use by calling methods on it like 
+      <code>audit_log.info 'message'</code>.
+    </p>
+
+    <p>
+      One important point to remember is that the <code>logfile</code> object
+      does not implicitly flush to the file by default. This means that your
+      code must call <code>logfile.flush</code> for the data to be written
+      out. Alternatively, you can set <code>logfile.sync = true</code> to turn
+      on implicit flushing.
+    </p>
+
+    <h2 id="activerecord-console">ActiveRecord Logging on the Console</h2>
+    <p>
+      When debugging your applications with <code>script/console</code>, it can be
+      very useful to see the SQL output of your ActiveRecord queries.  One way to do
+      this is to use <code>tail -f</code> on your logfile.  
+    </p>
+    <p>However, this isn't very
+      convenient and shows all other log information as well.  An easier way
+      that can be done directly from <code>script/console</code> is to enter this line:
+    </p>
+    <div class="syntax syntax_ruby">
+    <pre><span class="constant">ActiveRecord</span><span class="punct">::</span><span class="constant">Base</span><span class="punct">.</span><span class="ident">logger</span> <span class="punct">=</span> <span class="constant">Logger</span><span class="punct">.</span><span class="ident">new</span><span class="punct">(</span><span class="constant">STDOUT</span><span class="punct">)</span></pre>
+    </div>
+
+    <p>
+      This will cause the queries to be displayed immediately on the console as you
+      interact with your ActiveRecord objects with method calls like 
+      <code>Article.find :all</code>.
+    </p>
+
+    <h2 id="actioncontroller-console">ActionController Logging on the Console</h2>
+    <p>
+      Just like with ActiveRecord above, you can also redirect ActionController's log
+      output to the console when using <code>script/console</code>:
+    </p>
+
+    <div class="syntax syntax_ruby">
+    <pre><span class="constant">ActionController</span><span class="punct">::</span><span class="constant">Base</span><span class="punct">.</span><span class="ident">logger</span> <span class="punct">=</span> <span class="constant">Logger</span><span class="punct">.</span><span class="ident">new</span><span class="punct">(</span><span class="constant">STDOUT</span><span class="punct">)</span></pre>
+    </div>
+
+    <p>
+      You can then observe ActionController activities when using using using
+      the <code>app</code> object on the console, such as <code>app.get
+      '/'</code>. For a brief tutorial on using <code>app</code>, see <a href="http://clarkware.com/cgi/blosxom/2006/04/04">this post</a> on
+      Mike Clark's weblog.
+    </p>
+
+    <h2 id="firebug-console">Firebug Console</h2>
+    <p>
+      <a href="https://addons.mozilla.org/firefox/1843/">Firebug</a> is a popular
+      extension for the Firefox browser that provides a number of useful capabilities,
+      with a Javascript console being among them.  The console is accessed by
+      <code>console.log('message')</code> in Javascript.  
+    </p>
+    <p>
+      This means that any Rails view emitting this little Javascript call
+      between <code>&lt;script&gt;</code> tags can write to the Firebug
+      console.
+    </p>
+    <p>
+      It also means that any RJS template can write to the Firebug
+      console for debugging:
+    </p>
+
+    <div class="syntax syntax_ruby">
+    <pre><span class="ident">page</span><span class="punct">.</span><span class="ident">call</span> <span class="punct">'</span><span class="string">console.log</span><span class="punct">',</span> <span class="punct">'</span><span class="string">informational message</span><span class="punct">'</span></pre>
+    </div>
+    <p>
+      This can be very useful for logging debug information during AJAX
+      requests where a popup from <code>alert()</code> isn't desirable.
+    </p>
+
+
+  </div>
+
+  <div id="sidebar">
+    
+    <div class="side_item wwr">
+      <a href="http://www.workingwithrails.com/recommendation/new/person/5381-mike-naberezny"><img alt="Wwr" src="rails_logging_tips_files/wwr.gif"></a>
+    </div>
+    
+
+    
+      <div class="side_item"><h4>Author</h4><ul class="side_nav">        
+        <li id="author_1">
+          <a href="http://mikenaberezny.com/">Mike Naberezny</a>
+        </li>
+        
+      </ul></div>
+    
+
+    <div class="side_item"><h4>Posted</h4><ul class="side_nav">
+      <li id="posted">Feb 24, 2007</li>
+    </ul></div>
+
+    
+      <div class="side_item"><h4>Related Links</h4><ul class="side_nav">        
+        <li><a href="http://www.ruby-doc.org/stdlib/libdoc/logger/rdoc/">Logger (Ruby Std Lib)</a></li>
+        
+        <li><a href="https://addons.mozilla.org/firefox/1843/">Firebug</a></li>
+        
+      </ul></div>
+    
+    
+    <div class="side_item"><h4>Recent Articles</h4><ul class="side_nav">      
+        <li><a href="http://maintainable.com/articles/fail_early" id="article_10">Fail Early</a></li>
+      
+        <li><a href="http://maintainable.com/articles/rails_asset_cache" id="article_9">Rails Asset Cache</a></li>
+      
+        <li><a href="http://maintainable.com/articles/rails_internet_explorer_and_parallels" id="article_8">Rails, Internet Explorer, a...</a></li>
+      
+        <li><a href="http://maintainable.com/articles/dry_up_testing_with_autotest" id="article_7">DRY up testing in Rails wit...</a></li>
+      
+        <li>Rails Logging Tips</li>
+      
+        <li><a href="http://maintainable.com/articles/minifying_your_rails_javascript" id="article_5">Minifying Your Rails Javasc...</a></li>
+      
+        <li><a href="http://maintainable.com/articles/testing_javascript_in_rails" id="article_4">Testing Javascript in Rails</a></li>
+      
+        <li><a href="http://maintainable.com/articles/custom_rescue_templates" id="article_3">Custom Rescue Templates for...</a></li>
+      
+        <li><a href="http://maintainable.com/articles/creating_classes_with_prototype" id="article_1">Creating Classes with Proto...</a></li>
+      
+    </ul></div>
+    
+    <div class="side_item"><h4>Our Services</h4><ul class="side_nav">      <li><a href="http://maintainable.com/development">Custom Applications</a></li>
+      <li><a href="http://maintainable.com/design">Visual Design &amp; Identity</a></li>
+      <li><a href="http://maintainable.com/on_site">On-Site Services</a></li>
+      <li><a href="http://maintainable.com/training">Developer Training</a></li>
+    </ul></div>
+  </div>
+    </div>
+
+    <div id="footer" class="clr">
+      <span class="right">© 2008 Maintainable Software, LLC</span>
+    </div>
+  </div></div>
+
+  <script src="rails_logging_tips_files/urchin.js" type="text/javascript">
+</script>
+<script type="text/javascript">
+_uacct = "UA-106123-4";
+urchinTracker();
+</script>
+
+  </div>
+</body></html>

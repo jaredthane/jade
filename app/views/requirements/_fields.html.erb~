@@ -1,0 +1,24 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "requirement_edit" %>
+<% end %>
+
+<%= requirement_form.hidden_field(:product_id, :value=> @discount.id) %>
+<div id=non_js_fields>
+	<p>
+		<b>Producto</b><br />
+		<%= requirement_form.collection_select(:required_id, get_products, :id, :name) %>
+	</p>
+	<p>
+		<b>Cantidad</b><br />
+		<%= requirement_form.text_field(:quantity, :value => 1, :class => 'field') %>
+	</p>
+</div>
+<div id=js_fields style="display: none;">
+	<p>
+		<b>Código UPC para producto adicional</b><br />
+		<%= requirement_form.text_field(:bar_code, :id => 'bar_code_field', :class => 'field') %>
+	</p>
+</div>
+<p>
+	<%= requirement_form.submit "Añadir Producto al Pedido", :class => 'action', :id=>'submit_new_requirement_button' %>	
+</p>

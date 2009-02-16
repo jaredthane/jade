@@ -1,0 +1,41 @@
+<% content_for :title do %><%= heading %><% end %>
+
+<%= error_messages_for :warranty %>
+
+<% form_for(@warranty) do |f| %>
+
+	<div class="column2-unit-left">
+	<% if !@warranty.order_id %> 
+		<p>
+			<b>Producto</b>
+			<%= f.collection_select(:product_id, get_products, :id, :name) %>
+		</p>
+	<% else %>
+		<%= f.hidden_field :order_id, :value =>@warranty.order_id %>
+	<% end %>
+		<p>
+		  <b>Duración en Meses</b><br />
+		  <%= f.text_field :months, :class => 'field' %>
+		</p>
+	</div>
+	<div class="column2-unit-right">
+
+		<p>
+		  <b>Usuario responsable</b><br />
+		  <%= f.collection_select(:user_id, get_users, :id, :login) %>
+		</p>
+		<p>
+		  <b>Metodo de pago</b><br />
+		  <%= f.collection_select(:warranty_method_id, get_warranty_methods, :id, :name) %>
+		</p>
+
+	</div>
+	<hr class="clear-contentunit" />
+	<% if mode == 'edit' %>
+		<%= link_to 'Ver | ', @warranty, :class => 'action' %> |
+		<%= link_to 'Remover | ', @warranty, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %> |
+	<% end %>
+	<%= link_to 'Lista | ', warranties_path, :class => 'action' %>
+	<%= f.submit button_text, :class => 'action | ' %>
+<% end %>
+

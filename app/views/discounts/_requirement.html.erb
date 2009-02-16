@@ -1,0 +1,15 @@
+<div class="requirement">
+	<%= error_messages_for :requirement %>
+	<div class="table_row">
+	<% prefix = requirement.new_record? ? 'new' : 'existing' %>
+	<% fields_for "product[requirement_attributes][]", requirement do |requirement_form| %>
+		<div class="table_cell_20"><%=link_to requirement.required.upc, requirement.required %></div>
+		<div class="table_cell_20"><%=link_to requirement.required.name, edit_discount_path(requirement.required) %></div>
+		<div class="table_cell_10"><%=requirement_form.text_field :quantity, :class => 'field' %></div>
+		<div class="table_cell">as</div>
+		<%= requirement_form.hidden_field :id %>
+		<%= requirement_form.hidden_field :required_id %>
+		<%= requirement_form.hidden_field :product_id %>
+		</div>
+  <% end %>
+</div>

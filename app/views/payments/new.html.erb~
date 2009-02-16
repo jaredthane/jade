@@ -1,0 +1,5 @@
+<%= render   :partial    => "form",
+            :locals     => {:button_text => "Nuevo",
+                            :heading     => "Nuevo Pago:",
+                            :mode         => "new" }
+%>

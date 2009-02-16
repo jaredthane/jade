@@ -1,0 +1,56 @@
+
+rails Jade
+cd Jade
+gedit config/database.yml
+rails db:create:all
+
+
+ruby script/generate scaffold Order vendor:references client:references received:date ordered:date user:references
+ruby script/generate scaffold Line product:references order:references quantity:integer price:float received:date serialized_product:references serialized_product:references
+ruby script/generate scaffold Serialized_Product product:references serial_number:string
+ruby script/generate scaffold Product name:string description:text vendor:references min:integer max:integer price:float cost:float order:integer upc:string unit:references location:string model:string serialized:boolean serialized_product:references
+ruby script/generate scaffold User name:string first:string last:string location:references
+ruby script/generate scaffold Unit name:string
+ruby script/generate scaffold Movement entity:references product:references quantity:integer movement_type:references user:references date:date
+ruby script/generate scaffold MovementType name:string
+ruby script/generate scaffold PaymentMethod name:string
+ruby script/generate scaffold Payment order:references amount:integer date:date payment_method:references user:references
+ruby script/generate scaffold Privilege name:string
+ruby script/generate scaffold UserPrivilege user:references privilege:references
+ruby script/generate scaffold Entity name:string entity_type:references
+ruby script/generate scaffold EntityType name:string
+ruby script/generate scaffold ProductType name:string
+ruby script/generate scaffold ComboLine product:references combo:references quantity:references serialized_product:references
+
+ruby script/generate migration InsertPaymentMethods
+ruby script/generate migration InsertMovementTypes
+ruby script/generate migration InsertEntityTypes
+ruby script/generate migration InsertEntities
+ruby script/generate migration InsertUsers
+
+
+ruby script/generate scaffold Combo name:string
+rake db:migrate
+
+
+script/plugin install http://svn.rubyonrails.org/rails/plugins/auto_complete
+
+ruby script/server
+
+* First create Location for store and Entity to match it.
+
+-------------Below this line Done ----------------
+Adding product to movement 
+movement_type->MovementType
+entity_type->EntityType
+username will be user.name not user.user
+product.tobe ordered is now integer
+UsersPrivilege changed to UserPrivilege
+Remove location object and refer directly to Entity
+Changed ProductsOnOrder to Line
+change UPC to upc
+Added unit and location to product
+changed reorder to max
+changed tobeordered to order
+created unit model
+

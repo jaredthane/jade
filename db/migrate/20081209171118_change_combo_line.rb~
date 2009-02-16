@@ -1,0 +1,8 @@
+class ChangeComboLine < ActiveRecord::Migration
+  def self.up
+    add_column :combo_lines, :quantity, :int
+  end
+
+  def self.down
+  end
+end

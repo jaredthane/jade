@@ -1,0 +1,37 @@
+<% content_for :title do %><%= heading %><% end %>
+
+<%= error_messages_for :payment %>
+
+<% form_for(@payment) do |f| %>
+
+	<div class="column2-unit-left">
+	<% if !@payment.order_id %> 
+		<p>
+		  <b>Pedido</b><br />
+		  <%= f.collection_select(:order_id, get_orders, :id, :id) %>
+		</p>
+	<% else %>
+		<%= f.hidden_field :order_id, :value =>@payment.order_id %>
+	<% end %>
+		<p>
+		  <b>Cantidad</b><br />
+		  <%= f.text_field :amount, :class => 'field' %>
+		</p>
+	</div>
+	<div class="column2-unit-right">
+	<%= f.hidden_field :user_id, :value =>@current_user.id %>
+		<p>
+		  <b>Metodo de pago</b><br />
+		  <%= f.collection_select(:payment_method_id, get_payment_methods, :id, :name) %>
+		</p>
+
+	</div>
+	<hr class="clear-contentunit" />
+	<% if mode == 'edit' %>
+		<%= link_to 'Ver | ', @payment, :class => 'action' %> |
+		<%= link_to 'Remover | ', @payment, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %> |
+	<% end %>
+	<%= link_to 'Lista | ', payments_path, :class => 'action' %>
+	<%= f.submit button_text, :class => 'action | ' %>
+<% end %>
+

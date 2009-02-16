@@ -1,0 +1,8 @@
+<% content_for :title do %>Nueva Venta<% end %>
+
+<%= error_messages_for :order, :header_message => "Tratelo otra vez, por favor!", :message => "Habian algunas difcultades guardando los cambios al pedido:" %>
+
+<%= render :partial => 'fields' %>
+
+	
+

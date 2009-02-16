@@ -1,0 +1,14 @@
+<% case @order_type
+	when 'sales' %>
+		<% content_for :title do %>Nueva Venta<% end %>
+	<% when 'purchases' %>
+		<% content_for :title do %>Nueva Compra<% end %>
+	<% else %>
+		<% content_for :title do %>Nuevo Pedido<% end %>
+<% end %>
+
+<%form_for :order, :url => {:action => 'create'}, :html => {:id => 'order_form' } do |f|  %>
+	<%= render :partial => 'fields', :locals => { :order_type => 'all', :f => f} %>
+<% end %>
+<br />
+

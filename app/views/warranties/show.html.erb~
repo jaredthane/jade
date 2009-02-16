@@ -1,0 +1,25 @@
+<div class="column2-unit-left">
+	<p>
+		<b>Producto:</b>
+		<%=link_to @warranty.product.name, @warranty.product %>
+	</p>
+	<p>
+		<b>Duración en Meses:</b>
+		<%=h @warranty.months %>
+	</p>
+</div>
+<div class="column2-unit-right">
+	<p>
+		<b>Precio:</b>
+		<%=h @warranty.price %>
+	</p>
+</div>
+<hr class="clear-contentunit" />
+
+
+
+
+
+
+<%= link_to 'Edit', edit_warranty_path(@warranty), :class => 'action' %> |
+<%= link_to 'Back', warrantys_path, :class => 'action' %>

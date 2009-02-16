@@ -1,0 +1,83 @@
+K 25
+svn:wc:ra_dav:version-url
+V 49
+/external/!svn/ver/215/lowpro/trunk/test/selenium
+END
+iedoc.xml
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/external/!svn/ver/215/lowpro/trunk/test/selenium/iedoc.xml
+END
+selenium-logo.png
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/external/!svn/ver/215/lowpro/trunk/test/selenium/selenium-logo.png
+END
+TestRunner.hta
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/external/!svn/ver/215/lowpro/trunk/test/selenium/TestRunner.hta
+END
+TestPrompt.html
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/external/!svn/ver/215/lowpro/trunk/test/selenium/TestPrompt.html
+END
+TestRunner-splash.html
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/external/!svn/ver/215/lowpro/trunk/test/selenium/TestRunner-splash.html
+END
+selenium-test.css
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/external/!svn/ver/215/lowpro/trunk/test/selenium/selenium-test.css
+END
+SeleniumLog.html
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/external/!svn/ver/215/lowpro/trunk/test/selenium/SeleniumLog.html
+END
+RemoteRunner.html
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/external/!svn/ver/215/lowpro/trunk/test/selenium/RemoteRunner.html
+END
+iedoc-core.xml
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/external/!svn/ver/215/lowpro/trunk/test/selenium/iedoc-core.xml
+END
+selenium.css
+K 25
+svn:wc:ra_dav:version-url
+V 62
+/external/!svn/ver/215/lowpro/trunk/test/selenium/selenium.css
+END
+Blank.html
+K 25
+svn:wc:ra_dav:version-url
+V 60
+/external/!svn/ver/215/lowpro/trunk/test/selenium/Blank.html
+END
+TestRunner.html
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/external/!svn/ver/215/lowpro/trunk/test/selenium/TestRunner.html
+END
+InjectedRemoteRunner.html
+K 25
+svn:wc:ra_dav:version-url
+V 75
+/external/!svn/ver/215/lowpro/trunk/test/selenium/InjectedRemoteRunner.html
+END

@@ -1,0 +1,7 @@
+<% content_for :title do %>Cambiar Producto en Pedido<% end %>
+
+<%= error_messages_for :line %>
+
+<% form_for @line, :id='edit_form' do |f| %>
+  <%= render :partial => 'fields', :locals => { :f => f, :mode =>'edit' } %>
+<% end %>

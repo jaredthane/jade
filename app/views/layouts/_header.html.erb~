@@ -1,0 +1,183 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<!--  Version: Multiflex-3 Update-7 / Layout-4             -->
+<!--  Date:    January 15, 2007                            -->
+<!--  Author:  Wolfgang                                    -->
+<!--  License: Fully open source without restrictions.     -->
+<!--           Please keep footer credits with a link to   -->
+<!--           Wolfgang (www.1-2-3-4.info). Thank you!     -->
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="cache-control" content="no-cache" />
+  <meta http-equiv="expires" content="3600" />
+  <meta name="revisit-after" content="2 days" />
+  <meta name="robots" content="index,follow" />
+  <meta name="publisher" content="Your publisher infos here ..." />
+  <meta name="copyright" content="Your copyright infos here ..." />
+  <meta name="author" content="Design: Wolfgang (www.1-2-3-4.info) / Modified: Your Name" />
+  <meta name="distribution" content="global" />
+  <meta name="description" content="Your page description here ..." />
+  <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
+  <%= stylesheet_link_tag 'layout4_setup' %>
+  <%= stylesheet_link_tag 'layout4_text' %>
+  <%= stylesheet_link_tag 'autocomplete' %>
+	<%= javascript_include_tag :defaults, 'lowpro' %>
+	<%= javascript_include_tag 'autocomplete' %>
+	<%= yield :javascript %>
+  <link rel="icon" type="image/x-icon" href="./img/favicon.ico" />
+  <title>Sistema de Control de Inventario Jade | <%= page_title %></title>
+  
+</head>
+<!-- Global IE fix to avoid layout crash when single word size wider than column width -->
+<!--[if IE]><style type="text/css"> body {word-wrap: break-word;}</style><![endif]-->
+
+<body>
+  <div class="page-container">
+
+
+    <!-- A. HEADER -->      
+    <div class="header">
+      
+      <!-- A.1 HEADER MIDDLE -->
+      <div class="header-middle">    
+   
+        <!-- Sitelogo and sitename -->
+        <a class="sitelogo" href="#" title="Pagina de Inicio"></a>
+        <div class="sitename">
+          <h1><a href="/products" title="Pagina de Inicio">Jaasdde<span style="font-weight:normal;font-size:50%;">&nbsp;version 0.56</span></a></h1>
+          <h2>Sistema de Control de Inventario</h2>
+        </div>
+
+        <!-- Navigation Level 0 -->
+        <div class="nav0">        	<%= yield :nav0 %>
+        	
+        </div>			
+
+        <!-- Navigation Level 1 -->
+        <div class="nav1">
+            <%= yield :nav1 %>
+            <!-- Search form -->  
+					<div class="searchform">
+						<% form_tag search_path, :method =>'get' do %>
+							<%= text_field_tag :search, params[:search], :class => 'field'%><%= submit_tag "Buscar", :name => nil, :class => 'button' %>
+						<% end %>
+					</div>
+        </div>              
+      </div>
+      
+      <!-- A.2 HEADER BOTTOM -->
+      <div class="header-bottom">
+      
+        <!-- Navigation Level 2 (Drop-down menus) -->
+        <div class="nav2">
+        	<ul>
+    <li><a title="Nuevo">Nuevo</a>
+			<ul>
+				<li><a href="/products/new" title="Producto">Producto</a></li>
+	  		<li><a href="/discounts/new" title="Discuento">Discuento</a></li>
+	  		<li><a href="/sales/new" title="Venta">Venta</a></li>
+	  		<li><a href="/purchases/new" title="Compra">Compra</a></li>
+	  		<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
+	  		<li><a href="/clients/new" title="Cliente">Cliente</a></li>
+	  		<li><a href="/sites/new" title="Sitio">Sitio</a></li>
+  			</ul>
+		</li>
+		<li><a href="/products" title="Productos">Productos</a>
+			<ul>
+	  		<li><a href="/products" title="Productos">Productos</a></li>
+	  		<li><a href="/warranties" title="Garantías">Garantías</a></li>
+	  		<li><a href="/discounts" title="Discuentos">Discuentos</a></li>
+	  		<li><a href="/movements" title="Movimientos">Movimientos</a></li>
+	  		<li><a href="/products/edit_prices" title="Cambiar Precios">Cambiar Precios</a></li>
+	  		<li><a href="/units" title="Unidades">Unidades</a></li>
+	  	</ul>
+		</li>
+	  <li><a href="/purchases" title="Compras">Compras</a>
+	  	<ul>
+	  		<li><a href="/purchases" title="Compras">Compras</a></li>
+	  		<li><a href="/orders/show_batch" title="Últimas Compras">Últimas Compras</a></li>
+	  		<li><a href="/products/bulk_edit" title="Reaprovisionar">Reaprovisionar</a></li>
+	  	</ul>
+	  </li>
+	  <li><a href="/sales" title="Ventas">Ventas</a></li>																		
+	  <li><a href="/entities" title="Entidades">Entidades</a>
+	  	<ul>
+	  		<li><a href="/vendors" title="Proveedores">Proveedores</a></li>
+	  		<li><a href="/clients" title="Clientes">Clientes</a></li>
+	  		<li><a href="/sites" title="Sitios">Sitios</a></li>
+	  		<li><a href="/birthdays" title="Cumpleanos">Cumpleanos</a></li>
+	  	</ul>
+	  </li>
+	  <li><a href="/locations" title="Inventario">Inventario</a>
+	  	<ul>
+  			<% for location in get_locations %>
+  				<li><a href="/entities/<%= location.id %>" title=<%= location.name %>><%= location.name %></a></li>
+  			<% end %>
+  		</ul>
+  	</li>
+	  <li><a href="/payments" title="Pagos">Pagos</a></li>
+	</ul>
+					<%= yield :nav2 %>	
+        </div>
+	  </div>
+
+      <!-- A.3 HEADER BREADCRUMBS -->
+
+      <!-- Breadcrumbs -->
+      <div class="header-breadcrumbs">
+        <%= yield :bread %>
+
+        
+      </div>
+    </div>
+
+    <!-- B. MAIN -->
+    <div class="main">
+ 
+      <!-- B.1 MAIN NAVIGATION -->
+      <div class="main-navigation">
+
+        <!-- Navigation Level 3 -->
+        <div class="round-border-topright"></div>
+        <div class="round-border-topright"></div>
+  <h1 class="first">Enlaces</h1>
+	<dl class="nav3-grid">
+		<dt><a href="/products">Productos</a></dt>
+			<dd><a href="/products">Productos</a></dd>
+			<dd><a href="/discounts">Discuentos</a></dd>
+			<dd><a href="/warranties">Garantías</a></dd>
+			<dd><a href="/products/edit_prices">Cambiar Precios</a></dd>
+			<dd><a href="/products/bulk_edit">Reaprovisionar</a></dd>
+			<dd><a href="/units">Unidades</a></dd>
+		<dt><a href="/orders">Pedidos</a></dt>
+		  <dd><a href="/purchases">Compras</a></dd>
+		  <dd><a href="/sales">Ventas</a></dd>
+		  <dd><a href="/orders">Por Fecha</a></dd>		
+		  <dd><a href="/orders/show_batch">Últimas Compras</a></dd>
+		<dt><a href="/products">Inventario</a></dt>
+		<% for location in get_locations %>
+			<dd><a href="/entities/<%= location.id %>"><%= location.name %></a></dd>		
+  	<% end %>
+  	<dt><a href="/entities">Entidades</a></dt>
+	  	<dd><a href="/clients/">Clientes</a></dd>		
+	  	<dd><a href="/vendors/">Proveedores</a></dd>		
+	  	<dd><a href="/sites/">Sitios</a></dd>		
+	  <dt><a href="/product_categories">Categorías</a></dt>
+	  <% for category in get_product_categories %>
+			<dd><a href="/product_categories/<%= category.id %>"><%= category.name %></a></dd>		
+  	<% end %>
+  	<dt><a href="/payments">Pagos</a></dt>
+		<dt><a href="/users">Usuarios</a></dt>
+		<dt><a href="/logout">Salir</a></dt>
+	</dl>        
+        <%= yield :nav3 %>
+
+
+
+      </div>
+ 
+      <!-- B.1 MAIN CONTENT -->
+      <div class="main-content">
+

@@ -1,0 +1,66 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "discount_edit" %>
+<% end %>
+<% content_for :title do %><%= heading %><% end %>
+
+<%= error_messages_for :product %>
+		
+	  <%= f.hidden_field :unit_id, :value => 1 %>
+	  <%= f.hidden_field :product_type_id, :value => 2 %>
+	  
+	<div class="column2-unit-left">
+		<p>
+		  <b>Nombre</b><br />
+		  <%= f.text_field :name, :class => 'field' %>
+		</p>
+		 <p>
+		  <b>Precio</b><br />
+		  <%= f.text_field :price, :class => 'field' %>
+		</p>
+		<p><b>Catagoría</b><br />
+			<%= text_field_with_auto_complete :product, :catagory_name, 
+					{:class => 'field', :size=>30 }, 
+					{:url => '/product_catagories.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+		</p>
+	</div>
+	<div class="column2-unit-right">
+		
+	<p>
+	  <b>Codigo UPC</b><br />
+	  <%= f.text_field :upc, :class => 'field' %>
+	</p>
+
+		<p>
+		  <b>Costo</b><br />
+		  <%= f.text_field :cost, :class => 'field' %>
+		</p>
+		
+	</div>
+	
+	<hr class="clear-contentunit" />
+	<p>
+	  <b>Descripcion</b><br />
+	  <%= f.text_area :description %>
+	</p>
+	
+	<div>			
+		<div class="table_header_row">
+			<div class="table_cell_20">UPC</div>
+			<div class="table_cell_20">Nombre de Producto</div>
+			<div class="table_cell_10">Cantidad</div>
+			<div class="table_cell">Acciones </div>
+		</div>
+		<div id="requirements">
+			<%= render :partial => 'requirement', :collection => @discount.requirements %>
+		</div>
+	</div>
+	
+	<%= f.submit button_text + " | ", :class => 'action'  %>
+	<%= link_to 'Lista | ', discounts_path, :class => 'action' %>
+	<% if mode == 'edit' %>
+		<%= link_to 'Ver |', edit_discount_path(@discount), :class => 'action' %>
+		<%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %>
+	<% end %>
+  
+
+

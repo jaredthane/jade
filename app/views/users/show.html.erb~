@@ -1,0 +1,19 @@
+<p>
+  <b>Nombre de Usuario:</b>
+  <%=h @user.login %>
+</p>
+<hr class="clear-contentunit" />
+<div class="column2-unit-left">
+
+</div>
+<div class="column2-unit-right">
+<p>
+  <b>Correo Electronico:</b>
+  <%=h @user.email %>
+</p>
+</div>
+<hr class="clear-contentunit" />
+
+
+<%= link_to 'Cambiar', edit_user_path(@user) %> |
+<%= link_to 'Atras', users_path %>

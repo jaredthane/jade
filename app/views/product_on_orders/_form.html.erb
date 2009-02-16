@@ -1,0 +1,38 @@
+<h1><%= heading %></h1>
+
+<%= error_messages_for :product_on_order %>
+
+<% form_for(@product_on_order) do |f| %>
+  <p>
+    <b>Producto</b><br />
+    <%= f.text_field :product %>
+  </p>
+
+  <p>
+    <b>Pedido</b><br />
+    <%= f.text_field :order %>
+  </p>
+
+  <p>
+    <b>Cantidad</b><br />
+    <%= f.text_field :quantity %>
+  </p>
+
+  <p>
+    <b>Precio</b><br />
+    <%= f.text_field :price %>
+  </p>
+
+  <p>
+    <b>Recibido</b><br />
+    <%= f.date_select :received %>
+  </p>
+
+  <p>
+    <%= f.submit button_text %>
+  </p>
+<% end %>
+<% if mode == 'edit' %>
+<%= link_to 'Ver', @product_on_order %> |
+<% end %>
+<%= link_to 'Atras', product_on_orders_path %>

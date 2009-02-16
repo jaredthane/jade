@@ -1,0 +1,74 @@
+<% content_for :title do %><%=h @serialized_product.product.name %> - <%=h @serialized_product.product.upc %><% end %>
+
+<div class="column3-unit-left">
+	<p><b>Proveedor</b><br />
+    <% if @serialized_product.product.vendor %>
+    	<%=link_to @serialized_product.product.vendor.name, @serialized_product.product.vendor %>	
+    <% end %>
+  </p>
+	<p>
+    <b>Minimo</b><br />
+    <%=h @serialized_product.product.min(current_user.location_id) %>
+  </p>
+  <p>
+    <b>Numero de Serie:</b> <br />
+    <%=h @serialized_product.serial_number %>
+  </p>
+</div>
+<div class="column3-unit-middle">
+<p>
+    <b>Precio</b><br />
+      <%=h number_to_currency(@serialized_product.product.price) %>
+  </p>
+	<p>
+    <b>Maximo</b><br />
+    <%=h @serialized_product.product.max(current_user.location_id) %>
+  </p>
+	<p>
+    <b>Locacion Actual</b><br />
+    <%=link_to @serialized_product.location.name, @serialized_product.location %>
+  </p>
+</div>
+<div class="column3-unit-right">
+	<p>
+    <b>Costo</b><br />
+      <%=h number_to_currency(@serialized_product.product.cost) %>
+  </p>
+	<p>
+    <b>Unidad</b><br />
+    <%=h @serialized_product.product.unit.name %>
+  </p>
+
+</div>
+<hr class="clear-contentunit" />
+<p>
+  <b>Descripcion:</b>
+  <%=h @serialized_product.product.description %>
+</p>
+<p>
+	<b>Movimientos:</b>
+	<div>
+		<div class="table_header_row">
+			<div class="table_cell_20">Movimiento</div>
+			<div class="table_cell_20">Pedido</div>
+			<div class="table_cell_20">Usuario</div>
+			<div class="table_cell">Fecha</div>
+		</div>
+		<% for movement in @serialized_product.movements.find_all(:order => 'created_at desc') %>
+			<div class="table_row">
+				<div class="table_cell_20"><%= link_to movement.movement_type.name, movement %></div>
+				<div class="table_cell_20"><%= link_to movement.order.id, movement.order %></div>
+				<div class="table_cell_20"><%= link_to movement.user.login, movement.user %></div>
+				<div class="table_cell"><%=h movement.created_at.to_date.to_s %></div>
+			</div>
+		<% end %>
+	</div>
+</p>
+	
+	
+</p>
+
+<%= link_to 'Cambiar | ', edit_product_path(@serialized_product.product), :class =>'action' %> 
+<%= link_to 'Lista', products_path, :class =>'action' %>
+<%= link_to 'Edit', edit_serialized_product_path(@serialized_product) %> |
+<%= link_to 'Back', serialized_products_path %>

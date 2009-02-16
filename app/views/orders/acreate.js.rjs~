@@ -1,0 +1,1 @@
+page.insert_html :bottom, :lines, :partial => "line", :collection => @line.order.lines

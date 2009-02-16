@@ -1,0 +1,407 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" lang="en"><head profile="http://gmpg.org/xfn/11">
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Logging your model with a custom log « mediapeers development blog</title>
+<meta name="generator" content="WordPress.com"> 
+<link rel="stylesheet" href="Logging%20your%20model%20with%20a%20custom%20log%20%C2%AB%20mediapeers%20development%20blog_files/style.css" type="text/css" media="screen">
+<link rel="alternate" type="application/rss+xml" title="mediapeers development blog RSS Feed" href="http://mediapeers.wordpress.com/feed/">
+<link rel="pingback" href="http://mediapeers.wordpress.com/xmlrpc.php">
+<script type="text/javascript">
+/* <![CDATA[ */
+function addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() { oldonload(); func(); }
+	}
+}
+/* ]]> */
+</script>
+<link rel="stylesheet" href="Logging%20your%20model%20with%20a%20custom%20log%20%C2%AB%20mediapeers%20development%20blog_files/global.css" type="text/css">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://mediapeers.wordpress.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://mediapeers.wordpress.com/wp-includes/wlwmanifest.xml"> 
+	<link rel="introspection" type="application/atomserv+xml" title="Atom API" href="http://mediapeers.wordpress.com/wp-app.php">
+<link rel="shortcut icon" type="image/x-icon" href="http://www.gravatar.com/blavatar/ea74575d4779e1540516e679a8fed965?s=16&amp;d=http://s.wordpress.com/favicon.ico">
+<link rel="icon" type="image/x-icon" href="http://www.gravatar.com/blavatar/ea74575d4779e1540516e679a8fed965?s=16&amp;d=http://s.wordpress.com/favicon.ico">
+<link rel="apple-touch-icon" href="http://www.gravatar.com/blavatar/e5c30df89f0835b6cca1cfacff4dc7ae?s=158&amp;d=http://s.wordpress.com/wp-content/themes/h4/i/webclip.png">
+<link rel="openid.server" href="http://mediapeers.wordpress.com/?openidserver=1">
+<link rel="openid.delegate" href="http://mediapeers.wordpress.com/">
+<style type="text/css">
+#header_content {
+	background:#900 url(http://mediapeers.files.wordpress.com/2008/04/devblog_header.jpg) center repeat-y;
+}
+#header_content #title {
+	display: none;
+}
+</style>
+
+<script type="text/javascript">/*<![CDATA[*/if(typeof(addLoadEvent)!='undefined'){addLoadEvent(function(){if(top==self){i=document.createElement('img');i.src='http://botd.wordpress.com/botd.gif?blogid=3599543&postid=51&lang=1&date=1228478388&ip=190.87.157.111&url=http://mediapeers.wordpress.com/2008/12/05/logging-your-model-with-a-custom-log/&loc='+document.location;i.style.width='0px';i.style.height='0px';i.style.overflow='hidden';document.body.appendChild(i);}});}/*]]>*/</script>
+<style type="text/css">.dp-rb .symbol { color: #a70; }.dp-rb .variable { color: #a70; font-weight: bold; }</style></head><body class="wordpress k2 y2008 m12 d17 h07 single s-y2008 s-m12 s-d05 s-h03 s-category-rails s-author-ingemarinberlin">
+
+	<div id="header">
+    	<div class="top">
+			
+			<div id="header_content" onclick="document.location='http://mediapeers.wordpress.com';" style="cursor: pointer;">
+				<div id="title" class="title">
+					<h1><a href="http://mediapeers.wordpress.com/" title="Back to the front page">mediapeers development blog</a></h1>
+           		</div>
+			
+				<div id="rightcolumnheader">
+								</div>
+				
+			</div>
+  
+		</div>
+		
+	</div>
+	
+		<div>
+	<ul id="alt_menu">
+		<li class="page_item page-item-4"><a href="http://mediapeers.wordpress.com/imprint/" title="Imprint">Imprint</a></li>
+<li class="page_item page-item-2"><a href="http://mediapeers.wordpress.com/about/" title="About&nbsp;mediapeers">About&nbsp;mediapeers</a></li>
+	</ul>
+	</div>
+		
+<div id="page">	
+	<hr>
+
+<div class="content">
+	
+	<div id="middlecolumn">
+		<div id="primary">
+						
+				<div id="primarycontent" class="hfeed">
+					
+					
+
+<div id="post-51" class="post hentry category-rails tag-custom-log tag-log tag-logging tag-rails p publish author-ingemarinberlin y2008 m12 d05 h03 first">
+	<div class="entry-head">
+		<div class="published_sm" title="2008-12-05T13:59:48+0000"><div class="day">05</div><div class="month">Dec</div><div class="year">08</div></div>		<h3 class="entry-title"><a href="http://mediapeers.wordpress.com/2008/12/05/logging-your-model-with-a-custom-log/" rel="bookmark" title="Permanent Link to &quot;Logging your model with a custom&nbsp;log&quot;">Logging your model with a custom&nbsp;log</a></h3>
+			</div> <!-- .entry-head -->	
+	
+	<div class="meta-column">
+		<div class="entry-meta">
+			<h2>post info</h2>
+			<div class="meta-row">
+				<span class="authordata">By <span class="vcard author"><a href="http://mediapeers.wordpress.com/author/ingemarinberlin/" class="url fn">Ingemar Edsborn</a></span></span>			</div>
+			
+			<div class="meta-row">
+				<span class="entry-category">Categories: <a href="http://wordpress.com/tag/rails/" title="View all posts in Rails">Rails</a></span>				<br>
+				<span class="entry-category">Tags: <a href="http://wordpress.com/tag/custom-log/" rel="tag">custom log</a>, <a href="http://wordpress.com/tag/log/" rel="tag">log</a>, <a href="http://wordpress.com/tag/logging/" rel="tag">logging</a>, <a href="http://wordpress.com/tag/rails/" rel="tag">Rails</a><br></span>			</div>
+			
+			<div class="meta-row">
+							</div>
+		
+			<div class="meta-row">
+							</div>
+			
+			<div class="meta-row">
+							</div>
+
+			<div class="meta-row">
+							</div>
+
+			<div class="meta-row">
+							</div>
+			
+			<div class="meta-row">
+							</div>
+			
+			<div class="meta-row">
+							</div>			
+			
+		</div> <!-- .entry-meta -->
+	
+			</div>
+	
+	<div class="entry-content">
+												
+		<div class="snap_preview"><p>Sometimes it can be handy to keep track what a model is doing in a separate log. Here’s an easy way to do it.</p>
+<div class="dp-highlighter"><div class="bar"><div class="tools"><a href="#" onclick="dp.sh.Toolbar.Command('ViewSource',this);return false;">view plain</a><a href="#" onclick="dp.sh.Toolbar.Command('CopyToClipboard',this);return false;">copy to clipboard</a><a href="#" onclick="dp.sh.Toolbar.Command('PrintSource',this);return false;">print</a></div></div><ol class="dp-rb" start="1"><li class="alt"><span><span class="keyword">class</span><span>&nbsp;Article&nbsp;&lt;&nbsp;ActiveRecord::Base&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;LOGFILE&nbsp;=&nbsp;<span class="builtin">File</span><span>.join(RAILS_ROOT,&nbsp;</span><span class="string">'/log/'</span><span>,&nbsp;</span><span class="string">"article_#{RAILS_ENV}.log"</span><span>)&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;<span class="keyword">def</span><span>&nbsp;validate&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;log&nbsp;<span class="string">"was&nbsp;validated!"</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;<span class="keyword">end</span><span>&nbsp;&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;</span></li><li class="alt"><span>&nbsp;&nbsp;<span class="keyword">def</span><span>&nbsp;log(*args)&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;args.size&nbsp;==&nbsp;1&nbsp;?&nbsp;(message&nbsp;=&nbsp;args;&nbsp;severity&nbsp;=&nbsp;<span class="symbol">:info</span><span>)&nbsp;:&nbsp;(severity,&nbsp;message&nbsp;=&nbsp;args)&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;Article.logger&nbsp;severity,&nbsp;<span class="string">"Article##{self.id}:&nbsp;#{message}"</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;<span class="keyword">end</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;<span class="keyword">def</span><span>&nbsp;</span><span class="keyword">self</span><span>.logger(severity&nbsp;=&nbsp;</span><span class="keyword">nil</span><span>,&nbsp;message&nbsp;=&nbsp;</span><span class="keyword">nil</span><span>)&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">@article_logger</span><span>&nbsp;||=&nbsp;Article.open_log&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">if</span><span>&nbsp;!severity.</span><span class="keyword">nil</span><span>?&nbsp;&amp;&amp;&nbsp;!message.</span><span class="keyword">nil</span><span>?&nbsp;&amp;&amp;&nbsp;</span><span class="variable">@article_logger</span><span>.respond_to?(severity)&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="variable">@article_logger</span><span>.send&nbsp;severity,&nbsp;</span><span class="string">"[#{Time.now.to_s(:db)}]&nbsp;[#{severity.to_s.capitalize}]&nbsp;#{message}\n"</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">end</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;message&nbsp;<span class="keyword">or</span><span>&nbsp;</span><span class="variable">@article_logger</span><span>&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;<span class="keyword">end</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span>&nbsp;&nbsp;<span class="keyword">def</span><span>&nbsp;</span><span class="keyword">self</span><span>.open_log&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;&nbsp;&nbsp;ActiveSupport::BufferedLogger.<span class="keyword">new</span><span>(LOGFILE)&nbsp;&nbsp;</span></span></li><li class=""><span>&nbsp;&nbsp;<span class="keyword">end</span><span>&nbsp;&nbsp;</span></span></li><li class="alt"><span>&nbsp;&nbsp;</span></li><li class=""><span><span class="keyword">end</span><span>&nbsp;&nbsp;</span></span></li></ol></div><pre style="display: none;" name="code" class="ruby">
+class Article &lt; ActiveRecord::Base
+
+  LOGFILE = File.join(RAILS_ROOT, '/log/', "article_#{RAILS_ENV}.log")
+
+  def validate
+    log "was validated!"
+  end 
+
+  def log(*args)
+    args.size == 1 ? (message = args; severity = :info) : (severity, message = args)
+    Article.logger severity, "Article##{self.id}: #{message}"
+  end
+
+  def self.logger(severity = nil, message = nil)
+    @article_logger ||= Article.open_log
+    if !severity.nil? &amp;&amp; !message.nil? &amp;&amp; @article_logger.respond_to?(severity)
+      @article_logger.send severity, "[#{Time.now.to_s(:db)}] [#{severity.to_s.capitalize}] #{message}\n"
+    end
+    message or @article_logger
+  end
+
+  def self.open_log
+    ActiveSupport::BufferedLogger.new(LOGFILE)
+  end
+
+end
+</pre>
+<div style="margin-top: 1em;" class="possibly-related"><hr><p><strong>Possibly related posts: (automatically generated)</strong></p><ul><li><a rel="related" href="http://cciepursuit.wordpress.com/2008/05/05/question-of-the-day-05-may-2008?referer=sphere_related_content/">Question Of The Day: 05 May, 2008</a></li><li><a rel="related" href="http://onruby.flempo.com/2008/12/09/something-static-in-runtimeerror?referer=sphere_related_content/">Something static in RuntimeError</a></li><li><a rel="related" href="http://blog.rayapps.com/2008/02/23/how-to-log-db-statistics-at-info-log-level-in-rails-20?referer=sphere_related_content/">How to log DB statistics at info log level in Rails 2.0</a></li></ul></div></div>
+								</div> <!-- .entry-content -->
+	
+
+</div> <!-- #post-ID -->
+
+					
+				</div> <!-- #primarycontent .hfeed -->
+			
+						
+		</div> <!-- #primary -->
+	</div>
+
+	<hr>
+
+<div id="comment-block">
+	
+
+	
+	<div class="comments">
+
+		<h4><span id="comments">0</span> Responses to “Logging your model with a custom&nbsp;log”</h4>
+
+		<div class="metalinks">
+			<span class="commentsrsslink"><a href="http://mediapeers.wordpress.com/2008/12/05/logging-your-model-with-a-custom-log/feed/">Feed for this Entry</a></span>
+			<span class="trackbacklink"><a href="http://mediapeers.wordpress.com/2008/12/05/logging-your-model-with-a-custom-log/trackback/" title="Copy this URI to trackback this entry.">Trackback Address</a></span>		</div>
+
+		
+	<hr>
+
+				
+				
+		 
+		<ol id="commentlist">
+			<li id="leavecomment">
+				No Comments			</li>
+		</ol>
+				
+		
+	</div> <!-- END .comments 1 -->
+		
+		
+		<div class="comments">
+		<h4 id="respond" class="reply">Leave a Reply</h4>
+		
+		
+			<form action="http://mediapeers.wordpress.com/wp-comments-post.php" method="post" id="commentform">
+
+						
+							<div id="comment-personaldetails">
+					<p><input name="author" id="author" value="" size="22" tabindex="1" type="text">
+					<label for="author"><small><strong>Name</strong> </small></label></p>
+
+					<p><input name="email" id="email" value="" size="22" tabindex="2" type="text">
+					<label for="email"><small><strong>Mail</strong> (will not be published) </small></label></p>
+
+					<p><input name="url" id="url" value="" size="22" tabindex="3" type="text">
+					<label for="url"><small><strong>Website</strong></small></label></p>
+				</div>
+							<p><textarea name="comment" id="comment" cols="100" rows="10" tabindex="4"></textarea></p>
+		
+								
+				<p>
+					<input name="submit" id="submit" tabindex="5" value="Submit" type="submit">
+					<input name="comment_post_ID" value="51" type="hidden">
+				</p>
+				
+				<div class="clear"></div>
+
+				
+			</form>
+
+				
+			
+	<hr>
+
+	
+	<div class="navigation">
+		<div class="left"><span>«</span> <a href="http://mediapeers.wordpress.com/2008/11/06/extracting-symbols-or-keys-with-textmate/">Extracting symbols or keys with&nbsp;TextMate</a></div>				<div class="clear"></div>
+	</div>
+
+	
+	<hr>
+	
+	</div> <!-- END .comments #2 -->
+	
+</div>
+
+	<div id="rightcolumn">
+		<hr>
+
+<div class="secondary">
+	
+	
+	<div id="current-content">
+	
+<div id="search" class="module widget_search"><form method="get" id="searchform" action="/index.php">
+	<input onblur="this.value=(this.value=='') ? 'search blog archives' : this.value;" onfocus="this.value=(this.value=='search blog archives') ? '' : this.value;" id="s" name="s" value="search blog archives" size="15" type="text">
+	<input id="searchsubmit" value="GO" type="submit">
+</form>
+</div><div id="categories-103271181" class="module widget_categories"><h2 class="widgettitle">Categories</h2>
+		<ul>
+			<li class="cat-item cat-item-72924"><a href="http://mediapeers.wordpress.com/category/funstuff/" title="View all posts filed under Funstuff">Funstuff</a> (2)
+</li>
+	<li class="cat-item cat-item-54802"><a href="http://mediapeers.wordpress.com/category/html-css/" title="View all posts filed under HTML / CSS">HTML / CSS</a> (1)
+</li>
+	<li class="cat-item cat-item-2438"><a href="http://mediapeers.wordpress.com/category/os-x/" title="View all posts filed under OS X">OS X</a> (2)
+</li>
+	<li class="cat-item cat-item-6948689"><a href="http://mediapeers.wordpress.com/category/pitfalls-on-rails/" title="View all posts filed under Pitfalls on Rails">Pitfalls on Rails</a> (1)
+</li>
+	<li class="cat-item cat-item-6652"><a href="http://mediapeers.wordpress.com/category/rails/" title="View all posts filed under Rails">Rails</a> (4)
+</li>
+	<li class="cat-item cat-item-4872"><a href="http://mediapeers.wordpress.com/category/ruby/" title="View all posts filed under Ruby">Ruby</a> (4)
+</li>
+	<li class="cat-item cat-item-151883"><a href="http://mediapeers.wordpress.com/category/textmate/" title="View all posts filed under TextMate">TextMate</a> (2)
+</li>
+		</ul>
+</div><div id="linkcat-1356" class="module widget_links"><h2 class="widgettitle">Blogroll</h2>
+
+	<ul class="xoxo blogroll">
+<li><a href="http://wordpress.com/">WordPress.com</a></li>
+<li><a href="http://wordpress.org/">WordPress.org</a></li>
+
+	</ul>
+</div>
+		<div id="meta" class="module widget_meta">			<h2 class="widgettitle">Meta</h2>
+			<ul>
+						<li><a href="http://mediapeers.wordpress.com/wp-login.php">Log in</a></li>
+			<li><a href="http://mediapeers.wordpress.com/feed/" title="Syndicate this site using RSS 2.0">Entries <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="http://mediapeers.wordpress.com/comments/feed/" title="The latest comments to all posts in RSS">Comments <abbr title="Really Simple Syndication">RSS</abbr></a></li>
+			<li><a href="http://wordpress.com/" title="Powered by WordPress, state-of-the-art semantic personal publishing platform.">WordPress.com</a></li>
+						</ul>
+		</div><div id="calendar" class="module widget_calendar"><h2 class="widgettitle">&nbsp;</h2>
+<div id="calendar_wrap"><table id="wp-calendar" summary="Calendar">
+	<caption>December 2008</caption>
+	<thead>
+	<tr>
+		<th abbr="Monday" scope="col" title="Monday">M</th>
+		<th abbr="Tuesday" scope="col" title="Tuesday">T</th>
+		<th abbr="Wednesday" scope="col" title="Wednesday">W</th>
+		<th abbr="Thursday" scope="col" title="Thursday">T</th>
+		<th abbr="Friday" scope="col" title="Friday">F</th>
+		<th abbr="Saturday" scope="col" title="Saturday">S</th>
+		<th abbr="Sunday" scope="col" title="Sunday">S</th>
+	</tr>
+	</thead>
+
+	<tfoot>
+	<tr>
+		<td abbr="November" colspan="3" id="prev"><a href="http://mediapeers.wordpress.com/2008/11/" title="View posts for November 2008">« Nov</a></td>
+		<td class="pad">&nbsp;</td>
+		<td colspan="3" id="next" class="pad">&nbsp;</td>
+	</tr>
+	</tfoot>
+
+	<tbody>
+	<tr><td>1</td><td>2</td><td>3</td><td>4</td><td><a href="http://mediapeers.wordpress.com/2008/12/05/" title="Logging your model with a custom&nbsp;log">5</a></td><td>6</td><td>7</td>
+	</tr>
+	<tr>
+		<td>8</td><td>9</td><td>10</td><td>11</td><td>12</td><td>13</td><td>14</td>
+	</tr>
+	<tr>
+		<td>15</td><td>16</td><td id="today">17</td><td>18</td><td>19</td><td>20</td><td>21</td>
+	</tr>
+	<tr>
+		<td>22</td><td>23</td><td>24</td><td>25</td><td>26</td><td>27</td><td>28</td>
+	</tr>
+	<tr>
+		<td>29</td><td>30</td><td>31</td>
+		<td class="pad" colspan="4">&nbsp;</td>
+	</tr>
+	</tbody>
+	</table></div></div><div id="wp_tag_cloud" class="module wp_widget_tag_cloud"><h2 class="widgettitle">Tags</h2>
+<a href="http://mediapeers.wordpress.com/tag/cookies/" class="tag-link-18645" title="1 topic" rel="tag" style="font-size: 8pt;">cookies</a>
+<a href="http://mediapeers.wordpress.com/tag/custom-log/" class="tag-link-14321150" title="1 topic" rel="tag" style="font-size: 8pt;">custom log</a>
+<a href="http://mediapeers.wordpress.com/tag/extract-keys/" class="tag-link-13165918" title="1 topic" rel="tag" style="font-size: 8pt;">extract keys</a>
+<a href="http://mediapeers.wordpress.com/tag/extract-symbols/" class="tag-link-13165917" title="1 topic" rel="tag" style="font-size: 8pt;">extract symbols</a>
+<a href="http://mediapeers.wordpress.com/tag/firefox-home-end-keys-keyboard/" class="tag-link-8382301" title="1 topic" rel="tag" style="font-size: 8pt;">firefox home end keys keyboard</a>
+<a href="http://mediapeers.wordpress.com/tag/html-css-silbentrennung/" class="tag-link-7754072" title="1 topic" rel="tag" style="font-size: 8pt;">HTML CSS Silbentrennung</a>
+<a href="http://mediapeers.wordpress.com/tag/irb/" class="tag-link-144377" title="1 topic" rel="tag" style="font-size: 8pt;">irb</a>
+<a href="http://mediapeers.wordpress.com/tag/javascript/" class="tag-link-457" title="1 topic" rel="tag" style="font-size: 8pt;">javascript</a>
+<a href="http://mediapeers.wordpress.com/tag/log/" class="tag-link-12657" title="1 topic" rel="tag" style="font-size: 8pt;">log</a>
+<a href="http://mediapeers.wordpress.com/tag/logging/" class="tag-link-62087" title="1 topic" rel="tag" style="font-size: 8pt;">logging</a>
+<a href="http://mediapeers.wordpress.com/tag/performance/" class="tag-link-1930" title="1 topic" rel="tag" style="font-size: 8pt;">performance</a>
+<a href="http://mediapeers.wordpress.com/tag/rails/" class="tag-link-6652" title="1 topic" rel="tag" style="font-size: 8pt;">Rails</a>
+<a href="http://mediapeers.wordpress.com/tag/rails-console/" class="tag-link-12087812" title="1 topic" rel="tag" style="font-size: 8pt;">Rails console</a>
+<a href="http://mediapeers.wordpress.com/tag/ruby/" class="tag-link-4872" title="1 topic" rel="tag" style="font-size: 8pt;">Ruby</a>
+<a href="http://mediapeers.wordpress.com/tag/scripting/" class="tag-link-2929" title="1 topic" rel="tag" style="font-size: 8pt;">scripting</a>
+<a href="http://mediapeers.wordpress.com/tag/session-variables/" class="tag-link-6915582" title="1 topic" rel="tag" style="font-size: 8pt;">session variables</a>
+<a href="http://mediapeers.wordpress.com/tag/shell-script/" class="tag-link-202727" title="1 topic" rel="tag" style="font-size: 8pt;">shell script</a>
+<a href="http://mediapeers.wordpress.com/tag/textmate/" class="tag-link-151883" title="2 topics" rel="tag" style="font-size: 22pt;">TextMate</a></div>
+	
+	</div><!-- .current-content -->
+
+</div>
+	</div>
+	<div class="clear"></div>
+
+</div> <!-- .content -->
+
+	<div class="clear"></div>
+</div> <!-- Close Page -->
+
+<hr>
+
+<div id="footer"><!-- UNSLEEPABLE FOOTER -->
+	<div id="footer_content">
+		<div id="footer_middle">
+     		<div id="footer_images">
+
+     		</div>
+   		
+		<!-- spacer -->
+		<div id="copyright"><p>&nbsp;</p></div>
+
+			<small>
+				<a href="http://wordpress.com/" rel="generator">Blog at WordPress.com</a>. | Theme: Redoable Lite by <a href="http://www.deanjrobinson.com/" rel="designer">Dean J Robinson</a>
+   			</small>
+	
+		</div>
+	</div>
+</div><!-- END UNSLEEPABLE FOOTER -->
+
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="Logging%20your%20model%20with%20a%20custom%20log%20%C2%AB%20mediapeers%20development%20blog_files/ga.js" type="text/javascript"></script>
+	
+<script type="text/javascript">
+var wpcomPageTracker = _gat._getTracker("UA-52447-2");
+wpcomPageTracker._setDomainName("wordpress.com");
+wpcomPageTracker._initData();
+wpcomPageTracker._trackPageview();
+</script>
+<script type="text/javascript" src="Logging%20your%20model%20with%20a%20custom%20log%20%C2%AB%20mediapeers%20development%20blog_files/quant.js"></script>
+<script type="text/javascript">_qmeta="qc:adt=0;bti=mediapeers+development+blog;lan=en;dat=20081205;pti=Logging+your+model+with+a+custom+log;own=ingemarinberlin";_qacct="p-18-mFEk4J448M";quantserve();</script>
+<noscript><p><img src="http://pixel.quantserve.com/pixel/p-18-mFEk4J448M.gif" style="display: none" height="1" width="1" alt="" /></p></noscript>
+	<link type="text/css" rel="stylesheet" href="Logging%20your%20model%20with%20a%20custom%20log%20%C2%AB%20mediapeers%20development%20blog_files/SyntaxHighlighter.css">
+<script src="Logging%20your%20model%20with%20a%20custom%20log%20%C2%AB%20mediapeers%20development%20blog_files/w.js" type="text/javascript"></script>
+<script type="text/javascript">
+st_go({'blog':'3599543','v':'wpcom','user_id':'0','post':'51','subd':'mediapeers'});
+ex_go({'crypt':'D6%7C%2CY1mq%2CQJifJLxma6%2BFsm%3Dh%26.f33i%3FMahU%5Bf%3FcsvGm1PFAhKK7YQNe12Azn%2CZNbR6g%3Fn7v8%26OtQMp%7E3a%7C%2BA7h7%2Cfr_K%3F%2F3yWz%5B%2CWz0LG1xRwpjP%26%2CcgkJGq8TTxvj%2CqD6%2B64%25MA%3F%3DsdE%2FG%5DywJEjuo6qA%25%7CBE8yCrcqM%2BW%5Dlel3j%3DzL1USc9VCL9f2%26y%2BAc%5Bm3OpO'});
+re_go({'v':'sph','b':'3599543','p':'51','d[cciepursuit.wordpress.com]':'1','d[onruby.flempo.com]':'1','d[blog.rayapps.com]':'1'});
+addLoadEvent(function(){linktracker_init(3599543,51);});
+</script><img id="wpstats" src="Logging%20your%20model%20with%20a%20custom%20log%20%C2%AB%20mediapeers%20development%20blog_files/g.gif" alt=""><img id="wpstats2" src="Logging%20your%20model%20with%20a%20custom%20log%20%C2%AB%20mediapeers%20development%20blog_files/g_002.gif" alt="" style="display: none;"><img id="wpstats" src="Logging%20your%20model%20with%20a%20custom%20log%20%C2%AB%20mediapeers%20development%20blog_files/g_003.gif" alt="" style="display: none;">
+
+<!-- SyntaxHighlighter Stuff -->
+<script type="text/javascript" src="Logging%20your%20model%20with%20a%20custom%20log%20%C2%AB%20mediapeers%20development%20blog_files/shCore.js"></script>
+<script type="text/javascript" src="Logging%20your%20model%20with%20a%20custom%20log%20%C2%AB%20mediapeers%20development%20blog_files/shBrushRuby.js"></script>
+<script type="text/javascript">
+	dp.SyntaxHighlighter.ClipboardSwf = 'http://s1.wordpress.com/wp-content/plugins/highlight/clipboard.swf';
+	dp.SyntaxHighlighter.HighlightAll('code');
+</script>
+
+
+<img style="overflow: hidden; width: 0px; height: 0px;" src="Logging%20your%20model%20with%20a%20custom%20log%20%C2%AB%20mediapeers%20development%20blog_files/botd.gif"></body></html>

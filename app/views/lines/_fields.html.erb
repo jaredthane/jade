@@ -1,0 +1,28 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "line_edit" %>
+<% end %>
+
+<%= line_form.hidden_field(:order_id, :value=> @order_id) %>
+<div id=non_js_fields>
+	<p>
+		<b>Cantidad</b><br />
+		<%= line_form.text_field(:quantity, :value => 1, :class => 'field') %>
+	</p>
+	<p>
+		<b>Precio</b><br />
+		<%= line_form.text_field(:price, :value => 0.00, :class => 'field') %>
+	</p>
+	<p>
+		<b>Producto</b><br />
+		<%= line_form.collection_select(:product_id, get_products, :id, :name) %>
+	</p>
+</div>
+<div id=js_fields style="display: none;">
+	<p>
+		<b>Código UPC para producto adicional</b><br />
+		<%= line_form.text_field(:bar_code, :id => 'bar_code_field', :class => 'field') %>
+	</p>
+</div>
+<p>
+	<%= line_form.submit "Añadir Producto al Pedido", :class => 'action', :id=>'submit_new_line_button' %>	
+</p>

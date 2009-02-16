@@ -1,0 +1,17 @@
+<h1>Editing product_type</h1>
+
+<%= error_messages_for :product_type %>
+
+<% form_for(@product_type) do |f| %>
+  <p>
+    <b>Name</b><br />
+    <%= f.text_field :name %>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @product_type %> |
+<%= link_to 'Back', product_types_path %>

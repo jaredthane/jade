@@ -1,0 +1,51 @@
+<% content_for :title do %><%= heading %><% end %>
+
+<%= error_messages_for :service %>
+
+<% form_for(@service) do |f| %>
+		
+	<div class="column2-unit-left">
+		<p>
+		  <b>Nombre</b><br />
+		  <%= f.text_field :name, :class => 'field' %>
+		</p>
+		 <p>
+		  <b>Precio Fijo (+)</b><br />
+		  <%= f.text_field :static_price, :class => 'field' %>
+		</p>
+	</div>
+	<div class="column2-unit-right">
+		<p><b>Categoría</b><br />
+			<%= text_field_with_auto_complete :product, :category_name, 
+					{:class => 'field', :size=>30 }, 
+					{:url => '/product_categories.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+		</p>
+		<p>
+			<b>Codigo UPC</b><br />
+			<%= f.text_field :upc, :class => 'field' %>
+		</p>
+			<% if mode == 'new' %>
+	<p>
+	  <b>Unidad</b><br />
+	  <%= text_field_with_auto_complete :product, :unit_name, 
+	  				{:class => 'field', :size=>10 }, 
+	  				{:url => formatted_units_path(:js), :skip_style=>1, :method => :get, :param_name => 'search' } %>
+	</p>
+	<% end %>
+
+	</div>
+	<hr class="clear-contentunit" />
+	<p>
+	  <b>Descripcion</b><br />
+	  <%= f.text_area :description %>
+	</p>
+	<%= f.submit button_text+" | ", :class => 'action'  %>
+	<%= link_to 'Lista | ', services_path, :class => 'action' %>
+	<% if mode == 'edit' %>
+		<%= link_to 'Ver |', '/services/' + @service.id.to_s, :class => 'action' %>
+	<% end %>
+  
+<% end %>
+
+
+

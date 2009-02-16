@@ -1,0 +1,3 @@
+<% form_for Line.new, :html => {:id=>'bar_code_form'}, :url => { :action => "new", :controller=>"lines" } do |line_form| %>
+	<%= render :partial => 'lines/fields', :locals => { :line_form => line_form, :order_id => @order.id, :order => @order} %>
+<% end %>

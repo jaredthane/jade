@@ -1,0 +1,16 @@
+<div class="line">
+	<div class="table_row">
+	<% fields_for "products[]", prices_line do |line_form| %>
+
+				<div class="table_cell_35"><%= link_to line.name, line %></div>
+				<div class="table_cell_35"><%= link_to line.vendor.name,line.vendor %></div>
+				<div class="table_cell_10"><%= h line.price %></div>
+				<div class="table_cell_10"><%= line_form.text_field :static_price, :class => 'field' %></div>
+				<div class="table_cell"><%= line_form.text_field :relative_price, :class => 'field' %></div>
+
+		<%= line_form.hidden_field :id %>
+		</div>
+  <% end %>
+</div>
+
+

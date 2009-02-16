@@ -1,0 +1,26 @@
+<h1>Listing combo_lines</h1>
+
+<table>
+  <tr>
+    <th>Product</th>
+    <th>Combo</th>
+    <th>Quantity</th>
+    <th>Serialized product</th>
+  </tr>
+
+<% for combo_line in @combo_lines %>
+  <tr>
+    <td><%=h combo_line.product %></td>
+    <td><%=h combo_line.combo %></td>
+    <td><%=h combo_line.quantity %></td>
+    <td><%=h combo_line.serialized_product %></td>
+    <td><%= link_to 'Show', combo_line %></td>
+    <td><%= link_to 'Edit', edit_combo_line_path(combo_line) %></td>
+    <td><%= link_to 'Destroy', combo_line, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New combo_line', new_combo_line_path %>

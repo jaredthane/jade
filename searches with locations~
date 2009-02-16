@@ -1,0 +1,27 @@
+ def self.search_all(search, page)
+  	find 		 :all,
+  					 :conditions => ['(products.name like :search OR description like :search OR vendors.name like :search)', {:search => "%#{search}%"}],
+		         :order => 'name',
+		         :joins => 'inner join entities as vendors on vendors.id = products.vendor_id',
+		         :group => 'products.id'
+	end
+	def self.search_name(search, page)
+  	find 		 :all,
+  					 :conditions => ['(products.name like :search)', {:search => "%#{search}%"}],
+		         :order => 'name',
+		         :limit => 10
+	end
+  def self.search(search, page)
+  	paginate :per_page => 20, :page => page,
+		         :conditions => ['(products.name like :search OR description like :search OR vendors.name like :search) AND (locations.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+		         :order => 'name',
+		         :joins => 'inner join entities as vendors on vendors.id = products.vendor_id inner join movements on movements.product_id = products.id inner join entities as locations on locations.id= movements.entity_id',
+		         :group => 'products.id'
+	end
+	def self.search_for_discounts(search, page)
+  	paginate :per_page => 20, :page => page,
+		         :conditions => ['(products.name like :search OR description like :search) AND (locations.id=:current_location) AND (products.product_type_id=2)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+		         :order => 'name',
+		         :joins => 'inner join movements on movements.product_id = products.id inner join entities as locations on locations.id= movements.entity_id',
+		         :group => 'products.id'
+	end

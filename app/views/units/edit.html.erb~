@@ -1,0 +1,17 @@
+<h1>Editing unit</h1>
+
+<%= error_messages_for :unit %>
+
+<% form_for(@unit) do |f| %>
+  <p>
+    <b>Name</b><br />
+    <%= f.text_field :name %>
+  </p>
+
+  <p>
+    <%= f.submit "Update" %>
+  </p>
+<% end %>
+
+<%= link_to 'Show', @unit %> |
+<%= link_to 'Back', units_path %>

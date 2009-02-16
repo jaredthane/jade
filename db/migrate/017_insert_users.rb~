@@ -1,0 +1,10 @@
+class InsertUsers < ActiveRecord::Migration
+  def self.up
+  	down
+  	User.create(:name => "anonimo")
+  end
+
+  def self.down
+  	User.delete_all
+  end
+end

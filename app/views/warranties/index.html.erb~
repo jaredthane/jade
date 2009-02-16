@@ -1,0 +1,23 @@
+<% content_for :title do %>Lista de Garantías<% end %>
+
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_40">Producto</div>
+    <div class="table_cell_20">Meses</div>
+    <div class="table_cell_20">Precio</div>
+    <div class="table_cell">Acciones</div>
+  </div>
+
+
+<% for warranty in @warranties %>
+  <div class="table_row">
+    <div class="table_cell_40"><%= link_to warranty.product.name, warranty.product %></div>
+  	<div class="table_cell_20"><%= h warranty.months %></div>
+    <div class="table_cell_20"><%=h number_to_currency(warranty.price) %></div>
+    <div class="table_cell"><%= link_to 'Remover', product_type, :confirm => 'Esta seguro?', :method => :delete %></div>
+	</div>
+<% end %>
+</div>
+<br />
+<%= will_paginate @warranties %>
+<%= link_to 'Garantía Nuevo', new_warranty_path, :class => 'action' %>

@@ -1,0 +1,21 @@
+<% content_for :title do %>Lista de Usuarios<% end %>
+
+<table>
+  <tr>
+    <th class="top" scope="col">Nombre de usuario</th>
+    <th class="top" scope="col">Sitio</th>
+    <th class="top" scope="col">Correo E.</th>
+  </tr>
+
+<% for user in @users %>
+  <tr>
+    <td><%= link_to user.login, user %></td>
+    <td><%= h user.email %></td>
+    <td><%=link_to user.location.name, user.location %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'Nuevo usuario', new_user_path %>

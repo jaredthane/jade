@@ -1,0 +1,13 @@
+<div class="movement">
+  <% fields_for_movement(movement) do |movement_form| %>
+		<div class="table_row">
+			 <div class="table_cell_20"><%= movement_form.collection_select(:movement_type_id, get_movement_types, :id, :name) %></div>
+		  <div class="table_cell_30"><%= movement_form.collection_select(:product_id, get_products, :id, :name) %></div>
+			<div class="table_cell_15"><%= movement_form.text_field :quantity, :class => 'field' %></div>
+		  <div class="table_cell_20"><%= movement_form.collection_select(:user_id, get_users, :id, :login) %></div>
+		  <div class="table_cell"><%= movement_form.text_field :date.to_s, :class => 'field' %></div>
+		</div>
+  <% end %>
+</div>
+
+

@@ -1,0 +1,18 @@
+<% content_for :title do %><%= heading %><% end %>
+
+<%= error_messages_for :unit %>
+
+<% form_for(@unit) do |f| %>
+  <p>
+    <b>Nombre</b><br />
+    <%= f.text_field :name %>
+  </p>
+
+  <p>
+    <%= f.submit button_text %>
+  </p>
+<% end %>
+<% if mode=='edit' %>
+	<%= link_to 'Remover', @entity, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %> |
+<% end %>
+<%= link_to 'Atras', units_path, :class => 'action' %>

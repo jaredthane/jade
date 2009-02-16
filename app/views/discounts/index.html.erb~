@@ -1,0 +1,26 @@
+<% content_for :title do %>Lista de Discuentos<% end %>
+
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_20">Nombre</div>
+    <div class="table_cell_10">Precio</div>
+    <div class="table_cell_10">Costo</div>
+    <div class="table_cell">Upc</div>
+  </div>
+
+<% for discount in @discounts %>
+  <div class="table_row">
+    <div class="table_cell_20"><%= link_to discount.name[0..25], edit_discount_path(discount) %></div>
+    <div class="table_cell_10"><%=h number_to_currency(discount.price) %></div>
+    <div class="table_cell_10"><%=h number_to_currency(discount.cost) %></div>
+    <div class="table_cell"><%=h discount.upc %></div>
+   </div>
+<% end %>
+<br />
+<%= link_to 'Nuevo discuento', new_discount_path, :class => 'action' %>
+
+<%= will_paginate @discounts %>
+</div>
+
+
+

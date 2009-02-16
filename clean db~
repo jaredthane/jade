@@ -1,0 +1,14 @@
+delete from products;
+delete from inventories;
+import products
+create inventories with Ruby:
+	for p in Product.all; i=Inventory.new();i.product=p; i.entity=s; i.quantity=0; i.save; end
+create blank warranties with Ruby
+	for p in Product.find_all_by_serialized(1); w=Warranty.create(:product=>p, :price=>0, :months=>0); end
+update products set product_type_id=1;
+delete from orders;
+delete from `lines`;
+delete from movements;
+delete from serialized_products;
+delete from warranties;
+delete from product_categories;

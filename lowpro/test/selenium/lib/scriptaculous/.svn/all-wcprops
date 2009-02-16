@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 67
+/external/!svn/ver/215/lowpro/trunk/test/selenium/lib/scriptaculous
+END
+builder.js
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/external/!svn/ver/215/lowpro/trunk/test/selenium/lib/scriptaculous/builder.js
+END
+effects.js
+K 25
+svn:wc:ra_dav:version-url
+V 78
+/external/!svn/ver/215/lowpro/trunk/test/selenium/lib/scriptaculous/effects.js
+END
+unittest.js
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/external/!svn/ver/215/lowpro/trunk/test/selenium/lib/scriptaculous/unittest.js
+END
+scriptaculous.js
+K 25
+svn:wc:ra_dav:version-url
+V 84
+/external/!svn/ver/215/lowpro/trunk/test/selenium/lib/scriptaculous/scriptaculous.js
+END
+dragdrop.js
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/external/!svn/ver/215/lowpro/trunk/test/selenium/lib/scriptaculous/dragdrop.js
+END
+slider.js
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/external/!svn/ver/215/lowpro/trunk/test/selenium/lib/scriptaculous/slider.js
+END
+controls.js
+K 25
+svn:wc:ra_dav:version-url
+V 79
+/external/!svn/ver/215/lowpro/trunk/test/selenium/lib/scriptaculous/controls.js
+END

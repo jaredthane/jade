@@ -1,0 +1,81 @@
+<div class="column2-unit-left">
+	<p>
+		<b>Nombre</b><br />
+		<%= f.text_field :name, :class => 'field' %>
+	</p>
+	<p>
+		<b>Nacimiento</b><br />
+		<%= f.date_select :birth %>		
+	</p>
+	<p>
+		<b>Direcion</b><br />
+		<%= f.text_area :address, :style => "height:50px; width: 300px;" %>
+	</p>
+	<p>
+		<b>Departamento</b><br />
+		<%= f.collection_select(:state_id, get_states, :id, :name) %>
+	</p>
+	<p>
+		<b>Municipio</b><br />
+		<%= f.text_field :city, :class => 'field' %>
+	</p>
+</div>
+<div class="column2-unit-right">
+	<p>
+		<b>Telefono Fijo</b><br />
+		<%= f.text_field :home_phone, :class => 'field' %>
+	</p>
+	<p>
+		<b>Telefono Oficina</b><br />
+		<%= f.text_field :office_phone, :class => 'field' %>
+	</p>
+	<p>
+		<b>Telefono Celular</b><br />
+		<%= f.text_field :cell_phone, :class => 'field' %>
+	</p>
+	<p>
+		<b>Correo Electronico</b>
+		<%= f.text_field :email, :class => 'field' %>
+	</p>
+	<p>
+		<b>Registro</b><br />
+		<%= f.text_field :register, :class => 'field' %>
+	</p>
+	<p>
+		<b>NIT</b><br />
+		<%= f.text_field :nit, :class => 'field' %>
+	</p>
+	<p>
+		<b>Giro</b>
+		<%= f.text_field :giro, :class => 'field' %>
+	</p>
+	<% if mode == 'new' %>
+		<p>
+			<b>Tipo</b><br />
+			<%= f.collection_select(:entity_type_id, get_entity_types, :id, :name) %>
+		</p>
+	<% end %>
+</div>
+<hr class="clear-contentunit" />
+<% if @entity.entity_type_id == 3 %>
+
+<div id="movements" class='movements'>
+		<div class="table_header_row">
+			<div class="table_cell_20">Movimiento</div>
+			<div class="table_cell_30">Producto</div>
+			<div class="table_cell_15">Cantidad</div>
+			<% if :mode == 'edit' %>
+				<div class="table_cell_20">Usuario</div>
+				<div class="table_cell">Fecha</div>
+			<% else %>
+				<div class="table_cell">Usuario</div>
+			<% end %>
+		</div>
+	<%= render :partial => 'movement', :collection => @entity.movements %>
+</div>
+<p><%= add_movement_link "Anadir producto", :class => 'action' %></p>
+<% end %>
+<p>
+  <%= f.submit "Actualizar", :class => 'action' %>
+</p>
+

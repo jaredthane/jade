@@ -1,0 +1,6 @@
+<results>
+<% for product in @products %>
+	<rs id="<%= product.name %>" info=""><%= product.name %></rs>
+<% end %>
+</results>
+

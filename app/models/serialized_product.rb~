@@ -1,0 +1,13 @@
+class SerializedProduct < ActiveRecord::Base
+	has_many :lines
+	has_many :movements
+	belongs_to :product
+	def location
+		last_movement=Movement.find_by_product_id(self.product.id, :order => "id desc")
+		if last_movement.quantity>0
+			return last_movement.entity_id
+		else
+			return nil
+		end
+	end
+end

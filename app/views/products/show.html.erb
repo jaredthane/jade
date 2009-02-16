@@ -1,0 +1,78 @@
+<% content_for :title do %><%=h @product.name %> - <%=h @product.upc %><% end %>
+
+<div class="column3-unit-left">
+	<p><b>Proveedor</b><br />
+    <% if @product.vendor %>
+    	<%=h @product.vendor.name %>	
+    <% end %>
+  </p>
+	<p>
+    <b>Minimo</b><br />
+    <%=h @product.min(current_user.location_id) %>
+  </p>
+	<p>
+    <b>Se Usa numero de Serie</b><br />
+    <% if @product.serialized %>
+    	<%=h "Si" %>
+    <% else %>
+    	<%=h "No" %>
+    <% end %>
+  </p>
+</div>
+<div class="column3-unit-middle">
+<p>
+    <b>Precio</b><br />
+      <%=h number_to_currency(@product.price) %>
+  </p>
+	<p>
+    <b>Maximo</b><br />
+    <%=h @product.max(current_user.location_id) %>
+  </p>
+
+	<p>
+    <b>Categoría</b><br />
+    <% if @product.product_category %>
+    	<%=h @product.product_category.name %>
+    <% end %>
+  </p>
+</div>
+<div class="column3-unit-right">
+	<% if current_user.has_rights(['admin','compras','gerente']) %>
+		<p>
+		  <b>Costo</b><br />
+		    <%=h number_to_currency(@product.cost) %>
+		</p>
+	<% end %>
+	<p>
+    <b>Unidad</b><br />
+    <%=h @product.unit.name %>
+  </p>
+	<p>
+		<b>Numero de Modelo</b><br />
+		<%=h @product.model %>
+	</p>
+</div>
+<hr class="clear-contentunit" />
+<p>
+  <b>Descripcion:</b>
+  <%=h @product.description %>
+</p>
+<p>
+	<b>Inventario:</b>
+	<div>
+		<div class="table_header_row">
+			<div class="table_cell_80">Locacion</div>
+			<div class="table_cell">Cantidad </div>
+		</div>
+		<% for location in get_locations %>
+			<div class="table_row">
+				<div class="table_cell_80"><%=link_to location.name, :controller => "movements", :search => @product.upc %></div>
+				<div class="table_cell"><%=h location.inventory(@product) %></div>
+			</div>
+		<% end %>
+	</div>
+</p>
+<% if current_user.has_rights(['admin','compras','gerente']) %>
+	<%= link_to 'Cambiar | ', edit_product_path(@product), :class =>'action' %> 	
+<% end %>
+<%= link_to 'Lista', products_path, :class =>'action' %>

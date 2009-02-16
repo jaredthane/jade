@@ -1,0 +1,30 @@
+<div class="line">
+
+	<% @to_order=line.to_order||0
+	@min=line.min||0
+	@max=line.max||0 %>
+	
+	<% if @order > 0  %>
+		<div class="table_row_green">
+	<% else %>
+		<% if @min ==@max %>
+			<div class="table_row_red">
+		<% else %>
+			<div class="table_row">
+		<% end %>
+	<% end %>
+	<% fields_for_line(line) do |line_form| %>
+
+				<div class="table_cell_35"><%= link_to line.name, line %></div>
+				<div class="table_cell_35"><%= link_to line.vendor.name,line.vendor %></div>
+				<div class="table_cell_5"><%= h line.min(current_user.location_id) %></div>		  
+				<div class="table_cell_5"><%= h line.max(current_user.location_id) %></div>
+				<div class="table_cell_10"><%= h current_user.location.inventory(line) %></div>
+				<div class="table_cell"><%= line_form.text_field :order(current_user.location_id), :class => 'field' %></div>
+
+		<%= line_form.hidden_field :id %>
+		</div>
+  <% end %>
+</div>
+
+

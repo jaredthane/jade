@@ -1,0 +1,18 @@
+<h1>Listing serialized_products</h1>
+
+<table>
+  <tr>
+  </tr>
+
+<% for serialized_product in @serialized_products %>
+  <tr>
+    <td><%= link_to 'Show', serialized_product %></td>
+    <td><%= link_to 'Edit', edit_serialized_product_path(serialized_product) %></td>
+    <td><%= link_to 'Destroy', serialized_product, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New serialized_product', new_serialized_product_path %>

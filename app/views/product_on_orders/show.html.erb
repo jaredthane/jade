@@ -1,0 +1,28 @@
+<p>
+  <b>Product:</b>
+  <%=h @product_on_order.product %>
+</p>
+
+<p>
+  <b>Order:</b>
+  <%=h @product_on_order.order %>
+</p>
+
+<p>
+  <b>Quantity:</b>
+  <%=h @product_on_order.quantity %>
+</p>
+
+<p>
+  <b>Price:</b>
+  <%=h @product_on_order.price %>
+</p>
+
+<p>
+  <b>Received:</b>
+  <%=h @product_on_order.received %>
+</p>
+
+
+<%= link_to 'Edit', edit_product_on_order_path(@product_on_order) %> |
+<%= link_to 'Back', product_on_orders_path %>

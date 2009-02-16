@@ -1,0 +1,17 @@
+class ProductCatagoriesController < ApplicationController
+  def index
+		@product_catagories = ProductCatagory.search(params[:search], params[:page])
+    respond_to do |format|
+      format.js # index.html.erb
+    end
+  end
+  def show
+  	@search=params[:search] || ""
+    @products = Product.find_by_product_catagory_id(params[:id])
+		@product_catagory = ProductCatagory.find(params[:id])
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @products }
+    end
+  end
+end

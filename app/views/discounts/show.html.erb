@@ -1,0 +1,63 @@
+<% content_for :title do %><%=h @discount.name %> - <%=h @discount.upc %><% end %>
+
+<div class="column2-unit-left">
+	<p>
+	  <b>Precio</b><br />
+	    <%=h number_to_currency(@discount.price) %>
+	</p>
+	<p>
+    <b>Catagoría</b><br />
+    <% if @discount.product_catagory %>
+    	<%=h @discount.product_catagory.name %>
+    <% end %>
+  </p>
+</div>
+<div class="column2-unit-right">
+	<p>
+		<b>Costo</b><br />
+		  <%=h number_to_currency(@discount.cost) %>
+	</p>
+</div>
+<hr class="clear-contentunit" />
+<p>
+  <b>Descripcion:</b>
+  <%=h @discount.description %>
+</p>
+<p>
+	<b>Requisitos:</b>
+	<div>
+		<div class="table_header_row">
+			<div class="table_cell_20">UPC</div>
+			<div class="table_cell_20">Nombre de Producto</div>
+			<div class="table_cell_10">Cantidad</div>
+			<div class="table_cell">Acciones </div>
+		</div>
+		<% for requirement in @discount.requirements %>
+			<div class="table_row">
+				<div class="table_cell_20"><%=link_to requirement.required.upc, requirement.required %></div>
+				<div class="table_cell_20"><%=link_to requirement.required.name, edit_discount_path(requirement.required) %></div>
+				<div class="table_cell_10"><%=h requirement.quantity %></div>
+				<div class="table_cell"><%=link_to 'Remover', requirement.product %></div>
+			</div>
+		<% end %>
+	</div>
+</p>
+<p>
+	<b>Disponibilidad:</b>
+	<div>
+		<div class="table_header_row">
+			<div class="table_cell_80">Locacion</div>
+			<div class="table_cell">Cantidad </div>
+		</div>
+		<% for location in get_locations %>
+			<div class="table_row">
+				<div class="table_cell_80"><%=link_to location.name, :controller => "movements", :search => @discount.upc
+ %></div>
+				<div class="table_cell"><%=h location.inventory(@discount) %></div>
+			</div>
+		<% end %>
+	</div>
+</p>
+
+<%= link_to 'Cambiar | ', edit_discount_path(@discount), :class =>'action' %> 
+<%= link_to 'Lista', discounts_path, :class =>'action' %>

@@ -1,0 +1,5 @@
+alter table entities add column home_phone office_phone char(8) default '        ';
+alter table entities add column office_phone office_phone char(8) default '        ';
+alter table entities add column address text;
+alter table entities add column birth datetime;
+

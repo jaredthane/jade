@@ -1,0 +1,97 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "product_edit" %>
+<% end %>
+
+<% content_for :title do %><%= heading %><% end %>
+
+<%= error_messages_for :product %>
+
+<% form_for(@product) do |f| %>
+		
+	<div class="column2-unit-left">
+		<p>
+		  <b>Nombre</b><br />
+		  <%= f.text_field :name, :class => 'field' %>
+		</p>
+		 <p>
+		  <b>Precio Fijo (+)</b><br />
+		  <%= f.text_field :static_price, :class => 'field' %>
+		</p>
+		<p>
+			<b>Codigo UPC</b><br />
+			<%= f.text_field :upc, :id => 'upc', :class => 'field' %>
+		</p>
+		<p>
+			<b>Numero de Modelo</b>
+			<%= f.text_field :model, :class => 'field' %>
+		</p>
+		<p>
+			<%= f.check_box :serialized, :class => 'field' %><b> Usar Numeros de Serie</b>
+		</p>
+	</div>
+	<div class="column2-unit-right">
+		<p><b>Proveedor</b><br />
+			<%= text_field_with_auto_complete :product, :vendor_name, 
+					{:class => 'field', :size=>30 }, 
+					{:url => '/vendors.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+		</p>
+		 <p>
+		  <b>Precio Relativo (x)</b><br />
+		  <%= f.text_field :relative_price, :class => 'field' %>
+		</p>
+		<p><b>Categoría</b><br />
+			<%= text_field_with_auto_complete :product, :category_name, 
+					{:class => 'field', :size=>30 }, 
+					{:url => '/product_categories.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+		</p>
+
+		<% if @mode == 'edit' %>
+			<p>
+				<b>Costo</b><br />
+				<%= h number_to_currency(@product.cost) %>
+			</p>	
+		<% end %>
+		
+		<p>
+		  <b>Ubicacion</b><br />
+		  <%= f.text_field :location, :class => 'field' %>
+		</p>
+	</div>
+	<hr class="clear-contentunit" />
+	<div class="column3-unit-left">
+	<p>
+		  <b>Minimo</b><br />
+		  <%= f.text_field :min, :class => 'field', :size=>10 %>
+		</p>
+	</div>
+	<div class="column3-unit-middle">
+		<p>
+		  <b>Maximo</b><br />
+		  <%= f.text_field :max, :class => 'field', :size=>10 %>
+		</p>
+	</div>
+	<% if mode == 'new' %>
+	<div class="column3-unit-right">
+	<p>
+	  <b>Unidad</b><br />
+	  <%= text_field_with_auto_complete :product, :unit_name, 
+	  				{:class => 'field', :size=>10 }, 
+	  				{:url => formatted_units_path(:js), :skip_style=>1, :method => :get, :param_name => 'search' } %>
+	</p>
+
+	</div>
+	<% end %>
+	<hr class="clear-contentunit" />
+	<p>
+	  <b>Descripcion</b><br />
+	  <%= f.text_area :description %>
+	</p>
+	<%= f.submit "Guardar Producto | ", :class => 'action'  %>
+	<% if mode == 'edit' %>
+		<%= link_to 'Ver |', @product, :class => 'action' %>
+	<% end %>
+  <%= link_to 'Cancelar', products_path, :class => 'action' %> 
+<% end %>
+
+
+

@@ -1,0 +1,143 @@
+<% content_for :title do %>Detalles del <%= @entity.entity_type.name %> "<%= @entity.name %>"<% end %>
+
+  <% if @entity.entity_type_id !=3 and @entity.birthday? %>  
+  	<% flash[:error] = 'Este cliente esta cumpliendo anos..' %> 
+  <% end %>
+<div class="column2-unit-left">
+	<p>
+		<b>Nombre</b>
+		<%=h @entity.name %>
+	</p>
+	<p>
+		<b>Nacimiento</b><br />		
+		<%=h @entity.birth.strftime('%B %d') %>
+	</p>
+	<p>
+		<b>Direcion</b><br />
+		<%=h @entity.address %>
+	</p>
+	<p>
+		<b>Departamento</b><br />		
+		<%=h @entity.state.name %>
+	</p>
+	<p>
+		<b>Municipio</b><br />		
+		<%=h @entity.city %>
+	</p>
+</div>
+<div class="column2-unit-right">
+	<p>
+		<b>Telefono Fijo</b><br />
+		<% if @entity.home_phone.length == 8 %>
+			<%=h @entity.home_phone[0..3] + "-" + @entity.home_phone[4..7] %>
+		<% end %>
+		
+	</p>
+	<p>
+		<b>Telefono Oficina</b><br />
+		<% if @entity.office_phone.length == 8 %>
+			<%=h @entity.office_phone[0..3] + "-" + @entity.office_phone[4..7] %>
+		<% end %>
+	</p>
+	<p>
+		<b>Telefono Celular</b><br />
+		<% if @entity.cell_phone.length == 8 %>
+			<%=h @entity.cell_phone[0..3] + "-" + @entity.cell_phone[4..7] %>
+		<% end %>
+	</p>
+	<p>
+		<b>Correo E</b>
+		<%=h @entity.email %>
+	</p>
+	<p>
+		<b>Registro</b>
+		<%=h @entity.register %>
+	</p>
+	<p>
+		<b>NIT</b><br />
+		<% if @entity.nit.length == 14 %>
+			<%=h @entity.nit[0..3] + "-" + @entity.nit[4..9] + "-" + @entity.nit[10..12] + "-" + @entity.nit[13] %>
+		<% end %>
+	</p>
+	<p>
+		<b>Giro</b><br />
+		<%=h @entity.giro %>
+	</p>
+	<p>
+		<b>Tipo</b><br />
+		<%=h @entity.entity_type.name %>
+	</p>
+</div>
+<hr class="clear-contentunit" />
+<% case @entity.entity_type_id 
+	when 1,2 %>
+		<p>
+			<b>Compras:</b>
+			<div>
+				<div class="table_header_row">
+					<div class="table_cell_10">Numero</div>
+					<div class="table_cell_20">Proveedor</div>
+					<div class="table_cell_20">Cliente</div>
+					<div class="table_cell_15">Received</div>
+					<div class="table_cell_15">Ordered</div>
+					<div class="table_cell_right_20">User</div>
+				</div>
+				<% if @entity.entity_type_id == 1 %>
+					<% for order in Order.find_all_by_vendor_id(@entity, :limit => 20) %>
+						<div class="table_row">
+							<div class="table_cell_10"><%= link_to order.id, order %></div>
+							<div class="table_cell_20"><%= link_to order.vendor.name, order.vendor %></div>
+							<div class="table_cell_20"><%= link_to order.client.name, order.client %></div>
+							<div class="table_cell_15"><%=h order.received %></div>
+							<div class="table_cell_15"><%=h order.created_at.to_date.to_s %></div>
+							<div class="table_cell_right_20"><%= link_to order.user.login, order.user %></div>
+						</div>
+					<% end %>
+				<% else %>
+					<% for order in Order.find_all_by_client_id(@entity, :limit => 20) %>
+						<div class="table_row">
+							<div class="table_cell_10"><%= link_to order.id, order %></div>
+							<div class="table_cell_20"><%= link_to order.vendor.name, order.vendor %></div>
+							<div class="table_cell_20"><%= link_to order.client.name, order.client %></div>
+							<div class="table_cell_15"><%=h order.received %></div>
+							<div class="table_cell_15"><%=h order.created_at.to_date.to_s %></div>
+							<div class="table_cell_right_20"><%= link_to order.user.login, order.user %></div>
+						</div>
+					<% end %>
+				<% end %>
+			</div>
+		</p>
+		<%= link_to 'Cambiar |', edit_entity_path(@entity), :class => 'action' %>
+	<% when 3 %>
+		<p>
+			<b>Movimientos:</b>
+			<div>
+				<div class="table_header_row">
+					<div class="table_cell_15">Movimiento</div>
+					<div class="table_cell_15">Pedido</div>
+					<div class="table_cell_20">Producto</div>
+					<div class="table_cell_15">Cantidad (Num. Serie)</div>
+					<div class="table_cell_15">Usuario</div>
+					<div class="table_cell">Fecha</div>
+				</div>
+				<% for movement in Movement.find_all_by_entity_id(@entity, :order => 'created_at DESC', :limit => 20) %>
+					<div class="table_row">
+						<div class="table_cell_15"><%=link_to movement.movement_type.name, movement %></div>
+						<div class="table_cell_15"><%=link_to movement.order.id, movement.order %></div>
+						<div class="table_cell_20"><%=link_to movement.product.name, movement.product %></div>
+						<% if movement.product.serialized %>
+							<div class="table_cell_15"><%=link_to "(" + movement.serialized_product.serial_number.to_s + ')', movement.serialized_product %> </div>
+						<% else %>
+							<div class="table_cell_15"><%=h movement.quantity %> </div>
+						<% end %>
+						<div class="table_cell_15"><%=link_to movement.user.login, movement.user %> </div>
+						<div class="table_cell"><%=h movement.created_at.to_date.to_s %> </div>
+					</div>
+				<% end %>
+			</div>
+		</p>
+		<%= link_to 'Cambiar |', edit_entity_path(@entity), :class => 'action' %>
+		<%= link_to 'Compras para este Sitio |', purchases_path, :class => 'action' %>  
+		<%= link_to 'Ventas de este Sitio |', sales_path, :class => 'action' %>  
+<% end %>
+<%= link_to 'Atras', entities_path, :class => 'action' %>

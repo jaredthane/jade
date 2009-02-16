@@ -1,0 +1,324 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" lang="en"><head profile="http://gmpg.org/xfn/11">
+
+
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Ruby on Rails: Validation in Models « N Rao Lakkakula’s Blog</title>
+
+<meta name="generator" content="WordPress.com"> <!-- leave this for stats -->
+
+<link rel="stylesheet" href="Ruby%20on%20Rails:%20Validation%20in%20Models%20%C2%AB%20N%20Rao%20Lakkakula%E2%80%99s%20Blog_files/style.css" type="text/css" media="screen">
+<link rel="alternate" type="application/rss+xml" title="N Rao Lakkakula’s Blog RSS Feed" href="http://nlakkakula.wordpress.com/feed/">
+<link rel="pingback" href="http://nlakkakula.wordpress.com/xmlrpc.php">
+
+<script type="text/javascript">
+/* <![CDATA[ */
+function addLoadEvent(func) {
+	var oldonload = window.onload;
+	if (typeof window.onload != 'function') {
+		window.onload = func;
+	} else {
+		window.onload = function() { oldonload(); func(); }
+	}
+}
+/* ]]> */
+</script>
+<link rel="stylesheet" href="Ruby%20on%20Rails:%20Validation%20in%20Models%20%C2%AB%20N%20Rao%20Lakkakula%E2%80%99s%20Blog_files/global.css" type="text/css">
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="http://nlakkakula.wordpress.com/xmlrpc.php?rsd">
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="http://nlakkakula.wordpress.com/wp-includes/wlwmanifest.xml"> 
+	<link rel="introspection" type="application/atomserv+xml" title="Atom API" href="http://nlakkakula.wordpress.com/wp-app.php">
+<link rel="shortcut icon" type="image/x-icon" href="http://www.gravatar.com/blavatar/938868496f637c7614f48134461831e7?s=16&amp;d=http://s.wordpress.com/favicon.ico">
+<link rel="icon" type="image/x-icon" href="http://www.gravatar.com/blavatar/938868496f637c7614f48134461831e7?s=16&amp;d=http://s.wordpress.com/favicon.ico">
+<link rel="apple-touch-icon" href="http://www.gravatar.com/blavatar/f0921d680211101dc5cf84aae0b0f354?s=158&amp;d=http://s.wordpress.com/wp-content/themes/h4/i/webclip.png">
+<link rel="openid.server" href="http://nlakkakula.wordpress.com/?openidserver=1">
+<link rel="openid.delegate" href="http://nlakkakula.wordpress.com/">
+<!--
+	generated in 0.666 seconds
+	20132 bytes batcached for 300 seconds
+-->
+</head><body>
+
+<div id="wrap">
+<div id="header"><h1><a href="http://nlakkakula.wordpress.com/">N Rao Lakkakula’s Blog</a></h1>
+<p class="description">Techical Observations….</p>
+</div>
+<div id="content">
+									<div class="post hentry category-activerecord category-rails category-validation entry entry-1" id="post-21">
+		<div class="entrytitle">
+			<h2><a href="http://nlakkakula.wordpress.com/2007/08/01/ruby-on-rails-validation-in-models/" rel="bookmark" title="Permanent Link to Ruby on Rails: Validation in&nbsp;Models">Ruby on Rails: Validation in&nbsp;Models</a></h2> 
+			<h3>August 1, 2007</h3>
+		</div>
+		<div class="entrybody">
+			<div class="snap_preview"><p>Validating
+incoming data to make sure data is according to business logic rules is
+important and is easy to do in Rails. The best place to get more
+information is Official Rails Documentation site
+(http://api.rubyonrails.org/classes/ActiveRecord/Validations/ClassMethods.html)
+but if you want a general overview, proceed further.</p>
+<p>As a data gatekeeper, Model class can be a perfect place to keep all
+your data validations. That way whatever way you create/modify data
+(programmatically or user interface) the validations work.</p>
+<p>Basically we could write validations in 3 passes,</p>
+<p><strong>Pass 1: Use Rails inbuilt simple validation rules</strong></p>
+<p>a) Field should not be empty<br>
+Rails Method: validates_presence_of<br>
+Example: validates_presence_of :user_name, :password</p>
+<p>b) Field should Numerical<br>
+Rails Method: validates_numericality_of<br>
+Example: validates_numericality_of :value</p>
+<p>c) Field should not be Unique<br>
+Rails Method:validates_uniqueness_of<br>
+Example: validates_uniqueness_of :user_name</p>
+<p>d) Field Need to be of size X<br>
+Rails Method: validates_length_of<br>
+Example: validates_length_of :state_code, :is=&gt;2</p>
+<p>e) Field size Need to be of between X to Y<br>
+Rails Method: validates_length_of<br>
+Example: validates_uniqueness_of :user_name</p>
+<p><strong>Pass 2 :&nbsp; Write Regular Expression to do validation</strong>&nbsp;<br>
+Requirement: Field Need to be in Certain Format like Email or DOB</p>
+<p>Rails Method: validates_format_of</p>
+<p>Example: /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\Z/i, :on =&gt; :create&nbsp;&nbsp;</p>
+<p>(Tip : For all the above validations you could add :message =&gt;
+“Your customized message if validatation
+fails”&nbsp;&nbsp;to&nbsp;customize Error Messages)</p>
+<p><strong>Pass 3 : Custom Validations</strong></p>
+<p>Finally, for any other custom validations like say if product_price
+should be more than $100 or salary_requested less than 100K, define a
+protected method “<strong><em>validate</em></strong>” inside your
+model. Then use errors object to add any messages if validation fails
+like &nbsp; errors.add (:your_field, “your message”).</p>
+<p>example&nbsp;from Book “<a href="http://www.amazon.com/Rails-Solutions-Ruby-Made-Easy/dp/1590597524">Rails Solutions</a>” By Justin Williams</p>
+<p align="left">def validate</p>
+<p align="left">&nbsp; errors.add(:price, “should be a positive value”) if price.nil?|| price &lt; 0.01</p>
+<p>end</p>
+</div>					</div>
+		
+		<div class="entrymeta">
+		<div class="postinfo">
+			<span class="postedby">Posted by Bob Lakkakula</span><br>
+							<span class="filedto">Filed in <a href="http://wordpress.com/tag/activerecord/" title="View all posts in ActiveRecord" rel="category tag">ActiveRecord</a>,  <a href="http://wordpress.com/tag/rails/" title="View all posts in Rails" rel="category tag">Rails</a>,  <a href="http://wordpress.com/tag/validation/" title="View all posts in Validation" rel="category tag">Validation</a></span><br>
+										<span class="filedto"></span>
+		</div>
+				</div>
+		
+	</div>
+	<div class="commentsblock">
+		
+<!-- You can start editing here. -->
+
+	<h3 id="comments">7 Responses to “Ruby on Rails: Validation in&nbsp;Models”</h3> 
+
+	<ol class="commentlist">
+
+	
+		<li class="alt" id="comment-579">
+						<cite>Jason</cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="#comment-579" title="">October 3, 2007 at 6:00 pm</a> </small>
+
+			<p>Thanks for the tip! Very useful.</p>
+
+		</li>
+
+	
+	
+		<li class="" id="comment-1226">
+						<cite>Hong</cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="#comment-1226" title="">April 7, 2008 at 12:16 am</a> </small>
+
+			<p>You provided the duplicate sample in “Rails Method: validates_length_of”</p>
+
+		</li>
+
+	
+	
+		<li class="alt" id="comment-1313">
+						<cite>Jacob Lyles</cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="#comment-1313" title="">June 19, 2008 at 12:05 pm</a> </small>
+
+			<p>There’s an error in Pass 1:</p>
+<p>c) Field should not be Unique &lt;– Field should be Unique<br>
+Rails Method:validates_uniqueness_of<br>
+Example: validates_uniqueness_of :user_name</p>
+
+		</li>
+
+	
+	
+		<li class="" id="comment-1445">
+						<cite><a href="http://www.ecojoes.com/" rel="external nofollow" class="url">Joe</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="#comment-1445" title="">July 23, 2008 at 10:39 am</a> </small>
+
+			<p>That
+custom validation code is basically the same as what it in the book
+Agile Web Development with Rails on page 66. Weird that two different
+books would have basically the same sample code for that <img src="Ruby%20on%20Rails:%20Validation%20in%20Models%20%C2%AB%20N%20Rao%20Lakkakula%E2%80%99s%20Blog_files/icon_smile.gif" alt=":)" class="wp-smiley"> </p>
+
+		</li>
+
+	
+	
+		<li class="alt" id="comment-1446">
+						<cite><a href="http://www.elancommunications.net/" rel="external nofollow" class="url">Andrew Degenhardt</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="#comment-1446" title="">August 1, 2008 at 12:54 am</a> </small>
+
+			<p>if anyone is wondering about how to get the error message to show in the view here it is:</p>
+<p>I spent some time trying to find the answer to this one</p>
+
+		</li>
+
+	
+	
+		<li class="" id="comment-1447">
+						<cite><a href="http://www.elancommunications.net/" rel="external nofollow" class="url">Andrew Degenhardt</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="#comment-1447" title="">August 1, 2008 at 12:57 am</a> </small>
+
+			<p>I had to take out the surrounding symbols and equals sign as it didnt show…</p>
+<p> error_messages_for ‘model_name_goes_here’</p>
+
+		</li>
+
+	
+	
+		<li class="alt" id="comment-1455">
+						<cite><a href="http://link/" rel="external nofollow" class="url">name</a></cite> Says:
+						<br>
+
+			<small class="commentmetadata"><a href="#comment-1455" title="">September 1, 2008 at 1:40 am</a> </small>
+
+			<p>Hi!,</p>
+
+		</li>
+
+	
+	
+	</ol>
+
+ 
+
+
+<h3 id="respond">Leave a Reply</h3>
+
+
+<form action="http://nlakkakula.wordpress.com/wp-comments-post.php" method="post" id="commentform">
+
+
+<p><input name="author" id="author" value="" size="22" tabindex="1" type="text">
+<label for="author"><small>Name </small></label></p>
+
+<p><input name="email" id="email" value="" size="22" tabindex="2" type="text">
+<label for="email"><small>Mail (will not be published) </small></label></p>
+
+<p><input name="url" id="url" value="" size="22" tabindex="3" type="text">
+<label for="url"><small>Website</small></label></p>
+
+
+<!--<p><small><strong>XHTML:</strong> You can use these tags: &lt;a href=&quot;&quot; title=&quot;&quot;&gt; &lt;abbr title=&quot;&quot;&gt; &lt;acronym title=&quot;&quot;&gt; &lt;b&gt; &lt;blockquote cite=&quot;&quot;&gt; &lt;cite&gt; &lt;code&gt; &lt;del datetime=&quot;&quot;&gt; &lt;em&gt; &lt;i&gt; &lt;q cite=&quot;&quot;&gt; &lt;strike&gt; &lt;strong&gt; </small></p>-->
+
+<p><textarea name="comment" id="comment" cols="100" rows="10" tabindex="4"></textarea></p>
+
+<p><input name="submit" id="submit" tabindex="5" value="Submit Comment" type="submit">
+<input name="comment_post_ID" value="21" type="hidden">
+</p>
+
+</form>
+
+
+	</div>
+			<div class="navigation">
+			<div class="alignleft"></div>
+			<div class="alignright"></div>
+		</div>
+		
+	</div>
+<ul id="sidebar">
+<li id="search" class="widget widget_search"><form method="get" id="searchform" action="http://nlakkakula.wordpress.com/">
+	<label class="hidden" for="s">Search for:</label>
+	<div><input value="" name="s" id="s" type="text">
+	<input id="searchsubmit" value="Search" type="submit">
+	</div>
+	</form></li>
+		<li id="top-posts" class="widget widget_stats_topposts">			<h2 class="widgettitle">Top Posts</h2>
+			<ul><li><a href="http://nlakkakula.wordpress.com/2007/08/09/how-to-create-%e2%80%98coda%e2%80%99-like-scrolling-window-using-mootools-2/">How to Create Coda(tm) like Scrolling Window using Mootools -2 </a></li><li><a href="http://nlakkakula.wordpress.com/2007/08/01/ruby-on-rails-validation-in-models/">Ruby on Rails: Validation in Models</a></li><li><a href="http://nlakkakula.wordpress.com/2007/05/30/css-how-to-keep-a-div-always-center-to-window/">CSS- How to keep a Div always center to Window?</a></li><li><a href="http://nlakkakula.wordpress.com/2007/07/19/setting-up-rails-production-server-using-apache2-mongrel-cluster-on-fedora-core-5/">Setting up Rails Production Server using Apache2, Mongrel Cluster on Fedora Core 5</a></li><li><a href="http://nlakkakula.wordpress.com/2007/05/30/how-to-create-coda-like-scrolling-window-using-mootools/">How to Create 'Coda' like Scrolling Window using Mootools?</a></li><li><a href="http://nlakkakula.wordpress.com/2008/06/07/javascript-formatter-or-beautifier/">JavaScript Formatter or Beautifier...</a></li><li><a href="http://nlakkakula.wordpress.com/2007/09/02/performance-comparison-for-rails-and-merb/">Performance Comparison For Rails and Merb </a></li><li><a href="http://nlakkakula.wordpress.com/2008/11/24/10-steps-for-deploying-your-ruby-on-rails-application-on-a-windows-server-2008-apache-mongrel-cluster/">10 Steps to deploy your RubyonRails Application on Windows Vista/2008 using Apache and Mongrel cluster</a></li><li><a href="http://nlakkakula.wordpress.com/2007/08/10/how-to-merge-2-partions-in-your-windows-pc/">How to merge 2 Partions in Your Windows PC.</a></li><li><a href="http://nlakkakula.wordpress.com/2007/05/29/using-nifycube-with-rails-for-rounded-corners/">Using NifyCube with Rails For Rounded Corners</a></li></ul>		</li>
+<li id="wp_tag_cloud" class="widget wp_widget_tag_cloud"><h2 class="widgettitle">Tags</h2>
+<a href="http://nlakkakula.wordpress.com/tag/ajaxcontoltoolkit/" class="tag-link-8308110" title="1 topic" rel="tag" style="font-size: 8pt;">AjaxContolToolkit</a>
+<a href="http://nlakkakula.wordpress.com/tag/ajaxcontroltoolkit/" class="tag-link-5837114" title="1 topic" rel="tag" style="font-size: 8pt;">AjaxControlToolkit</a>
+<a href="http://nlakkakula.wordpress.com/tag/apache/" class="tag-link-3768" title="1 topic" rel="tag" style="font-size: 8pt;">Apache</a>
+<a href="http://nlakkakula.wordpress.com/tag/apsnet/" class="tag-link-5083554" title="1 topic" rel="tag" style="font-size: 8pt;">APS.NET</a>
+<a href="http://nlakkakula.wordpress.com/tag/aspnet/" class="tag-link-2425" title="1 topic" rel="tag" style="font-size: 8pt;">ASP.NET</a>
+<a href="http://nlakkakula.wordpress.com/tag/aspnet-20/" class="tag-link-30776" title="1 topic" rel="tag" style="font-size: 8pt;">ASP.NET 2.0</a>
+<a href="http://nlakkakula.wordpress.com/tag/aspnet-35/" class="tag-link-2762105" title="1 topic" rel="tag" style="font-size: 8pt;">ASP.NET 3.5</a>
+<a href="http://nlakkakula.wordpress.com/tag/aspnet-ajax/" class="tag-link-514982" title="2 topics" rel="tag" style="font-size: 22pt;">ASP.NET Ajax</a>
+<a href="http://nlakkakula.wordpress.com/tag/aspnet-mvc/" class="tag-link-2097482" title="1 topic" rel="tag" style="font-size: 8pt;">ASP.NET MVC</a>
+<a href="http://nlakkakula.wordpress.com/tag/broken-links/" class="tag-link-1049364" title="1 topic" rel="tag" style="font-size: 8pt;">broken links</a>
+<a href="http://nlakkakula.wordpress.com/tag/bsh/" class="tag-link-1733472" title="1 topic" rel="tag" style="font-size: 8pt;">bsh</a>
+<a href="http://nlakkakula.wordpress.com/tag/c/" class="tag-link-2426" title="1 topic" rel="tag" style="font-size: 8pt;">C#</a>
+<a href="http://nlakkakula.wordpress.com/tag/cron-job/" class="tag-link-1964731" title="1 topic" rel="tag" style="font-size: 8pt;">Cron Job</a>
+<a href="http://nlakkakula.wordpress.com/tag/css/" class="tag-link-169" title="1 topic" rel="tag" style="font-size: 8pt;">CSS</a>
+<a href="http://nlakkakula.wordpress.com/tag/fckeditor/" class="tag-link-106794" title="1 topic" rel="tag" style="font-size: 8pt;">FCKEditor</a>
+<a href="http://nlakkakula.wordpress.com/tag/html/" class="tag-link-647" title="1 topic" rel="tag" style="font-size: 8pt;">HTML</a>
+<a href="http://nlakkakula.wordpress.com/tag/ie7-update/" class="tag-link-2905018" title="1 topic" rel="tag" style="font-size: 8pt;">IE7 update</a>
+<a href="http://nlakkakula.wordpress.com/tag/iis/" class="tag-link-14013" title="1 topic" rel="tag" style="font-size: 8pt;">IIS</a>
+<a href="http://nlakkakula.wordpress.com/tag/javascript-beautifier/" class="tag-link-7623357" title="1 topic" rel="tag" style="font-size: 8pt;">Javascript Beautifier</a>
+<a href="http://nlakkakula.wordpress.com/tag/linux/" class="tag-link-610" title="1 topic" rel="tag" style="font-size: 8pt;">Linux</a>
+<a href="http://nlakkakula.wordpress.com/tag/mongrel-cluster/" class="tag-link-3116474" title="1 topic" rel="tag" style="font-size: 8pt;">Mongrel Cluster</a>
+<a href="http://nlakkakula.wordpress.com/tag/mvc/" class="tag-link-36699" title="1 topic" rel="tag" style="font-size: 8pt;">MVC</a>
+<a href="http://nlakkakula.wordpress.com/tag/netspell/" class="tag-link-5106636" title="1 topic" rel="tag" style="font-size: 8pt;">Netspell</a>
+<a href="http://nlakkakula.wordpress.com/tag/nifty-corners/" class="tag-link-6512762" title="1 topic" rel="tag" style="font-size: 8pt;">Nifty Corners</a>
+<a href="http://nlakkakula.wordpress.com/tag/postgresql/" class="tag-link-15989" title="2 topics" rel="tag" style="font-size: 22pt;">PostgreSQL</a>
+<a href="http://nlakkakula.wordpress.com/tag/practical-query-analysis/" class="tag-link-1885394" title="1 topic" rel="tag" style="font-size: 8pt;">Practical Query Analysis</a>
+<a href="http://nlakkakula.wordpress.com/tag/production-setup/" class="tag-link-13930554" title="1 topic" rel="tag" style="font-size: 8pt;">Production Setup</a>
+<a href="http://nlakkakula.wordpress.com/tag/rails/" class="tag-link-6652" title="1 topic" rel="tag" style="font-size: 8pt;">Rails</a>
+<a href="http://nlakkakula.wordpress.com/tag/rounded-corners/" class="tag-link-434134" title="1 topic" rel="tag" style="font-size: 8pt;">Rounded Corners</a>
+<a href="http://nlakkakula.wordpress.com/tag/ruby/" class="tag-link-4872" title="2 topics" rel="tag" style="font-size: 22pt;">Ruby</a>
+<a href="http://nlakkakula.wordpress.com/tag/shell-script/" class="tag-link-202727" title="1 topic" rel="tag" style="font-size: 8pt;">Shell Script</a>
+<a href="http://nlakkakula.wordpress.com/tag/visual-studio/" class="tag-link-6678" title="1 topic" rel="tag" style="font-size: 8pt;">Visual Studio</a>
+<a href="http://nlakkakula.wordpress.com/tag/visual-studio-2008/" class="tag-link-1267320" title="1 topic" rel="tag" style="font-size: 8pt;">Visual Studio 2008</a>
+<a href="http://nlakkakula.wordpress.com/tag/windows-server/" class="tag-link-8830" title="1 topic" rel="tag" style="font-size: 8pt;">Windows Server</a>
+<a href="http://nlakkakula.wordpress.com/tag/windows-vista/" class="tag-link-3003" title="1 topic" rel="tag" style="font-size: 8pt;">Windows Vista</a>
+<a href="http://nlakkakula.wordpress.com/tag/yahoo-messenger/" class="tag-link-49690" title="1 topic" rel="tag" style="font-size: 8pt;">yahoo messenger</a></li>
+		<li id="blog-stats" class="widget widget_statscounter">			<h2 class="widgettitle">Blog Stats</h2>
+			<ul>
+			<li>54,050 hits</li>
+			</ul>
+		</li>
+</ul></div>
+<div id="footer">Theme: Simpla by <a href="http://ifelse.co.uk/" rel="designer">Phu</a>. <a href="http://wordpress.com/" rel="generator">Blog at WordPress.com</a>.
+
+
+<script type="text/javascript">
+var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script src="Ruby%20on%20Rails:%20Validation%20in%20Models%20%C2%AB%20N%20Rao%20Lakkakula%E2%80%99s%20Blog_files/ga.js" type="text/javascript"></script>
+	
+<script type="text/javascript">
+var wpcomPageTracker = _gat._getTracker("UA-52447-2");
+wpcomPageTracker._setDomainName("wordpress.com");
+wpcomPageTracker._initData();
+wpcomPageTracker._trackPageview();
+</script>
+<script type="text/javascript" src="Ruby%20on%20Rails:%20Validation%20in%20Models%20%C2%AB%20N%20Rao%20Lakkakula%E2%80%99s%20Blog_files/quant.js"></script>
+<script type="text/javascript">_qmeta="qc:adt=0;bti=N+Rao+Lakkakula%27s+Blog;lan=en;dat=20070801;pti=Ruby+on+Rails%3A+Validation+in+Models;own=nlakkakula";_qacct="p-18-mFEk4J448M";quantserve();</script>
+<noscript><p><img src="http://pixel.quantserve.com/pixel/p-18-mFEk4J448M.gif" style="display: none" height="1" width="1" alt="" /></p></noscript>
+<script src="Ruby%20on%20Rails:%20Validation%20in%20Models%20%C2%AB%20N%20Rao%20Lakkakula%E2%80%99s%20Blog_files/w.js" type="text/javascript"></script>
+<script type="text/javascript">
+st_go({'blog':'1169014','v':'wpcom','user_id':'0','post':'21','subd':'nlakkakula'});
+ex_go({'crypt':'D6%7C%2CY1mqNRWEJ0e9%2BqN%5Dt_auCUUjJpDghocP%5BDF0A_rIlkqLLQ%7E5.%3DRrgF7r3twvJr%26MA6Wa8v5%3FnZ%2CYrf%7E.ZwzQbUwiN44BU-W%2FK%2C%5BJ22-7geUVM%5BaZB_6L2EPNH%26gHy1UQHNhXeB_R4%3D%25WjmrRBc%25Us85aMO'});
+addLoadEvent(function(){linktracker_init(1169014,21);});
+</script><img id="wpstats" src="Ruby%20on%20Rails:%20Validation%20in%20Models%20%C2%AB%20N%20Rao%20Lakkakula%E2%80%99s%20Blog_files/g.gif" alt=""><img id="wpstats2" src="Ruby%20on%20Rails:%20Validation%20in%20Models%20%C2%AB%20N%20Rao%20Lakkakula%E2%80%99s%20Blog_files/g_002.gif" alt="" style="display: none;">
+</div>
+
+</body></html>

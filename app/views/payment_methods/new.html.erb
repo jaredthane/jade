@@ -1,0 +1,16 @@
+<h1>New payment_method</h1>
+
+<%= error_messages_for :payment_method %>
+
+<% form_for(@payment_method) do |f| %>
+  <p>
+    <b>Name</b><br />
+    <%= f.text_field :name %>
+  </p>
+
+  <p>
+    <%= f.submit "Create" %>
+  </p>
+<% end %>
+
+<%= link_to 'Back', payment_methods_path %>

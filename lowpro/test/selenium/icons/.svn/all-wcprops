@@ -1,0 +1,53 @@
+K 25
+svn:wc:ra_dav:version-url
+V 55
+/external/!svn/ver/215/lowpro/trunk/test/selenium/icons
+END
+pause.png
+K 25
+svn:wc:ra_dav:version-url
+V 65
+/external/!svn/ver/215/lowpro/trunk/test/selenium/icons/pause.png
+END
+step_disabled.png
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/external/!svn/ver/215/lowpro/trunk/test/selenium/icons/step_disabled.png
+END
+continue.png
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/external/!svn/ver/215/lowpro/trunk/test/selenium/icons/continue.png
+END
+pause_disabled.png
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/external/!svn/ver/215/lowpro/trunk/test/selenium/icons/pause_disabled.png
+END
+all.png
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/external/!svn/ver/215/lowpro/trunk/test/selenium/icons/all.png
+END
+selected.png
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/external/!svn/ver/215/lowpro/trunk/test/selenium/icons/selected.png
+END
+continue_disabled.png
+K 25
+svn:wc:ra_dav:version-url
+V 77
+/external/!svn/ver/215/lowpro/trunk/test/selenium/icons/continue_disabled.png
+END
+step.png
+K 25
+svn:wc:ra_dav:version-url
+V 64
+/external/!svn/ver/215/lowpro/trunk/test/selenium/icons/step.png
+END

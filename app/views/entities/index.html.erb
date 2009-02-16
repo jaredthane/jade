@@ -1,0 +1,28 @@
+<% case @entity_type
+	when 'all' %>
+		<% content_for :title do %>Lista de Entidades<% end %>
+	<% when 'sites' %>
+		<% content_for :title do %>Lista de Sitios<% end %>
+	<% when 'vendors' %>
+		<% content_for :title do %>Lista de Proveedores<% end %>
+	<% when 'clients' %>
+		<% content_for :title do %>Lista de Clientes<% end %>
+<% end %>
+		
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_50">Nombre</div>
+    <div class="table_cell">Tipo</div>
+  </div>
+
+<% for entity in @entities %>
+  <div class="table_row">
+    <div class="table_cell_50"><%= link_to entity.name[0..25], entity %></div>
+    <div class="table_cell"><%=h entity.entity_type.name %></div>
+	</div>
+<% end %>
+</div>
+
+<br />
+
+<%= link_to 'Nueva entidad', new_entity_path, :class => 'action' %>
