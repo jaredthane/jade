@@ -57,9 +57,11 @@ class Product < ActiveRecord::Base
 			#puts "stock-items_counted" + (stock-items_counted).inspect
 			#puts "[stock-items_counted, movements[movement_counter].quantity].min=" + [stock-items_counted, movements[movement_counter].quantity].min.inspect
 			take = [stock-items_counted, movements[movement_counter].quantity].min
-			totalcost += movements[movement_counter].line.price
-			#puts items_counted.inspect
-			items_counted = items_counted + take
+			if movements[movement_counter].line
+				totalcost += movements[movement_counter].line.price
+				#puts items_counted.inspect
+				items_counted = items_counted + take
+			end
 			movement_counter = movement_counter + 1
 		end
 		if stock > 0

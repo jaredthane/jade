@@ -59,7 +59,7 @@ Rails::Initializer.run do |config|
   # config.active_record.default_timezone = :utc
 end
 require "will_paginate" 
-
+require "prawn"
 class AuditLogger < Logger
 	def format_message(severity, timestamp, progname, msg)
 	  "#{timestamp.to_formatted_s(:db)} #{severity} #{msg}\n" 

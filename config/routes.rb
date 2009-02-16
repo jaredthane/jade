@@ -11,7 +11,6 @@ ActionController::Routing::Routes.draw do |map|
 
   map.resources :users
 
-	map.resources :discounts
   map.resource :session
   
   map.resources :product_categories
@@ -61,6 +60,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :movements
   map.resources :warranties
   map.resources :services
+	map.resources :discounts
 	map.resources :requirements
   map.resources :orders
   map.connect 	'purchases/new', :controller => 'orders', :action => 'new', :order_type => 'purchases'

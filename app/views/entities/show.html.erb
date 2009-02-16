@@ -28,22 +28,16 @@
 <div class="column2-unit-right">
 	<p>
 		<b>Telefono Fijo</b><br />
-		<% if @entity.home_phone.length == 8 %>
-			<%=h @entity.home_phone[0..3] + "-" + @entity.home_phone[4..7] %>
-		<% end %>
+		<%=h @entity.home_phone_number %>
 		
 	</p>
 	<p>
 		<b>Telefono Oficina</b><br />
-		<% if @entity.office_phone.length == 8 %>
-			<%=h @entity.office_phone[0..3] + "-" + @entity.office_phone[4..7] %>
-		<% end %>
+		<%=h @entity.office_phone_number %>
 	</p>
 	<p>
 		<b>Telefono Celular</b><br />
-		<% if @entity.cell_phone.length == 8 %>
-			<%=h @entity.cell_phone[0..3] + "-" + @entity.cell_phone[4..7] %>
-		<% end %>
+		<%=h @entity.cell_phone_number %>
 	</p>
 	<p>
 		<b>Correo E</b>
@@ -55,9 +49,7 @@
 	</p>
 	<p>
 		<b>NIT</b><br />
-		<% if @entity.nit.length == 14 %>
-			<%=h @entity.nit[0..3] + "-" + @entity.nit[4..9] + "-" + @entity.nit[10..12] + "-" + @entity.nit[13] %>
-		<% end %>
+		<%=h @entity.nit_number %>
 	</p>
 	<p>
 		<b>Giro</b><br />
@@ -107,7 +99,6 @@
 				<% end %>
 			</div>
 		</p>
-		<%= link_to 'Cambiar |', edit_entity_path(@entity), :class => 'action' %>
 	<% when 3 %>
 		<p>
 			<b>Movimientos:</b>
@@ -136,8 +127,8 @@
 				<% end %>
 			</div>
 		</p>
-		<%= link_to 'Cambiar |', edit_entity_path(@entity), :class => 'action' %>
 		<%= link_to 'Compras para este Sitio |', purchases_path, :class => 'action' %>  
 		<%= link_to 'Ventas de este Sitio |', sales_path, :class => 'action' %>  
 <% end %>
+<%= link_to 'Cambiar |', edit_entity_path(@entity), :class => 'action' %>
 <%= link_to 'Atras', entities_path, :class => 'action' %>

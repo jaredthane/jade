@@ -19,7 +19,15 @@ class Entity < ActiveRecord::Base
       movements.build(attributes)
     end
   end
-  
+  def strip(s, c)
+   clean=''
+   s.each_char do |l|
+		 if !c.include?(l)
+		 	clean << l
+		 end
+   end
+   return clean; 
+  end
   def existing_movement_attributes=(movement_attributes)
     movements.reject(&:new_record?).each do |movement|
       attributes = movement_attributes[movement.id.to_s]
@@ -44,6 +52,46 @@ class Entity < ActiveRecord::Base
     movements.each do |movement|
       movement.save(false)
     end
+  end
+  def home_phone_number
+  	if self.home_phone
+			if self.home_phone.length == 8
+				return self.home_phone[0..3] + "-" + self.home_phone[4..7]
+			end
+		end
+  end
+  def home_phone_number=(number)
+  	self.home_phone=strip(number, ['-',' '])
+  end
+  def office_phone_number
+  	if self.office_phone
+			if self.office_phone.length == 8
+				return self.office_phone[0..3] + "-" + self.office_phone[4..7]
+			end
+		end
+  end
+  def office_phone_number=(number)
+  	self.office_phone=strip(number, ['-',' '])
+  end
+  def cell_phone_number
+	  if self.cell_phone
+			if self.cell_phone.length == 8
+				return self.cell_phone[0..3] + "-" + self.cell_phone[4..7]
+			end
+		end
+  end
+  def cell_phone_number=(number)
+  	self.cell_phone=strip(number, ['-',' '])
+  end
+  def nit_number
+  	if self.nit
+			if self.nit.length == 14
+				return self.nit[0..3] + "-" + self.nit[4..9] + "-" + self.nit[10..12] + "-" + self.nit[13].to_s
+			end
+		end
+  end
+  def nit_number=(number)
+  	self.nit=strip(number, ['-',' '])
   end
   def self.search(search, page, entity_type='all')
   	#puts "search=" + search

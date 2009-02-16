@@ -35,12 +35,14 @@ class Line < ActiveRecord::Base
 					#logger.debug  "validating Venta"
 					errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.vendor.inventory(self.product)
 					logger.debug  "self.serialized_product=" + self.serialized_product.to_s if self.serialized_product
-					if self.serialized_product
-							#logger.debug  "self.serialized_product.location.id=" + self.serialized_product.location.id.to_s
-							logger.debug  "@order.vendor.id=" + @order.vendor.id.to_s
-							errors.add "Este numero de serie no esta disponible en este sitio" if self.serialized_product.location != @order.vendor
-					else
-						errors.add "Este numero de serie no se encuentra en el registro"
+					if self.product.serialized
+						if self.serialized_product
+								#logger.debug  "self.serialized_product.location.id=" + self.serialized_product.location.id.to_s
+								logger.debug  "@order.vendor.id=" + @order.vendor.id.to_s
+								errors.add "Este numero de serie no esta disponible en este sitio" if self.serialized_product.location != @order.vendor
+						else
+							errors.add "Este numero de serie no se encuentra en el registro"
+						end
 					end
 					# Serial number should exist, and be in vendors location
 				when 2 # Compra
@@ -313,6 +315,6 @@ class Line < ActiveRecord::Base
 			logger.info "Product.find_by_upc(upc).id=#{Product.find_by_upc(upc).id.to_s}"
 		end
 		logger.info "found self.product_id=#{self.product_id.to_s}"
-		self.price = self.product.price
+		self.price = self.product.price if self.product
 	end
 end
