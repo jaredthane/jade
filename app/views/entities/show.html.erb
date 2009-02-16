@@ -113,7 +113,7 @@
 				</div>
 				<% for movement in Movement.find_all_by_entity_id(@entity, :order => 'created_at DESC', :limit => 20) %>
 					<div class="table_row">
-						<div class="table_cell_15"><%=link_to movement.movement_type.name, movement %></div>
+						<div class="table_cell_15"><%=link_to movement.movement_type.name, :controller => "movements", :search => movement.product.upc %></div>
 						<div class="table_cell_15"><%=link_to movement.order.id, movement.order %></div>
 						<div class="table_cell_20"><%=link_to movement.product.name, movement.product %></div>
 						<% if movement.product.serialized %>

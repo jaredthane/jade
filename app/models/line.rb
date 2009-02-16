@@ -10,6 +10,9 @@ class Line < ActiveRecord::Base
   end
   after_create :create_movements_on_save
   after_update :create_movements_on_save
+  belongs_to :receipt
+  before_create :set_taxes
+  before_update :set_taxes
 	belongs_to :order
 	belongs_to :warranty
 	belongs_to :product	
@@ -23,8 +26,10 @@ class Line < ActiveRecord::Base
 	#	self.movements_to_make=nil
 		# need to save this value here
 	end
+	def set_taxes
+		self.tax = self.total_price * 0.15
+	end
 	def validate
-		
 		logger.debug  "validating line"
 		##logger.debug  "@movements_to_create.length=" + @movements_to_create.length.to_s
 		if @movements_to_create # if we find stuff here, there is movement
@@ -78,6 +83,9 @@ class Line < ActiveRecord::Base
 		end
 	end
 	def create_movements_on_save
+		
+		self.product.cost=self.product.calculate_cost## <-------------- Remove this line for production!!!
+		self.product.save
 		@movements_to_create = [] if !@movements_to_create
 		#logger.debug  "movements_to_create has " + @movements_to_create.length.to_s
 		for m in @movements_to_create
@@ -112,6 +120,10 @@ class Line < ActiveRecord::Base
 	end
 	def total_price
 		total = ((price ||0) + (warranty_price || 0)) * quantity
+		return total
+	end
+	def total_price_with_tax
+		total = total_price + tax
 		return total
 	end
 	def last_change_type
@@ -196,9 +208,7 @@ class Line < ActiveRecord::Base
 		if checkbox.to_i==1
 			logger.debug 'saving date'
 			logger.debug  "order id is " + order.id.to_s
-			if self.warranty
-				self.warranty_expires = Time.now + (self.warranty.months || 0).months
-			end
+			
 			if self.received == nil
 				self.received=Time.now
 				create_movement

@@ -18,6 +18,25 @@ class OrdersController < ApplicationController
       format.xml  { render :xml => @orders }
     end
   end
+  def show_receipt
+  	@receipt = Order.find(params[:id])
+		params[:format] = 'pdf'
+		prawnto :prawn => { :page_size => 'RECEIPT',
+					              :page_layout => :landscape,
+					              :left_margin=>27,
+										    :right_margin=>36,
+										    :top_margin=>90,
+										    :bottom_margin=>18 }
+		@data=[]
+		total=0
+		for l in @receipt.lines
+			@data<< [l.quantity, l.product.name, l.price, "", l.total_price]
+			total += l.total_price
+		end
+    respond_to do |format|
+      format.pdf { render :layout => false }
+    end
+  end
 	# GET /orders/create_batch
   # GET /orders/create_batch.xml
   def create_batch

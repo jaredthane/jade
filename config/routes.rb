@@ -44,11 +44,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :products, :collection => { :bulk_edit => :get, :bulk_update => :post }, :product_type => 'simple'
 	map.connect 'allproducts.js', :controller => 'products', :scope => 'all', :format =>'js'
   map.show_batch 'orders/show_batch', :controller => 'orders', :action => 'show_batch'
+  map.show_receipt 'orders/:id/show_receipt', :controller => 'orders', :action => 'show_receipt'
   map.create_batch 'orders/create_batch', :controller => 'orders', :action => 'create_batch'
 	map.order_history 'orders/:id/history', :controller => 'orders', :action => 'show_history'
 	map.connect 'lines/new', :controller => 'lines', :action => 'new', :format => 'js'
   map.resources :lines
-
 	map.resources :inventories
 	
   map.resources :users

@@ -32,4 +32,6 @@
 
 
 <%= link_to 'Edit', edit_payment_path(@payment), :class => 'action' %> |
+
+<%= link_to 'Facturar | ', show_receipt_path(:order_id => @order.id), :class => 'action' %>
 <%= link_to 'Back', payments_path, :class => 'action' %>

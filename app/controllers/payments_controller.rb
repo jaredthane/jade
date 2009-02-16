@@ -3,6 +3,7 @@ class PaymentsController < ApplicationController
   # GET /payments.xml
   def index
 		@payments = Payment.search(params[:search], params[:page])
+		order_id=params[:order_id]
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @payments }
@@ -41,7 +42,6 @@ class PaymentsController < ApplicationController
   # POST /payments.xml
   def create
     @payment = Payment.new(params[:payment])
-
     respond_to do |format|
       if @payment.save
         flash[:notice] = 'Pago ha sido creado exitosamente.'

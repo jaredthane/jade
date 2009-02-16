@@ -12,7 +12,7 @@
 
 <% for movement in @movements %>
   <div class="table_row">
-    <div class="table_cell_20"><%= link_to movement.movement_type.name, movement.order %></div>
+    <div class="table_cell_20"><%= link_to movement.order.id.to_s + "<br />(" + movement.movement_type.name + ")", movement.order %></div>
     <div class="table_cell_20"><%= link_to movement.product.name[0..20], movement.product %></div>
   	<% if movement.serialized_product %>
   		<div class="table_cell_20"><%= link_to "("+movement.serialized_product.serial_number.to_s+")", movement.serialized_product %></div>

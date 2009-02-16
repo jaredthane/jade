@@ -44,28 +44,39 @@ class Product < ActiveRecord::Base
 		combo_lines.find(:all, :conditions =>"combo_line_type_id == 2")
 	end
 	def calculate_cost(location_id = User.current_user.location_id)
-		moves = movements.find_all_by_entity_id(location_id, :order => 'created_at desc')
-		num_movements = movements.count
-		stock = self.quantity
+		logger.info "product.id=#{self.id.to_s}"
+		logger.info "location_id=#{location_id.to_s}"
+		moves=connection.select_all("select movements.* from (select max(movements.id) as id from movements where product_id=#{self.id.to_s} group by order_id) as list left join movements on list.id=movements.id where movement_type_id=2;")
+		#moves = movements.find_all_by_entity_id(location_id, :order => 'created_at desc')
+		
+		stock = self.quantity(location_id)
 		items_counted = 0
 		movement_counter = 0
 		totalcost=0
-		while	(items_counted < stock) and (movements[movement_counter]) do
+		taken=0
+		while	(moves[movement_counter]) do
+			#puts moves[movement_counter].id
 			#puts "stock" + stock.inspect
 			#puts "items_counted" + items_counted.inspect
-			#puts "movements[movement_counter].quantity" + movements[movement_counter].quantity.inspect
-			#puts "stock-items_counted" + (stock-items_counted).inspect
+			#logger.info "moves[movement_counter][:quantity]" + moves[movement_counter][:quantity].inspect
+			#logger.info "stock-items_counted" + (stock-items_counted).inspect
 			#puts "[stock-items_counted, movements[movement_counter].quantity].min=" + [stock-items_counted, movements[movement_counter].quantity].min.inspect
-			take = [stock-items_counted, movements[movement_counter].quantity].min
-			if movements[movement_counter].line
-				totalcost += movements[movement_counter].line.price
+			
+			take = [stock-items_counted, moves[movement_counter]["quantity"].to_i].min
+			l=Line.find_by_id(moves[movement_counter]["line_id"].to_i)
+			if l
+				logger.info "take=#{take.to_s}"
+				logger.info "l.price=#{l.price.to_s}"
+				totalcost += l.price*take
 				#puts items_counted.inspect
 				items_counted = items_counted + take
 			end
 			movement_counter = movement_counter + 1
 		end
-		if stock > 0
-			return totalcost/stock
+		if items_counted > 0
+			logger.debug "totalcost=#{totalcost.to_s}"
+			logger.debug "items_counted=#{items_counted.to_s}"
+			return totalcost/items_counted
 		else
 			return 0
 		end

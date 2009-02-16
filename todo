@@ -3,6 +3,8 @@ make facturas
 make services work
 make combos work
 ================= To Do =======================================
+
+icon only showing up on some pages not on signin or new compra
 should make sure serial purchased is unique
 serials should only need to be unique to their product
 replenish should take into consideration the orders that have been created but not yet received
@@ -181,3 +183,14 @@ added detail fields to entities
 added birthday view
 fixed huminized description for upc
 --- Version 0.57 ---
+added email, giro, cell phone number, nit and others
+made them so you can use hyphens and spaces.
+added states and table to list the states
+--- Version 0.58 ---
+Added tax field to line
+controller for new payment should check to see if search contains a valid order_id and use it.
+should be able to click on product > movements
+fixed costs calculation.
+NOTE: if there are several serial numbers on a purchase, the system will only check the cost of the first one.
+--- Version 0.59 ---
+

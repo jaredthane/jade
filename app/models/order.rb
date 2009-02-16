@@ -98,6 +98,13 @@ class Order < ActiveRecord::Base
 		end
 		return total
 	end
+	def total_price_with_tax
+		total=0
+		for l in self.lines
+			total = total + (l.total_price_with_tax)
+		end
+		return total
+	end
 	def amount_paid
 		return self.payments.sum(:amount, :conditions => ['order_id = :order_id', {:order_id => self.id}])
 	end

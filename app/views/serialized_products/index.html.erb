@@ -1,18 +1,25 @@
-<h1>Listing serialized_products</h1>
+<% content_for :title do %>Lista de Productos<% end %>
 
-<table>
-  <tr>
-  </tr>
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_30">Numero de Serie</div>
+    <div class="table_cell_25">Producto</div>
+    <div class="table_cell_15">Locacion</div>
+    <div class="table_cell">Upc</div>
+  </div>
 
-<% for serialized_product in @serialized_products %>
-  <tr>
-    <td><%= link_to 'Show', serialized_product %></td>
-    <td><%= link_to 'Edit', edit_serialized_product_path(serialized_product) %></td>
-    <td><%= link_to 'Destroy', serialized_product, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
+<% for serial in @serialized_products %>
+  <div class="table_row">
+    <div class="table_cell_30"><%= link_to serial.serial_number, serial %></div>
+    <div class="table_cell_25"><%= link_to serial.product.name, serial.product %></div>
+    <div class="table_cell_15">
+		  <% if serial.location %>
+		  	<%= link_to serial.location.name, serial.location %>
+		  <% end %>
+    </div>
+    <div class="table_cell"><%=h serial.product.upc %></div>
+   </div>
 <% end %>
-</table>
-
 <br />
+<%= will_paginate @products %>
 
-<%= link_to 'New serialized_product', new_serialized_product_path %>

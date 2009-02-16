@@ -23,6 +23,10 @@
   <% end %>
 </p>
 <p>
+  <b>Numero de Factura:</b>
+  <%=h @order.receipt_number %>
+</p>
+<p>
   <b>Usuario Responsable:</b>
   <%=link_to @order.user.login, @order.user %>
 </p>
@@ -109,9 +113,9 @@
 <%= link_to 'Historia de este Pedido | ', order_history_path(@order), :class => 'action' %>
 <%= link_to 'Pagos | ', payments_path(:search=>@order.id), :class => 'action' %>
 
-<% case @order_type
+<% case @order.order_type
 	when 'sales' %>
-		<%= link_to 'Factura | ', orders_path, :class => 'action' %>
+		<%= link_to 'Facturar | ', show_receipt_path(:order_id => @order.id), :class => 'action' %>
 		<%= link_to 'Lista de Ventas', sales_path, :class => 'action' %> 
 	<% when 'purchases' %>
 		<%= link_to 'Lista de Compras', purchases_path, :class => 'action' %> 

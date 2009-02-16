@@ -2,7 +2,7 @@ class SerializedProductsController < ApplicationController
   # GET /serialized_products
   # GET /serialized_products.xml
   def index
-    @serialized_products = SerializedProduct.find(:all)
+    @serialized_products = SerializedProduct.search(params[:search], params[:page])
 
     respond_to do |format|
       format.html # index.html.erb

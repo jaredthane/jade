@@ -26,7 +26,9 @@
   </p>
 	<p>
     <b>Locacion Actual</b><br />
-    <%=link_to @serialized_product.location.name, @serialized_product.location %>
+    <% if @serialized_product.location %>
+    	<%=link_to @serialized_product.location.name, @serialized_product.location %>
+    <% end %>
   </p>
 </div>
 <div class="column3-unit-right">
@@ -68,7 +70,4 @@
 	
 </p>
 
-<%= link_to 'Cambiar | ', edit_product_path(@serialized_product.product), :class =>'action' %> 
-<%= link_to 'Lista', products_path, :class =>'action' %>
-<%= link_to 'Edit', edit_serialized_product_path(@serialized_product) %> |
-<%= link_to 'Back', serialized_products_path %>
+<%= link_to 'Lista', serialized_products_path, :class =>'action' %>

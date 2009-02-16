@@ -2,13 +2,13 @@
 	:file          => "layouts/_header.html.erb", 
 	:use_full_path => true, 
 	:locals => {
-		:page_title => 'Producto Serializado',
-		:search_path => serialized_products_path
+		:page_title => 'Facturas',
+		:search_path => receipts_path
 	}
 ) %>
-<% if flash[:notice] != nil %>
-	<p style="background: #008597; color: white; padding:2px;"> <%=  flash[:notice] %></p>
-<% end %>
+
+
+<p style="color: green"><%= flash[:notice] %></p>
 <h1 class="block"><%= yield :title %></h1>
 <%= yield  %>
 <hr class="clear-contentunit" />
