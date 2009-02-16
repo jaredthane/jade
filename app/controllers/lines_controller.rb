@@ -18,9 +18,14 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.xml
   def new
+  	@client=Entity.find_by_name(params[:line][:client_name])
+    if @client
+    	current_user.price_group_name_id = @client.price_group_name_id
+    end
     @line = Line.new()
     @line.bar_code = params[:line][:bar_code]
     @line.quantity = 1
+    @line.price = 
     
 		#if @line.product
 		  if !@line.product.serialized

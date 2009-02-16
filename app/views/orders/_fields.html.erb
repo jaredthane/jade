@@ -22,7 +22,7 @@
 			<p>
 				<b>Cliente</b><br />
 				<%= text_field_with_auto_complete :order, :client_name, 
-									{:class => 'field', :size=>20 }, 
+									{:class => 'field', :size=>20, :onchange=>'set_client_name(value)' }, 
 									{:url => '/clients.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 			</p>
 			<p>

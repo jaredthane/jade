@@ -3,6 +3,19 @@ class Entity < ActiveRecord::Base
   validates_uniqueness_of(:name, :message => "El nombre de entidad ya existe.") 
   
   belongs_to :state
+  
+  # These are all of the price groups that are available at this site.
+  # For use with Sites
+  has_many :price_groups
+  
+  # This is the default price Group Name to use for this client
+  # For use with Clients
+  belongs_to :price_group_name
+  
+  # This is the default price group to be used if a clients normal price group isn't available here
+  # to be used with Sites
+  belongs_to :price_group
+  
 	has_many :orders, :order => 'created_at'
 	has_many :products, :through => :inventories
 	has_many :products, :through => :movements
@@ -19,6 +32,14 @@ class Entity < ActiveRecord::Base
       movements.build(attributes)
     end
   end
+#  def price_group(location_id = User.current_user.location_id)
+#  	location = Entity.find(location_id)
+#  	pg = location.price_groups.find_by_name_id(self.default_price_group_id)
+#  	if !pg
+#  		pg = location.price_groups.find_by_name_id(self.price_group_name_id)
+#  	end
+#  	return pg
+#  end
   def strip(s, c)
    clean=''
    s.each_char do |l|

@@ -204,4 +204,81 @@ class Order < ActiveRecord::Base
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
+	def tens_to_spanish(num)
+#		puts "received:" + num.to_s
+		case num
+			when 20
+#				puts "returning veinte"
+				return 'veinte'
+			when 30
+				return 'treinta'
+			when 40
+				return 'cuarenta'
+			when 50
+				return 'cincuenta'
+			when 60
+				return 'sesenta'
+			when 70
+				return 'setenta'
+			when 80
+				return 'ochenta'
+			when 90
+				return 'noventa'
+		end
+	end
+	def digit_to_spanish (num)
+		if num > 19
+#			puts "tens_to_spanish:" + tens_to_spanish((num/10).to_i%10*10)
+#			puts "searching for " + (num%10).to_i.to_s
+			if (num%10).to_i > 0
+				return tens_to_spanish((num/10).to_i%10*10) + ' y ' + digit_to_spanish((num%10).to_i)
+			else
+				return tens_to_spanish((num/10).to_i%10*10)
+			end
+		else
+			case num
+				when 0
+					return 'cero'
+				when 1
+					return 'uno'
+				when 2
+					return 'dos'
+				when 3
+					return 'tres'
+				when 4
+					return 'cuatro'
+				when 5
+					return 'cinco'
+				when 6
+					return 'seis'
+				when 7
+					return 'siete'
+				when 8
+					return 'ocho'
+				when 9
+					return 'nueve'
+				when 10
+					return 'diez'
+				when 11
+					return 'once'
+				when 12
+					return 'doce'
+				when 13
+					return 'trece'
+				when 14
+					return 'catorse'
+				when 15
+					return 'quince'
+				when 16
+					return 'dieciseis'
+				when 17
+					return 'dieciseite'
+				when 18
+					return 'dieciocho'
+				when 19
+					return 'diecinueve'
+				
+			end
+		end
+	end
 end

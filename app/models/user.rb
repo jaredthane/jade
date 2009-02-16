@@ -3,6 +3,7 @@ class User < ActiveRecord::Base
 	cattr_accessor :current_user
 
 	belongs_to :location, :class_name => "Entity", :foreign_key => 'location_id'
+	belongs_to :price_group_name
   # Virtual attribute for the unencrypted password
   attr_accessor :password
 	has_many :movements
@@ -22,6 +23,20 @@ class User < ActiveRecord::Base
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :password, :password_confirmation
+	
+	def current_price_group
+#		logger.debug "location_id=#{location_id.to_s}"
+#		logger.debug "price_group_name=#{price_group_name.to_s}"
+#		logger.debug "price_group_name.price_groups.count=#{price_group_name.price_groups.count.to_s}"
+		pg=price_group_name.price_groups.find_by_entity_id(location_id) # this selects the group indicated if available
+#		logger.debug "pg=#{pg.to_s}"
+#		logger.debug "Entity.find(location_id)=#{Entity.find(location_id).to_s}"
+# otherwise well grab the default for this site		
+		if !pg
+			pg=Entity.find(location_id).price_group  
+		end
+		return pg
+	end
 	
   def self.search(search, page)
   	paginate :per_page => 20, :page => page,

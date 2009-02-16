@@ -9,6 +9,12 @@ module ApplicationHelper
   def get_privileges
     @privileges = Privilege.find(:all, :order => "name")
   end
+  def get_price_group_names
+    @price_group_names = PriceGroupName.find(:all, 
+    					:conditions => ['price_groups.entity_id=:site_id', {:site_id => "#{current_user.location.id}"}], 
+    					:order => "name", 
+    					:joins => 'inner join price_groups on price_groups.price_group_name_id=price_group_names.id')
+  end
   def get_states
     @states = State.find(:all, :order => "name")
   end

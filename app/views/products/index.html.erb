@@ -1,5 +1,10 @@
 <% content_for :title do %>Lista de Productos<% end %>
 
+<h2>
+	<div class="table_cell_50">Mostrando Productos de: <%= current_user.current_price_group.entity.name %></div>
+	<div class="table_cell" align="right">Con precios del grupo: <%= current_user.current_price_group.price_group_name.name %></div>
+</h2>
+
 <div>
   <div class="table_header_row">
     <div class="table_cell_20">Nombre</div>

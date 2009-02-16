@@ -24,6 +24,10 @@
 		<b>Municipio</b><br />		
 		<%=h @entity.city %>
 	</p>
+	<p>
+		<b>Grupo de Precios</b><br />		
+		<%=h @entity.price_group_name.name %>
+	</p>
 </div>
 <div class="column2-unit-right">
 	<p>
@@ -62,7 +66,7 @@
 </div>
 <hr class="clear-contentunit" />
 <% case @entity.entity_type_id 
-	when 1,2 %>
+	when 1,2,5 %>
 		<p>
 			<b>Compras:</b>
 			<div>

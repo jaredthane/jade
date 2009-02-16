@@ -21,11 +21,19 @@ class OrdersController < ApplicationController
   def show_receipt
   	@receipt = Order.find(params[:id])
 		params[:format] = 'pdf'
-		prawnto :prawn => { :page_size => 'RECEIPT_LAND',
+		if @receipt.client.entity_type.id == 2
+			prawnto :prawn => { :page_size => 'RECEIPT',
 					              :left_margin=>27,# was 27
 										    :right_margin=>5,
 										    :top_margin=>90, #was 90
 										    :bottom_margin=>18 }
+		else
+			prawnto :prawn => { :page_size => 'RECEIPT_LAND',
+					              :left_margin=>27,# was 27
+										    :right_margin=>5,
+										    :top_margin=>90, #was 90
+										    :bottom_margin=>5 }
+		end
 		@data=[]
 		total=0
 		for l in @receipt.lines

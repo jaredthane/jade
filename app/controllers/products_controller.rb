@@ -9,14 +9,14 @@ class ProductsController < ApplicationController
     #@products = Product.find(:all)
     @search=params[:search] || ""
     case params[:scope] 
-    when 'all'
-    	@products = Product.search_all(params[:search], params[:page])
-    when 'services'
-	    @products = Product.search_services(params[:search], params[:page])
-    when 'name'
-	    @products = Product.search_name(params[:search], params[:page])
-    else
-			@products = Product.search(params[:search], params[:page])
+		  when 'all'
+		  	@products = Product.search_all(params[:search], params[:page])
+		  when 'services'
+			  @products = Product.search_services(params[:search], params[:page])
+		  when 'name'
+			  @products = Product.search_name(params[:search], params[:page])
+		  else
+				@products = Product.search(params[:search], params[:page])
 		end
     respond_to do |format|
       format.html # index.html.erb
@@ -60,6 +60,7 @@ class ProductsController < ApplicationController
     	i=Inventory.new(:entity=>e, :product=>@product, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
     	i.save
     end
+    for g in PriceGroup.all; Price.create(:product_id=>@product.id, :price_group_id => g.id); end
     Warranty.create(:product=>@product, :price => 0, :months =>0)
     respond_to do |format|
       if @product.save
@@ -92,7 +93,7 @@ class ProductsController < ApplicationController
 		redirect_to('/products/bulk_edit?search=' + @search)
 	end
   def edit_prices
-  	@products = Product.search(params[:search], params[:page])
+  	@products = Product.search_all_with_pages(params[:search], params[:page])
     @action = 'prices' # for layout
 		@search = params[:search] || ""
     respond_to do |format|
@@ -150,10 +151,6 @@ class ProductsController < ApplicationController
 		end
 		
   end
-
-
-
-
 
   # DELETE /products/1
   # DELETE /products/1.xml

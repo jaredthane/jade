@@ -1,3 +1,11 @@
+onerror=handleErr;
+function handleErr(msg,url,l) {
+	alert("There was an error on this page.\n\nError: " + msg + "\nURL: " + url + "\nLine: " + l + "\n\nClick OK to continue.\n\n");
+	return true;
+}
+function set_client_name(value){
+	document.getElementById("client_name").value=value
+}
 function disableEnterKey(e){
      var key;
      if(window.event)

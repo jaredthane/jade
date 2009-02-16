@@ -9,6 +9,7 @@ class Product < ActiveRecord::Base
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
+  has_many :prices
   has_many :warranties
   has_many :inventories
 	has_many :lines
@@ -19,12 +20,12 @@ class Product < ActiveRecord::Base
 	after_create :create_requirements
 	belongs_to :product_type
 	belongs_to :unit
+	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
 	validates_presence_of(:unit, :message => "debe ser valido")
 	validates_presence_of(:name, :message => "debe ser valido.")
 	validates_uniqueness_of(:name, :message => "debe ser único.") 
 	validates_uniqueness_of(:upc, :message => "debe ser único.") 
 
-	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
 	def category_name
  		product_category.name if product_category
 	end
@@ -131,9 +132,12 @@ class Product < ActiveRecord::Base
 	def unit_name=(name)
 		self.unit = Unit.find_or_create_by_name(name) unless name.blank?
 	end
-	def price
-		relative_price
-		return (cost||0)*(relative_price||0)+(static_price||0)
+	
+	def price(price_group = User.current_user.current_price_group)
+		priceobj = price_group.prices.find_by_product_id(self.id)
+		relative_price = priceobj.relative
+		static_price = priceobj.fixed
+		return (cost||0) * (relative_price||0) + (static_price||0)
 	end
 	def new_requirement_attributes=(requirement_attributes)
 		#puts "saving new attributes"
@@ -216,16 +220,33 @@ class Product < ActiveRecord::Base
 	end
   def self.search(search, page)
   	paginate :per_page => 20, :page => page,
-		         :conditions => ['(products.name like :search OR products.model like :search OR products.upc like :search OR description like :search OR vendors.name like :search OR product_categories.name like :search) AND (locations.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+		         :conditions => ['(products.name like :search 
+		         										OR products.model like :search 
+		         										OR products.upc like :search 
+		         										OR description like :search 
+		         										OR vendors.name like :search 
+		         										OR product_categories.name like :search)
+		         							AND (prices.price_group_id = :price_group_id)
+		         							AND (prices.available = True)',
+		         							{:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
 		         :order => 'name',
-		         :joins => 'inner join entities as vendors on vendors.id = products.vendor_id inner join movements on movements.product_id = products.id inner join entities as locations on locations.id= movements.entity_id left join product_categories on product_categories.id=products.product_category_id',
+		         :joins => 'inner join entities as vendors on vendors.id = products.vendor_id 
+		         						inner join prices on prices.product_id=products.id
+		         						left join product_categories on product_categories.id=products.product_category_id',
 		         :group => 'products.id'
 	end
 	def self.search_for_services(search, page)
   	paginate :per_page => 20, :page => page,
-		         :conditions => ['(products.name like :search OR products.upc like :search OR description like :search OR product_categories.name like :search) AND (products.product_type_id=4)', {:search => "%#{search}%"}],
+		         :conditions => ['(products.name like :search 
+		         								OR products.upc like :search 
+		         								OR description like :search 
+		         								OR product_categories.name like :search) 
+		         								AND (prices.price_group_id = :price_group_id)
+		         								AND (prices.available = True)
+		         								AND (products.product_type_id=4)', {:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
 		         :order => 'name',
-		         :joins => 'left join product_categories on product_categories.id=products.product_category_id',
+		         :joins => 'inner join prices on prices.product_id=products.id
+		         						left join product_categories on product_categories.id=products.product_category_id',
 		         :group => 'products.id'
 	end
 	def self.search_for_discounts(search, page)

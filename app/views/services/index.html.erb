@@ -22,7 +22,7 @@
 <% end %>
 <br />
 <% if current_user.has_rights(['admin','compras','gerente']) %>
-	<%= link_to 'Nuevo Servicio | ', new_service_path, :class => 'action' %>
+	<%= link_to 'Nuevo Servicio', new_service_path, :class => 'action' %>
 <% end %>
 
 <%= will_paginate @services %>

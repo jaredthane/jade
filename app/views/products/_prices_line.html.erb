@@ -7,7 +7,8 @@
 				<div class="table_cell_10"><%= h number_to_currency(prices_line.cost) %></div>
 				<div class="table_cell_10"><%= h number_to_currency(prices_line.price) %></div>
 				<div class="table_cell_10"><%= line_form.text_field :static_price, :class => 'field' %></div>
-				<div class="table_cell"><%= line_form.text_field :relative_price, :class => 'field' %></div>
+				<div class="table_cell_10"><%= line_form.text_field :relative_price, :class => 'field' %></div>
+				<div class="table_cell"><%= line_form.text_field :available_str, :class => 'field' %></div>
 
 		<%= line_form.hidden_field :id %>
 		</div>

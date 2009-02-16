@@ -14,6 +14,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :session
   
   map.resources :product_categories
+  
+  map.resources :prices
 
   #map.resources :entity_types
 

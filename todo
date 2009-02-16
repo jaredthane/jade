@@ -92,6 +92,7 @@ make sure all actions have class=>'action'
 make sure authorization is enabled.
 all fields that are for money should use decimal(5,2) this allows values of up to $99,999.99
 check that validations are in place
+should be able to mark products as disabled and remove unneeded fields like prices
 =================== If I feel like it. =================================================
 have link on order show page to to return on items which would un-mark them as received and charge them for the return
 don't need to show client on compras or vedor on sales.
@@ -193,3 +194,12 @@ should be able to click on product > movements
 --- Version 0.59 ---
 added receipts
 each order has one receipt which is always generated on demand
+--- Version 0.60 ---
+different price groups for users
+different costs for each location
+services
+need to be able to modify price groups
+should create prices for every product when creating a new group
+should be able to copy prices in view to another group
+able to change availablity on products and services
+made purchases show up for credito fiscal clients 

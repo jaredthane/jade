@@ -33,6 +33,13 @@ class EntitiesController < ApplicationController
 			current_user.location_id = params[:id]
 			current_user.save
 		end
+		logger.debug "@entity_type=#{@entity_type.to_s}"
+		if @entity_type == 2 or @entity_type == 5
+			logger.debug "setting price group id"
+			current_user.price_group_name_id = @entity.price_group_name_id
+			current_user.save
+			logger.debug "current_user.price_group_name_id=#{current_user.price_group_name_id.to_s}"
+		end
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @entity }
