@@ -1,6 +1,0 @@
-Event.addBehavior({
-	'body' : function() {
-		$('add_new_requrirement').hide();
-  },
-	'#bar_code_form' : Remote.Form
-});

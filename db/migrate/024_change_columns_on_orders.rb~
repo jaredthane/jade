@@ -1,8 +1,0 @@
-class ChangeColumnsOnOrders < ActiveRecord::Migration
-  def self.up
-  	add_column :orders, :serialized_product, :int
-  end
-
-  def self.down
-  end
-end

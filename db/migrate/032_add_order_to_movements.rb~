@@ -1,8 +1,0 @@
-class AddOrderToMovements < ActiveRecord::Migration
-  def self.up
-   	add_column :movements, :order_id, :int
-  end
-
-  def self.down
-  end
-end

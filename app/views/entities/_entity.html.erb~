@@ -1,4 +1,0 @@
-  <tr>
-    <td><%=h entity.name %></td>
-    <td><%= link_to 'Ver', entity %> | <%= link_to 'Cambiar', edit_entity_path(entity) %> | <%= link_to 'Remover', entity, :confirm => 'Esta seguro?', :method => :delete %></td>
-  </tr>

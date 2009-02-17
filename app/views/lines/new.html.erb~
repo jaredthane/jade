@@ -1,8 +1,0 @@
-<% content_for :title do %>Producto Nuevo en Pedido<% end %>
-
-<%= error_messages_for :line %>
-
-<% form_for Line.new do |line_form| %>
-  <%= render :partial => 'fields', :locals => { :line_form => line_form, :mode =>'new' } %>
-<% end %>	
-

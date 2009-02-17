@@ -1,7 +1,0 @@
-<% content_for :title do %>Cambiar Entidad<% end %>
-
-<%= error_messages_for :entity %>
-
-<% form_for :entity, :url => entity_path(@entity), :html => { :method => 'put' } do |f| %>
-  <%= render :partial => 'fields', :locals => { :f => f, :mode ='edit'} %>
-<% end %>

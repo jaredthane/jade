@@ -1,5 +1,0 @@
-module ProductsHelper
-def fields_for_line(line, &block)
-		fields_for("products[]", line, &block)
-	end
-end

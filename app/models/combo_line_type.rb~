@@ -1,3 +1,0 @@
-class ComboLineType < ActiveRecord::Base
-has_many :ComboLines
-end

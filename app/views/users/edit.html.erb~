@@ -1,5 +1,0 @@
-<%= render   :partial    => "form",
-            :locals     => {:button_text => "Cambair",
-                            :heading     => "Cambiar Usuario:",
-                            :mode         => "edit" }
-%>

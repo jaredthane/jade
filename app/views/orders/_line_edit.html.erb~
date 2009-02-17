@@ -1,3 +1,0 @@
-<% form_for Line.new do |f| %>
-  <%= render :partial => 'fields', :locals => { :f => f, :mode =>'new' } %>
-<% end %>
