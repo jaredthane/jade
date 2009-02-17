@@ -1,0 +1,14 @@
+
+
+
+<% form_for(@combo, :url => { :action => 'update'}) do |f| %>
+<%= render   :partial    => "fields",
+            :locals     => {:f => f,
+            								:button_text => "Guardar Cambios",
+                            :heading     => "Cambiar Combo:",
+                            :mode         => "edit" }
+%>
+<% end %>
+<%= link_to "Añadir otro producto | ", new_requirement_path(:combo_id => @combo.id), :id => "add_new_requirement", :class => 'action'  %>	  
+<%= render :partial => 'new_req_form', :locals => {:combo => @combo} %>
+

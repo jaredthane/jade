@@ -39,6 +39,16 @@ class DiscountsController < ApplicationController
   # GET /discounts/1.xml
   def show
     @discount = Product.find(params[:id])
+		if @discount.product_type_id==1
+			redirect_to product_path(@discount)
+			return false
+		elsif @discount.product_type_id==3
+			redirect_to combo_path(@discount)
+			return false
+		elsif @discount.product_type_id==4
+			redirect_to service_path(@discount)
+			return false
+		end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -50,8 +60,8 @@ class DiscountsController < ApplicationController
   # GET /discounts/new.xml
   def new
     @discount = Product.new
-		@discount.relative=1
-		@discount.fixed=0
+		@discount.relative_price=1
+		@discount.static_price=0
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @discount }

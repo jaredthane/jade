@@ -1,5 +1,5 @@
 
 
 <% form_for Requirement.new, :html => {:id=>'bar_code_form'}, :url => { :action => "new", :controller=>"requirements" } do |requirement_form| %>
-	<%= render :partial => 'requirements/fields', :locals => { :requirement_form => requirement_form, :product => @discount} %>
+	<%= render :partial => 'requirements/fields', :locals => { :requirement_form => requirement_form, :product => @combo} %>
 <% end %>

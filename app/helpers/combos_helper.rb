@@ -17,20 +17,19 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 
-class Requirement < ActiveRecord::Base
-	belongs_to :product
-	belongs_to :required, :class_name => "Product", :foreign_key => 'required_id'
-	def bar_code
- 	 required.upc if required
+
+module CombosHelper
+	def edit_combo_path(combo)
+		return '/combos/' + combo.id.to_s + '/edit'
 	end
-	def bar_code=(upc)
-		self.required_id = Product.find_by_upc(upc).id unless upc.blank?
+	def fields_for_requirement(requirement, &block)
+		prefix = requirement.new_record? ? 'new' : 'existing'
+		fields_for("product[#{prefix}_requirement_attributes][]", requirement, &block)
 	end
-	def price(price_group = User.current_user.current_price_group)
-		if required
-			return ((required.price(price_group)||0) * (self.relative_price||0) + (self.static_price||0)) * (self.quantity||0)
-		else
-			return ( (self.relative_price||0) + (self.static_price||0)) * (self.quantity||0)
-		end
-	end
+
+	def add_requirement_link(name) 
+		link_to_function name do |page| 
+		  page.insert_html :bottom, :requirements, :partial => 'requirement', :object => Requirement.new 
+		end 
+	end 
 end

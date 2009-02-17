@@ -54,7 +54,16 @@ class ProductsController < ApplicationController
   # GET /products/1.xml
   def show
     @product = Product.find(params[:id])
-
+		if @product.product_type_id==2
+			redirect_to discount_path(@product)
+			return false
+		elsif @product.product_type_id==3
+			redirect_to combo_path(@product)
+			return false
+		elsif @product.product_type_id==4
+			redirect_to service_path(@product)
+			return false
+		end
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @product }

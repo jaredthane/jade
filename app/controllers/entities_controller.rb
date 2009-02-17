@@ -88,13 +88,14 @@ class EntitiesController < ApplicationController
     return false if !allowed((params[:entity_type] || 'entities'))
     puts "entity type = " + @entity_type
     @entities = Entity.search(params[:search], params[:page], @entity_type)
-    if @entities.length == 1
-			@entity=@entities[0]
-			render :action => 'show'
-			return false
-		end
     respond_to do |format|
-      format.html # index.html.erb
+      format.html {
+		    if @entities.length == 1
+					@entity=@entities[0]
+					render :action => 'show'
+					return false
+				end
+      }
       format.xml  { render :xml => @entities }
       format.js
     end

@@ -1,10 +1,7 @@
-
-
-
-<% content_for :title do %><%=h @discount.name %> - <%=h @discount.upc %><% end %>
+<% content_for :title do %><%=h @combo.name %> - <%=h @combo.upc %><% end %>
 <% content_for :actions do %>
-	<dt> <%= link_to 'Cambiar', edit_discount_path(@discount), :class =>'action' %>  </dt>
-	<dt> <%= link_to 'Lista', discounts_path, :class =>'action' %> </dt>
+	<dt> <%= link_to 'Cambiar', edit_combo_path(@combo), :class =>'action' %>  </dt>
+	<dt> <%= link_to 'Lista', combos_path, :class =>'action' %> </dt>
 <% end %>
 
 <h2>
@@ -12,45 +9,45 @@
 </h2>
 <div class="column2-unit-left">
 	<p>
-	  <b>Discuento Fijo</b><br />
-	    <%=h number_to_currency(@discount.static_price) %>
+	  <b>Precio Fijo</b><br />
+	  <%=h number_to_currency(@combo.static_price) %>
 	</p>
 	<p>
-	  <b>Discuento Relativo</b><br />
-	    <%=h number_to_currency(@discount.relative_price) %>
+	  <b>Precio Relativo</b><br />
+	  <%=h number_to_currency(@combo.relative_price) %>
 	</p>
 	<p>
     <b>Catagoría</b><br />
-    <% if @discount.product_category %>
-    	<%=h @discount.product_category.name %>
+    <% if @combo.product_category %>
+    	<%=h @combo.product_category.name %>
     <% end %>
   </p>
 </div>
 <div class="column2-unit-right">
 	<p>
-	  <b>Discuento Total Actual</b><br />
-	    <%=h number_to_currency(@discount.price) %>
+	  <b>Precio Total Actual</b><br />
+	  <%=h number_to_currency(@combo.price) %>
 	</p>
 </div>
 <hr class="clear-contentunit" />
 <p>
   <b>Descripcion:</b>
-  <%=h @discount.description %>
+  <%=h @combo.description %>
 </p>
 <p>
-	<b>Requisitos:</b>
+	<b>Componentes:</b>
 	<div>
 		<div class="table_header_row">
 			<div class="table_cell_25">Nombre de Producto</div>
 			<div class="table_cell_15">Cantidad</div>
-			<div class="table_cell_15">Discuento Fijo</div>
-			<div class="table_cell_15">Discuento Relativo</div>
-			<div class="table_cell_15">Total de Discuento</div>
+			<div class="table_cell_15">Precio Fijo</div>
+			<div class="table_cell_15">Precio Relativo</div>
+			<div class="table_cell_15">Precio Total</div>
 			<div class="table_cell">UPC</div>
 		</div>
-		<% for requirement in @discount.requirements %>
+		<% for requirement in @combo.requirements %>
 			<div class="table_row">
-				<div class="table_cell_25"><%=link_to requirement.required.name, edit_discount_path(requirement.required) %></div>
+				<div class="table_cell_25"><%=link_to requirement.required.name, combo_path(requirement.required) %></div>
 				<div class="table_cell_15"><%=h requirement.quantity %></div>
 				<div class="table_cell_15"><%=h requirement.static_price %></div>
 				<div class="table_cell_15"><%=h requirement.relative_price %></div>
@@ -69,9 +66,9 @@
 		</div>
 		<% for location in get_locations %>
 			<div class="table_row">
-				<div class="table_cell_80"><%=link_to location.name, :controller => "movements", :search => @discount.upc
+				<div class="table_cell_80"><%=link_to location.name, :controller => "movements", :search => @combo.upc
  %></div>
-				<div class="table_cell"><%=h location.inventory(@discount) %></div>
+				<div class="table_cell"><%=h location.inventory(@combo) %></div>
 			</div>
 		<% end %>
 	</div>

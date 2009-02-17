@@ -63,7 +63,7 @@
         <!-- Sitelogo and sitename -->
         <a class="sitelogo" href="#" title="Pagina de Inicio"></a>
         <div class="sitename">
-          <h1><a href="/products" title="Pagina de Inicio">Jade<span style="font-weight:normal;font-size:50%;">&nbsp;version 0.63</span></a></h1>
+          <h1><a href="/products" title="Pagina de Inicio">Jade<span style="font-weight:normal;font-size:50%;">&nbsp;version 0.64</span></a></h1>
           <h2>Sistema de Control de Inventario</h2>
         </div>
 
@@ -100,9 +100,10 @@
 	  		<% if current_user.has_rights(['admin','compras','gerente']) %>
 	  		<li><a href="/purchases/new" title="Compra">Compra</a></li>
 				<li><a href="/products/new" title="Producto">Producto</a></li>
-	  			<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
+  			<li><a href="/discounts/new" title="Descuento">Descuento</a></li>
+  			<li><a href="/combos/new" title="Combo">Combo</a></li>
+	  		<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
 	  		<% end %>
-  			<li><a href="/discounts/new" title="Discuento">Discuento</a></li>
   			<li><a href="/internal/new" title="Consumo Interno">Consumo Interno</a></li>
   			<li><a href="/sites/new" title="Sitio">Sitio</a></li>
   			</ul>
@@ -111,6 +112,7 @@
 			<ul>
 				<li><a href="/products" title="Productos">Productos</a></li>
 				<li><a href="/services" title="Servicios">Servicios</a></li>
+				<li><a href="/combos" title="Combos">Combos</a></li>
 				<li><a href="/serialized_products" title="Numeros de Serie">Numeros de Serie</a></li>
 				<li><a href="/warranties" title="Garantías">Garantías</a></li>
 				<li><a href="/discounts" title="Descuentos">Descuentos</a></li>
@@ -196,6 +198,7 @@
 		<dt><a href="/products">Productos</a></dt>
 			<dd><a href="/products">Productos</a></dd>
 			<dd><a href="/services">Servicios</a></dd>
+			<dd><a href="/combos">Combos</a></dd>
 			<dd><a href="/serialized_products">Numeros de Serie</a></dd>
 			<dd><a href="/discounts">Descuentos</a></dd>
 			<dd><a href="/warranties">Garantías</a></dd>

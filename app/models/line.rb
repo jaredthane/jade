@@ -50,7 +50,7 @@ class Line < ActiveRecord::Base
 	end
 	def validate
 		logger.debug  "validating line"
-		if self.product.product_type_id != 4
+		if self.product.product_type_id == 1
 			##logger.debug  "@movements_to_create.length=" + @movements_to_create.length.to_s
 			if @movements_to_create # if we find stuff here, there is movement
 				logger.debug  " there are movements to validate"
@@ -116,9 +116,14 @@ class Line < ActiveRecord::Base
 			qty=m.quantity || 0
 
 			p=Product.find(self.product_id)
-			i=p.inventories.find_by_entity_id(m.entity_id)
-			i.quantity=i.quantity + m.quantity
-			i.save
+			if p.product_type_id==1
+				i=p.inventories.find_by_entity_id(m.entity_id)
+				i.quantity=i.quantity + m.quantity
+				i.save
+				for req in Requirement.find_all_by_required_id(p.id)
+					i=req.product.calculate_quantity
+				end
+			end
 			# Update inventory levels
 			logger.info "about to calc the cost"
 			p.cost=p.calculate_cost
@@ -376,7 +381,7 @@ class Line < ActiveRecord::Base
 			puts "before again "+self.order_type.to_s
 			if self.order_type == 'sales'
 				puts self.order_type
-				self.price = self.product.price if self.product
+				self.price = self.product.price(User.current_user.current_price_group,1) if self.product
 			else
 				puts self.order_type
 				self.price = self.product.cost if self.product

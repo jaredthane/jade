@@ -1,5 +1,8 @@
 
 <% content_for :title do %>Lista de Precios para <%= current_user.location.name %><% end %>
+<% content_for :actions do %>
+	<dt><%= link_to "Cancelar Cambios", prices_url, :class => 'action' %></dt>
+<% end %>
 
 <h2>
 	<div class="table_cell">Con precios del grupo: <%= current_user.current_price_group.price_group_name.name %></div>
@@ -19,8 +22,7 @@
 			<%= render :partial => 'line', :collection => @prices %>
 		</div>
 	</div>
-	<%= submit_tag "Guardar Cambios | ", :class => 'action' %>
-	<%= link_to "Limpiar", prices_url, :class => 'action' %>
+	<%= submit_tag "Guardar Cambios", :class => 'action' %>
 	<br />
 	<%= will_paginate @prices, :class => 'pagination' %>
 <% end %>

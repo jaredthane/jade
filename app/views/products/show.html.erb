@@ -1,6 +1,7 @@
 <% content_for :title do %><%=h @product.name %> - <%=h @product.upc %><% end %>
 <% content_for :actions do %>
 	<% if current_user.has_rights(['admin','compras','gerente']) %>
+		<dt><%= link_to 'Nuevo producto', new_product_path, :class => 'action' %></dt>
 		<dt><%= link_to 'Cambiar', edit_product_path(@product), :class =>'action' %> </dt>
   <% end %>
   <dt><%= link_to 'Lista', products_path, :class =>'action' %></dt>
@@ -24,6 +25,10 @@
     <% else %>
     	<%=h "No" %>
     <% end %>
+  </p>
+  	<p>
+    <b>Ubicacion</b><br />
+    <%=h @product.location %>
   </p>
 </div>
 <div class="column3-unit-middle">
@@ -65,10 +70,11 @@
   <%=h @product.description %>
 </p>
 <p>
-	<b>Inventario:</b>
+	<b>Inventario:</b><br />
+	Para ver una lista de movimientos de este producto, seleccione uno de los sitios abajo.
 	<div>
 		<div class="table_header_row">
-			<div class="table_cell_80">Locacion</div>
+			<div class="table_cell_80">Sitio</div>
 			<div class="table_cell">Cantidad </div>
 		</div>
 		<% for location in get_locations %>

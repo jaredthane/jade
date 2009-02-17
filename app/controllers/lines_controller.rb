@@ -29,41 +29,52 @@ class LinesController < ApplicationController
 
     redirect_to(orders_path(@line.order))
   end
-
+	def add_line(upc, quantity, order_type, price = nil)
+		@additional=Line.new()
+		@additional.order_type = order_type
+		@additional.bar_code = upc
+		if price
+			@additional.price = price
+		end
+		@additional.quantity = quantity
+		return @additional
+	end
+	def add_product_or_combo(list, upc, quantity, order_type, price=nil)
+		@newline = add_line(upc, quantity, order_type, price)
+		@newline.received=current_user.default_received if !@newline.product.serialized
+		
+		list << @newline
+		if @newline.product.product_type_id==3 # If this is a combo, we have to add the components
+			logger.debug "Adding a combo"
+			for comp in @newline.product.requirements
+				newprice =  (comp.product.price||0) * (comp.relative_price||0) + (comp.static_price||0)
+				add_product_or_combo(list, comp.required.upc, comp.quantity, order_type, newprice)
+			end
+		end
+	end
   # GET /lines/new
   # GET /lines/new.xml
   def new
-  	puts 'creating new line'
-  	puts params[:line][:order_type]
-  	puts params[:line][:client_name]
-	  @line = Line.new()
-  	@client=Entity.find_by_name(params[:line][:client_name])
-    if @client and params[:line][:order_type]=='sales'
-    	
-    	current_user.price_group_name_id = @client.price_group_name_id
+ 		puts 'creating new line'
+#  	puts params[:line][:order_type]
+#  	puts params[:line][:client_name]
+  	
+    if params[:line][:order_type]=='sales'
+    	@client=Entity.find_by_name(params[:line][:client_name])
+    	if @client
+	    	current_user.price_group_name_id = @client.price_group_name_id
+	    end
     end
-    puts "before:" + @line.order_type.to_s
-    @line.order_type = params[:line][:order_type]
-    puts "after:" + @line.order_type.to_s
-    @line.bar_code = params[:line][:bar_code]
-    puts "after:" + @line.order_type.to_s
-    @line.quantity = 1
     
-    
-		#if @line.product
-		  if !@line.product.serialized
-			  @line.received = current_user.default_received
-			end
-	 	  puts "default received =" + current_user.default_received.to_s
-		  respond_to do |wants|
-		    wants.html do
-		      redirect_to '/orders/' + @line.order_id.to_s + '/edit'
-		    end
-		    wants.js
-		  end
-		#else
-		# 	render :action => 'error'
-		#end
+		@lines=[]
+		add_product_or_combo(@lines, params[:line][:bar_code], 1, params[:line][:order_type])
+#	 	  puts "default received =" + current_user.default_received.to_s
+	  respond_to do |wants|
+	    wants.html do
+	      redirect_to '/orders/' + @line.order_id.to_s + '/edit'
+	    end
+	    wants.js
+	  end
   end
 
   # GET /lines/1/edit

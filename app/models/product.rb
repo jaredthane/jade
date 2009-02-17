@@ -63,6 +63,40 @@ class Product < ActiveRecord::Base
 	def give_lines
 		combo_lines.find(:all, :conditions =>"combo_line_type_id == 2")
 	end
+	def calculate_quantity(location_id = User.current_user.location_id)
+		i=self.inventories.find_by_entity_id(location_id)
+		if self.product_type_id==1
+			logger.debug "getting simple sum"
+			i.quantity=self.movements.sum(:quantity)
+		elsif self.product_type_id==3
+			logger.debug "this is a combo"
+			newquantity=nil
+			for req in self.requirements
+				if newquantity == nil
+#					logger.debug "quantity=req.required.id=#{req.required.id.to_s}"
+#					logger.debug "req.required.quantity(location_id)=#{req.required.quantity(location_id).to_s}"
+#					logger.debug "req.quantity=#{req.quantity.to_s}"
+#					logger.debug "(req.required.quantity(location_id) / req.quantity).to_i=#{(req.required.quantity(location_id) / req.quantity).to_i.to_s}"
+					newquantity = (req.required.quantity(location_id) / req.quantity).to_i
+				else
+#					logger.debug "req.required.id=#{req.required.id.to_s}"
+#					logger.debug "req.required.quantity(location_id)=#{req.required.quantity(location_id).to_s}"
+#					logger.debug "req.quantity=#{req.quantity.to_s}"
+#					logger.debug "[(req.required.quantity(location_id) / req.quantity).to_i, quantity].min =#{[(req.required.quantity(location_id) / req.quantity).to_i, quantity].min .to_s}"
+					newquantity = [(req.required.quantity(location_id) / req.quantity).to_i, newquantity].min 
+				end
+			end
+			logger.debug "quantity=#{quantity.to_s}"
+			i.quantity = newquantity
+		end
+		i.save
+		reqs=Requirement.find_all_by_required_id(self.id) #Update any combos I might be a member of
+		if reqs
+			for req in reqs
+				req.product.calculate_quantity(location_id)
+			end
+		end
+	end
 	def calculate_cost(location_id = User.current_user.location_id)
 		logger.info "product.id=#{self.id.to_s}"
 		logger.info "location_id=#{location_id.to_s}"
@@ -163,8 +197,11 @@ class Product < ActiveRecord::Base
 			return priceobj.available
 		end
 	end
-	def price(price_group = User.current_user.current_price_group)
-		if self.product_type_id == 2 # For calculating price of a discount
+	def price(price_group = User.current_user.current_price_group, final=nil)
+		# final is a flag for returning prices for combos
+		# it should only be set for combos
+		# when it is true this function will return the total value of all of the components
+		if self.product_type_id == 2 or (self.product_type_id == 3 and !final) # For calculating price of a discount or combo
 			logger.info "Getting price from requirements"
 			priceobj = price_group.prices.find_by_product_id(self.id)
 			if priceobj
@@ -182,7 +219,11 @@ class Product < ActiveRecord::Base
 				sum += req.price(price_group)
 			end
 			logger.info "sum=#{sum.to_s}"
-			price = (sum * relative_price) - static_price
+			if self.product_type_id == 2
+				price = (sum * relative_price) - static_price
+			else
+				price = (sum * relative_price) + static_price
+			end
 			logger.debug "price1=#{price.to_s}"
 		else
 			priceobj = price_group.prices.find_by_product_id(self.id)
@@ -217,6 +258,13 @@ class Product < ActiveRecord::Base
 		if priceobj
 			priceobj.fixed=new_price
 			priceobj.save
+		end
+	end
+	def show_upc
+		if upc.to_s.length>12
+			return upc.to_s[0..9]+'...'
+		else
+			return upc.to_s
 		end
 	end
 #	def new_requirement_attributes=(incoming_reqs)

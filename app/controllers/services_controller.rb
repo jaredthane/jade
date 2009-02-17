@@ -33,6 +33,16 @@ class ServicesController < ApplicationController
   # GET /services/1.xml
   def show
     @service = Product.find(params[:id])
+		if @service.product_type_id==1
+			redirect_to product_path(@service)
+			return false
+		elsif @service.product_type_id==2
+			redirect_to discount_path(@service)
+			return false
+		elsif @service.product_type_id==3
+			redirect_to combo_path(@service)
+			return false
+		end
 
     respond_to do |format|
       format.html # show.html.erb

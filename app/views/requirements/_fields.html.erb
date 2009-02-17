@@ -2,8 +2,10 @@
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "requirement_edit" %>
 <% end %>
+<% if @product %>
+	<%= requirement_form.hidden_field(:product_id, :value=> @product.id) %>
+<% end %>
 
-<%= requirement_form.hidden_field(:product_id, :value=> @discount.id) %>
 <div id=non_js_fields>
 	<p>
 		<b>Producto</b><br />

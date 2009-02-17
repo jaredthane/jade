@@ -1,12 +1,21 @@
 ================= Required:  =======================================
-Combos
 
 ================= Desired:   =======================================
-available on internet.
 
-
+generated serial numbers for combos?
+min max of combos should be reflected in min/max of other products
+should have inventories edit/list page for changing min/maxs, order amounts and 
+reorder functions should use order data from inventories not from product
+show product page should have section "ejemplares presentes en this site"
 ================= PostPoned: =======================================
-make combos work
+shopping cart to fill order or combo or discount
+deleting items from order doesn't change total cost of order
+deleting lines from order not working right only removes about half
+mark entire order as received or not received
+on show combo, upc's skip to next line if they're too long
+web site on source forge
+should be able to change min/max in a list like prices
+make sure people don't create infinitly recursive combos
 setting a product to use serial numbers after its already been used causes inconsitancies in the database.
 - disallow changing serialized on products
 add and remove payment types
@@ -256,3 +265,9 @@ hide vendors from sales group
 assign a salesperson for each client
 client index shouldnt show pricegroup
 ======================================== Version 0.64 ===================================================
+available on internet.
+fixed - can't find franklin international when creating product by typing f or nk
+warranties are created for combos and discounts
+inventory of combos is not reduced like for normal products
+the amount available is calculated based on components
+Combos done.

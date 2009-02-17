@@ -1,24 +1,14 @@
 ActionController::Routing::Routes.draw do |map|
   map.resources :product_types
-
   map.resources :roles
-
   map.resources :serialized_products
-
   map.resources :users
-
   map.resource :session
-
   map.resources :users
-
   map.resource :session
-  
   map.resources :product_categories
-  
   map.resources :prices
-  
 	map.resources :discounts
-	
 	map.resources :combos
 
   #map.resources :entity_types

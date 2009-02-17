@@ -34,6 +34,16 @@ class CombosController < ApplicationController
   def show
     @combo = Product.find(params[:id])
 
+		if @combo.product_type_id==1
+			redirect_to product_path(@combo)
+			return false
+		elsif @combo.product_type_id==2
+			redirect_to discount_path(@combo)
+			return false
+		elsif @combo.product_type_id==4
+			redirect_to service_path(@combo)
+			return false
+		end
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @combo }
@@ -44,8 +54,8 @@ class CombosController < ApplicationController
   # GET /combos/new.xml
   def new
     @combo = Product.new
-		@combo.relative=1
-		@combo.fixed=0
+		@combo.relative_price=1
+		@combo.static_price=0
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @combo }
@@ -61,11 +71,15 @@ class CombosController < ApplicationController
   # POST /combos.xml
   def create
     @combo = Product.new(params[:product])
+    @combo.vendor_id=2
 		for e in Entity.find_all_by_entity_type_id(3)
     	i=Inventory.new(:entity=>e, :product=>@combo, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
     	i.save
+    	@combo.calculate_quantity(e.id)
     end
+    Warranty.create(:product=>@product, :price => 0, :months =>0)
     for g in PriceGroup.all; Price.create(:product_id=>@combo.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price]); end
+    
     respond_to do |format|
       if @combo.save
       	list= params['new_reqs'] || []
@@ -115,6 +129,10 @@ class CombosController < ApplicationController
   		new_req.update_attributes(l)
   		@combo.requirements.push( new_req)
   	end
+  	# Update quantities available now that requirements have changed
+  	for e in Entity.find_all_by_entity_type_id(3)
+    	@combo.calculate_quantity(e.id)
+    end
 		if  @combo.update_attributes(params[:product])
 			flash[:notice] = 'Discuento ha sido actualizado exitosamente.'
 		end

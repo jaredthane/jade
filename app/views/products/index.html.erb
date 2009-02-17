@@ -45,7 +45,7 @@
     <% if current_user.has_rights(['admin','compras','gerente']) %>
 	    <div class="table_cell_10"><%=h number_to_currency(product.cost) %></div>
     <% end %>
-    <div class="table_cell"><%=h product.upc %></div>
+    <div class="table_cell"><%=h product.show_upc %></div>
    </div>
 <% end %>
 <br />

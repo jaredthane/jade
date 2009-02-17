@@ -26,7 +26,11 @@
     <div class="table_cell_20"><%= link_to movement.user.login, movement.user %></div>
     <div class="table_cell"><%=h movement.created_at.to_date.to_s %></div>
 	</div>
-  <div class="table_row"><div class="table_cell"><%=h movement.comments %></div></div>
+  <% if movement.comments %>
+  	<% if movement.comments != "" %>
+  		<div class="table_row"><div class="table_cell"><%=h movement.comments %></div></div>
+  	<% end %>
+  <% end %>
 <% end %>
 </div>
 <br />

@@ -1,20 +1,23 @@
-<% case @order_type when 'purchases' %>
+<% content_for :actions do %>
+	<% case @order_type when 'purchases' %>
 		<% if current_user.has_rights(['admin','compras','gerente']) %>
-			<% content_for :new do %><%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %><% end %>
+			<dt><%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %></dt>
 		<% end %>
 	<% when 'internal'%>
 		<% if current_user.has_rights(['admin','compras','gerente','ventas']) %>
-			<% content_for :new do %><%= link_to 'Nuevo Consumo Interno', '/internal/new', :class => 'action' %><% end %>
+			<dt><%= link_to 'Nuevo Consumo Interno', '/internal/new', :class => 'action' %></dt>
 		<% end %>	
 	<% when 'sales'%>
 		<% if current_user.has_rights(['admin','gerente','ventas']) %>
-			<% content_for :new do %><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %><% end %>
+			<dt><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %></dt>
 		<% end %>
 	<% when 'all' %>
 		<% if current_user.has_rights(['admin','gerente']) %>
-			<% content_for :new do %><%= link_to 'Nuevo Pedido', new_order_path, :class => 'action' %><% end %>
+			<dt><%= link_to 'Nuevo Pedido', new_order_path, :class => 'action' %></dt>
 		<% end %>
+	<% end %>
 <% end %>
+
 <% case @order_type when 'purchases' %>
 		<% content_for :title do %>Lista de Compras en <%= current_user.location.name %><% end %>
 	<% when 'sales'%>
@@ -47,21 +50,5 @@
 
 <br />
 <%= will_paginate @orders %>
-<% case @order_type when 'purchases' %>
-		<% if current_user.has_rights(['admin','compras','gerente']) %>
-			<%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %>
-		<% end %>
-	<% when 'internal'%>
-		<% if current_user.has_rights(['admin','compras','gerente','ventas']) %>
-			<%= link_to 'Nuevo Consumo Interno', '/internal/new', :class => 'action' %>
-		<% end %>	
-	<% when 'sales'%>
-		<% if current_user.has_rights(['admin','gerente','ventas']) %>
-			<%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %>
-		<% end %>
-	<% when 'all' %>
-		<% if current_user.has_rights(['admin','gerente']) %>
-			<%= link_to 'Nuevo Pedido', new_order_path, :class => 'action' %>
-		<% end %>
-<% end %>
+
 
