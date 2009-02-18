@@ -91,8 +91,8 @@ module ApplicationHelper
   def get_clients
     @clients = entity_type.entities.find(:all, :order => "name", :conditions =>"entity_type_id=2 OR entity_type_id=5")
   end
-  def get_serials(product_id, location_id)
+  def get_serials(product_id)
     product = Product.find(product_id)
-    @serials = product.serialized_products.find(:all, :conditions =>"location_id == #{location_id}", :order => "name")
+    @serials = product.serialized_products.find(:all, :order => "serial_number")
   end
 end

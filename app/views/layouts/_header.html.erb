@@ -63,7 +63,7 @@
         <!-- Sitelogo and sitename -->
         <a class="sitelogo" href="#" title="Pagina de Inicio"></a>
         <div class="sitename">
-          <h1><a href="/products" title="Pagina de Inicio">Jade<span style="font-weight:normal;font-size:50%;">&nbsp;version 0.64</span></a></h1>
+          <h1><a href="/products" title="Pagina de Inicio">Jade<span style="font-weight:normal;font-size:50%;">&nbsp;version 0.65</span></a></h1>
           <h2>Sistema de Control de Inventario</h2>
         </div>
 
@@ -127,8 +127,7 @@
 			<li><a href="/purchases" title="Compras">Compras</a>
 				<ul>
 					<li><a href="/purchases" title="Compras">Compras</a></li>
-					<li><a href="/orders/show_batch" title="Últimas Compras">Últimas Compras</a></li>
-					<li><a href="/products/bulk_edit" title="Reaprovisionar">Reaprovisionar</a></li>
+					<li><a href="/inventories" title="Reaprovisionar">Reaprovisionar</a></li>
 				</ul>
 			</li>
 	 	<% end %>
@@ -206,7 +205,7 @@
 				<dd><a href="/prices">Cambiar Precios</a></dd>
 			<% end %>
 			<% if current_user.has_rights(['admin','gerente','compras']) %>
-				<dd><a href="/products/bulk_edit">Reaprovisionar</a></dd>
+				<dd><a href="/inventories">Reaprovisionar</a></dd>
 			<% end %>
 			<dd><a href="/units">Unidades</a></dd>
 		<dt><a href="/orders">Pedidos</a></dt>

@@ -69,6 +69,7 @@
   <b>Descripcion:</b>
   <%=h @product.description %>
 </p>
+<hr class="clear-contentunit" />
 <p>
 	<b>Inventario:</b><br />
 	Para ver una lista de movimientos de este producto, seleccione uno de los sitios abajo.
@@ -85,4 +86,27 @@
 		<% end %>
 	</div>
 </p>
+<br />
+<hr class="clear-contentunit" />
+<% if @product.serialized %>
+	<p>
+		<b>Ejemplares presentes en <%= current_user.location.name %></b><br />
+		<div>
+			<div class="table_header_row">
+				<div class="table_cell_50">Sitio</div>
+				<div class="table_cell">Cantidad </div>
+			</div>
+			<% for serial in get_serials(@product.id) %>
+				<% if serial.location %>
+					<% if serial.location.id = current_user.location.id%>
+						<div class="table_row">
+							<div class="table_cell_50"><%=link_to serial.serial_number, serial %></div>
+							<div class="table_cell"><%=link_to serial.product.name, serial.product %></div>
+						</div>
+					<% end %>
+				<% end %>
+			<% end %>
+		</div>
+	</p>
+<% end %>
 

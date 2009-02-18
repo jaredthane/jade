@@ -141,18 +141,18 @@
 /* End for the bulk_edit product view */
 
 
-.main-content .table_cell_5  input.field{width:90%;background: #e1e1e1;}
-.main-content .table_cell_10  input.field{width:90%;background: #e1e1e1;}
-.main-content .table_cell_15  input.field{width:90%;background: #e1e1e1;}
-.main-content .table_cell_20  input.field{width:90%;background: #e1e1e1;}
-.main-content .table_cell_25  input.field{width:90%;background: #e1e1e1;}
-.main-content .table_cell_30  input.field{width:90%;background: #e1e1e1;}
-.main-content .table_cell_35  input.field{width:90%;background: #e1e1e1;}
-.main-content .table_cell_40  input.field{width:90%;background: #e1e1e1;}
-.main-content .table_cell_50  input.field{width:90%;background: #e1e1e1;}
-.main-content .table_cell_80  input.field{width:90%;background: #e1e1e1;}
-.main-content .table_cell_10  input.serial{width:90%;background: #e1e1e1;}
-.main-content .table_cell_20  input.serial{width:90%;background: #e1e1e1;}
+.main-content .table_cell_5  input.field{width:90%;}
+.main-content .table_cell_10  input.field{width:90%;}
+.main-content .table_cell_15  input.field{width:90%;}
+.main-content .table_cell_20  input.field{width:90%;}
+.main-content .table_cell_25  input.field{width:90%;}
+.main-content .table_cell_30  input.field{width:90%;}
+.main-content .table_cell_35  input.field{width:90%;}
+.main-content .table_cell_40  input.field{width:90%;}
+.main-content .table_cell_50  input.field{width:90%;}
+.main-content .table_cell_80  input.field{width:90%;}
+.main-content .table_cell_10  input.serial{width:90%;}
+.main-content .table_cell_20  input.serial{width:90%;}
 
 
 
@@ -231,7 +231,8 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 
 .main a {color:#515147;  text-decoration:none;}
 .main-content h1 a {color:#515147; font-weight:normal; text-decoration:none;}
-.main a:hover {color:#96c09c; background-color:rgb(225,225,225);}
+.main a:hover {color:#96c09c; }
+.main .table_row_green a:hover {color:#008597; }
 
 .main a img {border:solid 1px rgb(150,150,150);}
 .main a:hover img {border:solid 1px rgb(220,220,220);background-color:rgb(225,225,225);}

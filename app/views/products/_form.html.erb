@@ -32,9 +32,11 @@
 			<b>Numero de Modelo</b>
 			<%= f.text_field :model, :class => 'field' %>
 		</p>
-		<p>
-			<%= f.check_box :serialized, :class => 'field' %><b> Usar Numeros de Serie</b>
-		</p>
+		<% if @mode == 'new' %>
+			<p>
+				<%= f.check_box :serialized, :class => 'field' %><b> Usar Numeros de Serie</b>
+			</p>
+		<% end %>
 	</div>
 	<div class="column2-unit-right">
 		<p><b>Proveedor</b><br />

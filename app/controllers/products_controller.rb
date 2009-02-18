@@ -110,24 +110,7 @@ class ProductsController < ApplicationController
       end
     end
   end
-  def clear_quantities
-		@products = Product.search_wo_pagination(params[:search], params[:page])
-		@search = params[:search] || ""
-		for p in @products
-			p.to_order = 0
-		end
-		redirect_to('/products/bulk_edit?search=' + @search)
-	end
-	def recommend_quantities
-		@products = Product.search_all_wo_pagination(params[:search], params[:page])
-		@search = params[:search] || ""
-		for p in @products
-			if current_user.location.inventory(p) < (p.min || 0)
-				p.to_order = p.max
-			end
-		end
-		redirect_to('/products/bulk_edit?search=' + @search)
-	end
+  
   def edit_prices
   	@products = Product.search_all_with_pages(params[:search], params[:page])
     @action = 'prices' # for layout

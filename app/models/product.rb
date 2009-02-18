@@ -34,6 +34,7 @@ class Product < ActiveRecord::Base
 	has_many :lines
 	belongs_to :product_category
 	has_many :movements
+	has_many :serialized_products
 	has_many :requirements, :dependent => :destroy
 	after_update :save_requirements
 	after_create :create_requirements

@@ -1,23 +1,20 @@
 ================= Required:  =======================================
 
-================= Desired:   =======================================
-
-generated serial numbers for combos?
-min max of combos should be reflected in min/max of other products
-should have inventories edit/list page for changing min/maxs, order amounts and 
-reorder functions should use order data from inventories not from product
-show product page should have section "ejemplares presentes en this site"
-================= PostPoned: =======================================
-shopping cart to fill order or combo or discount
-deleting items from order doesn't change total cost of order
 deleting lines from order not working right only removes about half
+
+================= Desired:   =======================================
 mark entire order as received or not received
-on show combo, upc's skip to next line if they're too long
+================= PostPoned: =======================================
+submit forms via java from actions panel
+"ejemplares presentes here" should have the list paginated
+generated serial numbers for combos?
+shopping cart to fill order or combo or discount
+
+
 web site on source forge
 should be able to change min/max in a list like prices
 make sure people don't create infinitly recursive combos
-setting a product to use serial numbers after its already been used causes inconsitancies in the database.
-- disallow changing serialized on products
+
 add and remove payment types
 should be able to delete sites
 price_group must be set for every site when created
@@ -271,3 +268,11 @@ warranties are created for combos and discounts
 inventory of combos is not reduced like for normal products
 the amount available is calculated based on components
 Combos done.
+======================================== Version 0.65 ===================================================
+should have inventories edit/list page for changing min/maxs, order amounts and 
+reorder functions should use order data from inventories not from product
+======================================== Version 0.66 ===================================================
+show product page should have section "ejemplares presentes en this site"
+on show combo, upc's skip to next line if they're too long
+setting a product to use serial numbers after its already been used causes inconsitancies in the database.
+- disallow changing serialized on products

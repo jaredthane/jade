@@ -18,83 +18,46 @@ class InventoriesController < ApplicationController
   # GET /inventories.xml
   def index
 		@inventories = Inventory.search(params[:search], params[:page])
+		@search=params[:search] || ""
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @inventories }
     end
   end
 
-  # GET /inventories/1
-  # GET /inventories/1.xml
-  def show
-    @inventory = Inventory.find(params[:id])
-
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @inventory }
-    end
-  end
-
-  # GET /inventories/new
-  # GET /inventories/new.xml
-  def new
-    @inventory = Inventory.new
-    @inventory.order_id = params[:order_id]
-		@inventory.inventory_method_id = 1
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @inventory }
-    end
-  end
-
-  # GET /inventories/1/edit
-  def edit
-    @inventory = Inventory.find(params[:id])
-  end
-
-  # POST /inventories
-  # POST /inventories.xml
-  def create
-    @inventory = Inventory.new(params[:inventory])
-
-    respond_to do |format|
-      if @inventory.save
-        flash[:notice] = 'Pago ha sido creado exitosamente.'
-        format.html { redirect_to(@inventory.order) }
-        format.xml  { render :xml => @inventory, :status => :created, :location => @inventory }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @inventory.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
   # PUT /inventories/1
   # PUT /inventories/1.xml
   def update
-    @inventory = Inventory.find(params[:id])
-
-    respond_to do |format|
-      if @inventory.update_attributes(params[:inventory])
-        flash[:notice] = 'Pago ha sido actualizado exitosamente.'
-        format.html { redirect_to(@inventory.order) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @inventory.errors, :status => :unprocessable_entity }
-      end
-    end
+  	@search=params[:search] || ""
+  	params[:inventories].each do |attributes|
+			puts "attribs: " + attributes.to_s
+			puts "attribs[1]: " + attributes[1].to_s
+			@inventory = Inventory.find(attributes[0])
+			puts "id:" + attributes[1][:id]
+			@inventory.to_order = attributes[1][:to_order]
+			@inventory.max = attributes[1][:max]
+			@inventory.min = attributes[1][:min]
+			@inventory.save
+		end
+		redirect_to('/inventories?search=' + @search)
   end
-
-  # DELETE /inventories/1
-  # DELETE /inventories/1.xml
-  def destroy
-    @inventory = Inventory.find(params[:id])
-    @inventory.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(inventories_url) }
-      format.xml  { head :ok }
-    end
-  end
+  
+  def clear
+		@inventories = Inventory.search_wo_pagination(params[:search], params[:page])
+		@search = params[:search] || ""
+		for i in @inventories
+			i.to_order = 0
+		end
+		redirect_to('/inventories?search=' + @search)
+	end
+	def recommend
+		@inventories = Inventory.search_all_wo_pagination(params[:search], params[:page])
+		@search = params[:search] || ""
+		for i in @inventories
+			if i.quantity < (i.min || 0)
+				i.to_order = i.max
+			end
+		end
+		redirect_to('/inventories?search=' + @search)
+	end
 end
