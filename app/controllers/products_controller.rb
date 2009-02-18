@@ -96,7 +96,13 @@ class ProductsController < ApplicationController
     end
     logger.debug "params:product:static_price= #{params[:product][:static_price].to_s}"
     logger.debug "params[:product][:relative_price]=#{params[:product][:relative_price].to_s}"
-    for g in PriceGroup.all; Price.create(:product_id=>@product.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price]); end
+    for g in PriceGroup.all
+    	if g == current_user.current_price_group
+		  	Price.create(:product_id=>@product.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price], :available => 1)
+		  else
+				Price.create(:product_id=>@product.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price], :available => 0)
+			end
+	  end
     Warranty.create(:product=>@product, :price => 0, :months =>0)
     respond_to do |format|
       if @product.save
@@ -111,48 +117,6 @@ class ProductsController < ApplicationController
     end
   end
   
-  def edit_prices
-  	@products = Product.search_all_with_pages(params[:search], params[:page])
-    @action = 'prices' # for layout
-		@search = params[:search] || ""
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @products }
-    end
-  end
-  def update_prices
-  	params[:products].each do |attributes|
-			puts "attribs: " + attributes.inspect
-			puts "attribs[1]: " + attributes[1].inspect
-			@product = Product.find(attributes[0])
-			puts "id:" + attributes[1][:id]
-			@product.static_price = attributes[1][:static_price]
-			@product.relative_price = attributes[1][:relative_price]
-			@product.save
-			#puts "products"
-		end
-		redirect_to('/products/edit_prices')
-  end
-  def bulk_edit
-  	@products = Product.search_all_with_pages(params[:search], params[:page])
-    @action = 'bulk' # for layout
-		@search = params[:search] || ""
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @products }
-    end
-  end
-  def bulk_update
-		params[:products].each do |attributes|
-			puts "attribs: " + attributes.to_s
-			puts "attribs[1]: " + attributes[1].to_s
-			@product = Product.find(attributes[0])
-			puts "id:" + attributes[1][:id]
-			@product.to_order = attributes[1][:to_order]
-			puts "products"
-		end
-		redirect_to('/products/bulk_edit')
-  end
   def update_product(attributes)
   	@products = Product.find(attributes[:id])
   	return @products.update_attributes(attributes)

@@ -4,6 +4,14 @@ deleting lines from order not working right only removes about half
 
 ================= Desired:   =======================================
 mark entire order as received or not received
+warranty for combos not showing up
+price for combo not taken into consideration
+doesn't show components on product view
+email notifications when out of product
+in reaprovisionar should be able to filter by all red or all green
+copy pagination to the top of the screen
+list of serials on product show page says cantidad
+make new products available in current location
 ================= PostPoned: =======================================
 submit forms via java from actions panel
 "ejemplares presentes here" should have the list paginated
