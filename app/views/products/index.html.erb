@@ -16,6 +16,7 @@
 	<div class="table_cell">Mostrando precios del grupo: <%= current_user.current_price_group.price_group_name.name %></div>
 </h2>
 
+<%= will_paginate @products %>
 <div>
   <div class="table_header_row">
     <div class="table_cell_20">Nombre</div>
