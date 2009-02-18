@@ -38,13 +38,6 @@ class Line < ActiveRecord::Base
 	attr_accessor :client_name
 	attr_accessor :order_type
 	belongs_to :serialized_product
-	def check_create_movements
-	#	#logger.debug  self.order.client_id
-	#	#logger.debug  "im here"
-	#	create_movement(self.movements_to_make-2) if self.movements_to_make
-	#	self.movements_to_make=nil
-		# need to save this value here
-	end
 	def set_taxes
 		self.tax = self.total_price * 0.15
 	end
@@ -291,7 +284,7 @@ class Line < ActiveRecord::Base
 		serialized_product.serial_number if serialized_product
 	end
 	def serial_number=(serial)
-		logger.debug "order.order_type=" + order.order_type.to_s
+		
 		logger.debug "serial=" + serial.to_s
 		if (!(serial == "" or serial == "\n") and (order.order_type=='purchases'))
 			logger.debug "Taking create path"

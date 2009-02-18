@@ -68,7 +68,7 @@ class LinesController < ApplicationController
     
 		@lines=[]
 		add_product_or_combo(@lines, params[:line][:bar_code], 1, params[:line][:order_type])
-#	 	  puts "default received =" + current_user.default_received.to_s
+		logger.debug "default received =" + current_user.default_received.to_s
 	  respond_to do |wants|
 	    wants.html do
 	      redirect_to '/orders/' + @line.order_id.to_s + '/edit'

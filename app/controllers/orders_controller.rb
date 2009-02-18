@@ -279,11 +279,13 @@ class OrdersController < ApplicationController
   def update
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type, 'edit')
-    
+    lines_to_delete=[]
     #Update existing lines
     for l in @order.lines
-			#logger.debug "l.id=" + l.id.to_s
-			##logger.debug "params['existing_lines'][l.id.to_s]=" + params['existing_lines'][l.id.to_s].to_s
+			logger.debug "l.id=" + l.id.to_s
+			if params['existing_lines']
+				logger.debug "params['existing_lines'][l.id.to_s]=" + params['existing_lines'][l.id.to_s].to_s
+			end
 			if params['existing_lines']
 				if params['existing_lines'][l.id.to_s]
 					logger.debug "setting attribs for line #{l.id}"
@@ -292,28 +294,29 @@ class OrdersController < ApplicationController
 					logger.debug "l.warranty afterz=#{l.warranty.to_s}"
 				else
 					logger.debug "deleting line #{l.id}"
-					@order.lines.delete(l)
+					lines_to_delete << l
 				end
 			else
 				logger.debug "deleting line #{l.id}"
-				@order.lines.delete(l)
+				lines_to_delete << l
 			end
 		end
-		
+		for l in lines_to_delete
+			@order.lines.delete(l)
+		end
 		# Update New lines
 		list= params['new_lines'] || []
   	for l in list
   		new_line = Line.new(:order_id=>@order.id)
-  		#new_line.product_name = l[:product_name]  
   		new_line.product_id = l[:product_id]		
   		new_line.quantity = l[:quantity]
   		new_line.attributes=l  
   		logger.debug "about to push #{new_line.inspect}"  	
   		@order.lines.push(new_line)
   	end
-		#params['new_lines'].each { |l| @order.lines << Line.new(l) } if params['new_lines']
+		params['new_lines'].each { |l| @order.lines << Line.new(l) } if params['new_lines']
 		
-    #params['existing_lines'].each_value  { |l| #logger.debug "l['id']=" + l['id'].to_s; Line.find(l['id']).attributes = l } if params['existing_lines']
+    params['existing_lines'].each_value  { |l| logger.debug "l['id']=" + l['id'].to_s; Line.find(l['id']).attributes = l } if params['existing_lines']
 		for l in @order.lines
 			logger.debug "l=#{l.inspect}"
 		end
