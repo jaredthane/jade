@@ -1,0 +1,31 @@
+
+
+<div class="line">
+	<% if (line.to_order ||0) > 0  %>
+			<div class="table_row_green">
+		<% else %>
+			<% if (line.min ||0) > line.product.quantity %>
+				<div class="table_row_red">
+			<% else %>
+				<div class="table_row">
+			<% end %>
+	<% end %>
+	<% fields_for "inventories[]", line do |line_form| %>
+
+				<div class="table_cell_25"><%= link_to line.product.name, line.product %></div>
+				<div class="table_cell_25">
+					<% if line.product.vendor %>
+						<%= link_to line.product.vendor.name, line.product.vendor %>
+					<% end %>
+				</div>
+				<div class="table_cell_10"><%= line_form.text_field :min, :class => 'field' %></div>
+				<div class="table_cell_10"><%= line_form.text_field :max, :class => 'field' %></div>
+				<div class="table_cell_10"><%= h line.product.quantity %></div>
+				<div class="table_cell"><%= line_form.text_field :to_order, :class => 'field' %></div>
+
+		<%= line_form.hidden_field :id %>
+		</div>
+  <% end %>
+</div>
+
+
