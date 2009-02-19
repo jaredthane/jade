@@ -8,7 +8,7 @@
 <h2>
 	<div class="table_cell">Mostrando precios del grupo: <%= current_user.current_price_group.price_group_name.name %></div>
 </h2>
-<%= will_paginate @combos %>
+<%= will_paginate @combos, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
     <div class="table_cell_30">Nombre</div>
@@ -25,9 +25,8 @@
 		  <div class="table_cell"><%=h combo.show_upc %></div>
 		 </div>
 	<% end %>
-	<br />
-	<%= will_paginate @combos %>
 </div>
-
+<br />
+<%= will_paginate @combos, :class => 'pagination' %>
 
 

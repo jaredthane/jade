@@ -76,6 +76,8 @@
 .main-navigation ol {margin:0.5em 10px 1.0em 40px !important /*Non-IE6*/; margin:0.5em 10px 1.0em 45px /*IE6*/;}
 .main-navigation ol li {list-style-position:outside; margin:0 0 0.4em 0; font-size:110%;}
 
+/* Pagination */
+.pagination { font-size:140%;}
 /* MAIN CONTENT */
 .main-content h1.pagetitle {margin:0 0 0.4em 0; padding:0 0 2px 0; border-bottom:solid 7px rgb(225,225,225); font-family:"trebuchet ms",arial,sans-serif; color:rgb(100,100,100); font-weight:bold; font-size:220%;}
 .main-content h1.block {clear:both; margin:.25em 0 0em 0; padding:2px 0 2px 2px; background:#008597; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:220%;}

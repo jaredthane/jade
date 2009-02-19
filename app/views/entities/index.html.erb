@@ -30,6 +30,7 @@
 	<% end %>
 <% end %>
 
+<br /><%= will_paginate @products, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
     <div class="table_cell_30">Numero</div>
@@ -47,6 +48,6 @@
 	<% end %>
 <% end %>
 </div>
-<%= will_paginate @products %>
-<br />
+<br /><%= will_paginate @products, :class => 'pagination' %>
+
 

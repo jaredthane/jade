@@ -5,8 +5,6 @@
 mark entire order as received or not received
 price for combo not taken into consideration
 
-in reaprovisionar should be able to filter by all red or all green
-copy pagination to the top of the screen
 ================= PostPoned: =======================================
 submit forms via java from actions panel
 "ejemplares presentes here" should have the list paginated
@@ -280,3 +278,5 @@ setting a product to use serial numbers after its already been used causes incon
 deleting lines from order not working right only removes about half
 make new products available in current location
 list of serials on product show page says cantidad
+copy pagination to the top of the screen
+in reaprovisionar should be able to filter by all red or all green

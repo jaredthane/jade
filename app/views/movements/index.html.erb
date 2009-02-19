@@ -4,6 +4,8 @@
 	<dt><%= link_to 'Inventario', products_url, :class => 'action' %></dt>
 <% end %>
 
+<br />
+<%= will_paginate @movements, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
     <div class="table_cell_20">Tipo</div>
@@ -34,5 +36,5 @@
 <% end %>
 </div>
 <br />
-<%= will_paginate @movements %>
+<%= will_paginate @movements, :class => 'pagination' %>
 

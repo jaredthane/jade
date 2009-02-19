@@ -1,6 +1,11 @@
 
 <% content_for :title do %>Lista de Garantías<% end %>
+<% content_for :actions do %>
+	<dt><%= link_to 'Garantía Nuevo', new_warranty_path, :class => 'action' %></dt>
+<% end %>
 
+<br />
+<%= will_paginate @warranties, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
     <div class="table_cell_40">Producto</div>
@@ -20,5 +25,5 @@
 <% end %>
 </div>
 <br />
-<%= will_paginate @warranties %>
-<%= link_to 'Garantía Nuevo', new_warranty_path, :class => 'action' %>
+<%= will_paginate @warranties, :class => 'pagination' %>
+

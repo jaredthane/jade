@@ -18,6 +18,7 @@ class Inventory < ActiveRecord::Base
 	belongs_to :entity
 	belongs_to :product
 	def self.search(search, page)
+		search = (search ||"")
 		if search[0..3].downcase=='rojo'
 			search = search[4..search.length].downcase.strip
 			paginate :per_page => 20, :page => page,

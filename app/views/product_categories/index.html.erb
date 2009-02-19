@@ -1,6 +1,7 @@
 
 <% content_for :title do %>Lista de Categorías<% end %>
-
+<br />
+<%= will_paginate @product_categories, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
     <div class="table_cell_50">Categoría</div>
@@ -17,4 +18,4 @@
 </div>
 <p>Para hacer nuevas categorías, simplemente asigna un producto a la categoría y se hará automaticamente</p>
 <br />
-<%= will_paginate @product_categories %>
+<%= will_paginate @product_categories, :class => 'pagination' %>

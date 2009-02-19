@@ -27,6 +27,8 @@
 	<% when 'all' %>
 		<% content_for :title do %>Lista de Pedidos en <%= current_user.location.name %><% end %>
 <% end %>
+
+<br /> <%= will_paginate @orders, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
     <div class="table_cell_10">Numero</div>
@@ -49,6 +51,6 @@
 </div>
 
 <br />
-<%= will_paginate @orders %>
+<%= will_paginate @orders, :class => 'pagination' %>
 
 

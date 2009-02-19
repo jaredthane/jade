@@ -8,7 +8,7 @@
 <h2>
 	<div class="table_cell">Mostrando precios del grupo: <%= current_user.current_price_group.price_group_name.name %></div>
 </h2>
-<%= will_paginate @discounts %>
+<%= will_paginate @discounts, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
     <div class="table_cell_30">Nombre</div>
@@ -23,9 +23,9 @@
     <div class="table_cell"><%=h discount.show_upc %></div>
    </div>
 <% end %>
-<br />
-<%= will_paginate @discounts %>
 </div>
 
+<br />
+<%= will_paginate @discounts, :class => 'pagination' %>
 
 

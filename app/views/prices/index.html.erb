@@ -7,7 +7,7 @@
 <h2>
 	<div class="table_cell">Con precios del grupo: <%= current_user.current_price_group.price_group_name.name %></div>
 </h2>
-
+<%= will_paginate @prices, :class => 'pagination' %>
 <% form_for :@prices, :url => {:action => 'update'}, id => 1 do |f| %>
 <div>
   <div id="lines" class="table_header_row">

@@ -1,6 +1,13 @@
 
 <% content_for :title do %>Lista de Servicios disponibles en <%= current_user.location.name %><% end %>
+<% content_for :actions do %>
+	<% if current_user.has_rights(['admin','compras','gerente']) %>
+		<dt><%= link_to 'Nuevo Servicio', new_service_path, :class => 'action' %></dt>
+	<% end %>
+<% end %>
 
+<br />
+<%= will_paginate @services, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
     <div class="table_cell_30">Nombre</div>
@@ -21,12 +28,10 @@
     <div class="table_cell"><%=h service.upc %></div>
    </div>
 <% end %>
-<br />
-<% if current_user.has_rights(['admin','compras','gerente']) %>
-	<%= link_to 'Nuevo Servicio', new_service_path, :class => 'action' %>
-<% end %>
 
-<%= will_paginate @services %>
+
+<br />
+<%= will_paginate @services, :class => 'pagination' %>
 </div>
 
 
