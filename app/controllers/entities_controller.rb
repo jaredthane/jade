@@ -33,11 +33,11 @@ class EntitiesController < ApplicationController
 		  		render :template=>'sessions/rejected'
 		  		return false
 		  	end
-		  when 'entities'
-		  	if !current_user.has_rights(['admin','gerente'])
-		  		render :template=>'sessions/rejected'
-		  		return false
-		  	end
+#		  when 'entities'
+#		  	if !current_user.has_rights(['admin','gerente'])
+#		  		render :template=>'sessions/rejected'
+#		  		return false
+#		  	end
 		  when 1
 		  	if !current_user.has_rights(['admin','compras','gerente'])
 		  		render :template=>'sessions/rejected'
@@ -58,9 +58,9 @@ class EntitiesController < ApplicationController
 		  		render :template=>'sessions/rejected'
 		  		return false
 		  	end
-		  else
-		  	render :template=>'sessions/rejected'
-		  	return false
+#		  else
+#		  	render :template=>'sessions/rejected'
+#		  	return false
     end  
     return true  
 	end
@@ -68,7 +68,7 @@ class EntitiesController < ApplicationController
 		@user_id = User.current_user.id
 		@entity_type = 'clients'
     return false if !allowed('clients')
-    puts "entity type = " + @entity_type
+#    puts "entity type = " + @entity_type
     @entities = Entity.search(params[:search], params[:page], @entity_type, @user_id)
     if @entities.length == 1
 			@entity=@entities[0]

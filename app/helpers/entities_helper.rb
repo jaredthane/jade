@@ -18,7 +18,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 module EntitiesHelper
-def fields_for_movement(movement, &block)
+	def fields_for_movement(movement, &block)
 		prefix = movement.new_record? ? 'new' : 'existing'
 		fields_for("entity[#{prefix}_movement_attributes][]", movement, &block)
 	end
@@ -27,5 +27,19 @@ def fields_for_movement(movement, &block)
 		link_to_function name do |page| 
 		  page.insert_html :bottom, "movements", :partial => 'movement', :object => Movement.new 
 		end 
-	end 
+	end
+	def allowed(entity_type)
+		case entity_type
+			when 1
+		  	return true if current_user.has_rights(['admin','compras','gerente'])
+		  when 2
+		  	return true if current_user.has_rights(['admin','gerente','ventas'])
+		  when 3
+		  	return true if current_user.has_rights(['admin','compras','gerente','ventas'])
+		  when 5
+		  	return true if current_user.has_rights(['admin','gerente','ventas'])
+		  else 
+		  	return false
+		end
+	end
 end
