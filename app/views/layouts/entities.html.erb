@@ -10,6 +10,18 @@
 	<% when 'vendor' %>
 		<%= render( :file => "layouts/_header.html.erb", :use_full_path => true, :locals => {:page_title =>'Proveedores', :search_path => vendors_path}) %> 
 		vendor
+	<% when 1 %>
+		<%= render( :file => "layouts/_header.html.erb", :use_full_path => true, :locals => {:page_title =>'Proveedores', :search_path => vendors_path}) %>
+		vendor
+	<% when 2 %>
+		<%= render( :file => "layouts/_header.html.erb", :use_full_path => true, :locals => {:page_title =>'Clientes', :search_path => clients_path}) %>
+		client
+	<% when 3 %>
+		<%= render( :file => "layouts/_header.html.erb", :use_full_path => true, :locals => {:page_title =>'Sitios', :search_path => sites_path}) %>
+		Sitios
+	<% when 5 %>
+		<%= render( :file => "layouts/_header.html.erb", :use_full_path => true, :locals => {:page_title =>'Clientes', :search_path => clients_path}) %>
+		client
 	<% else %>
 		<%= render( :file => "layouts/_header.html.erb", :use_full_path => true, :locals => {:page_title =>'Entidades', :search_path => entities_path}) %> 
 		other
