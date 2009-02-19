@@ -67,7 +67,7 @@ class EntitiesController < ApplicationController
 	def my_clients
 		@user_id = User.current_user.id
 		@entity_type = 'clients'
-    return false if !allowed((params[:entity_type] || 'entities'))
+    return false if !allowed('clients')
     puts "entity type = " + @entity_type
     @entities = Entity.search(params[:search], params[:page], @entity_type, @user_id)
     if @entities.length == 1
@@ -86,7 +86,7 @@ class EntitiesController < ApplicationController
   def index
     @entity_type = params[:entity_type] || 'all'
     return false if !allowed((params[:entity_type] || 'entities'))
-    puts "entity type = " + @entity_type
+    logger.info "entity type = " + @entity_type
     @entities = Entity.search(params[:search], params[:page], @entity_type)
     respond_to do |format|
       format.html {

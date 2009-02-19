@@ -16,15 +16,15 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :entities
   map.connect 'vendors.js', :controller => 'entities', :entity_type => 'vendors', :format =>'js'
   map.vendors 'vendors/', :controller => 'entities', :entity_type => 'vendors'
-  map.vendors 'vendors/new', :controller => 'entities', :entity_type => 'vendors', :action => 'new'
+  map.new_vendor 'vendors/new', :controller => 'entities', :entity_type => 'vendors', :action => 'new'
   map.end_users 'end_users/', :controller => 'entities', :entity_type => 'end_users'
   map.wholesale_clients 'wholesale_clients/', :controller => 'entities', :entity_type => 'wholesale_clients'
   map.connect 'clients.js', :controller => 'entities', :entity_type => 'clients', :format =>'js'
   map.clients 'clients/', :controller => 'entities', :entity_type => 'clients'
-  map.clients 'clients/new', :controller => 'entities', :entity_type => 'clients', :action => 'new'
+  map.new_client 'clients/new', :controller => 'entities', :entity_type => 'clients', :action => 'new'
   map.connect 'sites.js', :controller => 'entities', :entity_type => 'sites', :format =>'js'
   map.sites 'sites/', :controller => 'entities', :entity_type => 'sites'
-  map.sites 'sites/new', :controller => 'entities', :entity_type => 'sites', :action => 'new'
+  map.new_site 'sites/new', :controller => 'entities', :entity_type => 'sites', :action => 'new'
 	map.birthdays 'birthdays', :controller => 'entities', :action => 'birthdays'
 	
   map.connect 'entities/:id/movements', :controller => 'entities', :action => 'movements'
