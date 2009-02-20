@@ -198,11 +198,11 @@ class Product < ActiveRecord::Base
 			return priceobj.available
 		end
 	end
-	def price(price_group = User.current_user.current_price_group, final=nil)
+	def price(price_group = User.current_user.current_price_group, final=True)
 		# final is a flag for returning prices for combos
 		# it should only be set for combos
 		# when it is true this function will return the total value of all of the components
-		if self.product_type_id == 2 or (self.product_type_id == 3 and !final) # For calculating price of a discount or combo
+		if self.product_type_id == 2 or (self.product_type_id == 3 and final) # For calculating price of a discount or combo
 			logger.info "Getting price from requirements"
 			priceobj = price_group.prices.find_by_product_id(self.id)
 			if priceobj
@@ -226,6 +226,8 @@ class Product < ActiveRecord::Base
 				price = (sum * relative_price) + static_price
 			end
 			logger.debug "price1=#{price.to_s}"
+		elsif (self.product_type_id == 3 and !final)
+			return (static_price||0)
 		else
 			priceobj = price_group.prices.find_by_product_id(self.id)
 			relative_price = priceobj.relative

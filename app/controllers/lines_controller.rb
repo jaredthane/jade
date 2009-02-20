@@ -29,26 +29,33 @@ class LinesController < ApplicationController
 
     redirect_to(orders_path(@line.order))
   end
-	def add_line(upc, quantity, order_type, price = nil)
+	def add_line(upc, quantity, order_type, relative_price = 1)
 		@additional=Line.new()
 		@additional.order_type = order_type
 		@additional.bar_code = upc
 		if price
-			@additional.price = price
+			## If its a combo, we don't want the price of the components included
+			## we will multiply this price by relative_price so that if this is part of a combo they get the discount
+			@additional.price = price(User.current_user.current_price_group, False) * relative_price
 		end
 		@additional.quantity = quantity
 		return @additional
 	end
-	def add_product_or_combo(list, upc, quantity, order_type, price=nil)
-		@newline = add_line(upc, quantity, order_type, price)
+	def add_product_or_combo(list, upc, quantity, order_type, relative_price=1)
+		## Create a line for the product
+		@newline = add_line(upc, quantity, order_type, relative_price)
+		## If it doesnt need a serial number mark it received if the user wants
 		@newline.received=current_user.default_received if !@newline.product.serialized
-		
+		## Add the new line to the list of lines created
 		list << @newline
-		if @newline.product.product_type_id==3 # If this is a combo, we have to add the components
-			logger.debug "Adding a combo"
+		if @newline.product.product_type_id==3 ## If this is a combo, we have to add the components
+#			logger.debug "Adding a combo"
+			## Update relative price so the children get the discount
+			relative_price=relative_price * @newline.product.relative_price
+			## Loop through each child product
 			for comp in @newline.product.requirements
-				newprice =  (comp.product.price||0) * (comp.relative_price||0) + (comp.static_price||0)
-				add_product_or_combo(list, comp.required.upc, comp.quantity, order_type, newprice)
+				## Add them recursively
+				add_product_or_combo(list, comp.required.upc, comp.quantity, order_type, relative_price)
 			end
 		end
 	end

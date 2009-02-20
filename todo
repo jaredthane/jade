@@ -4,7 +4,9 @@
 ================= Desired:   =======================================
 mark entire order as received or not received
 price for combo not taken into consideration
-
+calculate cost of combo correctly
+price listed on receipt for a combo should not include relative value
+should pass relative value to children
 ================= PostPoned: =======================================
 submit forms via java from actions panel
 "ejemplares presentes here" should have the list paginated

@@ -4,6 +4,11 @@ git remote add origin git@github.com:jaredthane/jade.git
 Create local repo (First time install)
 git clone git://github.com/jaredthane/jade.git
 
+Add new files to git
+git add .
+  -OR-
+git add filename
+
 To save changes to local repo
 sudo git commit -a -m 'description of changes'
 
