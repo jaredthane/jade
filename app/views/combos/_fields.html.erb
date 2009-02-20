@@ -10,8 +10,8 @@
 			<dt> <%= link_to 'Remover', :class => 'action', :controller => "combos", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
 		<% end %>
   <% end %>
-  <dt> <%= link_to 'Ver |', edit_combo_path(@combo), :class => 'action' %> </dt>
-  <dt><%= link_to 'Lista | ', combos_path, :class => 'action' %></dt>
+  <dt><%= link_to 'Lista', combos_path, :class => 'action' %></dt>  
+  <dt> <%= link_to 'Cancelar', edit_combo_path(@combo), :class => 'action' %> </dt>
 <% end %>
 <%= error_messages_for :combo %>
 		

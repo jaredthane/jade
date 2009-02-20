@@ -1,38 +1,44 @@
-================= Required:  =======================================
+------------------------ This Version -------------------------------
+================= Bugs:  =======================================
+discounts that arent available in a site shouldnt be applied
 
-
-================= Desired:   =======================================
+================= Features:   =======================================
 mark entire order as received or not received
 
-================= PostPoned: =======================================
-submit forms via java from actions panel
+replenish should take into consideration the orders that have been created but not yet received
+----------------- Later Versions ----------------------------------------
+================= Bugs: =======================================
+
+icon only showing up on some pages not on signin or new compra
+should make sure serial purchased is unique
+serials should only need to be unique to their product
+================= Essential Features: ==========================
 "ejemplares presentes here" should have the list paginated
-generated serial numbers for combos?
-shopping cart to fill order or combo or discount
-email notifications when out of product
-web site on source forge
 make sure people don't create infinitly recursive combos
 add and remove payment types
 should be able to delete sites
 price_group must be set for every site when created
 price_group_name must be set for every client when created
-icon only showing up on some pages not on signin or new compra
-should make sure serial purchased is unique
-serials should only need to be unique to their product
-replenish should take into consideration the orders that have been created but not yet received
+need link to site to sign up
+================= Other Features: ===================================
+submit forms via java from actions panel
+generated serial numbers for combos?
+shopping cart to fill order or combo or discount
+email notifications when out of product
+web site on source forge
 when doing a transfer, price should be set to the cost.
-we can change movements. disable that.
+create client on the fly in sales
+
+================= PostPoned Unsorted: ===================================
 make sites page show products instead of movements
 need accurate confirmation when bulk_edit is submitted
 adding new products should check it products already in order
-entities doesn't have title
-need to be able to disable discount so it doesn't get applied
+
+
 should have checkboxes for controlling scope: "search this site" and "search for products"
 disable quantity field when adding serialized product to order
 need to set new users default site
-need link to site to sign up
 can't add requirement and update requirements on discount at the same time
-when you put in an invalid upc it should show an error
 you cant remove a requirement from a discount
 need view to list products that don't have locations
 date fields should be removed and just use created_at field instead. Only authorized users should have rights to change these dates
@@ -63,12 +69,10 @@ add forget and change password functionality as per http://railsonedge.blogspot.
 show flash message on previous page if they don't have permissions
 translate Logged in successfully
 use Google Chart API for charts on reports
-product combos
 physical counts
 reports
 credit
 price quotes
-create client on the fly in sales
 different costs for each location
 need to be able to modify price groups
  - should create prices for every product when creating a new group
@@ -135,7 +139,6 @@ replace most selects with autocomplete fields
 make autocompletes work on inserted lines
 Need views that show just Compras or Ventas
 garentees
-internal consumption of products
 specials
 new entity doesn't work
 How do I get client.orders to work:
@@ -283,3 +286,8 @@ calculate cost of combo correctly
 price listed on receipt for a combo should not include relative value
 should pass relative value to children
 should be able to change min/max in a list like prices
+entities doesn't have title
+we can change movements. disable that.
+when you put in an invalid upc it should show an error
+product combos
+internal consumption of products

@@ -63,23 +63,25 @@ class Order < ActiveRecord::Base
   end
   def check_for_discounts
 		for discount in get_discounts do #Go through each discount
-			@qualify=100
-			for req in discount.requirements do        #Check if the order has enough of each product
-				@wehave = get_sum(req.required)
-				@weneed = req.quantity
-				#puts "@wehave ->" + @wehave.to_s + "<-"
-				if @wehave == nil
-					#puts "@wehave is null again"
-				end
-				#puts "@weneed ->" + @weneed.to_s + "<-"
-				@temp = @wehave / @weneed
-				@qualify= [@qualify, @temp].min
-			end #req in discount.requirements
-			if @qualify >= 1			                     		#If the order qualifies,
-				##puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
-				l=Line.new(:order_id => self.id, :product_id => discount.id, :quantity => @qualify, :price => discount.price, :received => 1)
-				l.save
-			end #if qualify==1
+			if discount.available
+				@qualify=100
+				for req in discount.requirements do        #Check if the order has enough of each product
+					@wehave = get_sum(req.required)
+					@weneed = req.quantity
+					#puts "@wehave ->" + @wehave.to_s + "<-"
+					if @wehave == nil
+						#puts "@wehave is null again"
+					end
+					#puts "@weneed ->" + @weneed.to_s + "<-"
+					@temp = @wehave / @weneed
+					@qualify= [@qualify, @temp].min
+				end #req in discount.requirements
+				if @qualify >= 1			                     		#If the order qualifies,
+					##puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
+					l=Line.new(:order_id => self.id, :product_id => discount.id, :quantity => @qualify, :price => discount.price, :received => 1)
+					l.save
+				end #if qualify==1
+			end # if available
 		end #discount in get_discounts
 	end #check_for_discounts
 	
