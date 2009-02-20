@@ -6,7 +6,7 @@
 	<% prefix = requirement.new_record? ? 'new_reqs' : 'existing_reqs' %>
 	<% fields_for "#{prefix}[]", requirement do |requirement_form| %>
 		<div class="table_cell_20"><%=link_to requirement.required.name, edit_discount_path(requirement.required) %></div>
-		<div class="table_cell_10"><%=requirement_form.text_field :quantity, :class => 'field' %></div>
+		<div class="table_cell_10"><%=requirement_form.text_field :quantity, :class => 'serial' %></div>
 		<div class="table_cell_10"><%=requirement_form.text_field :static_price, :class => 'field' %></div>
 		<div class="table_cell_10"><%=requirement_form.text_field :relative_price, :class => 'field' %></div>
 		<div class="table_cell"><%= link_to_function "Remover", "$(this).up().up().remove()" %></div>

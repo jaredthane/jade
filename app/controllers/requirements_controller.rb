@@ -37,31 +37,24 @@ class RequirementsController < ApplicationController
       format.xml  { render :xml => @requirement }
     end
   end
-
-  # GET /requirements/new
-  # GET /requirements/new.xml
-  def new
-    @requirement = Requirement.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @requirement }
-    end
-  end
   
   def new
     @requirement = Requirement.new()
     logger.debug "Were ready to save the requirement"
     @requirement.bar_code = params[:requirement][:bar_code]
-    @requirement.product_id = params[:requirement][:product_id]
-    @requirement.quantity = 1
-    logger.debug "Were ready to go back to the client"
-    respond_to do |wants|
-      wants.html do
-        redirect_to '/discounts/' + @requirement.product_id.to_s + '/edit'
-      end
-      wants.js
-    end
+    if !@requirement.product
+			@requirement.product_id = params[:requirement][:product_id]
+			@requirement.quantity = 1
+			logger.debug "Were ready to go back to the client"
+			respond_to do |wants|
+				wants.html do
+					redirect_to '/discounts/' + @requirement.product_id.to_s + '/edit'
+				end
+				wants.js
+			end
+		else
+		 	render :action => 'error'
+		end
   end
 
   # GET /requirements/1/edit

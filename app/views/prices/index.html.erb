@@ -2,6 +2,7 @@
 <% content_for :title do %>Lista de Precios para <%= current_user.location.name %><% end %>
 <% content_for :actions do %>
 	<dt><%= link_to "Cancelar Cambios", prices_url, :class => 'action' %></dt>
+	<dt> <%= link_to 'Lista de Productos', products_url, :class => 'action' %>  </dt>
 <% end %>
 
 <h2>

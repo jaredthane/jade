@@ -33,10 +33,12 @@ class LinesController < ApplicationController
 		@additional=Line.new()
 		@additional.order_type = order_type
 		@additional.bar_code = upc
-		if price
-			## If its a combo, we don't want the price of the components included
-			## we will multiply this price by relative_price so that if this is part of a combo they get the discount
-			@additional.price = price(User.current_user.current_price_group, False) * relative_price
+		if @additional.product
+			if @additional.product.product_type==3
+				## If its a combo, we don't want the price of the components included
+				## we will multiply this price by relative_price so that if this is part of a combo they get the discount
+				@additional.price = price(User.current_user.current_price_group, False) * relative_price
+			end
 		end
 		@additional.quantity = quantity
 		return @additional
@@ -44,18 +46,20 @@ class LinesController < ApplicationController
 	def add_product_or_combo(list, upc, quantity, order_type, relative_price=1)
 		## Create a line for the product
 		@newline = add_line(upc, quantity, order_type, relative_price)
-		## If it doesnt need a serial number mark it received if the user wants
-		@newline.received=current_user.default_received if !@newline.product.serialized
-		## Add the new line to the list of lines created
-		list << @newline
-		if @newline.product.product_type_id==3 ## If this is a combo, we have to add the components
-#			logger.debug "Adding a combo"
-			## Update relative price so the children get the discount
-			relative_price=relative_price * @newline.product.relative_price
-			## Loop through each child product
-			for comp in @newline.product.requirements
-				## Add them recursively
-				add_product_or_combo(list, comp.required.upc, comp.quantity, order_type, relative_price)
+		if @newline.product
+			## If it doesnt need a serial number mark it received if the user wants
+			@newline.received=current_user.default_received if !@newline.product.serialized
+			## Add the new line to the list of lines created
+			list << @newline
+			if @newline.product.product_type_id==3 ## If this is a combo, we have to add the components
+	#			logger.debug "Adding a combo"
+				## Update relative price so the children get the discount
+				relative_price=relative_price * @newline.product.relative_price
+				## Loop through each child product
+				for comp in @newline.product.requirements
+					## Add them recursively
+					add_product_or_combo(list, comp.required.upc, comp.quantity, order_type, relative_price)
+				end
 			end
 		end
 	end
@@ -75,13 +79,17 @@ class LinesController < ApplicationController
     
 		@lines=[]
 		add_product_or_combo(@lines, params[:line][:bar_code], 1, params[:line][:order_type])
-		logger.debug "default received =" + current_user.default_received.to_s
-	  respond_to do |wants|
-	    wants.html do
-	      redirect_to '/orders/' + @line.order_id.to_s + '/edit'
-	    end
-	    wants.js
-	  end
+		if @lines.length > 0
+			logger.debug "default received =" + current_user.default_received.to_s
+			respond_to do |wants|
+			  wants.html do
+			    redirect_to '/orders/' + @line.order_id.to_s + '/edit'
+			  end
+			  wants.js
+			end
+		else
+		 	render :action => 'error'
+		end
   end
 
   # GET /lines/1/edit

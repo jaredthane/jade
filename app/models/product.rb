@@ -198,7 +198,7 @@ class Product < ActiveRecord::Base
 			return priceobj.available
 		end
 	end
-	def price(price_group = User.current_user.current_price_group, final=True)
+	def price(price_group = User.current_user.current_price_group, final=true)
 		# final is a flag for returning prices for combos
 		# it should only be set for combos
 		# when it is true this function will return the total value of all of the components

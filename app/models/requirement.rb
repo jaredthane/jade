@@ -24,7 +24,11 @@ class Requirement < ActiveRecord::Base
  	 required.upc if required
 	end
 	def bar_code=(upc)
-		self.required_id = Product.find_by_upc(upc).id unless upc.blank?
+		unless upc.blank?
+			if product=Product.find_by_upc(upc)
+				self.required_id = Product.find_by_upc(upc).id
+			end
+		end
 	end
 	def price(price_group = User.current_user.current_price_group)
 		if required

@@ -357,7 +357,7 @@ class Line < ActiveRecord::Base
 				self.product_id = prod.id
 			end
 			logger.info "Product.find_by_upc(upc)=#{Product.find_by_upc(upc).inspect}"
-			logger.info "Product.find_by_upc(upc).id=#{Product.find_by_upc(upc).id.to_s}"
+#			logger.info "Product.find_by_upc(upc).id=#{Product.find_by_upc(upc).id.to_s}"
 		end
 		logger.info "found self.product_id=#{self.product_id.to_s}"
 		if self.order
