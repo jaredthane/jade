@@ -3,10 +3,7 @@
 
 ================= Desired:   =======================================
 mark entire order as received or not received
-price for combo not taken into consideration
-calculate cost of combo correctly
-price listed on receipt for a combo should not include relative value
-should pass relative value to children
+
 ================= PostPoned: =======================================
 submit forms via java from actions panel
 "ejemplares presentes here" should have the list paginated
@@ -14,7 +11,6 @@ generated serial numbers for combos?
 shopping cart to fill order or combo or discount
 email notifications when out of product
 web site on source forge
-should be able to change min/max in a list like prices
 make sure people don't create infinitly recursive combos
 add and remove payment types
 should be able to delete sites
@@ -282,3 +278,8 @@ make new products available in current location
 list of serials on product show page says cantidad
 copy pagination to the top of the screen
 in reaprovisionar should be able to filter by all red or all green
+price for combo not taken into consideration
+calculate cost of combo correctly
+price listed on receipt for a combo should not include relative value
+should pass relative value to children
+should be able to change min/max in a list like prices
