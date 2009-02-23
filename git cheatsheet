@@ -25,6 +25,7 @@ To create and change to branch
 git checkout -b unstable
 
 To merge changes made in a branch into the master:
+(merge is a pull type of action)
 git checkout master
 git merge unstable
 

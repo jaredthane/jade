@@ -1,9 +1,11 @@
 ------------------------ This Version -------------------------------
 ================= Bugs:  =======================================
-discounts that arent available in a site shouldnt be applied
+
+need to remove discounts when products are removed from an order
+need to set new users default site
 
 ================= Features:   =======================================
-mark entire order as received or not received
+mark entire order as received or not received -- Javascript
 
 replenish should take into consideration the orders that have been created but not yet received
 ----------------- Later Versions ----------------------------------------
@@ -20,6 +22,7 @@ should be able to delete sites
 price_group must be set for every site when created
 price_group_name must be set for every client when created
 need link to site to sign up
+need accurate confirmation when bulk_edit is submitted
 ================= Other Features: ===================================
 submit forms via java from actions panel
 generated serial numbers for combos?
@@ -28,23 +31,17 @@ email notifications when out of product
 web site on source forge
 when doing a transfer, price should be set to the cost.
 create client on the fly in sales
+should have checkboxes for controlling scope: "search this site" and "search for products"
+Create pedidos/compras/ventas pendientes for ones that haven't been received/paid
+Need view "outstanding accounts"
 
 ================= PostPoned Unsorted: ===================================
-make sites page show products instead of movements
-need accurate confirmation when bulk_edit is submitted
 adding new products should check it products already in order
 
 
-should have checkboxes for controlling scope: "search this site" and "search for products"
-disable quantity field when adding serialized product to order
-need to set new users default site
-can't add requirement and update requirements on discount at the same time
-you cant remove a requirement from a discount
 need view to list products that don't have locations
 date fields should be removed and just use created_at field instead. Only authorized users should have rights to change these dates
 	-Should be available on new field also, but only for users with set date on new privilege
-Create pedidos/compras/ventas pendientes for ones that haven't been received/paid
-Need view "outstanding accounts"
 Add cancel button to each edit page.
 Make column headers links to sort 
 Need to make controller search for combos and warranties when submitting sales
@@ -64,7 +61,6 @@ should be able to see serial numbers on product show, and order show&edit should
 need to format show serialized product page
 need to make sure serial number is for correct product
 
-need to remove discounts when products are removed from an order
 add forget and change password functionality as per http://railsonedge.blogspot.com/2008/03/rails-forum-restful-authenticationpart.html
 show flash message on previous page if they don't have permissions
 translate Logged in successfully
@@ -291,3 +287,7 @@ we can change movements. disable that.
 when you put in an invalid upc it should show an error
 product combos
 internal consumption of products
+discounts that arent available in a site shouldnt be applied
+disable quantity field when adding serialized product to order
+can't add requirement and update requirements on discount at the same time
+you cant remove a requirement from a discount
