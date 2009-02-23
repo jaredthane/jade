@@ -36,6 +36,8 @@ class Order < ActiveRecord::Base
   end
 	after_update :save_lines
 	after_create :create_lines
+	after_update :check_for_discounts
+	after_create :check_for_discounts
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
 	belongs_to :client, :class_name => "Entity", :foreign_key => 'client_id'
 	validates_presence_of(:vendor, :message => "debe ser valido")
@@ -44,10 +46,17 @@ class Order < ActiveRecord::Base
 	belongs_to :user
 	validates_presence_of(:user, :message => "debe ser valido")
 	
+  ###################################################################################
+	# Returns an array of all of the discounts in the system
+	###################################################################################
 	def get_discounts
   	product_type=ProductType.find(2)
     @discounts = product_type.products.find(:all, :order => "name")
   end
+  
+  ###################################################################################
+	# Returns total quantity of an item contained in this order
+	###################################################################################
   def get_sum(product)
   	sum=0
   	o=Order.find(self.id)
@@ -61,32 +70,78 @@ class Order < ActiveRecord::Base
   	end
   	return sum
   end
+  
+  ###################################################################################
+	# Returns the number of times an order qualifies for a discount or 0 if it does not
+	###################################################################################
+  def discount_qualifies(discount)
+  	
+  	@qualify=10000
+ 		#Check if we have enough of each product
+		for req in discount.requirements do        
+			@wehave = get_sum(req.required)
+			@weneed = req.quantity
+#			puts "@wehave ->" + @wehave.to_s + "<-"
+#			puts "@weneed ->" + @weneed.to_s + "<-"
+			@temp = @wehave / @weneed
+			
+#			puts "@temp ->" + @temp.to_s + "<-"
+#			puts "@qualify ->" + @qualify.to_s + "<-"
+			@qualify= [@qualify, @temp].min
+#			puts "@qualify ->" + @qualify.to_s + "<-"
+		end #req in discount.requirements
+		return nil if @qualify == 10000
+  	return @qualify
+  end
+	
+  ###################################################################################
+	# Checks if the order qualifies for any discounts and adds lines for them ass necisary
+	###################################################################################
   def check_for_discounts
-		for discount in get_discounts do #Go through each discount
-			if discount.available
-				@qualify=100
-				for req in discount.requirements do        #Check if the order has enough of each product
-					@wehave = get_sum(req.required)
-					@weneed = req.quantity
-					#puts "@wehave ->" + @wehave.to_s + "<-"
-					if @wehave == nil
-						#puts "@wehave is null again"
-					end
-					#puts "@weneed ->" + @weneed.to_s + "<-"
-					@temp = @wehave / @weneed
-					@qualify= [@qualify, @temp].min
-				end #req in discount.requirements
-				if @qualify >= 1			                     		#If the order qualifies,
-					##puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
-					l=Line.new(:order_id => self.id, :product_id => discount.id, :quantity => @qualify, :price => discount.price, :received => 1)
-					l.save
-				end #if qualify==1
-			end # if available
+#  	puts "checking existing discounts"
+  	# Go through each discount in the order and see if it still qualifys
+  	@discounts_in_order= []
+  	for line in self.lines.find(:all, 
+																:conditions => ' products.product_type_id = 2 ',
+  															:joins => ' inner join products on lines.product_id=products.id ')
+#  		puts "checking " + line.product.name
+  		@discounts_in_order << line.product
+  		@qualify = discount_qualifies(line.product)
+  		if @qualify > 0
+  			# Set the quantity of this discount to the number of times we qualify
+  			line.quantity = @qualify
+  			line.save()
+  		else
+  			# Remove discount since we no longer qualify
+  			puts line.id.to_s
+  			self.lines.delete(line)
+  		end
+  	end
+  	# Go through each discount and see if the order qualifies
+#  	puts "checking new discounts"
+		for discount in get_discounts do 
+#			puts "checking" + discount.name
+			#make sure we dont add a discount thats already in the order
+			if !@discounts_in_order.include?(discount)
+				# make sure the discount is available in this site
+				if discount.available
+					puts discount.name + "available" 
+					@qualify = discount_qualifies(discount)
+					#If the order qualifies, add it.
+					if @qualify >= 1			                     		
+#						puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
+						l=Line.new(:order_id => self.id, :product_id => discount.id, :quantity => @qualify, :price => discount.price, :received => 1)
+						l.save
+					end #if qualify==1
+				end # if available
+			end
 		end #discount in get_discounts
 	end #check_for_discounts
 	
 
-	
+	###################################################################################
+	# Returns the total price of all of the products in the order, not including tax
+	###################################################################################
 	def total_price
 		total=0
 		for l in self.lines
@@ -94,6 +149,9 @@ class Order < ActiveRecord::Base
 		end
 		return total
 	end
+	###################################################################################
+	# Returns the total tax to be charged the user.
+	###################################################################################
 	def total_tax
 		total=0
 		for l in self.lines
@@ -101,6 +159,10 @@ class Order < ActiveRecord::Base
 		end
 		return total
 	end
+	
+	###################################################################################
+	# Returns the total price of all of the products in the order plus tax
+	###################################################################################
 	def total_price_with_tax
 		total=0
 		for l in self.lines
@@ -108,21 +170,43 @@ class Order < ActiveRecord::Base
 		end
 		return total
 	end
+	
+	###################################################################################
+	# Returns the total price of all of the products in the order with tax spelled out in spanish
+	###################################################################################
 	def total_price_with_tax_in_spanish
 		return number_to_spanish(self.total_price_with_tax)
 	end
+	
+	###################################################################################
+	# Returns the total of all the payments made for this order
+	###################################################################################
 	def amount_paid
 		return self.payments.sum(:amount, :conditions => ['order_id = :order_id', {:order_id => self.id}])
 	end
+	
+	###################################################################################
+	# Returns the name of the Vendor as a string
+	###################################################################################
 	def vendor_name
 		vendor.name if vendor
 	end
+	
+	###################################################################################
+	# Receives a string and sets the vendor_id for the product to the entity with that name
+	###################################################################################
 	def vendor_name=(name)
 		self.vendor = Entity.find_by_name(name) unless name.blank?
 	end
+	###################################################################################
+	# Returns the name of the Client as a string
+	###################################################################################
 	def client_name
 		client.name if client
 	end
+	###################################################################################
+	# Receives a string and sets the client_id for the product to the entity with that name
+	###################################################################################
 	def client_name=(name)
 		self.client = Entity.find_by_name(name) unless name.blank?
 	end
@@ -152,6 +236,7 @@ class Order < ActiveRecord::Base
 		 end
 	end
 	def save_lines
+		puts "saving lines"
 		lines.each do |line|
 			line.save(false)
 		end

@@ -1,7 +1,15 @@
+------------------------ Contract     -------------------------------
+physical counts
+reports
+credit
+price quotes
+edit users
+audit logs
+
 ------------------------ This Version -------------------------------
 ================= Bugs:  =======================================
 
-need to remove discounts when products are removed from an order
+
 need to set new users default site
 
 ================= Features:   =======================================
@@ -15,6 +23,7 @@ icon only showing up on some pages not on signin or new compra
 should make sure serial purchased is unique
 serials should only need to be unique to their product
 ================= Essential Features: ==========================
+different costs for each location
 "ejemplares presentes here" should have the list paginated
 make sure people don't create infinitly recursive combos
 add and remove payment types
@@ -69,7 +78,7 @@ physical counts
 reports
 credit
 price quotes
-different costs for each location
+
 need to be able to modify price groups
  - should create prices for every product when creating a new group
  - should be able to copy prices in view to another group
@@ -291,3 +300,4 @@ discounts that arent available in a site shouldnt be applied
 disable quantity field when adding serialized product to order
 can't add requirement and update requirements on discount at the same time
 you cant remove a requirement from a discount
+need to remove discounts when products are removed from an order

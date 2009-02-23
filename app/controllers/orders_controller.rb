@@ -260,7 +260,6 @@ class OrdersController < ApplicationController
       		logger.debug "new_line.warranty.to_s= after" + new_line.warranty.to_s.to_s
       		@order.lines << new_line
       	end
-      	@order.check_for_discounts if @order.order_type == 'sales'
         flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { redirect_to(@order) }
         format.xml  { render :xml => @order, :status => :created, :location => @order }
