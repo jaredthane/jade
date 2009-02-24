@@ -22,41 +22,41 @@ class OrdersController < ApplicationController
 		case (order_type)
 		  when 'all'
 		  	if !current_user.has_rights(['admin','gerente'])
-		  		render :template=>'sessions/rejected'
-		  		return false
+					redirect_back_or_default('/')
+					flash[:error] = "No tiene los derechos suficientes para ver todos los pedidos"
 		  	end
 		  when 'sales'
 		  	if action=="edit"
 					if !current_user.has_rights(['admin','gerente','ventas'])
-						render :template=>'sessions/rejected'
-						return false
+						redirect_back_or_default('/')
+						flash[:error] = "No tiene los derechos suficientes para cambiar las ventas"
 					end
 				elsif action=="view"
 					if !current_user.has_rights(['admin','gerente','ventas','compras'])
-						render :template=>'sessions/rejected'
-						return false
+						redirect_back_or_default('/')
+						flash[:error] = "No tiene los derechos suficientes para ver lsa ventas"
 					end
 				end
 		  when 'purchases'
 		  	if !current_user.has_rights(['admin','compras','gerente'])
-		  		render :template=>'sessions/rejected'
-		  		return false
+					redirect_back_or_default('/')
+					flash[:error] = "No tiene los derechos suficientes para ver las compras"
 		  	end
 		  when 'internal'
 		  	if action=="edit"
 					if !current_user.has_rights(['admin','gerente','gerente'])
-						render :template=>'sessions/rejected'
-						return false
+						redirect_back_or_default('/')
+						flash[:error] = "No tiene los derechos suficientes para cambiar el uso interno"
 					end
 				elsif action=="view"
 					if !current_user.has_rights(['admin','gerente','ventas','compras'])
-						render :template=>'sessions/rejected'
-						return false
+						redirect_back_or_default('/')
+						flash[:error] = "No tiene los derechos suficientes para ver el uso interno"
 					end
 				end
 		  else
-		  	render :template=>'sessions/rejected'
-		  	return false
+		  	redirect_back_or_default('/')
+				flash[:error] = "No tiene los derechos suficientes para esta accion"
     end  
     return true  
 	end

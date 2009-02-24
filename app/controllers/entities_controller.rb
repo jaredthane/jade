@@ -15,52 +15,44 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class EntitiesController < ApplicationController
 	before_filter :login_required
-	access_control [:new, :create, :update, :edit, :destroy] => '(gerente | admin | ventas | compras)' 
+	access_control [:new, :create, :update, :edit, :destroy] => '(gerente | admin | ventas | compras | inventario)' 
 	def allowed(entity_type)
 		case (entity_type)
 		  when 'sites'
-		  	if !current_user.has_rights(['admin','compras','gerente','ventas'])
-		  		render :template=>'sessions/rejected'
-		  		return false
+		  	if !current_user.has_rights(['admin','compras','gerente','ventas','inventario','invitado'])
+					redirect_back_or_default('/')
+					flash[:error] = "No tiene los derechos suficientes para ver los sitios"
 		  	end
 		  when 'clients'
 		  	if !current_user.has_rights(['admin','gerente','ventas'])
-		  		render :template=>'sessions/rejected'
-		  		return false
+					redirect_back_or_default('/')
+					flash[:error] = "No tiene los derechos suficientes para ver los clientes"
 		  	end
 		  when 'vendors'
 		  	if !current_user.has_rights(['admin','compras','gerente'])
-		  		render :template=>'sessions/rejected'
-		  		return false
+					redirect_back_or_default('/')
+					flash[:error] = "No tiene los derechos suficientes para ver los proveedores"
 		  	end
-#		  when 'entities'
-#		  	if !current_user.has_rights(['admin','gerente'])
-#		  		render :template=>'sessions/rejected'
-#		  		return false
-#		  	end
 		  when 1
 		  	if !current_user.has_rights(['admin','compras','gerente'])
-		  		render :template=>'sessions/rejected'
-		  		return false
+					redirect_back_or_default('/')
+					flash[:error] = "No tiene los derechos suficientes para ver los proveedores"
 		  	end
 		  when 2
 		  	if !current_user.has_rights(['admin','gerente','ventas'])
-		  		render :template=>'sessions/rejected'
-		  		return false
+					redirect_back_or_default('/')
+					flash[:error] = "No tiene los derechos suficientes para ver los clientes"
 		  	end
 		  when 3
-		  	if !current_user.has_rights(['admin','compras','gerente','ventas'])
-		  		render :template=>'sessions/rejected'
-		  		return false
+		  	if !current_user.has_rights(['admin','compras','gerente','ventas','inventario','invitado'])
+					redirect_back_or_default('/')
+					flash[:error] = "No tiene los derechos suficientes para ver los sitios"
 		  	end
 		  when 5
 		  	if !current_user.has_rights(['admin','gerente','ventas'])
-		  		render :template=>'sessions/rejected'
-		  		return false
+					redirect_back_or_default('/')
+					flash[:error] = "No tiene los derechos suficientes para ver los clientes"
 		  	end
-#		  else
-#		  	render :template=>'sessions/rejected'
-#		  	return false
     end  
     return true  
 	end
