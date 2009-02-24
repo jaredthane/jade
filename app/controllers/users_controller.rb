@@ -17,10 +17,15 @@
 
 class UsersController < ApplicationController
   # Be sure to include AuthenticationSystem in Application Controller instead
-  include AuthenticatedSystem
+	before_filter :login_required
+	access_control [:new, :create, :destroy] => '(gerente | admin)' 
   
 	def index
     @users = User.search(params[:search], params[:page])
+		if !current_user.has_rights(['admin','gerente'])
+			redirect_back_or_default('/')
+			flash[:error] = "No tiene los derechos suficientes para alistar los usuarios"
+		end
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @entities }
@@ -28,21 +33,23 @@ class UsersController < ApplicationController
     end
   end
   # render new.rhtml
-  def new
-  end
+#  def new
+#  end
 
   def create
-    cookies.delete :auth_token
+#    cookies.delete :auth_token
     # protects against session fixation attacks, wreaks havoc with 
     # request forgery protection.
     # uncomment at your own risk
     # reset_session
     @user = User.new(params[:user])
+    @user.location= current_user.location
+    @user.default_received = false
     @user.save
     if @user.errors.empty?
-      self.current_user = @user
+#      self.current_user = @user
       redirect_back_or_default('/')
-      flash[:notice] = "Gracias por inscribirse!"
+      flash[:notice] = "Nuevo usuario creado exitosamente"
     else
       render :action => 'new'
     end
@@ -53,7 +60,24 @@ class UsersController < ApplicationController
   # GET /users/1.xml
   def show
     @user = User.find(params[:id])
-
+    logger.debug "@user=#{@user.to_s}"
+    logger.debug "current_user=#{current_user.to_s}"
+    logger.debug "current_user.has_rights(['admin','gerente'])=#{current_user.has_rights(['admin','gerente']).to_s}"
+		if @user!=current_user and !current_user.has_rights(['admin','gerente'])
+			redirect_back_or_default('/')
+			flash[:error] = "No tiene los derechos suficientes para ver otros usuarios"
+		end
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @user }
+    end
+  end
+  # GET /users/1
+  # GET /users/1.xml
+  def show_me
+    @user = current_user
+    render :action => 'show'
+    return false
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @user }
@@ -64,6 +88,10 @@ class UsersController < ApplicationController
   # GET /users/new.xml
   def new
     @user = User.new
+		if !current_user.has_rights(['admin','gerente'])
+			redirect_back_or_default('/')
+			flash[:error] = "No tiene los derechos suficientes para crear nuevos usuarios"
+		end
 
     respond_to do |format|
       format.html # new.html.erb
@@ -74,12 +102,20 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     @user = User.find(params[:id])
+    if @user!=current_user and !current_user.has_rights(['admin','gerente'])
+			redirect_back_or_default('/')
+			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
+		end
   end
 
   # PUT /users/1
   # PUT /users/1.xml
   def update
     @user = User.find(params[:id])
+    if @user!=current_user and !current_user.has_rights(['admin','gerente'])
+			redirect_back_or_default('/')
+			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
+		end
 
     respond_to do |format|
       if @user.update_attributes(params[:user])

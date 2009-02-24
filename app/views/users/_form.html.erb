@@ -1,33 +1,57 @@
-
 <% content_for :title do %><%= heading %><% end %>
+<% content_for :actions do %>
+	<% if mode=='edit' %>
+		<dt><%= link_to 'Remover', @user, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+	<% end %>
+	<dt><%= link_to 'Cancelar', @user, :class => 'action' %></dt>
+<% end %>
 
-<%= error_messages_for :user %>
+<%= error_messages_for :unit %>
 
 <% form_for(@user) do |f| %>
+	
+	<div class="column2-unit-left">
+		<p>
+		  <b>Nombre de Usuario</b><br />
+		  <%= f.text_field :login, :class => 'field' %>
+		</p>
+		<p>
+		  <b>Sitio Actual:</b><br />
+		  <input disabled class="field" value= <% if @user.location %><%= @user.location.name %><% end %> >
+		  	
+		  <br />
+		  (Para cambiar simplemente escoja otro sitio de la lista de sitios)
+		</p>
+		
+	</div>
+	<div class="column2-unit-right">
+	
+		<p>
+		  <b>Correo Electronico</b><br />
+		  <%= f.text_field :email, :class => 'field' %>
+		</p>
+		<p>
+		  <b>Grupo de Precios Actual:</b><br />
+	  	<input disabled class="field" value= <% if @user.price_group_name %><%= @user.price_group_name.name %><% end %> >
+		  <br />
+		  (Para cambiar simplemente escoja un cliente de otro grupo de precios de la lista de clientes)
+		</p>
+		<p>
+			<%= f.check_box :default_received, :class => 'field' %><b> Marcar pedidos como Recibido como defecto?</b>
+		</p>
+	
+	</div>
+	<hr class="clear-contentunit" />
   <p>
-    <b>Usuario</b><br />
-    <%= f.text_field :login, :class => 'field' %>
-  </p>
-
-<hr class="clear-contentunit" />
-<div class="column2-unit-left">
- <p>
-    <b>E Mail</b><br />
-    <%= f.text_field :email, :class => 'field' %>
-  </p>
- 
-</div>
-<div class="column2-unit-right">
- 
-</div>
-<hr class="clear-contentunit" />
-  <p>
-    <%= f.submit button_text, :class => 'button' %>
-  </p>
+  	<b>Password</b><br/>
+		<%= f.password_field :password, :class => 'field' %>
+	</p>
+	<p>
+		<b>Confirm Password</b><br/>
+		<%= f.password_field :password_confirmation, :class => 'field' %>
+	</p>
+	
+	
+    <%= f.submit button_text, :class => 'action' %>
 <% end %>
-<% if mode == 'edit' %>
-	<%= link_to 'Ver', @user %> |
-	<%= link_to 'Remover', @user, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %> |
-<% end %>
-<%= link_to 'Atras', users_path %>
 

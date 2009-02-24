@@ -1,20 +1,45 @@
+<% content_for :title do %><%=h @user.login %><% end %>
+<% content_for :actions do %>
+	<dt><%= link_to 'Cambiar', edit_user_path(@user) %></dt>
+	<dt><%= link_to 'Lista', users_path %></dt>
+<% end %>
+	
+	<div class="column2-unit-left">
+		<p>
+		  <b>Nombre de Usuario</b><br />
+		  <%= h @user.login %>
+		</p>
+		<p>
+		  <b>Sitio Actual:</b><br />
+		  <% if @user.location %>
+		  	<%= h @user.location.name %>
+		  <% end %> 
+		  	
+		  <br />
+		  (Para cambiar simplemente escoja otro sitio de la lista de sitios)
+		</p>
+		
+	</div>
+	<div class="column2-unit-right">
+	
+		<p>
+		  <b>Correo Electronico</b><br />
+		  <%= h @user.email %>
+		</p>
+		<p>
+		  <b>Grupo de Precios Actual:</b>
+	  	<% if @user.price_group_name %>
+	  		<%=  h @user.price_group_name.name %>
+	  	<% end %> 
+		  <br />
+		  (Para cambiar simplemente escoja un cliente de otro grupo de precios de la lista de clientes)
+		</p>
+		<p>
+			<b> Marcar pedidos como Recibido como defecto?</b><br />
+			<%= h @user.default_received %>
+		</p>
+	
+	</div>
+	<hr class="clear-contentunit" />
+	
 
-<p>
-  <b>Nombre de Usuario:</b>
-  <%=h @user.login %>
-</p>
-<hr class="clear-contentunit" />
-<div class="column2-unit-left">
-
-</div>
-<div class="column2-unit-right">
-<p>
-  <b>Correo Electronico:</b>
-  <%=h @user.email %>
-</p>
-</div>
-<hr class="clear-contentunit" />
-
-
-<%= link_to 'Cambiar', edit_user_path(@user) %> |
-<%= link_to 'Lista', users_path %>

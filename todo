@@ -9,8 +9,9 @@ audit logs
 ------------------------ This Version -------------------------------
 ================= Bugs:  =======================================
 
+add users into menus
+set rights so list users doesnt sow up on me
 
-need to set new users default site
 
 ================= Features:   =======================================
 mark entire order as received or not received -- Javascript
@@ -301,3 +302,4 @@ disable quantity field when adding serialized product to order
 can't add requirement and update requirements on discount at the same time
 you cant remove a requirement from a discount
 need to remove discounts when products are removed from an order
+need to set new users default site

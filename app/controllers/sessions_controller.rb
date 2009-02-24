@@ -40,6 +40,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+  	logger.debug "Destroying session"
     self.current_user.forget_me if logged_in?
     cookies.delete :auth_token
     reset_session

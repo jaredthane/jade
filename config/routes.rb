@@ -2,16 +2,12 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :product_types
   map.resources :roles
   map.resources :serialized_products
-  map.resources :users
-  map.resource :session
-  map.resources :users
   map.resource :session
   map.resources :product_categories
   map.resources :prices
 	map.resources :discounts
 	map.resources :combos
 
-  #map.resources :entity_types
 	map.my_clients 'entities/my_clients', :controller => 'entities', :action => 'my_clients'
   map.resources :entities
   map.connect 'vendors.js', :controller => 'entities', :entity_type => 'vendors', :format =>'js'
@@ -30,12 +26,6 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'entities/:id/movements', :controller => 'entities', :action => 'movements'
   map.connect 'entities/:id/products', :controller => 'entities', :action => 'products'
   
-  #map.connect 'locations/:id/sales', :controller => 'entities', :order_type => 'sales', :action => 'movements'
-  #map.connect 'locations/:id/purchases', :controller => 'entities', :order_type => 'purchases', :action => 'movements'
-  #map.connect 'locations/:id/movements', :controller => 'entities', :order_type => 'all', :action => 'movements'
-  #map.connect 'locations/:id/products', :controller => 'entities', :action => 'products'
-  #map.edit_prices 'products/edit_prices', :controller => 'products', :action => 'edit_prices'
-  #map.update_prices 'products/update_prices', :controller => 'products', :action => 'update_prices'
   map.recommend 'inventories/recommend', :controller => 'inventories', :action => 'recommend'
   map.clear 'inventories/clear', :controller => 'inventories', :action => 'clear'
   map.resources :products, :collection => { :bulk_edit => :get, :bulk_update => :post }, :product_type => 'simple'
@@ -48,7 +38,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :lines
 	map.resources :inventories
 	
-  map.resources :users
+
   
   map.resources :units
     
@@ -68,11 +58,12 @@ ActionController::Routing::Routes.draw do |map|
   map.sales 'sales/', :controller => 'orders', :order_type => 'sales'
 
 	map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate', :activation_code => nil
-	map.signup '/signup', :controller => 'users', :action => 'new'
+	map.new_user '/users/new', :controller => 'users', :action => 'new'
 	map.login '/login', :controller => 'sessions', :action => 'new'
 	map.logout '/logout', :controller => 'sessions', :action => 'destroy'
 	map.reject '/reject', :controller => 'sessions', :action => 'reject'
-
+	map.me '/me', :controller => 'users', :action => 'show_me'
+  map.resources :users
   # The priority is based upon order of creation: first created -> highest priority.
 
   # Sample of regular route:

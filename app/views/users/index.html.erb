@@ -1,22 +1,32 @@
-
 <% content_for :title do %>Lista de Usuarios<% end %>
-
-<table>
-  <tr>
-    <th class="top" scope="col">Nombre de usuario</th>
-    <th class="top" scope="col">Correo E.</th>
-    <th class="top" scope="col">Sitio</th>
-  </tr>
-
-<% for user in @users %>
-  <tr>
-    <td><%= link_to user.login, user %></td>
-    <td><%= h user.email %></td>
-    <td><%=link_to user.location.name, user.location %></td>
-  </tr>
+<% content_for :actions do %>
+	<% if current_user.has_rights(['admin','gerente']) %>
+		<dt><%= link_to 'Nuevo Usuario', new_user_path %></dt>
+	<% end %>
 <% end %>
-</table>
 
+<%= will_paginate @users, :class => 'pagination' %>
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_25">Nombre</div>
+    <div class="table_cell_25">Correo E.</div>
+    <div class="table_cell_15">Recibido por defecto</div>
+    <div class="table_cell">Locacion Actual</div>
+  </div>
+<% for user in @users %>
+  <div class="table_row"> 
+    <div class="table_cell_25"><%= link_to user.login, user %></div>
+    <div class="table_cell_25"><%= h user.email %></div>
+    <div class="table_cell_15"><%= h user.default_received %></div>
+    <div class="table_cell">
+    	<% if user.location %>
+    		<%= link_to user.location.name, user.location %>
+    	<% end %>
+    </div>
+    
+  </div>
+<% end %>
 <br />
+<%= will_paginate @users, :class => 'pagination' %>
 
-<%= link_to 'Nuevo usuario', new_user_path %>
+</div>

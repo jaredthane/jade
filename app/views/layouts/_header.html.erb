@@ -162,6 +162,11 @@
   	<% if current_user.has_rights(['admin','gerente','ventas']) %>
 	  	<li><a href="/payments" title="Pagos">Pagos</a></li>
 	  <% end %>
+  	<% if current_user.has_rights(['admin','gerente']) %>
+	  	<li><a href="/payments" title="Pagos">Pagos</a></li>
+	  <% else %>
+	  	<li><a href="/payments" title="Pagos">Mi Cuenta</a></li>
+	  <% end %>
 	</ul>
 	<% end %>
 					<%= yield :nav2 %>	
