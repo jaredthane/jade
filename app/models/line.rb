@@ -123,7 +123,6 @@ class Line < ActiveRecord::Base
 			p.cost=p.calculate_cost
 			logger.info "the calculated cost is #{p.calculate_cost}"
 			logger.info "the cost is #{p.cost}"
-			p.save
 			logger.info "the cost was saved as #{Product.find(self.product_id).cost}"
 			
 			#logger.debug  "old qty was" + i.quantity.to_s

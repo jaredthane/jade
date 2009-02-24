@@ -99,11 +99,11 @@ class Product < ActiveRecord::Base
 		end
 	end
 	def calculate_cost(location_id = User.current_user.location_id)
-		logger.info "product.id=#{self.id.to_s}"
-		logger.info "location_id=#{location_id.to_s}"
+		logger.debug "product.id=#{self.id.to_s}"
+		logger.debug "location_id=#{location_id.to_s}"
 		moves=connection.select_all("select movements.* from (select max(movements.id) as id from movements where product_id=#{self.id.to_s} group by order_id) as list left join movements on list.id=movements.id where movement_type_id=2;")
 		#moves = movements.find_all_by_entity_id(location_id, :order => 'created_at desc')
-		logger.info "self.quantity(location_id)=" + self.quantity(location_id).to_s
+		logger.debug "self.quantity(location_id)=" + self.quantity(location_id).to_s
 		
 		stock = self.quantity(location_id)
 		items_counted = 0
@@ -111,22 +111,22 @@ class Product < ActiveRecord::Base
 		totalcost=0
 		taken=0
 		while	(moves[movement_counter]) do
-			logger.info moves[movement_counter].id
-			logger.info "stock" + stock.inspect
-			logger.info "items_counted" + items_counted.inspect
-			logger.info "moves[movement_counter][:quantity]" + moves[movement_counter][:quantity].inspect
-			logger.info "stock-items_counted" + (stock-items_counted).inspect
-			logger.info "[stock-items_counted, movements[movement_counter].quantity].min=" + [stock-items_counted, movements[movement_counter].quantity].min.inspect
+			logger.debug moves[movement_counter].id
+			logger.debug "stock" + stock.inspect
+			logger.debug "items_counted" + items_counted.inspect
+			logger.debug "moves[movement_counter][:quantity]" + moves[movement_counter][:quantity].inspect
+			logger.debug "stock-items_counted" + (stock-items_counted).inspect
+			logger.debug "[stock-items_counted, movements[movement_counter].quantity].min=" + [stock-items_counted, movements[movement_counter].quantity].min.inspect
 			puts moves[movement_counter]["quantity"].to_i
 			puts stock
 			puts items_counted
 			take = [stock-items_counted, moves[movement_counter]["quantity"].to_i].min
 			l=Line.find_by_id(moves[movement_counter]["line_id"].to_i)
 			if l
-				logger.info "take=#{take.to_s}"
-				logger.info "l.price=#{l.price.to_s}"
+				logger.debug "take=#{take.to_s}"
+				logger.debug "l.price=#{l.price.to_s}"
 				totalcost += l.price*take
-				logger.info items_counted.inspect
+				logger.debug items_counted.inspect
 				items_counted = items_counted + take
 			end
 			movement_counter = movement_counter + 1
@@ -203,23 +203,23 @@ class Product < ActiveRecord::Base
 		# it should only be set for combos
 		# when it is true this function will return the total value of all of the components
 		if self.product_type_id == 2 or (self.product_type_id == 3 and final) # For calculating price of a discount or combo
-			logger.info "Getting price from requirements"
+			logger.debug "Getting price from requirements"
 			priceobj = price_group.prices.find_by_product_id(self.id)
 			if priceobj
-				logger.info "found priceobj"
+				logger.debug "found priceobj"
 				relative_price = (priceobj.relative||0)
 				static_price = (priceobj.fixed||0)
 			else
-				logger.info "unable to find priceobj"
+				logger.debug "unable to find priceobj"
 				relative_price =0
 				static_price =0
 			end
 			sum = 0
 			for req in self.requirements
-				logger.info "checking a req"
+				logger.debug "checking a req"
 				sum += req.price(price_group)
 			end
-			logger.info "sum=#{sum.to_s}"
+			logger.debug "sum=#{sum.to_s}"
 			if self.product_type_id == 2
 				price = (sum * relative_price) - static_price
 			else
@@ -260,6 +260,19 @@ class Product < ActiveRecord::Base
 		priceobj = price_group.prices.find_by_product_id(self.id)
 		if priceobj
 			priceobj.fixed=new_price
+			priceobj.save
+		end
+	end
+	def cost(price_group = User.current_user.current_price_group)
+		priceobj = price_group.prices.find_by_product_id(self.id)
+		if priceobj
+			return priceobj.cost
+		end
+	end
+	def cost=(new_cost, price_group = User.current_user.current_price_group)
+		priceobj = price_group.prices.find_by_product_id(self.id)
+		if priceobj
+			priceobj.cost=new_cost
 			priceobj.save
 		end
 	end
