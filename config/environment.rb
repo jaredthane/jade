@@ -53,19 +53,15 @@ Rails::Initializer.run do |config|
   # config.active_record.schema_format = :sql
 
   # Activate observers that should always be running
-  # config.active_record.observers = :cacher, :garbage_collector
-
+	config.active_record.observers = :audit_observer
   # Make Active Record use UTC-base instead of local time
   # config.active_record.default_timezone = :utc
 end
 require "will_paginate" 
 require "prawn"
-class AuditLogger < Logger
-	def format_message(severity, timestamp, progname, msg)
-	  "#{timestamp.to_formatted_s(:db)} #{severity} #{msg}\n" 
-	end 
-end 
+
 logfile = File.open('log/audit.log', 'a')   
 logfile.sync = true  #remove this for production 
-$audit = AuditLogger.new(logfile) 
-	
+Audit = AuditLogger.new(logfile)
+
+

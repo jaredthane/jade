@@ -316,13 +316,11 @@ class OrdersController < ApplicationController
 		params['new_lines'].each { |l| @order.lines << Line.new(l) } if params['new_lines']
 		
     params['existing_lines'].each_value  { |l| logger.debug "l['id']=" + l['id'].to_s; Line.find(l['id']).attributes = l } if params['existing_lines']
-		for l in @order.lines
-			logger.debug "l=#{l.inspect}"
-		end
+#		for l in @order.lines
+#			logger.debug "l=#{l.inspect}"
+#		end
     respond_to do |format|
       if @order.update_attributes(params[:order])
-    		logger.debug "saving order worked"
-    		$audit.info "changed order #{@order.id}"
         flash[:notice] = 'Pedido ha sido actualizado exitosamente.'
         format.html { redirect_to(@order) }
         format.xml  { head :ok }

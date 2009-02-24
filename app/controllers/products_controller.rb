@@ -125,7 +125,9 @@ class ProductsController < ApplicationController
   # PUT /products/1.xml
   def update
 		puts "running products update"
+		
   	@product = Product.find(params[:id])
+ 		#Audit.info "changed product #{@product.inspect}"
 		if  @product.update_attributes(params[:product])
 			flash[:notice] = 'Producto ha sido actualizado exitosamente.'
 			redirect_to(@product)

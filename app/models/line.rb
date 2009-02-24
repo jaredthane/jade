@@ -113,12 +113,13 @@ class Line < ActiveRecord::Base
 				i=p.inventories.find_by_entity_id(m.entity_id)
 				i.quantity=i.quantity + m.quantity
 				i.save
-				for req in Requirement.find_all_by_required_id(p.id)
-					i=req.product.calculate_quantity
-				end
+#				for req in Requirement.find_all_by_required_id(p.id)
+#					i=req.product.calculate_quantity
+#				end
 			end
 			# Update inventory levels
 			logger.info "about to calc the cost"
+			
 			p.cost=p.calculate_cost
 			logger.info "the calculated cost is #{p.calculate_cost}"
 			logger.info "the cost is #{p.cost}"
