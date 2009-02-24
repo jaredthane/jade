@@ -2,7 +2,6 @@
 physical counts
 reports
 credit
-audit logs
 
 ------------------------ This Version -------------------------------
 ================= Bugs:  =======================================
@@ -305,3 +304,4 @@ add users into menus
 set rights so list users doesnt sow up on me
 change rejected message
 price quotes
+audit logs
