@@ -3,7 +3,6 @@ physical counts
 reports
 credit
 price quotes
-edit users
 audit logs
 
 ------------------------ This Version -------------------------------
@@ -11,9 +10,11 @@ audit logs
 
 add users into menus
 set rights so list users doesnt sow up on me
+change rejected message
 
 
 ================= Features:   =======================================
+print upc's
 mark entire order as received or not received -- Javascript
 
 replenish should take into consideration the orders that have been created but not yet received
@@ -303,3 +304,5 @@ can't add requirement and update requirements on discount at the same time
 you cant remove a requirement from a discount
 need to remove discounts when products are removed from an order
 need to set new users default site
+
+edit users

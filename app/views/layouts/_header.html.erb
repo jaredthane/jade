@@ -163,9 +163,9 @@
 	  	<li><a href="/payments" title="Pagos">Pagos</a></li>
 	  <% end %>
   	<% if current_user.has_rights(['admin','gerente']) %>
-	  	<li><a href="/payments" title="Pagos">Pagos</a></li>
+	  	<li><a href="/users" title="Usuarios">Usuarios</a></li>
 	  <% else %>
-	  	<li><a href="/payments" title="Pagos">Mi Cuenta</a></li>
+	  	<li><a href="/me" title="Mi Cuenta">Mi Cuenta</a></li>
 	  <% end %>
 	</ul>
 	<% end %>
@@ -198,7 +198,7 @@
 		</dl>      
   <h1>Enlaces</h1>
 	<dl class="nav3-grid">
-	<% if current_user.has_rights(['admin','ventas','gerente','compras']) %>
+	<% if current_user.has_rights(['admin','ventas','gerente','compras','inventario']) %>
 		<dt><a href="/products">Productos</a></dt>
 			<dd><a href="/products">Productos</a></dd>
 			<dd><a href="/services">Servicios</a></dd>
@@ -234,17 +234,19 @@
 	  	<dd><a href="/vendors/">Proveedores</a></dd>		
 	  <% end %>
 	  	<dd><a href="/sites/">Sitios</a></dd>		
-	  <dt><a href="/product_categories">Categorías</a></dt>
+	  	<dt><a href="/product_categories">Categorías</a></dt>
 	  <% for category in get_product_categories %>
 			<dd><a href="/product_categories/<%= category.id %>"><%= category.name %></a></dd>		
   	<% end %>
   	<% if current_user.has_rights(['admin','gerente','ventas']) %>
-  	<dt><a href="/payments">Pagos</a></dt>
+  		<dt><a href="/payments">Pagos</a></dt>
   	<% end %>
   	<% if current_user.has_rights(['admin','gerente']) %>
-		<dt><a href="/users">Usuarios</a></dt>
+			<dt><a href="/users">Usuarios</a></dt>
+		<% else %>
+			<dt><a href="/me">Mi Cuenta</a></dt>
 		<% end %>
-		<dt><a href="/logout">Salir</a></dt>
+			<dt><a href="/logout">Salir</a></dt>
 		<% end %>
 	</dl>        
         

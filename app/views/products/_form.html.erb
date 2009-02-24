@@ -4,7 +4,7 @@
 
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
-	<% if current_user.has_rights(['admin','compras','gerente']) %>
+	<% if current_user.has_rights(['admin','gerente']) %>
 		<% if mode == 'edit' %>
 			<dt> <%=link_to 'Lista', products_path, :class => 'action' %></dt>
 		<% end %>

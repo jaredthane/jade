@@ -1,7 +1,11 @@
 <% content_for :title do %><%=h @user.login %><% end %>
 <% content_for :actions do %>
-	<dt><%= link_to 'Cambiar', edit_user_path(@user) %></dt>
-	<dt><%= link_to 'Lista', users_path %></dt>
+	<% if @user==current_user or current_user.has_rights(['admin','gerente']) %>
+		<dt><%= link_to 'Cambiar', edit_user_path(@user) %></dt>
+	<% end %>
+	<% if current_user.has_rights(['admin','gerente']) %>
+		<dt><%= link_to 'Lista', users_path %></dt>
+	<% end %>
 <% end %>
 	
 	<div class="column2-unit-left">
