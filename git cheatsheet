@@ -36,5 +36,9 @@ git merge master
 To Remove file from disk and git
 git rm filename
 
+To trash uncommited changes
+git reset --hard
 
+To trash local commits
+git reset --hard origin/master
 

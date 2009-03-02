@@ -22,6 +22,7 @@ class Order < ActiveRecord::Base
 	has_many :products, :through => :lines
 	has_many :payments
 	has_many :movements
+	belongs_to :order_type
 	HUMANIZED_ATTRIBUTES = {
     :user => "Usuario",
     :ordered => "Fecha de Solicitud",
