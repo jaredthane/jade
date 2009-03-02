@@ -1,10 +1,10 @@
 
-<% case @order.order_type
-	when 'transfers' %>
+<% case @order.order_type_id
+	when 4 %>
 		<% content_for :title do %>Detalles de Transferencia #<%= @order.id %><% end %>
-	<% when 'sales' %>
+	<% when 1 %>
 		<% content_for :title do %>Detalles de Venta #<%= @order.id %><% end %>
-	<% when 'purchases' %>
+	<% when 2 %>
 		<% content_for :title do %>Detalles de Compra #<%= @order.id %><% end %>
 	<% else %>
 		<% content_for :title do %>Detalles de Pedido #<%= @order.id %><% end %>
@@ -27,7 +27,7 @@
   <b>Usuario Responsable:</b>
   <%=link_to @order.user.login, @order.user %>
 </p>
-<% if !(@order.order_type=='purchases') or (current_user.has_rights(['admin','compras','gerente'])) %>
+<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
 	<p>
 		<b>Precio Total:</b>
 		<%=h number_to_currency(@order.total_price) %>
@@ -44,7 +44,7 @@
   <b>Fecha Solicitado:</b>
   <%=h @order.created_at.to_s %>
 </p>
-<% if !(@order.order_type=='purchases') or (current_user.has_rights(['admin','compras','gerente'])) %>
+<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
 	<p>
   <b>Total Pagado:</b>
   <%=h number_to_currency(@order.amount_paid) %>
@@ -83,11 +83,11 @@
 <%= link_to 'Cambiar | ', edit_order_path(@order), :class => 'action' %>
 <%= link_to 'Lista de Productos | ', order_path(@order), :class => 'action' %>
 <%= link_to 'Pagos | ', payments_path(:search=>@order.id), :class => 'action' %>
-<% case @order_type
-	when 'sales' %>
+<% case @order_type_id
+	when 1 %>
 		<%= link_to 'Factura | ', orders_path, :class => 'action' %>
 		<%= link_to 'Lista de Ventas', sales_path, :class => 'action' %> 
-	<% when 'purchases' %>
+	<% when 2 %>
 		<%= link_to 'Lista de Compras', purchases_path, :class => 'action' %> 
 	<% else %>
 		<%= link_to 'Añadir Pago | ', new_payment_path(:order_id=>@order.id), :class => 'action' %>

@@ -1,17 +1,19 @@
 
-<% case @order.order_type
-	when 'transfers' %>
+<% case @order.order_type_id
+	when 4 %>
 		<% content_for :title do %>Detalles de Transferencia #<%= @order.id %><% end %>
-	<% when 'sales' %>
+	<% when 1 %>
 		<% content_for :title do %>Detalles de Venta #<%= @order.id %><% end %>
-	<% when 'purchases' %>
+	<% when 2 %>
 		<% content_for :title do %>Detalles de Compra #<%= @order.id %><% end %>
+	<% when 3 %>
+		<% content_for :title do %>Detalles de Consumo Interno #<%= @order.id %><% end %>
 	<% else %>
 		<% content_for :title do %>Detalles de Pedido #<%= @order.id %><% end %>
 <% end %>
 <% content_for :actions do %>
-	<% case @order.order_type
-	when 'sales' %>
+	<% case @order.order_type_id
+	when 1 %>
 		<% if current_user.has_rights(['admin','ventas','gerente']) %>
 			<dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
 			<dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
@@ -21,7 +23,7 @@
 			<dt><%= link_to 'Historia de este Pedido', order_history_path(@order), :class => 'action' %></dt>
 			<dt><%= link_to 'Pagos', payments_path(:search=>@order.id), :class => 'action' %></dt>
 		<dt><%= link_to 'Lista de Ventas', sales_path, :class => 'action' %> </dt>
-	<% when 'purchases' %>
+	<% when 2 %>
 		<% if current_user.has_rights(['admin','compras','gerente']) %>
 		
 			<dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
@@ -62,7 +64,7 @@
   <b>Usuario Responsable:</b>
   <%=link_to @order.user.login, @order.user %>
 </p>
-<% if !(@order.order_type=='purchases') or (current_user.has_rights(['admin','compras','gerente'])) %>
+<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
 	<p>
 		<b>Precio Total:</b>
 		<%=h number_to_currency(@order.total_price) %>
@@ -74,7 +76,7 @@
 <p>
   <b>Cliente:</b>
   <%=link_to @order.client.name, @order.client %><br />
-  <% if @order.order_type == 'sales' and @order.client.birthday? %>  
+  <% if @order.order_type_id == 1 and @order.client.birthday? %>  
   	<% flash[:error] = 'Este cliente esta cumpliendo anos..' %> 
   <% end %>
 </p>
@@ -82,7 +84,7 @@
   <b>Fecha Solicitado:</b>
   <%=h @order.created_at.to_s %>
 </p>
-<% if !(@order.order_type=='purchases') or (current_user.has_rights(['admin','compras','gerente'])) %>
+<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
 	<p>
   <b>Total Pagado:</b>
   <%=h number_to_currency(@order.amount_paid) %>
@@ -100,7 +102,7 @@
 			<div class="table_cell_30">Producto</div>
 			<div class="table_cell_10">Cantidad</div>
 			<div class="table_cell_15">Numero de Serie</div>
-			<% if !(@order.order_type=='purchases') or (current_user.has_rights(['admin','compras','gerente'])) %>
+			<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
 				<div class="table_cell_15">Precio<br />(Garantía) </div>
 			<% end %>
 			<div class="table_cell_15">Garantía Expira</div>
@@ -119,7 +121,7 @@
 				<% else %>
 					<div class="table_cell_15">N/A</div>
 				<% end %>
-				<% if !(@order.order_type=='purchases') or (current_user.has_rights(['admin','compras','gerente'])) %>
+				<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
 					<div class="table_cell_15"><%=h number_to_currency(line.price) %>
 						<% if (line.warranty_price || 0) > 0 %>
 							<br />(<%= number_to_currency(line.warranty_price) %>)

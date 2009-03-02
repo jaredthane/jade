@@ -1,30 +1,36 @@
 <% content_for :actions do %>
-	<% case @order_type when 'purchases' %>
+	<% case @order_type_id when 2 %>
 		<% if current_user.has_rights(['admin','compras','gerente']) %>
 			<dt><%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %></dt>
 		<% end %>
-	<% when 'internal'%>
+	<% when 3%>
 		<% if current_user.has_rights(['admin','compras','gerente','ventas']) %>
 			<dt><%= link_to 'Nuevo Consumo Interno', '/internal/new', :class => 'action' %></dt>
 		<% end %>	
-	<% when 'sales'%>
+	<% when 1%>
 		<% if current_user.has_rights(['admin','gerente','ventas']) %>
 			<dt><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %></dt>
 		<% end %>
-	<% when 'all' %>
-		<% if current_user.has_rights(['admin','gerente']) %>
-			<dt><%= link_to 'Nuevo Pedido', new_order_path, :class => 'action' %></dt>
+	<% when 0 %>
+		<% if current_user.has_rights(['admin','compras','gerente']) %>
+			<dt><%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %></dt>
+		<% end %>
+		<% if current_user.has_rights(['admin','compras','gerente','ventas']) %>
+			<dt><%= link_to 'Nuevo Consumo Interno', '/internal/new', :class => 'action' %></dt>
+		<% end %>	
+		<% if current_user.has_rights(['admin','gerente','ventas']) %>
+			<dt><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %></dt>
 		<% end %>
 	<% end %>
 <% end %>
 
-<% case @order_type when 'purchases' %>
+<% case @order_type_id when 2 %>
 		<% content_for :title do %>Lista de Compras en <%= current_user.location.name %><% end %>
-	<% when 'sales'%>
+	<% when 1%>
 		<% content_for :title do %>Lista de Ventas en <%= current_user.location.name %><% end %>
-	<% when 'internal'%>
+	<% when 3%>
 		<% content_for :title do %>Lista de Consumos Internos de <%= current_user.location.name %><% end %>
-	<% when 'all' %>
+	<% when 0 %>
 		<% content_for :title do %>Lista de Pedidos en <%= current_user.location.name %><% end %>
 <% end %>
 

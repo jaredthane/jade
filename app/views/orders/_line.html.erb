@@ -6,6 +6,7 @@
 		<div class="table_row">
 			<% if !line.received or line.new_record? %>
 				<div class="table_cell_30">
+					<%= line_form.hidden_field :order_type_id %>
 					<%= link_to line.product.name, line.product %>
 					<%= line_form.hidden_field :product_id, :value => line.product.id %>
 				</div>

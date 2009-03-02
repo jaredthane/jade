@@ -6,7 +6,7 @@ credit
 ------------------------ This Version -------------------------------
 ================= Bugs:  =======================================
 
-
+make sure all order types are considered in orders views
 
 ================= Features:   =======================================
 print upc's

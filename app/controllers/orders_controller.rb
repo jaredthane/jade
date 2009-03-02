@@ -190,7 +190,7 @@ class OrdersController < ApplicationController
   # GET /orders/show_batch.xml
   def show_batch
 		@orders = Order.search_batch(params[:search], params[:page])
-		@order_type	= 'purchases'
+		@order_type_id	= 2
 		respond_to do |format|
       format.html {render :template=> "/orders/index"}
       format.xml  { render :xml => @orders }
@@ -200,7 +200,7 @@ class OrdersController < ApplicationController
   # GET /orders/1.xml
   def show
     @order = Order.find(params[:id])
-		return false if !allowed(@order.order_type, 'view')
+		return false if !allowed(@order.order_type_id, 'view')
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @order }
@@ -208,7 +208,7 @@ class OrdersController < ApplicationController
   end
 	def show_history
     @order = Order.find(params[:id])
-		return false if !allowed(@order.order_type, 'view')
+		return false if !allowed(@order.order_type_id, 'view')
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @order }
@@ -219,8 +219,8 @@ class OrdersController < ApplicationController
   # GET /orders/new.xml
   def new
     @order = Order.new
-		@order_type = params[:order_type] || 'all'
-		return false if !allowed(params[:order_type], 'edit')
+		@order_type_id = params[:order_type_id] || 0
+		return false if !allowed(params[:order_type_id], 'edit')
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @order }
@@ -245,14 +245,14 @@ class OrdersController < ApplicationController
   # GET /orders/1/edit
   def edit
     @order = Order.find(params[:id])
-    return false if !allowed(@order.order_type, 'edit')
+    return false if !allowed(@order.order_type_id, 'edit')
   end
 
   # POST /orders
   # POST /orders.xml
   def create
     @order = Order.new(params["order"])
-    return false if !allowed(@order.order_type, 'edit')
+    return false if !allowed(@order.order_type_id, 'edit')
     respond_to do |format|
       if @order.save
       	list= params['new_lines'] || []
@@ -285,7 +285,7 @@ class OrdersController < ApplicationController
   # PUT /orders/1.xml
   def update
     @order = Order.find(params[:id])
-    return false if !allowed(@order.order_type, 'edit')
+    return false if !allowed(@order.order_type_id, 'edit')
     lines_to_delete=[]
     #Update existing lines
     for l in @order.lines

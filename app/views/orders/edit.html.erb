@@ -1,12 +1,12 @@
 
-<% case @order.order_type
-	when 'transfers' %>
+<% case @order.order_type_id
+	when 3 %>
 		<% content_for :title do %>Cambiar Transferencia #<%= @order.id %><% end %>
-	<% when 'sales' %>
+	<% when 1 %>
 		<% content_for :title do %>Cambiar Venta #<%= @order.id %><% end %>
-	<% when 'purchases' %>
+	<% when 2 %>
 		<% content_for :title do %>Cambiar Compra #<%= @order.id %><% end %>
-	<% when 'internal' %>
+	<% when 4 %>
 		<% content_for :title do %>Cambiar Consumo Interno #<%= @order.id %><% end %>
 	<% else %>
 		<% content_for :title do %>Cambiar Pedido #<%= @order.id %><% end %>
