@@ -18,8 +18,8 @@ class OrdersController < ApplicationController
 	access_control [:create_batch, :create_orders, :show_batch, :new_purchase] => '(gerente | admin | compras)' 
 	access_control [:new_sale] => '(gerente | admin | ventas)'
 	access_control [:destroy] => '(admin)'
-	def allowed(order_type, action)
-		case (order_type)
+	def allowed(order_type_id, action)
+		case (order_type_id)
 		  when 'all'
 		  	if !current_user.has_rights(['admin','gerente'])
 					redirect_back_or_default('/products')
@@ -73,8 +73,8 @@ class OrdersController < ApplicationController
   # GET /orders.xml
   def index
     #@orders = Order.find(:all)
-		@order_type = params[:order_type] || 'all'
-		case @order_type
+		@order_type_id = params[:order_type_id] || 0
+		case @order_type_id
 		when 'all'
 			@orders = Order.search(params[:search], params[:page])
 		when 'sales'
@@ -86,11 +86,11 @@ class OrdersController < ApplicationController
 		end
 		if @orders.length == 1
 			@order=@orders[0]
-			return false if !allowed(@order.order_type, 'view')
+			return false if !allowed(@order.order_type_id, 'view')
 			render :action => 'show'
 			return false
 		end
-		return false if !allowed(@order_type, 'view')
+		return false if !allowed(@order_type_id, 'view')
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @orders }
@@ -98,7 +98,7 @@ class OrdersController < ApplicationController
   end
   def show_receipt
   	@receipt = Order.find(params[:id])
-  	return false if !allowed(@receipt.order_type, 'view')
+  	return false if !allowed(@receipt.order_type_id, 'view')
 		params[:format] = 'pdf'
 		if @receipt.client.entity_type.id == 2
 			prawnto :prawn => { :page_size => 'RECEIPT',
