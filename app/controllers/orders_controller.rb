@@ -61,9 +61,10 @@ class OrdersController < ApplicationController
 					end
 				end
 		  else
-		  	redirect_back_or_default('/products')
-				flash[:error] = "No tiene los derechos suficientes para esta accion"
-				return false
+#		  	redirect_back_or_default('/products')
+#				flash[:error] = "No tiene los derechos suficientes para esta accion"
+				flash[:error] = "You weren't supposed to be here"
+				return true
     end  
     return true  
 	end
