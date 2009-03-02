@@ -217,24 +217,24 @@ class Order < ActiveRecord::Base
 		self.user = User.find_by_login(name) unless name.blank?
 	end
 	
-	def order_type
-		if self.client.id==1
-			return 'internal'
-		end
-		if self.vendor.entity_type.id == 3 
-			 if self.client.entity_type.id == 3 
-				 'transfers' 
-			 else 
-				 'sales' 
-			 end 
-		else 
-			 if self.client.entity_type.id == 3 
-				 'purchases' 
-			 else 
-				 'other' 
-			 end 
-		 end
-	end
+#	def order_type
+#		if self.client.id==1
+#			return 'internal'
+#		end
+#		if self.vendor.entity_type.id == 3 
+#			 if self.client.entity_type.id == 3 
+#				 'transfers' 
+#			 else 
+#				 'sales' 
+#			 end 
+#		else 
+#			 if self.client.entity_type.id == 3 
+#				 'purchases' 
+#			 else 
+#				 'other' 
+#			 end 
+#		 end
+#	end
 	def save_lines
 		puts "saving lines"
 		lines.each do |line|
