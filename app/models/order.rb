@@ -236,6 +236,10 @@ class Order < ActiveRecord::Base
 #			 end 
 #		 end
 #	end
+for o in Order.all
+	case o.old_order_type
+		when 'transfers' 
+			o.order_type
 	def save_lines
 		puts "saving lines"
 		lines.each do |line|
