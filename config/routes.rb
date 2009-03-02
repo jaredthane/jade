@@ -50,12 +50,12 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.resources :requirements
   map.resources :orders
-  map.connect 	'purchases/new', :controller => 'orders', :action => 'new', :order_type => 'purchases'
-  map.connect 	'sales/new', :controller => 'orders', :action => 'new', :order_type => 'sales'
-  map.connect 	'internal/new', :controller => 'orders', :action => 'new', :order_type => 'internal'
-  map.purchases 'purchases/', :controller => 'orders', :order_type => 'purchases'
-  map.internal 'internal/', :controller => 'orders', :order_type => 'internal'
-  map.sales 'sales/', :controller => 'orders', :order_type => 'sales'
+  map.connect 	'purchases/new', :controller => 'orders', :action => 'new', :order_type_id => 2
+  map.connect 	'sales/new', :controller => 'orders', :action => 'new', :order_type_id => 1
+  map.connect 	'internal/new', :controller => 'orders', :action => 'new', :order_type_id => 3
+  map.purchases 'purchases/', :controller => 'orders', :order_type_id => 2
+  map.internal 'internal/', :controller => 'orders', :order_type_id => 3
+  map.sales 'sales/', :controller => 'orders', :order_type_id => 1
 
 	map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate', :activation_code => nil
 	map.new_user '/users/new', :controller => 'users', :action => 'new'
