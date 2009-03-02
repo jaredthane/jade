@@ -274,6 +274,17 @@ class Order < ActiveRecord::Base
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
+	def self.search_by_rights(search, page)
+		search=search||''
+		conditions = "vendors.name like '%" + search + "%' OR clients.name like '%" + search + "%' OR orders.id like '%" + search + "%') AND (vendors.id=" + User.current_user.location_id.to_s + " OR clients.id =" + User.current_user.location_id.to_s
+		conditions += ' AND order_type_id != 2' if !User.current_user.has_rights(['admin','gerente','compras'])
+		conditions += ' AND order_type_id != 1' if !User.current_user.has_rights(['admin','gerente','ventas'])
+		conditions += ' AND order_type_id != 3' if !User.current_user.has_rights(['admin','gerente','compras','ventas'])
+		paginate :per_page => 20, :page => page,
+						 :conditions => conditions,
+						 :order => 'created_at desc',
+						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
+	end
 	def self.search_sales(search, page)
 		paginate :per_page => 20, :page => page,
 						 :conditions => ['(vendors.entity_type_id = 3 and clients.name like :search) AND (vendors.id=:current_location OR clients.id=:current_location) AND (clients.id != 1)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],

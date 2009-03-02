@@ -20,13 +20,7 @@ class OrdersController < ApplicationController
 	access_control [:destroy] => '(admin)'
 	def allowed(order_type_id, action)
 		case (order_type_id)
-		  when 'all'
-		  	if !current_user.has_rights(['admin','gerente'])
-					redirect_back_or_default('/products')
-					flash[:error] = "No tiene los derechos suficientes para ver todos los pedidos"
-						return false
-		  	end
-		  when 'sales'
+		  when 1
 		  	if action=="edit"
 					if !current_user.has_rights(['admin','gerente','ventas'])
 						redirect_back_or_default('/products')
@@ -40,13 +34,13 @@ class OrdersController < ApplicationController
 						return false
 					end
 				end
-		  when 'purchases'
+		  when 2
 		  	if !current_user.has_rights(['admin','compras','gerente'])
 					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver las compras"
 						return false
 		  	end
-		  when 'internal'
+		  when 3
 		  	if action=="edit"
 					if !current_user.has_rights(['admin','gerente','gerente'])
 						redirect_back_or_default('/products')
@@ -60,11 +54,6 @@ class OrdersController < ApplicationController
 						return false
 					end
 				end
-		  else
-#		  	redirect_back_or_default('/products')
-#				flash[:error] = "No tiene los derechos suficientes para esta accion"
-				flash[:error] = "You weren't supposed to be here"
-				return true
     end  
     return true  
 	end
@@ -75,13 +64,13 @@ class OrdersController < ApplicationController
     #@orders = Order.find(:all)
 		@order_type_id = params[:order_type_id] || 0
 		case @order_type_id
-		when 'all'
-			@orders = Order.search(params[:search], params[:page])
-		when 'sales'
+		when 0
+				@orders = Order.search_by_rights(params[:search], params[:page])
+		when 1
 			@orders = Order.search_sales(params[:search], params[:page])
-		when 'purchases'
+		when 2
 			@orders = Order.search_purchases(params[:search], params[:page])
-		when 'internal'
+		when 3
 			@orders = Order.search_internal(params[:search], params[:page])
 		end
 		if @orders.length == 1
