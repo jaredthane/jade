@@ -36,7 +36,7 @@ class Line < ActiveRecord::Base
 	validates_presence_of(:product, :message => " debe ser valido")
 	attr_accessor :movements_to_create
 	attr_accessor :client_name
-	attr_accessor :order_type
+	attr_accessor :order_type_id
 	belongs_to :serialized_product
 	def set_taxes
 		self.tax = self.total_price * 0.15
@@ -159,27 +159,27 @@ class Line < ActiveRecord::Base
 		else
 			direction=-1
 		end
-		#logger.debug  "direction=" + direction.to_s + " order.order_type=" + order.order_type.to_s
-		case order.order_type
-			when 'sales'
+		#logger.debug  "direction=" + direction.to_s + " order.order_type_id=" + order.order_type_id.to_s
+		case order.order_type_id
+			when 1
 				if direction==1
 					return 1
 				else
 					return 5
 				end
-			when 'internal'
+			when 3
 				if direction==1
 					return 8
 				else
 					return 9
 				end
-			when 'purchases'
+			when 2
 				if direction==1
 					return 2
 				else
 					return 6
 				end
-			when 'transfers'
+			when 4
 				if direction==1
 					return 3
 				else
@@ -286,7 +286,7 @@ class Line < ActiveRecord::Base
 	def serial_number=(serial)
 		
 		logger.debug "serial=" + serial.to_s
-		if (!(serial == "" or serial == "\n") and (order.order_type=='purchases'))
+		if (!(serial == "" or serial == "\n") and (order.order_type_id==2))
 			logger.debug "Taking create path"
 			s=SerializedProduct.find_or_create_by_serial_number(serial)
 			if s.product_id==nil
@@ -362,21 +362,21 @@ class Line < ActiveRecord::Base
 		logger.info "found self.product_id=#{self.product_id.to_s}"
 		if self.order
 			puts "we have an order"
-			if self.order.order_type = 'sales'
-				puts self.order.order_type
+			if self.order.order_type_id = 1
+				puts self.order.order_type_id
 				self.price = self.product.price if self.product
 			else
-				puts self.order.order_type
+				puts self.order.order_type_id
 				self.price = self.product.cost if self.product
 			end
 		else
 			puts "we dont have an order"
-			puts "before again "+self.order_type.to_s
-			if self.order_type == 'sales'
-				puts self.order_type
+			puts "before again "+self.order_type_id.to_s
+			if self.order_type_id == 1
+				puts self.order_type_id
 				self.price = self.product.price(User.current_user.current_price_group,1) if self.product
 			else
-				puts self.order_type
+				puts self.order_type_id
 				self.price = self.product.cost if self.product
 			end
 		end
