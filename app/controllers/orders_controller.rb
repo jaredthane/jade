@@ -310,7 +310,7 @@ class OrdersController < ApplicationController
   		logger.debug "about to push #{new_line.inspect}"  	
   		@order.lines.push(new_line)
   	end
-		params['new_lines'].each { |l| @order.lines << Line.new(l) } if params['new_lines']
+		#params['new_lines'].each { |l| @order.lines << Line.new(l) } if params['new_lines']
 		
     params['existing_lines'].each_value  { |l| logger.debug "l['id']=" + l['id'].to_s; Line.find(l['id']).attributes = l } if params['existing_lines']
 #		for l in @order.lines
