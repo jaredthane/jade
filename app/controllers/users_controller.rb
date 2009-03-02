@@ -23,7 +23,7 @@ class UsersController < ApplicationController
 	def index
     @users = User.search(params[:search], params[:page])
 		if !current_user.has_rights(['admin','gerente'])
-			redirect_back_or_default('/')
+			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para alistar los usuarios"
 		end
     respond_to do |format|
@@ -48,7 +48,7 @@ class UsersController < ApplicationController
     @user.save
     if @user.errors.empty?
 #      self.current_user = @user
-      redirect_back_or_default('/')
+      redirect_back_or_default('/products')
       flash[:notice] = "Nuevo usuario creado exitosamente"
     else
       render :action => 'new'
@@ -64,7 +64,7 @@ class UsersController < ApplicationController
     logger.debug "current_user=#{current_user.to_s}"
     logger.debug "current_user.has_rights(['admin','gerente'])=#{current_user.has_rights(['admin','gerente']).to_s}"
 		if @user!=current_user and !current_user.has_rights(['admin','gerente'])
-			redirect_back_or_default('/')
+			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para ver otros usuarios"
 		end
     respond_to do |format|
@@ -89,7 +89,7 @@ class UsersController < ApplicationController
   def new
     @user = User.new
 		if !current_user.has_rights(['admin','gerente'])
-			redirect_back_or_default('/')
+			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para crear nuevos usuarios"
 		end
 
@@ -103,7 +103,7 @@ class UsersController < ApplicationController
   def edit
     @user = User.find(params[:id])
     if @user!=current_user and !current_user.has_rights(['admin','gerente'])
-			redirect_back_or_default('/')
+			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
 		end
   end
@@ -113,7 +113,7 @@ class UsersController < ApplicationController
   def update
     @user = User.find(params[:id])
     if @user!=current_user and !current_user.has_rights(['admin','gerente'])
-			redirect_back_or_default('/')
+			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
 		end
 

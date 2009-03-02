@@ -45,6 +45,6 @@ class SessionsController < ApplicationController
     cookies.delete :auth_token
     reset_session
     flash[:notice] = "Ha salido exitosamente"
-    redirect_back_or_default('/')
+    redirect_back_or_default('/products')
   end
 end

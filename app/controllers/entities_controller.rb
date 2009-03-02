@@ -20,37 +20,37 @@ class EntitiesController < ApplicationController
 		case (entity_type)
 		  when 'sites'
 		  	if !current_user.has_rights(['admin','compras','gerente','ventas','inventario','invitado'])
-					redirect_back_or_default('/')
+					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los sitios"
 		  	end
 		  when 'clients'
 		  	if !current_user.has_rights(['admin','gerente','ventas'])
-					redirect_back_or_default('/')
+					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los clientes"
 		  	end
 		  when 'vendors'
 		  	if !current_user.has_rights(['admin','compras','gerente'])
-					redirect_back_or_default('/')
+					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los proveedores"
 		  	end
 		  when 1
 		  	if !current_user.has_rights(['admin','compras','gerente'])
-					redirect_back_or_default('/')
+					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los proveedores"
 		  	end
 		  when 2
 		  	if !current_user.has_rights(['admin','gerente','ventas'])
-					redirect_back_or_default('/')
+					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los clientes"
 		  	end
 		  when 3
 		  	if !current_user.has_rights(['admin','compras','gerente','ventas','inventario','invitado'])
-					redirect_back_or_default('/')
+					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los sitios"
 		  	end
 		  when 5
 		  	if !current_user.has_rights(['admin','gerente','ventas'])
-					redirect_back_or_default('/')
+					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los clientes"
 		  	end
     end  
