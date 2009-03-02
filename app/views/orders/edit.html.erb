@@ -13,7 +13,7 @@
 <% end %>
 
 <%form_for @order do |f|  %>
-	<%= render :partial => 'fields', :locals => { :order_type => 'all', :f => f} %>
+	<%= render :partial => 'fields', :locals => { :order_type_id => @order.order_type_id, :f => f} %>
 <% end %>
 <br />
 <%= render :partial => 'new_line_form', :locals => { :order => @order} %>
