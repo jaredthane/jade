@@ -9,7 +9,6 @@
 
 <%= error_messages_for :order, :header_message => "Tratelo otra vez, por favor!", :message => "Habian algunas difcultades guardando los cambios al pedido:" %>
 <%= f.hidden_field :order_type_id, :value => @order_type_id %>
-:<%= order_type_id %>:
 <% case order_type_id
 	when 2 %>
 		<div class="column3-unit-left">
