@@ -97,7 +97,7 @@ class ProductsController < ApplicationController
     logger.debug "params:product:static_price= #{params[:product][:static_price].to_s}"
     logger.debug "params[:product][:relative_price]=#{params[:product][:relative_price].to_s}"
     for g in PriceGroup.all
-    	if g == current_user.current_price_group
+    	if g.entity_id == current_user.location_id
 		  	Price.create(:product_id=>@product.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price], :available => 1)
 		  else
 				Price.create(:product_id=>@product.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price], :available => 0)
