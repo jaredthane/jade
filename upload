@@ -1,3 +1,3 @@
-sudo rsync -r jared@192.168.2.95:"/home/jared/Jade\ 0.63/*" /srv/Jade
+sudo git pull
 sudo chown -R jade /srv/Jade
 sudo /etc/init.d/apache2 restart
