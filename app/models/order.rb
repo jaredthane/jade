@@ -171,7 +171,6 @@ class Order < ActiveRecord::Base
 				for l in self.lines
 					total = total + (l.total_price)
 				end
-			end
 			else
 				for l in self.lines
 					total = total + (l.total_price_with_tax)
