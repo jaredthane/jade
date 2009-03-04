@@ -32,7 +32,8 @@
 			<b>Numero de Modelo</b>
 			<%= f.text_field :model, :class => 'field' %>
 		</p>
-		<% if @mode == 'new' %>
+		
+		<% if mode == 'new' %>
 			<p>
 				<%= f.check_box :serialized, :class => 'field' %><b> Usar Numeros de Serie</b>
 			</p>
@@ -54,10 +55,11 @@
 					{:url => '/product_categories.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 		</p>
 
-		<% if @mode == 'edit' %>
+		<% if mode == 'edit' %>
 			<p>
 				<b>Costo</b><br />
 				<%= h number_to_currency(@product.cost) %>
+				<input disabled class="field" value= <%= number_to_currency(@product.cost) %> >
 			</p>	
 		<% end %>
 		
