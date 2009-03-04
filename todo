@@ -11,7 +11,7 @@ make sure all order types are considered in orders views
 ================= Features:   =======================================
 print upc's
 mark entire order as received or not received -- Javascript
-
+should be able to remove/change a line in one save
 replenish should take into consideration the orders that have been created but not yet received
 ----------------- Later Versions ----------------------------------------
 ================= Bugs: =======================================

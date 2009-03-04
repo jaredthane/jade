@@ -11,10 +11,11 @@
 	<% else %>
 		<% content_for :title do %>Cambiar Pedido #<%= @order.id %><% end %>
 <% end %>
-
+	:<%= @order.order_type_id %>:
 <%form_for @order do |f|  %>
+
 	<%= render :partial => 'fields', :locals => { :order_type_id => @order.order_type_id, :f => f} %>
 <% end %>
 <br />
-<%= render :partial => 'new_line_form', :locals => { :order => @order} %>
+<%= render :partial => 'new_line_form', :locals => { :order => @order,:order_type_id => @order_type_id} %>
 
