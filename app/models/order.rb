@@ -166,8 +166,21 @@ class Order < ActiveRecord::Base
 	###################################################################################
 	def total_price_with_tax
 		total=0
-		for l in self.lines
-			total = total + (l.total_price_with_tax)
+		if client
+			if client.entity_type_id == 2
+				for l in self.lines
+					total = total + (l.total_price)
+				end
+			end
+			else
+				for l in self.lines
+					total = total + (l.total_price_with_tax)
+				end
+			end
+		else
+			for l in self.lines
+				total = total + (l.total_price)
+			end
 		end
 		return total
 	end
