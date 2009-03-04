@@ -66,7 +66,7 @@
 
 if @receipt.client.entity_type.id == 2	# for final consumers
 	pdf.font.size = 9
-	o={:x=>-10,:y=>0}
+	o={:x=>-10,:y=>10}
 	pdf.text @receipt.client.name, :at=>[90+o[:x],310+o[:y]]
 	pdf.text @receipt.client.address, :at=>[100+o[:x],308+o[:y]]
 	pdf.text @receipt.created_at.to_date.to_s, :at=>[220+o[:x],325+o[:y]]
