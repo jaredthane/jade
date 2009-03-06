@@ -1,7 +1,15 @@
-
-
-<% content_for :title do %>Cambiar Entidad<% end %>
-
+<% case @entity.entity_type_id
+	when 1 %>
+		<% content_for :title do %>Cambiar Proveedor #<%= @entity.id %><% end %>
+	<% when 2 %>
+		<% content_for :title do %>Cambiar Consumidor Final #<%= @entity.id %><% end %>
+	<% when 3 %>
+		<% content_for :title do %>Cambiar Sitio #<%= @entity.id %><% end %>
+	<% when 5 %>
+		<% content_for :title do %>Cambiar Cliente de Credito Fiscal #<%= @entity.id %><% end %>
+	<% else %>
+		<% content_for :title do %>Cambiar Entidad #<%= @entity.id %><% end %>
+<% end %>
 <%= error_messages_for :entity %>
 
 <% form_for :entity, :url => entity_path(@entity), :html => { :method => 'put' } do |f| %>

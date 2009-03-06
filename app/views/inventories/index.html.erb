@@ -3,8 +3,8 @@
 <% content_for :actions do %>
 	<% if current_user.has_rights(['admin','compras','gerente']) %>
 		<dt><%= link_to "Generar Pedidos", '/orders/create_batch', :class => 'action' %></dt>
-		<dt><%= link_to "Dar Recomendaciones", '/products/recommend_quantities?search=' + @search, :class => 'action' %></dt>
-		<dt><%= link_to "Borrar Recomendaciones", '/products/clear_quantities?search=' + @search, :class => 'action' %></dt>
+		<dt><%= link_to "Dar Recomendaciones", 'inventories/recommend?search=' + @search, :class => 'action' %></dt>
+		<dt><%= link_to "Borrar Recomendaciones", 'inventories/clear?search=' + @search, :class => 'action' %></dt>
 	<% end %>
 	<dt><%= link_to "Cancelar Cambios", inventories_url, :class => 'action' %></dt>
 	<dt> <%= link_to 'Lista de Productos', products_url, :class => 'action' %>  </dt>
