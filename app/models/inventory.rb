@@ -43,4 +43,9 @@ class Inventory < ActiveRecord::Base
 			       :order => 'inventories.created_at DESC',
 			       :joins => 'inner join products on products.id = inventories.product_id inner join entities on entities.id = inventories.entity_id'
 	end
+	def self.search_all_wo_pagination(search, page)
+		find     :conditions => ['(products.name like :search OR products.upc like :search) AND (products.product_type_id=1)', {:search => "%#{search}%"}],
+			       :order => 'inventories.created_at DESC',
+			       :joins => 'inner join products on products.id = inventories.product_id inner join entities on entities.id = inventories.entity_id'
+	end
 end
