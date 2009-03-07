@@ -10,8 +10,8 @@ make sure all order types are considered in orders views
 users default received not getting set
 need to allow setting permissions
 need to be able to create clients on the fly
-Dar recommendaciones
 out of inventory errors not clear
+
 ================= Features:   =======================================
 print upc's
 mark entire order as received or not received -- Javascript
@@ -309,3 +309,4 @@ set rights so list users doesnt sow up on me
 change rejected message
 price quotes
 audit logs
+Dar recommendaciones

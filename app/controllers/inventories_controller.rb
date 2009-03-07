@@ -46,7 +46,7 @@ class InventoriesController < ApplicationController
 		@inventories = Inventory.search_wo_pagination(params[:search], params[:page])
 		@search = params[:search] || ""
 		for i in @inventories
-			i.to_order = 0
+			i.product.to_order = 0
 		end
 		redirect_to('/inventories?search=' + @search)
 	end
@@ -55,7 +55,7 @@ class InventoriesController < ApplicationController
 		@search = params[:search] || ""
 		for i in @inventories
 			if i.quantity < (i.min || 0)
-				i.to_order = i.max
+				i.product.to_order = i.max
 			end
 		end
 		redirect_to('/inventories?search=' + @search)
