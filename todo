@@ -10,7 +10,8 @@ make sure all order types are considered in orders views
 users default received not getting set
 need to allow setting permissions
 need to be able to create clients on the fly
-out of inventory errors not clear
+expand error messages in order.validation
+make it so line errors ("Lines is invalid") dont appear at top of orders page
 
 ================= Features:   =======================================
 print upc's
@@ -310,3 +311,4 @@ change rejected message
 price quotes
 audit logs
 Dar recommendaciones
+out of inventory errors not clear

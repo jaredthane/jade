@@ -43,7 +43,7 @@ class Order < ActiveRecord::Base
 	belongs_to :client, :class_name => "Entity", :foreign_key => 'client_id'
 	validates_presence_of(:vendor, :message => "debe ser valido")
 	validates_presence_of(:client, :message => "debe ser valido")
-	validates_associated :lines
+	#validates_associated :lines
 	belongs_to :user
 	validates_presence_of(:user, :message => "debe ser valido")
 	

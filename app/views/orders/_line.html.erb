@@ -1,6 +1,7 @@
 
 <div class="line">
-	<%= error_messages_for :line %>
+	<% @line= line %>
+	<%= error_messages_for :line, :class => "lineErrorExplanation",:id => "lineErrorExplanation", :object_name => "", :header_message => "", :message => "" %>
 	<% prefix = line.new_record? ? 'new_lines' : 'existing_lines' %>
   <% fields_for "#{prefix}[]", line do |line_form| %>
 		<div class="table_row">

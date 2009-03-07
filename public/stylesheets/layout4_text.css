@@ -185,12 +185,13 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .contactform input.button:hover {cursor: pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:#96c09c;}
 
 /* Errors */
-.fieldWithErrors {  padding: 2px;  background-color: red;  display: table;}
-#errorExplanation {  width: 600;  border: 2px solid red;  padding: 7px;  padding-bottom: 12px;  margin-bottom: 20px;  background-color: #f0f0f0;}
-#errorExplanation h2 {  text-align: left;  font-weight: bold;  padding: 5px 5px 5px 15px;  font-size: 12px;  margin: -7px;  background-color: #c00;  color: #fff;}
+.fieldWithErrors {  padding: 2px;  background-color: #ff6666;  display: table;}
+#errorExplanation {  width: 600;  border: 2px solid #ff6666;  padding: 7px;  padding-bottom: 0px;   margin-bottom: 20px;  background-color: #f0f0f0;}
+#errorExplanation h2 {  text-align: left;  font-weight: bold;  padding: 5px 5px 5px 15px;  font-size: 12px;  margin: -7px;  background-color: #ff6666;  color: #fff;}
 #errorExplanation p {  color: #333;  margin-bottom: 0; padding: 5px;}
-#errorExplanation ul li {  font-size: 12px;  list-style: square;  margin-left: 50px;}
-
+#errorExplanation ul {  font-size: 12px;  list-style: square;  margin-left: 50px;margin-top: 20px;}
+#errorExplanation li {  font-size: 12px;  list-style: square;  }
+.main-content .lineErrorExplanation {background-color: #ff6666 ;color: white;  margin-bottom: 0; padding: 1px;}
 /* MAIN SUBCONTENT */
 .main-subcontent h1 {clear:both; margin:0 0 10px 0; padding:4px 10px 3px 10px; background-color:#7cb4a9; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
 .main-subcontent h1.green {clear:both; margin:0 0 5px 0; padding:4px 10px 3px 10px; background-color:rgb(160,214,81); font-family:"trebuchet ms",verdana,arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}

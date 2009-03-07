@@ -7,7 +7,8 @@
 	<dt><%= link_to 'Cancelar', orders_url, :class => 'action' %></dt>
 <% end %>
 
-<%= error_messages_for :order, :header_message => "Tratelo otra vez, por favor!", :message => "Habian algunas difcultades guardando los cambios al pedido:" %>
+<%= error_messages_for :order, :header_message => "Surgieron los siguentes dificultades guardando los cambios al pedido:", :message => "" %>
+
 <%= f.hidden_field :order_type_id, :value => @order_type_id %>
 <% case order_type_id
 	when 2 %>

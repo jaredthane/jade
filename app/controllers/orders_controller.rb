@@ -245,6 +245,7 @@ class OrdersController < ApplicationController
     respond_to do |format|
       if @order.save
       	list= params['new_lines'] || []
+      	errors=false
       	for l in list
       		new_line = Line.new(:order_id=>@order.id)
       		#new_line.product_name = l[:product_name]  		
@@ -253,17 +254,27 @@ class OrdersController < ApplicationController
   				#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])
       		#logger.debug "product id:   ->" + l[:product_name]
       		logger.debug "new_line.warranty.to_s before=" + new_line.warranty.to_s.to_s
-      		new_line.update_attributes(l)
+      		errors= true if !new_line.update_attributes(l)
       		logger.debug "new_line.warranty.to_s= after" + new_line.warranty.to_s.to_s
       		@order.lines << new_line
       	end
-        flash[:notice] = 'Pedido ha sido creado exitosamente.'
+      else
+      	errors = true
+      end
+      if !errors
+      	flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { redirect_to(@order) }
         format.xml  { render :xml => @order, :status => :created, :location => @order }
       else
       	#logger.debug "unable to save new order"
 				#@order.errors.each {|e| #logger.debug e.to_s}
-				#@order.lines.errors.each {|e| #logger.debug e.to_s}
+				#@order.lines.errors.each {@order.errors << error}
+				@order.errors.each do |error|
+					logger.debug "error[0]=#{error[0].to_s}"
+					if error[0] == "lines"
+						errors.delete(error)
+					end
+				end
         format.html { render :action => "new" }
         format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
       end
@@ -312,7 +323,7 @@ class OrdersController < ApplicationController
   	end
 		#params['new_lines'].each { |l| @order.lines << Line.new(l) } if params['new_lines']
 		
-    params['existing_lines'].each_value  { |l| logger.debug "l['id']=" + l['id'].to_s; Line.find(l['id']).attributes = l } if params['existing_lines']
+    #params['existing_lines'].each_value  { |l| logger.debug "l['id']=" + l['id'].to_s; Line.find(l['id']).attributes = l } if params['existing_lines']
 #		for l in @order.lines
 #			logger.debug "l=#{l.inspect}"
 #		end

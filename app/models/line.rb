@@ -51,15 +51,16 @@ class Line < ActiveRecord::Base
 				case self.last_change_type	# check inventory levels
 					when 1 # Venta     
 						#logger.debug  "validating Venta"
-						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.vendor.inventory(self.product)
+						qty=order.vendor.inventory(self.product)
+						errors.add " ","Solo hay " + qty.to_s + " " + self.product.unit.name + " del producto " + self.product.name + " en el inventario"  if self.quantity > qty
 						logger.debug  "self.serialized_product=" + self.serialized_product.to_s if self.serialized_product
 						if self.product.serialized
 							if self.serialized_product
 									#logger.debug  "self.serialized_product.location.id=" + self.serialized_product.location.id.to_s
 									logger.debug  "@order.vendor.id=" + @order.vendor.id.to_s
-									errors.add "Este numero de serie no esta disponible en este sitio" if self.serialized_product.location != @order.vendor
+									errors.add "El numero de serie " + self.serialized_product.serial_number + " no esta disponible en este sitio" if self.serialized_product.location != @order.vendor
 							else
-								errors.add "Este numero de serie no se encuentra en el registro"
+								errors.add "El numero de serie " + self.serialized_product.serial_number + " no se encuentra en el registro"
 							end
 						end
 						# Serial number should exist, and be in vendors location
