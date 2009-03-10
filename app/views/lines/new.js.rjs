@@ -4,4 +4,7 @@ if @order_type_id == '5'
 else
 	page.insert_html :bottom, :lines, :partial => 'orders/line', :collection => @lines
 end
-page.select(".serial").last.focus()
+page.call 'select_serial'
+#page.function { |f| f[:serial].select $$(".serial").last().focus();}
+
+#page.select(".serial").last.focus()

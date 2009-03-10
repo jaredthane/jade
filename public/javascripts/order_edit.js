@@ -20,6 +20,9 @@ function disableEnterKey(e){
       	return true;
      }
 }
+function select_serial(){
+	$$(".serial").last().select(); 
+}
 Event.addBehavior({
 	'body' : function() {
 		$('add_new_line').hide();

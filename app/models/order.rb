@@ -221,11 +221,33 @@ class Order < ActiveRecord::Base
 	# Receives a string and sets the client_id for the product to the entity with that name
 	###################################################################################
 	def client_name=(name)
-		self.client = Entity.find_by_name(name) unless name.blank?
+		logger.debug "saving order"
+		if !name.blank?
+			logger.debug "self.order_type_id=#{self.order_type_id.to_s}"
+			if self.order_type_id == 1
+				logger.debug "saving sale"
+				find = Entity.find_all_by_name(name)
+				if find.length > 0
+					logger.debug "client was found"
+					self.client = find[0]
+				else
+					logger.debug "client was not found"
+					self.client = Entity.create(:entity_type_id => 2,:name=> name, :price_group_name_id =>User.current_user.price_group_name_id, :user_id =>User.current_user.id, :state_id => 12)
+				end
+			else
+				self.client = Entity.find_by_name(name)
+			end
+		end
 	end
+	###################################################################################
+	# Returns the name of the user as a string
+	###################################################################################
 	def user_name
 		user.login if user
 	end
+	###################################################################################
+	# Receives a string and sets the user_id for the product to the user with that name
+	###################################################################################
 	def user_name=(name)
 		self.user = User.find_by_login(name) unless name.blank?
 	end
