@@ -1,0 +1,44 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "order_edit" %>
+<% end %>
+<% content_for :actions do %>
+	<dt><%= link_to 'Remover', @count, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+	<dt><%= link_to 'Cancelar', physical_counts_url, :class => 'action' %></dt>
+<% end %>
+
+<%= error_messages_for :count, :header_message => "Surgieron los siguentes dificultades guardando los cambios a la cuenta fisica:", :message => "" %>
+<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
+<%= f.hidden_field :order_type_id, :value => 5 %>
+
+<div class="column3-unit-right">
+	<p>
+		<b>Fecha de Pedido</b><br />
+		<%= f.date_select :ordered %>
+	</p>
+	<%= f.hidden_field :user_id, :value => current_user.id %>
+</div>
+
+<hr class="clear-contentunit" />
+
+<div>
+	<div class="table_header_row">
+		<div class="table_cell_15">UPC</div>	
+		<div class="table_cell_30">Producto</div>
+		<div class="table_cell_10">Cantidad</div>
+		<div class="table_cell_10">Cuenta</div>
+		<div class="table_cell_20">Num de Serie</div>
+		<div class="table_cell">Acciones</div>
+	</div>
+	<div id="lines">
+		<%= render :partial => 'physical_counts/line', :collection => @count.lines %>
+	</div>
+	<div id="lines_errors"></div>
+	<%= link_to "Añadir otro producto o numero de serie | ", new_line_path(:order_id => @count.id), :id => "add_new_line", :class => 'action'  %>	  
+</div>
+<p>
+  <b>Comentarios para los Movimientos</b><br />
+  <%= f.text_area :comments, :class => 'comments' %>
+</p>
+<%= f.submit "Guardar Cuenta Fisica", :class => 'action' %>
+
+	

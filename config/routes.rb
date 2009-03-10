@@ -7,7 +7,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :prices
 	map.resources :discounts
 	map.resources :combos
-
+	map.resources :physical_counts, :order_type_id => 5
 	map.my_clients 'entities/my_clients', :controller => 'entities', :action => 'my_clients'
   map.resources :entities
   map.connect 'vendors.js', :controller => 'entities', :entity_type => 'vendors', :format =>'js'

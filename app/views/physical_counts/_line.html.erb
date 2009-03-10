@@ -1,0 +1,38 @@
+<div class="line">
+	<% @line= line %>
+	<%= error_messages_for :line, :class => "lineErrorExplanation",:id => "lineErrorExplanation", :object_name => "", :header_message => "", :message => "" %>
+	<% prefix = line.new_record? ? 'new_lines' : 'existing_lines' %>
+  <% fields_for "#{prefix}[]", line do |line_form| %>
+		<div class="table_row">
+			<div class="table_cell_15">
+				<%= link_to line.product.upc, line.product %>
+			</div>
+			<div class="table_cell_30">
+				<%= link_to line.product.name, line.product %>
+				<%= line_form.hidden_field :product_id, :value => line.product.id %>
+			</div>
+			<%= line_form.hidden_field :order_type_id, :value => 5 %>
+			
+			<% if line.product.serialized %>
+				<div class="table_cell_10"><%= h line.quantity %></div>	
+				<div class="table_cell_10"><%= h line.quantity %></div>	
+				<%= line_form.hidden_field :quantity, :value => 1 %>
+			<% else %>		
+				<div class="table_cell_10"><%= h line.product.quantity %></div>	
+				<div class="table_cell_10"><%= line_form.text_field :quantity, :id => 'serial', :class => 'serial' %></div>	
+			<% end %>
+			<%= line_form.hidden_field :id %>
+			
+			<% if line.product.serialized %>
+				<div class="table_cell_20"><%= line_form.text_field :serial_number, :id => 'serial', :class => 'serial' %></div>
+			<% else %>
+				<div class="table_cell_20"></div>
+			<% end %>
+			
+			<div class="table_cell"><%= link_to_function "Remover", "$(this).up().up().remove()" %></div>
+
+		</div>
+	<% end %>
+</div>
+
+

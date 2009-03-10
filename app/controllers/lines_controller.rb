@@ -66,11 +66,12 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.xml
   def new
- 		puts 'creating new line'
+# 		puts 'creating new line'
 #  	puts params[:line][:order_type_id]
+#  	puts "---------"
 #  	puts params[:line][:client_name]
-  	
-    if params[:line][:order_type_id]==1
+  	@order_type_id = params[:line][:order_type_id] || 0
+    if @order_type_id == 1
     	@client=Entity.find_by_name(params[:line][:client_name])
     	if @client
 	    	current_user.price_group_name_id = @client.price_group_name_id
@@ -78,7 +79,7 @@ class LinesController < ApplicationController
     end
     
 		@lines=[]
-		add_product_or_combo(@lines, params[:line][:bar_code], 1, params[:line][:order_type_id])
+		add_product_or_combo(@lines, params[:line][:bar_code], 1, @order_type_id)
 		if @lines.length > 0
 			logger.debug "default received =" + current_user.default_received.to_s
 			respond_to do |wants|

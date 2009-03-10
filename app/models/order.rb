@@ -315,6 +315,12 @@ class Order < ActiveRecord::Base
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id"
 	end
+	def self.search_physical_counts(search, page)
+		paginate :per_page => 20, :page => page,
+						 :conditions => ['(location.id=:current_location) AND (orders.order_type_id = 5)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+						 :order => 'created_at desc',
+						 :joins => "inner join entities as location on location.id = orders.vendor_id"
+	end
 	def self.search_batch(search, page)
 		paginate :per_page => 20, :page => page,
 						 :conditions => ['(last_batch=True) AND (vendors.name like :search OR clients.name like :search OR orders.id like :search) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],

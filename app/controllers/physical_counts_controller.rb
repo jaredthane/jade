@@ -17,21 +17,21 @@
 
 class PhysicalCountsController < ApplicationController
 	def index
-		@count = PhysicalCount.search(params[:search], params[:page])
+		@counts = Order.search_physical_counts(params[:search], params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @count }
     end
   end
   def show
-    @count = PhysicalCount.find(params[:id])
+    @count = Order.find(params[:id])
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @count }
     end
   end
   def new
-    @count = PhysicalCount.new
+    @count = Order.new(:order_type_id => 5)
     @count.user = current_user
     respond_to do |format|
       format.html # new.html.erb
@@ -39,10 +39,10 @@ class PhysicalCountsController < ApplicationController
     end
   end
   def edit
-    @count = PhysicalCount.find(params[:id])
+    @count = Order.find(params[:id])
   end
   def create
-    @count = PhysicalCount.new(params[:count])
+    @count = Order.new(params[:count])
     respond_to do |format|
       if @count.save
         flash[:notice] = 'Cuenta Fisica ha sido creado exitosamente.'
@@ -55,7 +55,7 @@ class PhysicalCountsController < ApplicationController
     end
   end
   def update
-    @count = PhysicalCount.find(params[:id])
+    @count = Order.find(params[:id])
 
     respond_to do |format|
       if @count.update_attributes(params[:count])
@@ -69,7 +69,7 @@ class PhysicalCountsController < ApplicationController
     end
   end
   def destroy
-    @count = PhysicalCount.find(params[:id])
+    @count = Order.find(params[:id])
     @count.destroy
 
     respond_to do |format|
@@ -78,7 +78,7 @@ class PhysicalCountsController < ApplicationController
     end
   end
   def submit
-    @count = PhysicalCount.find(params[:id])
+    @count = Order.find(params[:id])
 
     respond_to do |format|
       if @count.update_attributes(params[:count])

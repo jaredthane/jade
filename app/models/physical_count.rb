@@ -17,7 +17,7 @@
 # Filters added to this controller apply to all controllers in the application.
 # Likewise, all the methods added will be available for all controllers.
 
-class PhysicalCount < ActiveRecord::Base
+class PhysicalaCount < ActiveRecord::Base
 	belongs_to :entity
 	belongs_to :user
 	has_many :physical_count_lines
