@@ -60,8 +60,9 @@ class EntitiesController < ApplicationController
 		@user_id = User.current_user.id
 		@entity_type = 'clients'
     return false if !allowed('clients')
+    @search = (params[:search]||'') + (params[:filter]||'')
 #    puts "entity type = " + @entity_type
-    @entities = Entity.search(params[:search], params[:page], @entity_type, @user_id)
+    @entities = Entity.search(@search, params[:page], @entity_type, @user_id)
     if @entities.length == 1
 			@entity=@entities[0]
 			render :action => 'show'
