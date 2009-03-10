@@ -84,7 +84,7 @@ class EntitiesController < ApplicationController
       format.html {
 		    if @entities.length == 1
 					@entity=@entities[0]
-					render :action => 'show'
+					redirect_to(entity_url(@entity.id))
 					return false
 				end
       }
@@ -110,6 +110,11 @@ class EntitiesController < ApplicationController
 		return if !allowed(@entity.entity_type_id || 'entities')
 		if @entity_type == 3
 			current_user.location_id = params[:id]
+			current_user.save
+		end
+		logger.debug "@entity.entity_type_id=#{@entity.entity_type_id.to_s}"
+		if @entity.entity_type_id == 2 or @entity.entity_type_id == 5
+			current_user.price_group_name_id = @entity.price_group_name_id
 			current_user.save
 		end
 		logger.debug "@entity_type=#{@entity_type.to_s}"
