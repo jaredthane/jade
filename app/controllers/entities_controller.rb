@@ -73,6 +73,40 @@ class EntitiesController < ApplicationController
       format.js
     end
 	end
+	def my_end_users
+		@user_id = User.current_user.id
+		@entity_type = 'end_users'
+    return false if !allowed('clients')
+#    puts "entity type = " + @entity_type
+    @entities = Entity.search(params[:search], params[:page], @entity_type, @user_id)
+    if @entities.length == 1
+			@entity=@entities[0]
+			render :action => 'show'
+			return false
+		end
+    respond_to do |format|
+      format.html { render :action => 'index' }
+      format.xml  { render :xml => @entities }
+      format.js
+    end
+	end
+	def my_cedito_fiscal
+		@user_id = User.current_user.id
+		@entity_type = 'wholesale_clients'
+    return false if !allowed('clients')
+#    puts "entity type = " + @entity_type
+    @entities = Entity.search(params[:search], params[:page], @entity_type, @user_id)
+    if @entities.length == 1
+			@entity=@entities[0]
+			render :action => 'show'
+			return false
+		end
+    respond_to do |format|
+      format.html { render :action => 'index' }
+      format.xml  { render :xml => @entities }
+      format.js
+    end
+	end
   # GET /entities
   # GET /entities.xml
   def index
