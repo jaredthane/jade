@@ -209,6 +209,9 @@ class OrdersController < ApplicationController
   def new
     @order = Order.new
 		@order_type_id = params[:order_type_id] || 0
+		if @order_type_id == 1
+			@order.client_id = 1213
+		end
 		return false if !allowed(params[:order_type_id], 'edit')
     respond_to do |format|
       format.html # new.html.erb

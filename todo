@@ -14,6 +14,7 @@ expand error messages in order.validation
 make it so line errors ("Lines is invalid") dont appear at top of orders page
 
 ================= Features:   =======================================
+allow changing quantities and removing without specificly marking as received
 un boton disponible aqui on products edit page
 print upc's
 mark entire order as received or not received -- Javascript
