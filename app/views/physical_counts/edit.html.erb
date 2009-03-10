@@ -1,6 +1,6 @@
 <% content_for :title do %>Cambiar Cuenta Fisica #<%= @count.id %><% end %>
-<%form_for @order do |f|  %>
-	<%= render :partial => 'fields', :locals => { :order_type_id => @order.order_type_id, :f => f} %>
+<%form_for @count do |f|  %>
+	<%= render :partial => 'fields', :locals => { :order_type_id => @count.order_type_id, :f => f} %>
 <% end %>
 <br />
-<%= render :partial => 'new_line_form', :locals => { :order => @order,:order_type_id => @order_type_id} %>
+<%= render :partial => 'new_line_form', :locals => { :order => @count,:order_type_id => @order_type_id} %>

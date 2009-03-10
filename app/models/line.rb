@@ -249,6 +249,7 @@ class Line < ActiveRecord::Base
 			
 			if self.received == nil
 				self.received=Time.now
+				self.previous_qty = self.product.quantity
 				create_movement
 			end
 		else
