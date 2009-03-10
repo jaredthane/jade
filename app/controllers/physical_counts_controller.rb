@@ -41,12 +41,30 @@ class PhysicalCountsController < ApplicationController
   def edit
     @count = Order.find(params[:id])
   end
+
   def create
-    @count = Order.new(params[:count])
+  	@count = Order.new(:order_type_id => params[:count][:order_type_id])
+    @count.attributes = params[:count]
     respond_to do |format|
       if @count.save
+      	list= params['new_lines'] || []
+      	errors=false
+      	for l in list
+      		new_line = Line.new(:order_id=>@count.id)
+      		#new_line.product_name = l[:product_name]  		
+      		new_line.product_id = l[:product_id]  	
+  				new_line.quantity = l[:quantity]  
+  				#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])
+      		#logger.debug "product id:   ->" + l[:product_name]
+      		errors= true if !new_line.update_attributes(l)
+      		@count.lines << new_line
+      	end
+      else
+      	errors = true
+      end
+      if !errors
         flash[:notice] = 'Cuenta Fisica ha sido creado exitosamente.'
-        format.html { redirect_to(@count.order) }
+        format.html { redirect_to(physical_count_url(@count)) }
         format.xml  { render :xml => @count, :status => :created }
       else
         format.html { render :action => "new" }

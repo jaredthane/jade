@@ -189,6 +189,10 @@ class OrdersController < ApplicationController
   # GET /orders/1.xml
   def show
     @order = Order.find(params[:id])
+    if @order.order_type_id == 5
+    	redirect_to(physical_count_url(params[:id]))
+    	return false
+    end
 		return false if !allowed(@order.order_type_id, 'view')
     respond_to do |format|
       format.html # show.html.erb

@@ -2,7 +2,7 @@
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "line_edit" %>
 <% end %>
-
+<% @order = @count if @count %>
 <%= line_form.hidden_field(:order_id, :value=> @order_id) %>
 <div id=non_js_fields>
 	<p>

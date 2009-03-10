@@ -186,6 +186,8 @@ class Line < ActiveRecord::Base
 				else
 					return 7			
 				end
+			when 5
+				return 4
 			else
 				return 4
 		end		
@@ -201,7 +203,7 @@ class Line < ActiveRecord::Base
 				create_movement_for(order.client_id, 3, self.quantity)
 				create_movement_for(order.vendor_id, 3, -self.quantity)
 			when 4
-				create_movement_for(order.vendor_id, 4, self.quantity)
+				create_movement_for(order.vendor_id, 4, self.quantity-self.product.quantity)
 			when 5
 				create_movement_for(order.vendor_id, 5, self.quantity)
 			when 6
