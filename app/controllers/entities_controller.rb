@@ -187,15 +187,17 @@ class EntitiesController < ApplicationController
 
     respond_to do |format|
       if @entity.save
-      	for p in Product.all
-      		i=Inventory.create(:entity=>@entity, :product=>p, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
-      	end      	
-      	puts "creating entity workd"
+      	if entity_type_id == 3
+		    	for p in Product.all
+		    		i=Inventory.create(:entity=>@entity, :product=>p, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
+		    	end  
+		    end    	
+#      	puts "creating entity workd"
         flash[:notice] = 'Entidad ha sido creado exitosamente.'
         format.html { redirect_to(entities_url) }
         format.xml  { render :xml => @entity, :status => :created, :location => @entity }
       else
-      	puts "creating entity didnt workd"
+#      	puts "creating entity didnt workd"
         format.html { render :action => "new" }
         format.xml  { render :xml => @entity.errors, :status => :unprocessable_entity }
       end

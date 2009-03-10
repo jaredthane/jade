@@ -243,7 +243,8 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.xml
   def create
-    @order = Order.new(params["order"])
+    @order = Order.new(:order_type_id => params["order"]["order_type_id"])
+    @order.attributes = params["order"]
     return false if !allowed(@order.order_type_id, 'edit')
     respond_to do |format|
       if @order.save
