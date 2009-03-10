@@ -1,3 +1,6 @@
 page.replace_html 'lines_errors', ""
 page.insert_html :bottom, :lines, :partial => 'orders/line', :collection => @lines
-page.select(".serial").last.focus()
+page.call 'select_serial'
+#page.function { |f| f[:serial].select }
+
+#page.select(".serial").last.focus()
