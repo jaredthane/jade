@@ -21,7 +21,7 @@ function disableEnterKey(e){
      }
 }
 function select_serial(){
-	$('serial').select(); 
+	$$(".serial").last().select(); 
 }
 Event.addBehavior({
 	'body' : function() {
