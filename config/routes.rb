@@ -9,6 +9,8 @@ ActionController::Routing::Routes.draw do |map|
 	map.resources :combos
 	map.resources :physical_counts, :order_type_id => 5
 	map.my_clients 'entities/my_clients', :controller => 'entities', :action => 'my_clients'
+	map.my_end_users 'entities/my_end_users', :controller => 'entities', :action => 'my_clients', :filter => 'consumidor final'
+	map.my_cedito_fiscal 'entities/my_cedito_fiscal', :controller => 'entities', :action => 'my_cedito_fiscal'
   map.resources :entities
   map.connect 'vendors.js', :controller => 'entities', :entity_type => 'vendors', :format =>'js'
   map.vendors 'vendors/', :controller => 'entities', :entity_type => 'vendors'

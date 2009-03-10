@@ -133,7 +133,7 @@ class Entity < ActiveRecord::Base
   def nit_number=(number)
   	self.nit=strip(number, ['-',' '])
   end
-  def self.search(search, page, entity_type='all', user_id=0)
+  def self.search(search, page, entity_type='all', user_id=0, filter='')
   	#puts "search=" + search
   	search = search || ""
   	#puts "search=" + search
