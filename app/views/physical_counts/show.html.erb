@@ -1,0 +1,71 @@
+<% content_for :title do %>Detalles de Cuenta Fisica #<%= @count.id %><% end %>
+<% content_for :actions do %>
+	<% if current_user.has_rights(['admin','inventario','gerente']) %>
+		<dt><%= link_to 'Cambiar', edit_physical_count_path(@count), :class => 'action' %></dt>
+		<dt><%= link_to 'Nueva Cuenta Fisica', '/physical_counts/new', :class => 'action' %></dt>
+	<% end %>
+<% end %>
+<div class="column2-unit-left">
+	<p>
+		<b>Fecha Aplicado:</b>
+		<% if @count.received != nil %>
+			<%=h @count.received.to_date.to_s(:long) %>
+		<% end %>
+	</p>
+
+
+</div>
+<div class="column2-unit-right">
+	<p>
+		<b>Usuario Responsable:</b>
+		<%=link_to @count.user.login, @count.user %>
+	</p>
+</div>
+<hr class="clear-contentunit" />
+<p>
+	<b>Productos:</b>
+	<div>
+		<div class="table_header_row">
+			<div class="table_cell_30">Producto</div>
+			<% if @count.received != nil %>
+				<div class="table_cell_10">Cantidad Anterior</div>
+			<% else %>
+				<div class="table_cell_10">Cantidad Actual</div>
+			<% end %>
+				<div class="table_cell_10">Cuenta</div>
+			<div class="table_cell_15">Numero de Serie</div>
+			<% if !(@count.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
+				<div class="table_cell_15">Valor de Differencia</div>
+			<% end %>
+			<div class="table_cell">Aplicado</div>
+		</div>
+		<% for line in @count.lines %>
+			<div class="table_row">
+				<div class="table_cell_30"><%=link_to line.product.name, line.product %></div>
+				<% if line.received %>
+					<div class="table_cell_10"><%=h line.previous_qty %></div>
+				<% else %>
+					<div class="table_cell_10"><%=h line.product.quantity %></div>
+				<% end %>
+				<div class="table_cell_10"><%=h line.quantity %></div>
+				<% if line.product.serialized %>
+					<% if line.serialized_product %>
+						<div class="table_cell_15"><%=link_to line.serial_number, line.serialized_product %></div>
+					<% else %>
+						<div class="table_cell_15"><%=h line.serial_number %></div>
+					<% end %>
+				<% else %>
+					<div class="table_cell_15">N/A</div>
+				<% end %>
+				<% if !(@count.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
+					<% if line.received %>
+						<div class="table_cell_15"><%=h number_to_currency(line.price) %></div>
+					<% else %>
+						<div class="table_cell_15"><%=h number_to_currency((line.product.cost||0) * ((line.quantity||0) - (line.product.quantity||0))) %></div>
+					<% end %>
+				<% end %>
+				<div class="table_cell"><% if line.received %><%=h line.received.to_date.to_s %><% end %></div>
+			</div>
+		<% end %>
+	</div>
+</p>
