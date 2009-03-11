@@ -15,7 +15,6 @@
 			
 			<% if line.product.serialized %>
 				<div class="table_cell_10"><%= h line.quantity %></div>	
-				<div class="table_cell_10"><%= h line.quantity %></div>	
 				<%= line_form.hidden_field :quantity, :value => 1 %>
 			<% else %>		
 				<div class="table_cell_10"><%= h line.product.quantity %></div>	
@@ -29,7 +28,11 @@
 				<div class="table_cell_20"></div>
 			<% end %>
 			
-			<div class="table_cell"><%= link_to_function "Remover", "$(this).up().up().remove()" %></div>
+			<div class="table_cell">
+				<%= line_form.hidden_field :isreceived_str, :class => 'applied'%>
+				<%= link_to_function "Aplicar", '$(this).previous().value="Si"; $(this).hide()' %>
+				<%= link_to_function "Remover", "$(this).up().up().remove()" %>
+			</div>
 
 		</div>
 	<% end %>

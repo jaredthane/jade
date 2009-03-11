@@ -48,7 +48,13 @@ class LinesController < ApplicationController
 		@newline = add_line(upc, quantity, order_type_id, relative_price)
 		if @newline.product
 			## If it doesnt need a serial number mark it received if the user wants
-			@newline.received=current_user.default_received if !@newline.product.serialized
+#			logger.debug "------------------------->order_type_id=#{order_type_id.to_s}"
+			if order_type_id != '5'
+				@newline.received=current_user.default_received if !@newline.product.serialized
+			else
+#				logger.debug "left null"
+				@newline.received= nil
+			end
 			## Add the new line to the list of lines created
 			list << @newline
 			if @newline.product.product_type_id==3 ## If this is a combo, we have to add the components
