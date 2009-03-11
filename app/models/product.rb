@@ -172,6 +172,22 @@ class Product < ActiveRecord::Base
 			return nil
 		end
 	end
+	def quantity=(location_id = User.current_user.location_id)
+		i=inventories.find_by_entity_id(location_id)
+		if i
+			puts "-----------------> " + i.id.to_s + '  quantity=' + i.quantity.to_s
+			i.quantity = value
+			return i.save
+		end
+	end
+	def on_order(location_id = User.current_user.location_id)
+		list=self.lines.find(:all, :conditions => 'orders.order_type_id=2 AND lines.received is null AND orders.client_id=' + location_id.to_s, :joins => 'left join orders on orders.id=lines.order_id')
+		return list.sum(&:quantity)
+	end
+	def sales_waiting(location_id = User.current_user.location_id)
+		list=self.lines.find(:all, :conditions => 'orders.order_type_id=1 AND lines.received is null AND orders.vendor_id=' + location_id.to_s, :joins => 'left join orders on orders.id=lines.order_id')
+		return list.sum(&:quantity)
+	end
 	def to_order(location_id = User.current_user.location_id)
 		i=inventories.find_by_entity_id(location_id)
 		return i.to_order || 0 if i

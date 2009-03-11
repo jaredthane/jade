@@ -30,10 +30,10 @@ class InventoriesController < ApplicationController
   def update
   	@search=params[:search] || ""
   	params[:inventories].each do |attributes|
-			puts "attribs: " + attributes.to_s
-			puts "attribs[1]: " + attributes[1].to_s
+			#puts "attribs: " + attributes.to_s
+			#puts "attribs[1]: " + attributes[1].to_s
 			@inventory = Inventory.find(attributes[0])
-			puts "id:" + attributes[1][:id]
+			#puts "id:" + attributes[1][:id]
 			@inventory.to_order = attributes[1][:to_order]
 			@inventory.max = attributes[1][:max]
 			@inventory.min = attributes[1][:min]
@@ -43,7 +43,7 @@ class InventoriesController < ApplicationController
   end
   
   def clear
-		@inventories = Inventory.search_wo_pagination(params[:search], params[:page])
+		@inventories = Inventory.search_wo_pagination(params[:search])
 		@search = params[:search] || ""
 		for i in @inventories
 			i.product.to_order = 0
@@ -51,11 +51,17 @@ class InventoriesController < ApplicationController
 		redirect_to('/inventories?search=' + @search)
 	end
 	def recommend
-		@inventories = Inventory.search_all_wo_pagination(params[:search], params[:page])
+		@inventories = Inventory.search_wo_pagination(params[:search])
 		@search = params[:search] || ""
 		for i in @inventories
-			if i.quantity < (i.min || 0)
-				i.product.to_order = i.max
+			
+			if i.quantity < (i.min || 0) + i.sales_waiting - i.on_order
+				if i.quantity + (i.max||0) > i.sales_waiting - i.on_order
+					i.product.to_order = (i.max||0)
+					#puts "i.quantity=#{i.quantity.to_s}"
+				else
+					i.product.to_order = i.sales_waiting - i.on_order - i.quantity
+				end
 			end
 		end
 		redirect_to('/inventories?search=' + @search)

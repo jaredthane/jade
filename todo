@@ -12,6 +12,8 @@ need to allow setting permissions
 make it so line errors ("Lines is invalid") dont appear at top of orders page
 
 ================= Features:   =======================================
+allow searching for orders by product
+activate link on reorder page to link to list of open orders for a product
 print upc's
 mark entire order as received or not received -- Javascript
 should be able to remove/change a line in one save
