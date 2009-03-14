@@ -25,8 +25,9 @@ class Line < ActiveRecord::Base
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
-  after_create :create_movements_on_save
-  after_update :create_movements_on_save
+  before_save :prepare_movements
+  after_create :create_movements
+  after_update :create_movements
   belongs_to :receipt
   before_create :set_taxes
   before_update :set_taxes
@@ -96,14 +97,9 @@ class Line < ActiveRecord::Base
 			end		
 		end
 	end
-	def create_movements_on_save
-		
-		#self.product.cost=self.product.calculate_cost## <-------------- Remove this line for production!!!
-		#self.product.save
+	def create_movements
 		@movements_to_create = [] if !@movements_to_create
-		#logger.debug  "movements_to_create has " + @movements_to_create.length.to_s
 		for m in @movements_to_create
-			#logger.debug  "adding movement to queue" + m.entity_id.to_s + "-" + m.movement_type_id.to_s + "-" + m.quantity.to_s
 			# Save movement from the list
 			m.line_id=self.id
 			m.save
@@ -114,9 +110,6 @@ class Line < ActiveRecord::Base
 				i=p.inventories.find_by_entity_id(m.entity_id)
 				i.quantity=i.quantity + m.quantity
 				i.save
-#				for req in Requirement.find_all_by_required_id(p.id)
-#					i=req.product.calculate_quantity
-#				end
 			end
 			# Update inventory levels
 			logger.info "about to calc the cost"
@@ -125,21 +118,11 @@ class Line < ActiveRecord::Base
 			logger.info "the calculated cost is #{p.calculate_cost}"
 			logger.info "the cost is #{p.cost}"
 			logger.info "the cost was saved as #{Product.find(self.product_id).cost}"
-			
-			#logger.debug  "old qty was" + i.quantity.to_s
-			
-			#logger.debug  "new qty is " + i.quantity.to_s
-			
 		end
 		# Erase list
 		@movements_to_create.clear
 	end
 	def create_movement_for(entity_id, movement_type_id, quantity)
-		#logger.debug  "adding movement to queue" + entity_id.to_s + "-" + movement_type_id.to_s + "-" + quantity.to_s
-		logger.debug  "self.product_id=" + self.product_id.to_s
-		logger.debug  "quantity=" + quantity.to_s
-		logger.debug  "movement_type_id=" + movement_type_id.to_s
-		logger.debug  "self.order.comments=" + self.order.comments.to_s
 		m=Movement.new(:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.order.id, :serialized_product_id => self.serialized_product_id, :line_id => self.id)
 		@movements_to_create = [] if !@movements_to_create 
 		@movements_to_create.push(m)
@@ -152,15 +135,32 @@ class Line < ActiveRecord::Base
 		total = total_price + tax
 		return total
 	end
-	def last_change_type
-		#logger.debug  "self.received=" + self.received.to_s
-		#logger.debug  "self.isreceived=" + self.isreceived.to_s
-		if isreceived==1
-			direction=1
-		else
-			direction=-1
+	def quantity_change_direction(new, old)
+		if new.received and !old.received 		# The line was marked received
+			return 1
+		elsif old.received and !new.received	# The line was unmarked received
+			return -1 
+		elsif old.received and new.received		# The line was always received
+			if new.quantity > old.quantity			# The quantity increased
+				return 1
+			elsif new.quantity < old.quantity		# The quantity decreased
+				return -1
+			end
 		end
-		#logger.debug  "direction=" + direction.to_s + " order.order_type_id=" + order.order_type_id.to_s
+		return 0
+	end
+	def quantity_change(new, old)
+		if new.received == old.received
+			return new.quantity - old.quantity
+		else
+			if new.received
+				return new.quantity
+			else
+				return -new.quantity		
+			end		
+		end
+	end
+	def movement_type_id(direction)
 		case order.order_type_id
 			when 1
 				if direction==1
@@ -190,29 +190,34 @@ class Line < ActiveRecord::Base
 				return 4
 		end		
 	end
-	def create_movement
-		logger.debug  "self.received=" + self.received.to_s
-		case self.last_change_type
-			when 1
-				create_movement_for(order.vendor_id, 1, -self.quantity)
-			when 2
-				create_movement_for(order.client_id, 2, self.quantity)
-			when 3
-				create_movement_for(order.client_id, 3, self.quantity)
-				create_movement_for(order.vendor_id, 3, -self.quantity)
-			when 4
-				create_movement_for(order.vendor_id, 4, self.quantity)
-			when 5
-				create_movement_for(order.vendor_id, 5, self.quantity)
-			when 6
-				create_movement_for(order.client_id, 6, -self.quantity)
-			when 7
-				create_movement_for(order.client_id, 7, -self.quantity)
-				create_movement_for(order.vendor_id, 7, self.quantity)	
-			when 8
-				create_movement_for(order.vendor_id, 8, -self.quantity)
-			when 9
-				create_movement_for(order.vendor_id, 9, self.quantity)
+	def prepare_movements
+		if self.product.product_type_id == 1
+			dir = quantity_change_direction(self, Line.find(self.id))
+			puts "----------------->" + dir.to_s
+			if dir != 0
+				case self.movement_type_id(dir)
+					when 1
+						create_movement_for(order.vendor_id, 1, -quantity_change(self, Line.find(self.id)))
+					when 2
+						create_movement_for(order.client_id, 2, quantity_change(self, Line.find(self.id)))
+					when 3
+						create_movement_for(order.client_id, 3, quantity_change(self, Line.find(self.id)))
+						create_movement_for(order.vendor_id, 3, -quantity_change(self, Line.find(self.id)))
+					when 4
+						create_movement_for(order.vendor_id, 4, quantity_change(self, Line.find(self.id)))
+					when 5
+						create_movement_for(order.vendor_id, 5, -quantity_change(self, Line.find(self.id)))
+					when 6
+						create_movement_for(order.client_id, 6, quantity_change(self, Line.find(self.id)))
+					when 7
+						create_movement_for(order.client_id, 7, quantity_change(self, Line.find(self.id)))
+						create_movement_for(order.vendor_id, 7, -quantity_change(self, Line.find(self.id)))
+					when 8
+						create_movement_for(order.vendor_id, 8, -quantity_change(self, Line.find(self.id)))
+					when 9
+						create_movement_for(order.vendor_id, 9, -quantity_change(self, Line.find(self.id)))
+				end
+			end
 		end
 	end
 	def isreceived_str
@@ -240,21 +245,13 @@ class Line < ActiveRecord::Base
 		end
 	end
 	def isreceived=(checkbox)
-		logger.debug 'Checkbox='+checkbox.to_i.to_s
 		if checkbox.to_i==1
-			logger.debug 'saving date'
-			logger.debug  "order id is " + order.id.to_s
-			
 			if self.received == nil
 				self.received=Time.now
-				create_movement
 			end
 		else
 			if self.received != nil
-				logger.debug 'removing date'
 				self.received=nil
-				logger.debug  "self.received=" + self.received.to_s
-				create_movement
 			end
 		end
 	end
@@ -285,7 +282,6 @@ class Line < ActiveRecord::Base
 		serialized_product.serial_number if serialized_product
 	end
 	def serial_number=(serial)
-		
 		logger.debug "serial=" + serial.to_s
 		if (!(serial == "" or serial == "\n") and (order.order_type_id==2))
 			logger.debug "Taking create path"
