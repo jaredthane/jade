@@ -8,42 +8,50 @@
 	<% end %>
 <% end %>
 	
-	<div class="column2-unit-left">
-		<p>
-		  <b>Nombre de Usuario</b><br />
-		  <%= h @user.login %>
-		</p>
-		<p>
-		  <b>Sitio Actual:</b><br />
-		  <% if @user.location %>
-		  	<%= h @user.location.name %>
-		  <% end %> 
-		  	
-		  <br />
-		  (Para cambiar simplemente escoja otro sitio de la lista de sitios)
-		</p>
-		
-	</div>
-	<div class="column2-unit-right">
+<div class="column2-unit-left">
+	<p>
+	  <b>Nombre de Usuario</b><br />
+	  <%= h @user.login %>
+	</p>
+	<p>
+	  <b>Sitio Actual:</b><br />
+	  <% if @user.location %>
+	  	<%= h @user.location.name %>
+	  <% end %> 
+	  	
+	  <br />
+	  (Para cambiar simplemente escoja otro sitio de la lista de sitios)
+	</p>
 	
-		<p>
-		  <b>Correo Electronico</b><br />
-		  <%= h @user.email %>
-		</p>
-		<p>
-		  <b>Grupo de Precios Actual:</b>
-	  	<% if @user.price_group_name %>
-	  		<%=  h @user.price_group_name.name %>
-	  	<% end %> 
-		  <br />
-		  (Para cambiar simplemente escoja un cliente de otro grupo de precios de la lista de clientes)
-		</p>
-		<p>
-			<b> Marcar pedidos como Recibido como defecto?</b><br />
-			<%= h @user.default_received %>
-		</p>
+</div>
+<div class="column2-unit-right">
+
+	<p>
+	  <b>Correo Electronico</b><br />
+	  <%= h @user.email %>
+	</p>
+	<p>
+	  <b>Grupo de Precios Actual:</b>
+  	<% if @user.price_group_name %>
+  		<%=  h @user.price_group_name.name %>
+  	<% end %> 
+	  <br />
+	  (Para cambiar simplemente escoja un cliente de otro grupo de precios de la lista de clientes)
+	</p>
+	<p>
+		<b> Marcar pedidos como Recibido como defecto?</b><br />
+		<%= h @user.default_received %>
+	</p>
 	
+</div>
+<hr class="clear-contentunit" />
+<p>
+	<b>Papeles:</b>
+	<div>
+		<% for role in @user.roles %>
+			<dt><%=h role.title %></dt>
+		<% end %>
 	</div>
-	<hr class="clear-contentunit" />
+</p>
 	
 
