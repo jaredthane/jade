@@ -1,0 +1,13 @@
+<div class="role">
+	<%= error_messages_for :role %>
+	<div class="table_row">
+		<% prefix = role.new_record? ? 'new_roles' : 'existing_roles' %>
+		<% fields_for "#{prefix}[]", role do |role_form| %>
+			<div class="table_cell_80"><%=h role.role.title %></div>
+			<%= role_form.hidden_field :role_id %>
+			<%= role_form.hidden_field :id %>
+			<%= role_form.hidden_field :user_id %>
+			<div class="table_cell"><%= link_to_function "Remover", "$(this).up().up().remove()" %></div>
+		<% end %>
+ 	</div>
+</div>

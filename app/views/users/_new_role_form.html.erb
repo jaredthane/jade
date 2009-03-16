@@ -1,0 +1,7 @@
+<% form_remote_for(RolesUser.new(), :url => new_user_role_path) do |f| %>
+	
+	<%= f.collection_select(:role_id, get_roles, :id, :title) %>
+	
+  <%= submit_tag ' Anadir Papel', :action => :first_method, 
+                       :id => 'new_role_submit', :style => 'display', :class =>'action' %>
+<% end %>
