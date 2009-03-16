@@ -12,7 +12,6 @@
 		<% content_for :title do %>Cambiar Pedido #<%= @order.id %><% end %>
 <% end %>
 <%form_for @order, :html => {:id => 'order_form' } do |f|  %>
-
 	<%= render :partial => 'fields', :locals => { :order_type_id => @order.order_type_id, :f => f} %>
 <% end %>
 <br />

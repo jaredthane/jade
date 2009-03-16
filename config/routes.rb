@@ -7,7 +7,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :prices
 	map.resources :discounts
 	map.resources :combos
-
+	map.new_users_roles 'user/new_role', :controller => 'users', :action => 'new_role', :format =>'js'
 	map.my_clients 'entities/my_clients', :controller => 'entities', :action => 'my_clients'
 	map.my_end_users 'entities/my_end_users', :controller => 'entities', :action => 'my_clients', :filter => 'consumidor final'
 	map.my_cedito_fiscal 'entities/my_cedito_fiscal', :controller => 'entities', :action => 'my_cedito_fiscal'

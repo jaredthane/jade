@@ -77,6 +77,9 @@ module ApplicationHelper
   def get_vendors
     @vendors = Entity.find(:all, :order => "name", :conditions =>"entity_type_id=1")
   end
+  def get_roles
+    @roles = Role.find(:all, :order => "title")
+  end
   def get_locations
   	entity_type=EntityType.find(3)
     @locations = entity_type.entities.find(:all, :order => "name")

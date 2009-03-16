@@ -1,6 +1,12 @@
+
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+  <%= javascript_include_tag "user_edit" %>
+<% end %>
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
 	<% if mode=='edit' %>
+		<dt><%= link_to_function 'Guardar', 'submit("user_form")', :class => 'action' %></dt>
 		<dt><%= link_to 'Remover', @user, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
 	<% end %>
 	<dt><%= link_to 'Cancelar', @user, :class => 'action' %></dt>
@@ -8,7 +14,7 @@
 
 <%= error_messages_for :unit %>
 
-<% form_for(@user) do |f| %>
+<% form_for @user, :html => {:id => 'user_form' }  do |f| %>
 	
 	<div class="column2-unit-left">
 		<p>
@@ -21,6 +27,14 @@
 		  	
 		  <br />
 		  (Para cambiar simplemente escoja otro sitio de la lista de sitios)
+		</p>
+		<p>
+			<b>Password</b><br/>
+			<%= f.password_field :password, :class => 'field' %>
+		</p>
+		<p>
+			<b>Confirm Password</b><br/>
+			<%= f.password_field :password_confirmation, :class => 'field' %>
 		</p>
 		
 	</div>
@@ -39,19 +53,23 @@
 		<p>
 			<%= f.check_box :default_received, :class => 'field' %><b> Marcar pedidos como Recibido como defecto?</b>
 		</p>
-	
 	</div>
-	<hr class="clear-contentunit" />
-  <p>
-  	<b>Password</b><br/>
-		<%= f.password_field :password, :class => 'field' %>
-	</p>
+  
+	<hr class="clear-contentunit" /><br />
 	<p>
-		<b>Confirm Password</b><br/>
-		<%= f.password_field :password_confirmation, :class => 'field' %>
+		<b>Papeles de este usuario:</b>
 	</p>
-	
-	
-    <%= f.submit button_text, :class => 'action' %>
+	<div>			
+	<div class="table_header_row">
+		<div class="table_cell_80">Papel</div>
+		<div class="table_cell">Acciones </div>
+	</div>
+	<div id="roles">
+		<%= render :partial => 'role', :collection => @user.roles_users %>
+	</div>
+	<div id="roles_errors"></div>
+</div>
 <% end %>
+<%= render :partial => 'new_role_form', :locals => { :user => @user} %>
+
 

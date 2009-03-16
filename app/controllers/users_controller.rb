@@ -107,7 +107,26 @@ class UsersController < ApplicationController
 			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
 		end
   end
-
+	def new_role	
+		@role = RolesUser.new(:user_id => params[:user_id], :role_id => params[:role_id])
+		logger.debug "@role.user_id=#{@role.user_id.to_s}"
+		logger.debug "@role.role_id=#{@role.role_id.to_s}"
+		logger.debug "params[:format]=#{params[:format].to_s}"
+		respond_to do |format|
+			logger.debug "format=#{format.inspect}"
+			format.html do
+				logger.debug " ======================================>  html requested"
+				redirect_to '/users/' + @role.user_id.to_s + '/edit'
+			end
+			format.js do
+        render :update do |page|
+        	page.replace_html 'roles_errors', ""
+					puts @role.inspect
+          page.insert_html :bottom, :roles, :partial => 'role', :object => @role
+        end
+      end
+    end
+	end
   # PUT /users/1
   # PUT /users/1.xml
   def update
