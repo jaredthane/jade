@@ -5,12 +5,14 @@ credit
 
 ------------------------ This Versions Goals-------------------------------
 ================= Bugs:  =======================================
-
-
+inventories shouldnt show id column
 
 ================= Features:   =======================================
 ----------------- Later Versions ----------------------------------------
 ================= Bugs: =======================================
+Cantidad se debe shows wierd numbers when prices are high
+test to see if we can sell products to users that are not availalbe to their price group
+vendors for products should be stored on inventorys table
 need to show si/no for disponibilidad on descuento show page
 make sure all order types are considered in orders views
 users default received not getting set
