@@ -31,7 +31,7 @@
 		
 	</div>
 	<div class="column2-unit-right">
-	<%= f.hidden_field :user_id, :value =>@current_user.id %>
+	<%= f.hidden_field :user_id, :value => @current_user.id %>
 		<p>
 		  <b>Metodo de pago</b><br />
 		  <%= f.collection_select(:payment_method_id, get_payment_methods, :id, :name) %>
@@ -41,12 +41,12 @@
 			<% if (@payment.order.total_price_with_tax||0) - (@payment.presented||0) + (@payment.returned||0) >= 0 %>
 				style="display: none;"
 			<% end %> >
-			<%= (@payment.order.total_price_with_tax||0) - (@payment.presented||0) + (@payment.returned||0) %>
-		<p>
-		  <b>Vuelto Recomendado</b><br />
-		  <input disabled=True class="field" id="recommended_change" value=<%= number_to_currency((@payment.presented || 0)-(@payment.order.total_price_with_tax||0)) %>> 
-		  <input type="button" value="Actualizar" onclick="calculate_total()" class="field"> 
-		</p>
+			
+			<p>
+				<b>Vuelto Recomendado</b><br />
+				<input disabled=True class="field" id="recommended_change" value=<%= number_to_currency((@payment.presented || 0)-(@payment.order.total_price_with_tax||0)) %>> 
+				<input type="button" value="Actualizar" onclick="calculate_total()" class="field"> 
+			</p>
 		</div>
 		<div id="debt_div" 
 			<% if (@payment.order.total_price_with_tax||0) - (@payment.presented||0) + (@payment.returned||0) < 0 %>

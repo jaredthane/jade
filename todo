@@ -10,7 +10,6 @@ inventories shouldnt show id column
 ================= Features:   =======================================
 ----------------- Later Versions ----------------------------------------
 ================= Bugs: =======================================
-Cantidad se debe shows wierd numbers when prices are high
 test to see if we can sell products to users that are not availalbe to their price group
 vendors for products should be stored on inventorys table
 need to show si/no for disponibilidad on descuento show page
@@ -320,3 +319,4 @@ expand error messages in order.validation
 replenish should take into consideration the orders that have been created but not yet received
 different costs for each location
 should be able to remove/change a line in one save
+Cantidad se debe shows wierd numbers when prices are high
