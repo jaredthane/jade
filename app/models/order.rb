@@ -195,7 +195,7 @@ class Order < ActiveRecord::Base
 	# Returns the total of all the payments made for this order
 	###################################################################################
 	def amount_paid
-		return self.payments.sum(:amount, :conditions => ['order_id = :order_id', {:order_id => self.id}])
+		return self.payments.sum(:presented)-self.payments.sum(:returned)
 	end
 	
 	###################################################################################

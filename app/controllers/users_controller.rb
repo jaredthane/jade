@@ -107,26 +107,63 @@ class UsersController < ApplicationController
 			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
 		end
   end
-
+	def new_role	
+		@role = RolesUser.new(:user_id => params[:roles_user][:user_id], :role_id => params[:roles_user][:role_id])
+#		logger.debug "@role.user_id=#{@role.user_id.to_s}"
+#		logger.debug "@role.role_id=#{@role.role_id.to_s}"
+#		logger.debug "params[:format]=#{params[:format].to_s}"
+		respond_to do |format|
+			format.html do
+				logger.debug " ======================================>  html requested"
+				redirect_to '/users/' + @role.user_id.to_s + '/edit'
+			end
+			format.js do
+        render :update do |page|
+        	page.replace_html 'roles_errors', ""
+					puts @role.inspect
+          page.insert_html :bottom, :roles, :partial => 'role', :object => @role
+        end
+      end
+    end
+	end
   # PUT /users/1
   # PUT /users/1.xml
   def update
     @user = User.find(params[:id])
     if @user!=current_user and !current_user.has_rights(['admin','gerente'])
-			redirect_back_or_default('/products')
+			redirect_back_or_default('/users')
 			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
 		end
+		to_delete=[]
+		#Update existing reqs
+    for l in @user.roles_users
+			if params['existing_roles']
+				if params['existing_roles'][l.id.to_s]
+					logger.debug "UPDATING l=#{l.inspect}"
+					l.attributes = params['existing_roles'][l.id.to_s]
+				else
+					logger.debug "DELETING l=#{l.inspect}"
+					@user.roles_users.delete(l)
+				end
+			else
+				logger.debug "DELETING l=#{l.inspect}"
+				@user.roles_users.delete(l)
+			end
+		end
+		
+		# Update New roles
+		list= params['new_roles'] || []
+  	for l in list
+  		logger.debug "ADDING l=#{l.inspect}"
+  		new_role = RolesUser.new(:user_id=>@user.id)
+  		new_role.update_attributes(l)
+  		@user.roles_users.push(new_role)
+  	end
+		if  @user.update_attributes(params[:user])
+			flash[:notice] = 'Usuario ha sido actualizado exitosamente.'
+		end
+	redirect_to(user_path(@user))
 
-    respond_to do |format|
-      if @user.update_attributes(params[:user])
-        flash[:notice] = 'Pago ha sido actualizado exitosamente.'
-        format.html { redirect_to(@user) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @user.errors, :status => :unprocessable_entity }
-      end
-    end
   end
 
   # DELETE /users/1

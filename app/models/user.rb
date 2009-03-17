@@ -27,7 +27,8 @@ class User < ActiveRecord::Base
   attr_accessor :password
 	has_many :movements
 	has_many :orders
-	has_many :roles, :through => :users_roles
+	has_many :roles_users
+	has_many :roles, :through => :roles_users
 	has_and_belongs_to_many :roles
   validates_presence_of     :login, :email
   validates_presence_of     :password,                   :if => :password_required?

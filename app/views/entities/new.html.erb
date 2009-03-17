@@ -12,6 +12,6 @@
 <% end %>
 <%= error_messages_for :entity %>
 
-<% form_for @entity do |f| %>
+<% form_for @entity, :html => {:id => 'entity_form' } do |f| %>
   <%= render :partial => 'fields', :locals => { :f => f, :mode =>'new' } %>
 <% end %>

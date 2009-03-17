@@ -18,5 +18,5 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class State < ActiveRecord::Base
-has_many :entities
+	has_many :entities
 end

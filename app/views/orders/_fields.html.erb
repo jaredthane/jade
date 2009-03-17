@@ -1,8 +1,10 @@
 
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "order_edit" %>
+  <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
+	<dt><%= link_to_function 'Guardar', 'submit("order_form")', :class => 'action' %></dt>
 	<dt><%= link_to 'Remover', @order, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
 	<dt><%= link_to 'Cancelar', orders_url, :class => 'action' %></dt>
 <% end %>
@@ -95,6 +97,5 @@
   <%= f.text_area :comments, :class => 'comments' %>
 </p>
 
-<%= f.submit "Guardar Pedido", :class => 'action' %>
 
 	

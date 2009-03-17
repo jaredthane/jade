@@ -3,29 +3,31 @@ physical counts
 reports
 credit
 
------------------------- This Version -------------------------------
+------------------------ This Versions Goals-------------------------------
 ================= Bugs:  =======================================
 
+================= Features:   =======================================
+
+----------------- Later Versions ----------------------------------------
+================= Bugs: =======================================
+test to see if we can sell products to users that are not availalbe to their price group
+vendors for products should be stored on inventorys table
+need to show si/no for disponibilidad on descuento show page
 make sure all order types are considered in orders views
 users default received not getting set
 need to allow setting permissions
 make it so line errors ("Lines is invalid") dont appear at top of orders page
-
-================= Features:   =======================================
-allow changing quantities and removing without specificly marking as received
-un boton disponible aqui on products edit page
-print upc's
-mark entire order as received or not received -- Javascript
-should be able to remove/change a line in one save
-replenish should take into consideration the orders that have been created but not yet received
------------------ Later Versions ----------------------------------------
-================= Bugs: =======================================
-
 icon only showing up on some pages not on signin or new compra
 should make sure serial purchased is unique
 serials should only need to be unique to their product
 ================= Essential Features: ==========================
-different costs for each location
+special key to submit order
+allow searching for orders by product
+activate link on reorder page to link to list of open orders for a product
+print upc's
+mark entire order as received or not received -- Javascript
+
+
 "ejemplares presentes here" should have the list paginated
 make sure people don't create infinitly recursive combos
 add and remove payment types
@@ -314,3 +316,8 @@ Dar recommendaciones
 out of inventory errors not clear
 need to be able to create clients on the fly
 expand error messages in order.validation
+replenish should take into consideration the orders that have been created but not yet received
+different costs for each location
+should be able to remove/change a line in one save
+Cantidad se debe shows wierd numbers when prices are high
+inventories shouldnt show id column

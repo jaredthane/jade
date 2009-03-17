@@ -1,12 +1,12 @@
 function calculate_total() {
-	$("total_paid").value=$("presented_field").value-$("returned_field").value;
-	$("debt_field").value=$("total_price").value-$("presented_field").value+$("returned_field").value;
-	if ($("presented_field").value-$("total_price").value < 0){
+	$("total_paid").value=(parseFloat($("presented_field").value) - parseFloat($("returned_field").value)).toFixed(2);
+	$("debt_field").value=(parseFloat($("total_price").value)     - parseFloat($("presented_field").value) + parseFloat($("returned_field").value)).toFixed(2);
+	if ($("debt_field").value >= 0){
 		$("change_div").hide();
 		$("debt_div").show();
 	} else {
 		$("change_div").show();
 		$("debt_div").hide();
 	}
-	$("recommended_change").value=$("presented_field").value-$("total_price").value;
+	$("recommended_change").value=(parseFloat($("presented_field").value)-parseFloat($("total_price").value)).toFixed(2);
 }
