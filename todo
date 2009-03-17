@@ -5,9 +5,9 @@ credit
 
 ------------------------ This Versions Goals-------------------------------
 ================= Bugs:  =======================================
-inventories shouldnt show id column
 
 ================= Features:   =======================================
+
 ----------------- Later Versions ----------------------------------------
 ================= Bugs: =======================================
 test to see if we can sell products to users that are not availalbe to their price group
@@ -320,3 +320,4 @@ replenish should take into consideration the orders that have been created but n
 different costs for each location
 should be able to remove/change a line in one save
 Cantidad se debe shows wierd numbers when prices are high
+inventories shouldnt show id column
