@@ -1,5 +1,5 @@
 <% content_for :title do %>Cambiar Cuenta Fisica #<%= @count.id %><% end %>
-<input value = "save" id = "submit_type" type="hidden" >
+
 <%form_for @count, :html => {:id => 'counts_form' } do |f|  %>
 	<%= render :partial => 'fields', :locals => { :order_type_id => @count.order_type_id, :f => f} %>
 <% end %>

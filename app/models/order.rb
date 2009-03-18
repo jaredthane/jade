@@ -277,19 +277,80 @@ class Order < ActiveRecord::Base
 	###################################################################################
 	def post
 		products_done = []
+		logger.debug "======================Starting to post ======================================"
+		logger.debug "self.lines=#{self.lines.inspect}"
 		for line in self.lines
+			logger.debug "posting line=#{line.inspect}"
 			if !products_done.include?(line.product)
+				logger.debug "its product has not been posted yet"
 				if line.product.serialized
-				
-					#Get a complete list of the serials
-					serials = []
+					logger.debug "the product is serialized"
+					#Get a complete list of the lines in the order for this product
+					product_lines= []
 					for l in self.lines
-						serials << l.serialized_product if l.product = line.product
+						product_lines << l if l.product = line.product
 					end
 					
+					logger.debug "product_lines=#{product_lines.inspect}" 
 					# Add new serials
-					
-				
+					for l in product_lines
+						logger.debug "l=#{l.inspect}"
+#						logger.debug "l.serialized_product.new_record?=#{l.serialized_product.new_record?.to_s}"
+						old_loc = l.serialized_product.location
+						logger.debug "old_loc=#{old_loc.inspect}"
+						if old_loc # make sure it has a location, might have just been created
+							logger.debug "old_loc existes"
+							logger.debug "self.vendor_id=#{self.vendor_id.to_s}"
+							logger.debug "old_loc.id=#{old_loc.id.to_s}"
+							if old_loc.id != self.vendor_id # It was not already here
+								logger.debug "old_loc.id != self.vendor_id"
+								if old_loc.entity_type== 3 # It was in a different site
+									logger.debug "old_loc.entity_type== 3"
+									# Make a movement to take it out of the other site
+									Movement.create(:entity_id => old_loc.id, :comments => self.comments, :product_id => l.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
+									i=l.product.inventories.find_by_entity_id(old_loc.id)
+									i.quantity=i.quantity-1
+									i.save
+								end
+								logger.debug "Make a movement to bring it here"
+								# Make a movement to bring it here
+								Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
+								i = l.product.inventories.find_by_entity_id(self.vendor_id)
+								l.previous_qty = i.quantity
+								i.quantity=i.quantity+1
+								i.save
+							end
+						else	# This serial was just created
+							logger.debug "# This serial was just created"
+								# Make a movement to put it here
+								Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
+								i = l.product.inventories.find_by_entity_id(self.vendor_id)
+								l.previous_qty = i.quantity
+								i.quantity=i.quantity+1
+								i.save
+						end
+					end
+					#Remove missing serials
+					logger.debug "Remove missing serials"
+					serials=[]
+					for l in product_lines
+						serials << l.serialized_product
+					end
+					logger.debug "serials=#{serials.inspect}"
+					for s in line.product.get_serials_here(self.vendor_id)
+						logger.debug "s=#{s.inspect}"
+						if !serials.include?(s)
+							logger.debug "!serials.include?(s)"
+							# Make a movement to remove it from here
+							Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => s.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
+							i = s.product.inventories.find_by_entity_id(self.vendor_id)
+							l.previous_qty = i.quantity
+							i.quantity=i.quantity-1
+							i.save
+							# Make movement to move it to Internal Consumption
+							Movement.create(:entity_id => 1, :comments => self.comments, :product_id => s.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
+						end
+					end
 				else
 					if line.quantity != line.product.quantity
 						m=Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => line.quantity - line.product.quantity, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)

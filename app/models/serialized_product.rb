@@ -22,12 +22,21 @@ class SerializedProduct < ActiveRecord::Base
 	has_many :movements
 	belongs_to :product
 	def location
-		if self.lines.find(:last, :order=> 'received')
-			return self.lines.find(:last, :order=> 'received').order.client
+		logger.debug "=-=======================================-="
+		last_movement = self.movements.find(:last, :order=> 'id ASC')
+		if last_movement
+			return last_movement.entity
 		else
 			return nil
 		end
 	end
+#	def location
+#		if self.lines.find(:last, :order=> 'received')
+#			return self.lines.find(:last, :order=> 'received').order.client
+#		else
+#			return nil
+#		end
+#	end
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['(serial_number like :search OR upc like :search OR name like :search)', {:search => "%#{search}%"}],

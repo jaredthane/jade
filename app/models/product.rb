@@ -299,7 +299,19 @@ class Product < ActiveRecord::Base
 			return upc.to_s
 		end
 	end
-
+	def get_serials
+    return self.serialized_products.find(:all, :order => "serial_number")
+  end
+  def get_serials_here(site_id = current_user.location.id)
+    @allserials = self.serialized_products.find(:all, :order => "serial_number")
+    @serials=[]
+    for s in @allserials
+    	if s.location
+	    	@serials << s if s.location.id == site_id
+    	end
+    end
+    return @serials
+  end
 	def create_requirements
 		requirements.each do |requirement|
 			requirement.product_id = self.id

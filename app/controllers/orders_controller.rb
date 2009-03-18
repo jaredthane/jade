@@ -294,6 +294,7 @@ class OrdersController < ApplicationController
   def update
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
+    errors = false
     lines_to_delete=[]
     #Update existing lines
     for l in @order.lines
@@ -329,14 +330,12 @@ class OrdersController < ApplicationController
   		logger.debug "about to push #{new_line.inspect}"  	
   		@order.lines.push(new_line)
   	end
-		#params['new_lines'].each { |l| @order.lines << Line.new(l) } if params['new_lines']
-		
-    #params['existing_lines'].each_value  { |l| logger.debug "l['id']=" + l['id'].to_s; Line.find(l['id']).attributes = l } if params['existing_lines']
-#		for l in @order.lines
-#			logger.debug "l=#{l.inspect}"
-#		end
+		errors = true if !@order.update_attributes(params[:order])
+		if params[:submit_type] == 'post' and !errors
+			errors = true if !@order.post
+		end
     respond_to do |format|
-      if @order.update_attributes(params[:order])
+      if !errors
         flash[:notice] = 'Pedido ha sido actualizado exitosamente.'
         format.html { redirect_to(@order) }
         format.xml  { head :ok }

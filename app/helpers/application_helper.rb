@@ -95,18 +95,9 @@ module ApplicationHelper
     @clients = entity_type.entities.find(:all, :order => "name", :conditions =>"entity_type_id=2 OR entity_type_id=5")
   end
   def get_serials(product_id)
-    product = Product.find(product_id)
-    @serials = product.serialized_products.find(:all, :order => "serial_number")
+    return Product.find(product_id).get_serials
   end
   def get_serials_here(product_id, site_id = current_user.location.id)
-    product = Product.find(product_id)
-    @allserials = product.serialized_products.find(:all, :order => "serial_number")
-    @serials=[]
-    for s in @allserials
-    	if s.location
-	    	@serials << s if s.location.id == site_id
-    	end
-    end
-    return @serials
+    return Product.find(product_id).get_serials_here(site_id)
   end
 end

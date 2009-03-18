@@ -108,8 +108,10 @@ class Line < ActiveRecord::Base
 			p=Product.find(self.product_id)
 			if p.product_type_id==1
 				i=p.inventories.find_by_entity_id(m.entity_id)
-				i.quantity=i.quantity + m.quantity
-				i.save
+				if i # Don't worry about it if they dont have a i, its probably a client
+					i.quantity=i.quantity + m.quantity
+					i.save
+				end
 			end
 			# Update inventory levels
 #			logger.info "about to calc the cost"
@@ -197,6 +199,7 @@ class Line < ActiveRecord::Base
 		end		
 	end
 	def prepare_movements
+		logger.debug "==============self.product.product_type_id=#{self.product.inspect}"
 		if self.product.product_type_id == 1
 			old = Line.find_by_id(self.id)
 			puts old.inspect
@@ -210,6 +213,7 @@ class Line < ActiveRecord::Base
 				case self.movement_type_id(dir)
 					when 1
 						create_movement_for(order.vendor_id, 1, -quantity_change(self, old))
+						create_movement_for(order.client_id, 1, quantity_change(self, old))
 					when 2
 						create_movement_for(order.client_id, 2, quantity_change(self, old))
 					when 3
@@ -294,7 +298,8 @@ class Line < ActiveRecord::Base
 	end
 	def serial_number=(serial)
 		logger.debug "serial=" + serial.to_s
-		if (!(serial == "" or serial == "\n") and (order.order_type_id==2))
+		logger.debug "order.order_type_id=#{order.order_type_id.to_s}"
+		if (!(serial == "" or serial == "\n") and ((order.order_type_id==2) or (order.order_type_id==5)))
 			logger.debug "Taking create path"
 			s=SerializedProduct.find_or_create_by_serial_number(serial)
 			if s.product_id==nil
