@@ -98,7 +98,7 @@
 			</div>
 			<% for serial in get_serials(@product.id) %>
 				<% if serial.location %>
-					<% if serial.location.id = current_user.location.id%>
+					<% if serial.location.id == current_user.location.id%>
 						<div class="table_row">
 							<div class="table_cell_50"><%=link_to serial.serial_number, serial %></div>
 							<div class="table_cell"><%=link_to serial.product.name, serial.product %></div>

@@ -6,8 +6,11 @@ credit
 ------------------------ This Versions Goals-------------------------------
 ================= Bugs:  =======================================
 restrict only product_type 1 can be added to counts
+I created a purchase for a serial object but it didnt appear in the quantity
 ================= Features:   =======================================
-
+change orders to be updated with two properties newlines, and existing lines
+be sure to update counts controller too.
+block sales and purchases on products being counted
 ----------------- Later Versions ----------------------------------------
 ================= Bugs: =======================================
 test to see if we can sell products to users that are not availalbe to their price group

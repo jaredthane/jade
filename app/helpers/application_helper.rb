@@ -98,4 +98,13 @@ module ApplicationHelper
     product = Product.find(product_id)
     @serials = product.serialized_products.find(:all, :order => "serial_number")
   end
+  def get_serials_here(product_id, site_id = current_user.location.id)
+    product = Product.find(product_id)
+    @allserials = product.serialized_products.find(:all, :order => "serial_number")
+    @serials=[]
+    for s in @allserials
+    	@serials << s if s.location_id == site_id
+    end
+    return @serials
+  end
 end

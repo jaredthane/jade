@@ -23,7 +23,7 @@ class SerializedProduct < ActiveRecord::Base
 	belongs_to :product
 	def location
 		if self.lines.find(:last, :order=> 'received')
-			self.lines.find(:last, :order=> 'received').order.client
+			return self.lines.find(:last, :order=> 'received').order.client
 		else
 			return nil
 		end

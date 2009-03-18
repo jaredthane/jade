@@ -276,17 +276,30 @@ class Order < ActiveRecord::Base
 	# Posts a physical count, saving previous qtys, creating movements, updating inventories and costs
 	###################################################################################
 	def post
+		products_done = []
 		for line in self.lines
-			if line.product.serialized
+			if !products_done.include?(line.product)
+				if line.product.serialized
 				
-			else
-				if line.quantity != line.product.quantity
-					m=Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => line.quantity - line.product.quantity, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
-					i=line.product.inventories.find_by_entity_id(self.vendor_id)
-					line.previous_qty = i.quantity
-					i.quantity=line.quantity
-					i.save
-					line.product.cost=line.product.calculate_cost
+					#Get a complete list of the serials
+					serials = []
+					for l in self.lines
+						serials << l.serialized_product if l.product = line.product
+					end
+					
+					# Add new serials
+					
+				
+				else
+					if line.quantity != line.product.quantity
+						m=Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => line.quantity - line.product.quantity, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
+						i=line.product.inventories.find_by_entity_id(self.vendor_id)
+						line.previous_qty = i.quantity
+						i.quantity=line.quantity
+						i.save
+						line.product.cost=line.product.calculate_cost
+						products_done << line.product
+					end
 				end
 			end
 		end
