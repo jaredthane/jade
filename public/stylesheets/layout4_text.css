@@ -35,9 +35,9 @@
 .nav3-grid dt a:hover, .nav3-grid dd a:hover {background-color:rgb(225,225,225); color:#96c09c; text-decoration:bold; font-size:135%;}
 /*.nav3-grid dd a.action {font-size:150%; font-weight:bold;background:none;border:0;color:#515147}*/
 
-.nav3-bullet {width:170px; margin:10px 0 0 20px;}
-.nav3-bullet dt a, .nav3-bullet dt a:visited {line-height:2.0em; padding:0 0 0 10px; background:url(../images/img/bg_bullet_full_1.gif) no-repeat 0px 50%; text-decoration:none; color:#515147; font-weight:bold; font-size:120%;}
-.nav3-bullet dd a, .nav3-bullet dd a:visited {line-height:1.7em; margin:0 0 0 15px; padding:0 0 0 10px; background:url(../images/img/bg_bullet_half_1.gif) no-repeat 0px 50%; text-decoration:none; color:#515147; font-weight:normal; font-size:120%;}
+.nav3-bullet {width:170px; margin:10px 0 0 20px;color:#515147; font-weight:bold;font-size:110%;}
+.nav3-bullet dt a, .nav3-bullet dt a:visited {line-height:2.0em; padding:0 0 0 10px; background:url(../images/img/bg_bullet_full_1.gif) no-repeat 0px 50%; text-decoration:none; color:#515147; font-weight:bold; font-size:110%;}
+.nav3-bullet dd a, .nav3-bullet dd a:visited {line-height:1.7em; margin:0 0 0 15px; padding:0 0 0 10px; background:url(../images/img/bg_bullet_half_1.gif) no-repeat 0px 50%; text-decoration:none; color:#515147; font-weight:normal; font-size:110%;}
 .nav3-bullet dt a:hover {background:url(../images/img/bg_bullet_full_2.gif) no-repeat 0px 50%; text-decoration:none; color:#96c09c;font-size:125%;}
 .nav3-bullet dd a:hover {background:url(../images/img/bg_bullet_half_2.gif) no-repeat 0px 50%; text-decoration:none; color:#96c09c;font-size:125%;}
 

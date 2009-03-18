@@ -1,5 +1,5 @@
 <% content_for :title do %>Nueva Cuenta Fisica para <%= current_user.location.name %><% end %>
-<%form_for :count, :url => {:action => 'create'}, :html => {:id => 'order_form' } do |f|  %>
+<%form_for :count, :url => {:action => 'create'}, :html => {:id => 'counts_form' } do |f|  %>
 	<%= render :partial => 'fields', :locals => { :order_type_id => 5, :f => f} %>
 <% end %>
 <br />

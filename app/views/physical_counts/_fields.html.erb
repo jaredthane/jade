@@ -1,7 +1,10 @@
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "physical_count_edit" %>
+  <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
+	<dt><%= link_to_function 'Guardar Cambios', 'submit("counts_form")', :class => 'action' %></dt>
+	<dt><%= link_to_function 'Procesar', 'post_count()', :class => 'action' %></dt>
 	<dt><%= link_to 'Remover', @count, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
 	<dt><%= link_to 'Cancelar', physical_counts_url, :class => 'action' %></dt>
 <% end %>
@@ -24,9 +27,11 @@
 <div>
 	<div class="table_header_row">
 		<div class="table_cell_15">UPC</div>	
-		<div class="table_cell_30">Producto</div>
+		<div class="table_cell_15">Producto</div>
+		<div class="table_cell_10">Costo</div>
 		<div class="table_cell_10">Cantidad</div>
 		<div class="table_cell_10">Cuenta</div>
+		<div class="table_cell_10">Diferencia</div>
 		<div class="table_cell_20">Num de Serie</div>
 		<div class="table_cell">Acciones</div>
 	</div>
@@ -40,6 +45,4 @@
   <b>Comentarios para los Movimientos</b><br />
   <%= f.text_area :comments, :class => 'comments' %>
 </p>
-<%= f.submit "Guardar Cuenta Fisica", :class => 'action' %>
-
 	

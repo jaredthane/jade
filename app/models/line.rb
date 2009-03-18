@@ -48,8 +48,8 @@ class Line < ActiveRecord::Base
 			##logger.debug  "@movements_to_create.length=" + @movements_to_create.length.to_s
 			if @movements_to_create # if we find stuff here, there is movement
 				logger.debug  " there are movements to validate"
-				logger.debug  "self.last_change_type =" + self.last_change_type.to_s
-				case self.last_change_type	# check inventory levels
+#				logger.debug  "self.last_change_type =" + self.last_change_type.to_s
+				case self.order_type_id	# check inventory levels
 					when 1 # Venta     
 						#logger.debug  "validating Venta"
 						qty=order.vendor.inventory(self.product)
@@ -112,12 +112,12 @@ class Line < ActiveRecord::Base
 				i.save
 			end
 			# Update inventory levels
-			logger.info "about to calc the cost"
+#			logger.info "about to calc the cost"
 			
 			p.cost=p.calculate_cost
-			logger.info "the calculated cost is #{p.calculate_cost}"
-			logger.info "the cost is #{p.cost}"
-			logger.info "the cost was saved as #{Product.find(self.product_id).cost}"
+#			logger.info "the calculated cost is #{p.calculate_cost}"
+#			logger.info "the cost is #{p.cost}"
+#			logger.info "the cost was saved as #{Product.find(self.product_id).cost}"
 		end
 		# Erase list
 		@movements_to_create.clear
@@ -150,14 +150,18 @@ class Line < ActiveRecord::Base
 		return 0
 	end
 	def quantity_change(new, old)
-		if new.received == old.received
-			return new.quantity - old.quantity
-		else
-			if new.received
-				return new.quantity
+		if old
+			if new.received == old.received
+				return new.quantity - old.quantity
 			else
-				return -new.quantity		
-			end		
+				if new.received
+					return new.quantity
+				else
+					return -new.quantity		
+				end		
+			end
+		else
+			return new.quantity
 		end
 	end
 	def movement_type_id(direction)
@@ -194,30 +198,35 @@ class Line < ActiveRecord::Base
 	end
 	def prepare_movements
 		if self.product.product_type_id == 1
-			dir = quantity_change_direction(self, Line.find(self.id))
-			puts "----------------->" + dir.to_s
+			old = Line.find_by_id(self.id)
+			puts old.inspect
+			if old
+				dir = quantity_change_direction(self, old)
+			else
+				dir = 1
+			end
+#			puts "----------------->" + dir.to_s
 			if dir != 0
 				case self.movement_type_id(dir)
 					when 1
-						create_movement_for(order.vendor_id, 1, -quantity_change(self, Line.find(self.id)))
+						create_movement_for(order.vendor_id, 1, -quantity_change(self, old))
 					when 2
-						create_movement_for(order.client_id, 2, quantity_change(self, Line.find(self.id)))
+						create_movement_for(order.client_id, 2, quantity_change(self, old))
 					when 3
-						create_movement_for(order.client_id, 3, quantity_change(self, Line.find(self.id)))
-						create_movement_for(order.vendor_id, 3, -quantity_change(self, Line.find(self.id)))
-					when 4
-						create_movement_for(order.vendor_id, 4, quantity_change(self, Line.find(self.id)))
+						create_movement_for(order.client_id, 3, quantity_change(self, old))
+						create_movement_for(order.vendor_id, 3, -quantity_change(self, old))
+					# We won't touch physical counts. The Physical Count model will take care of that.
 					when 5
-						create_movement_for(order.vendor_id, 5, -quantity_change(self, Line.find(self.id)))
+						create_movement_for(order.vendor_id, 5, -quantity_change(self, old))
 					when 6
-						create_movement_for(order.client_id, 6, quantity_change(self, Line.find(self.id)))
+						create_movement_for(order.client_id, 6, quantity_change(self, old))
 					when 7
-						create_movement_for(order.client_id, 7, quantity_change(self, Line.find(self.id)))
-						create_movement_for(order.vendor_id, 7, -quantity_change(self, Line.find(self.id)))
+						create_movement_for(order.client_id, 7, quantity_change(self, old))
+						create_movement_for(order.vendor_id, 7, -quantity_change(self, old))
 					when 8
-						create_movement_for(order.vendor_id, 8, -quantity_change(self, Line.find(self.id)))
+						create_movement_for(order.vendor_id, 8, -quantity_change(self, old))
 					when 9
-						create_movement_for(order.vendor_id, 9, -quantity_change(self, Line.find(self.id)))
+						create_movement_for(order.vendor_id, 9, -quantity_change(self, old))
 				end
 			end
 		end

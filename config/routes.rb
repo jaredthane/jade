@@ -7,6 +7,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :prices
 	map.resources :discounts
 	map.resources :combos
+	map.post_physical_counts 'physical_counts/:id/post', :controller => 'physical_counts', :action => 'post'
 	map.resources :physical_counts, :order_type_id => 5
 	map.new_user_role 'user/new_role', :controller => 'users', :action => 'new_role', :format =>'js'
 	map.my_clients 'entities/my_clients', :controller => 'entities', :action => 'my_clients'

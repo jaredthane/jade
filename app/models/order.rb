@@ -101,42 +101,44 @@ class Order < ActiveRecord::Base
   def check_for_discounts
 #  	puts "checking existing discounts"
   	# Go through each discount in the order and see if it still qualifys
-  	@discounts_in_order= []
-  	for line in self.lines.find(:all, 
-																:conditions => ' products.product_type_id = 2 ',
-  															:joins => ' inner join products on lines.product_id=products.id ')
-#  		puts "checking " + line.product.name
-  		@discounts_in_order << line.product
-  		@qualify = discount_qualifies(line.product)
-  		if @qualify > 0
-  			# Set the quantity of this discount to the number of times we qualify
-  			line.quantity = @qualify
-  			line.save()
-  		else
-  			# Remove discount since we no longer qualify
-  			puts line.id.to_s
-  			self.lines.delete(line)
-  		end
-  	end
-  	# Go through each discount and see if the order qualifies
-#  	puts "checking new discounts"
-		for discount in get_discounts do 
-#			puts "checking" + discount.name
-			#make sure we dont add a discount thats already in the order
-			if !@discounts_in_order.include?(discount)
-				# make sure the discount is available in this site
-				if discount.available
-					puts discount.name + "available" 
-					@qualify = discount_qualifies(discount)
-					#If the order qualifies, add it.
-					if @qualify >= 1			                     		
-#						puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
-						l=Line.new(:order_id => self.id, :product_id => discount.id, :quantity => @qualify, :price => discount.price, :received => 1)
-						l.save
-					end #if qualify==1
-				end # if available
+  	if self.order_type_id==1
+			@discounts_in_order= []
+			for line in self.lines.find(:all, 
+																	:conditions => ' products.product_type_id = 2 ',
+																	:joins => ' inner join products on lines.product_id=products.id ')
+	#  		puts "checking " + line.product.name
+				@discounts_in_order << line.product
+				@qualify = discount_qualifies(line.product)
+				if @qualify > 0
+					# Set the quantity of this discount to the number of times we qualify
+					line.quantity = @qualify
+					line.save()
+				else
+					# Remove discount since we no longer qualify
+					puts line.id.to_s
+					self.lines.delete(line)
+				end
 			end
-		end #discount in get_discounts
+			# Go through each discount and see if the order qualifies
+	#  	puts "checking new discounts"
+			for discount in get_discounts do 
+	#			puts "checking" + discount.name
+				#make sure we dont add a discount thats already in the order
+				if !@discounts_in_order.include?(discount)
+					# make sure the discount is available in this site
+					if discount.available
+						puts discount.name + "available" 
+						@qualify = discount_qualifies(discount)
+						#If the order qualifies, add it.
+						if @qualify >= 1			                     		
+	#						puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
+							l=Line.new(:order_id => self.id, :product_id => discount.id, :quantity => @qualify, :price => discount.price, :received => 1)
+							l.save
+						end #if qualify==1
+					end # if available
+				end
+			end #discount in get_discounts
+		end # if this is a sale
 	end #check_for_discounts
 	
 
@@ -270,6 +272,25 @@ class Order < ActiveRecord::Base
 #			 end 
 #		 end
 #	end
+	###################################################################################
+	# Posts a physical count, saving previous qtys, creating movements, updating inventories and costs
+	###################################################################################
+	def post
+		for line in self.lines
+			if line.product.serialized
+				
+			else
+				if line.quantity != line.product.quantity
+					m=Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => line.quantity - line.product.quantity, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
+					i=line.product.inventories.find_by_entity_id(self.vendor_id)
+					line.previous_qty = i.quantity
+					i.quantity=line.quantity
+					i.save
+					line.product.cost=line.product.calculate_cost
+				end
+			end
+		end
+	end
 	def save_lines
 		puts "saving lines"
 		lines.each do |line|
@@ -302,6 +323,7 @@ class Order < ActiveRecord::Base
 		end
 		return @received
 	end
+	
 	def self.search(search, page)
 		paginate :per_page => 20, :page => page,
 						 :conditions => ['(vendors.name like :search OR clients.name like :search OR orders.id like :search) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],

@@ -21,38 +21,39 @@ class PhysicalaCount < ActiveRecord::Base
 	belongs_to :entity
 	belongs_to :user
 	has_many :physical_count_lines
-	def update( attributes, existing_lines = [], new_lines = [])
-		lines_to_delete=[]
-		# Check to see if each of our lines are in the list
-		for l in self.physical_count_lines
-			if existing_lines[l.id.to_s]
-				# If it is, save the changes
-				l.attributes = existing_lines[l.id.to_s]
-			else
-				# Otherwise put it on the hit list
-				lines_to_delete << l
-			end
-		end
-		
-		# delete the lines in the hit list
-		for l in lines_to_delete
-			self.physical_count_lines.delete(l)
-		end
-		
-		# Add the new lines
-  	for l in new_lines
-  		new_line = PhysicalCountLine.new(:physical_count_id=>self.id)
-  		# Make sure we set these values first just in case we want to submit this line later
-  		new_line.product_id = l[:product_id]		
-  		new_line.count = l[:count]
-  		# Now we can save the other values with confidence
-  		new_line.attributes=l  
-  		logger.debug "about to push #{new_line.inspect}"  	
-  		self.lines.push(new_line)
-  	end
-  	self.update_attributes(attributes)
-		
-	end
+	
+#	def update( attributes, existing_lines = [], new_lines = [])
+#		lines_to_delete=[]
+#		# Check to see if each of our lines are in the list
+#		for l in self.physical_count_lines
+#			if existing_lines[l.id.to_s]
+#				# If it is, save the changes
+#				l.attributes = existing_lines[l.id.to_s]
+#			else
+#				# Otherwise put it on the hit list
+#				lines_to_delete << l
+#			end
+#		end
+#		
+#		# delete the lines in the hit list
+#		for l in lines_to_delete
+#			self.physical_count_lines.delete(l)
+#		end
+#		
+#		# Add the new lines
+#  	for l in new_lines
+#  		new_line = PhysicalCountLine.new(:physical_count_id=>self.id)
+#  		# Make sure we set these values first just in case we want to submit this line later
+#  		new_line.product_id = l[:product_id]		
+#  		new_line.count = l[:count]
+#  		# Now we can save the other values with confidence
+#  		new_line.attributes=l  
+#  		logger.debug "about to push #{new_line.inspect}"  	
+#  		self.lines.push(new_line)
+#  	end
+#  	self.update_attributes(attributes)
+#		
+#	end
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page
 	end
