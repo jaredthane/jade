@@ -103,7 +103,9 @@ module ApplicationHelper
     @allserials = product.serialized_products.find(:all, :order => "serial_number")
     @serials=[]
     for s in @allserials
-    	@serials << s if s.location_id == site_id
+    	if s.location
+	    	@serials << s if s.location.id == site_id
+    	end
     end
     return @serials
   end

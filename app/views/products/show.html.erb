@@ -96,15 +96,11 @@
 				<div class="table_cell_50">Sitio</div>
 				<div class="table_cell">Nombre del Producto </div>
 			</div>
-			<% for serial in get_serials(@product.id) %>
-				<% if serial.location %>
-					<% if serial.location.id == current_user.location.id%>
-						<div class="table_row">
-							<div class="table_cell_50"><%=link_to serial.serial_number, serial %></div>
-							<div class="table_cell"><%=link_to serial.product.name, serial.product %></div>
-						</div>
-					<% end %>
-				<% end %>
+			<% for serial in get_serials_here(@product.id) %>
+				<div class="table_row">
+					<div class="table_cell_50"><%=link_to serial.serial_number, serial %></div>
+					<div class="table_cell"><%=link_to serial.product.name, serial.product %></div>
+				</div>
 			<% end %>
 		</div>
 	</p>
