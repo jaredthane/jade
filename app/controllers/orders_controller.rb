@@ -154,7 +154,7 @@ class OrdersController < ApplicationController
   				##logger.debug "ordering product"
   				if order_made==0
   					#puts"creating new order for " + v.name
-  					o=Order.new(:vendor=>v, :client=>current_user.location, :user=>current_user, :last_batch=>true)
+  					o=Order.new(:vendor=>v, :client=>current_user.location, :user=>current_user, :last_batch=>true, :order_type_id => 2)
   					o.save
   					order_made=1
   				end	
@@ -308,7 +308,7 @@ class OrdersController < ApplicationController
 					logger.debug "l.warranty before=#{l.warranty.to_s}"
 					l.attributes = params['existing_lines'][l.id.to_s]
 					logger.debug "l.warranty afterz=#{l.warranty.to_s}"
-				else
+				else # We really shouldn't delete these lines yet, but leave them marked so they get deleted when the model is saved
 					logger.debug "deleting line #{l.id}"
 					lines_to_delete << l
 				end

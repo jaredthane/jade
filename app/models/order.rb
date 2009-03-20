@@ -366,10 +366,12 @@ class Order < ActiveRecord::Base
 		end
 	end
 	def save_lines
-		puts "saving lines"
+		sucessful = true
+		logger.debug "saving lines"
 		lines.each do |line|
-			line.save(false)
+			sucessful = false if !line.save(false)
 		end
+		return sucessful
 	end
 	def create_lines
 		#puts "creating lines"
