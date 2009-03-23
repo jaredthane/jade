@@ -288,7 +288,7 @@ class Order < ActiveRecord::Base
 					#Get a complete list of the lines in the order for this product
 					product_lines= []
 					for l in self.lines
-						product_lines << l if l.product = line.product
+						product_lines << l if l.product == line.product
 					end
 					
 					logger.debug "product_lines=#{product_lines.inspect}" 
