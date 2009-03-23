@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+
+# To use: set_version 0.72 tag
+echo -n Updating Headers ...
+sed -i "s/version.*/version "$1"\<\/span\>\<\/a\>\<\/h1\>/g" app/views/layouts/sessions.html.erb
+sed -i "s/version.*/version "$1"\<\/span\>\<\/a\>\<\/h1\>/g" app/views/layouts/_header.html.erb
+echo [Done.]
+if [ -n "$2" ]
+then
+	echo -n Creating Git tag $1
+	git tag -a $1 -m $1
+	echo [Done]
+fi
+
