@@ -361,6 +361,7 @@ class Order < ActiveRecord::Base
 						line.product.cost=line.product.calculate_cost
 						products_done << line.product
 					end
+					line.isreceived_str = 'Si'
 				end
 			end
 		end

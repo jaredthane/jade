@@ -161,6 +161,7 @@
   			<% for location in get_locations %>
   				<li><a href="/entities/<%= location.id %>" title=<%= location.name %>><%= location.name %></a></li>
   			<% end %>
+  			<li><a href="/physical_counts" title="Cuentas Fisicas">Cuentas Fisicas</a></li>
   		</ul>
   	</li>
   	<% if current_user.has_rights(['admin','gerente','ventas']) %>
