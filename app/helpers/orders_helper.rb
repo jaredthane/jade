@@ -32,7 +32,7 @@ module OrdersHelper
 		if order.last_received == nil
 			return "Entrega"
 		else
-			if order.amount_paid == order.total_price
+			if order.amount_paid == order.total_price_with_tax
 				return "Terminado"
 			else
 				return "Pago" 

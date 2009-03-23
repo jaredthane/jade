@@ -58,12 +58,106 @@ class PhysicalCountsController < ApplicationController
    	@count = Order.find(params[:id])
   end
   def post
+    if !current_user.has_rights(['admin','gerente','inventario'])
+      redirect_back_or_default('/physical_counts')
+      flash[:error] = "No tiene los derechos suficientes para cambiar cuentas fisicas"
+    end
+    @count = Order.find(params[:id])
+    errors=false
+    lines_to_delete=[]
+    #Update existing lines
+    for l in @count.lines
+      logger.debug "l.id=" + l.id.to_s
+      if params['existing_lines']
+        logger.debug "params['existing_lines'][l.id.to_s]=" + params['existing_lines'][l.id.to_s].to_s
+      end
+      if params['existing_lines']
+        if params['existing_lines'][l.id.to_s]
+          logger.debug "setting attribs for line #{l.id}"
+          logger.debug "l.warranty before=#{l.warranty.to_s}"
+          l.attributes = params['existing_lines'][l.id.to_s]
+          logger.debug "l.warranty afterz=#{l.warranty.to_s}"
+        else
+          logger.debug "deleting line #{l.id}"
+          lines_to_delete << l
+        end
+      else
+        logger.debug "deleting line #{l.id}"
+        lines_to_delete << l
+      end
+    end
+    for l in lines_to_delete
+      @count.lines.delete(l)
+    end
+    # Update New lines
+    list= params['new_lines'] || []
+    for l in list
+      new_line = Line.new(:order_id=>@count.id)
+      new_line.product_id = l[:product_id]    
+      new_line.quantity = l[:quantity]
+      new_line.attributes=l  
+      logger.debug "about to push #{new_line.inspect}"    
+      @count.lines.push(new_line)
+    end
+    errors = true if !@count.post
+    if !errors
+      flash[:notice] = 'Cuenta Fisica ha sido procesado exitosamente.'
+      redirect_to(physical_count_url(@count))
+    else
+      format.html { render :action => "edit" }
+    end
+  end
+  def create
+  @count = Order.new(:order_type_id => 3)
+  @count.attributes = params["count"]
+  	if !current_user.has_rights(['admin','gerente','inventario'])
+			redirect_back_or_default('/physical_counts')
+			flash[:error] = "No tiene los derechos suficientes para crear cuentas fisicas"
+  	end
+    respond_to do |format|
+      if @count.save
+      	list= params['new_lines'] || []
+      	errors=false
+      	for l in list
+      		new_line = Line.new(:order_id=>@count.id)
+      		#new_line.product_name = l[:product_name]  		
+      		new_line.product_id = l[:product_id]  	
+  				new_line.quantity = l[:quantity]  
+  				#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])
+      		#logger.debug "product id:   ->" + l[:product_name]
+      		errors= true if !new_line.update_attributes(l)
+      		@count.lines << new_line
+      	end
+      else
+      	errors = true
+      end
+      if params[:submit_type] == 'post' and !errors
+      	errors = true if !@count.post
+      end
+      errors = true if !@count.update_attributes(params[:count])
+      if !errors
+        flash[:notice] = 'Cuenta Fisica ha sido creado exitosamente.'
+        format.html {  redirect_to(@count)  }
+        format.xml  { render :xml => @count, :status => :created }
+      else
+		    @count.errors.each do |error|
+					logger.debug "error[0]=#{error[0].to_s}"
+					if error[0] == "lines"
+						errors.delete(error)
+					end
+				end
+        format.html { render :action => "new" }
+        format.xml  { render :xml => @count.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
+  def update
+  	@count = Order.find(params[:id])
   	if !current_user.has_rights(['admin','gerente','inventario'])
 			redirect_back_or_default('/physical_counts')
 			flash[:error] = "No tiene los derechos suficientes para cambiar cuentas fisicas"
   	end
-    @count = Order.find(params[:id])
-    errors=false
+  	errors=false
     lines_to_delete=[]
     #Update existing lines
     for l in @count.lines
@@ -99,111 +193,21 @@ class PhysicalCountsController < ApplicationController
   		logger.debug "about to push #{new_line.inspect}"  	
   		@count.lines.push(new_line)
   	end
-    errors = true if !@count.post
-    if !errors
-    	flash[:notice] = 'Cuenta Fisica ha sido procesado exitosamente.'
-    	redirect_to(physical_count_url(@count))
-    else
-    	format.html { render :action => "edit" }
-    end
-  end
-  def create
-  	if !current_user.has_rights(['admin','gerente','inventario'])
-			redirect_back_or_default('/physical_counts')
-			flash[:error] = "No tiene los derechos suficientes para crear cuentas fisicas"
-  	end
-  	@count = Order.new(:order_type_id => params[:count][:order_type_id])
-    respond_to do |format|
-      if @count.update_attributes(params[:count])
-      	list= params['new_lines'] || []
-      	errors=false
-      	for l in list
-      		new_line = Line.new(:order_id=>@count.id)
-      		#new_line.product_name = l[:product_name]  		
-      		new_line.product_id = l[:product_id]  	
-  				new_line.quantity = l[:quantity]  
-  				#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])
-      		#logger.debug "product id:   ->" + l[:product_name]
-      		errors= true if !new_line.update_attributes(l)
-      		@count.lines << new_line
-      	end
-      else
-      	errors = true
-      end
-      if !errors
-        flash[:notice] = 'Cuenta Fisica ha sido creado exitosamente.'
-        format.html { redirect_to(physical_count_url(@count)) }
-        format.xml  { render :xml => @count, :status => :created }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @count.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-  def update
-  	if !current_user.has_rights(['admin','gerente','inventario'])
-			redirect_back_or_default('/physical_counts')
-			flash[:error] = "No tiene los derechos suficientes para cambiar cuentas fisicas"
-  	end
-  	errors=false
-    @order = Order.find(params[:id])
-    return false if !allowed(@order.order_type_id, 'edit')
-    lines_to_delete=[]
-    #Update existing lines
-    for l in @order.lines
-			logger.debug "l.id=" + l.id.to_s
-			if params['existing_lines']
-				logger.debug "params['existing_lines'][l.id.to_s]=" + params['existing_lines'][l.id.to_s].to_s
-			end
-			if params['existing_lines']
-				if params['existing_lines'][l.id.to_s]
-					logger.debug "setting attribs for line #{l.id}"
-					logger.debug "l.warranty before=#{l.warranty.to_s}"
-					l.attributes = params['existing_lines'][l.id.to_s]
-					logger.debug "l.warranty afterz=#{l.warranty.to_s}"
-				else
-					logger.debug "deleting line #{l.id}"
-					lines_to_delete << l
-				end
-			else
-				logger.debug "deleting line #{l.id}"
-				lines_to_delete << l
-			end
-		end
-		for l in lines_to_delete
-			@order.lines.delete(l)
-		end
-		# Update New lines
-		list= params['new_lines'] || []
-  	for l in list
-  		new_line = Line.new(:order_id=>@order.id)
-  		new_line.product_id = l[:product_id]		
-  		new_line.quantity = l[:quantity]
-  		new_line.attributes=l  
-  		logger.debug "about to push #{new_line.inspect}"  	
-  		@order.lines.push(new_line)
-  	end
-  	errors = true if !@order.update_attributes(params[:order])
-  	if params['submit_type'] == 'post'
+  	errors = true if !@count.update_attributes(params[:count])
+  	if params['submit_type'] == 'post' and !errors
 	  	errors = true if !@count.post
 	  end
   	
   	respond_to do |format|
       if !errors
         flash[:notice] = 'Cuenta Fisica ha sido actualizado exitosamente.'
-        format.html { redirect_to(@order) }
+        format.html { redirect_to(@count) }
         format.xml  { head :ok }
       else
       	logger.debug "saving order didnt work"
         format.html { render :action => "edit" }
-        format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @count.errors, :status => :unprocessable_entity }
       end
-    end
-  	if !errors
-    	flash[:notice] = 'Cuenta Fisica ha sido procesado exitosamente.'
-    	redirect_to(physical_count_url(@count))
-    else
-    	format.html { render :action => "edit" }
     end
   end
   def destroy
