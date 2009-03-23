@@ -42,3 +42,5 @@ git reset --hard
 To trash local commits
 git reset --hard origin/master
 
+To change version of project (my script)
+set_version 0.72 tag
