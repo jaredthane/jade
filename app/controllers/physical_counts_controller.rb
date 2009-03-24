@@ -119,7 +119,6 @@ class PhysicalCountsController < ApplicationController
   	for l in list
   		new_line = Line.new(:order=>@count)
   		#new_line.product_name = l[:product_name]  	
-  		logger.debug "%%%%%%%%%%%%%%%%%%%%%%%%%%%%new_line.order.order_type_id=#{new_line.order.order_type_id.to_s}"	
   		new_line.product_id = l[:product_id]  	
 			new_line.quantity = l[:quantity]  
 			#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])

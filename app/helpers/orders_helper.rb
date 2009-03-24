@@ -30,9 +30,13 @@ module OrdersHelper
 	end 
 	def awaiting(order)
 		if order.last_received == nil
-			return "Entrega"
+			if order.order_type_id==5
+				return "En Proceso"
+			else
+				return "Entrega"
+			end
 		else
-			if order.amount_paid == order.total_price_with_tax
+			if order.amount_paid == order.total_price_with_tax or order.order_type_id==5
 				return "Terminado"
 			else
 				return "Pago" 
