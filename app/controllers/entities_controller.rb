@@ -227,7 +227,7 @@ class EntitiesController < ApplicationController
 
     respond_to do |format|
       if @entity.save
-      	if entity_type_id == 3
+      	if params[:entity_type_id] == 3
 		    	for p in Product.all
 		    		i=Inventory.create(:entity=>@entity, :product=>p, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
 		    	end  
