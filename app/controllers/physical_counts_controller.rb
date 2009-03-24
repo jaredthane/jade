@@ -134,7 +134,6 @@ class PhysicalCountsController < ApplicationController
       if params[:submit_type] == 'post' and !errors
       	errors = true if !@count.post
       end
-      errors = true if !@count.update_attributes(params[:count])
       if !errors
         flash[:notice] = 'Cuenta Fisica ha sido creado exitosamente.'
         format.html {  redirect_to(@count)  }
@@ -193,10 +192,10 @@ class PhysicalCountsController < ApplicationController
   		logger.debug "about to push #{new_line.inspect}"  	
   		@count.lines.push(new_line)
   	end
-  	errors = true if !@count.update_attributes(params[:count])
   	if params['submit_type'] == 'post' and !errors
 	  	errors = true if !@count.post
 	  end
+  	errors = true if !@count.update_attributes(params[:count])
   	
   	respond_to do |format|
       if !errors

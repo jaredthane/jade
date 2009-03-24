@@ -7,6 +7,8 @@ credit
  
 ------------------------ This Versions Goals-------------------------------
 ================= Bugs:  =======================================
+make order set lines as received
+have it show cantidad anterior in show after submit
 Make it count the number of lines for each product in js and then calculate the difference in price
 +No error is given when a serial number is not found
 MYSQL for rojo filter must treat Null values as 0 <- Dont know how to do this yet

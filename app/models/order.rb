@@ -285,8 +285,9 @@ class Order < ActiveRecord::Base
 				logger.debug "its product has not been posted yet"
 				if line.product.serialized
 					serials_here = line.product.get_serials_here(self.vendor_id)
-					#Get a complete list of the lines in the order for this product
-					product_lines= []
+					old_qty = serials_here.length
+					# Get a complete list of the lines in the order for this product
+					product_lines = []
 					for l in self.lines
 						product_lines << l if l.product_id == line.product_id
 					end
@@ -350,7 +351,7 @@ class Order < ActiveRecord::Base
 						end
 					end
 	        for l in product_lines
-	          l.previous_qty = serials_here.length
+	          l.previous_qty = old_qty
 	          l.price = l.product.cost * (serials_here.length - line.product.get_serials_here(self.vendor_id).length)
 	        end
 				else
@@ -365,8 +366,8 @@ class Order < ActiveRecord::Base
 						line.product.cost=line.product.calculate_cost
 						products_done << line.product_id
 					end
-					line.isreceived_str = 'Si'
 				end
+				line.received=Time.now
 			end
 		end
 	end
