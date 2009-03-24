@@ -1,12 +1,13 @@
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "product_edit" %>
-  <%= javascript_include_tag "sumbit_link" %>
+  <%= javascript_include_tag "submit_link" %>
 <% end %>
 
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
 	<% if current_user.has_rights(['admin','gerente']) %>
 		<% if mode == 'edit' %>
+			<dt><%= link_to_function 'Guardar', 'submit("product_form")', :class => 'action' %></dt>
 			<dt> <%=link_to 'Lista', products_path, :class => 'action' %></dt>
 		<% end %>
   <dt> <%= link_to 'Cancelar', @product, :class => 'action' %>  </dt>
@@ -14,7 +15,7 @@
 <% end %>
 <%= error_messages_for :product %>
 
-<% form_for(@product) do |f| %>
+<% form_for @product, :html => {:id => 'product_form' } do |f| %>
 		
   <%= f.hidden_field :product_type_id, :value => 1 %>
 	<div class="column2-unit-left">
@@ -98,7 +99,6 @@
 	  <b>Descripcion</b><br />
 	  <%= f.text_area :description %>
 	</p>
-	<%= f.submit "Guardar Producto", :class => 'action'  %>
 	
 <% end %>
 
