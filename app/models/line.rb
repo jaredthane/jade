@@ -311,38 +311,40 @@ class Line < ActiveRecord::Base
 			logger.debug  "taking find path"
 			s=SerializedProduct.find_by_serial_number(serial)
 		end
-		if self.serialized_product # the line was already marked as delivered
-			logger.debug  "the line was already marked as delivered"
-			if !(serial == "" or serial == "\n")
-				if s != self.serialized_product # only need to work if it's been changed
-					logger.debug  "we are changing the serial numbers delivered for the line"
-					# we are changing the serial numbers delivered for the line
-					# because it is an existing order, we can create the movements now.
+			if self.order.order_type_id != 5
+				if self.serialized_product # the line was already marked as delivered
+					logger.debug  "the line was already marked as delivered"
+					if !(serial == "" or serial == "\n")
+						if s != self.serialized_product # only need to work if it's been changed
+							logger.debug  "we are changing the serial numbers delivered for the line"
+							# we are changing the serial numbers delivered for the line
+							# because it is an existing order, we can create the movements now.
 					
-					# This is a Compra(2), Venta(1), o Transaccion(3)
+							# This is a Compra(2), Venta(1), o Transaccion(3)
 					
+							self.isreceived=0
+						self.serialized_product = s
+						self.isreceived=1
+					end
+				else # we are marking the line as not delivered after it was previously delivered
+					logger.debug  "we are marking the line as not delivered after it was previously delivered"
+				
+					# This is a Devolucion of Compra(6), Venta(5), o Transaccion(7)
+					logger.debug  "setting isreceived=0"
 					self.isreceived=0
+					self.serialized_product = nil # s was also nil
+				end
+			else # the line was previously undelivered
+				logger.debug  "the line was previously undelivered"
+				if !(serial == "" or serial == "\n")
+					logger.debug  "delivering previously undelivered serial"
+					# either this is a new order, or is simply undelivered until now.
+				
+					# This is a Compra(2), Venta(1), o Transaccion(3)
+				
 					self.serialized_product = s
 					self.isreceived=1
 				end
-			else # we are marking the line as not delivered after it was previously delivered
-				logger.debug  "we are marking the line as not delivered after it was previously delivered"
-				
-				# This is a Devolucion of Compra(6), Venta(5), o Transaccion(7)
-				logger.debug  "setting isreceived=0"
-				self.isreceived=0
-				self.serialized_product = nil # s was also nil
-			end
-		else # the line was previously undelivered
-			logger.debug  "the line was previously undelivered"
-			if !(serial == "" or serial == "\n")
-				logger.debug  "delivering previously undelivered serial"
-				# either this is a new order, or is simply undelivered until now.
-				
-				# This is a Compra(2), Venta(1), o Transaccion(3)
-				
-				self.serialized_product = s
-				self.isreceived=1
 			end
 		end
 	end
