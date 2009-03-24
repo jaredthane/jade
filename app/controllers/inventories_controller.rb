@@ -54,13 +54,18 @@ class InventoriesController < ApplicationController
 		@inventories = Inventory.search_wo_pagination(params[:search])
 		@search = params[:search] || ""
 		for i in @inventories
-			
-			if i.quantity < (i.min || 0) + i.sales_waiting - i.on_order
-				if i.quantity + (i.max||0) > i.sales_waiting - i.on_order
+			logger.debug "i=#{i.inspect}"
+			logger.debug "i.quantity + i.on_order=#{(i.quantity + i.on_order).to_s}"
+			logger.debug "(i.min || 0) + i.sales_waiting=#{((i.min || 0) + i.sales_waiting).to_s}"
+			if i.quantity + i.on_order < (i.min || 0) + i.sales_waiting
+				logger.debug "here"
+				if i.quantity + i.on_order + (i.max||0) > (i.min || 0) + i.sales_waiting
 					i.product.to_order = (i.max||0)
+					logger.debug "i.product.to_order=#{i.product.to_order.to_s}"
 					#puts "i.quantity=#{i.quantity.to_s}"
 				else
-					i.product.to_order = i.sales_waiting - i.on_order - i.quantity
+					i.product.to_order = i.sales_waiting + (i.min || 0) - i.on_order - i.quantity
+					logger.debug "i.product.to_order=#{i.product.to_order.to_s}"
 				end
 			end
 		end
