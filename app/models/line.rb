@@ -298,7 +298,7 @@ class Line < ActiveRecord::Base
 	end
 	def serial_number=(serial)
 		logger.debug "serial=" + serial.to_s
-		logger.debug "order.order_type_id=#{order.order_type_id.to_s}"
+#		logger.debug "order.order_type_id=#{order.order_type_id.to_s}"
 		if (!(serial == "" or serial == "\n") and ((order.order_type_id==2) or (order.order_type_id==5)))
 			logger.debug "Taking create path"
 			s=SerializedProduct.find_or_create_by_serial_number(serial)

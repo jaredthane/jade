@@ -108,33 +108,31 @@ class PhysicalCountsController < ApplicationController
     end
   end
   def create
-  @count = Order.new(:order_type_id => 3)
-  @count.attributes = params["count"]
-  	if !current_user.has_rights(['admin','gerente','inventario'])
+		@count = Order.new(:order_type_id => 3)
+		@count.attributes = params["count"]
+		if !current_user.has_rights(['admin','gerente','inventario'])
 			redirect_back_or_default('/physical_counts')
 			flash[:error] = "No tiene los derechos suficientes para crear cuentas fisicas"
+		end
+  	errors=false
+  	list= params['new_lines'] || []
+  	for l in list
+  		new_line = Line.new(:order=>@count)
+  		#new_line.product_name = l[:product_name]  	
+  		logger.debug "%%%%%%%%%%%%%%%%%%%%%%%%%%%%new_line.order.order_type_id=#{new_line.order.order_type_id.to_s}"	
+  		new_line.product_id = l[:product_id]  	
+			new_line.quantity = l[:quantity]  
+			#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])
+  		#logger.debug "product id:   ->" + l[:product_name]
+  		errors = true if !new_line.update_attributes(l)
+  		@count.lines << new_line
   	end
-    respond_to do |format|
-      if @count.save
-      	list= params['new_lines'] || []
-      	errors=false
-      	for l in list
-      		new_line = Line.new(:order_id=>@count.id)
-      		#new_line.product_name = l[:product_name]  		
-      		new_line.product_id = l[:product_id]  	
-  				new_line.quantity = l[:quantity]  
-  				#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])
-      		#logger.debug "product id:   ->" + l[:product_name]
-      		errors= true if !new_line.update_attributes(l)
-      		@count.lines << new_line
-      	end
-      else
-      	errors = true
-      end
-      if params[:submit_type] == 'post' and !errors
-      	errors = true if !@count.post
-      end
-      if !errors
+	  if params[:submit_type] == 'post' and !errors
+	  	errors = true if !@count.post
+	  end
+	  errors = true if !@count.save
+		respond_to do |format|
+			if !errors
         flash[:notice] = 'Cuenta Fisica ha sido creado exitosamente.'
         format.html {  redirect_to(@count)  }
         format.xml  { render :xml => @count, :status => :created }

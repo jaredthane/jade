@@ -12,7 +12,7 @@
 <%= error_messages_for :count, :header_message => "Surgieron los siguentes dificultades guardando los cambios a la cuenta fisica:", :message => "" %>
 <%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 <%= f.hidden_field :client_id, :value => current_user.location.id %>
-	<%= f.hidden_field :user_id, :value => current_user.id %>
+<%= f.hidden_field :user_id, :value => current_user.id %>
 <%= f.hidden_field :order_type_id, :value => 5 %>
 
 <div class="column3-unit-right">

@@ -285,6 +285,7 @@ class Order < ActiveRecord::Base
 				logger.debug "its product has not been posted yet"
 				if line.product.serialized
 					serials_here = line.product.get_serials_here(self.vendor_id)
+					logger.debug "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==#{serials_here.length.to_s}"
 					old_qty = serials_here.length
 					# Get a complete list of the lines in the order for this product
 					product_lines = []
