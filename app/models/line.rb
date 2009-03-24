@@ -311,7 +311,9 @@ class Line < ActiveRecord::Base
 			logger.debug  "taking find path"
 			s=SerializedProduct.find_by_serial_number(serial)
 		end
-			if self.order.order_type_id != 5
+			if self.order.order_type_id == 5
+				self.serialized_product=s
+			else
 				if self.serialized_product # the line was already marked as delivered
 					logger.debug  "the line was already marked as delivered"
 					if !(serial == "" or serial == "\n")
