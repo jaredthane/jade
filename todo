@@ -7,9 +7,7 @@ credit
  
 ------------------------ This Versions Goals-------------------------------
 ================= Bugs:  =======================================
-make order set lines as received
-have it show cantidad anterior in show after submit
-Make it count the number of lines for each product in js and then calculate the difference in price
+Jared Make it count the number of lines for each product in js and then calculate the difference in price
 +No error is given when a serial number is not found
 MYSQL for rojo filter must treat Null values as 0 <- Dont know how to do this yet
 restrict only product_type 1 can be added to counts
@@ -102,8 +100,7 @@ price quotes
 need to be able to modify price groups
  - should create prices for every product when creating a new group
  - should be able to copy prices in view to another group
-pay aheads
-logs with security
+
 products show should show inventory for each location and links to a list of movements for that product in those locations
 
 have link on the bottom to permit saving a comment with movements made on submit
@@ -337,3 +334,7 @@ different costs for each location
 should be able to remove/change a line in one save
 Cantidad se debe shows wierd numbers when prices are high
 inventories shouldnt show id column
+make order set lines as received
+have it show cantidad anterior in show after submit
+pay aheads
+logs with security

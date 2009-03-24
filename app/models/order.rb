@@ -357,7 +357,7 @@ class Order < ActiveRecord::Base
 	        end
 				else
 					line.previous_qty = line.product.quantity
-+         line.price = line.product.cost * (line.quantity - line.product.quantity)
+        	line.price = line.product.cost * (line.quantity - line.product.quantity)
 					if line.quantity != line.product.quantity
 						m=Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => line.quantity - line.product.quantity, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
 						i=line.product.inventories.find_by_entity_id(self.vendor_id)
@@ -442,7 +442,7 @@ class Order < ActiveRecord::Base
 	end
 	def self.search_purchases(search, page)
 		paginate :per_page => 20, :page => page,
-						 :conditions => ['(vendors.name like :search) AND order_type_id = 2 and clients.entity_type_id = 3) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+						 :conditions => ['(vendors.name like :search AND order_type_id = 2 and clients.entity_type_id = 3) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
