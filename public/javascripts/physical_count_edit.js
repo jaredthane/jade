@@ -17,11 +17,11 @@ function calc_dif(e) {
 	// $("this")										<--- count
 	//test = (parseFloat(e.value) - parseFloat(e.previousSibling.previousSibling.value)) * parseFloat(e.previousSibling.previousSibling..previousSibling.previousSibling).toFixed(2);
 	qty= parseFloat(e.parentNode.previousSibling.previousSibling.childNodes[1].value);
-	cost= parseFloat(e.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.childNodes[1].value);
+	cost= parseFloat(e.parentNode.previousSibling.previousSibling.previousSibling.previousSibling.value);
 	count= parseFloat(e.value);
 	//x = e.parentNode.nextSibling.nextSibling.childNodes[0].id
 	//alert(x);
-	e.parentNode.nextSibling.nextSibling.childNodes[0].value = '$'+((count-qty)*cost).toFixed(2)
+	e.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.childNodes[0].value = '$'+((count-qty)*cost).toFixed(2)
 }
 function disableEnterKey(e){
      var key;

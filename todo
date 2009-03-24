@@ -7,14 +7,18 @@ credit
  
 ------------------------ This Versions Goals-------------------------------
 ================= Bugs:  =======================================
+Make it count the number of lines for each product in js and then calculate the difference in price
++No error is given when a serial number is not found
 MYSQL for rojo filter must treat Null values as 0 <- Dont know how to do this yet
 restrict only product_type 1 can be added to counts
 I created a purchase for a serial object but it didnt appear in the quantity
-need to set client = location on counts
 shouldnt dump products from order when proveedor is invalid
 fix serial number collisions
 move the orders work into the model and out of the controller
 ================= Features:   =======================================
++reorganize the menus into logical order
++serial number page should let you search products
++when you go to the inventories menu and select a site, you should be able to search inventories
 change orders to be updated with two properties newlines, and existing lines
 be sure to update counts controller too.
 block sales and purchases on products being counted

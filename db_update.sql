@@ -9,3 +9,10 @@ UNLOCK TABLES;
 LOCK TABLES `order_types` WRITE;
 INSERT INTO `order_types` VALUES (5,'Cuenta Fisica');
 UNLOCK TABLES;
++
+0
++LOCK TABLES `products` WRITE;
+0
++alter table products add column blocked_by_count int(1) default 0;
+0
++UNLOCK TABLES;

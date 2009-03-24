@@ -104,6 +104,9 @@
   			<li><a href="/combos/new" title="Combo">Combo</a></li>
 	  		<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
 	  		<% end %>
+	  		<% if current_user.has_rights(['admin','inventario','gerente']) %>
+        	<li><a href="/physical_counts/new" title="Cuenta Fisica">Cuenta Fisica</a></li>
+        <% end %>
   			<li><a href="/internal/new" title="Consumo Interno">Consumo Interno</a></li>
   			<li><a href="/sites/new" title="Sitio">Sitio</a></li>
   			</ul>
@@ -156,7 +159,7 @@
 	  		<% end %>
 	  	</ul>
 	  </li>
-	  <li><a href="/locations" title="Inventario">Inventario</a>
+	  <li><a href="/sites" title="Inventario">Inventario</a>
 	  	<ul>
   			<% for location in get_locations %>
   				<li><a href="/entities/<%= location.id %>" title=<%= location.name %>><%= location.name %></a></li>

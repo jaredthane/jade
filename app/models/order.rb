@@ -281,14 +281,14 @@ class Order < ActiveRecord::Base
 		logger.debug "self.lines=#{self.lines.inspect}"
 		for line in self.lines
 			logger.debug "posting line=#{line.inspect}"
-			if !products_done.include?(line.product)
+			if !products_done.include?(line.product_id)
 				logger.debug "its product has not been posted yet"
 				if line.product.serialized
-					logger.debug "the product is serialized"
+					serials_here = line.product.get_serials_here(self.vendor_id)
 					#Get a complete list of the lines in the order for this product
 					product_lines= []
 					for l in self.lines
-						product_lines << l if l.product == line.product
+						product_lines << l if l.product_id == line.product_id
 					end
 					
 					logger.debug "product_lines=#{product_lines.inspect}" 
@@ -316,7 +316,6 @@ class Order < ActiveRecord::Base
 								# Make a movement to bring it here
 								Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
 								i = l.product.inventories.find_by_entity_id(self.vendor_id)
-								l.previous_qty = i.quantity
 								i.quantity=i.quantity+1
 								i.save
 							end
@@ -340,32 +339,47 @@ class Order < ActiveRecord::Base
 					for s in line.product.get_serials_here(self.vendor_id)
 						logger.debug "s=#{s.inspect}"
 						if !serials.include?(s)
-							logger.debug "!serials.include?(s)"
+							logger.debug "!serials.include?(s.id)"
 							# Make a movement to remove it from here
 							Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => s.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
 							i = s.product.inventories.find_by_entity_id(self.vendor_id)
 							l.previous_qty = i.quantity
-							i.quantity=i.quantity-1
 							i.save
 							# Make movement to move it to Internal Consumption
 							Movement.create(:entity_id => 1, :comments => self.comments, :product_id => s.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
 						end
 					end
+	        for l in product_lines
+	          l.previous_qty = serials_here.length
+	          l.price = l.product.cost * (serials_here.length - line.product.get_serials_here(self.vendor_id).length)
+	        end
 				else
+					line.previous_qty = line.product.quantity
++         line.price = line.product.cost * (line.quantity - line.product.quantity)
 					if line.quantity != line.product.quantity
 						m=Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => line.quantity - line.product.quantity, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
 						i=line.product.inventories.find_by_entity_id(self.vendor_id)
-						line.previous_qty = i.quantity
 						i.quantity=line.quantity
+						products_done << line.product_id
 						i.save
 						line.product.cost=line.product.calculate_cost
-						products_done << line.product
+						products_done << line.product_id
 					end
 					line.isreceived_str = 'Si'
 				end
 			end
 		end
 	end
+	# Returns the a list of lines from the specified count that are for the specified product_id
+  def lines_for_product(product_id)
+    aplicable_lines=[]
+    for l in self.lines
+      if l.product_id == product_id
+      	aplicable_lines << l
+      end
+    end
+    return aplicable_lines
+  end
 	def save_lines
 		sucessful = true
 		logger.debug "saving lines"
