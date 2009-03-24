@@ -16,6 +16,7 @@
 
 <% form_for(@product) do |f| %>
 		
+  <%= f.hidden_field :product_type_id, :value => 3 %>
 	<div class="column2-unit-left">
 		<p>
 		  <b>Nombre</b><br />
@@ -33,7 +34,6 @@
 			<b>Numero de Modelo</b>
 			<%= f.text_field :model, :class => 'field' %>
 		</p>
-		
 		<% if mode == 'new' %>
 			<p>
 				<%= f.check_box :serialized, :class => 'field' %><b> Usar Numeros de Serie</b>
