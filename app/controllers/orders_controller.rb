@@ -137,17 +137,18 @@ class OrdersController < ApplicationController
   end
   def create_orders
   	#logger.debug "starting create orders"
-  	@vendors = Entity.find(:all, :order => "name", :conditions =>"entity_type_id=1")
+  	
   	for o in Order.find(:all, :conditions =>'last_batch=True')
   		o.last_batch=false
   		o.save
   	end
+  	
   	#logger.debug "about to go through vendors"
+  	@vendors = Entity.find(:all, :order => "name", :conditions =>"entity_type_id=1")
   	for v in @vendors
   		#logger.debug "looking at " + v.name
   		order_made=0
-  		condition='vendor_id=' + v.id.to_s
-  		for p in Product.find(:all, :conditions => condition)
+  		for p in v.products
   			to_order=p.to_order
   			##logger.debug "product:" + p.id.to_s + " "+ p.name + " to order:" + to_order.to_s
   			if (to_order || 0) > 0
@@ -156,6 +157,7 @@ class OrdersController < ApplicationController
   					#puts"creating new order for " + v.name
   					o=Order.new(:vendor=>v, :client=>current_user.location, :user=>current_user, :last_batch=>true, :order_type_id => 2)
   					o.save
+  					logger.debug "o=#{o.inspect}"
   					order_made=1
   				end	
   				if p.serialized
