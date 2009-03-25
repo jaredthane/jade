@@ -6,8 +6,8 @@
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
 	<% if current_user.has_rights(['admin','gerente']) %>
+		<dt><%= link_to_function 'Guardar', 'submit("product_form")', :class => 'action' %></dt>
 		<% if mode == 'edit' %>
-			<dt><%= link_to_function 'Guardar', 'submit("product_form")', :class => 'action' %></dt>
 			<dt> <%=link_to 'Lista', products_path, :class => 'action' %></dt>
 		<% end %>
   <dt> <%= link_to 'Cancelar', @product, :class => 'action' %>  </dt>
