@@ -111,4 +111,5 @@ else
 	pdf.text number_to_currency(@receipt.total_price_with_tax), :at=>[405+o[:x],40+o[:y]]
 	pdf.text "$0.00", :at=>[405+o[:x],26+o[:y]]
 	pdf.text number_to_currency(@receipt.total_price_with_tax), :at=>[405+o[:x],16+o[:y]]
+	pdf.text @receipt.total_price_with_tax_in_spanish, :at=>[35+o[:x],68+o[:y]]
 end
