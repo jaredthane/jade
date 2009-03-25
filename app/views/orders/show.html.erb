@@ -69,6 +69,10 @@
 		<b>Precio Total:</b>
 		<%=h number_to_currency(@order.total_price) %>
 	</p>
+	<p>
+		<b>Precio Total despues de IVA:</b>
+		<%=h number_to_currency(@order.total_price_with_tax) %>
+	</p>
 <% end %>
 
 </div>
