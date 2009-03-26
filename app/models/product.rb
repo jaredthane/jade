@@ -125,7 +125,7 @@ class Product < ActiveRecord::Base
 			if l
 				logger.debug "take=#{take.to_s}"
 				logger.debug "l.price=#{l.price.to_s}"
-				totalcost += l.price*take
+				totalcost += (l.price||0)*(take||0)
 				logger.debug items_counted.inspect
 				items_counted = items_counted + take
 			end
