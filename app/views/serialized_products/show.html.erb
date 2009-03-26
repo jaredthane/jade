@@ -5,7 +5,7 @@
 	<p>
 		<b>Producto</b>
 		<% if @serialized_product.product %>
-			<%= link_to @serialized_product.product.name @serialized_product.product%>
+			<%= link_to @serialized_product.product.name, @serialized_product.product%>
 		<% end %>
 	</p>
 	<p><b>Proveedor</b><br />
