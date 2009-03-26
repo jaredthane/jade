@@ -285,14 +285,13 @@ class Order < ActiveRecord::Base
 				logger.debug "its product has not been posted yet"
 				if line.product.serialized
 					serials_here = line.product.get_serials_here(self.vendor_id)
-					logger.debug "-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-==#{serials_here.length.to_s}"
+					logger.debug "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#{serials_here.length.to_s}"
 					old_qty = serials_here.length
 					# Get a complete list of the lines in the order for this product
 					product_lines = []
 					for l in self.lines
 						product_lines << l if l.product_id == line.product_id
 					end
-					
 					logger.debug "product_lines=#{product_lines.inspect}" 
 					# Add new serials
 					for l in product_lines
@@ -318,7 +317,9 @@ class Order < ActiveRecord::Base
 								# Make a movement to bring it here
 								Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
 								i = l.product.inventories.find_by_entity_id(self.vendor_id)
+								logger.debug "===============> old i=#{i.inspect}"
 								i.quantity=i.quantity+1
+								logger.debug "===============> new i=#{i.inspect}"
 								i.save
 							end
 						else	# This serial was just created
@@ -327,7 +328,9 @@ class Order < ActiveRecord::Base
 								Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
 								i = l.product.inventories.find_by_entity_id(self.vendor_id)
 								l.previous_qty = i.quantity
+								logger.debug "===============> old i=#{i.inspect}"
 								i.quantity=i.quantity+1
+								logger.debug "===============> new i=#{i.inspect}"
 								i.save
 						end
 					end
@@ -346,6 +349,7 @@ class Order < ActiveRecord::Base
 							Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => s.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
 							i = s.product.inventories.find_by_entity_id(self.vendor_id)
 							l.previous_qty = i.quantity
+							i.quantity=i.quantity-1
 							i.save
 							# Make movement to move it to Internal Consumption
 							Movement.create(:entity_id => 1, :comments => self.comments, :product_id => s.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
