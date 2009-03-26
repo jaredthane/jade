@@ -28,27 +28,27 @@ class OrdersController < ApplicationController
 						return false
 					end
 				elsif action=="view"
-					if !current_user.has_rights(['admin','gerente','ventas','compras'])
+					if !current_user.has_rights(['admin','gerente','ventas','compras','inventario'])
 						redirect_back_or_default('/products')
 						flash[:error] = "No tiene los derechos suficientes para ver lsa ventas"
 						return false
 					end
 				end
 		  when 2
-		  	if !current_user.has_rights(['admin','compras','gerente'])
+		  	if !current_user.has_rights(['admin','compras','gerente','inventario'])
 					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver las compras"
 						return false
 		  	end
 		  when 3
 		  	if action=="edit"
-					if !current_user.has_rights(['admin','gerente','gerente'])
+					if !current_user.has_rights(['admin','gerente','ventas','inventario'])
 						redirect_back_or_default('/products')
 						flash[:error] = "No tiene los derechos suficientes para cambiar el uso interno"
 						return false
 					end
 				elsif action=="view"
-					if !current_user.has_rights(['admin','gerente','ventas','compras'])
+					if !current_user.has_rights(['admin','gerente','ventas','compras','inventario'])
 						redirect_back_or_default('/products')
 						flash[:error] = "No tiene los derechos suficientes para ver el uso interno"
 						return false
