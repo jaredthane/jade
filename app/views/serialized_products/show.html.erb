@@ -1,7 +1,13 @@
 
-<% content_for :title do %><%=h @serialized_product.product.name %> - <%=h @serialized_product.product.upc %><% end %>
+<% content_for :title do %>Numero de Serie - <%=h @serialized_product.product.upc %><% end %>
 
 <div class="column3-unit-left">
+	<p>
+		<b>Producto</b>
+		<% if @serialized_product.product %>
+			<%= link_to @serialized_product.product.name @serialized_product.product%>
+		<% end %>
+	</p>
 	<p><b>Proveedor</b><br />
     <% if @serialized_product.product.vendor %>
     	<%=link_to @serialized_product.product.vendor.name, @serialized_product.product.vendor %>	

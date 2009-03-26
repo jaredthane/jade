@@ -296,6 +296,7 @@ class Order < ActiveRecord::Base
 					# Add new serials
 					for l in product_lines
 						logger.debug "l=#{l.inspect}"
+						
 #						logger.debug "l.serialized_product.new_record?=#{l.serialized_product.new_record?.to_s}"
 						old_loc = l.serialized_product.location
 						logger.debug "old_loc=#{old_loc.inspect}"
