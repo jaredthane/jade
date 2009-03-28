@@ -138,17 +138,22 @@ class Line < ActiveRecord::Base
 		return total
 	end
 	def quantity_change_direction(new, old)
+		logger.debug "Checking movement direction"
 		if new.received and !old.received 		# The line was marked received
+			logger.debug "The line was marked received"
 			return 1
 		elsif old.received and !new.received	# The line was unmarked received
+			logger.debug "The line was unmarked received"
 			return -1 
 		elsif old.received and new.received		# The line was always received
+			logger.debug "The line was always received"
 			if new.quantity > old.quantity			# The quantity increased
 				return 1
 			elsif new.quantity < old.quantity		# The quantity decreased
 				return -1
 			end
 		end
+		logger.debug "The line was never received"
 		return 0
 	end
 	def quantity_change(new, old)
@@ -206,7 +211,11 @@ class Line < ActiveRecord::Base
 			if old
 				dir = quantity_change_direction(self, old)
 			else
-				dir = 1
+				if self.received
+					dir = 1
+				else
+					dir = 0
+				end
 			end
 #			puts "----------------->" + dir.to_s
 			if dir != 0

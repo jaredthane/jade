@@ -4,10 +4,10 @@
 	<% if (line.to_order ||0) > 0  %>
 			<div class="table_row_green">
 		<% else %>
-			<% logger.debug "line.quantity=#{line.quantity.to_s}" %>
-			<% logger.debug "line.on_order=#{line.on_order.to_s}" %>
-			<% logger.debug "(line.min || 0)=#{(line.min || 0).to_s}" %>
-			<% logger.debug "line.sales_waiting=#{line.sales_waiting.to_s}" %>
+			<% #logger.debug "line.quantity=#{line.quantity.to_s}" %>
+			<% #logger.debug "line.on_order=#{line.on_order.to_s}" %>
+			<% #logger.debug "(line.min || 0)=#{(line.min || 0).to_s}" %>
+			<% #logger.debug "line.sales_waiting=#{line.sales_waiting.to_s}" %>
 			<% if (line.quantity || 0) + (line.on_order || 0) < (line.min || 0) + (line.sales_waiting||0)  %>
 				<div class="table_row_red">
 			<% else %>

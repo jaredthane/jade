@@ -131,7 +131,7 @@ class OrdersController < ApplicationController
 		  end
 		else
 			respond_to do |format|
-		    format.html {redirect_to('/products/bulk_edit')}
+		    format.html {redirect_to('/inventories')}
 		  end
 		end
   end
@@ -148,26 +148,31 @@ class OrdersController < ApplicationController
   	for v in @vendors
   		#logger.debug "looking at " + v.name
   		order_made=0
-  		for p in v.products
+  		for p in Product.find_all_by_vendor_id(v.id)
   			to_order=p.to_order
-  			##logger.debug "product:" + p.id.to_s + " "+ p.name + " to order:" + to_order.to_s
+  			logger.debug "product:" + p.id.to_s + " "+ p.name + " to order:" + to_order.to_s
   			if (to_order || 0) > 0
-  				##logger.debug "ordering product"
+  				logger.debug "ordering product"
   				if order_made==0
   					#puts"creating new order for " + v.name
   					o=Order.new(:vendor=>v, :client=>current_user.location, :user=>current_user, :last_batch=>true, :order_type_id => 2)
+  					logger.debug "============> o.new=#{o.inspect}"
   					o.save
-  					logger.debug "o=#{o.inspect}"
+  					logger.debug "============> o.save=#{o.inspect}"
   					order_made=1
   				end	
   				if p.serialized
   					for i in (1..to_order)
 							l=o.lines.new(:product=>p, :quantity=>1,:price=>p.price)
+							logger.debug "l.new(s)=#{l.inspect}"
 							l.save
+							logger.debug "l.save(s)=#{l.inspect}"
 						end
   				else
 						l=o.lines.new(:product=>p, :quantity=>to_order,:price=>p.price)
+						logger.debug "l.new=#{l.inspect}"
 						l.save
+						logger.debug "l.save=#{l.inspect}"
   				end
   				##logger.debug "done ordering product"
   				p.to_order=0
