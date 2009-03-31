@@ -278,10 +278,12 @@ class Order < ActiveRecord::Base
 	def post
 		products_done = []
 		logger.debug "======================Starting to post ======================================"
-		logger.debug "self.lines=#{self.lines.inspect}"
+#		logger.debug "self.lines=#{self.lines.inspect}"
 		for line in self.lines
 			logger.debug "posting line=#{line.inspect}"
+			logger.debug "products_done ->" + products_done.inspect
 			if !products_done.include?(line.product_id)
+				products_done << line.product_id
 				logger.debug "its product has not been posted yet"
 				if line.product.serialized
 					serials_here = line.product.get_serials_here(self.vendor_id)
@@ -299,9 +301,9 @@ class Order < ActiveRecord::Base
 						
 #						logger.debug "l.serialized_product.new_record?=#{l.serialized_product.new_record?.to_s}"
 						old_loc = l.serialized_product.location
-						logger.debug "old_loc=#{old_loc.inspect}"
+#						logger.debug "old_loc=#{old_loc.inspect}"
 						if old_loc # make sure it has a location, might have just been created
-							logger.debug "old_loc existes"
+							logger.debug "old_loc exists"
 							logger.debug "self.vendor_id=#{self.vendor_id.to_s}"
 							logger.debug "old_loc.id=#{old_loc.id.to_s}"
 							if old_loc.id != self.vendor_id # It was not already here
@@ -328,7 +330,6 @@ class Order < ActiveRecord::Base
 								# Make a movement to put it here
 								Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
 								i = l.product.inventories.find_by_entity_id(self.vendor_id)
-								l.previous_qty = i.quantity
 								logger.debug "===============> old i=#{i.inspect}"
 								i.quantity=i.quantity+1
 								logger.debug "===============> new i=#{i.inspect}"
@@ -341,7 +342,7 @@ class Order < ActiveRecord::Base
 					for l in product_lines
 						serials << l.serialized_product
 					end
-					logger.debug "serials=#{serials.inspect}"
+#					logger.debug "serials=#{serials.inspect}"
 					for s in line.product.get_serials_here(self.vendor_id)
 						logger.debug "s=#{s.inspect}"
 						if !serials.include?(s)
@@ -349,19 +350,21 @@ class Order < ActiveRecord::Base
 							# Make a movement to remove it from here
 							Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => s.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
 							i = s.product.inventories.find_by_entity_id(self.vendor_id)
-							l.previous_qty = i.quantity
 							i.quantity=i.quantity-1
 							i.save
 							# Make movement to move it to Internal Consumption
 							Movement.create(:entity_id => 1, :comments => self.comments, :product_id => s.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
 						end
 					end
+					price_per = l.product.cost * (serials_here.length - old_qty) 
 	        for l in product_lines
+	        	logger.debug "old_qty = "+old_qty.to_s
 	          l.previous_qty = old_qty
-	          l.price = l.product.cost * (serials_here.length - line.product.get_serials_here(self.vendor_id).length)
+	          l.price = price_per
 	        end
 				else
 					line.previous_qty = line.product.quantity
+					logger.debug("previous qty = " + line.product.quantity.to_s)
         	line.price = (line.product.cost||0) * ((line.quantity||0) - (line.product.quantity||0))
 					if line.quantity != line.product.quantity
 						m=Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => line.quantity - line.product.quantity, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
@@ -373,8 +376,8 @@ class Order < ActiveRecord::Base
 						products_done << line.product_id
 					end
 				end
-				line.received=Time.now
 			end
+			line.received=Time.now
 		end
 	end
 	# Returns the a list of lines from the specified count that are for the specified product_id

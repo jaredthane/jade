@@ -306,8 +306,9 @@ class Product < ActiveRecord::Base
     @allserials = self.serialized_products.find(:all, :order => "serial_number")
     @serials=[]
     for s in @allserials
-    	if s.location
-	    	@serials << s if s.location.id == site_id
+    	loc = s.location
+    	if loc
+	    	@serials << s if loc.id == site_id
     	end
     end
     return @serials

@@ -16,6 +16,7 @@
 
 
 class PhysicalCountsController < ApplicationController
+	before_filter :login_required
 	def index
   	if !current_user.has_rights(['admin','gerente','inventario'])
 			redirect_back_or_default('/physical_counts')

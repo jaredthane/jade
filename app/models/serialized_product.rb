@@ -22,8 +22,9 @@ class SerializedProduct < ActiveRecord::Base
 	has_many :movements
 	belongs_to :product
 	def location
-		logger.debug "=-=======================================-="
+#		logger.debug "=-=======================================-="
 		last_movement = self.movements.find(:last, :order=> 'id ASC')
+		logger.debug "Last movement for " + self.product.name + "-" + self.serial_number + ":" + last_movement.inspect
 		if last_movement
 			return last_movement.entity
 		else
