@@ -1,6 +1,9 @@
-
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
 <% content_for :title do %>Lista de Precios para <%= current_user.location.name %><% end %>
 <% content_for :actions do %>
+  <dt><%= link_to_function 'Guardar', 'submit("prices_form")', :class => 'action' %></dt>
 	<dt><%= link_to "Cancelar Cambios", prices_url, :class => 'action' %></dt>
 	<dt> <%= link_to 'Lista de Productos', products_url, :class => 'action' %>  </dt>
 <% end %>
@@ -9,7 +12,7 @@
 	<div class="table_cell">Con precios del grupo: <%= current_user.current_price_group.price_group_name.name %></div>
 </h2>
 <%= will_paginate @prices, :class => 'pagination' %>
-<% form_for :@prices, :url => {:action => 'update'}, id => 1 do |f| %>
+<% form_for :@prices, :html => {:id => 'prices_form' }, :url => {:action => 'update'}, id => 1 do |f| %>
 <div>
   <div id="lines" class="table_header_row">
 		  <div class="table_cell_35">Nombre</div>
