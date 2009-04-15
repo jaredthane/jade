@@ -10,7 +10,6 @@
 		<b>Nombre</b><br />
 		<%= f.text_field :name, :class => 'field' %>
 	</p>
-	<%= f.hidden_field :entity_type_id, :value => @entity.entity_type_id %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>
 			<b>Nacimiento</b><br />
@@ -87,6 +86,8 @@
 			<b>Tipo</b><br />
 			<%= f.collection_select(:entity_type_id, get_client_types, :id, :name) %>
 		</p>
+	<% else %>
+	  <%= f.hidden_field :entity_type_id, :value => @entity.entity_type_id %>
 	<% end %>
 </div>
 <hr class="clear-contentunit" />

@@ -251,6 +251,9 @@ class EntitiesController < ApplicationController
 
     respond_to do |format|
       if @entity.update_attributes(params[:entity])
+        logger.debug "entity_type="+ @entity.entity_type_id.to_s
+        logger.debug "entity_type="+ Entity.find(@entity.id).entity_type_id.to_s
+        
         flash[:notice] = 'Entidad  ha sido actualizado exitosamente.'
         format.html { redirect_to(entities_url) }
         format.xml  { head :ok }
