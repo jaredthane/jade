@@ -380,7 +380,9 @@ class Order < ActiveRecord::Base
 			line.received=Time.now
 		end
 	end
+	###################################################################################
 	# Returns the a list of lines from the specified count that are for the specified product_id
+	###################################################################################
   def lines_for_product(product_id)
     aplicable_lines=[]
     for l in self.lines
@@ -390,14 +392,21 @@ class Order < ActiveRecord::Base
     end
     return aplicable_lines
   end
+	###################################################################################
+	# saves all lines in the order are returns true if successful
+	###################################################################################
 	def save_lines
 		sucessful = true
 		logger.debug "saving lines"
 		lines.each do |line|
 			sucessful = false if !line.save(false)
+			line.product.calculate_cost()
 		end
 		return sucessful
 	end
+	###################################################################################
+	# creates a new line for this order
+	###################################################################################
 	def create_lines
 		#puts "creating lines"
 		lines.each do |line|
@@ -406,6 +415,9 @@ class Order < ActiveRecord::Base
 			line.save(true)
 		end		
 	end
+	###################################################################################
+	# returns the date the last product to be received was received or nil if any lines are pending
+	###################################################################################
 	def last_received
 		##puts "Checking for order number "+self.id.to_s
 		@received=nil
@@ -425,12 +437,18 @@ class Order < ActiveRecord::Base
 		return @received
 	end
 	
+	###################################################################################
+	# result of a search
+	###################################################################################
 	def self.search(search, page)
 		paginate :per_page => 20, :page => page,
 						 :conditions => ['(vendors.name like :search OR clients.name like :search OR orders.id like :search) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
+	###################################################################################
+	# returns result of a search taking into consideration the current user's rights'
+	###################################################################################
 	def self.search_by_rights(search, page)
 		search=search||''
 		conditions = "vendors.name like '%" + search + "%' OR clients.name like '%" + search + "%' OR orders.id like '%" + search + "%') AND (vendors.id=" + User.current_user.location_id.to_s + " OR clients.id =" + User.current_user.location_id.to_s

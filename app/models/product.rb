@@ -279,17 +279,17 @@ class Product < ActiveRecord::Base
 			priceobj.save
 		end
 	end
-	def cost(price_group = User.current_user.current_price_group)
-		priceobj = price_group.prices.find_by_product_id(self.id)
-		if priceobj
-			return priceobj.cost
+	def cost(site = User.current_user.location)
+		i = site.inventories.find_by_product_id(self.id)
+		if i
+			return i.cost
 		end
 	end
-	def cost=(new_cost, price_group = User.current_user.current_price_group)
-		priceobj = price_group.prices.find_by_product_id(self.id)
-		if priceobj
-			priceobj.cost=new_cost
-			priceobj.save
+	def cost=(new_cost, site = User.current_user.location)
+		i = site.inventories.find_by_product_id(self.id)
+		if i
+			i.cost=new_cost
+			i.save
 		end
 	end
 	def show_upc

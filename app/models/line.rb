@@ -113,13 +113,9 @@ class Line < ActiveRecord::Base
 					i.save
 				end
 			end
-			# Update inventory levels
-#			logger.info "about to calc the cost"
-			
-			p.cost=p.calculate_cost
-#			logger.info "the calculated cost is #{p.calculate_cost}"
-#			logger.info "the cost is #{p.cost}"
-#			logger.info "the cost was saved as #{Product.find(self.product_id).cost}"
+			# Update costs
+#			p.cost=p.calculate_cost  <---- This has been moved to order.after_create_lines and order.after_update_lines
+
 		end
 		# Erase list
 		@movements_to_create.clear
