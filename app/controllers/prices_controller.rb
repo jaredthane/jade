@@ -31,6 +31,7 @@ class PricesController < ApplicationController
   # PUT /prices/1
   # PUT /prices/1.xml
   def update
+    sucess=true
     params[:prices].each do |attributes|
 			@price = Price.find(attributes[0])
 			@price.fixed = attributes[1][:fixed]
@@ -38,10 +39,21 @@ class PricesController < ApplicationController
 			logger.debug "About to set available <============================================="
 			@price.available_str = attributes[1][:available_str]
 			logger.debug "@price.available_str=#{@price.available_str.to_s}"
-			@price.save
+			success=false if !@price.save
 			@price = Price.find(attributes[0])
 			logger.debug "@price.available_str=#{@price.available_str.to_s}"
 			logger.debug "@price.available=#{@price.available.to_s}"
+		end
+		if sucess
+		    flash[:notice] = 'Precios han sido actualizado exitosamente.'
+		else
+		    flash[:notice] = 'Alugnos precios no se puedieron guardar.'
+		end
+		if params[:prices].count == 1
+		    logger.debug params[:prices].keys[0]
+		    @price = Price.find(params[:prices].keys[0].to_i)
+		    redirect_to(@price.product)
+		    return false
 		end
 		redirect_to('/prices')
   end

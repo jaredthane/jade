@@ -111,29 +111,29 @@ class Product < ActiveRecord::Base
 		totalcost=0
 		taken=0
 		while	(moves[movement_counter]) do
-			logger.debug moves[movement_counter].id
-			logger.debug "stock" + stock.inspect
-			logger.debug "items_counted" + items_counted.inspect
-			logger.debug "moves[movement_counter][:quantity]" + moves[movement_counter][:quantity].inspect
-			logger.debug "stock-items_counted" + (stock-items_counted).inspect
-			logger.debug "[stock-items_counted, movements[movement_counter].quantity].min=" + [stock-items_counted, movements[movement_counter].quantity].min.inspect
-			puts moves[movement_counter]["quantity"].to_i
-			puts stock
-			puts items_counted
+#			logger.debug moves[movement_counter].id
+#			logger.debug "stock" + stock.inspect
+#			logger.debug "items_counted" + items_counted.inspect
+#			logger.debug "moves[movement_counter][:quantity]" + moves[movement_counter][:quantity].inspect
+#			logger.debug "stock-items_counted" + (stock-items_counted).inspect
+#			logger.debug "[stock-items_counted, movements[movement_counter].quantity].min=" + [stock-items_counted, movements[movement_counter].quantity].min.inspect
+#			puts moves[movement_counter]["quantity"].to_i
+#			puts stock
+#			puts items_counted
 			take = [stock-items_counted, moves[movement_counter]["quantity"].to_i].min
 			l=Line.find_by_id(moves[movement_counter]["line_id"].to_i)
 			if l
-				logger.debug "take=#{take.to_s}"
-				logger.debug "l.price=#{l.price.to_s}"
+#				logger.debug "take=#{take.to_s}"
+#				logger.debug "l.price=#{l.price.to_s}"
 				totalcost += (l.price||0)*(take||0)
-				logger.debug items_counted.inspect
+#				logger.debug items_counted.inspect
 				items_counted = items_counted + take
 			end
 			movement_counter = movement_counter + 1
 		end
 		if items_counted > 0
-			logger.debug "totalcost=#{totalcost.to_s}"
-			logger.debug "items_counted=#{items_counted.to_s}"
+#			logger.debug "totalcost=#{totalcost.to_s}"
+#			logger.debug "items_counted=#{items_counted.to_s}"
 			return totalcost/items_counted
 		else
 			return 0
@@ -280,13 +280,16 @@ class Product < ActiveRecord::Base
 		end
 	end
 	def cost(site = User.current_user.location)
-		i = site.inventories.find_by_product_id(self.id)
+		i = self.inventories.find_by_entity_id(site.id)
 		if i
-			return i.cost
+			if i.cost
+			    return i.cost
+			end
 		end
+		return 0
 	end
 	def cost=(new_cost, site = User.current_user.location)
-		i = site.inventories.find_by_product_id(self.id)
+		i = self.inventories.find_by_entity_id(site.id)
 		if i
 			i.cost=new_cost
 			i.save

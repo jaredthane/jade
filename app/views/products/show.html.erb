@@ -3,7 +3,7 @@
 	<% if current_user.has_rights(['admin','compras','gerente']) %>
 		<dt><%= link_to 'Nuevo producto', new_product_path, :class => 'action' %></dt>
 		<dt><%= link_to 'Cambiar', edit_product_path(@product), :class =>'action' %> </dt>		
-		<dt><%= link_to 'Cambiar Precio', :controller => "prices",:action => "index", :search => @product.name, :class =>'action' %> </dt>
+		<dt><%= link_to 'Cambiar Precio', :controller => "prices",:action => "index", :search => @product.upc, :class =>'action' %> </dt>
 
   <% end %>
   <dt><%= link_to 'Lista', products_path, :class =>'action' %></dt>

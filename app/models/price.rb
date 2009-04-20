@@ -42,14 +42,14 @@ class Price < ActiveRecord::Base
 	end
 	def self.search(search, page)
 		paginate :per_page => 20, :page => page,
-			       :conditions => ['(products.name like :search 
-			       									OR products.description like :search 
-			       									OR products.upc like :search 
-			       									OR vendors.name like :search )
-			       									AND (prices.price_group_id = :price_group_id)',
-			       			 {:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
-			       :order => 'products.name',
-			       :joins => 'inner join products on products.id = prices.product_id left join entities as vendors on vendors.id = products.vendor_id'
+	       :conditions => ['(products.name like :search 
+	       									OR products.description like :search 
+	       									OR products.upc = :exact_search
+	       									OR vendors.name like :search )
+	       									AND (prices.price_group_id = :price_group_id)',
+   			    {:search => "%#{search}%", :exact_search => "#{search}", :price_group_id => User.current_user.current_price_group.id}],
+	       :order => 'products.name',
+	       :joins => 'inner join products on products.id = prices.product_id left join entities as vendors on vendors.id = products.vendor_id'
 	end
 end
 
