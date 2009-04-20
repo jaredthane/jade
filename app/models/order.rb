@@ -401,8 +401,10 @@ class Order < ActiveRecord::Base
 		lines.each do |line|
 			sucessful = false if !line.save(false)
 			p = line.product
+			logger.debug "old cost:" + p.cost().to_s
 			p.cost=p.calculate_cost()
 			p.save()
+			logger.debug "new cost:" + p.cost().to_s
 		end
 		return sucessful
 	end

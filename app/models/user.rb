@@ -55,6 +55,8 @@ class User < ActiveRecord::Base
 			self.price_group_name=PriceGroupName.first
 		end
 	end
+	logger.debug "self.price_group_name=" + self.price_group_name.name
+	logger.debug "looking in location=" + self.location.name
 		pg=price_group_name.price_groups.find_by_entity_id(location_id) # this selects the group indicated if available
 #		logger.debug "pg=#{pg.to_s}"
 #		logger.debug "Entity.find(location_id)=#{Entity.find(location_id).to_s}"
