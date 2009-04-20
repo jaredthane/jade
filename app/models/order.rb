@@ -400,7 +400,9 @@ class Order < ActiveRecord::Base
 		logger.debug "saving lines"
 		lines.each do |line|
 			sucessful = false if !line.save(false)
-			line.product.calculate_cost()
+			p = line.product
+			p.cost=p.calculate_cost()
+			p.save()
 		end
 		return sucessful
 	end
@@ -413,6 +415,9 @@ class Order < ActiveRecord::Base
 			#puts "setting order_id to " + self.id.to_s
 			line.order_id = self.id 
 			line.save(true)
+			p = line.product
+			p.cost=p.calculate_cost()
+			p.save()
 		end		
 	end
 	###################################################################################
