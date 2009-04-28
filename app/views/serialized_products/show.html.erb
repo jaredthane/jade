@@ -1,6 +1,9 @@
 
 <% content_for :title do %>Numero de Serie - <%=h @serialized_product.product.upc %><% end %>
 
+<% content_for :actions do %>
+	<dt><%= link_to 'Lista', serialized_products_path, :class =>'action' %></dt>
+<% end %>
 <div class="column3-unit-left">
 	<p>
 		<b>Producto</b>
@@ -79,4 +82,4 @@
 	
 </p>
 
-<%= link_to 'Lista', serialized_products_path, :class =>'action' %>
+
