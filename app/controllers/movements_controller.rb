@@ -18,9 +18,16 @@ class MovementsController < ApplicationController
 	access_control [:new, :create, :update, :edit, :destroy] => '(admin)' 
   # GET /movements
   # GET /movements.xml
+  def for_product
+    @movements = Movement.for_product_in_site(params[:id], params[:page], params[:site])
+    respond_to do |format|
+      format.html {render :template=> "/movements/index"}
+      format.xml  { render :xml => @movements }
+    end
+  end
   def index
     #@movements = Movement.find(:all)
-		@movements = Movement.search(params[:search], params[:page])
+	@movements = Movement.search(params[:search], params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @movements }

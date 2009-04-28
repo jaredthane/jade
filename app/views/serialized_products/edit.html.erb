@@ -1,13 +1,15 @@
 
 <h1>Editing serialized_product</h1>
-
+<% content_for :actions do %>
+	<dt><%= link_to 'Ver', @serialized_product %></dt>
+	<dt><%= link_to 'Cancelar', serialized_products_path %></dt>
+<% end %>
 <%= error_messages_for :serialized_product %>
 
 <% form_for(@serialized_product) do |f| %>
   <p>
-    <%= f.submit "Update" %>
+    <%= f.submit "Actualizar" %>
   </p>
 <% end %>
 
-<%= link_to 'Show', @serialized_product %> |
-<%= link_to 'Back', serialized_products_path %>
+

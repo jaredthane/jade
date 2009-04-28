@@ -47,7 +47,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :units
     
   map.resources :payments
-  
+  map.movements_for_product 'movements/:site/:id', :controller => 'movements', :action => 'for_product'
   map.resources :movements
   map.resources :warranties
   map.resources :services
