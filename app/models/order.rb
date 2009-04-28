@@ -33,10 +33,10 @@ class Order < ActiveRecord::Base
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
   def validate
-  	#puts "validating order"
+  	## puts "validating order"
   end
-	after_update :save_lines
-	after_create :create_lines
+#	after_update :save_lines
+#	after_create :create_lines
 	after_update :check_for_discounts
 	after_create :check_for_discounts
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
@@ -48,9 +48,9 @@ class Order < ActiveRecord::Base
 	validates_presence_of(:user, :message => "debe ser valido")
 	
   ###################################################################################
-	# Returns an array of all of the discounts in the system
-	###################################################################################
-	def get_discounts
+  # Returns an array of all of the discounts in the system
+  ##################################################################################
+  def get_discounts
   	product_type=ProductType.find(2)
     @discounts = product_type.products.find(:all, :order => "name")
   end
@@ -61,11 +61,11 @@ class Order < ActiveRecord::Base
   def get_sum(product)
   	sum=0
   	o=Order.find(self.id)
-  	#puts "num lines: " + o.lines.count.to_s
+  	## puts "num lines: " + o.lines.count.to_s
   	for line in o.lines
-  		#puts "checking line#" + line.id.to_s
+  		## puts "checking line#" + line.id.to_s
   		if line.product.id==product.id
-  			#puts "found some"
+  			## puts "found some"
   			sum+=line.quantity
   		end
   	end
@@ -78,20 +78,20 @@ class Order < ActiveRecord::Base
   def discount_qualifies(discount)
   	
   	@qualify=10000
- 		#Check if we have enough of each product
-		for req in discount.requirements do        
-			@wehave = get_sum(req.required)
-			@weneed = req.quantity
-#			puts "@wehave ->" + @wehave.to_s + "<-"
-#			puts "@weneed ->" + @weneed.to_s + "<-"
-			@temp = @wehave / @weneed
-			
-#			puts "@temp ->" + @temp.to_s + "<-"
-#			puts "@qualify ->" + @qualify.to_s + "<-"
-			@qualify= [@qualify, @temp].min
-#			puts "@qualify ->" + @qualify.to_s + "<-"
-		end #req in discount.requirements
-		return nil if @qualify == 10000
+	#Check if we have enough of each product
+	for req in discount.requirements do        
+		@wehave = get_sum(req.required)
+		@weneed = req.quantity
+		# puts "@wehave ->" + @wehave.to_s + "<-"
+		# puts "@weneed ->" + @weneed.to_s + "<-"
+		@temp = @wehave / @weneed
+		
+		# puts "@temp ->" + @temp.to_s + "<-"
+		# puts "@qualify ->" + @qualify.to_s + "<-"
+		@qualify= [@qualify, @temp].min
+		# puts "@qualify ->" + @qualify.to_s + "<-"
+	end #req in discount.requirements
+	return nil if @qualify == 10000
   	return @qualify
   end
 	
@@ -99,14 +99,15 @@ class Order < ActiveRecord::Base
 	# Checks if the order qualifies for any discounts and adds lines for them ass necisary
 	###################################################################################
   def check_for_discounts
-#  	puts "checking existing discounts"
+  	# puts "checking existing discounts"
   	# Go through each discount in the order and see if it still qualifys
+  	# puts "self.order_type_id"+(self.order_type_id==1).to_s
   	if self.order_type_id==1
 			@discounts_in_order= []
 			for line in self.lines.find(:all, 
 																	:conditions => ' products.product_type_id = 2 ',
 																	:joins => ' inner join products on lines.product_id=products.id ')
-	#  		puts "checking " + line.product.name
+	  		# puts "checking " + line.product.name
 				@discounts_in_order << line.product
 				@qualify = discount_qualifies(line.product)
 				if @qualify > 0
@@ -115,23 +116,23 @@ class Order < ActiveRecord::Base
 					line.save()
 				else
 					# Remove discount since we no longer qualify
-					puts line.id.to_s
+					# puts line.id.to_s
 					self.lines.delete(line)
 				end
 			end
 			# Go through each discount and see if the order qualifies
-	#  	puts "checking new discounts"
+	  	# puts "checking new discounts"
 			for discount in get_discounts do 
-	#			puts "checking" + discount.name
+				# puts "checking" + discount.name
 				#make sure we dont add a discount thats already in the order
 				if !@discounts_in_order.include?(discount)
 					# make sure the discount is available in this site
 					if discount.available
-						puts discount.name + "available" 
+						# puts discount.name + "available" 
 						@qualify = discount_qualifies(discount)
 						#If the order qualifies, add it.
 						if @qualify >= 1			                     		
-	#						puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
+							# puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
 							l=Line.new(:order_id => self.id, :product_id => discount.id, :quantity => @qualify, :price => discount.price, :received => 1)
 							l.save
 						end #if qualify==1
@@ -392,52 +393,55 @@ class Order < ActiveRecord::Base
     end
     return aplicable_lines
   end
+  # The following code is not needed and is redundant
 	###################################################################################
 	# saves all lines in the order are returns true if successful
 	###################################################################################
-	def save_lines
-		sucessful = true
-		logger.debug "saving lines"
-		lines.each do |line|
-			sucessful = false if !line.save(false)
-			p = line.product
-			logger.debug "old cost:" + p.cost().to_s
-			p.cost=p.calculate_cost()
-			p.save()
-			logger.debug "new cost:" + p.cost().to_s
-		end
-		return sucessful
-	end
-	###################################################################################
-	# creates a new line for this order
-	###################################################################################
-	def create_lines
-		#puts "creating lines"
-		lines.each do |line|
-			#puts "setting order_id to " + self.id.to_s
-			line.order_id = self.id 
-			line.save(true)
-			p = line.product
-			p.cost=p.calculate_cost()
-			p.save()
-		end		
-	end
+#	def save_lines
+#		sucessful = true
+#		# puts "saving lines"
+#		logger.debug "saving lines"
+#		lines.each do |line|
+#			sucessful = false if !line.save(false)
+#			line.product.update_cost
+#			logger.debug "new cost:" + p.cost().to_s
+#		end
+#		return sucessful
+#	end
+#	###################################################################################
+#	# creates a new line for this order
+#	###################################################################################
+#	def create_lines
+#		# puts "creating lines"
+#		sucessful = true
+#		# puts lines.inspect
+#		self.lines.each do |line|
+#			# puts "setting order_id to " + self.id.to_s
+#			line.order_id = self.id 
+#			sucessful = false if !line.save(true)
+#			# puts "before"
+#			line.product.update_cost()
+#			# puts "after"
+#		end		
+#		# puts "end"
+#		return sucessful
+#	end
 	###################################################################################
 	# returns the date the last product to be received was received or nil if any lines are pending
 	###################################################################################
 	def last_received
-		##puts "Checking for order number "+self.id.to_s
+		### puts "Checking for order number "+self.id.to_s
 		@received=nil
 		for line in self.lines do
 			return nil if line.received == nil
 			if @received == nil
 				@received=line.received
-				##puts line.product.name + " was received " + line.received.to_s + " 2received set to "+@received.to_s
+				### puts line.product.name + " was received " + line.received.to_s + " 2received set to "+@received.to_s
 			else 
 				if line.received > @received
-					##puts line.product.name + " was received " + line.received.to_s + " received is already "+@received.to_s
+					### puts line.product.name + " was received " + line.received.to_s + " received is already "+@received.to_s
 					@received=line.received
-					##puts line.product.name + " was received " + line.received.to_s + " 1received set to "+@received.to_s
+					### puts line.product.name + " was received " + line.received.to_s + " 1received set to "+@received.to_s
 				end
 			end
 		end
@@ -498,10 +502,10 @@ class Order < ActiveRecord::Base
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
 	def tens_to_spanish(num)
-#		puts "received:" + num.to_s
+#		# puts "received:" + num.to_s
 		case num
 			when 20
-#				puts "returning veinte"
+#				# puts "returning veinte"
 				return 'veinte'
 			when 30
 				return 'treinta'
@@ -523,7 +527,7 @@ class Order < ActiveRecord::Base
 	end
 	def hundreds_to_spanish(num)
 		# handles only hundreds place
-#		puts "received:" + num.to_s
+#		# puts "received:" + num.to_s
 		case num
 			when 100
 				return 'ciento'

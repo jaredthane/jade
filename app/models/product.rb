@@ -37,6 +37,8 @@ class Product < ActiveRecord::Base
 	has_many :serialized_products
 	has_many :requirements, :dependent => :destroy
 	after_update :save_requirements
+	after_update :update_cost
+	after_create :update_cost
 	after_create :create_requirements
 	belongs_to :product_type
 	belongs_to :unit
@@ -98,28 +100,40 @@ class Product < ActiveRecord::Base
 			end
 		end
 	end
+	def update_cost(location_id = User.current_user.location_id)
+	    puts "Hello There <-------------------------------------------------------------"
+	    puts self.calculate_cost(location_id)
+	    self.cost = self.calculate_cost(location_id)
+	end
 	def calculate_cost(location_id = User.current_user.location_id)
 		logger.debug "product.id=#{self.id.to_s}"
 		logger.debug "location_id=#{location_id.to_s}"
-		moves=connection.select_all("select movements.* from (select max(movements.id) as id from movements where product_id=#{self.id.to_s} group by order_id) as list left join movements on list.id=movements.id where movement_type_id=2;")
+		moves=connection.select_all("select movements.* from (select max(movements.id) as id from movements where product_id=#{self.id.to_s} group by order_id order by id DESC) as list left join movements on list.id=movements.id where movement_type_id=2;")
 		#moves = movements.find_all_by_entity_id(location_id, :order => 'created_at desc')
 		logger.debug "self.quantity(location_id)=" + self.quantity(location_id).to_s
-		
+		puts moves.inspect
 		stock = self.quantity(location_id)
+		puts "stock" + stock.to_s
+		puts "moves.length" + moves.length.to_s
+		if (stock == 0) or (moves.length == 0)
+		    return self.default_cost
+		end
 		items_counted = 0
 		movement_counter = 0
 		totalcost=0
 		taken=0
 		while	(moves[movement_counter]) do
-#			logger.debug moves[movement_counter].id
-#			logger.debug "stock" + stock.inspect
-#			logger.debug "items_counted" + items_counted.inspect
-#			logger.debug "moves[movement_counter][:quantity]" + moves[movement_counter][:quantity].inspect
-#			logger.debug "stock-items_counted" + (stock-items_counted).inspect
-#			logger.debug "[stock-items_counted, movements[movement_counter].quantity].min=" + [stock-items_counted, movements[movement_counter].quantity].min.inspect
-#			puts moves[movement_counter]["quantity"].to_i
-#			puts stock
-#			puts items_counted
+			puts moves[movement_counter].id
+			puts "stock" + stock.inspect
+			puts "items_counted" + items_counted.inspect
+			#puts "moves[movement_counter].quantity" + moves[movement_counter].quantity
+			puts "moves[movement_counter][quantity]" + moves[movement_counter]["quantity"].to_s
+			puts "stock-items_counted" + (stock-items_counted).inspect
+			puts "[stock-items_counted, moves[movement_counter].quantity].min=" + [stock-items_counted, moves[movement_counter]["quantity"].to_i].min.inspect
+            puts "id:"+moves[movement_counter]["id"].to_s
+			puts moves[movement_counter]["quantity"].to_i
+			puts stock
+			puts items_counted
 			take = [stock-items_counted, moves[movement_counter]["quantity"].to_i].min
 			l=Line.find_by_id(moves[movement_counter]["line_id"].to_i)
 			if l
@@ -132,8 +146,8 @@ class Product < ActiveRecord::Base
 			movement_counter = movement_counter + 1
 		end
 		if items_counted > 0
-#			logger.debug "totalcost=#{totalcost.to_s}"
-#			logger.debug "items_counted=#{items_counted.to_s}"
+			puts "totalcost=#{totalcost.to_s}"
+			puts "items_counted=#{items_counted.to_s}"
 			return totalcost/items_counted
 		else
 			return 0
@@ -175,7 +189,6 @@ class Product < ActiveRecord::Base
 	def quantity=(location_id = User.current_user.location_id)
 		i=inventories.find_by_entity_id(location_id)
 		if i
-			puts "-----------------> " + i.id.to_s + '  quantity=' + i.quantity.to_s
 			i.quantity = value
 			return i.save
 		end
@@ -248,7 +261,7 @@ class Product < ActiveRecord::Base
 			priceobj = price_group.prices.find_by_product_id(self.id)
 			relative_price = priceobj.relative
 			static_price = priceobj.fixed
-			price = (cost||0) * (relative_price||0) + (static_price||0)
+			price = (cost(price_group.entity)||0) * (relative_price||0) + (static_price||0)
 		end
 		logger.debug "price2=#{price.to_s}"
 		return price
@@ -292,6 +305,22 @@ class Product < ActiveRecord::Base
 		i = self.inventories.find_by_entity_id(site.id)
 		if i
 			i.cost=new_cost
+			i.save
+		end
+	end
+	def default_cost(site = User.current_user.location)
+		i = self.inventories.find_by_entity_id(site.id)
+		if i
+			if i.default_cost
+			    return i.default_cost
+			end
+		end
+		return 0
+	end
+	def default_cost=(new_cost, site = User.current_user.location)
+		i = self.inventories.find_by_entity_id(site.id)
+		if i
+			i.default_cost=new_cost
 			i.save
 		end
 	end

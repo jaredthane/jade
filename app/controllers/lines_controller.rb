@@ -31,21 +31,25 @@ class LinesController < ApplicationController
   end
 	def add_line(upc, quantity, order_type_id, relative_price = 1)
 		@additional=Line.new()
+		puts "order_type_id=" + order_type_id.to_s
 		@additional.order_type_id = order_type_id
 		@additional.bar_code = upc
+		puts "add price2" + @additional.price.to_s
 		if @additional.product
 			if @additional.product.product_type==3
 				## If its a combo, we don't want the price of the components included
 				## we will multiply this price by relative_price so that if this is part of a combo they get the discount
-				@additional.price = price(User.current_user.current_price_group, False) * relative_price
+				@additional.price = @additional.product.price(User.current_user.current_price_group, False) * relative_price
 			end
 		end
+		puts "add price3" + @additional.price.to_s
 		@additional.quantity = quantity
 		return @additional
 	end
 	def add_product_or_combo(list, upc, quantity, order_type_id, relative_price=1)
 		## Create a line for the product
 		@newline = add_line(upc, quantity, order_type_id, relative_price)
+		puts "add price4" + @newline.price.to_s
 		if @newline.product
 			## If it doesnt need a serial number mark it received if the user wants
 #			logger.debug "------------------------->order_type_id=#{order_type_id.to_s}"
@@ -72,10 +76,11 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.xml
   def new
-# 		puts 'creating new line'
-#  	puts params[:line][:order_type_id]
-#  	puts "---------"
-#  	puts params[:line][:client_name]
+ 		puts 'creating new line'
+  	puts params[:line].inspect
+  	puts params[:line][:order_type_id]
+  	puts "---------"
+  	puts params[:line][:client_name]
   	@order_type_id = params[:line][:order_type_id] || 0
     if @order_type_id == 1
     	@client=Entity.find_by_name(params[:line][:client_name])
@@ -83,20 +88,19 @@ class LinesController < ApplicationController
 	    	current_user.price_group_name_id = @client.price_group_name_id
 	    end
     end
-    
-		@lines=[]
-		add_product_or_combo(@lines, params[:line][:bar_code], 1, @order_type_id)
-		if @lines.length > 0
-			logger.debug "default received =" + current_user.default_received.to_s
-			respond_to do |wants|
-			  wants.html do
-			    redirect_to '/orders/' + @line.order_id.to_s + '/edit'
-			  end
-			  wants.js
-			end
-		else
-		 	render :action => 'error'
+	@lines=[]
+	add_product_or_combo(@lines, params[:line][:bar_code], 1, @order_type_id)
+	if @lines.length > 0
+		logger.debug "default received =" + current_user.default_received.to_s
+		respond_to do |wants|
+		  wants.html do
+		    redirect_to '/orders/' + @line.order_id.to_s + '/edit'
+		  end
+		  wants.js
 		end
+	else
+	 	render :action => 'error'
+	end
   end
 
   # GET /lines/1/edit

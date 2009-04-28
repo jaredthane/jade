@@ -115,6 +115,8 @@ class Line < ActiveRecord::Base
 			end
 			# Update costs
 #			p.cost=p.calculate_cost  <---- This has been moved to order.after_create_lines and order.after_update_lines
+    # This has been moved back cause order.create_lines and order.save_lines served no purpose since the lines were already being saved
+            p.update_cost
 
 		end
 		# Erase list
@@ -385,21 +387,23 @@ class Line < ActiveRecord::Base
 		logger.info "found self.product_id=#{self.product_id.to_s}"
 		if self.order
 			puts "we have an order"
-			if self.order.order_type_id = 1
-				puts self.order.order_type_id
+			if self.order.order_type_id == 1
+				puts "self.order.order_type_id" + self.order.order_type_id.to_s
 				self.price = self.product.price if self.product
 			else
-				puts self.order.order_type_id
+				puts "self.order.order_type_id" + self.order.order_type_id.to_s
 				self.price = self.product.cost if self.product
 			end
 		else
 			puts "we dont have an order"
 			puts "before again "+self.order_type_id.to_s
-			if self.order_type_id == 1
-				puts self.order_type_id
+			if self.order_type_id.to_i == 1
+				puts "self.order_type_id" + self.order_type_id.to_s
+				puts "its a sale"
 				self.price = self.product.price(User.current_user.current_price_group,1) if self.product
 			else
-				puts self.order_type_id
+				puts "self.order_type_id" + self.order_type_id.to_s
+				puts "its not a sale"
 				self.price = self.product.cost if self.product
 			end
 		end

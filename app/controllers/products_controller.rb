@@ -91,7 +91,7 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new(params[:product])
     for e in Entity.find_all_by_entity_type_id(3)
-    	i=Inventory.new(:entity=>e, :product=>@product, :quantity=>0, :min=>0, :max=>0, :to_order=>0, :cost=>0)
+    	i=Inventory.new(:entity=>e, :product=>@product, :quantity=>0, :min=>0, :max=>0, :to_order=>0, :cost=>params[:product][:default_cost], :default_cost=>params[:product][:default_cost])
     	i.save
     end
     logger.debug "params:product:static_price= #{params[:product][:static_price].to_s}"

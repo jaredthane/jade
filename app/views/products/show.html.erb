@@ -52,10 +52,17 @@
 </div>
 <div class="column3-unit-right">
 	<% if current_user.has_rights(['admin','compras','gerente']) %>
+	
+
 		<p>
-		  <b>Costo</b><br />
+		  <b>Costo Actual</b><br />
 		    <%=h number_to_currency(@product.cost) %>
 		</p>
+		<p>
+		  <b>Costo por Defualt</b><br />
+		  <%= h number_to_currency(@product.default_cost) %>
+		</p>
+		
 	<% end %>
 	<p>
     <b>Unidad</b><br />

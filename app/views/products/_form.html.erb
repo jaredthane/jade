@@ -32,6 +32,10 @@
 			<%= f.text_field :upc, :id => 'upc', :class => 'field' %>
 		</p>
 		<p>
+		  <b>Costo por Defualt</b><br />
+		  <%= f.text_field :default_cost, :class => 'field' %>
+		</p>
+		<p>
 			<b>Numero de Modelo</b>
 			<%= f.text_field :model, :class => 'field' %>
 		</p>
@@ -60,7 +64,6 @@
 		<% if mode == 'edit' %>
 			<p>
 				<b>Costo</b><br />
-				<%= h number_to_currency(@product.cost) %>
 				<input disabled class="field" value= <%= number_to_currency(@product.cost) %> >
 			</p>	
 		<% end %>
