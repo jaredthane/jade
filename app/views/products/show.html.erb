@@ -12,7 +12,7 @@
 	<% if current_user.has_rights(['admin','compras','gerente']) %>
 	<p><b>Proveedor</b><br />
     <% if @product.vendor %>
-    	<%=h @product.vendor.name %>	
+    	<%=link_to @product.vendor.name, @product.vendor%>	
     <% end %>
   </p>
   <% end %>
