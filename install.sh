@@ -1,5 +1,5 @@
 #Install ruby
-sudo aptitude install ruby ruby1.8-dev irb
+sudo aptitude install ruby1.8-dev ruby1.8 ri1.8 rdoc1.8 irb1.8 libreadline-ruby1.8 libruby1.8 libopenssl-ruby sqlite3 libsqlite3-ruby1.8
 
 # Install Ruby Gems
 wget http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz
@@ -11,7 +11,6 @@ sudo ruby setup.rb
 sudo gem install rails
 
 sudo aptitude install mysql libmysqlclient-dev
-sudo aptitude install git
 
 sudo gem install prawn
 sudo gem install will_paginate
