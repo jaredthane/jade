@@ -18,11 +18,11 @@ class Inventory < ActiveRecord::Base
 	belongs_to :entity
 	belongs_to :product
 	def on_order()
-		list=self.product.lines.find(:all, :conditions => 'orders.order_type_id=2 AND lines.received is null AND orders.client_id=' + entity_id.to_s, :joins => 'left join orders on orders.id=lines.order_id')
+		list=self.product.lines.find(:all, :conditions => 'orders.order_type_id=2 AND orders.deleted=0 AND lines.received is null AND orders.client_id=' + entity_id.to_s, :joins => 'left join orders on orders.id=lines.order_id')
 		return list.sum(&:quantity)
 	end
 	def sales_waiting()
-		list=self.product.lines.find(:all, :conditions => 'orders.order_type_id=1 AND lines.received is null AND orders.vendor_id=' + entity_id.to_s, :joins => 'left join orders on orders.id=lines.order_id')
+		list=self.product.lines.find(:all, :conditions => 'orders.order_type_id=1 AND orders.deleted=0 AND lines.received is null AND orders.vendor_id=' + entity_id.to_s, :joins => 'left join orders on orders.id=lines.order_id')
 		return list.sum(&:quantity)
 	end
 	def self.search(search, page)

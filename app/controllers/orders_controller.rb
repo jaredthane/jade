@@ -302,6 +302,11 @@ class OrdersController < ApplicationController
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
     errors = false
+    if @order.deleted
+        redirect_back_or_default('/orders')
+		flash[:error] = "Este pedido ha sido anulado. Ya no se puede cambiar"
+		return false
+    end
     lines_to_delete=[]
     #Update existing lines
     for l in @order.lines
@@ -358,11 +363,32 @@ class OrdersController < ApplicationController
   # DELETE /orders/1.xml
   def destroy
     @order = Order.find(params[:id])
-    @order.destroy
+    return false if !allowed(@order.order_type_id, 'edit')
+    #you can't null an order if we received money for it.
+    if @order.amount_paid != 0 
+        redirect_back_or_default('/orders')
+		flash[:error] = "No se puede anular un pedido hasta que el total de los pagos es cero"
+		return false
+    end
+    for line in @order.lines
+        line.isreceived_str = "No"
+    end
+    errors = @order.save()
+    @order.lines.errors.each {@order.errors << error}
+    if !errors
+        @order.deleted = 1
+    end
 
     respond_to do |format|
-      format.html { redirect_to(orders_url) }
-      format.xml  { head :ok }
+        if !errors
+          flash[:notice] = 'Pedido ha sido marcado como borrado exitosamente.'
+          format.html { redirect_to(orders_url) }
+          format.xml  { head :ok }
+        else
+            redirect_back_or_default('/orders')
+		    flash[:error] = "No se pudo anular el pedido"
+		    return false
+        end
     end
   end
 end

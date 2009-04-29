@@ -1,29 +1,20 @@
-<% if current_user.has_rights(['admin','gerente','compras','ventas']) %>
-	<% content_for :new do %><%= link_to 'Nuevo Pago', new_payment_path, :class => 'action' %><% end %>
-<% end %>
 <% content_for :title do %>Lista de Pagos<% end %>
+<div>
+    <div id="lines" class="table_header_row">
+        <div class="table_cell_20">Pedido</div>
+        <div class="table_cell_20">Cantidad</div>
+        <div class="table_cell_20">Fecha</div>
+        <div class="table_cell_20">Metodo</div>
+        <div class="table_cell">Usuario</div>
+	</div>
+    <% for payment in @payments %>
+	    <div class="table_row">
+		    <div class="table_cell_20"><%= link_to payment.order.id, payment.order %></div>
+            <div class="table_cell_20"><%= link_to number_to_currency(payment.amount), payment %></div>
+            <div class="table_cell_20"><%=h payment.created_at.to_date %></div>
+            <div class="table_cell_20"><%=h payment.payment_method.name %></div>
+            <div class="table_cell"><%= link_to payment.user.login, payment.user %></div>
+	    </div>
+	<% end %>
+</div>
 
-<table>
-  <tr>
-    <th class="top" scope="col">Pedido</th>
-    <th class="top" scope="col">Cantidad</th>
-    <th class="top" scope="col">Fecha</th>
-    <th class="top" scope="col">Metodo</th>
-    <th class="top" scope="col">Usuario</th>
-  </tr>
-
-<% for payment in @payments %>
-  <tr>
-	  <td><%= link_to payment.order.id, payment.order %></td>
-		<td><%= link_to number_to_currency(payment.amount), payment %></td>
-    <td><%=h payment.created_at.to_date %></td>
-    <td><%=h payment.payment_method.name %></td>
-    <td><%= link_to payment.user.login, payment.user %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-<% if current_user.has_rights(['admin','gerente','compras','ventas']) %>
-	<%= link_to 'Nuevo Pago', new_payment_path, :class => 'action' %>
-<% end %>

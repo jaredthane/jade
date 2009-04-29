@@ -32,14 +32,14 @@
 .nav3-grid {width:199px; border-bottom:solid 1px rgb(200,200,200);}
 .nav3-grid dt a, .nav3-grid dt a:visited {display:block; min-height:2.0em /*Non-IE6*/; height:auto !important; height:2.0em /*IE6*/; line-height:2.0em; padding:0px 10px 0px 20px;  border-top: solid 1px rgb(200,200,200); text-decoration:none; color:#369472; font-weight:bold; font-size:120%;}
 .nav3-grid dd a, .nav3-grid dd a:visited {display:block; min-height:1.7em /*Non-IE6*/; height:auto !important; height:1.7em /*IE6*/; line-height:1.7em; padding:0px 10px 0px 40px; border:none; font-weight:normal; text-decoration:none; color:#515147; font-size:120%;}
-.nav3-grid dt a:hover, .nav3-grid dd a:hover {background-color:rgb(225,225,225); color:#96c09c; text-decoration:bold; font-size:135%;}
+.nav3-grid dt a:hover, .nav3-grid dd a:hover {background-color:rgb(225,225,225); color:#96c09c; text-decoration:bold;}
 /*.nav3-grid dd a.action {font-size:150%; font-weight:bold;background:none;border:0;color:#515147}*/
 
 .nav3-bullet {width:170px; margin:10px 0 0 20px;color:#515147; font-weight:bold;font-size:110%;}
 .nav3-bullet dt a, .nav3-bullet dt a:visited {line-height:2.0em; padding:0 0 0 10px; background:url(../images/img/bg_bullet_full_1.gif) no-repeat 0px 50%; text-decoration:none; color:#515147; font-weight:bold; font-size:110%;}
 .nav3-bullet dd a, .nav3-bullet dd a:visited {line-height:1.7em; margin:0 0 0 15px; padding:0 0 0 10px; background:url(../images/img/bg_bullet_half_1.gif) no-repeat 0px 50%; text-decoration:none; color:#515147; font-weight:normal; font-size:110%;}
-.nav3-bullet dt a:hover {background:url(../images/img/bg_bullet_full_2.gif) no-repeat 0px 50%; text-decoration:none; color:#96c09c;font-size:125%;}
-.nav3-bullet dd a:hover {background:url(../images/img/bg_bullet_half_2.gif) no-repeat 0px 50%; text-decoration:none; color:#96c09c;font-size:125%;}
+.nav3-bullet dt a:hover {background:url(../images/img/bg_bullet_full_2.gif) no-repeat 0px 50%; text-decoration:none; color:#96c09c;}
+.nav3-bullet dd a:hover {background:url(../images/img/bg_bullet_half_2.gif) no-repeat 0px 50%; text-decoration:none; color:#96c09c;}
 
 .nav3-nobullet {width:170px; margin:10px 0 0 20px;}
 .nav3-nobullet dt a, .nav3-nobullet dt a:visited {line-height:2.0em; text-decoration:none; color:#515147; font-weight:bold; font-size:120%;}
@@ -237,6 +237,8 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .main img {clear:both; float:left; margin:3px 10px 7px 0; padding:1px; border:1px solid rgb(150,150,150);}
 .main img.center {clear:both; float:none; display:block; margin:0 auto; padding:1px; border:1px solid rgb(150,150,150);}
 .main img.right {clear:both; float:right; margin:3px 0 7px 10px; padding:1px; border:1px solid rgb(150,150,150);}
+
+.strikethrough {text-decoration: line-through;}
 
 .main a {color:#515147;  text-decoration:none;}
 .main-content h1 a {color:#515147; font-weight:normal; text-decoration:none;}

@@ -37,6 +37,7 @@ ActionController::Routing::Routes.draw do |map|
   map.show_batch 'orders/show_batch', :controller => 'orders', :action => 'show_batch'
   map.show_receipt 'orders/show_receipt/:id', :controller => 'orders', :action => 'show_receipt'
   map.create_batch 'orders/create_batch', :controller => 'orders', :action => 'create_batch'
+  map.delete_order 'orders/delete', :controller => 'orders', :action => 'delete'
 	map.order_history 'orders/:id/history', :controller => 'orders', :action => 'show_history'
 	map.connect 'lines/new', :controller => 'lines', :action => 'new', :format => 'js'
   map.resources :lines

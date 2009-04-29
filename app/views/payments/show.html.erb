@@ -1,5 +1,14 @@
 
 <% content_for :title do %>Detalles de Pago<% end %>
+
+<% content_for :actions do %>
+	<% if current_user.has_rights(['admin','compras','ventas','gerente']) %>
+		<dt><%= link_to 'Cambiar', edit_payment_path(@payment), :class => 'action' %></dt>
+	<% end %>
+	<dt><%= link_to 'Facturar', show_receipt_path(:order_id => @payment.order.id), :class => 'action' %> </dt>		
+	<dt><%= link_to 'Lista de Pagos', payments_path, :class => 'action' %></dt>
+<% end %>
+
 <div class="column2-unit-left">
 <p>
   <b>Numero de Pedido:</b>
@@ -35,14 +44,4 @@
 </p>
 
 </div>
-<hr class="clear-contentunit" />
 
-
-
-
-
-
-<%= link_to 'Cambiar', edit_payment_path(@payment), :class => 'action' %> |
-
-<%= link_to 'Facturar | ', show_receipt_path(:order_id => @payment.order.id), :class => 'action' %>
-<%= link_to 'Lista de Pagos', payments_path, :class => 'action' %>

@@ -6,6 +6,10 @@ credit
  for m in Movement.find_all_by_movement_type_id(1); Movement.create(:entity_id => m.order.client_id, :product_id => m.product_id, :quantity => m.quantity, :movement_type_id => 1, :user_id => m.user_id, :order_id => m.order.id, :serialized_product_id => m.serialized_product_id, :line_id => m.line_id); end
  
 ------------------------ This Versions Goals-------------------------------
+Anular pedidos
+Anticipos & 'abonar a cuenta' & aplicar saldo a pedido
+anular productos
+
 ================= Bugs:  =======================================
 Jared Make it count the number of lines for each product in js and then calculate the difference in price
 +No error is given when a serial number is not found
