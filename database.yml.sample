@@ -1,0 +1,15 @@
+development:
+  adapter: mysql
+  encoding: utf8
+  database: Jade
+  username: root
+  password: pa$$word
+  socket: /var/run/mysqld/mysqld.sock
+
+production:
+  adapter: mysql
+  encoding: utf8
+  database: Jade
+  username: root
+  password: pa$$word
+  socket: /var/run/mysqld/mysqld.sock

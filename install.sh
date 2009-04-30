@@ -37,4 +37,7 @@ else
     sudo mysql -p$2 -e "create database Jade"
     sudo mysql -p$2 Jade < clean.sql
     sudo mysql -p$2 Jade -e "update entities set name = $1 where id=5"
+    echo "Configuring Jade"
+    cp database.yml.sample config/database.yml
+    sed 's/pa$$word/$2/g' config/database.yml
 fi
