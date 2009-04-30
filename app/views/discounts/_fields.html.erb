@@ -10,8 +10,8 @@
 			<dt> <%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
 		<% end %>
   <% end %>
-  <dt> <%= link_to 'Ver |', edit_discount_path(@discount), :class => 'action' %> </dt>
-  <dt><%= link_to 'Lista | ', discounts_path, :class => 'action' %></dt>
+  <dt> <%= link_to 'Ver', edit_discount_path(@discount), :class => 'action' %> </dt>
+  <dt><%= link_to 'Lista', discounts_path, :class => 'action' %></dt>
 <% end %>
 <%= error_messages_for :discount %>
 		
