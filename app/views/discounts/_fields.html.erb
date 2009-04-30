@@ -10,8 +10,13 @@
 			<dt> <%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
 		<% end %>
   <% end %>
-  <dt> <%= link_to 'Ver', edit_discount_path(@discount), :class => 'action' %> </dt>
-  <dt><%= link_to 'Lista', discounts_path, :class => 'action' %></dt>
+  <% if mode == 'edit' %>
+      <dt> <%= link_to 'Cancelar', edit_discount_path(@discount), :class => 'action' %> </dt>
+      <dt><%= link_to 'Lista de Descuentos', discounts_path, :class => 'action' %></dt>
+  <% else %>
+      <dt><%= link_to 'Cancelar', discounts_path, :class => 'action' %></dt>
+  <% end %>
+  
 <% end %>
 <%= error_messages_for :discount %>
 		
@@ -59,8 +64,8 @@
 		<div class="table_header_row">
 			<div class="table_cell_20">Nombre de Producto</div>
 			<div class="table_cell_10">Cantidad</div>
-			<div class="table_cell_10">Discuento Fijo</div>
-			<div class="table_cell_10">Discuento Relativo</div>
+			<div class="table_cell_10">Descuento Fijo</div>
+			<div class="table_cell_10">Descuento Relativo</div>
 			<div class="table_cell">Acciones </div>
 		</div>
 		<div id="requirements">
