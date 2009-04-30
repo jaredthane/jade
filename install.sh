@@ -1,9 +1,12 @@
 #Check that we received enough args
 if [ "$#" -lt 2 ]
 then 
+    echo ""
     echo "Usage: ./install.sh home_site_name [root_mysql_passwd]"
+    echo ""
     echo "Make sure the passwd you specify matches the one you give MySQL during its configuration"
     echo "If you do not specify the root mysql passwd, you will be prompted when the time comes"
+    echo ""
 else
     #Install Ruby
     echo "Installing Ruby"
