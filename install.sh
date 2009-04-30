@@ -39,5 +39,6 @@ else
     sudo mysql -p$2 Jade -e "update entities set name = $1 where id=5"
     echo "Configuring Jade"
     cp database.yml.sample config/database.yml
-    sed 's/pa$$word/$2/g' config/database.yml
+    sed -i 's/pa$$word/$2/g' config/database.yml
+    chmod 400 config/database.yml
 fi
