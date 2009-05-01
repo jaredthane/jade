@@ -9,7 +9,7 @@ credit
 Anular pedidos
 Anticipos & 'abonar a cuenta' & aplicar saldo a pedido
 anular productos
-
+**Clicking on Ver on the Descuentos edit page brings to bad url
 ================= Bugs:  =======================================
 Jared Make it count the number of lines for each product in js and then calculate the difference in price
 +No error is given when a serial number is not found

@@ -21,7 +21,7 @@
 			    <dt><%= link_to 'Facturar', show_receipt_path(:order_id => @order.id), :class => 'action' %></dt>
 			<% end %>
 		<% end %>
-			<dt><%= link_to 'Historia de este Pedido', order_history_path(@order), :class => 'action' %></dt>
+			<dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
 			<dt><%= link_to 'Pagos', payments_path(:search=>@order.id), :class => 'action' %></dt>
 		<dt><%= link_to 'Lista de Ventas', sales_path, :class => 'action' %> </dt>
 	<% when 2 %>
@@ -30,7 +30,7 @@
 			    <dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
 			<% end %>
-			<dt><%= link_to 'Historia de este Pedido', order_history_path(@order), :class => 'action' %></dt>
+			<dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
 			<dt><%= link_to 'Pagos', payments_path(:search=>@order.id), :class => 'action' %></dt>
 			<dt><%= link_to 'Lista de Compras', purchases_path, :class => 'action' %> </dt>
 		<% end %>
@@ -40,7 +40,7 @@
 			    <dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
 			<% end %>
-			<dt><%= link_to 'Historia de este Pedido', order_history_path(@order), :class => 'action' %></dt>
+			<dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
 			<dt><%= link_to 'Pagos', payments_path(:search=>@order.id), :class => 'action' %></dt>
 		<% end %>
 		<dt><%= link_to 'Lista de Pedidos', orders_path, :class => 'action' %> </dt>
