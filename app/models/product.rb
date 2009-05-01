@@ -102,8 +102,8 @@ class Product < ActiveRecord::Base
 		end
 	end
 	def update_cost(location_id = User.current_user.location_id)
-	    puts "Hello There <-------------------------------------------------------------"
-	    puts self.calculate_cost(location_id)
+	    # puts "Hello There <-------------------------------------------------------------"
+	    # puts self.calculate_cost(location_id)
 	    self.cost = self.calculate_cost(location_id)
 	end
 	def calculate_cost(location_id = User.current_user.location_id)
@@ -112,10 +112,10 @@ class Product < ActiveRecord::Base
 		moves=connection.select_all("select movements.* from (select max(movements.id) as id from movements where product_id=#{self.id.to_s} group by order_id order by id DESC) as list left join movements on list.id=movements.id where movement_type_id=2;")
 		#moves = movements.find_all_by_entity_id(location_id, :order => 'created_at desc')
 		logger.debug "self.quantity(location_id)=" + self.quantity(location_id).to_s
-		puts moves.inspect
+		# puts moves.inspect
 		stock = self.quantity(location_id)
-		puts "stock" + stock.to_s
-		puts "moves.length" + moves.length.to_s
+		# puts "stock" + stock.to_s
+		# puts "moves.length" + moves.length.to_s
 		if (stock == 0) or (moves.length == 0)
 		    return self.default_cost
 		end
@@ -124,17 +124,17 @@ class Product < ActiveRecord::Base
 		totalcost=0
 		taken=0
 		while	(moves[movement_counter]) do
-			puts moves[movement_counter].id
-			puts "stock" + stock.inspect
-			puts "items_counted" + items_counted.inspect
-			#puts "moves[movement_counter].quantity" + moves[movement_counter].quantity
-			puts "moves[movement_counter][quantity]" + moves[movement_counter]["quantity"].to_s
-			puts "stock-items_counted" + (stock-items_counted).inspect
-			puts "[stock-items_counted, moves[movement_counter].quantity].min=" + [stock-items_counted, moves[movement_counter]["quantity"].to_i].min.inspect
-            puts "id:"+moves[movement_counter]["id"].to_s
-			puts moves[movement_counter]["quantity"].to_i
-			puts stock
-			puts items_counted
+			# puts moves[movement_counter].id
+			# puts "stock" + stock.inspect
+			# puts "items_counted" + items_counted.inspect
+			## puts "moves[movement_counter].quantity" + moves[movement_counter].quantity
+			# puts "moves[movement_counter][quantity]" + moves[movement_counter]["quantity"].to_s
+			# puts "stock-items_counted" + (stock-items_counted).inspect
+			# puts "[stock-items_counted, moves[movement_counter].quantity].min=" + [stock-items_counted, moves[movement_counter]["quantity"].to_i].min.inspect
+            # puts "id:"+moves[movement_counter]["id"].to_s
+			# puts moves[movement_counter]["quantity"].to_i
+			# puts stock
+			# puts items_counted
 			take = [stock-items_counted, moves[movement_counter]["quantity"].to_i].min
 			l=Line.find_by_id(moves[movement_counter]["line_id"].to_i)
 			if l
@@ -147,8 +147,8 @@ class Product < ActiveRecord::Base
 			movement_counter = movement_counter + 1
 		end
 		if items_counted > 0
-			puts "totalcost=#{totalcost.to_s}"
-			puts "items_counted=#{items_counted.to_s}"
+			# puts "totalcost=#{totalcost.to_s}"
+			# puts "items_counted=#{items_counted.to_s}"
 			return totalcost/items_counted
 		else
 			return 0

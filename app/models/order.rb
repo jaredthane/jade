@@ -35,8 +35,8 @@ class Order < ActiveRecord::Base
   def validate
   	## puts "validating order"
   end
-#	after_update :save_lines
-#	after_create :create_lines
+	after_update :save_lines
+	after_create :create_lines
 	after_update :check_for_discounts
 	after_create :check_for_discounts
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
@@ -393,39 +393,38 @@ class Order < ActiveRecord::Base
     end
     return aplicable_lines
   end
-  # The following code is not needed and is redundant
 	###################################################################################
 	# saves all lines in the order are returns true if successful
 	###################################################################################
-#	def save_lines
-#		sucessful = true
-#		# puts "saving lines"
-#		logger.debug "saving lines"
-#		lines.each do |line|
-#			sucessful = false if !line.save(false)
-#			line.product.update_cost
+	def save_lines
+		sucessful = true
+		 puts "saving lines"
+		logger.debug "saving lines"
+		lines.each do |line|
+			sucessful = false if !line.save(false)
+			puts "saving a line"
 #			logger.debug "new cost:" + p.cost().to_s
-#		end
-#		return sucessful
-#	end
-#	###################################################################################
-#	# creates a new line for this order
-#	###################################################################################
-#	def create_lines
-#		# puts "creating lines"
-#		sucessful = true
-#		# puts lines.inspect
-#		self.lines.each do |line|
-#			# puts "setting order_id to " + self.id.to_s
-#			line.order_id = self.id 
-#			sucessful = false if !line.save(true)
-#			# puts "before"
-#			line.product.update_cost()
-#			# puts "after"
-#		end		
-#		# puts "end"
-#		return sucessful
-#	end
+		end
+		return sucessful
+	end
+	
+	# NOTE: Many times when a new line is created, save_lines gets run instead of create_lines
+	###################################################################################
+	# creates a new line for this order
+	###################################################################################
+	def create_lines
+		 puts "creating lines"
+		sucessful = true
+		# puts lines.inspect
+		self.lines.each do |line|
+			puts "setting order_id to " + self.id.to_s
+			puts "creating a line"
+			line.order_id = self.id 
+			sucessful = false if !line.save(true)
+		end		
+		# puts "end"
+		return sucessful
+	end
 	###################################################################################
 	# returns the date the last product to be received was received or nil if any lines are pending
 	###################################################################################
