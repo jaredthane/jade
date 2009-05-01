@@ -49,7 +49,7 @@
 			<dt><%= link_to 'Pagos', payments_path(:search=>@order.id), :class => 'action' %></dt>
 		<% end %>
 		<dt><%= link_to 'Lista de Pedidos', orders_path, :class => 'action' %> </dt>
-<% end %>
+    <% end %>
 <% end %>
 
 <% if @order.deleted %><h2 class="lineErrorExplanation" >Este pedido ha sido anulado.</h2><% end %>

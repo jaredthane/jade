@@ -6,8 +6,50 @@
 		<% content_for :title do %>Detalles de Venta #<%= @order.id %><% end %>
 	<% when 2 %>
 		<% content_for :title do %>Detalles de Compra #<%= @order.id %><% end %>
+	<% when 3 %>
+		<% content_for :title do %>Detalles de Consumo Interno #<%= @order.id %><% end %>
 	<% else %>
 		<% content_for :title do %>Detalles de Pedido #<%= @order.id %><% end %>
+<% end %>
+<% content_for :actions do %>
+	<% case @order.order_type_id
+	when 1 %>
+		<% if current_user.has_rights(['admin','ventas','gerente']) %>
+		    <% if !@order.deleted %>
+    			<dt><%= link_to 'Nueva Venta', new_sale_path, :class => 'action' %></dt>
+    			<dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
+    			<dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de esta venta serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularla?', :method => :delete %></dt>
+			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
+			    <dt><%= link_to 'Facturar', show_receipt_path(:order_id => @order.id), :class => 'action' %></dt>
+			<% end %>
+		<% end %>
+			<dt><%= link_to 'Productos', order_path(@order), :class => 'action' %></dt>
+			<dt><%= link_to 'Pagos', payments_path(:search=>@order.id), :class => 'action' %></dt>
+		<dt><%= link_to 'Lista de Ventas', sales_path, :class => 'action' %> </dt>
+	<% when 2 %>
+		<% if current_user.has_rights(['admin','compras','gerente']) %>
+		    <% if !@order.deleted %>
+    			<dt><%= link_to 'Nueva Compra', new_purchase_path, :class => 'action' %></dt>
+			    <dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
+			    <dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de esta compra serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularla?', :method => :delete %></dt>
+			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
+			<% end %>
+			<dt><%= link_to 'Productos', order_path(@order), :class => 'action' %></dt>
+			<dt><%= link_to 'Pagos', payments_path(:search=>@order.id), :class => 'action' %></dt>
+			<dt><%= link_to 'Lista de Compras', purchases_path, :class => 'action' %> </dt>
+		<% end %>
+	<% else %>
+		<% if current_user.has_rights(['admin','gerente']) %>
+	        <% if !@order.deleted %>
+			    <dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
+			    <dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de este pedido serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularlo?', :method => :delete %></dt>
+			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
+			<% end %>
+			<dt><%= link_to 'Productos', order_path(@order), :class => 'action' %></dt>
+			<dt><%= link_to 'Pagos', payments_path(:search=>@order.id), :class => 'action' %></dt>
+		<% end %>
+		<dt><%= link_to 'Lista de Pedidos', orders_path, :class => 'action' %> </dt>
+    <% end %>
 <% end %>
 
 
@@ -24,6 +66,10 @@
   <% end %>
 </p>
 <p>
+  <b>Numero de Factura:</b>
+  <%=h @order.receipt_number %>
+</p>
+<p>
   <b>Usuario Responsable:</b>
   <%=link_to @order.user.login, @order.user %>
 </p>
@@ -32,8 +78,11 @@
 		<b>Precio Total:</b>
 		<%=h number_to_currency(@order.total_price) %>
 	</p>
+	<p>
+		<b>Precio Total despues de IVA:</b>
+		<%=h number_to_currency(@order.total_price_with_tax) %>
+	</p>
 <% end %>
-
 </div>
 <div class="column2-unit-right">
 <p>
@@ -80,17 +129,4 @@
 <% end %>
 	</div>
 </p>
-<%= link_to 'Cambiar | ', edit_order_path(@order), :class => 'action' %>
-<%= link_to 'Lista de Productos | ', order_path(@order), :class => 'action' %>
-<%= link_to 'Pagos | ', payments_path(:search=>@order.id), :class => 'action' %>
-<% case @order_type_id
-	when 1 %>
-		<%= link_to 'Factura | ', orders_path, :class => 'action' %>
-		<%= link_to 'Lista de Ventas', sales_path, :class => 'action' %> 
-	<% when 2 %>
-		<%= link_to 'Lista de Compras', purchases_path, :class => 'action' %> 
-	<% else %>
-		<%= link_to 'Añadir Pago | ', new_payment_path(:order_id=>@order.id), :class => 'action' %>
-		<%= link_to 'Lista de Pedidos', orders_path, :class => 'action' %> 
-<% end %>
 
