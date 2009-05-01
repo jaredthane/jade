@@ -16,6 +16,7 @@
 	when 1 %>
 		<% if current_user.has_rights(['admin','ventas','gerente']) %>
 		    <% if !@order.deleted %>
+    			<dt><%= link_to 'Nueva Venta', new_sale_path, :class => 'action' %></dt>
     			<dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
 			    <dt><%= link_to 'Facturar', show_receipt_path(:order_id => @order.id), :class => 'action' %></dt>
@@ -27,6 +28,7 @@
 	<% when 2 %>
 		<% if current_user.has_rights(['admin','compras','gerente']) %>
 		    <% if !@order.deleted %>
+    			<dt><%= link_to 'Nueva Compra', new_purchase_path, :class => 'action' %></dt>
 			    <dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
 			<% end %>

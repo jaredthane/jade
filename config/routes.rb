@@ -55,9 +55,9 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.resources :requirements
   map.resources :orders
-  map.connect 	'purchases/new', :controller => 'orders', :action => 'new', :order_type_id => 2
-  map.connect 	'sales/new', :controller => 'orders', :action => 'new', :order_type_id => 1
-  map.connect 	'internal/new', :controller => 'orders', :action => 'new', :order_type_id => 3
+  map.new_purchase 	'purchases/new', :controller => 'orders', :action => 'new', :order_type_id => 2
+  map.new_sale 	'sales/new', :controller => 'orders', :action => 'new', :order_type_id => 1
+  map.new_internal 	'internal/new', :controller => 'orders', :action => 'new', :order_type_id => 3
   map.purchases 'purchases/', :controller => 'orders', :order_type_id => 2
   map.internal 'internal/', :controller => 'orders', :order_type_id => 3
   map.sales 'sales/', :controller => 'orders', :order_type_id => 1
