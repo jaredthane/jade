@@ -370,17 +370,17 @@ class OrdersController < ApplicationController
 		flash[:error] = "No se puede anular un pedido hasta que el total de los pagos es cero"
 		return false
     end
+    @order.deleted = 1
     for line in @order.lines
         line.isreceived_str = "No"
     end
-    errors = @order.save()
-    @order.lines.errors.each {@order.errors << error}
-    if !errors
-        @order.deleted = 1
-    end
+    sucess = @order.save()
+#    @order.lines.errors.each {@order.errors << error}
+    puts "sucess =" + sucess.to_s + "*"
+
 
     respond_to do |format|
-        if !errors
+        if sucess
           flash[:notice] = 'Pedido ha sido marcado como borrado exitosamente.'
           format.html { redirect_to(orders_url) }
           format.xml  { head :ok }
