@@ -18,6 +18,7 @@
 		    <% if !@order.deleted %>
     			<dt><%= link_to 'Nueva Venta', new_sale_path, :class => 'action' %></dt>
     			<dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
+    			<dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de esta venta serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularla?', :method => :delete %></dt>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
 			    <dt><%= link_to 'Facturar', show_receipt_path(:order_id => @order.id), :class => 'action' %></dt>
 			<% end %>
@@ -30,6 +31,7 @@
 		    <% if !@order.deleted %>
     			<dt><%= link_to 'Nueva Compra', new_purchase_path, :class => 'action' %></dt>
 			    <dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
+			    <dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de esta compra serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularla?', :method => :delete %></dt>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
 			<% end %>
 			<dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
@@ -40,6 +42,7 @@
 		<% if current_user.has_rights(['admin','gerente']) %>
 	        <% if !@order.deleted %>
 			    <dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
+			    <dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de este pedido serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularlo?', :method => :delete %></dt>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
 			<% end %>
 			<dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
