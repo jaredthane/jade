@@ -33,6 +33,10 @@ class Entity < ActiveRecord::Base
   # to be used with Sites
   belongs_to :price_group
   
+  # This is the product(service) that a certain employee offers the firm
+  # To be used with Employees
+  belongs_to :product
+
   belongs_to :user
   
 	has_many :orders, :order => 'created_at'

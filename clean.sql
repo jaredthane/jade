@@ -42,6 +42,7 @@ CREATE TABLE `entities` (
   `price_group_id` int(11) default NULL,
   `price_group_name_id` int(11) default NULL,
   `user_id` int(11) default NULL,
+  `product_id` int(11) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
@@ -52,7 +53,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `entities` WRITE;
 /*!40000 ALTER TABLE `entities` DISABLE KEYS */;
-INSERT INTO `entities` VALUES (1,'Internal Consumption',NULL,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'Various',1,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(3,'Anonimo',2,'2009-03-06 20:00:31','2009-03-06 20:00:31','','','','2009-03-06 00:00:00',12,'','','','','','',NULL,1,6),(4,'No Specificado',1,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,'Principal',3,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL);
+INSERT INTO `entities` VALUES (1,'Internal Consumption',NULL,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'Various',1,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(3,'Anonimo',2,'2009-03-06 20:00:31','2009-03-06 20:00:31','','','','2009-03-06 00:00:00',12,'','','','','','',NULL,1,6,NULL),(4,'No Specificado',1,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,'Principal',3,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `entities` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,8 +67,9 @@ SET character_set_client = utf8;
 CREATE TABLE `entity_types` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
+  `balance` decimal(5,2) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -76,7 +78,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `entity_types` WRITE;
 /*!40000 ALTER TABLE `entity_types` DISABLE KEYS */;
-INSERT INTO `entity_types` VALUES (1,'Proveedor'),(2,'Consumidor Final'),(3,'Sitio'),(5,'Credito Fiscal');
+INSERT INTO `entity_types` VALUES (1,'Proveedor',NULL),(2,'Consumidor Final',NULL),(3,'Sitio',NULL),(5,'Credito Fiscal',NULL),(6,'Empleado',NULL),(7,'Cuenta Bancaria',NULL);
 /*!40000 ALTER TABLE `entity_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -102,7 +104,7 @@ CREATE TABLE `inventories` (
   `cost` decimal(5,2) default NULL,
   `default_cost` decimal(5,2) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2086 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2090 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -111,6 +113,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `inventories` WRITE;
 /*!40000 ALTER TABLE `inventories` DISABLE KEYS */;
+INSERT INTO `inventories` VALUES (NULL,5,0,0,0,2086,'2009-05-01','2009-05-01',0,NULL,NULL,NULL,NULL),(3,5,NULL,NULL,0,2087,'2009-05-01','2009-05-01',0,NULL,NULL,'0.00','0.00'),(NULL,5,0,0,0,2088,'2009-05-01','2009-05-01',0,NULL,NULL,NULL,NULL),(4,5,NULL,NULL,0,2089,'2009-05-01','2009-05-01',0,NULL,NULL,'0.00','0.00');
 /*!40000 ALTER TABLE `inventories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -138,7 +141,7 @@ CREATE TABLE `lines` (
   `previous_qty` int(11) default NULL,
   `warranty_months` int(11) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -147,6 +150,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `lines` WRITE;
 /*!40000 ALTER TABLE `lines` DISABLE KEYS */;
+INSERT INTO `lines` VALUES (1,3,1,1,'1.00',NULL,'2009-05-01 20:16:37','2009-05-01 20:16:37',NULL,NULL,'0.00',69,'0.15',NULL,NULL);
 /*!40000 ALTER TABLE `lines` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -161,7 +165,7 @@ CREATE TABLE `movement_types` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -170,7 +174,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `movement_types` WRITE;
 /*!40000 ALTER TABLE `movement_types` DISABLE KEYS */;
-INSERT INTO `movement_types` VALUES (1,'Venta'),(2,'Compra'),(3,'Transferencia'),(4,'Cuenta Fisica'),(5,'Devolucion de Venta'),(6,'Devolucion de Compra'),(7,'Devolucion de Transferencia'),(8,'Consumo Interno'),(9,'Devolucion de Consumo Interno');
+INSERT INTO `movement_types` VALUES (1,'Venta'),(2,'Compra'),(3,'Transferencia'),(4,'Cuenta Fisica'),(5,'Devolucion de Venta'),(6,'Devolucion de Compra'),(7,'Devolucion de Transferencia'),(8,'Consumo Interno'),(9,'Devolucion de Consumo Interno'),(10,'Pago'),(11,'Deposito'),(12,'Retiro');
 /*!40000 ALTER TABLE `movement_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,6 +198,7 @@ CREATE TABLE `movements` (
   `serialized_product_id` int(11) default NULL,
   `line_id` int(11) default NULL,
   `comments` text,
+  `value` decimal(5,2) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
@@ -218,7 +223,7 @@ CREATE TABLE `order_types` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -227,7 +232,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `order_types` WRITE;
 /*!40000 ALTER TABLE `order_types` DISABLE KEYS */;
-INSERT INTO `order_types` VALUES (1,'Venta'),(2,'Compra'),(3,'Consumo Interno'),(4,'Transferencia'),(5,'Cuenta Fisica');
+INSERT INTO `order_types` VALUES (1,'Venta'),(2,'Compra'),(3,'Consumo Interno'),(4,'Transferencia'),(5,'Cuenta Fisica'),(6,'Abono a cuenta'),(7,'Transferencia de Fondos');
 /*!40000 ALTER TABLE `order_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -255,7 +260,7 @@ CREATE TABLE `orders` (
   `order_type_id` int(11) default NULL,
   `deleted` tinyint(1) default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -264,6 +269,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
+INSERT INTO `orders` VALUES (1,5,3,NULL,'2009-05-01',1,'2009-05-01 20:16:37','2009-05-01 20:16:37',NULL,NULL,NULL,NULL,'',1,0);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -387,7 +393,7 @@ CREATE TABLE `prices` (
   `relative` decimal(7,2) default NULL,
   `available` tinyint(1) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=192 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=200 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -396,6 +402,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `prices` WRITE;
 /*!40000 ALTER TABLE `prices` DISABLE KEYS */;
+INSERT INTO `prices` VALUES (1,1,1,'1.00',NULL,1),(2,2,1,'1.00',NULL,1),(3,1,2,'1.00',NULL,1),(4,2,2,'1.00',NULL,1);
 /*!40000 ALTER TABLE `prices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -471,7 +478,7 @@ CREATE TABLE `products` (
   `product_category_id` int(11) default NULL,
   `blocked_by_count` int(1) default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -480,7 +487,33 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
+INSERT INTO `products` VALUES (1,'Abono a cuenta','',NULL,NULL,'!Abono a cuenta',4,'','2009-05-01 20:11:49','2009-05-01 20:11:49','',0,NULL,1,NULL,0),(2,'Transferencia de Fondos','',NULL,NULL,'!Transferencia de Fondos',4,'','2009-05-01 20:13:31','2009-05-01 20:13:31','',0,NULL,1,NULL,0);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `receipts`
+--
+
+DROP TABLE IF EXISTS `receipts`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `receipts` (
+  `id` int(11) NOT NULL auto_increment,
+  `order_id` int(11) default NULL,
+  `filename` varchar(255) default NULL,
+  `created_at` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `receipts`
+--
+
+LOCK TABLES `receipts` WRITE;
+/*!40000 ALTER TABLE `receipts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `receipts` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -521,7 +554,7 @@ CREATE TABLE `roles` (
   `id` int(11) NOT NULL auto_increment,
   `title` varchar(255) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -530,7 +563,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `roles` WRITE;
 /*!40000 ALTER TABLE `roles` DISABLE KEYS */;
-INSERT INTO `roles` VALUES (1,'ventas'),(2,'admin'),(3,'compras'),(4,'inventario');
+INSERT INTO `roles` VALUES (1,'ventas'),(2,'admin'),(3,'compras'),(4,'inventario'),(5,'Contabilidad');
 /*!40000 ALTER TABLE `roles` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -654,6 +687,38 @@ INSERT INTO `states` VALUES (1,'Ahuachapán'),(14,'Usulután'),(13,'Sonsonate'),
 UNLOCK TABLES;
 
 --
+-- Table structure for table `subscriptions`
+--
+
+DROP TABLE IF EXISTS `subscriptions`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `subscriptions` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  `client_id` int(11) default NULL,
+  `vendor_id` int(11) default NULL,
+  `quantity` int(11) default NULL,
+  `end_date` datetime default NULL,
+  `end_times` int(11) default NULL,
+  `fixed_price` decimal(5,2) default NULL,
+  `relative_price` decimal(5,2) default NULL,
+  `last_run` datetime default NULL,
+  `product_id` int(11) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `subscriptions`
+--
+
+LOCK TABLES `subscriptions` WRITE;
+/*!40000 ALTER TABLE `subscriptions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `subscriptions` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `units`
 --
 
@@ -664,7 +729,7 @@ CREATE TABLE `units` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -673,7 +738,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `units` WRITE;
 /*!40000 ALTER TABLE `units` DISABLE KEYS */;
-INSERT INTO `units` VALUES (1,'Cada Uno'),(11,'Hora'),(12,'Caja');
+INSERT INTO `units` VALUES (1,'Cada Uno'),(2,'Hora'),(3,'Caja'),(4,'Dolares');
 /*!40000 ALTER TABLE `units` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -732,7 +797,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','null@null.null','efac2d903cd08baa3ffb48c853e0eff587e39b5d','b41e5fb0c70973c725b3d47dd8bfb99780da3a0b',NULL,NULL,5,1,1);
+INSERT INTO `users` VALUES (1,'admin','null@null.null','efac2d903cd08baa3ffb48c853e0eff587e39b5d','b41e5fb0c70973c725b3d47dd8bfb99780da3a0b',NULL,NULL,5,1,2);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -751,7 +816,7 @@ CREATE TABLE `warranties` (
   `order_type_id` int(11) default NULL,
   `months` int(11) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=68 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -760,6 +825,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `warranties` WRITE;
 /*!40000 ALTER TABLE `warranties` DISABLE KEYS */;
+INSERT INTO `warranties` VALUES (68,NULL,'0.00',NULL,NULL,0),(69,3,'0.00',NULL,NULL,0),(70,NULL,'0.00',NULL,NULL,0),(71,4,'0.00',NULL,NULL,0);
 /*!40000 ALTER TABLE `warranties` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -796,4 +862,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-04-30 23:54:31
+-- Dump completed on 2009-05-03  1:44:36

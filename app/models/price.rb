@@ -41,11 +41,13 @@ class Price < ActiveRecord::Base
 		end
 	end
 	def self.search(search, page)
+		# the prices.id > 4 is so we don't show prices for some system services
 		paginate :per_page => 20, :page => page,
 	       :conditions => ['(products.name like :search 
 							OR products.description like :search 
 							OR products.upc = :exact_search
 							OR vendors.name like :search )
+							AND (prices.id > 4)
 							AND (prices.price_group_id = :price_group_id)',
                             {:search => "%#{search}%", 
                             :exact_search => "#{search}", 
