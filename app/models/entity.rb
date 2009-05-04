@@ -40,6 +40,7 @@ class Entity < ActiveRecord::Base
   belongs_to :user
   
 	has_many :orders, :order => 'created_at'
+	belongs_to :site, :class_name => "Entity", :foreign_key => "site_id"
 	has_many :products, :through => :inventories
 	has_many :products, :through => :movements
 	has_many :movements, :dependent => :destroy, :order => 'created_at'
