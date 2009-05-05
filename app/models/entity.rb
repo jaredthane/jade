@@ -59,6 +59,8 @@ class Entity < ActiveRecord::Base
       movements.build(attributes)
     end
   end
+
+
 #  def price_group(location_id = User.current_user.location_id)
 #  	location = Entity.find(location_id)
 #  	pg = location.price_groups.find_by_name_id(self.default_price_group_id)

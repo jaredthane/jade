@@ -204,6 +204,7 @@ class EntitiesController < ApplicationController
     	@entity = Entity.new(:entity_type_id=> 1)    	
     when 'clients'
     	@entity = Entity.new(:entity_type_id=> 2)
+    	@entity.site_id = User.current_user.location_id
     when 'entities'
     	@entity = Entity.new()
     end    
