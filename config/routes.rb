@@ -5,6 +5,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :session
   map.resources :product_categories
   map.resources :prices
+  map.resources :subscriptions
 	map.resources :discounts
 	map.resources :combos
 	map.post_physical_counts 'physical_counts/:id/post', :controller => 'physical_counts', :action => 'post'

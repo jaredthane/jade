@@ -18,7 +18,23 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class Subscription < ActiveRecord::Base
-	belongs_to :client
-	belongs_to :vendor
+	belongs_to :client, :class_name => "Entity", :foreign_key => "client_id"
+	belongs_to :vendor, :class_name => "Entity", :foreign_key => "vendor_id"
 	belongs_to :product
+	belongs_to :last_order, :class_name => "Order", :foreign_key => "last_order_id"
+	def client_name
+ 		client.name if client
+	end
+	def client_name=(name)
+		self.client = Entity.find_by_name(name) unless name.blank?
+	end
+	def self.search(search, page)
+  	    paginate :per_page => 20, :page => page,
+		         :conditions => ['(products.name like :search or products.upc like :search or clients.name like :search)', {:search => "%#{search}%"}],
+		         :order => 'products.name',
+		         :joins => 'inner join products on products.id = subscriptions.product_id inner join entities as clients on clients.id = subscriptions.client_id'
+	end
+	def price(price_group = User.current_user.current_price_group)
+	    return self.product.price * relative_price + fixed_price
+	end
 end
