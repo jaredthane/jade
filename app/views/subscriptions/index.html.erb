@@ -1,0 +1,37 @@
+
+<% content_for :title do %>Lista de Suscripciones<% end %>
+<% content_for :actions do %>
+	<dt><%= link_to 'Suscripción Nuevo', new_subscription_path, :class => 'action' %></dt>
+<% end %>
+<h2>Haga clic en la cantidad para ver los detalles de la suscripción.</h2>
+<br />
+<%= will_paginate @subscriptions, :class => 'pagination' %>
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_20">Cliente</div>
+    <div class="table_cell_20">Producto</div>
+    <div class="table_cell_15">Cantidad</div>
+    <div class="table_cell_15">Precio</div>
+    <div class="table_cell_15">Ultima Venta</div>
+    <div class="table_cell">Acciones</div>
+  </div>
+
+
+<% for subscription in @subscriptions %>
+  <div class="table_row">
+    <div class="table_cell_20"><%= link_to subscription.client.name, subscription.client %></div>
+    <div class="table_cell_20"><%= link_to subscription.product.name, subscription.product %></div>
+  	<div class="table_cell_15"><%= link_to subscription.quantity, subscription %></div>
+    <div class="table_cell_15"><%=h number_to_currency(subscription.price) %></div>
+    <div class="table_cell_15">
+        <% if subscription.last_order %>
+            <%= link_to subscription.last_order.created_at, subscription.last_order %>
+        <% end %>
+    </div>
+    <div class="table_cell"><%= link_to 'Remover', subscription, :confirm => 'Esta seguro?', :method => :delete %></div>
+	</div>
+<% end %>
+</div>
+<br />
+<%= will_paginate @subscriptions, :class => 'pagination' %>
+
