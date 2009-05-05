@@ -234,7 +234,7 @@ class EntitiesController < ApplicationController
 		    end    	
 #      	puts "creating entity workd"
         flash[:notice] = 'Entidad ha sido creado exitosamente.'
-        format.html { redirect_to(entities_url) }
+        format.html { redirect_to(@entity) }
         format.xml  { render :xml => @entity, :status => :created, :location => @entity }
       else
 #      	puts "creating entity didnt workd"
@@ -255,7 +255,7 @@ class EntitiesController < ApplicationController
         logger.debug "entity_type="+ Entity.find(@entity.id).entity_type_id.to_s
         
         flash[:notice] = 'Entidad  ha sido actualizado exitosamente.'
-        format.html { redirect_to(entities_url) }
+        format.html { redirect_to(@entity) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

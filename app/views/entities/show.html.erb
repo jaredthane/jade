@@ -5,12 +5,12 @@
 <% end %>
 
 <% content_for :actions do %>
-	<% if @entity.entity_type.id == 3 %>
-		<dt><%= link_to 'Compras para este Sitio', purchases_path, :class => 'action' %>  </dt>
-		<dt><%= link_to 'Ventas de este Sitio', sales_path, :class => 'action' %>  </dt>
-	<% end %>
 	<dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
-	<dt><%= link_to 'Atras', entities_path, :class => 'action' %></dt>
+	<% if @entity.entity_type.id == 3 %>
+		<dt><%= link_to 'Compras Aqui', purchases_path, :class => 'action' %>  </dt>
+		<dt><%= link_to 'Ventas Aqui', sales_path, :class => 'action' %>  </dt>
+	<% end %>
+	<dt><%= link_to 'Lista', entities_path, :class => 'action' %></dt>
 <% end %>
 
   <% if @entity.entity_type_id !=3 and @entity.birthday? %>  

@@ -3,7 +3,7 @@
 <% end %>
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
-<% if mode == 'edit' %>
+    <% if mode == 'edit' %>
 		<dt><%= link_to 'Ver', @subscription, :class => 'action' %></dt>
 		<dt><%= link_to 'Remover', @subscription, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
 	<% end %>
