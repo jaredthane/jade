@@ -5,6 +5,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :session
   map.resources :product_categories
   map.resources :prices
+  map.process_subscriptions 'subscriptions/process', :controller => 'subscriptions', :action => 'create_orders'
+  map.subscriptions_results 'subscriptions/results', :controller => 'subscriptions', :action => 'show_batch'
   map.resources :subscriptions
 	map.resources :discounts
 	map.resources :combos

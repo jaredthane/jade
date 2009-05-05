@@ -38,7 +38,7 @@ class Entity < ActiveRecord::Base
   belongs_to :product
 
 
-    belongs_to :site, :class_name => "Entity", :foreign_key => "site_id"
+  belongs_to :site, :class_name => "Entity", :foreign_key => "site_id"
     
   belongs_to :user
   
@@ -170,6 +170,11 @@ class Entity < ActiveRecord::Base
 		       :conditions => condition,
 		       :joins => 'left join price_group_names as client_group on client_group.id=entities.price_group_name_id left join price_groups on entities.price_group_id=price_groups.id left join price_group_names as site_group on site_group.id = price_groups.price_group_name_id left join users on users.id=entities.user_id',
 		       :order => 'name'
+	end
+	def self.find_all_clients
+	  condition = "(entity_type_id = 2 OR entity_type_id = 5)"
+  	condition += ' AND entities.site_id = ' + User.current_user.location_id.to_s
+		find :all, :conditions => condition, :order => 'name'
 	end
 	def self.search_birthdays(search)
 		search = search || ""

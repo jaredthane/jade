@@ -28,6 +28,47 @@ class Subscription < ActiveRecord::Base
 	def client_name=(name)
 		self.client = Entity.find_by_name(name) unless name.blank?
 	end
+	def create_order_for_client(subs)
+	  puts "subs:" +  subs.inspect
+	  for vendor_id, list in subs
+	    puts "vendor_id=" + vendor_id.inspect
+	    puts "list=" + list.inspect
+	    o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+	    for sub in list
+	      l=Line.create(:order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price)
+	      sub.last_order=o
+        sub.save
+      end
+    end
+	end
+	def create_orders
+	  for o in Order.find(:all, :conditions =>'last_batch=True')
+  		o.last_batch=false
+  		o.save
+  	end
+  	for client in Entity.find_all_clients
+  	  subs_to_fill_for_client = {}
+  	  puts "asubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+  	  for sub in Subscription.find_all_by_client_id(client.id)
+  	    if sub.last_order
+	        if sub.last_order.created_at.to_date >> 1 < Date.today
+  	        puts "bsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+	          subs_to_fill_for_client[sub.vendor_id] = [] if !subs_to_fill_for_client[sub.vendor_id]
+  	        puts "csubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+	          subs_to_fill_for_client[sub.vendor_id] << sub
+	        end
+	      else
+	        puts "dsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+	        subs_to_fill_for_client[sub.vendor_id] = [] if !subs_to_fill_for_client[sub.vendor_id]
+  	      puts "esubs_to_fill_for_client" + subs_to_fill_for_client.inspect  
+	        subs_to_fill_for_client[sub.vendor_id] << sub
+	      end
+  	  end
+  	  puts "fsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+  	  puts "lenght="+subs_to_fill_for_client.length.to_s
+  	  create_order_for_client(subs_to_fill_for_client) if subs_to_fill_for_client.length > 0
+  	end
+	end
 	def self.search(search, page)
   	    paginate :per_page => 20, :page => page,
 		         :conditions => ['(products.name like :search or products.upc like :search or clients.name like :search)', {:search => "%#{search}%"}],
@@ -35,6 +76,6 @@ class Subscription < ActiveRecord::Base
 		         :joins => 'inner join products on products.id = subscriptions.product_id inner join entities as clients on clients.id = subscriptions.client_id'
 	end
 	def price(price_group = User.current_user.current_price_group)
-	    return self.product.price * relative_price + fixed_price
+	    return (self.product.price||0) * (relative_price||0) + (fixed_price||0)
 	end
 end

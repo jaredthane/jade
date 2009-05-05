@@ -39,6 +39,23 @@ class SubscriptionsController < ApplicationController
 
   # GET /subscriptions/new
   # GET /subscriptions/new.xml
+  def create_orders
+    Subscription.first.create_orders
+    respond_to do |format|
+      format.html { redirect_to(subscriptions_results_path) }
+      format.xml  { render :xml => @subscription }
+    end
+  end
+  def show_batch
+		@orders = Order.search_batch(params[:search], params[:page])
+		@order_type_id	= 1
+		respond_to do |format|
+      format.html {render :template=> "/orders/index"}
+      format.xml  { render :xml => @orders }
+    end
+  end
+  # GET /subscriptions/new
+  # GET /subscriptions/new.xml
   def new
     @subscription = Subscription.new
     respond_to do |format|
