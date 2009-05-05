@@ -227,17 +227,24 @@ class EntitiesController < ApplicationController
 
     respond_to do |format|
       if @entity.save
-      	if params[:entity_type_id] == 3
+      	logger.debug "creating entity workd"
+      	logger.debug "|" + params[:entity][:entity_type_id].to_s + "|"
+      	if params[:entity][:entity_type_id] == '3'
+      	    logger.debug "its a site"
 		    	for p in Product.all
 		    		i=Inventory.create(:entity=>@entity, :product=>p, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
 		    	end  
+		    	logger.debug "made the inventories"
+            	for pgn in PriceGroupName.all
+                    pg=PriceGroup.create(:price_group_name=>pgn, :entity=>@entity)
+                end  
+                logger.debug " made the price groups"
 		    end    	
-#      	puts "creating entity workd"
         flash[:notice] = 'Entidad ha sido creado exitosamente.'
         format.html { redirect_to(@entity) }
         format.xml  { render :xml => @entity, :status => :created, :location => @entity }
       else
-#      	puts "creating entity didnt workd"
+      	logger.debug "creating entity didnt workd"
         format.html { render :action => "new" }
         format.xml  { render :xml => @entity.errors, :status => :unprocessable_entity }
       end
