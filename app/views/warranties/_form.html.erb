@@ -1,9 +1,19 @@
-
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
 <% content_for :title do %><%= heading %><% end %>
+<% content_for :actions do %>
+<% if mode == 'edit' %>
+		<dt><%= link_to 'Ver', @warranty, :class => 'action' %></dt>
+		<dt><%= link_to 'Remover', @warranty, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+	<% end %>
+	<dt><%= link_to 'Lista', warranties_path, :class => 'action' %></dt>
+	<dt><%= link_to_function 'Guardar', 'submit("warranty_form")', :class => 'action' %></dt>
+<% end %>
 
 <%= error_messages_for :warranty %>
 
-<% form_for(@warranty) do |f| %>
+<% form_for(@warranty, :html => {:id => 'warranty_form' }) do |f| %>
 
 	<div class="column2-unit-left">
 		<p>
@@ -24,11 +34,6 @@
 
 	</div>
 	<hr class="clear-contentunit" />
-	<% if mode == 'edit' %>
-		<%= link_to 'Ver | ', @warranty, :class => 'action' %> |
-		<%= link_to 'Remover | ', @warranty, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %> |
-	<% end %>
-	<%= link_to 'Lista | ', warranties_path, :class => 'action' %>
-	<%= f.submit button_text, :class => 'action | ' %>
+	
 <% end %>
 
