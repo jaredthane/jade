@@ -37,6 +37,9 @@ class Entity < ActiveRecord::Base
   # To be used with Employees
   belongs_to :product
 
+
+    belongs_to :site, :class_name => "Entity", :foreign_key => "site_id"
+    
   belongs_to :user
   
 	has_many :orders, :order => 'created_at'
@@ -157,6 +160,7 @@ class Entity < ActiveRecord::Base
 				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR site_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entities.id!=1"
   	end
   	condition += ' AND entities.user_id = ' + user_id.to_s if user_id != 0 
+  	condition += ' AND entities.site_id = ' + User.current_user.location.to_s
   	#puts "condition=" + condition
 		paginate :per_page => 20, :page => page,
 		       :conditions => condition,
