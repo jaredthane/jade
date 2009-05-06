@@ -32,6 +32,23 @@
 		<b>Nombre</b><br />		
 		<%=h @entity.name %>
 	</p>
+	<% if @entity.entity_type.id == 3 %>
+	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+	    <p>
+			  <b>Cuenta de Efectivo</b><br />
+			  <% if @entity.cash_account %>
+  			  <%=link_to @entity.cash_account.name, @entity.cash_account %>
+			  <% end %>
+		  </p>
+	    <p>
+			  <b>Cuenta de Inventario</b><br />
+			  <% if @entity.inventory_account %>
+  			  <%=link_to @entity.inventory_account.name, @entity.cash_account %>
+			  <% end %>
+		  </p>
+	    
+		<% end %>
+	<% end %>
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
 		<p>
 			<b>Nacimiento</b><br />		
@@ -81,7 +98,38 @@
 	<% end %>
 </div>
 <div class="column2-unit-right">
+	<p>
+		<b>Tipo</b><br />
+		<% if @entity.entity_type %>
+			<%=h @entity.entity_type.name %>
+		<% end %>
+	</p>
+  <% if @entity.entity_type.id == 3 %>
+	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+      <p>
+			  <b>Cuenta de Ingresos</b><br />
+			  <% if @entity.revenue_account %>
+  			  <%=link_to @entity.revenue_account.name, @entity.cash_account %>
+			  <% end %>
+		  </p>
+	    <p>
+			  <b>Cuenta de Gastos</b><br />
+			  <% if @entity.expense_account %>
+  			  <%=link_to @entity.expense_account.name, @entity.cash_account %>
+			  <% end %>
+		  </p>
+		<% end %>
+  <% end %>
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
+	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+	    <p>
+		    <b>Cuenta para Contabilidad</b><br />
+		    <% if @entity.revenue_account %>
+  		    <%=link_to @entity.cash_account.name, @entity.cash_account%>
+		    <% end %>
+		
+	    </p>
+	   <% end %>
 	<p>
 		<b>Telefono Fijo</b><br />
 		<%=h @entity.home_phone_number %>
@@ -114,12 +162,6 @@
 			<%=h @entity.giro %>
 		</p>
 	<% end %>
-	<p>
-		<b>Tipo</b><br />
-		<% if @entity.entity_type %>
-			<%=h @entity.entity_type.name %>
-		<% end %>
-	</p>
 </div>
 <hr class="clear-contentunit" />
 <% case @entity.entity_type_id 
