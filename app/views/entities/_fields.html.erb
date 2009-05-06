@@ -73,6 +73,10 @@
 		    <b>Cuenta de Gastos</b><br />
 			  <%= f.collection_select(:expense_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
 		  </p>
+		  <p>
+		    <b>Cuenta de Impuestos</b><br />
+			  <%= f.collection_select(:tax_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+		  </p>
 		<% end %>
   <% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
