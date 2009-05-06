@@ -24,7 +24,7 @@ class Movement < ActiveRecord::Base
 	belongs_to :order
 	belongs_to :user
 	belongs_to :serialized_product
-	belongs_to :line
+#	belongs_to :line
 
 	def product_name
  	    product.name if product

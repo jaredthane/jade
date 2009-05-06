@@ -46,7 +46,7 @@ class Order < ActiveRecord::Base
 	#validates_associated :lines
 	belongs_to :user
 	validates_presence_of(:user, :message => "debe ser valido")
-	
+	attr_accessor :movements_to_create
   ###################################################################################
   # Returns an array of all of the discounts in the system
   ##################################################################################

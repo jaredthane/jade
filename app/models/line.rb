@@ -101,7 +101,7 @@ class Line < ActiveRecord::Base
 		@movements_to_create = [] if !@movements_to_create
 		for m in @movements_to_create
 			# Save movement from the list
-			m.line_id=self.id
+#			m.line_id=self.id
 			m.save
 			qty=m.quantity || 0
 
@@ -123,7 +123,7 @@ class Line < ActiveRecord::Base
 		@movements_to_create.clear
 	end
 	def create_movement_for(entity_id, movement_type_id, quantity)
-		m=Movement.new(:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.order.id, :serialized_product_id => self.serialized_product_id, :line_id => self.id)
+		m=Movement.new(:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.order.id, :serialized_product_id => self.serialized_product_id)
 		@movements_to_create = [] if !@movements_to_create 
 		@movements_to_create.push(m)
 	end
