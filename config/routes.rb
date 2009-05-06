@@ -4,6 +4,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :serialized_products
   map.resource :session
   map.resources :product_categories
+  map.resources :accounts
   map.resources :prices
   map.process_subscriptions 'subscriptions/process', :controller => 'subscriptions', :action => 'create_orders'
   map.subscriptions_results 'subscriptions/results', :controller => 'subscriptions', :action => 'show_batch'

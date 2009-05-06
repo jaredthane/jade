@@ -1,0 +1,46 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :title do %><%= heading %><% end %>
+<% content_for :actions do %>
+  <% if mode == 'edit' %>
+	  <dt><%= link_to 'Lista', accounts_path, :class => 'action' %></dt>
+		<dt><%= link_to 'Remover', @account, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+	  <dt><%= link_to 'Cancelar', @account, :class => 'action' %></dt>
+  <% else %>
+    <dt><%= link_to 'Cancelar', accounts_path, :class => 'action' %></dt>
+	<% end %>
+	<dt><%= link_to_function 'Guardar', 'submit("account_form")', :class => 'action' %></dt>
+<% end %>
+
+<%= error_messages_for :account %>
+
+<% form_for(@account, :html => {:id => 'account_form' }) do |f| %>
+
+	<div class="column2-unit-left">
+		<p>
+			<b>Nombre</b>
+			<%= f.text_field :name, :class => 'field' %>			
+		</p>
+		<p>
+		  <b>Rama</b><br />
+			<%= f.collection_select(:parent_id, get_accounts, :id, :name, {:include_blank => true}) %>
+		</p>
+	</div>
+	<div class="column2-unit-right">
+    <p>
+			<b>Numero</b>
+			<%= f.text_field :number, :class => 'field' %>
+		</p>
+		<p>
+		  <b>Entidad</b><br />
+			<%= f.collection_select(:entity_id, get_entities, :id, :name, {:include_blank => true}) %>
+		</p>
+    <p>
+			<%= f.check_box :postable, :class => 'field' %><b> Se puede postar transacciones directamente a esta cuenta?</b>
+		</p>
+	</div>
+	<hr class="clear-contentunit" />
+	
+<% end %>
+
