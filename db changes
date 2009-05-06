@@ -23,3 +23,5 @@ alter table entities change column payables_account_id expense_account_id int(11
 alter table transactions add column order_id int(11);
 alter table transactions add column comments text;
 alter table posts add column transaction_id int(11);
+alter table entities add column tax_account_id int(11);
+

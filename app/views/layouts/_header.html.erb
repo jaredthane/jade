@@ -175,6 +175,9 @@
 	  <% else %>
 	  	<li><a href="/me" title="Mi Cuenta">Mi Cuenta</a></li>
 	  <% end %>
+	  <% if current_user.has_rights(['admin','gerente', 'contabilidad']) %>
+	  	<li><a href="/accounts" title="Contabilidad">Contabilidad</a></li>
+	  <% end %>
 	</ul>
 	<% end %>
 					<%= yield :nav2 %>	
@@ -254,6 +257,9 @@
 		<% else %>
 			<dt><a href="/me">Mi Cuenta</a></dt>
 		<% end %>
+	  <% if current_user.has_rights(['admin','gerente', 'contabilidad']) %>
+			<dt><a href="/accounts">Contabilidad</a></dt>
+	  <% end %>
 			<dt><a href="/logout">Salir</a></dt>
 		<% end %>
 	</dl>        

@@ -168,7 +168,8 @@ class Entity < ActiveRecord::Base
   	end
   	condition += ' AND entities.user_id = ' + user_id.to_s if user_id != 0 
   	if entity_type=='clients' or entity_type=='end_users' or entity_type=='wholesale_clients'
-      	condition += ' AND entities.site_id = ' + User.current_user.location_id.to_s
+  	    # only show for this site, but always include anonimo and no spcificado
+      	condition += ' AND (entities.site_id = ' + User.current_user.location_id.to_s + ' or entities.id=3 or entities.id=4) ' 
     end
   	#puts "condition=" + condition
 		paginate :per_page => 20, :page => page,

@@ -21,9 +21,20 @@ class Account < ActiveRecord::Base
 	belongs_to :parent, :class_name => "Account", :foreign_key => "parent_id"
 	belongs_to :entity
 	has_many :posts
+	has_many :trans, :through => :posts
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['(accounts.name like :search)', {:search => "%#{search}%"}],
 		         :order => 'accounts.number'
+	end
+	def children
+	  return Account.find_all_by_parent_id(self.id)
+	end
+	def all_transactions
+	  trans = self.trans
+    for child in children
+  	  trans << child.all_transactions
+  	end
+	  return trans
 	end
 end
