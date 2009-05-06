@@ -20,6 +20,7 @@
 class Account < ActiveRecord::Base
 	belongs_to :parent, :class_name => "Account", :foreign_key => "parent_id"
 	belongs_to :entity
+	has_many :posts
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['(accounts.name like :search)', {:search => "%#{search}%"}],

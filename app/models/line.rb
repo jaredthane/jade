@@ -95,11 +95,23 @@ class Line < ActiveRecord::Base
 			end		
 		end
 	end
-	
+	###################################################################################
+	# Returns the total price of the products on this line
+	###################################################################################
+	def total_cost
+		total = (product.cost ||0) * quantity
+		return total
+	end
+  ###################################################################################
+	# Returns the total price of the products on this line
+	###################################################################################
 	def total_price
 		total = ((price ||0) + (warranty_price || 0)) * quantity
 		return total
 	end
+	###################################################################################
+	# Returns the total price of the products on this line plus tax
+	###################################################################################
 	def total_price_with_tax
 		total = (total_price||0) + (tax||0)
 		return total

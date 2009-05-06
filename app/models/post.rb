@@ -19,6 +19,6 @@
 
 class Post < ActiveRecord::Base
   belongs_to :post_type
-  belongs_to :transaction
+  belongs_to :trans
 	belongs_to :account
 end

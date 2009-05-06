@@ -39,7 +39,9 @@ class Order < ActiveRecord::Base
 	after_create :create_lines
 	after_update :check_for_discounts
 	after_create :check_for_discounts
-  after_create :create_movements
+	after_update :create_transactions
+	after_create :create_transactions
+	after_create :create_movements
   after_update :create_movements
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
 	belongs_to :client, :class_name => "Entity", :foreign_key => 'client_id'
@@ -52,12 +54,15 @@ class Order < ActiveRecord::Base
 	attr_accessor :movements_to_create
 	attr_accessor :transactions_to_create # list of lists of posts
 	def create_transactions
+	  puts "create transactions -> @transactions_to_create = "+@transactions_to_create.to_s
 	  @transactions_to_create = [] if !@transactions_to_create
 	  for t in @transactions_to_create
-	    trans = Transaction.create()
+	    trans = Trans.create(:order => self, :comments => self.comments)
 	    for p in t
-	      p.transaction_id = trans.id
-	      p.save
+	      p.trans_id = trans.id
+	      puts "create transactions -> p = "+p.inspect
+	      puts "save result"+p.save.to_s
+	      p.errors.each {|e| puts "POst ERROR" + e.to_s}
 	    end
 	  end
 	end
@@ -163,6 +168,9 @@ class Order < ActiveRecord::Base
 				return 4
 		end		
 	end
+  ###################################################################################
+  # prepares a single movement to be created but DOES NOT SAVE IT
+  ##################################################################################
 	def create_movement_for(line, entity_id, movement_type_id, quantity)
 	  value = (line.price||0) * (line.quantity||0)
 		m=Movement.new(:entity_id => entity_id, :comments => self.comments, :product_id => line.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => line.serialized_product_id, :value => value)
@@ -170,24 +178,50 @@ class Order < ActiveRecord::Base
 		@movements_to_create.push(m)
 	end
 	
+  ###################################################################################
+  # creates posts for transactions but DOES NOT SAVE THEM
+  ##################################################################################
 	def prepare_transaction
 	  case order_type_id
     when 1 # Venta
+      puts "preparing transactions for venta"
       vendor = Post.new(:account => self.vendor.revenue_account, :value=>self.total_price, :post_type_id =>2)
       client = Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>1)
       tax    = Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>2)
       inventory = Post.new(:account => self.vendor.inventory_account, :value=>self.total_cost, :post_type_id =>2)
       expense = Post.new(:account => self.vendor.expense_account, :value=>self.total_cost, :post_type_id =>1)
-      @tranactions_to_create = [[vendor, client, tax], [inventory, expense]]
+	    puts "prepare transactions -> vendor = " + vendor.inspect
+	    puts "prepare transactions -> client = " + client.inspect
+	    puts "prepare transactions -> tax = " + tax.inspect
+	    puts "prepare transactions -> inventory = " + inventory.inspect
+	    puts "prepare transactions -> expense = " + expense.inspect
+	    both = [[vendor, client, tax], [inventory, expense]]
+	    puts "prepare transactions -> both = " + both.to_s
+      @transactions_to_create = [[vendor, client, tax], [inventory, expense]]
+	    puts "prepare transactions1 -> @transactions_to_create = " + @transactions_to_create.inspect
       
 	  when 2 # Compra
+      puts "preparing transactions for Compra"
 	    puts self.vendor.cash_account.to_s
 	    puts self.total_price_with_tax.to_s
 	    vendor = Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>2)
       client = Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>1)
-      @tranactions_to_create = [[vendor, client]]
+      puts "prepare transactions -> vendor = " + vendor.to_s
+	    puts "prepare transactions -> client = " + client.to_s
+	    both = [[vendor, client]]
+	    puts "prepare transactions -> both = " + both.to_s
+      @transactions_to_create = [[vendor, client]]
+	    puts "prepare transactions1 -> @transactions_to_create = " + @transactions_to_create.to_s
+	    puts "prepare transactions1 -> @movements_to_create = " + @movements_to_create.to_s
+	    puts "prepare transactions -> both = " + both.to_s
+	    
 	  end
+	  
+	  puts "prepare transaction2s -> @transactions_to_create = " + @transactions_to_create.to_s
 	end
+  ###################################################################################
+  # checks if there are any transactions to be made, if so, it calls prepare_transaction
+  ##################################################################################
 	def check_for_transactions
 	  if self.new_record?
 	    prepare_transaction
@@ -198,6 +232,9 @@ class Order < ActiveRecord::Base
 	    end
 	  end	
 	end
+  ###################################################################################
+  # prepares the movements to be created but DOES NOT SAVE THEM
+  ##################################################################################
 	def prepare_movements(line)
 	  logger.debug "==============line.product.product_type_id=#{line.product.inspect}"
 	  if line.product.product_type_id == 1
@@ -239,11 +276,12 @@ class Order < ActiveRecord::Base
 		  end
 	  end
 	end
-	############################## End of Creating Movements ####################################
 	
 	
-	
-	
+
+  ###################################################################################
+  # creates new lines and fills them with the contents specified. DOES NOT SAVE THEM
+  ##################################################################################
 	def create_all_lines(lines)
 	  lines=[] if !lines
   	for l in lines
@@ -261,6 +299,9 @@ class Order < ActiveRecord::Base
   		check_for_transactions
   	end
 	end
+  ###################################################################################
+  # updates existing lines on the order, adds new ones and deletes missing ones. DOES NOT SAVE THEM
+  ##################################################################################
 	def update_all_lines(new_lines=[], existing_lines=[])
 	lines_to_delete=[]
     #Update existing lines
@@ -404,7 +445,17 @@ class Order < ActiveRecord::Base
 	def total_price
 		total=0
 		for l in self.lines
-			total = total + (l.total_price)
+			total = (total||0) + (l.total_price||0)
+		end
+		return total
+	end
+  ###################################################################################
+	# Returns the total cost of all of the products in the order
+	###################################################################################
+	def total_cost
+		total=0
+		for l in self.lines
+			total = (total||0) + (l.total_cost||0)
 		end
 		return total
 	end
@@ -414,7 +465,7 @@ class Order < ActiveRecord::Base
 	def total_tax
 		total=0
 		for l in self.lines
-			total = total + (l.tax)
+			total = (total||0) + (l.tax||0)
 		end
 		return total
 	end
@@ -427,16 +478,16 @@ class Order < ActiveRecord::Base
 		if client
 			if client.entity_type_id == 2
 				for l in self.lines
-					total = total + (l.total_price)
+					total = (total||0) + (l.total_price||0)
 				end
 			else
 				for l in self.lines
-					total = total + (l.total_price_with_tax)
+					total = (total||0) + (l.total_price_with_tax||0)
 				end
 			end
 		else
 			for l in self.lines
-				total = total + (l.total_price)
+				total = (total||0) + (l.total_price||0)
 			end
 		end
 		return total
