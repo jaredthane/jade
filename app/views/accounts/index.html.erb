@@ -16,15 +16,19 @@
 
 
 <% for account in @accounts %>
-  <div class="table_row">
+  <% if account.postable %><div class="table_row_green"><% else %><div class="table_row"><% end %>
     <div class="table_cell_25"><%= link_to account.number, account %></div>
   	<div class="table_cell_25"><%= link_to account.name, account %></div>
     <div class="table_cell_25">
   		<% if account.parent %>
-	    	<%= link_to account.parent.name, account.parent %>
-	    <% end %>
-	  </div>
-  	<div class="table_cell"><%= link_to account.entity.name, account.entity %></div>
+      	<%= link_to account.parent.name, account.parent %>
+      <% end %>
+    </div>
+  	<div class="table_cell">
+  		<% if account.entity %>
+      	<%= link_to account.entity.name, account.entity %>
+      <% end %>
+  	</div>
 	</div>
 <% end %>
 </div>
