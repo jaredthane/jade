@@ -35,8 +35,8 @@
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
 		<p>
 			<b>Nacimiento</b><br />		
-			<% if @person.birth %>
-				<%=h @person.birth.strftime('%B %d') %>
+			<% if @entity.birth %>
+				<%=h @entity.birth.strftime('%B %d') %>
 			<% end %>
 			
 		</p>
@@ -44,15 +44,15 @@
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
 		<p>
 			<b>Direcion</b><br />
-			<%=h @person.address %>
+			<%=h @entity.address %>
 		</p>
 		<p>
 			<b>Departamento</b><br />		
-			<%=h @person.state.name %>
+			<%=h @entity.state.name %>
 		</p>
 		<p>
 			<b>Municipio</b><br />		
-			<%=h @person.city %>
+			<%=h @entity.city %>
 		</p>
 		<p>
 			<b>Grupo de Precios</b><br />		
@@ -84,34 +84,34 @@
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
 	<p>
 		<b>Telefono Fijo</b><br />
-		<%=h @person.home_phone_number %>
+		<%=h @entity.home_phone_number %>
 		
 	</p>
 	<p>
 		<b>Telefono Oficina</b><br />
-		<%=h @person.office_phone_number %>
+		<%=h @entity.office_phone_number %>
 	</p>
 	<p>
 		<b>Telefono Celular</b><br />
-		<%=h @person.cell_phone_number %>
+		<%=h @entity.cell_phone_number %>
 	</p>
 	<p>
 		<b>Correo E</b>
-		<%=h @person.email %>
+		<%=h @entity.email %>
 	</p>
 	<% end %>
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
 		<p>
 			<b>Registro</b>
-			<%=h @person.register %>
+			<%=h @entity.register %>
 		</p>
 		<p>
 			<b>NIT</b><br />
-			<%=h @person.nit_number %>
+			<%=h @entity.nit_number %>
 		</p>
 		<p>
 			<b>Giro</b><br />
-			<%=h @person.giro %>
+			<%=h @entity.giro %>
 		</p>
 	<% end %>
 	<p>

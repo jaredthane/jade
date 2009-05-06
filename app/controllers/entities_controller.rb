@@ -142,7 +142,6 @@ class EntitiesController < ApplicationController
   def show
     @entity = Entity.find(params[:id])
 		@entity_type = @entity.entity_type_id
-		@person = @entity.person
 		return if !allowed(@entity.entity_type_id || 'entities')
 		if @entity_type == 3
 			current_user.location_id = params[:id]
@@ -202,11 +201,9 @@ class EntitiesController < ApplicationController
     when 'sites'
     	@entity = Entity.new(:entity_type_id=> 3)
     when 'vendors'
-    	@entity = Entity.new(:entity_type_id=> 1)  
-    	@person = Person.new()  	
+    	@entity = Entity.new(:entity_type_id=> 1)    	
     when 'clients'
     	@entity = Entity.new(:entity_type_id=> 2)
-    	@person = Person.new()
     	@entity.site_id = User.current_user.location_id
     when 'entities'
     	@entity = Entity.new()
@@ -222,19 +219,15 @@ class EntitiesController < ApplicationController
   # GET /entities/1/edit
   def edit
     @entity = Entity.find(params[:id])
-		@person = @entity.person
   end
 
   # POST /entities
   # POST /entities.xml
   def create
     @entity = Entity.new(params[:entity])
-    @person = Person.new(params[:person])
-    errors=nil
-    errors=true if !@entity.save
-    errors=true if !@person.save
+
     respond_to do |format|
-      if !errors
+      if @entity.save
       	logger.debug "creating entity workd"
       	logger.debug "|" + params[:entity][:entity_type_id].to_s + "|"
       	if params[:entity][:entity_type_id] == '3'
@@ -263,12 +256,9 @@ class EntitiesController < ApplicationController
   # PUT /entities/1.xml
   def update
     @entity = Entity.find(params[:id])
-		@person = @entity.person
-    errors=nil
-    errors=true if !@entity.update_attributes(params[:entity])
-    errors=true if !@person.update_attributes(params[:person])
+
     respond_to do |format|
-      if !errors
+      if @entity.update_attributes(params[:entity])
         logger.debug "entity_type="+ @entity.entity_type_id.to_s
         logger.debug "entity_type="+ Entity.find(@entity.id).entity_type_id.to_s
         
@@ -286,7 +276,6 @@ class EntitiesController < ApplicationController
   # DELETE /entities/1.xml
   def destroy
     @entity = Entity.find(params[:id])
-		@entity.person.destroy
     @entity.destroy
 
     respond_to do |format|

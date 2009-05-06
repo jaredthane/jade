@@ -1,0 +1,24 @@
+<% content_for :head do %><title><%= heading %></title><% end %>
+<% content_for :title do %><%= heading %><% end %>
+
+<%= error_messages_for :entity %>
+
+<% form_for(@entity) do |f| %>
+  <p>
+    <b>Nombre</b><br />
+    <%= f.text_field :name, :class => 'field' %>
+  </p>
+
+	<p>
+    <b>Tipo<br />
+    <%= f.collection_select(:entity_type_id, get_entity_types, :id, :name) %>
+	</p>
+  <p>
+    <%= f.submit button_text, :class => 'button' %>
+  </p>
+<% end %>
+<% if mode == 'edit' %>
+	<%= link_to 'Ver', @entity, :class => 'action' %> |
+	<%= link_to 'Remover', @entity, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %> |
+<% end %>
+<%= link_to 'Atras', entities_path, :class => 'action' %>

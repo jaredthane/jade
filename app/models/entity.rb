@@ -19,7 +19,7 @@ class Entity < ActiveRecord::Base
 	validates_presence_of(:name, :message => "Debe introducir el nombre de la entidad.")
   validates_uniqueness_of(:name, :message => "El nombre de entidad ya existe.") 
   
-  
+  belongs_to :state
   
   # These are all of the price groups that are available at this site.
   # For use with Sites
@@ -47,7 +47,6 @@ class Entity < ActiveRecord::Base
 	has_many :products, :through => :inventories
 	has_many :products, :through => :movements
 	has_many :movements, :dependent => :destroy, :order => 'created_at'
-	belongs_to :person
 	validates_associated :movements
 	after_update :save_movements
   after_create :save_movements
@@ -105,44 +104,44 @@ class Entity < ActiveRecord::Base
     end
   end
   def home_phone_number
-  	if self.person.home_phone
-			if self.person.home_phone.length == 8
-				return self.person.home_phone[0..3] + "-" + self.person.home_phone[4..7]
+  	if self.home_phone
+			if self.home_phone.length == 8
+				return self.home_phone[0..3] + "-" + self.home_phone[4..7]
 			end
 		end
   end
   def home_phone_number=(number)
-  	self.person.home_phone=strip(number, ['-',' '])
+  	self.home_phone=strip(number, ['-',' '])
   end
   def office_phone_number
-  	if self.person.office_phone
-			if self.person.office_phone.length == 8
-				return self.person.office_phone[0..3] + "-" + self.person.office_phone[4..7]
+  	if self.office_phone
+			if self.office_phone.length == 8
+				return self.office_phone[0..3] + "-" + self.office_phone[4..7]
 			end
 		end
   end
   def office_phone_number=(number)
-  	self.person.office_phone=strip(number, ['-',' '])
+  	self.office_phone=strip(number, ['-',' '])
   end
   def cell_phone_number
-	  if self.person.cell_phone
-			if self.person.cell_phone.length == 8
-				return self.person.cell_phone[0..3] + "-" + self.person.cell_phone[4..7]
+	  if self.cell_phone
+			if self.cell_phone.length == 8
+				return self.cell_phone[0..3] + "-" + self.cell_phone[4..7]
 			end
 		end
   end
   def cell_phone_number=(number)
-  	self.person.cell_phone=strip(number, ['-',' '])
+  	self.cell_phone=strip(number, ['-',' '])
   end
   def nit_number
-  	if self.person.nit
-			if self.person.nit.length == 14
-				return self.person.nit[0..3] + "-" + self.person.nit[4..9] + "-" + self.person.nit[10..12] + "-" + self.person.nit[13].to_s
+  	if self.nit
+			if self.nit.length == 14
+				return self.nit[0..3] + "-" + self.nit[4..9] + "-" + self.nit[10..12] + "-" + self.nit[13].to_s
 			end
 		end
   end
   def nit_number=(number)
-  	self.person.nit=strip(number, ['-',' '])
+  	self.nit=strip(number, ['-',' '])
   end
   def self.search(search, page, entity_type='all', user_id=0, filter='')
   	#puts "search=" + search
@@ -186,9 +185,9 @@ class Entity < ActiveRecord::Base
 		return list
 	end
 	def birthday?
-#		logger.debug "self.birth=#{self.birth.inspect}"
-		if self.person.birth
-			if self.person.birth.strftime("%j") == Time.now.strftime("%j")
+		logger.debug "self.birth=#{self.birth.inspect}"
+		if self.birth
+			if self.birth.strftime("%j") == Time.now.strftime("%j")
 				return true
 			else
 				return false
@@ -199,8 +198,8 @@ class Entity < ActiveRecord::Base
 		
 	end
 	def inventory(product)
-#		puts "product.id=" + product.id.to_s
-#		puts "self.id=" + self.id.to_s
+		puts "product.id=" + product.id.to_s
+		puts "self.id=" + self.id.to_s
 		if product.inventories.find_by_entity_id(self.id)
 			return product.inventories.find_by_entity_id(self.id).quantity
 		else

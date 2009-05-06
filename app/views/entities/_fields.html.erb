@@ -3,33 +3,31 @@
 <% end %>
 <% content_for :actions do %>
 	<dt><%= link_to_function 'Guardar', 'submit("entity_form")', :class => 'action' %></dt>
-	<dt><%= link_to 'Cancelar', @entity %></dt>
 <% end %>
-<% fields_for "person", @person do |p| %>
+
 <div class="column2-unit-left">
 	<p>
 		<b>Nombre</b><br />
 		<%= f.text_field :name, :class => 'field' %>
 	</p>
-	
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>
 			<b>Nacimiento</b><br />
-			<%= p.date_select :birth %>		
+			<%= f.date_select :birth %>		
 		</p>
 	<% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
 		<p>
 			<b>Direcion</b><br />
-			<%= p.text_area :address, :style => "height:50px; width: 300px;" %>
+			<%= f.text_area :address, :style => "height:50px; width: 300px;" %>
 		</p>
 		<p>
 			<b>Departamento</b><br />
-			<%= p.collection_select(:state_id, get_states, :id, :name) %>
+			<%= f.collection_select(:state_id, get_states, :id, :name) %>
 		</p>
 		<p>
 			<b>Municipio</b><br />
-			<%= p.text_field :city, :class => 'field' %>
+			<%= f.text_field :city, :class => 'field' %>
 		</p>
 		<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>
@@ -57,33 +55,33 @@
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
 	<p>
 		<b>Telefono Fijo</b><br />
-		<%= p.text_field :home_phone_number, :class => 'field' %>
+		<%= f.text_field :home_phone_number, :class => 'field' %>
 	</p>
 	<p>
 		<b>Telefono Oficina</b><br />
-		<%= p.text_field :office_phone_number, :class => 'field' %>
+		<%= f.text_field :office_phone_number, :class => 'field' %>
 	</p>
 	<p>
 		<b>Telefono Celular</b><br />
-		<%= p.text_field :cell_phone_number, :class => 'field' %>
+		<%= f.text_field :cell_phone_number, :class => 'field' %>
 	</p>
 	<p>
 		<b>Correo Electronico</b>
-		<%= p.text_field :email, :class => 'field' %>
+		<%= f.text_field :email, :class => 'field' %>
 	</p>
 	<% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 	<p>
 		<b>Registro</b><br />
-		<%= p.text_field :register, :class => 'field' %>
+		<%= f.text_field :register, :class => 'field' %>
 	</p>
 	<p>
 		<b>NIT</b><br />
-		<%= p.text_field :nit_number, :class => 'field' %>
+		<%= f.text_field :nit_number, :class => 'field' %>
 	</p>
 	<p>
 		<b>Giro</b>
-		<%= p.text_field :giro, :class => 'field' %>
+		<%= f.text_field :giro, :class => 'field' %>
 	</p>
 	<% end %>
 <br/>
@@ -97,7 +95,6 @@
 	<% end %>
 </div>
 <hr class="clear-contentunit" />
-<% end %>
 
 
 
