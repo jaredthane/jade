@@ -35,13 +35,14 @@ class LinesController < ApplicationController
 		@additional.order_type_id = order_type_id
 		@additional.bar_code = upc
 		puts "add price2" + @additional.price.to_s
-		if @additional.product
-			if @additional.product.product_type==3
-				## If its a combo, we don't want the price of the components included
-				## we will multiply this price by relative_price so that if this is part of a combo they get the discount
-				@additional.price = @additional.product.price(User.current_user.current_price_group, False) * relative_price
-			end
-		end
+		@additional.price = @additional.price * relative_price
+#		if @additional.product
+#			if @additional.product.product_type==3
+#				## If its a combo, we don't want the price of the components included
+#				## we will multiply this price by relative_price so that if this is part of a combo they get the discount
+#				@additional.price = @additional.product.price(User.current_user.current_price_group, False) * relative_price
+#			end
+#		end
 		puts "add price3" + @additional.price.to_s
 		@additional.quantity = quantity
 		return @additional
@@ -49,7 +50,6 @@ class LinesController < ApplicationController
 	def add_product_or_combo(list, upc, quantity, order_type_id, relative_price=1)
 		## Create a line for the product
 		@newline = add_line(upc, quantity, order_type_id, relative_price)
-		puts "add price4" + @newline.price.to_s
 		if @newline.product
 			## If it doesnt need a serial number mark it received if the user wants
 #			logger.debug "------------------------->order_type_id=#{order_type_id.to_s}"
@@ -64,11 +64,12 @@ class LinesController < ApplicationController
 			if @newline.product.product_type_id==3 ## If this is a combo, we have to add the components
 	#			logger.debug "Adding a combo"
 				## Update relative price so the children get the discount
-				relative_price=relative_price * @newline.product.relative_price
+				relative_price=(relative_price||0) * (@newline.product.relative_price||0)
+				relative_price = 0                                 ###  <=============== This is for roberto. Must clean up later!!
 				## Loop through each child product
 				for comp in @newline.product.requirements
 					## Add them recursively
-					add_product_or_combo(list, comp.required.upc, comp.quantity, order_type_id, relative_price)
+					add_product_or_combo(list, comp.required.upc, comp.quantity, order_type_id, 0)
 				end
 			end
 		end
