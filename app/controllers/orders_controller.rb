@@ -258,24 +258,9 @@ class OrdersController < ApplicationController
     @order.attributes = params["order"]
     return false if !allowed(@order.order_type_id, 'edit')
     respond_to do |format|
-      if @order.save
-      	list= params['new_lines'] || []
-      	errors=false
-      	for l in list
-      		new_line = Line.new(:order_id=>@order.id)
-      		#new_line.product_name = l[:product_name]  		
-      		new_line.product_id = l[:product_id]  	
-  				new_line.quantity = l[:quantity]  
-  				#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])
-      		#logger.debug "product id:   ->" + l[:product_name]
-      		logger.debug "new_line.warranty.to_s before=" + new_line.warranty.to_s.to_s
-      		errors= true if !new_line.update_attributes(l)
-      		logger.debug "new_line.warranty.to_s= after" + new_line.warranty.to_s.to_s
-      		@order.lines << new_line
-      	end
-      else
-      	errors = true
-      end
+      errors=false
+      errors=true if !@order.save
+      errors=true if !@order.create_all_lines(params[:new_lines])
       if !errors
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { redirect_to(@order) }
@@ -307,41 +292,7 @@ class OrdersController < ApplicationController
 		flash[:error] = "Este pedido ha sido anulado. Ya no se puede cambiar"
 		return false
     end
-    lines_to_delete=[]
-    #Update existing lines
-    for l in @order.lines
-			logger.debug "l.id=" + l.id.to_s
-			if params['existing_lines']
-				logger.debug "params['existing_lines'][l.id.to_s]=" + params['existing_lines'][l.id.to_s].to_s
-			end
-			if params['existing_lines']
-				if params['existing_lines'][l.id.to_s]
-					logger.debug "setting attribs for line #{l.id}"
-					logger.debug "l.warranty before=#{l.warranty.to_s}"
-					l.attributes = params['existing_lines'][l.id.to_s]
-					logger.debug "l.warranty afterz=#{l.warranty.to_s}"
-				else # We really shouldn't delete these lines yet, but leave them marked so they get deleted when the model is saved
-					logger.debug "deleting line #{l.id}"
-					lines_to_delete << l
-				end
-			else
-				logger.debug "deleting line #{l.id}"
-				lines_to_delete << l
-			end
-		end
-		for l in lines_to_delete
-			@order.lines.delete(l)
-		end
-		# Update New lines
-		list= params['new_lines'] || []
-  	for l in list
-  		new_line = Line.new(:order_id=>@order.id)
-  		new_line.product_id = l[:product_id]		
-  		new_line.quantity = l[:quantity]
-  		new_line.attributes=l  
-  		logger.debug "about to push #{new_line.inspect}"  	
-  		@order.lines.push(new_line)
-  	end
+    @order.update_all_lines(params[:new_lines], params[:existing_lines])
 		errors = true if !@order.update_attributes(params[:order])
 		if params[:submit_type] == 'post' and !errors
 			errors = true if !@order.post

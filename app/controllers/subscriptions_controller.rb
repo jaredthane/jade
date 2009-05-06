@@ -16,6 +16,10 @@
 
 
 class SubscriptionsController < ApplicationController
+  before_filter :login_required
+	#before_filter {privilege_required('sales')}
+	access_control [:new, :create, :update, :edit] => '(gerente | admin | ventas)' 
+	access_control [:destroy] => '(admin)'
   # GET /subscriptions
   # GET /subscriptions.xml
   def index

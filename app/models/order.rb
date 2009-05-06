@@ -46,7 +46,65 @@ class Order < ActiveRecord::Base
 	#validates_associated :lines
 	belongs_to :user
 	validates_presence_of(:user, :message => "debe ser valido")
-	attr_accessor :movements_to_create
+#	attr_accessor :movements_to_create
+	
+	def create_all_lines(lines)
+	  lines=[] if !lines
+  	errors=false
+  	for l in lines
+  		new_line = Line.new(:order_id=>self.id)
+  		#new_line.product_name = l[:product_name]  		
+  		new_line.product_id = l[:product_id]  	
+			new_line.quantity = l[:quantity]  
+			#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])
+  		#logger.debug "product id:   ->" + l[:product_name]
+  		logger.debug "new_line.warranty.to_s before=" + new_line.warranty.to_s.to_s
+  		errors= true if !new_line.update_attributes(l)
+  		logger.debug "new_line.warranty.to_s= after" + new_line.warranty.to_s.to_s
+  		self.lines << new_line
+  	end
+  	return !errors #return true if there are no errors
+	end
+	def update_all_lines(new_lines=[], existing_lines=[])
+	lines_to_delete=[]
+    #Update existing lines
+    for l in self.lines
+#			logger.debug "l.id=" + l.id.to_s
+#			if existing_lines
+##				logger.debug "params['existing_lines'][l.id.to_s]=" + params['existing_lines'][l.id.to_s].to_s
+#			end
+			if existing_lines
+				if existing_lines[l.id.to_s]
+#					logger.debug "setting attribs for line #{l.id}"
+#					logger.debug "l.warranty before=#{l.warranty.to_s}"
+					l.attributes = existing_lines[l.id.to_s]
+#					logger.debug "l.warranty afterz=#{l.warranty.to_s}"
+				else # We really shouldn't delete these lines yet, but leave them marked so they get deleted when the model is saved
+#					logger.debug "deleting line #{l.id}"
+					lines_to_delete << l
+				end
+			else
+#				logger.debug "deleting line #{l.id}"
+				lines_to_delete << l
+			end
+		end
+		for l in lines_to_delete
+			self.lines.delete(l)
+		end
+		new_lines=[] if !new_lines
+		# Update New lines
+  	for l in new_lines
+  		new_line = Line.new(:order_id=>self.id)
+  		new_line.product_id = l[:product_id]		
+  		new_line.quantity = l[:quantity]
+  		new_line.attributes=l  
+#  		logger.debug "about to push #{new_line.inspect}"  	
+  		self.lines.push(new_line)
+  	end
+	
+	
+	
+	end
   ###################################################################################
   # Returns an array of all of the discounts in the system
   ##################################################################################
