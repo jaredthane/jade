@@ -101,7 +101,7 @@ class Line < ActiveRecord::Base
 		return total
 	end
 	def total_price_with_tax
-		total = total_price + tax
+		total = (total_price||0) + (tax||0)
 		return total
 	end
 	def isreceived_str

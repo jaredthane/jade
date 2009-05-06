@@ -47,6 +47,11 @@ class Entity < ActiveRecord::Base
 	has_many :products, :through => :inventories
 	has_many :products, :through => :movements
 	has_many :movements, :dependent => :destroy, :order => 'created_at'
+	belongs_to :cash_account, :class_name => "Account", :foreign_key => "cash_account_id"
+	belongs_to :inventory_account, :class_name => "Account", :foreign_key => "inventory_account_id"
+	belongs_to :revenue_account, :class_name => "Account", :foreign_key => "revenue_account_id"
+	belongs_to :tax_account, :class_name => "Account", :foreign_key => "tax_account_id"
+	belongs_to :expense_account, :class_name => "Account", :foreign_key => "expense_account_id"
 	validates_associated :movements
 	after_update :save_movements
   after_create :save_movements

@@ -50,21 +50,16 @@ class Order < ActiveRecord::Base
 	validates_presence_of(:user, :message => "debe ser valido")
 	############################## End of Creating Movements ####################################
 	attr_accessor :movements_to_create
-	def account_to_credit(direction)
-	  case movement_type_id(direction)
-	  when 1 # Venta
-	    return self.vendor.receivables_account
-	  when 2 # Compra
-	    return self.vendor.cash_account
-	  when 5 # Devolucion de Ventas
-	    
-	  when 6 # Venta
-	  when 1 # Venta
-	    
+	attr_accessor :transactions_to_create # list of lists of posts
+	def create_transactions
+	  @transactions_to_create = [] if !@transactions_to_create
+	  for t in @transactions_to_create
+	    trans = Transaction.create()
+	    for p in t
+	      p.transaction_id = trans.id
+	      p.save
+	    end
 	  end
-	end
-	def account_to_debit(direction)
-	
 	end
 	def create_movements
 		@movements_to_create = [] if !@movements_to_create
@@ -174,6 +169,35 @@ class Order < ActiveRecord::Base
 		@movements_to_create = [] if !@movements_to_create 
 		@movements_to_create.push(m)
 	end
+	
+	def prepare_transaction
+	  case order_type_id
+    when 1 # Venta
+      vendor = Post.new(:account => self.vendor.revenue_account, :value=>self.total_price, :post_type_id =>2)
+      client = Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>1)
+      tax    = Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>2)
+      inventory = Post.new(:account => self.vendor.inventory_account, :value=>self.total_cost, :post_type_id =>2)
+      expense = Post.new(:account => self.vendor.expense_account, :value=>self.total_cost, :post_type_id =>1)
+      @tranactions_to_create = [[vendor, client, tax], [inventory, expense]]
+      
+	  when 2 # Compra
+	    puts self.vendor.cash_account.to_s
+	    puts self.total_price_with_tax.to_s
+	    vendor = Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>2)
+      client = Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>1)
+      @tranactions_to_create = [[vendor, client]]
+	  end
+	end
+	def check_for_transactions
+	  if self.new_record?
+	    prepare_transaction
+	  else
+	    old = Order.find(self.id)
+	    if self.total_price != old.total_price or self.total_tax != old.total_tax
+	      prepare_transaction
+	    end
+	  end	
+	end
 	def prepare_movements(line)
 	  logger.debug "==============line.product.product_type_id=#{line.product.inspect}"
 	  if line.product.product_type_id == 1
@@ -234,6 +258,7 @@ class Order < ActiveRecord::Base
   		logger.debug "new_line.warranty.to_s= after" + new_line.warranty.to_s.to_s
   		self.lines << new_line
   		prepare_movements(new_line)
+  		check_for_transactions
   	end
 	end
 	def update_all_lines(new_lines=[], existing_lines=[])
@@ -272,9 +297,10 @@ class Order < ActiveRecord::Base
 #  		logger.debug "about to push #{new_line.inspect}"  	
   		self.lines.push(new_line)
   	end
-	
-	
-	
+  	for l in self.lines
+  		prepare_movements(l)
+  	end
+	  check_for_transactions	
 	end
   ###################################################################################
   # Returns an array of all of the discounts in the system

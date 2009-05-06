@@ -16,6 +16,6 @@ create table post_types (id int(11) not null primary key auto_increment, name va
 create table transactions ( id int(11) primary key auto_increment not null);
 alter table entities add column inventory_account_id int(11);
 alter table entities add column cash_account_id int(11);
-alter table entities add column receivables_account_id int(11);
+alter table entities add column revenue_account_id int(11);
 alter table entities add column payables_account_id int(11);
 alter table entities add column returns_account_id int(11);
