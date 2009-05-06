@@ -257,18 +257,20 @@ class OrdersController < ApplicationController
     @order = Order.new(:order_type_id => params["order"]["order_type_id"])
     @order.attributes = params["order"]
     return false if !allowed(@order.order_type_id, 'edit')
+    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
+    logger.debug "finished updating lines"
     respond_to do |format|
-      errors=false
-      errors=true if !@order.save
-      errors=true if !@order.create_all_lines(params[:new_lines])
-      if !errors
+      if @order.save
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { redirect_to(@order) }
         format.xml  { render :xml => @order, :status => :created, :location => @order }
       else
-      	#logger.debug "unable to save new order"
-				#@order.errors.each {|e| #logger.debug e.to_s}
-				#@order.lines.errors.each {@order.errors << error}
+      	logger.debug "unable to save new order"
+      	logger.debug "ORDERS ERRORS" + @order.errors.inspect
+      	@order.lines.each {|l| logger.debug "LINES ERRORS" + l.errors.inspect}
+				
+				@order.errors.each {|e| logger.debug "ORDER ERROR" + e.to_s}
+				@order.lines.each {|l| l.errors.each {|e| logger.debug "LINE ERROR" + e.to_s}}
 				@order.errors.each do |error|
 					logger.debug "error[0]=#{error[0].to_s}"
 					if error[0] == "lines"

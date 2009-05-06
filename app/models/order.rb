@@ -46,11 +46,155 @@ class Order < ActiveRecord::Base
 	#validates_associated :lines
 	belongs_to :user
 	validates_presence_of(:user, :message => "debe ser valido")
-#	attr_accessor :movements_to_create
+	############################## End of Creating Movements ####################################
+	attr_accessor :movements_to_create
+	
+	def create_movements
+		@movements_to_create = [] if !@movements_to_create
+		for m in @movements_to_create
+			# Save movement from the list
+#			m.line_id=self.id
+			m.save
+			qty=m.quantity || 0
+
+			p=Product.find(self.product_id)
+			if p.product_type_id==1
+				i=p.inventories.find_by_entity_id(m.entity_id)
+				if i # Don't worry about it if they dont have a i, its probably a client
+					i.quantity=i.quantity + m.quantity
+					i.save
+				end
+			end
+			# Update costs
+#			p.cost=p.calculate_cost  <---- This has been moved to order.after_create_lines and order.after_update_lines
+    # This has been moved back cause order.create_lines and order.save_lines served no purpose since the lines were already being saved
+            p.update_cost
+
+		end
+		# Erase list
+		@movements_to_create.clear
+	end
+	def create_movement_for(entity_id, movement_type_id, quantity)
+		m=Movement.new(:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.order.id, :serialized_product_id => self.serialized_product_id)
+		@movements_to_create = [] if !@movements_to_create 
+		@movements_to_create.push(m)
+	end
+	def quantity_change_direction(new, old)
+		logger.debug "Checking movement direction"
+		if new.received and !old.received 		# The line was marked received
+			logger.debug "The line was marked received"
+			return 1
+		elsif old.received and !new.received	# The line was unmarked received
+			logger.debug "The line was unmarked received"
+			return -1 
+		elsif old.received and new.received		# The line was always received
+			logger.debug "The line was always received"
+			if new.quantity > old.quantity			# The quantity increased
+				return 1
+			elsif new.quantity < old.quantity		# The quantity decreased
+				return -1
+			end
+		end
+		logger.debug "The line was never received"
+		return 0
+	end
+	def quantity_change(new, old)
+		if old
+			if new.received == old.received
+				return new.quantity - old.quantity
+			else
+				if new.received
+					return new.quantity
+				else
+					return -new.quantity		
+				end		
+			end
+		else
+			return new.quantity
+		end
+	end
+	def movement_type_id(direction)
+		case order.order_type_id
+			when 1
+				if direction==1
+					return 1
+				else
+					return 5
+				end
+			when 3
+				if direction==1
+					return 8
+				else
+					return 9
+				end
+			when 2
+				if direction==1
+					return 2
+				else
+					return 6
+				end
+			when 4
+				if direction==1
+					return 3
+				else
+					return 7			
+				end
+			when 5
+				return 4
+			else
+				return 4
+		end		
+	end
+	def prepare_movements
+	  for line in lines
+		  logger.debug "==============self.product.product_type_id=#{self.product.inspect}"
+		  if self.product.product_type_id == 1
+			  old = Line.find_by_id(self.id)
+			  puts old.inspect
+			  if old
+				  dir = quantity_change_direction(self, old)
+			  else
+				  if self.received
+					  dir = 1
+				  else
+					  dir = 0
+				  end
+			  end
+  #			puts "----------------->" + dir.to_s
+			  if dir != 0
+				  case self.movement_type_id(dir)
+					  when 1
+						  create_movement_for(order.vendor_id, 1, -quantity_change(self, old))
+						  create_movement_for(order.client_id, 1, quantity_change(self, old))
+					  when 2
+						  create_movement_for(order.client_id, 2, quantity_change(self, old))
+					  when 3
+						  create_movement_for(order.client_id, 3, quantity_change(self, old))
+						  create_movement_for(order.vendor_id, 3, -quantity_change(self, old))
+					  # We won't touch physical counts. The Physical Count model will take care of that.
+					  when 5
+						  create_movement_for(order.vendor_id, 5, -quantity_change(self, old))
+					  when 6
+						  create_movement_for(order.client_id, 6, quantity_change(self, old))
+					  when 7
+						  create_movement_for(order.client_id, 7, quantity_change(self, old))
+						  create_movement_for(order.vendor_id, 7, -quantity_change(self, old))
+					  when 8
+						  create_movement_for(order.vendor_id, 8, -quantity_change(self, old))
+					  when 9
+						  create_movement_for(order.vendor_id, 9, -quantity_change(self, old))
+				  end
+			  end
+		  end
+		end
+	end
+	############################## End of Creating Movements ####################################
+	
+	
+	
 	
 	def create_all_lines(lines)
 	  lines=[] if !lines
-  	errors=false
   	for l in lines
   		new_line = Line.new(:order_id=>self.id)
   		#new_line.product_name = l[:product_name]  		
@@ -59,11 +203,10 @@ class Order < ActiveRecord::Base
 			#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])
   		#logger.debug "product id:   ->" + l[:product_name]
   		logger.debug "new_line.warranty.to_s before=" + new_line.warranty.to_s.to_s
-  		errors= true if !new_line.update_attributes(l)
+  		new_line.attributes = l
   		logger.debug "new_line.warranty.to_s= after" + new_line.warranty.to_s.to_s
   		self.lines << new_line
   	end
-  	return !errors #return true if there are no errors
 	end
 	def update_all_lines(new_lines=[], existing_lines=[])
 	lines_to_delete=[]

@@ -39,65 +39,8 @@ class Line < ActiveRecord::Base
 	attr_accessor :client_name
 	attr_accessor :order_type_id
 	belongs_to :serialized_product
-	def set_taxes
-		self.tax = self.total_price * 0.15
-	end
-	def validate
-		logger.debug  "validating line"
-		if self.product.product_type_id == 1
-			##logger.debug  "@movements_to_create.length=" + @movements_to_create.length.to_s
-			if @movements_to_create # if we find stuff here, there is movement
-				logger.debug  " there are movements to validate"
-#				logger.debug  "self.last_change_type =" + self.last_change_type.to_s
-				case self.order_type_id	# check inventory levels
-					when 1 # Venta     
-						#logger.debug  "validating Venta"
-						qty=order.vendor.inventory(self.product)
-						errors.add " ","Solo hay " + qty.to_s + " " + self.product.unit.name + " del producto " + self.product.name + " en el inventario"  if self.quantity > qty
-						logger.debug  "self.serialized_product=" + self.serialized_product.to_s if self.serialized_product
-						if self.product.serialized
-							if self.serialized_product
-									#logger.debug  "self.serialized_product.location.id=" + self.serialized_product.location.id.to_s
-									logger.debug  "@order.vendor.id=" + @order.vendor.id.to_s
-									errors.add "El numero de serie " + self.serialized_product.serial_number + " no esta disponible en este sitio" if self.serialized_product.location != @order.vendor
-							else
-								errors.add "El numero de serie " + self.serialized_product.serial_number + " no se encuentra en el registro"
-							end
-						end
-						# Serial number should exist, and be in vendors location
-					when 2 # Compra
-						#logger.debug  "validating Compra"
-						# Serial number may or may not exist
-						# if it does its location should be nil
-						# if not, it should be unqiue to the product, add it
-					when 3 # Transferencia
-						#logger.debug  "validating Transferencia"
-						logger.debug  "order.vendor.inventory(self.product)=" + order.vendor.inventory(self.product).to_s
-						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.vendor.inventory(self.product)	
-						errors.add "numero de serie no esta disponible en sitio señalado" if !self.serialized_product 
-						# Serial number should exist, and be in vendors location
-					when 5 # Devolucion de Venta
-						##logger.debug  "validating Devolucion de Venta"
-						##logger.debug  "self.product.id=" + self.product.id.to_s
-						#errors.add "insufficient stock" if self.quantity > order.client.inventory(self.product)
-						# Serial number should exist
-						# its location should be nil
-						# dont need to validate serial cause it was already validated
-					when 6 # Devolucion de Compra
-						#logger.debug  "validating Devolucion de Compra"
-						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.inventory(self.product)	
-						# Serial number should exist, and be in clients location
-						# dont need to validate serial cause it was already validated
-					when 7 # Devolucion de Transferencia	
-						#logger.debug  "validating Devolucion de Transferencia"				
-						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.location.inventory(self.product)
-						# Serial number should exist, and be in clients location
-						# dont need to validate serial cause it was already validated
-				end
-			end		
-		end
-	end
-	def create_movements
+	
+		def create_movements
 		@movements_to_create = [] if !@movements_to_create
 		for m in @movements_to_create
 			# Save movement from the list
@@ -126,14 +69,6 @@ class Line < ActiveRecord::Base
 		m=Movement.new(:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.order.id, :serialized_product_id => self.serialized_product_id)
 		@movements_to_create = [] if !@movements_to_create 
 		@movements_to_create.push(m)
-	end
-	def total_price
-		total = ((price ||0) + (warranty_price || 0)) * quantity
-		return total
-	end
-	def total_price_with_tax
-		total = total_price + tax
-		return total
 	end
 	def quantity_change_direction(new, old)
 		logger.debug "Checking movement direction"
@@ -202,45 +137,113 @@ class Line < ActiveRecord::Base
 		end		
 	end
 	def prepare_movements
-		logger.debug "==============self.product.product_type_id=#{self.product.inspect}"
+	   logger.debug "==============self.product.product_type_id=#{self.product.inspect}"
+		  if self.product.product_type_id == 1
+			  old = Line.find_by_id(self.id)
+			  puts old.inspect
+			  if old
+				  dir = quantity_change_direction(self, old)
+			  else
+				  if self.received
+					  dir = 1
+				  else
+					  dir = 0
+				  end
+			  end
+  #			puts "----------------->" + dir.to_s
+			  if dir != 0
+				  case self.movement_type_id(dir)
+					  when 1
+						  create_movement_for(order.vendor_id, 1, -quantity_change(self, old))
+						  create_movement_for(order.client_id, 1, quantity_change(self, old))
+					  when 2
+						  create_movement_for(order.client_id, 2, quantity_change(self, old))
+					  when 3
+						  create_movement_for(order.client_id, 3, quantity_change(self, old))
+						  create_movement_for(order.vendor_id, 3, -quantity_change(self, old))
+					  # We won't touch physical counts. The Physical Count model will take care of that.
+					  when 5
+						  create_movement_for(order.vendor_id, 5, -quantity_change(self, old))
+					  when 6
+						  create_movement_for(order.client_id, 6, quantity_change(self, old))
+					  when 7
+						  create_movement_for(order.client_id, 7, quantity_change(self, old))
+						  create_movement_for(order.vendor_id, 7, -quantity_change(self, old))
+					  when 8
+						  create_movement_for(order.vendor_id, 8, -quantity_change(self, old))
+					  when 9
+						  create_movement_for(order.vendor_id, 9, -quantity_change(self, old))
+				  end
+			  end
+		  end
+	end
+	
+	def set_taxes
+		self.tax = self.total_price * 0.15
+	end
+	def validate
+		logger.debug  "validating line"
 		if self.product.product_type_id == 1
-			old = Line.find_by_id(self.id)
-			puts old.inspect
-			if old
-				dir = quantity_change_direction(self, old)
-			else
-				if self.received
-					dir = 1
-				else
-					dir = 0
+			##logger.debug  "@movements_to_create.length=" + @movements_to_create.length.to_s
+			if @movements_to_create # if we find stuff here, there is movement
+				logger.debug  " there are movements to validate"
+#				logger.debug  "self.last_change_type =" + self.last_change_type.to_s
+				case self.order_type_id	# check inventory levels
+					when 1 # Venta     
+						#logger.debug  "validating Venta"
+						qty=order.vendor.inventory(self.product)
+						errors.add " ","Solo hay " + qty.to_s + " " + self.product.unit.name + " del producto " + self.product.name + " en el inventario"  if self.quantity > qty
+						logger.debug  "self.serialized_product=" + self.serialized_product.to_s if self.serialized_product
+						if self.product.serialized
+							if self.serialized_product
+									#logger.debug  "self.serialized_product.location.id=" + self.serialized_product.location.id.to_s
+									logger.debug  "@order.vendor.id=" + @order.vendor.id.to_s
+									errors.add "El numero de serie " + self.serialized_product.serial_number + " no esta disponible en este sitio" if self.serialized_product.location != @order.vendor
+							else
+								errors.add "El numero de serie " + self.serialized_product.serial_number + " no se encuentra en el registro"
+							end
+						end
+						# Serial number should exist, and be in vendors location
+					when 2 # Compra
+						#logger.debug  "validating Compra"
+						# Serial number may or may not exist
+						# if it does its location should be nil
+						# if not, it should be unqiue to the product, add it
+					when 3 # Transferencia
+						#logger.debug  "validating Transferencia"
+						logger.debug  "order.vendor.inventory(self.product)=" + order.vendor.inventory(self.product).to_s
+						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.vendor.inventory(self.product)	
+						errors.add "numero de serie no esta disponible en sitio señalado" if !self.serialized_product 
+						# Serial number should exist, and be in vendors location
+					when 5 # Devolucion de Venta
+						##logger.debug  "validating Devolucion de Venta"
+						##logger.debug  "self.product.id=" + self.product.id.to_s
+						#errors.add "insufficient stock" if self.quantity > order.client.inventory(self.product)
+						# Serial number should exist
+						# its location should be nil
+						# dont need to validate serial cause it was already validated
+					when 6 # Devolucion de Compra
+						#logger.debug  "validating Devolucion de Compra"
+						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.inventory(self.product)	
+						# Serial number should exist, and be in clients location
+						# dont need to validate serial cause it was already validated
+					when 7 # Devolucion de Transferencia	
+						#logger.debug  "validating Devolucion de Transferencia"				
+						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.location.inventory(self.product)
+						# Serial number should exist, and be in clients location
+						# dont need to validate serial cause it was already validated
 				end
-			end
-#			puts "----------------->" + dir.to_s
-			if dir != 0
-				case self.movement_type_id(dir)
-					when 1
-						create_movement_for(order.vendor_id, 1, -quantity_change(self, old))
-						create_movement_for(order.client_id, 1, quantity_change(self, old))
-					when 2
-						create_movement_for(order.client_id, 2, quantity_change(self, old))
-					when 3
-						create_movement_for(order.client_id, 3, quantity_change(self, old))
-						create_movement_for(order.vendor_id, 3, -quantity_change(self, old))
-					# We won't touch physical counts. The Physical Count model will take care of that.
-					when 5
-						create_movement_for(order.vendor_id, 5, -quantity_change(self, old))
-					when 6
-						create_movement_for(order.client_id, 6, quantity_change(self, old))
-					when 7
-						create_movement_for(order.client_id, 7, quantity_change(self, old))
-						create_movement_for(order.vendor_id, 7, -quantity_change(self, old))
-					when 8
-						create_movement_for(order.vendor_id, 8, -quantity_change(self, old))
-					when 9
-						create_movement_for(order.vendor_id, 9, -quantity_change(self, old))
-				end
-			end
+			end		
 		end
+	end
+	
+	def total_price
+		total = ((price ||0) + (warranty_price || 0)) * quantity
+		return total
+	end
+	def total_price_with_tax
+		total = total_price + tax
+		return total
 	end
 	def isreceived_str
 		if self.isreceived ==1
