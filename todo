@@ -6,6 +6,8 @@ credit
  
 ------------------------ This Versions Goals-------------------------------
 Anticipos & 'abonar a cuenta' & aplicar saldo a pedido
+makes transactions for new sales and purchases, but not for edits
+needs to make transactions for payments
 anular productos
 **Clicking on Ver on the Descuentos edit page brings to bad url
 if there are errors creating a product, invalid price entries are made

@@ -94,13 +94,15 @@ class OrdersController < ApplicationController
 					              :left_margin=>27,# was 27
 										    :right_margin=>5,
 										    :top_margin=>90, #was 90
-										    :bottom_margin=>18 }
+										    :bottom_margin=>18 ,
+										    :filename=>"#{@receipt.id}.pdf" }
 		else
 			prawnto :prawn => { :page_size => 'RECEIPT_LAND',
 					              :left_margin=>27,# was 27
 										    :right_margin=>5,
 										    :top_margin=>90, #was 90
-										    :bottom_margin=>5 }
+										    :bottom_margin=>5 ,
+										    :filename=>"#{@receipt.id}.pdf" }
 		end
 		@data=[]
 		total=0
