@@ -144,8 +144,8 @@
 /* These are set specificly for the bulk_edit product view */
 .main-content .table_row_red input.field {width:7%;background: #ff6666;}
 .main-content .table_row_green input.field {width:7%;background: #96c09c;}
-.main-content .table_row input.field {width:7%;background: #e1e1e1;}
-.main-content .table_row input.serial {width:7%;background: #e1e1e1;}
+.main-content .table_row input.field {width:90%;background: #e1e1e1;}
+.main-content .table_row input.serial {width:90%;background: #e1e1e1;}
 /* End for the bulk_edit product view */
 
 

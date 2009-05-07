@@ -136,8 +136,8 @@ CREATE TABLE `inventories` (
   `quantity` int(11) default NULL,
   `default_warranty_sales_id` int(11) default NULL,
   `default_warranty_purchases_id` int(11) default NULL,
-  `cost` decimal(5,2) default NULL,
-  `default_cost` decimal(5,2) default NULL,
+  `cost` decimal(8,2) default NULL,
+  `default_cost` decimal(8,2) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2096 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
@@ -164,15 +164,15 @@ CREATE TABLE `lines` (
   `product_id` int(11) default NULL,
   `order_id` int(11) default NULL,
   `quantity` int(11) default NULL,
-  `price` decimal(7,2) default NULL,
+  `price` decimal(8,2) default NULL,
   `received` datetime default NULL,
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
   `serialized_product_id` int(11) default NULL,
   `line_id` int(11) default NULL,
-  `warranty_price` decimal(7,2) default NULL,
+  `warranty_price` decimal(8,2) default NULL,
   `warranty_id` int(11) default NULL,
-  `tax` decimal(7,2) default NULL,
+  `tax` decimal(8,2) default NULL,
   `previous_qty` int(11) default NULL,
   `warranty_months` int(11) default NULL,
   PRIMARY KEY  (`id`)
@@ -233,7 +233,7 @@ CREATE TABLE `movements` (
   `serialized_product_id` int(11) default NULL,
   `oldline_id` int(11) default NULL,
   `comments` text,
-  `value` decimal(5,2) default NULL,
+  `value` decimal(8,2) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
@@ -341,15 +341,15 @@ SET character_set_client = utf8;
 CREATE TABLE `payments` (
   `id` int(11) NOT NULL auto_increment,
   `order_id` int(11) default NULL,
-  `amount` decimal(7,2) default NULL,
+  `amount` decimal(8,2) default NULL,
   `date` date default NULL,
   `payment_method_id` int(11) default NULL,
   `user_id` int(11) default NULL,
   `created_at` datetime default NULL,
   `updated_at` datetime default NULL,
-  `returned` decimal(7,2) default NULL,
+  `returned` decimal(8,2) default NULL,
   `receipt_id` int(11) default NULL,
-  `presented` decimal(7,2) default NULL,
+  `presented` decimal(8,2) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
@@ -431,10 +431,10 @@ SET character_set_client = utf8;
 CREATE TABLE `posts` (
   `id` int(11) NOT NULL auto_increment,
   `post_type_id` int(11) default NULL,
-  `value` decimal(5,2) default NULL,
+  `value` decimal(8,2) default NULL,
   `account_id` int(11) default NULL,
   `trans_id` int(11) default NULL,
-  `balance` decimal(5,2) default NULL,
+  `balance` decimal(8,2) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=113 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
@@ -508,8 +508,8 @@ CREATE TABLE `prices` (
   `id` int(11) NOT NULL auto_increment,
   `price_group_id` int(11) default NULL,
   `product_id` int(11) default NULL,
-  `fixed` decimal(7,2) default NULL,
-  `relative` decimal(7,2) default NULL,
+  `fixed` decimal(8,2) default NULL,
+  `relative` decimal(8,2) default NULL,
   `available` tinyint(1) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=208 DEFAULT CHARSET=latin1;
@@ -584,7 +584,7 @@ CREATE TABLE `products` (
   `name` varchar(255) default NULL,
   `description` text,
   `vendor_id` int(11) default NULL,
-  `oldcost` decimal(5,2) default NULL,
+  `oldcost` decimal(8,2) default NULL,
   `upc` varchar(255) default NULL,
   `unit_id` int(11) default NULL,
   `location` varchar(255) default NULL,
@@ -647,8 +647,8 @@ CREATE TABLE `requirements` (
   `product_id` int(11) default NULL,
   `required_id` int(11) default NULL,
   `quantity` int(11) default NULL,
-  `static_price` decimal(5,2) default NULL,
-  `relative_price` decimal(5,2) default NULL,
+  `static_price` decimal(8,2) default NULL,
+  `relative_price` decimal(8,2) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=66 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
@@ -821,8 +821,8 @@ CREATE TABLE `subscriptions` (
   `quantity` int(11) default NULL,
   `end_date` datetime default NULL,
   `end_times` int(11) default NULL,
-  `fixed_price` decimal(5,2) default NULL,
-  `relative_price` decimal(5,2) default NULL,
+  `fixed_price` decimal(8,2) default NULL,
+  `relative_price` decimal(8,2) default NULL,
   `last_run` datetime default NULL,
   `product_id` int(11) default NULL,
   PRIMARY KEY  (`id`)
@@ -956,7 +956,7 @@ SET character_set_client = utf8;
 CREATE TABLE `warranties` (
   `id` int(11) NOT NULL auto_increment,
   `product_id` int(11) default NULL,
-  `price` decimal(7,2) default NULL,
+  `price` decimal(8,2) default NULL,
   `month_id` int(11) default NULL,
   `order_type_id` int(11) default NULL,
   `months` int(11) default NULL,
