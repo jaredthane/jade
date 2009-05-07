@@ -16,6 +16,35 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `accounts`
+--
+
+DROP TABLE IF EXISTS `accounts`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `accounts` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  `parent_id` int(11) default NULL,
+  `entity_id` int(11) default NULL,
+  `postable` tinyint(1) default NULL,
+  `number` varchar(20) default NULL,
+  `transparent_journal` tinyint(1) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `accounts`
+--
+
+LOCK TABLES `accounts` WRITE;
+/*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
+INSERT INTO `accounts` VALUES (2,'Activos',NULL,NULL,NULL,'1',NULL),(3,'Pasivos',NULL,NULL,NULL,'2',NULL),(4,'Patrimonio',NULL,NULL,NULL,'3',NULL),(5,'Ingresos',NULL,NULL,NULL,'4',NULL),(6,'Gastos',NULL,NULL,1,'5',NULL),(7,'Efectivo',2,NULL,1,'11',NULL),(8,'Inventario',2,NULL,1,'12',NULL),(9,'Cuenta Bancaria',2,NULL,1,'13',NULL),(10,'Cuentas a Cobrar',2,NULL,1,'14',NULL),(17,'Cuentas por Pagar',3,NULL,1,'21',NULL),(18,'Impuesto',3,NULL,1,'22',NULL);
+/*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `entities`
 --
 
@@ -44,8 +73,14 @@ CREATE TABLE `entities` (
   `user_id` int(11) default NULL,
   `product_id` int(11) default NULL,
   `site_id` int(11) default NULL,
+  `inventory_account_id` int(11) default NULL,
+  `cash_account_id` int(11) default NULL,
+  `revenue_account_id` int(11) default NULL,
+  `expense_account_id` int(11) default NULL,
+  `returns_account_id` int(11) default NULL,
+  `tax_account_id` int(11) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -54,7 +89,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `entities` WRITE;
 /*!40000 ALTER TABLE `entities` DISABLE KEYS */;
-INSERT INTO `entities` VALUES (1,'Internal Consumption',NULL,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'Various',1,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(3,'Anonimo',2,'2009-03-06 20:00:31','2009-03-06 20:00:31','','','','2009-03-06 00:00:00',12,'','','','','','',NULL,1,6,NULL,NULL),(4,'No Specificado',1,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(5,'Principal',3,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL);
+INSERT INTO `entities` VALUES (1,'Consumo Interno',NULL,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL),(2,'Varios',1,NULL,'2009-05-06 20:30:06','','','',NULL,12,'',NULL,'','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17,NULL,NULL,NULL,NULL),(3,'Anonimo',2,NULL,'2009-05-06 20:30:41','','','','2009-05-06 00:00:00',12,'','','','','','',NULL,1,1,NULL,5,NULL,10,NULL,NULL,NULL,NULL),(4,'No Specificado',1,NULL,'2009-05-06 20:29:44','','','',NULL,12,'',NULL,'','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17,NULL,NULL,NULL,NULL),(5,'Principal',3,NULL,'2009-05-06 20:28:57','','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,8,7,5,6,NULL,18);
 /*!40000 ALTER TABLE `entities` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -68,7 +103,6 @@ SET character_set_client = utf8;
 CREATE TABLE `entity_types` (
   `id` int(11) NOT NULL auto_increment,
   `name` varchar(255) default NULL,
-  `balance` decimal(5,2) default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
@@ -79,7 +113,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `entity_types` WRITE;
 /*!40000 ALTER TABLE `entity_types` DISABLE KEYS */;
-INSERT INTO `entity_types` VALUES (1,'Proveedor',NULL),(2,'Consumidor Final',NULL),(3,'Sitio',NULL),(5,'Credito Fiscal',NULL),(6,'Empleado',NULL),(7,'Cuenta Bancaria',NULL);
+INSERT INTO `entity_types` VALUES (1,'Proveedor'),(2,'Consumidor Final'),(3,'Sitio'),(5,'Credito Fiscal'),(6,'Empleado'),(7,'Cuenta Bancaria');
 /*!40000 ALTER TABLE `entity_types` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -105,7 +139,7 @@ CREATE TABLE `inventories` (
   `cost` decimal(5,2) default NULL,
   `default_cost` decimal(5,2) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2090 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=2096 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -142,7 +176,7 @@ CREATE TABLE `lines` (
   `previous_qty` int(11) default NULL,
   `warranty_months` int(11) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -151,7 +185,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `lines` WRITE;
 /*!40000 ALTER TABLE `lines` DISABLE KEYS */;
-INSERT INTO `lines` VALUES (1,3,1,1,'1.00',NULL,'2009-05-01 20:16:37','2009-05-01 20:16:37',NULL,NULL,'0.00',69,'0.15',NULL,NULL);
+INSERT INTO `lines` VALUES (1,3,1,1,'1.00',NULL,'2009-05-01 20:16:37','2009-05-01 20:16:37',NULL,NULL,'0.00',69,'0.15',NULL,NULL),(3,3,3,10,'3.00','2009-05-05 23:53:40','2009-05-05 23:53:40','2009-05-05 23:53:40',NULL,NULL,'0.00',69,'4.50',NULL,NULL),(4,3,5,10,'3.00','2009-05-06 08:38:53','2009-05-06 08:38:53','2009-05-06 08:38:53',NULL,NULL,'0.00',69,'4.50',NULL,NULL),(5,3,6,10,'0.00','2009-05-06 08:42:30','2009-05-06 08:42:30','2009-05-06 08:42:30',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(6,3,7,10,'5.00','2009-05-06 08:57:12','2009-05-06 08:57:12','2009-05-06 08:58:05',NULL,NULL,'0.00',69,'7.50',NULL,NULL),(8,3,11,10,'5.00','2009-05-06 09:10:29','2009-05-06 09:10:29','2009-05-06 09:10:29',NULL,NULL,'0.00',69,'7.50',NULL,NULL),(9,3,12,10,'0.00','2009-05-06 09:11:37','2009-05-06 09:11:37','2009-05-06 09:11:37',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(10,3,15,10,'0.00','2009-05-06 09:30:19','2009-05-06 09:30:19','2009-05-06 09:30:19',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(11,3,17,10,'0.00','2009-05-06 09:31:06','2009-05-06 09:31:06','2009-05-06 09:31:06',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(12,3,23,10,'0.00','2009-05-06 09:41:26','2009-05-06 09:41:26','2009-05-06 09:41:26',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(13,3,24,10,'0.00','2009-05-06 09:43:07','2009-05-06 09:43:07','2009-05-06 09:43:07',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(15,3,27,10,'0.00','2009-05-06 09:55:18','2009-05-06 09:55:18','2009-05-06 09:55:18',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(16,3,28,10,'0.00','2009-05-06 09:58:49','2009-05-06 09:58:50','2009-05-06 09:58:50',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(18,3,30,10,'3.00','2009-05-06 10:10:55','2009-05-06 10:10:55','2009-05-06 10:10:55',NULL,NULL,'0.00',69,'4.50',NULL,NULL),(19,3,31,1,'5.00','2009-05-06 10:29:31','2009-05-06 10:29:31','2009-05-06 10:29:31',NULL,NULL,'0.00',69,'0.75',NULL,NULL),(20,3,32,1,'0.00','2009-05-06 11:19:50','2009-05-06 11:19:50','2009-05-06 11:19:50',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(21,3,33,1,'0.00','2009-05-06 11:36:06','2009-05-06 11:36:06','2009-05-06 11:36:06',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(22,3,34,1,'50.00','2009-05-06 12:06:01','2009-05-06 12:06:01','2009-05-06 12:06:01',NULL,NULL,'0.00',69,'7.50',NULL,NULL),(23,3,35,1,'30.00','2009-05-06 12:11:57','2009-05-06 12:11:57','2009-05-06 12:11:57',NULL,NULL,'0.00',69,'4.50',NULL,NULL),(24,3,36,1,'77.00','2009-05-06 12:14:08','2009-05-06 12:14:09','2009-05-06 12:14:09',NULL,NULL,'0.00',69,'11.55',NULL,NULL),(25,3,37,1,'0.04','2009-05-06 12:15:23','2009-05-06 12:15:23','2009-05-06 12:15:23',NULL,NULL,'0.00',69,'0.01',NULL,NULL),(26,3,38,1,'66.00','2009-05-06 12:16:27','2009-05-06 12:16:28','2009-05-06 12:16:28',NULL,NULL,'0.00',69,'9.90',NULL,NULL),(27,3,39,1,'46.00','2009-05-06 12:18:18','2009-05-06 12:18:18','2009-05-06 12:18:18',NULL,NULL,'0.00',69,'6.90',NULL,NULL),(30,3,42,1,'665.00','2009-05-06 12:34:51','2009-05-06 12:34:51','2009-05-06 12:34:51',NULL,NULL,'0.00',69,'99.75',NULL,NULL),(31,3,43,1,'2.00','2009-05-06 12:39:54','2009-05-06 12:39:54','2009-05-06 12:39:54',NULL,NULL,'0.00',69,'0.30',NULL,NULL),(32,3,44,1,'0.00','2009-05-06 12:51:28','2009-05-06 12:51:28','2009-05-06 12:51:28',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(33,3,45,1,'0.00','2009-05-06 13:26:07','2009-05-06 13:26:07','2009-05-06 13:26:07',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(34,3,46,1,'0.00','2009-05-06 13:29:51','2009-05-06 13:29:51','2009-05-06 13:29:51',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(35,3,47,1,'0.00','2009-05-06 13:31:31','2009-05-06 13:31:31','2009-05-06 13:31:31',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(36,3,48,1,'23.00','2009-05-06 13:33:12','2009-05-06 13:33:12','2009-05-06 13:33:12',NULL,NULL,'0.00',69,'3.45',NULL,NULL),(37,3,49,1,'0.00','2009-05-06 13:41:22','2009-05-06 13:41:22','2009-05-06 13:41:22',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(39,3,51,1,'0.00','2009-05-06 13:53:23','2009-05-06 13:53:23','2009-05-06 13:53:23',NULL,NULL,'0.00',69,'0.00',NULL,NULL),(40,3,52,1,'5.00','2009-05-06 14:01:29','2009-05-06 14:01:29','2009-05-06 14:01:29',NULL,NULL,'0.00',69,'0.75',NULL,NULL),(41,3,53,1,'5.00','2009-05-06 14:09:25','2009-05-06 14:09:25','2009-05-06 14:09:25',NULL,NULL,'0.00',69,'0.75',NULL,NULL),(42,3,54,1,'5.00','2009-05-06 14:10:47','2009-05-06 14:10:47','2009-05-06 14:10:47',NULL,NULL,'0.00',69,'0.75',NULL,NULL),(43,3,55,1,'5.00','2009-05-06 14:12:15','2009-05-06 14:12:15','2009-05-06 14:12:15',NULL,NULL,'0.00',69,'0.75',NULL,NULL),(44,3,56,1,'5.00','2009-05-06 14:20:41','2009-05-06 14:20:42','2009-05-06 14:20:42',NULL,NULL,'0.00',69,'0.75',NULL,NULL),(45,3,57,1,'5.00','2009-05-06 14:43:09','2009-05-06 14:43:09','2009-05-06 14:43:09',NULL,NULL,'0.00',69,'0.75',NULL,NULL),(46,3,58,1,'5.00','2009-05-06 16:55:30','2009-05-06 16:55:31','2009-05-06 16:55:31',NULL,NULL,'0.00',69,'0.75',NULL,NULL),(47,3,59,1,'5.00','2009-05-06 17:00:45','2009-05-06 17:00:45','2009-05-06 17:00:45',NULL,NULL,'0.00',69,'0.75',NULL,NULL),(48,3,60,1,'36.00','2009-05-06 18:15:59','2009-05-06 18:15:59','2009-05-06 18:15:59',NULL,NULL,'0.00',69,'5.40',NULL,NULL),(49,3,61,2,'40.00','2009-05-06 18:38:51','2009-05-06 18:38:51','2009-05-06 18:38:51',NULL,NULL,'0.00',69,'12.00',NULL,NULL),(50,3,62,1,'5.00','2009-05-06 19:14:48','2009-05-06 19:14:48','2009-05-06 19:14:48',NULL,NULL,'0.00',69,'0.75',NULL,NULL),(51,3,63,1,'5.00','2009-05-06 19:26:18','2009-05-06 19:26:18','2009-05-06 19:26:18',NULL,NULL,'0.00',69,'0.75',NULL,NULL),(52,3,64,1,'7.00','2009-05-06 19:29:07','2009-05-06 19:29:08','2009-05-06 19:29:08',NULL,NULL,'0.00',69,'1.05',NULL,NULL),(53,3,65,1,'8.00','2009-05-06 19:33:04','2009-05-06 19:33:04','2009-05-06 19:33:04',NULL,NULL,'0.00',69,'1.20',NULL,NULL),(54,3,66,1,'1.00','2009-05-06 19:37:33','2009-05-06 19:37:33','2009-05-06 19:37:33',NULL,NULL,'0.00',69,'0.15',NULL,NULL),(55,3,67,1,'5.00','2009-05-06 19:39:08','2009-05-06 19:39:08','2009-05-06 19:39:08',NULL,NULL,'0.00',69,'0.75',NULL,NULL),(56,3,68,1,'5.00','2009-05-06 20:00:25','2009-05-06 20:00:25','2009-05-06 20:00:25',NULL,NULL,'0.00',69,'0.75',NULL,NULL);
 /*!40000 ALTER TABLE `lines` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -197,11 +231,11 @@ CREATE TABLE `movements` (
   `updated_at` datetime default NULL,
   `order_id` int(11) default NULL,
   `serialized_product_id` int(11) default NULL,
-  `line_id` int(11) default NULL,
+  `oldline_id` int(11) default NULL,
   `comments` text,
   `value` decimal(5,2) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -261,7 +295,7 @@ CREATE TABLE `orders` (
   `order_type_id` int(11) default NULL,
   `deleted` tinyint(1) default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=69 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -270,7 +304,6 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (1,5,3,NULL,'2009-05-01',1,'2009-05-01 20:16:37','2009-05-01 20:16:37',NULL,NULL,NULL,NULL,'',1,0);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -331,6 +364,91 @@ LOCK TABLES `payments` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `people`
+--
+
+DROP TABLE IF EXISTS `people`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `people` (
+  `id` int(11) NOT NULL auto_increment,
+  `home_phone` char(8) default '',
+  `office_phone` char(8) default '',
+  `address` text,
+  `birth` datetime default NULL,
+  `state_id` int(11) default NULL,
+  `cell_phone` char(8) default NULL,
+  `nit` char(14) default NULL,
+  `city` varchar(255) default NULL,
+  `email` varchar(255) default NULL,
+  `register` varchar(255) default NULL,
+  `giro` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `people`
+--
+
+LOCK TABLES `people` WRITE;
+/*!40000 ALTER TABLE `people` DISABLE KEYS */;
+INSERT INTO `people` VALUES (1,'','',NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL),(2,'','',NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL),(3,'','',NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL),(4,'','',NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL),(5,'','',NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL),(6,'','',NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL),(7,'','',NULL,NULL,1,NULL,NULL,NULL,NULL,NULL,NULL),(8,'24080080','','','2009-05-05 00:00:00',1,'','123456789845','','','','asdf');
+/*!40000 ALTER TABLE `people` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `post_types`
+--
+
+DROP TABLE IF EXISTS `post_types`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `post_types` (
+  `id` int(11) NOT NULL auto_increment,
+  `name` varchar(255) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `post_types`
+--
+
+LOCK TABLES `post_types` WRITE;
+/*!40000 ALTER TABLE `post_types` DISABLE KEYS */;
+INSERT INTO `post_types` VALUES (1,'Debito'),(2,'Credito');
+/*!40000 ALTER TABLE `post_types` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `posts`
+--
+
+DROP TABLE IF EXISTS `posts`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `posts` (
+  `id` int(11) NOT NULL auto_increment,
+  `post_type_id` int(11) default NULL,
+  `value` decimal(5,2) default NULL,
+  `account_id` int(11) default NULL,
+  `trans_id` int(11) default NULL,
+  `balance` decimal(5,2) default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=113 DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `posts`
+--
+
+LOCK TABLES `posts` WRITE;
+/*!40000 ALTER TABLE `posts` DISABLE KEYS */;
+/*!40000 ALTER TABLE `posts` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `price_group_names`
 --
 
@@ -366,7 +484,7 @@ CREATE TABLE `price_groups` (
   `price_group_name_id` int(11) default NULL,
   `entity_id` int(11) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -375,7 +493,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `price_groups` WRITE;
 /*!40000 ALTER TABLE `price_groups` DISABLE KEYS */;
-INSERT INTO `price_groups` VALUES (1,1,5),(2,2,5);
+INSERT INTO `price_groups` VALUES (1,1,5),(2,2,5),(5,1,7),(6,2,7);
 /*!40000 ALTER TABLE `price_groups` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -394,7 +512,7 @@ CREATE TABLE `prices` (
   `relative` decimal(7,2) default NULL,
   `available` tinyint(1) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=200 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=208 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -403,7 +521,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `prices` WRITE;
 /*!40000 ALTER TABLE `prices` DISABLE KEYS */;
-INSERT INTO `prices` VALUES (1,1,1,'1.00',NULL,1),(2,2,1,'1.00',NULL,1),(3,1,2,'1.00',NULL,1),(4,2,2,'1.00',NULL,1);
+INSERT INTO `prices` VALUES (1,1,1,'1.00',NULL,1),(2,2,1,'1.00',NULL,1),(3,1,2,'1.00',NULL,1),(4,2,2,'1.00',NULL,1),(200,1,3,'5.00',NULL,0),(201,2,3,'5.00',NULL,0),(202,5,3,'5.00',NULL,1),(203,6,3,'5.00',NULL,1),(204,1,4,'77.00',NULL,NULL),(205,2,4,'77.00',NULL,NULL),(206,5,4,'77.00',NULL,NULL),(207,6,4,'77.00',NULL,NULL);
 /*!40000 ALTER TABLE `prices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -479,7 +597,7 @@ CREATE TABLE `products` (
   `product_category_id` int(11) default NULL,
   `blocked_by_count` int(1) default '0',
   PRIMARY KEY  (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -532,7 +650,7 @@ CREATE TABLE `requirements` (
   `static_price` decimal(5,2) default NULL,
   `relative_price` decimal(5,2) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=64 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=66 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -541,6 +659,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `requirements` WRITE;
 /*!40000 ALTER TABLE `requirements` DISABLE KEYS */;
+INSERT INTO `requirements` VALUES (64,4,3,1,'0.00',NULL),(65,4,3,1,'0.00',NULL);
 /*!40000 ALTER TABLE `requirements` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -720,6 +839,31 @@ LOCK TABLES `subscriptions` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `trans`
+--
+
+DROP TABLE IF EXISTS `trans`;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+CREATE TABLE `trans` (
+  `id` int(11) NOT NULL auto_increment,
+  `order_id` int(11) default NULL,
+  `comments` text,
+  `created_at` datetime default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=latin1;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Dumping data for table `trans`
+--
+
+LOCK TABLES `trans` WRITE;
+/*!40000 ALTER TABLE `trans` DISABLE KEYS */;
+/*!40000 ALTER TABLE `trans` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `units`
 --
 
@@ -798,7 +942,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'admin','null@null.null','efac2d903cd08baa3ffb48c853e0eff587e39b5d','b41e5fb0c70973c725b3d47dd8bfb99780da3a0b',NULL,NULL,5,1,2);
+INSERT INTO `users` VALUES (1,'admin','null@null.null','efac2d903cd08baa3ffb48c853e0eff587e39b5d','b41e5fb0c70973c725b3d47dd8bfb99780da3a0b',NULL,NULL,5,1,1);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -817,7 +961,7 @@ CREATE TABLE `warranties` (
   `order_type_id` int(11) default NULL,
   `months` int(11) default NULL,
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=72 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=74 DEFAULT CHARSET=latin1;
 SET character_set_client = @saved_cs_client;
 
 --
@@ -826,7 +970,7 @@ SET character_set_client = @saved_cs_client;
 
 LOCK TABLES `warranties` WRITE;
 /*!40000 ALTER TABLE `warranties` DISABLE KEYS */;
-INSERT INTO `warranties` VALUES (68,NULL,'0.00',NULL,NULL,0),(69,3,'0.00',NULL,NULL,0),(70,NULL,'0.00',NULL,NULL,0),(71,4,'0.00',NULL,NULL,0);
+INSERT INTO `warranties` VALUES (68,NULL,'0.00',NULL,NULL,0),(69,3,'0.00',NULL,NULL,0),(70,NULL,'0.00',NULL,NULL,0),(71,4,'0.00',NULL,NULL,0),(72,3,'0.00',NULL,NULL,0),(73,NULL,'0.00',NULL,NULL,0);
 /*!40000 ALTER TABLE `warranties` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -863,4 +1007,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-05-04 21:40:31
+-- Dump completed on 2009-05-07  2:31:56

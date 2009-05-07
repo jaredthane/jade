@@ -130,7 +130,7 @@
 	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
 	    <p>
 		    <b>Cuenta para Contabilidad</b><br />
-		    <% if @entity.revenue_account %>
+		    <% if @entity.cash_account %>
   		    <%=link_to @entity.cash_account.name, @entity.cash_account%>
 		    <% end %>
 		

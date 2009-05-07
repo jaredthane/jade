@@ -30,11 +30,19 @@ class Account < ActiveRecord::Base
 	def children
 	  return Account.find_all_by_parent_id(self.id)
 	end
-	def all_transactions
-	  trans = self.trans
+	def all_posts
+	  list = self.posts
     for child in children
-  	  trans << child.all_transactions
+  	    list += child.all_posts
   	end
-	  return trans
+	  return list
+	end
+	def balance
+	  total=0
+  	total += posts.last.balance if posts.length > 0
+  	for child in children
+  	  total += child.balance
+  	end
+  	return total
 	end
 end

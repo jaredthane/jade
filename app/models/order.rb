@@ -184,40 +184,21 @@ class Order < ActiveRecord::Base
 	def prepare_transaction
 	  case order_type_id
     when 1 # Venta
-      puts "preparing transactions for venta"
-      vendor = Post.new(:account => self.vendor.revenue_account, :value=>self.total_price, :post_type_id =>2)
-      client = Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>1)
-      tax    = Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>2)
-      inventory = Post.new(:account => self.vendor.inventory_account, :value=>self.total_cost, :post_type_id =>2)
-      expense = Post.new(:account => self.vendor.expense_account, :value=>self.total_cost, :post_type_id =>1)
-	    puts "prepare transactions -> vendor = " + vendor.inspect
-	    puts "prepare transactions -> client = " + client.inspect
-	    puts "prepare transactions -> tax = " + tax.inspect
-	    puts "prepare transactions -> inventory = " + inventory.inspect
-	    puts "prepare transactions -> expense = " + expense.inspect
-	    both = [[vendor, client, tax], [inventory, expense]]
-	    puts "prepare transactions -> both = " + both.to_s
+      puts "self.vendor.revenue_account.balance"+ self.vendor.revenue_account.balance.inspect
+      puts "self.total_price"+ self.total_price.inspect
+      vendor = Post.new(:account => self.vendor.revenue_account, :value=>self.total_price, :post_type_id =>2, :balance => (self.vendor.revenue_account.balance||0) + (self.total_price||0))
+      client = Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>1, :balance => (self.client.cash_account.balance||0) + (self.total_price||0))
+      tax    = Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>2, :balance => (self.vendor.tax_account.balance||0) + (self.total_price||0))
+      inventory = Post.new(:account => self.vendor.inventory_account, :value=>self.total_cost, :post_type_id =>2, :balance => (self.vendor.inventory_account.balance||0) - (self.total_price||0))
+      expense = Post.new(:account => self.vendor.expense_account, :value=>self.total_cost, :post_type_id =>1, :balance => (self.vendor.expense_account.balance||0) + (self.total_price||0))
       @transactions_to_create = [[vendor, client, tax], [inventory, expense]]
-	    puts "prepare transactions1 -> @transactions_to_create = " + @transactions_to_create.inspect
-      
 	  when 2 # Compra
-      puts "preparing transactions for Compra"
 	    puts self.vendor.cash_account.to_s
 	    puts self.total_price_with_tax.to_s
-	    vendor = Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>2)
-      client = Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>1)
-      puts "prepare transactions -> vendor = " + vendor.to_s
-	    puts "prepare transactions -> client = " + client.to_s
-	    both = [[vendor, client]]
-	    puts "prepare transactions -> both = " + both.to_s
-      @transactions_to_create = [[vendor, client]]
-	    puts "prepare transactions1 -> @transactions_to_create = " + @transactions_to_create.to_s
-	    puts "prepare transactions1 -> @movements_to_create = " + @movements_to_create.to_s
-	    puts "prepare transactions -> both = " + both.to_s
-	    
+	    vendor = Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>2, :balance => (self.vendor.cash_account.balance||0) + (self.total_price||0))
+      client = Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>1, :balance => (self.client.inventory_account.balance||0) + (self.total_price||0))
+      @transactions_to_create = [[vendor, client]]	    
 	  end
-	  
-	  puts "prepare transaction2s -> @transactions_to_create = " + @transactions_to_create.to_s
 	end
   ###################################################################################
   # checks if there are any transactions to be made, if so, it calls prepare_transaction
@@ -447,7 +428,7 @@ class Order < ActiveRecord::Base
 		for l in self.lines
 			total = (total||0) + (l.total_price||0)
 		end
-		return total
+		return (total||0)
 	end
   ###################################################################################
 	# Returns the total cost of all of the products in the order
@@ -457,7 +438,7 @@ class Order < ActiveRecord::Base
 		for l in self.lines
 			total = (total||0) + (l.total_cost||0)
 		end
-		return total
+		return (total||0)
 	end
 	###################################################################################
 	# Returns the total tax to be charged the user.
@@ -467,7 +448,7 @@ class Order < ActiveRecord::Base
 		for l in self.lines
 			total = (total||0) + (l.tax||0)
 		end
-		return total
+		return (total||0)
 	end
 	
 	###################################################################################
@@ -490,7 +471,7 @@ class Order < ActiveRecord::Base
 				total = (total||0) + (l.total_price||0)
 			end
 		end
-		return total
+		return (total||0)
 	end
 	
 	###################################################################################

@@ -11,6 +11,7 @@ else
     #Install Ruby
     echo "Installing Ruby"
     sudo aptitude install ruby1.8-dev ruby1.8 ri1.8 rdoc1.8 irb1.8 libreadline-ruby1.8 libruby1.8 libopenssl-ruby sqlite3 libsqlite3-ruby1.8
+    sudo ln /usr/bin/ruby1.8 /usr/bin/ruby
 
     # Install Ruby Gems
     echo "Installing Ruby Gems"
@@ -19,10 +20,11 @@ else
     cd rubygems-1.3.1
     sudo ruby setup.rb
     cd ..
+    sudo ln /usr/bin/gem1.8 /usr/bin/gem
     
     # Install MySQL
     echo "Installing MySQL"
-    sudo aptitude install mysql libmysqlclient-dev
+    sudo aptitude install mysql-server libmysqlclient-dev
 
     # Install Rails
     echo "Installing Rails"
@@ -36,9 +38,9 @@ else
     echo "Installing Jade database"
     sudo mysql -p$2 -e "create database Jade"
     sudo mysql -p$2 Jade < clean.sql
-    sudo mysql -p$2 Jade -e "update entities set name = $1 where id=5"
+    sudo mysql -p$2 Jade -e "update entities set name = '$1' where id=5"
     echo "Configuring Jade"
-    cp database.yml.sample config/database.yml
-    sed -i 's/pa$$word/$2/g' config/database.yml
-    chmod 400 config/database.yml
+    sudo cp database.yml.sample config/database.yml
+    sudo sed -i 's/pa$$word/'$2'/g' config/database.yml
+    sudo chmod 400 config/database.yml
 fi
