@@ -18,6 +18,7 @@ class OrdersController < ApplicationController
 	access_control [:create_batch, :create_orders, :show_batch, :new_purchase] => '(gerente | admin | compras)' 
 	access_control [:new_sale] => '(gerente | admin | ventas)'
 	access_control [:destroy] => '(admin)'
+
 	def allowed(order_type_id, action)
 		case (order_type_id)
 		  when 1
@@ -30,7 +31,7 @@ class OrdersController < ApplicationController
 				elsif action=="view"
 					if !current_user.has_rights(['admin','gerente','ventas','compras','inventario'])
 						redirect_back_or_default('/products')
-						flash[:error] = "No tiene los derechos suficientes para ver lsa ventas"
+						flash[:error] = "No tiene los derechos suficientes para ver las ventas"
 						return false
 					end
 				end
@@ -85,43 +86,7 @@ class OrdersController < ApplicationController
       format.xml  { render :xml => @orders }
     end
   end
-  def show_receipt
-  	@receipt = Order.find(params[:id])
-  	return false if !allowed(@receipt.order_type_id, 'view')
-		params[:format] = 'pdf'
-		if @receipt.client.entity_type.id == 2
-			prawnto :prawn => { :page_size => 'RECEIPT',
-					              :left_margin=>27,# was 27
-										    :right_margin=>5,
-										    :top_margin=>90, #was 90
-										    :bottom_margin=>18 ,
-										    :filename=>"#{@receipt.id}.pdf" }
-		else
-			prawnto :prawn => { :page_size => 'RECEIPT_LAND',
-					              :left_margin=>27,# was 27
-										    :right_margin=>5,
-										    :top_margin=>90, #was 90
-										    :bottom_margin=>5 ,
-										    :filename=>"#{@receipt.id}.pdf" }
-		end
-		@data=[]
-		total=0
-		for l in @receipt.lines
-			x = Object.new.extend(ActionView::Helpers::NumberHelper)
-			if l.product.serialized
-				if l.serialized_product
-					@data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
-				end
-			else
-				@data << [l.quantity.to_s, l.product.name, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
-			end
-			total += l.total_price
-		end
-		logger.debug @data.inspect
-    respond_to do |format|
-      format.pdf { render :layout => false }
-    end
-  end
+  
 	# GET /orders/create_batch
   # GET /orders/create_batch.xml
   def create_batch

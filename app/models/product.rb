@@ -123,7 +123,7 @@ class Product < ActiveRecord::Base
 		totalcost=0
 		for m in moves
 		  take = [items_to_count, m["quantity"].to_i].min
-		  totalcost += (m["value"].to_i || 0) * (take || 0)
+		  totalcost += (m["value"].to_i || 0) /(m["quantity"].to_i || 0) * (take || 0)
 		  items_to_count -= take
 		  break if items_to_count < 1
 		end

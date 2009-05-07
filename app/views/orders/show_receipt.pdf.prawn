@@ -65,13 +65,13 @@
 
 
 if @receipt.client.entity_type.id == 2	# for final consumers
-	pdf.font.size = 9
+	pdf.font_size = 9
 	o={:x=>-10,:y=>10}
 	pdf.text @receipt.client.name, :at=>[90+o[:x],310+o[:y]]
 	pdf.text @receipt.client.address, :at=>[100+o[:x],308+o[:y]]
 	pdf.text @receipt.created_at.to_date.to_s, :at=>[220+o[:x],325+o[:y]]
 	pdf.bounding_box([60+o[:x],270+o[:y]], :width => 255, :height => 220) do
-	pdf.table(@data,
+	  pdf.table(@data,
 					:at=>[60+o[:x],270+o[:y]],
 		      :font_size => 9,
 		      :horizontal_padding => 1,
@@ -97,7 +97,7 @@ else
 	pdf.text @receipt.client.nit, :at=>[355+o[:x],169+o[:y]]
 	pdf.text @receipt.client.giro, :at=>[355+o[:x],159+o[:y]]
 	pdf.bounding_box([35+o[:x],145+o[:y]], :width => 410, :height => 77) do
-	pdf.table(@data,
+	  pdf.table(@data,
 					:at=>[35+o[:x],145+o[:y]],
 		      :font_size => 9,
 		      :horizontal_padding => 1,

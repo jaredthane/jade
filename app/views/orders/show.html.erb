@@ -90,7 +90,7 @@
   <b>Cliente:</b>
   <%=link_to @order.client.name, @order.client %><br />
   <% if @order.order_type_id == 1 and @order.client.birthday? %>  
-  	<% flash[:error] = 'Este cliente esta cumpliendo anos..' %> 
+  	<% flash[:important] = 'Este cliente esta cumpliendo anos..' %> 
   <% end %>
 </p>
 <p>

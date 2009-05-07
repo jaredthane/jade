@@ -1,0 +1,19 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :title do %>Nueva Factura para <%= @order.order_type.name %> #<%= @order.id %><% end %>
+<% content_for :actions do %>
+
+	<dt><%= link_to 'Cancelar', @order %></dt>
+	<dt><%= link_to_function 'Guardar', 'submit("receipt_form")' %></dt>
+<% end %>
+
+<%= error_messages_for :receipt %>
+
+
+<% form_tag create_receipt_path, :method =>'post', :html => {:id => 'receipt_form' } do %>
+  <%= text_field_tag :number, @next, :class => 'field'%>
+  <%= submit_tag "Generar Pedido", :name => nil, :class => 'button' %>
+<% end %>
+
+

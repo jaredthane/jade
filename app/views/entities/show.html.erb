@@ -25,7 +25,7 @@
 <% end %>
 
   <% if @entity.entity_type_id !=3 and @entity.birthday? %>  
-  	<% flash[:error] = 'Este cliente esta cumpliendo anos..' %> 
+  	<% flash[:important] = 'Este cliente esta cumpliendo anos..' %> 
   <% end %>
 <div class="column2-unit-left">
 	<p>

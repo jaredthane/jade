@@ -89,6 +89,7 @@
 .main-content h3.side {clear:none;}
 .main-content p.notice_message {background: #7cb4a9; color: white; padding:2px;}
 .main-content p.error_message {background: #e31c1c; color: white; padding:2px;}
+.main-content p.important_message {color: #e31c1c; padding:2px;}
 .main-content p.rejected {clear:both; margin:.25em 0 0em 0; padding:2px 0 2px 2px; background:#e31c1c; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:220%;}
 
 /*.main-content dt {background:url(../images/img/bg_bullet_full_2.gif) no-repeat 0px 50%; text-decoration:none; font-size:125%;}
