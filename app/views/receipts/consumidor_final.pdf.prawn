@@ -13,6 +13,6 @@ pdf.bounding_box([60+o[:x],270+o[:y]], :width => 255, :height => 220) do
 	      :align => { 0 => :center, 1 => :left, 2 => :center, 3 => :center, 4 => :center },
 	      :widths => { 0 => 30, 1 => 130, 2 => 35, 3 => 25, 4 => 35})
 end
-pdf.text number_to_currency(@receipt.order.total_price), :at=>[283+o[:x],50+o[:y]]
+pdf.text number_to_currency(@receipt.total_price), :at=>[283+o[:x],50+o[:y]]
 pdf.text "$0.00", :at=>[285+o[:x],30+o[:y]]
-pdf.text number_to_currency(@receipt.order.total_price_with_tax), :at=>[283+o[:x],20+o[:y]]
+pdf.text number_to_currency(@receipt.total_price_with_tax), :at=>[283+o[:x],20+o[:y]]

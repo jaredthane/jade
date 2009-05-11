@@ -41,7 +41,6 @@ class ReceiptsController < ApplicationController
 	end
 	
   def generate_receipts(order, start_id=1)
-    
     if order.client.entity_type.id == 2
       lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_RECIEPT
     else
@@ -49,10 +48,12 @@ class ReceiptsController < ApplicationController
     end
     lines_on_receipt = 0
     for line in order.lines
-      if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt = 0) 
+      logger.debug "lines_on_receipt" + lines_on_receipt.to_s
+      if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt == 0) 
         # Create a new receipt
         r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt #{start_id}.pdf", :user=> User.current_user)
         lines_on_receipt = 0
+        logger.debug "reseting lines on receipt"
         start_id += 1
       end
       # Add line to receipt
@@ -62,6 +63,8 @@ class ReceiptsController < ApplicationController
       line.save
       logger.debug "double check it saved" + Line.find(line.id).inspect
       lines_on_receipt += 1
+      
+      logger.debug "+= 1 lines on receipt"
       logger.debug "lines on the receipt:" + Receipt.find(r.id).lines.inspect
       logger.debug "the receipt:" + Receipt.find(r.id).inspect
     end

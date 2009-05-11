@@ -20,9 +20,9 @@ pdf.bounding_box([35+o[:x],145+o[:y]], :width => 410, :height => 77) do
 	      :align => { 0 => :center, 1 => :left, 2 => :center, 3 => :center, 4 => :center },
 	      :widths => { 0 => 30, 1 => 275, 2 => 30, 3 => 25, 4 => 50})
 end
-pdf.text number_to_currency(@receipt.order.total_price), :at=>[405+o[:x],68+o[:y]]
-pdf.text number_to_currency(@receipt.order.total_tax), :at=>[405+o[:x],54+o[:y]]
-pdf.text number_to_currency(@receipt.order.total_price_with_tax), :at=>[405+o[:x],40+o[:y]]
+pdf.text number_to_currency(@receipt.total_price), :at=>[405+o[:x],68+o[:y]]
+pdf.text number_to_currency(@receipt.total_tax), :at=>[405+o[:x],54+o[:y]]
+pdf.text number_to_currency(@receipt.total_price_with_tax), :at=>[405+o[:x],40+o[:y]]
 pdf.text "$0.00", :at=>[405+o[:x],26+o[:y]]
-pdf.text number_to_currency(@receipt.order.total_price_with_tax), :at=>[405+o[:x],16+o[:y]]
-pdf.text @receipt.order.total_price_with_tax_in_spanish, :at=>[35+o[:x],68+o[:y]]
+pdf.text number_to_currency(@receipt.total_price_with_tax), :at=>[405+o[:x],16+o[:y]]
+pdf.text @receipt.total_price_with_tax_in_spanish, :at=>[35+o[:x],68+o[:y]]
