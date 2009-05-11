@@ -101,7 +101,10 @@ class ReceiptsController < ApplicationController
 def show
     @receipt = Receipt.find(params[:id])
     if @receipt
-      send_file @receipt.filename  #, :x_sendfile=>true
+      #send_data @receipt.filename, :disposition => 'inline'
+      # This is good for if the user wants to download the file
+      send_file @receipt.filename, :type => 'application/pdf', :disposition => 'inline'
+  #, :x_sendfile=>true
     else
       redirect_back_or_default(sales_url)
 			flash[:error] = "No hay ninguna factura en el sistema con ese numero"
