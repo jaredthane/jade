@@ -34,7 +34,7 @@ class SessionsController < ApplicationController
       redirect_back_or_default('/products')
       flash[:notice] = "Se ha engresado exitosamente"
     else
-	    flash.now[:error] = "Authenticacion Fallo"
+	    flash.now[:error] = "No se pudo engresar con esos datos. Favor de revisar su nombre de usuario y la clave."
       render :action => 'new'
     end
   end

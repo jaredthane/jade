@@ -22,6 +22,7 @@ class Order < ActiveRecord::Base
 	has_many :products, :through => :lines
 	has_many :payments
 	has_many :movements
+	has_many :receipts
 	belongs_to :order_type
 	HUMANIZED_ATTRIBUTES = {
     :user => "Usuario",
@@ -65,6 +66,31 @@ class Order < ActiveRecord::Base
 	      p.errors.each {|e| puts "POst ERROR" + e.to_s}
 	    end
 	  end
+	end
+	def create_receipts
+	  # Prepare the data           ------------------------------------------------
+	  @data=[]
+	  total=0
+	  for l in self.lines
+		  x = Object.new.extend(ActionView::Helpers::NumberHelper)
+		  if l.product.serialized
+			  if l.serialized_product
+				  @data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
+			  end
+		  else
+			  @data << [l.quantity.to_s, l.product.name, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
+		  end
+		  total += l.total_price
+		end  
+	  # Call the appropriate format ------------------------------------------------
+	  
+	  if self.client.entity_type.id == 2
+	    consumidor_final # from the formats.rb file
+	  else
+	    credito_fiscal # from the formats.rb file
+	  end
+	  r=Receipt.create(:order=>params[:order_id], :number =>params[:number], :filename=>"#{RAILS_ROOT}/invoice_pdfs/order #{self.id}.pdf")
+	  return r
 	end
 	def create_movements
 		@movements_to_create = [] if !@movements_to_create

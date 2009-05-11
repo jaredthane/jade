@@ -13,12 +13,12 @@
 
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 class OrdersController < ApplicationController
 	before_filter :login_required
 	access_control [:create_batch, :create_orders, :show_batch, :new_purchase] => '(gerente | admin | compras)' 
 	access_control [:new_sale] => '(gerente | admin | ventas)'
 	access_control [:destroy] => '(admin)'
-
 	def allowed(order_type_id, action)
 		case (order_type_id)
 		  when 1
@@ -86,7 +86,6 @@ class OrdersController < ApplicationController
       format.xml  { render :xml => @orders }
     end
   end
-  
 	# GET /orders/create_batch
   # GET /orders/create_batch.xml
   def create_batch
@@ -101,6 +100,20 @@ class OrdersController < ApplicationController
 		    format.html {redirect_to('/inventories')}
 		  end
 		end
+  end
+  def show_receipts
+    @order = Order.find(params[:id])
+    return false if !allowed(@order.order_type_id, 'view')
+    if @order.receipts.length < 1
+      # receipts for this order have not been generated yet
+      redirect_to(new_receipt_url(@order))
+  		return false
+    end
+    @receipts=@order.receipts
+    respond_to do |format|
+      format.html # show_receipts.html.erb
+      format.xml  { render :xml => @orders }
+    end
   end
   def create_orders
   	#logger.debug "starting create orders"
@@ -169,7 +182,7 @@ class OrdersController < ApplicationController
     end
 		return false if !allowed(@order.order_type_id, 'view')
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render :template => "/orders/show_products" }
       format.xml  { render :xml => @order }
     end
   end

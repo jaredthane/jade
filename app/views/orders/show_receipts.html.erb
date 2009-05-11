@@ -1,0 +1,22 @@
+<%= render :partial => 'details', :locals => { :order => @order, :view =>'receipts' } %>
+
+<p>
+	<b>Facturas:</b>
+	<div>
+		<div class="table_header_row">
+			<div class="table_cell_25">Fecha</div>
+		  <div class="table_cell_25">Factura</div>
+		  <div class="table_cell_25">Total</div>
+		  <div class="table_cell">Usuario</div>
+		</div>
+		<% for receipt in @receipts %>
+  <div class="table_row">
+    <div class="table_cell_25"><%= h receipt.created_at %></div>
+    <div class="table_cell_25"><%= link_to receipt.number, receipt %></div>
+    <div class="table_cell_25"><%= h number_to_currency(receipt.total_price_with_tax) %></div>
+    <div class="table_cell"><%=link_to receipt.user.login, receipt.user %></div>
+	</div>
+<% end %>
+	</div>
+</p>
+

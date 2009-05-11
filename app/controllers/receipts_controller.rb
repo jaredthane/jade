@@ -1,4 +1,5 @@
 class ReceiptsController < ApplicationController
+  include Formats
   def allowed(order_type_id, action)
 		case (order_type_id)
 		  when 1
@@ -38,33 +39,50 @@ class ReceiptsController < ApplicationController
     end  
     return true  
 	end
-  def consumidor_final
-    prawnto :prawn => { :page_size => 'LETTER',#RECEIPT
-					              :left_margin=>27,# was 27
-										    :right_margin=>5,
-										    :top_margin=>90, #was 90
-										    :bottom_margin=>18}
-    pdf_string = render_to_string :template => 'receipts/consumidor_final.pdf.prawn', :layout => false
-    File.open("#{RAILS_ROOT}/invoice_pdfs/order #{@order.id}.pdf", 'w') { |f| f.write(pdf_string) }
-  end
-  def credito_fiscal
-			prawnto :prawn => { :page_size => 'LETTER',
-					              :left_margin=>27,# was 27
-										    :right_margin=>5,
-										    :top_margin=>90, #was 90
-										    :bottom_margin=>5, 
-										    :page_layout => :landscape }
-    pdf_string = render_to_string :template => 'receipts/credito_fiscal.pdf.prawn', :layout => false
-    File.open("#{RAILS_ROOT}/invoice_pdfs/order #{@order.id}.pdf", 'w') { |f| f.write(pdf_string) }
+	
+  def generate_receipts(order, start_id=1)
+    
+    if order.client.entity_type.id == 2
+      lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_RECIEPT
+    else
+      lines_per_receipt = CREDITO_FISCAL_LINES_PER_RECIEPT
+    end
+    lines_on_receipt = 0
+    for line in order.lines
+      if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt = 0) 
+        # Create a new receipt
+        r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt #{start_id}.pdf", :user=> User.current_user)
+        lines_on_receipt = 0
+        start_id += 1
+      end
+      # Add line to receipt
+      logger.debug "Setting line" + line.inspect
+      line.receipt = r
+      logger.debug "now with receipt_id" + line.inspect
+      line.save
+      logger.debug "double check it saved" + Line.find(line.id).inspect
+      lines_on_receipt += 1
+      logger.debug "lines on the receipt:" + Receipt.find(r.id).lines.inspect
+      logger.debug "the receipt:" + Receipt.find(r.id).inspect
+    end
+    # Generate the PDF's
+    for receipt in Order.find(order.id).receipts
+      if receipt.order.client.entity_type.id == 2
+	      consumidor_final(receipt) # from the formats.rb file
+	    else
+	      credito_fiscal(receipt) # from the formats.rb file
+	    end
+    end
   end
   def new
     @order = Order.find(params[:id])
+    return false if !allowed(@order.order_type_id, 'edit')
     if last=Receipt.last
-      @next = (last.number || 0 )+1
+      logger.debug "Strange... Couldn't find the last receipt made, assuming there are none"
+      @next = (last.number.to_i || 0 )+1
     else
       @next=nil
     end
-    return false if !allowed(@order.order_type_id, 'edit')
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @order }
@@ -72,44 +90,18 @@ class ReceiptsController < ApplicationController
   end
   def create
     @order = Order.find(params[:id])
-    return false if !allowed(@order.order_type_id, 'view')
-    if !@order.receipt_printed
-      return false if !allowed(@order.order_type_id, 'edit')
-		  params[:format] = 'pdf'
-		
-		  # Prepare the data           ------------------------------------------------
-		  @data=[]
-		  total=0
-		  for l in @order.lines
-			  x = Object.new.extend(ActionView::Helpers::NumberHelper)
-			  if l.product.serialized
-				  if l.serialized_product
-					  @data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
-				  end
-			  else
-				  @data << [l.quantity.to_s, l.product.name, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
-			  end
-			  total += l.total_price
-			end  
-		  # Call the appropriate format ------------------------------------------------
-		  if @order.client.entity_type.id == 2
-		    consumidor_final
-		  else
-		    credito_fiscal
-		  end
-		  flash[:info] = "La factura ha sido generada existosamente"
-		end
-		r=Receipt.create(:order=>params[:order_id], :number =>params[:number], :filename=>"#{RAILS_ROOT}/invoice_pdfs/order #{@order.id}.pdf")
-		# Send the user the file ------------------------------------------------------
-		redirect_to show_receipt_path(params[:id])
-		return false
+    return false if !allowed(@order.order_type_id, 'edit')
+    flash[:info] = "La factura ha sido generada existosamente" if generate_receipts(@order, params[:number].to_i)
+    redirect_to show_receipts_url(@order)
+    return false
   end
-  def show
-    @order = Order.find(params[:id])
-    if @order.receipt_printed
-      send_file "#{RAILS_ROOT}/invoice_pdfs/order #{@order.id}.pdf", :type=>"application/pdf"#, :x_sendfile=>true
+def show
+    @receipt = Receipt.find(params[:id])
+    if @receipt
+      send_file @receipt.filename  #, :x_sendfile=>true
     else
-      redirect_to new_receipt_path(params[:id])
+      redirect_back_or_default(sales_url)
+			flash[:error] = "No hay ninguna factura en el sistema con ese numero"
       return false
     end
   end

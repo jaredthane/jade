@@ -25,3 +25,5 @@ alter table transactions add column comments text;
 alter table posts add column transaction_id int(11);
 alter table entities add column tax_account_id int(11);
 alter table posts add column balance decimal(5,2);
+alter table `lines` add column receipt_id int(11);
+alter table receipts add column user_id int(11);

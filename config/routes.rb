@@ -8,7 +8,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :accounts
   map.resources :prices
   map.create_receipt 'receipts/:id/create', :controller => 'receipts', :action => 'create'
-  map.show_receipt 'receipts/:id/', :controller => 'receipts', :action => 'show'
+  map.receipt 'receipts/:id/', :controller => 'receipts', :action => 'show'
   map.new_receipt 'receipts/:id/new', :controller => 'receipts', :action => 'new'
   map.process_subscriptions 'subscriptions/process', :controller => 'subscriptions', :action => 'create_orders'
   map.subscriptions_results 'subscriptions/results', :controller => 'subscriptions', :action => 'show_batch'
@@ -45,10 +45,12 @@ ActionController::Routing::Routes.draw do |map|
   map.clear 'inventories/clear', :controller => 'inventories', :action => 'clear'
   map.resources :products, :collection => { :bulk_edit => :get, :bulk_update => :post }, :product_type => 'simple'
 	map.connect 'allproducts.js', :controller => 'products', :scope => 'all', :format =>'js'
+	map.show_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
   map.show_batch 'orders/show_batch', :controller => 'orders', :action => 'show_batch'
   map.create_batch 'orders/create_batch', :controller => 'orders', :action => 'create_batch'
   map.delete_order 'orders/delete', :controller => 'orders', :action => 'delete'
 	map.order_history 'orders/:id/history', :controller => 'orders', :action => 'show_history'
+	map.order_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
 	map.connect 'lines/new', :controller => 'lines', :action => 'new', :format => 'js'
   map.resources :lines
 	map.resources :inventories

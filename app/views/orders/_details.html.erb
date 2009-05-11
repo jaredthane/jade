@@ -1,4 +1,3 @@
-
 <% case @order.order_type_id
 	when 4 %>
 		<% content_for :title do %>Detalles de Transferencia #<%= @order.id %><% end %>
@@ -20,11 +19,19 @@
     			<dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
     			<dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de esta venta serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularla?', :method => :delete %></dt>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
-			    <dt><%= link_to 'Facturar', show_receipt_path(:order_id => @order.id), :class => 'action' %></dt>
 			<% end %>
 		<% end %>
-			<dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
-			<dt><%= link_to 'Pagos', payments_path(:search=>@order.id), :class => 'action' %></dt>
+		<% if view == 'products' %>
+		  <dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
+		  <dt><%= link_to 'Facturas', order_receipts_path(@order), :class => 'action' %></dt>
+		<% elsif view == 'history' %>
+		  <dt><%= link_to 'Productos', order_path(@order), :class => 'action' %></dt>
+		  <dt><%= link_to 'Facturas', order_receipts_path(@order), :class => 'action' %></dt>
+		<% elsif view == 'receipts' %>
+		  <dt><%= link_to 'Productos', order_path(@order), :class => 'action' %></dt>
+		  <dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
+		<% end %>
+		<dt><%= link_to 'Pagos', payments_path(:search=>@order.id), :class => 'action' %></dt>
 		<dt><%= link_to 'Lista de Ventas', sales_path, :class => 'action' %> </dt>
 	<% when 2 %>
 		<% if current_user.has_rights(['admin','compras','gerente']) %>
@@ -34,8 +41,14 @@
 			    <dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de esta compra serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularla?', :method => :delete %></dt>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
 			<% end %>
-			<dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
-			<dt><%= link_to 'Pagos', payments_path(:search=>@order.id), :class => 'action' %></dt>
+		  <% if view == 'products' %>
+		    <dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
+		  <% elsif view == 'history' %>
+		    <dt><%= link_to 'Productos', order_path(@order), :class => 'action' %></dt>
+		  <% elsif view == 'receipts' %>
+		    <dt><%= link_to 'Productos', order_path(@order), :class => 'action' %></dt>
+		    <dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
+		  <% end %>
 			<dt><%= link_to 'Lista de Compras', purchases_path, :class => 'action' %> </dt>
 		<% end %>
 	<% else %>
@@ -45,8 +58,16 @@
 			    <dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de este pedido serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularlo?', :method => :delete %></dt>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id), :class => 'action' %></dt>
 			<% end %>
-			<dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
-			<dt><%= link_to 'Pagos', payments_path(:search=>@order.id), :class => 'action' %></dt>
+		  <% if view == 'products' %>
+		    <dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
+		    <dt><%= link_to 'Facturas', order_receipt_path(@order), :class => 'action' %></dt>
+		  <% elsif view == 'history' %>
+		    <dt><%= link_to 'Productos', order_path(@order), :class => 'action' %></dt>
+		    <dt><%= link_to 'Facturas', order_receipt_path(@order), :class => 'action' %></dt>
+		  <% elsif view == 'receipts' %>
+		    <dt><%= link_to 'Productos', order_path(@order), :class => 'action' %></dt>
+		    <dt><%= link_to 'Historia', order_history_path(@order), :class => 'action' %></dt>
+		  <% end %>
 		<% end %>
 		<dt><%= link_to 'Lista de Pedidos', orders_path, :class => 'action' %> </dt>
     <% end %>
@@ -106,58 +127,4 @@
 
 </div>
 <hr class="clear-contentunit" />
-
-
-<p>
-	<b>Productos:</b>
-	<div>
-		<div class="table_header_row">
-			<div class="table_cell_30">Producto</div>
-			<div class="table_cell_10">Cantidad</div>
-			<div class="table_cell_15">Numero de Serie</div>
-			<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
-				<div class="table_cell_15">Precio<br />(Garantía) </div>
-			<% end %>
-			<div class="table_cell_15">Garantía Expira</div>
-			<div class="table_cell">Entregado</div>
-		</div>
-		<% for line in @order.lines %>
-			<div class="table_row">
-				<div class="table_cell_30"><%=link_to line.product.name, line.product %></div>
-				<div class="table_cell_10"><%=h line.quantity %></div>
-				<% if line.product.serialized %>
-					<% if line.serialized_product %>
-						<div class="table_cell_15"><%=link_to line.serial_number, line.serialized_product %></div>
-					<% else %>
-						<div class="table_cell_15"><%=h line.serial_number %></div>
-					<% end %>
-				<% else %>
-					<div class="table_cell_15">N/A</div>
-				<% end %>
-				<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
-					<div class="table_cell_15"><%=h number_to_currency(line.price) %>
-						<% if (line.warranty_price || 0) > 0 %>
-							<br />(<%= number_to_currency(line.warranty_price) %>)
-						<% end %>
-					</div>
-				<% end %>
-				<div class="table_cell_15">
-				<% if line.warranty_expires %>
-					<%=h line.warranty_expires.to_date.to_s %>
-						<% if line.warranty_expires > Time.now %>
-							(Activo)
-						<% else %>
-							(Expirado)
-						<% end %>
-				<% end %>
-				</div>
-				<div class="table_cell"><% if line.received %><%=h line.received.to_date.to_s %><% end %></div>
-			</div>
-		<% end %>
-	</div>
-</p>
-
-
-
-
 

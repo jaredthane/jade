@@ -36,7 +36,6 @@ class ProductsController < ApplicationController
 		  else
 				@products = Product.search(params[:search], params[:page])
 		end
-		puts @products.length
 		if @products.length == 1
 			@product=@products[0]
 			render :action => 'show'

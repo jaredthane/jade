@@ -27,6 +27,7 @@ class User < ActiveRecord::Base
   attr_accessor :password
 	has_many :movements
 	has_many :orders
+	has_many :receipts
 	has_many :roles_users
 	has_many :roles, :through => :roles_users
 	has_and_belongs_to_many :roles
