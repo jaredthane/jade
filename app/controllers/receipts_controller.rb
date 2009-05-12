@@ -103,8 +103,21 @@ class ReceiptsController < ApplicationController
       end
     end
   end
+  def pay_off
+		@receipt = Receipt.find(params[:id])
+    if @receipt
+      @receipt.pay_off
+			flash[:info] = "Pago se ha hecho exitosamente"
+			redirect_to unpaid_receipts_url
+			return false
+    else
+      redirect_back_or_default(sales_url)
+			flash[:error] = "No hay ninguna factura en el sistema con ese numero"
+      return false
+    end
+  end
   def show_today
-		@receipts = Receipt.search_todays(params[:page])
+		@receipt = Receipt.search_todays(params[:page])
     respond_to do |format|
       format.html {render :template=> "/receipts/index", :locals=> {:title=>'Lista de Facturas Hechas Hoy'}}
       format.xml  { render :xml => @receipts }
@@ -140,17 +153,16 @@ class ReceiptsController < ApplicationController
   def unpaid
     @receipts = Receipt.search_unpaid(params[:page])
     respond_to do |format|
-      format.html {render :template=> "/receipts/index", :locals=> {:title=>'Lista de Facturas No Canceladas'}}
+      format.html {render :locals=> {:title=>'Lista de Facturas No Canceladas'}}
       format.xml  { render :xml => @receipts }
     end
   end
-def show
+  def show
     @receipt = Receipt.find(params[:id])
     if @receipt
       #send_data @receipt.filename, :disposition => 'inline'
       # This is good for if the user wants to download the file
-      send_file @receipt.filename, :type => 'application/pdf', :disposition => 'inline'
-  #, :x_sendfile=>true
+      send_file @receipt.filename, :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
     else
       redirect_back_or_default(sales_url)
 			flash[:error] = "No hay ninguna factura en el sistema con ese numero"

@@ -205,7 +205,11 @@ class Receipt < ActiveRecord::Base
 				return ''
 		end
 	end
-	
+	def pay_off
+	  if order.grand_total > order.amount_paid
+  	  Payment.create(:order=>order, :amount=>order.grand_total-order.amount_paid, :payment_method_id=>1, :user=>User.current_user, :receipt=>self, :presented=>order.grand_total-order.amount_paid)
+    end
+	end
 	###################################################################################
 	# Returns the total price of all of the products requested with tax spelled out in spanish
 	###################################################################################
@@ -221,7 +225,7 @@ class Receipt < ActiveRecord::Base
 	def self.search_unpaid(page)
   	paginate :per_page => 20, :page => page,
 		         :order => 'created_at',
-		         :joins => 'inner join (select id from (select orders.id, orders.grand_total, sum(payments.presented-payments.returned) as paid from orders left join payments on payments.order_id=orders.id group by orders.id) as payments where grand_total<paid or paid is null) as openorders  on receipts.order_id=openorders.id'
+		         :joins => 'inner join (select id from (select orders.id, orders.grand_total, sum(payments.presented-payments.returned) as paid from orders left join payments on payments.order_id=orders.id group by orders.id) as payments where grand_total > paid or paid is null) as openorders  on receipts.order_id=openorders.id'
 	end
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page,
