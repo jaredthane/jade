@@ -35,6 +35,9 @@ else
     sudo gem install will_paginate
     echo "Installing MySQL Gem"
     sudo gem install mysql
+    echo "Installing Calander Date Picker"
+    sudo gem install calendar_date_select
+    sudo cp public/javascripts/calendar_date_select/locale/es.js /usr/local/lib/ruby/gems/1.8/gems/calendar_date_select*/public/javascripts/calendar_date_select/locale/
     echo "Installing Jade database"
     sudo mysql -p$2 -e "create database Jade"
     sudo mysql -p$2 Jade < clean.sql

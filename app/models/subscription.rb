@@ -41,6 +41,26 @@ class Subscription < ActiveRecord::Base
       end
     end
 	end
+	
+	###################################################################################
+	# Returns the upc of the product requested
+	###################################################################################
+	def product_name
+ 	 product.name if product
+	end
+	
+	###################################################################################
+	# Sets the product requested by the upc provided
+	###################################################################################
+	def product_name=(name)
+		if !name.blank?		
+			prod = Product.find_by_name(name)
+			if prod != nil
+				self.product_id = prod.id
+			end
+		end
+	end
+	
 	def create_orders
 	  for o in Order.find(:all, :conditions =>'last_batch=True')
   		o.last_batch=false

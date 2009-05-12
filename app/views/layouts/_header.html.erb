@@ -42,6 +42,8 @@
   <%= stylesheet_link_tag 'autocomplete' %>
 	<%= javascript_include_tag :defaults, 'lowpro' %>
 	<%= javascript_include_tag 'autocomplete' %>
+	<%= calendar_date_select_includes "green" %>
+	<%= javascript_include_tag 'calendar_date_select/locale/es' %>
 	<%= yield :javascript %>
   <link rel="icon" type="image/x-icon" href="/images/img/favicon.ico" />
   <title>Sistema de Control de Inventario Jade | <%= page_title %></title>

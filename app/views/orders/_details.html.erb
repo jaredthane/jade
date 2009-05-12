@@ -87,10 +87,6 @@
   <% end %>
 </p>
 <p>
-  <b>Numero de Factura:</b>
-  <%=h @order.receipt_number %>
-</p>
-<p>
   <b>Usuario Responsable:</b>
   <%=link_to @order.user.login, @order.user %>
 </p>
@@ -116,7 +112,7 @@
 </p>
 <p>
   <b>Fecha Solicitado:</b>
-  <%=h @order.created_at.to_s %>
+  <%=h @order.created_at.to_date.to_s(:long) %>
 </p>
 <% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
 	<p>

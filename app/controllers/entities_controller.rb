@@ -115,16 +115,18 @@ class EntitiesController < ApplicationController
     return false if !allowed((params[:entity_type] || 'entities'))
     logger.info "entity type = " + @entity_type
     @entities = Entity.search(params[:search], params[:page], @entity_type)
+    logger.info "here"
     respond_to do |format|
       format.html {
+        logger.debug "Shouldnt be here"
 		    if @entities.length == 1
 					@entity=@entities[0]
 					redirect_to(entity_url(@entity.id))
 					return false
 				end
-      }
+       }
       format.xml  { render :xml => @entities }
-      format.js
+      format.js {logger.debug "Should be here" }
     end
   end
   # GET /entities

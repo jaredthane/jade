@@ -60,7 +60,7 @@ end
 require "will_paginate" 
 require "prawn"
 require "prawn/layout"
-
+require "calendar_date_select"
 
 logfile = File.open('log/audit.log', 'a')   
 logfile.sync = true  #remove this for production 

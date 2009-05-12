@@ -18,7 +18,9 @@
 	<div class="column2-unit-left">
 		<p>
 			<b>Producto</b>
-			<%= f.collection_select(:product_id, get_products, :id, :name) %>
+			<%= text_field_with_auto_complete :warranty, :product_name, 
+					{:class => 'field', :size=>30 }, 
+					{:url => '/products.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 		</p>
 		<p>
 		  <b>Duración en Meses</b><br />

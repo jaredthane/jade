@@ -36,14 +36,17 @@ class ProductsController < ApplicationController
 		  else
 				@products = Product.search(params[:search], params[:page])
 		end
-		if @products.length == 1
-			@product=@products[0]
-			render :action => 'show'
-			return false
+		
 				#redirect_to('/products/' + @products[0].to_s)
-		end
+		
     respond_to do |format|
-      format.html # index.html.erb
+      format.html {
+        if @products.length == 1
+			    @product=@products[0]
+			    render :action => 'show'
+			    return false
+			  end
+      }
       format.xml
       format.js
     end

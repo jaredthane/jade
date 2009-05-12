@@ -21,8 +21,9 @@ class Receipt < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :order
 	has_many :lines
+	
 	###################################################################################
-	# Returns the total price of all of the products in the order, not including tax
+	# Returns the total price of all of the products requested, not including tax
 	###################################################################################
 	def total_price
 		total=0
@@ -32,7 +33,7 @@ class Receipt < ActiveRecord::Base
 		return (total||0)
 	end
   ###################################################################################
-	# Returns the total cost of all of the products in the order
+	# Returns the total cost of all of the products requested
 	###################################################################################
 	def total_cost
 		total=0
@@ -53,7 +54,7 @@ class Receipt < ActiveRecord::Base
 	end
 	
 	###################################################################################
-	# Returns the total price of all of the products in the order plus tax
+	# Returns the total price of all of the products requested plus tax
 	###################################################################################
 	def total_price_with_tax
 		total=0
@@ -207,7 +208,7 @@ class Receipt < ActiveRecord::Base
 	end
 	
 	###################################################################################
-	# Returns the total price of all of the products in the order with tax spelled out in spanish
+	# Returns the total price of all of the products requested with tax spelled out in spanish
 	###################################################################################
 	def total_price_with_tax_in_spanish
 		return number_to_spanish(self.total_price_with_tax)

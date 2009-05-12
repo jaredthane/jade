@@ -10,15 +10,16 @@
 	<dt><%= link_to 'Lista', subscriptions_path, :class => 'action' %></dt>
 	<dt><%= link_to_function 'Guardar', 'submit("subscription_form")', :class => 'action' %></dt>
 <% end %>
-
 <%= error_messages_for :subscription %>
 
 <% form_for(@subscription, :html => {:id => 'subscription_form' }) do |f| %>
     <%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 	<div class="column2-unit-left">
 		<p>
-			<b>Producto</b>
-			<%= f.collection_select(:product_id, get_products, :id, :name) %>
+			<b>Producto</b><br />
+			<%= text_field_with_auto_complete :subscription, :product_name, 
+					{:class => 'field', :size=>30 }, 
+					{:url => '/products.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 		</p>
 		<p>
 			<b>Cantidad</b>
@@ -29,12 +30,13 @@
 			<%= f.text_field :fixed_price, :class => 'field' %>
 		</p>
 		<p>
-			<b>End Date</b>
+			<b>Fecha de Vencimiento</b><br />
+			<%= calendar_date_select_tag "end_date", @subscription.end_date, :popup => :force, :month_year => "label" %>
 		</p>
 	</div>
 	<div class="column2-unit-right">
-        <p>
-            <b>Cliente</b><br />
+    <p>
+      <b>Cliente</b><br />
 			<%= text_field_with_auto_complete :subscription, :client_name, 
 					{:class => 'field', :size=>30 }, 
 					{:url => '/clients.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
@@ -44,7 +46,9 @@
 			<%= f.text_field :relative_price, :class => 'field' %>
 		</p>
 		<p>
-			<b>End Times</b>
+			<b>Cantidad de Números</b><br />
+			(Deje en cero para no usar esta opción)
+			<%= f.text_field :end_times, :class => 'field' %>
 		</p>
 
 	</div>

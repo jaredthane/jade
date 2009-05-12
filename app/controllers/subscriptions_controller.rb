@@ -98,7 +98,7 @@ class SubscriptionsController < ApplicationController
     respond_to do |format|
       if @subscription.update_attributes(params[:subscription])
         flash[:notice] = 'Garantía ha sido actualizado exitosamente.'
-        format.html { render :action => "index" }
+        format.html { redirect_to(subscriptions_url) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
