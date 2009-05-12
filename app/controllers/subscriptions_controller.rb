@@ -54,7 +54,7 @@ class SubscriptionsController < ApplicationController
 		@orders = Order.search_batch(params[:search], params[:page])
 		@order_type_id	= 1
 		respond_to do |format|
-      format.html {render :template=> "/orders/index"}
+      format.html {render :template=> "/orders/index", :locals =>{:subscriptions=> true}}
       format.xml  { render :xml => @orders }
     end
   end

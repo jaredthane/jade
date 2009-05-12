@@ -129,7 +129,7 @@
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
 	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
 	    <p>
-		    <b>Cuenta para Contabilidad</b><br />
+		    <b>Cuenta para Cobrar</b><br />
 		    <% if @entity.cash_account %>
   		    <%=link_to @entity.cash_account.name, @entity.cash_account%>
 		    <% end %>

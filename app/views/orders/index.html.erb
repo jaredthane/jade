@@ -10,6 +10,9 @@
 	<% when 1%>
 		<% if current_user.has_rights(['admin','gerente','ventas']) %>
 			<dt><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %></dt>
+			<% if subscriptions %>
+			  <dt><%= link_to 'Facturar Actualizadas', create_batch_receipts_url %></dt>
+			<% end %>
 		<% end %>
 	<% when 0 %>
 		<% if current_user.has_rights(['admin','compras','gerente']) %>

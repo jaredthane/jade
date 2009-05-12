@@ -52,6 +52,8 @@ class ReceiptsController < ApplicationController
       if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt == 0) 
         # Create a new receipt
         r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt #{start_id}.pdf", :user=> User.current_user)
+        order.receipt_printed=Date.today
+        order.save
         lines_on_receipt = 0
         logger.debug "reseting lines on receipt"
         start_id += 1
@@ -76,6 +78,37 @@ class ReceiptsController < ApplicationController
 	      credito_fiscal(receipt) # from the formats.rb file
 	    end
     end
+    return start_id
+  end
+  def generate_receipts_for_up_to_date_accounts(start_id=1)
+    next_id = start_id
+    # Get a list of clients
+    clients=[]
+    for sub in Subscription.all
+      if !clients.include?(sub.client)
+        last = Order.find(:last, :conditions => ['(client_id=:client_id) AND (receipt_printed is not null)', {:client_id => "#{sub.client.id}"}], :order => 'id')
+        if last
+          if last.total_price_with_tax <= last.amount_paid
+            clients << sub.client
+          end
+        else 
+          clients << sub.client
+        end
+      end
+    end
+    for client in clients
+      order = Order.find(:first, :conditions => ['(client_id=:client_id) AND (receipt_printed is null)', {:client_id => "#{client.id}"}], :order => 'id')
+      if order
+        start_id = generate_receipts(order, start_id)
+      end
+    end
+  end
+  def show_today
+		@receipts = Receipt.search_todays(params[:page])
+    respond_to do |format|
+      format.html {render :template=> "/receipts/index"}
+      format.xml  { render :xml => @receipts }
+    end
   end
   def new
     @order = Order.find(params[:id])
@@ -97,6 +130,19 @@ class ReceiptsController < ApplicationController
     flash[:info] = "La factura ha sido generada existosamente" if generate_receipts(@order, params[:number].to_i)
     redirect_to show_receipts_url(@order)
     return false
+  end
+  def create_batch
+    return false if !allowed(1, 'edit')
+    flash[:info] = "Las facturas han sido generadas existosamente" if generate_receipts_for_up_to_date_accounts(params[:number].to_i)
+    redirect_to todays_receipts_path
+    return false
+  end
+  def unpaid
+    @receipts = Receipt.search_unpaid(params[:page])
+    respond_to do |format|
+      format.html {render :template=> "/receipts/index"}
+      format.xml  { render :xml => @receipts }
+    end
   end
 def show
     @receipt = Receipt.find(params[:id])

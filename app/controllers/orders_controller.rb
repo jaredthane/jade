@@ -190,11 +190,20 @@ class OrdersController < ApplicationController
     @order = Order.find(params[:id])
 		return false if !allowed(@order.order_type_id, 'view')
     respond_to do |format|
-      format.html # show.html.erb
+      format.html # show_history.html.erb
       format.xml  { render :xml => @order }
     end
   end
 
+	def show_payments
+    @order = Order.find(params[:id])
+		return false if !allowed(@order.order_type_id, 'view')
+    @payments = @order.recent_payments(10)
+    respond_to do |format|
+      format.html # show_payments.html.erb
+      format.xml  { render :xml => @order }
+    end
+  end
   # GET /orders/new
   # GET /orders/new.xml
   def new

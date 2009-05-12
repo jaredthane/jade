@@ -44,6 +44,8 @@ class PaymentsController < ApplicationController
     @payment = Payment.new
     @payment.order_id = params[:order_id]
 		@payment.payment_method_id = 1
+		@paid = @payment.order.amount_paid
+		logger.debug "amount already paid = "+@paid.to_s + " or " + @payment.order.amount_paid.to_s
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @payment }
@@ -53,6 +55,8 @@ class PaymentsController < ApplicationController
   # GET /payments/1/edit
   def edit
     @payment = Payment.find(params[:id])
+		@paid = @payment.order.amount_paid-@payment.amount
+		logger.debug "amount already paid = "+@paid.to_s + " or " + @payment.order.amount_paid.to_s
   end
 
   # POST /payments

@@ -762,6 +762,10 @@ class Order < ActiveRecord::Base
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
+	
+	def recent_payments(limit)
+		return payments(:limit=>limit, :order=>'created_at DESC')
+	end
 	###################################################################################
 	# returns result of a search taking into consideration the current user's rights'
 	###################################################################################

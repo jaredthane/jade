@@ -46,6 +46,8 @@ class Entity < ActiveRecord::Base
 	belongs_to :site, :class_name => "Entity", :foreign_key => "site_id"
 	has_many :products, :through => :inventories
 	has_many :products, :through => :movements
+	has_many :receipts, :through => :orders, :foreign_key => "client_id"
+	
 	has_many :movements, :dependent => :destroy, :order => 'created_at'
 	belongs_to :cash_account, :class_name => "Account", :foreign_key => "cash_account_id"
 	belongs_to :inventory_account, :class_name => "Account", :foreign_key => "inventory_account_id"

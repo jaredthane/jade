@@ -21,7 +21,6 @@ class Receipt < ActiveRecord::Base
 	belongs_to :user
 	belongs_to :order
 	has_many :lines
-	
 	###################################################################################
 	# Returns the total price of all of the products requested, not including tax
 	###################################################################################
@@ -214,4 +213,21 @@ class Receipt < ActiveRecord::Base
 		return number_to_spanish(self.total_price_with_tax)
 	end
 	
+	def self.search_todays(page)
+  	paginate :per_page => 20, :page => page,
+		         :conditions => 'date(created_at) = curdate()',
+		         :order => 'created_at'
+	end
+	def self.search_unpaid(page)
+  	paginate :per_page => 20, :page => page,
+		         :conditions => 'orders.',
+		         :order => 'created_at'
+		         :joins => 'inner join orders on orders.id=receipts.order_id'
+	end
+	def self.search(search, page)
+  	paginate :per_page => 20, :page => page,
+		         :conditions => ['(order.id like :search or vendor.name like :search or client.name like :search)', {:search => "%#{search}%"}],
+		         :order => 'products.name',
+		         :joins => 'inner join orders on receipts.order_id = orders.id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
+	end
 end

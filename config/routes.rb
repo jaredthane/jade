@@ -7,6 +7,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :product_categories
   map.resources :accounts
   map.resources :prices
+  map.todays_receipts 'receipts/today/', :controller => 'receipts', :action => 'show_today'
+  map.unpaid_receipts 'receipts/unpaid/', :controller => 'receipts', :action => 'unpaid'
+  map.create_batch_receipts 'subscriptions/create_receipts', :controller => 'receipts', :action => 'create_batch'
   map.create_receipt 'receipts/:id/create', :controller => 'receipts', :action => 'create'
   map.receipt 'receipts/:id/', :controller => 'receipts', :action => 'show'
   map.new_receipt 'receipts/:id/new', :controller => 'receipts', :action => 'new'
@@ -50,6 +53,7 @@ ActionController::Routing::Routes.draw do |map|
   map.create_batch 'orders/create_batch', :controller => 'orders', :action => 'create_batch'
   map.delete_order 'orders/delete', :controller => 'orders', :action => 'delete'
 	map.order_history 'orders/:id/history', :controller => 'orders', :action => 'show_history'
+	map.order_payments 'orders/:id/payments', :controller => 'orders', :action => 'show_payments'
 	map.order_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
 	map.connect 'lines/new', :controller => 'lines', :action => 'new', :format => 'js'
   map.resources :lines
