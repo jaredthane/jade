@@ -7,6 +7,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :product_categories
   map.resources :accounts
   map.resources :prices
+  map.consumidor_final_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>2, :format =>'pdf'
+  map.credito_fiscal_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>5, :format =>'pdf'
   map.pay_off_receipt 'receipts/:id/pay_off', :controller => 'receipts', :action => 'pay_off'
   map.todays_receipts 'receipts/today/', :controller => 'receipts', :action => 'show_today'
   map.unpaid_receipts 'receipts/unpaid/', :controller => 'receipts', :action => 'unpaid'

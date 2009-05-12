@@ -217,10 +217,17 @@ class Receipt < ActiveRecord::Base
 		return number_to_spanish(self.total_price_with_tax)
 	end
 	
-	def self.search_todays(page)
+	def self.consumidor_final_today(page)
   	paginate :per_page => 20, :page => page,
-		         :conditions => 'date(created_at) = curdate()',
-		         :order => 'created_at'
+		         :conditions => 'date(receipts.created_at) = curdate() AND clients.entity_type_id=2',
+		         :order => 'receipts.created_at',
+		         :joins => 'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id = orders.client_id'
+	end
+	def self.credito_fiscal_today(page)
+  	paginate :per_page => 20, :page => page,
+		         :conditions => 'date(receipts.created_at) = curdate() AND clients.entity_type_id=5',
+		         :order => 'receipts.created_at',
+		         :joins => 'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id = orders.client_id'
 	end
 	def self.search_unpaid(page)
   	paginate :per_page => 20, :page => page,

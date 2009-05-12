@@ -116,10 +116,25 @@ class ReceiptsController < ApplicationController
       return false
     end
   end
+  def concat_pdf
+    if @entity_type_id == 2
+      @receipts = Receipt.credito_fiscal_today(params[:page])
+    else
+      @receipts = Receipt.consumidor_final_today(params[:page])
+    end
+    command = "gs -q -sPAPERSIZE=letter -dNOPAUSE -dBATCH -sDEVICE=pdfwrite -sOutputFile=#{RAILS_ROOT}/invoice_pdfs/concat.pdf "
+    for receipt in @receipts
+      command += receipt.filename+" "
+    end
+    logger.debug "Executing: "+ command
+    system(command)
+    send_file "#{RAILS_ROOT}/invoice_pdfs/concat.pdf", :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
+  end
   def show_today
-		@receipt = Receipt.search_todays(params[:page])
+		@credito_fiscal_today = Receipt.credito_fiscal_today(params[:page])
+		@consumidor_final_today = Receipt.consumidor_final_today(params[:page])
     respond_to do |format|
-      format.html {render :template=> "/receipts/index", :locals=> {:title=>'Lista de Facturas Hechas Hoy'}}
+      format.html 
       format.xml  { render :xml => @receipts }
     end
   end
