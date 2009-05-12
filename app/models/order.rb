@@ -44,6 +44,7 @@ class Order < ActiveRecord::Base
 	after_create :create_transactions
 	after_create :create_movements
   after_update :create_movements
+  before_save :update_grand_total
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
 	belongs_to :client, :class_name => "Entity", :foreign_key => 'client_id'
 	validates_presence_of(:vendor, :message => "debe ser valido")
@@ -54,6 +55,9 @@ class Order < ActiveRecord::Base
 	############################## End of Creating Movements ####################################
 	attr_accessor :movements_to_create
 	attr_accessor :transactions_to_create # list of lists of posts
+	def	update_grand_total
+    self.grand_total = self.total_price_with_tax
+  end
 	def create_transactions
 	  puts "create transactions -> @transactions_to_create = "+@transactions_to_create.to_s
 	  @transactions_to_create = [] if !@transactions_to_create

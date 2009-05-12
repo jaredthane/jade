@@ -220,9 +220,8 @@ class Receipt < ActiveRecord::Base
 	end
 	def self.search_unpaid(page)
   	paginate :per_page => 20, :page => page,
-		         :conditions => 'orders.',
-		         :order => 'created_at'
-		         :joins => 'inner join orders on orders.id=receipts.order_id'
+		         :order => 'created_at',
+		         :joins => 'inner join (select id from (select orders.id, orders.grand_total, sum(payments.presented-payments.returned) as paid from orders left join payments on payments.order_id=orders.id group by orders.id) as payments where grand_total<paid or paid is null) as openorders  on receipts.order_id=openorders.id'
 	end
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page,

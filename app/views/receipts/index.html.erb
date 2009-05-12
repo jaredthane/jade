@@ -1,5 +1,5 @@
 
-<% content_for :title do %>Lista de Facturas Hechas Hoy<% end %>
+<% content_for :title do %><%= title %><% end %>
 
 <br />
 <%= will_paginate @receipts, :class => 'pagination' %>

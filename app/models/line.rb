@@ -36,7 +36,7 @@ class Line < ActiveRecord::Base
 	attr_accessor :client_name
 	attr_accessor :order_type_id
 	belongs_to :serialized_product
-	
+
 	def set_taxes
 		self.tax = self.total_price * 0.15
 	end

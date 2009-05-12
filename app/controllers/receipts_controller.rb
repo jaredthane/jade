@@ -106,7 +106,7 @@ class ReceiptsController < ApplicationController
   def show_today
 		@receipts = Receipt.search_todays(params[:page])
     respond_to do |format|
-      format.html {render :template=> "/receipts/index"}
+      format.html {render :template=> "/receipts/index", :locals=> {:title=>'Lista de Facturas Hechas Hoy'}}
       format.xml  { render :xml => @receipts }
     end
   end
@@ -140,7 +140,7 @@ class ReceiptsController < ApplicationController
   def unpaid
     @receipts = Receipt.search_unpaid(params[:page])
     respond_to do |format|
-      format.html {render :template=> "/receipts/index"}
+      format.html {render :template=> "/receipts/index", :locals=> {:title=>'Lista de Facturas No Canceladas'}}
       format.xml  { render :xml => @receipts }
     end
   end
