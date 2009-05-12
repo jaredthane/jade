@@ -58,7 +58,7 @@ iframe.ie6_blocker {
   height:20px;
   text-decoration: none;
   font-size:14px;
-  color:black !important;
+  color:white !important;
 }
 .calendar_date_select .cds_header a.prev {
   float:left;
@@ -110,7 +110,7 @@ iframe.ie6_blocker {
 
 
 .calendar_date_select tbody td {
-  border-bottom: 1px solid #515147;
+  border-bottom: 1px solid white;
 }
 .calendar_date_select tbody td.selected {
   background-color:white;

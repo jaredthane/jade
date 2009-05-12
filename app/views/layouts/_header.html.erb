@@ -139,6 +139,7 @@
 	  <li><a href="/sales" title="Ventas">Ventas</a>		
 	  	<ul>
 	  		<li><a href="/sales" title="Ventas">Ventas</a></li>
+	  		<li><a href="/subscriptions" title="Suscripciones">Suscripciones</a></li>
 	  		<li><a href="/internal" title="Consumo Interno">Consumo Interno</a></li>
 	  	</ul>				
 	  </li>												
@@ -232,7 +233,9 @@
 		  <dd><a href="/orders/show_batch">Últimas Compras</a></dd>
 		 <% end %>
 		  <dd><a href="/sales">Ventas</a></dd>
+		  <dd><a href="/subscriptions">Suscripciones</a></dd>
 		  <dd><a href="/internal">Consumo Interno</a></dd>
+		  
 		<dt><a href="/products">Inventario</a></dt>
 		<% for location in get_locations %>
 			<dd><a href="/entities/<%= location.id %>"><%= location.name %></a></dd>		

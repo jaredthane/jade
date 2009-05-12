@@ -36,8 +36,13 @@ class Subscription < ActiveRecord::Base
 	    o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 	    for sub in list
 	      l=Line.create(:order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price)
+	      puts "last order = " + sub.last_order.inspect
+	      puts "o = " + o.inspect
+	      puts "sub=" + sub.inspect
 	      sub.last_order=o
+	      puts "last order after= " + sub.last_order.inspect
         sub.save
+	      puts "make sure it saved= " + Subscription.find(sub.id).last_order.inspect
       end
     end
 	end
@@ -78,10 +83,12 @@ class Subscription < ActiveRecord::Base
 	          subs_to_fill_for_client[sub.vendor_id] << sub
 	        end
 	      else
-	        puts "dsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
-	        subs_to_fill_for_client[sub.vendor_id] = [] if !subs_to_fill_for_client[sub.vendor_id]
-  	      puts "esubs_to_fill_for_client" + subs_to_fill_for_client.inspect  
-	        subs_to_fill_for_client[sub.vendor_id] << sub
+	        if sub.created_at.to_date >> 1 < Date.today
+	          puts "dsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+	          subs_to_fill_for_client[sub.vendor_id] = [] if !subs_to_fill_for_client[sub.vendor_id]
+    	      puts "esubs_to_fill_for_client" + subs_to_fill_for_client.inspect  
+	          subs_to_fill_for_client[sub.vendor_id] << sub
+          end
 	      end
   	  end
   	  puts "fsubs_to_fill_for_client" + subs_to_fill_for_client.inspect

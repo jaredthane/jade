@@ -18,7 +18,7 @@
 		<p>
 			<b>Producto</b><br />
 			<%= text_field_with_auto_complete :subscription, :product_name, 
-					{:class => 'field', :size=>30 }, 
+					{:class => 'field', :size=>20 }, 
 					{:url => '/products.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 		</p>
 		<p>
@@ -31,7 +31,7 @@
 		</p>
 		<p>
 			<b>Fecha de Vencimiento</b><br />
-			<%= calendar_date_select_tag "end_date", @subscription.end_date, :popup => :force, :month_year => "label" %>
+			<%= calendar_date_select "subscription", :end_date, :month_year => "label", :size=>20 %>
 		</p>
 	</div>
 	<div class="column2-unit-right">
@@ -40,6 +40,10 @@
 			<%= text_field_with_auto_complete :subscription, :client_name, 
 					{:class => 'field', :size=>30 }, 
 					{:url => '/clients.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+		</p>
+		<p>
+			<b>Frequencia</b> (En meses)<br />
+			<%= f.text_field :frequency, :class => 'field' %>
 		</p>
 		<p>
 			<b>Precio Relativo (x)</b>

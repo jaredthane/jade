@@ -1,7 +1,8 @@
 
 <% content_for :title do %>Lista de Suscripciones<% end %>
 <% content_for :actions do %>
-	<dt><%= link_to 'Suscripción Nuevo', new_subscription_path, :class => 'action' %></dt>
+	<dt><%= link_to 'Suscripción Nuevo', new_subscription_path %></dt>
+	<dt><%= link_to 'Procesar', process_subscriptions_path %></dt>
 <% end %>
 <h2>Haga clic en la cantidad para ver los detalles de la suscripción.</h2>
 <br />

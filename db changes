@@ -1,3 +1,4 @@
+
 alter table movements add column value decimal(5,2);
 alter table movements add column balance decimal(5,2);
 insert into entity_types (name) values ('Empleado'),('Cuenta Bancaria');
@@ -27,3 +28,7 @@ alter table entities add column tax_account_id int(11);
 alter table posts add column balance decimal(5,2);
 alter table `lines` add column receipt_id int(11);
 alter table receipts add column user_id int(11);
+alter table subscriptions add column frequency int(11) default 1;
+alter table subscriptions add column last_order_id int(11);
+alter table orders drop column ordered;
+
