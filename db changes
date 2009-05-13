@@ -36,4 +36,5 @@ alter table subscriptions add column created_at datetime;
 alter table payments drop column date;
 alter table payments drop column updated_at;
 alter table orders add column grand_total decimal(8,2) default 0;
+alter table `lines` add column note text;
 
