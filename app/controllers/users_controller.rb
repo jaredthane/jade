@@ -159,6 +159,10 @@ class UsersController < ApplicationController
   		new_role.update_attributes(l)
   		@user.roles_users.push(new_role)
   	end
+  	if current_user.has_rights(['admin','gerente','contabilidad'])
+  	  @user.firm_account_id = params[:user][:firm_account_id]
+  	  @user.personal_account_id = params[:user][:personal_account_id]
+  	end
 		if  @user.update_attributes(params[:user])
 			flash[:notice] = 'Usuario ha sido actualizado exitosamente.'
 		end

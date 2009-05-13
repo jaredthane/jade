@@ -133,8 +133,13 @@
 		    <% if @entity.cash_account %>
   		    <%=link_to @entity.cash_account.name, @entity.cash_account%>
 		    <% end %>
-		
-	    </p>
+		  </p>
+	    <p>
+		    <b>Cuenta para Recibir Pagos</b><br />
+		    <% if @entity.revenue_account %>
+  		    <%=link_to @entity.revenue_account.name, @entity.revenue_account%>
+		    <% end %>
+		  </p>
 	   <% end %>
 	<p>
 		<b>Telefono Fijo</b><br />

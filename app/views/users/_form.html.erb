@@ -53,6 +53,16 @@
 		<p>
 			<%= f.check_box :default_received, :class => 'field' %><b> Marcar pedidos como Recibido como defecto?</b>
 		</p>
+		<% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+		  <p>
+		    <b>Cuenta para Fondos de la Compañía</b><br />
+			  <%= f.collection_select(:firm_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+		  </p>
+		  <p>
+		    <b>Cuenta para Fondos Personales</b><br />
+			  <%= f.collection_select(:personal_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+		  </p>
+		<% end %>
 	</div>
   
 	<hr class="clear-contentunit" /><br />

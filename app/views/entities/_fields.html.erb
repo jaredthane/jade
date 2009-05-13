@@ -85,6 +85,10 @@
         <b>Cuenta para Cobrar</b><br />
 	      <%= f.collection_select(:cash_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
       </p>
+	    <p>
+        <b>Cuenta para Recibir Pagos</b><br />
+	      <%= f.collection_select(:revenue_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+      </p>
     <% end %>
 	<p>
 		<b>Telefono Fijo</b><br />

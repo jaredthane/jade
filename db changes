@@ -37,4 +37,7 @@ alter table payments drop column date;
 alter table payments drop column updated_at;
 alter table orders add column grand_total decimal(8,2) default 0;
 alter table `lines` add column note text;
+alter table users add column firm_account_id int(11);
+alter table users add column personal_account_id int(11);
+
 

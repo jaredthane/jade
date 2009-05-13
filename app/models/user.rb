@@ -27,6 +27,8 @@ class User < ActiveRecord::Base
   attr_accessor :password
 	has_many :movements
 	has_many :orders
+	belongs_to :firm_account, :class_name => "Account", :foreign_key => 'firm_account_id'
+	belongs_to :personal_account, :class_name => "Account", :foreign_key => 'personal_account_id'
 	has_many :receipts
 	has_many :roles_users
 	has_many :roles, :through => :roles_users
