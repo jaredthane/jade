@@ -13,6 +13,7 @@
 
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 class OrdersController < ApplicationController
 	before_filter :login_required
 	access_control [:create_batch, :create_orders, :show_batch, :new_purchase] => '(gerente | admin | compras)' 
@@ -30,7 +31,7 @@ class OrdersController < ApplicationController
 				elsif action=="view"
 					if !current_user.has_rights(['admin','gerente','ventas','compras','inventario'])
 						redirect_back_or_default('/products')
-						flash[:error] = "No tiene los derechos suficientes para ver lsa ventas"
+						flash[:error] = "No tiene los derechos suficientes para ver las ventas"
 						return false
 					end
 				end
@@ -85,41 +86,6 @@ class OrdersController < ApplicationController
       format.xml  { render :xml => @orders }
     end
   end
-  def show_receipt
-  	@receipt = Order.find(params[:id])
-  	return false if !allowed(@receipt.order_type_id, 'view')
-		params[:format] = 'pdf'
-		if @receipt.client.entity_type.id == 2
-			prawnto :prawn => { :page_size => 'RECEIPT',
-					              :left_margin=>27,# was 27
-										    :right_margin=>5,
-										    :top_margin=>90, #was 90
-										    :bottom_margin=>18 }
-		else
-			prawnto :prawn => { :page_size => 'RECEIPT_LAND',
-					              :left_margin=>27,# was 27
-										    :right_margin=>5,
-										    :top_margin=>90, #was 90
-										    :bottom_margin=>5 }
-		end
-		@data=[]
-		total=0
-		for l in @receipt.lines
-			x = Object.new.extend(ActionView::Helpers::NumberHelper)
-			if l.product.serialized
-				if l.serialized_product
-					@data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
-				end
-			else
-				@data << [l.quantity.to_s, l.product.name, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
-			end
-			total += l.total_price
-		end
-		logger.debug @data.inspect
-    respond_to do |format|
-      format.pdf { render :layout => false }
-    end
-  end
 	# GET /orders/create_batch
   # GET /orders/create_batch.xml
   def create_batch
@@ -134,6 +100,20 @@ class OrdersController < ApplicationController
 		    format.html {redirect_to('/inventories')}
 		  end
 		end
+  end
+  def show_receipts
+    @order = Order.find(params[:id])
+    return false if !allowed(@order.order_type_id, 'view')
+    if @order.receipts.length < 1
+      # receipts for this order have not been generated yet
+      redirect_to(new_receipt_url(@order))
+  		return false
+    end
+    @receipts=@order.receipts
+    respond_to do |format|
+      format.html # show_receipts.html.erb
+      format.xml  { render :xml => @orders }
+    end
   end
   def create_orders
   	#logger.debug "starting create orders"
@@ -202,7 +182,7 @@ class OrdersController < ApplicationController
     end
 		return false if !allowed(@order.order_type_id, 'view')
     respond_to do |format|
-      format.html # show.html.erb
+      format.html { render :template => "/orders/show_products" }
       format.xml  { render :xml => @order }
     end
   end
@@ -210,11 +190,20 @@ class OrdersController < ApplicationController
     @order = Order.find(params[:id])
 		return false if !allowed(@order.order_type_id, 'view')
     respond_to do |format|
-      format.html # show.html.erb
+      format.html # show_history.html.erb
       format.xml  { render :xml => @order }
     end
   end
 
+	def show_payments
+    @order = Order.find(params[:id])
+		return false if !allowed(@order.order_type_id, 'view')
+    @payments = @order.recent_payments(10)
+    respond_to do |format|
+      format.html # show_payments.html.erb
+      format.xml  { render :xml => @order }
+    end
+  end
   # GET /orders/new
   # GET /orders/new.xml
   def new
@@ -257,33 +246,20 @@ class OrdersController < ApplicationController
     @order = Order.new(:order_type_id => params["order"]["order_type_id"])
     @order.attributes = params["order"]
     return false if !allowed(@order.order_type_id, 'edit')
+    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
+    logger.debug "finished updating lines"
     respond_to do |format|
       if @order.save
-      	list= params['new_lines'] || []
-      	errors=false
-      	for l in list
-      		new_line = Line.new(:order_id=>@order.id)
-      		#new_line.product_name = l[:product_name]  		
-      		new_line.product_id = l[:product_id]  	
-  				new_line.quantity = l[:quantity]  
-  				#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])
-      		#logger.debug "product id:   ->" + l[:product_name]
-      		logger.debug "new_line.warranty.to_s before=" + new_line.warranty.to_s.to_s
-      		errors= true if !new_line.update_attributes(l)
-      		logger.debug "new_line.warranty.to_s= after" + new_line.warranty.to_s.to_s
-      		@order.lines << new_line
-      	end
-      else
-      	errors = true
-      end
-      if !errors
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { redirect_to(@order) }
         format.xml  { render :xml => @order, :status => :created, :location => @order }
       else
-      	#logger.debug "unable to save new order"
-				#@order.errors.each {|e| #logger.debug e.to_s}
-				#@order.lines.errors.each {@order.errors << error}
+      	logger.debug "unable to save new order"
+      	logger.debug "ORDERS ERRORS" + @order.errors.inspect
+      	@order.lines.each {|l| logger.debug "LINES ERRORS" + l.errors.inspect}
+				
+				@order.errors.each {|e| logger.debug "ORDER ERROR" + e.to_s}
+				@order.lines.each {|l| l.errors.each {|e| logger.debug "LINE ERROR" + e.to_s}}
 				@order.errors.each do |error|
 					logger.debug "error[0]=#{error[0].to_s}"
 					if error[0] == "lines"
@@ -307,41 +283,7 @@ class OrdersController < ApplicationController
 		flash[:error] = "Este pedido ha sido anulado. Ya no se puede cambiar"
 		return false
     end
-    lines_to_delete=[]
-    #Update existing lines
-    for l in @order.lines
-			logger.debug "l.id=" + l.id.to_s
-			if params['existing_lines']
-				logger.debug "params['existing_lines'][l.id.to_s]=" + params['existing_lines'][l.id.to_s].to_s
-			end
-			if params['existing_lines']
-				if params['existing_lines'][l.id.to_s]
-					logger.debug "setting attribs for line #{l.id}"
-					logger.debug "l.warranty before=#{l.warranty.to_s}"
-					l.attributes = params['existing_lines'][l.id.to_s]
-					logger.debug "l.warranty afterz=#{l.warranty.to_s}"
-				else # We really shouldn't delete these lines yet, but leave them marked so they get deleted when the model is saved
-					logger.debug "deleting line #{l.id}"
-					lines_to_delete << l
-				end
-			else
-				logger.debug "deleting line #{l.id}"
-				lines_to_delete << l
-			end
-		end
-		for l in lines_to_delete
-			@order.lines.delete(l)
-		end
-		# Update New lines
-		list= params['new_lines'] || []
-  	for l in list
-  		new_line = Line.new(:order_id=>@order.id)
-  		new_line.product_id = l[:product_id]		
-  		new_line.quantity = l[:quantity]
-  		new_line.attributes=l  
-  		logger.debug "about to push #{new_line.inspect}"  	
-  		@order.lines.push(new_line)
-  	end
+    @order.update_all_lines(params[:new_lines], params[:existing_lines])
 		errors = true if !@order.update_attributes(params[:order])
 		if params[:submit_type] == 'post' and !errors
 			errors = true if !@order.post

@@ -30,7 +30,6 @@
 			<%= render :partial => 'line', :collection => @prices %>
 		</div>
 	</div>
-	<%= submit_tag "Guardar Cambios", :class => 'action' %>
 	<br />
 	<%= will_paginate @prices, :class => 'pagination' %>
 <% end %>

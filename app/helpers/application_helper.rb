@@ -50,6 +50,9 @@ module ApplicationHelper
   def get_states
     @states = State.find(:all, :order => "name")
   end
+  def get_accounts
+    @accounts = Account.find(:all, :order => "name")
+  end
   def get_users
     @users = User.find(:all, :order => "login")
   end
@@ -89,7 +92,7 @@ module ApplicationHelper
     @discounts = product_type.products.find(:all, :order => "name")
   end
   def get_entities
-	  @entity_types = Entity.find(:all, :order => "name")
+	  @entity = Entity.find(:all, :order => "name")
   end
   def get_clients
     @clients = entity_type.entities.find(:all, :order => "name", :conditions =>"entity_type_id=2 OR entity_type_id=5")

@@ -53,9 +53,20 @@
      	</div>
     <!-- B. MAIN -->
     <div class="main">
+      <div class="main-navigation">
+        <dl class="loginform">
+          <%= yield %>
+        </dl>   
+      </div>
       <!-- B.1 MAIN CONTENT -->
       <div class="main-content">
-				<%= yield %>
+        <% if flash[:notice] %>
+	        <p class="notice_message"><%= flash[:notice] %></p>
+        <% end %>
+        <% if flash[:error] %>
+	        <p class="error_message"><%= flash[:error] %></p>
+        <% end %>
+				
       </div>
     </div>
     <div class="footer">

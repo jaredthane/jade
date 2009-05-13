@@ -59,9 +59,15 @@ Rails::Initializer.run do |config|
 end
 require "will_paginate" 
 require "prawn"
+require "prawn/layout"
+require "calendar_date_select"
 
 logfile = File.open('log/audit.log', 'a')   
 logfile.sync = true  #remove this for production 
 Audit = AuditLogger.new(logfile)
+Date::MONTHNAMES = [nil] + %w(Enero Febrero Marzo Abril Mayo Junio Julio Agosto Septiembre Octubre Noviembre Diciembre)
+Date::DAYNAMES  	=  	%w(Domingo Lunes Martes Miercoles Jueves Viernes Sabado)
+Date::ABBR_MONTHNAMES  	=  	[nil] + %w(Ene Feb Mar Abr May Jun Jul Ago Sep Oct Nov Dic)
+Date::ABBR_DAYNAMES  	=  	%w(Dom Lun Mar Mie Jue Vie Sab)
 
 

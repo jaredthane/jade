@@ -1,0 +1,62 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :title do %><%= heading %><% end %>
+<% content_for :actions do %>
+    <% if mode == 'edit' %>
+		<dt><%= link_to 'Ver', @subscription, :class => 'action' %></dt>
+		<dt><%= link_to 'Remover', @subscription, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+	<% end %>
+	<dt><%= link_to 'Lista', subscriptions_path, :class => 'action' %></dt>
+	<dt><%= link_to_function 'Guardar', 'submit("subscription_form")', :class => 'action' %></dt>
+<% end %>
+<%= error_messages_for :subscription %>
+
+<% form_for(@subscription, :html => {:id => 'subscription_form' }) do |f| %>
+    <%= f.hidden_field :vendor_id, :value => current_user.location.id %>
+	<div class="column2-unit-left">
+		<p>
+			<b>Producto</b><br />
+			<%= text_field_with_auto_complete :subscription, :product_name, 
+					{:class => 'field', :size=>20 }, 
+					{:url => '/products.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+		</p>
+		<p>
+			<b>Cantidad</b>
+			<%= f.text_field :quantity, :class => 'field' %>
+		</p>
+		<p>
+			<b>Precio Fijo (+)</b>
+			<%= f.text_field :fixed_price, :class => 'field' %>
+		</p>
+		<p>
+			<b>Fecha de Vencimiento</b><br />
+			<%= calendar_date_select "subscription", :end_date, :month_year => "label", :size=>20 %>
+		</p>
+	</div>
+	<div class="column2-unit-right">
+    <p>
+      <b>Cliente</b><br />
+			<%= text_field_with_auto_complete :subscription, :client_name, 
+					{:class => 'field', :size=>30 }, 
+					{:url => '/clients.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+		</p>
+		<p>
+			<b>Frequencia</b> (En meses)<br />
+			<%= f.text_field :frequency, :class => 'field' %>
+		</p>
+		<p>
+			<b>Precio Relativo (x)</b>
+			<%= f.text_field :relative_price, :class => 'field' %>
+		</p>
+		<p>
+			<b>Cantidad de Números</b><br />
+			(Deje en cero para no usar esta opción)
+			<%= f.text_field :end_times, :class => 'field' %>
+		</p>
+
+	</div>
+	<hr class="clear-contentunit" />
+	
+<% end %>
+

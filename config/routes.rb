@@ -3,8 +3,22 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :roles
   map.resources :serialized_products
   map.resource :session
+  map.attachment 'orders/attachment', :controller => 'orders', :action => 'attachment'
   map.resources :product_categories
+  map.resources :accounts
   map.resources :prices
+  map.consumidor_final_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>2, :format =>'pdf'
+  map.credito_fiscal_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>5, :format =>'pdf'
+  map.pay_off_receipt 'receipts/:id/pay_off', :controller => 'receipts', :action => 'pay_off'
+  map.todays_receipts 'receipts/today/', :controller => 'receipts', :action => 'show_today'
+  map.unpaid_receipts 'receipts/unpaid/', :controller => 'receipts', :action => 'unpaid'
+  map.create_batch_receipts 'subscriptions/create_receipts', :controller => 'receipts', :action => 'create_batch'
+  map.create_receipt 'receipts/:id/create', :controller => 'receipts', :action => 'create'
+  map.receipt 'receipts/:id/', :controller => 'receipts', :action => 'show'
+  map.new_receipt 'receipts/:id/new', :controller => 'receipts', :action => 'new'
+  map.process_subscriptions 'subscriptions/process', :controller => 'subscriptions', :action => 'create_orders'
+  map.subscriptions_results 'subscriptions/results', :controller => 'subscriptions', :action => 'show_batch'
+  map.resources :subscriptions
 	map.resources :discounts
 	map.resources :combos
 	map.post_physical_counts 'physical_counts/:id/post', :controller => 'physical_counts', :action => 'post'
@@ -17,14 +31,17 @@ ActionController::Routing::Routes.draw do |map|
   map.connect 'vendors.js', :controller => 'entities', :entity_type => 'vendors', :format =>'js'
   map.vendors 'vendors/', :controller => 'entities', :entity_type => 'vendors'
   map.new_vendor 'vendors/new', :controller => 'entities', :entity_type => 'vendors', :action => 'new'
+  map.edit_vendor 'vendors/new', :controller => 'entities', :entity_type => 'vendors', :action => 'edit'
   map.end_users 'end_users/', :controller => 'entities', :entity_type => 'end_users'
   map.wholesale_clients 'wholesale_clients/', :controller => 'entities', :entity_type => 'wholesale_clients'
   map.connect 'clients.js', :controller => 'entities', :entity_type => 'clients', :format =>'js'
   map.clients 'clients/', :controller => 'entities', :entity_type => 'clients'
   map.new_client 'clients/new', :controller => 'entities', :entity_type => 'clients', :action => 'new'
+  map.edit_client 'clients/new', :controller => 'entities', :entity_type => 'clients', :action => 'edit'
   map.connect 'sites.js', :controller => 'entities', :entity_type => 'sites', :format =>'js'
   map.sites 'sites/', :controller => 'entities', :entity_type => 'sites'
   map.new_site 'sites/new', :controller => 'entities', :entity_type => 'sites', :action => 'new'
+  map.edit_site 'sites/new', :controller => 'entities', :entity_type => 'sites', :action => 'edit'
 	map.birthdays 'birthdays', :controller => 'entities', :action => 'birthdays'
 	
   map.connect 'entities/:id/movements', :controller => 'entities', :action => 'movements'
@@ -34,11 +51,13 @@ ActionController::Routing::Routes.draw do |map|
   map.clear 'inventories/clear', :controller => 'inventories', :action => 'clear'
   map.resources :products, :collection => { :bulk_edit => :get, :bulk_update => :post }, :product_type => 'simple'
 	map.connect 'allproducts.js', :controller => 'products', :scope => 'all', :format =>'js'
+	map.show_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
   map.show_batch 'orders/show_batch', :controller => 'orders', :action => 'show_batch'
-  map.show_receipt 'orders/show_receipt/:id', :controller => 'orders', :action => 'show_receipt'
   map.create_batch 'orders/create_batch', :controller => 'orders', :action => 'create_batch'
   map.delete_order 'orders/delete', :controller => 'orders', :action => 'delete'
 	map.order_history 'orders/:id/history', :controller => 'orders', :action => 'show_history'
+	map.order_payments 'orders/:id/payments', :controller => 'orders', :action => 'show_payments'
+	map.order_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
 	map.connect 'lines/new', :controller => 'lines', :action => 'new', :format => 'js'
   map.resources :lines
 	map.resources :inventories

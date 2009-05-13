@@ -1,0 +1,39 @@
+
+<% content_for :title do %>Lista de Cuentas<% end %>
+<% content_for :actions do %>
+	<dt><%= link_to 'Cuenta Nuevo', new_account_path, :class => 'action' %></dt>
+<% end %>
+
+<br />
+<%= will_paginate @accounts, :class => 'pagination' %>
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_20">Numero</div>
+    <div class="table_cell_20">Nombre</div>
+    <div class="table_cell_20">Rama</div>
+    <div class="table_cell_20">Entidad</div>
+    <div class="table_cell">Balance</div>
+  </div>
+
+
+<% for account in @accounts %>
+  <% if account.postable %><div class="table_row_green"><% else %><div class="table_row"><% end %>
+    <div class="table_cell_20"><%= link_to account.number, account %></div>
+  	<div class="table_cell_20"><%= link_to account.name, account %></div>
+    <div class="table_cell_20">
+  		<% if account.parent %>
+      	<%= link_to account.parent.name, account.parent %>
+      <% end %>
+    </div>
+  	<div class="table_cell_20">
+  		<% if account.entity %>
+      	<%= link_to account.entity.name, account.entity %>
+      <% end %>
+  	</div>
+  	<div class="table_cell"><%= number_to_currency(account.balance) %></div>
+	</div>
+<% end %>
+</div>
+<br />
+<%= will_paginate @accounts, :class => 'pagination' %>
+

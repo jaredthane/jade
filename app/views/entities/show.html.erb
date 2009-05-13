@@ -6,21 +6,49 @@
 
 <% content_for :actions do %>
 	<% if @entity.entity_type.id == 3 %>
-		<dt><%= link_to 'Compras para este Sitio', purchases_path, :class => 'action' %>  </dt>
-		<dt><%= link_to 'Ventas de este Sitio', sales_path, :class => 'action' %>  </dt>
+	    <dt><%= link_to 'Nuevo', new_site_path, :class => 'action' %></dt>
+	    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
+		<dt><%= link_to 'Compras Aqui', purchases_path, :class => 'action' %>  </dt>
+		<dt><%= link_to 'Ventas Aqui', sales_path, :class => 'action' %>  </dt>
+	    <dt><%= link_to 'Lista', sites_path, :class => 'action' %></dt>
 	<% end %>
-	<dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
-	<dt><%= link_to 'Atras', entities_path, :class => 'action' %></dt>
+	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
+	    <dt><%= link_to 'Nuevo', new_client_path, :class => 'action' %></dt>
+	    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
+	    <dt><%= link_to 'Lista', clients_path, :class => 'action' %></dt>
+	<% end %>
+	<% if @entity.entity_type.id == 1 %>
+	    <dt><%= link_to 'Nuevo', new_vendor_path, :class => 'action' %></dt>
+	    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
+	    <dt><%= link_to 'Lista', vendors_path, :class => 'action' %></dt>
+	<% end %>
 <% end %>
 
   <% if @entity.entity_type_id !=3 and @entity.birthday? %>  
-  	<% flash[:error] = 'Este cliente esta cumpliendo anos..' %> 
+  	<% flash[:important] = 'Este cliente esta cumpliendo anos..' %> 
   <% end %>
 <div class="column2-unit-left">
 	<p>
 		<b>Nombre</b><br />		
 		<%=h @entity.name %>
 	</p>
+	<% if @entity.entity_type.id == 3 %>
+	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+	    <p>
+			  <b>Cuenta de Efectivo</b><br />
+			  <% if @entity.cash_account %>
+  			  <%=link_to @entity.cash_account.name, @entity.cash_account %>
+			  <% end %>
+		  </p>
+	    <p>
+			  <b>Cuenta de Inventario</b><br />
+			  <% if @entity.inventory_account %>
+  			  <%=link_to @entity.inventory_account.name, @entity.inventory_account %>
+			  <% end %>
+		  </p>
+	    
+		<% end %>
+	<% end %>
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
 		<p>
 			<b>Nacimiento</b><br />		
@@ -70,7 +98,49 @@
 	<% end %>
 </div>
 <div class="column2-unit-right">
+	<p>
+		<b>Tipo</b><br />
+		<% if @entity.entity_type %>
+			<%=h @entity.entity_type.name %>
+		<% end %>
+	</p>
+  <% if @entity.entity_type.id == 3 %>
+	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+      <p>
+			  <b>Cuenta de Ingresos</b><br />
+			  <% if @entity.revenue_account %>
+  			  <%=link_to @entity.revenue_account.name, @entity.revenue_account %>
+			  <% end %>
+		  </p>
+	    <p>
+			  <b>Cuenta de Gastos</b><br />
+			  <% if @entity.expense_account %>
+  			  <%=link_to @entity.expense_account.name, @entity.expense_account %>
+			  <% end %>
+		  </p>
+	    <p>
+			  <b>Cuenta de Impuestos</b><br />
+			  <% if @entity.tax_account %>
+  			  <%=link_to @entity.tax_account.name, @entity.tax_account %>
+			  <% end %>
+		  </p>
+		<% end %>
+  <% end %>
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
+	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+	    <p>
+		    <b>Cuenta para Cobrar</b><br />
+		    <% if @entity.cash_account %>
+  		    <%=link_to @entity.cash_account.name, @entity.cash_account%>
+		    <% end %>
+		  </p>
+	    <p>
+		    <b>Cuenta para Recibir Pagos</b><br />
+		    <% if @entity.revenue_account %>
+  		    <%=link_to @entity.revenue_account.name, @entity.revenue_account%>
+		    <% end %>
+		  </p>
+	   <% end %>
 	<p>
 		<b>Telefono Fijo</b><br />
 		<%=h @entity.home_phone_number %>
@@ -103,12 +173,6 @@
 			<%=h @entity.giro %>
 		</p>
 	<% end %>
-	<p>
-		<b>Tipo</b><br />
-		<% if @entity.entity_type %>
-			<%=h @entity.entity_type.name %>
-		<% end %>
-	</p>
 </div>
 <hr class="clear-contentunit" />
 <% case @entity.entity_type_id 

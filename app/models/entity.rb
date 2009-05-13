@@ -33,24 +33,41 @@ class Entity < ActiveRecord::Base
   # to be used with Sites
   belongs_to :price_group
   
+  # This is the product(service) that a certain employee offers the firm
+  # To be used with Employees
+  belongs_to :product
+
+
+  belongs_to :site, :class_name => "Entity", :foreign_key => "site_id"
+    
   belongs_to :user
   
 	has_many :orders, :order => 'created_at'
+	belongs_to :site, :class_name => "Entity", :foreign_key => "site_id"
 	has_many :products, :through => :inventories
 	has_many :products, :through => :movements
+	has_many :receipts, :through => :orders, :foreign_key => "client_id"
+	
 	has_many :movements, :dependent => :destroy, :order => 'created_at'
+	belongs_to :cash_account, :class_name => "Account", :foreign_key => "cash_account_id"
+	belongs_to :inventory_account, :class_name => "Account", :foreign_key => "inventory_account_id"
+	belongs_to :revenue_account, :class_name => "Account", :foreign_key => "revenue_account_id"
+	belongs_to :tax_account, :class_name => "Account", :foreign_key => "tax_account_id"
+	belongs_to :expense_account, :class_name => "Account", :foreign_key => "expense_account_id"
 	validates_associated :movements
 	after_update :save_movements
   after_create :save_movements
 	
 	belongs_to :entity_type
 	validates_presence_of(:entity_type, :message => "Debe seleccionar el tipo de entidad.")
-	
+    
   def new_movement_attributes=(movement_attributes)
     movement_attributes.each do |attributes|
       movements.build(attributes)
     end
   end
+
+
 #  def price_group(location_id = User.current_user.location_id)
 #  	location = Entity.find(location_id)
 #  	pg = location.price_groups.find_by_name_id(self.default_price_group_id)
@@ -152,11 +169,20 @@ class Entity < ActiveRecord::Base
 				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR site_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entities.id!=1"
   	end
   	condition += ' AND entities.user_id = ' + user_id.to_s if user_id != 0 
+  	if entity_type=='clients' or entity_type=='end_users' or entity_type=='wholesale_clients'
+  	    # only show for this site, but always include anonimo and no spcificado
+      	condition += ' AND (entities.site_id = ' + User.current_user.location_id.to_s + ' or entities.id=3 or entities.id=4) ' 
+    end
   	#puts "condition=" + condition
 		paginate :per_page => 20, :page => page,
 		       :conditions => condition,
 		       :joins => 'left join price_group_names as client_group on client_group.id=entities.price_group_name_id left join price_groups on entities.price_group_id=price_groups.id left join price_group_names as site_group on site_group.id = price_groups.price_group_name_id left join users on users.id=entities.user_id',
 		       :order => 'name'
+	end
+	def self.find_all_clients
+	  condition = "(entity_type_id = 2 OR entity_type_id = 5)"
+  	condition += ' AND entities.site_id = ' + User.current_user.location_id.to_s
+		find :all, :conditions => condition, :order => 'name'
 	end
 	def self.search_birthdays(search)
 		search = search || ""

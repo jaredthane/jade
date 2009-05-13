@@ -2,11 +2,24 @@
 <% content_for :title do %><%= heading %><% end %>
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "payment_edit" %>
+  <%= javascript_include_tag "submit_link" %>
 <% end %>
+
+<% content_for :actions do %>
+  <% if mode == 'edit' %>
+    <dt><%= link_to 'Cancelar', @payment %></dt>
+    <dt><%= link_to 'Remover', @payment, :confirm => 'Esta seguro?', :method => :delete %></dt>
+    <dt><%= link_to 'Lista', payments_path %></dt>
+  <% else %>
+    <dt><%= link_to 'Cancelar', payments_path %></dt>
+  <% end %>
+  <dt><%= link_to_function 'Guardar', 'submit("payment_form")' %></dt>
+<% end %>
+
 <%= error_messages_for :payment %>
 
-<% form_for(@payment) do |f| %>
-
+<% form_for(@payment, :html => {:id => 'payment_form' }) do |f| %>
+  <%= hidden_field_tag :paid, @paid %>
 	<div class="column2-unit-left">
 	<% if !@payment.order_id %> 
 		<p>
@@ -54,7 +67,7 @@
 			<% end %> >
 		<p>
 		  <b>Cantidad se debe</b><br />
-		  <input disabled=True class="field" id="debt_field" value=<%= number_to_currency(@payment.order.total_price_with_tax-(@payment.presented || 0)+(@payment.returned || 0)) %>> 
+		  <input disabled=True class="field" id="debt_field" value=<%= number_to_currency(@payment.order.total_price_with_tax-(@payment.presented || 0)+(@payment.returned || 0) - (@paid||0)) %>> 
 		  <input type="button" value="Actualizar" onclick="calculate_total()" class="field"> 
 		</p>
 		</div>
@@ -66,11 +79,6 @@
 
 	</div>
 	<hr class="clear-contentunit" />
-	<% if mode == 'edit' %>
-		<%= link_to 'Ver | ', @payment, :class => 'action' %> |
-		<%= link_to 'Remover | ', @payment, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %> |
-	<% end %>
-	<%= link_to 'Lista | ', payments_path, :class => 'action' %>
-	<%= f.submit button_text, :class => 'action | ' %>
+	
 <% end %>
 

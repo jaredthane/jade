@@ -22,6 +22,7 @@ class Order < ActiveRecord::Base
 	has_many :products, :through => :lines
 	has_many :payments
 	has_many :movements
+	has_many :receipts
 	belongs_to :order_type
 	HUMANIZED_ATTRIBUTES = {
     :user => "Usuario",
@@ -39,6 +40,11 @@ class Order < ActiveRecord::Base
 	after_create :create_lines
 	after_update :check_for_discounts
 	after_create :check_for_discounts
+	after_update :create_transactions
+	after_create :create_transactions
+	after_create :create_movements
+  after_update :create_movements
+  before_save :update_grand_total
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
 	belongs_to :client, :class_name => "Entity", :foreign_key => 'client_id'
 	validates_presence_of(:vendor, :message => "debe ser valido")
@@ -46,7 +52,308 @@ class Order < ActiveRecord::Base
 	#validates_associated :lines
 	belongs_to :user
 	validates_presence_of(:user, :message => "debe ser valido")
+	############################## End of Creating Movements ####################################
+	attr_accessor :movements_to_create
+	attr_accessor :transactions_to_create # list of lists of posts
+	def	update_grand_total
+    self.grand_total = self.total_price_with_tax
+  end
+	def create_transactions
+	  puts "create transactions -> @transactions_to_create = "+@transactions_to_create.to_s
+	  @transactions_to_create = [] if !@transactions_to_create
+	  for t in @transactions_to_create
+	    trans = Trans.create(:order => self, :comments => self.comments)
+	    for p in t
+	      p.trans_id = trans.id
+	      puts "create transactions -> p = "+p.inspect
+	      puts "save result"+p.save.to_s
+	      p.errors.each {|e| puts "POst ERROR" + e.to_s}
+	    end
+	  end
+	end
+	def create_receipts
+	  # Prepare the data           ------------------------------------------------
+	  @data=[]
+	  total=0
+	  for l in self.lines
+		  x = Object.new.extend(ActionView::Helpers::NumberHelper)
+		  if l.product.serialized
+			  if l.serialized_product
+				  @data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
+			  end
+		  else
+			  @data << [l.quantity.to_s, l.product.name, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
+		  end
+		  total += l.total_price
+		end  
+	  # Call the appropriate format ------------------------------------------------
+	  
+	  if self.client.entity_type.id == 2
+	    consumidor_final # from the formats.rb file
+	  else
+	    credito_fiscal # from the formats.rb file
+	  end
+	  r=Receipt.create(:order=>params[:order_id], :number =>params[:number], :filename=>"#{RAILS_ROOT}/invoice_pdfs/order #{self.id}.pdf")
+	  return r
+	end
+	def create_movements
+		@movements_to_create = [] if !@movements_to_create
+		#collect the values of each movement type
+		values={}
+		for m in @movements_to_create
+		  if !values[m.movement_type_id]
+		    values[m.movement_type_id] = m.value 
+		  else
+		    values[m.movement_type_id] += m.value
+		  end
+		end
+		
+		for m in @movements_to_create
+			# Save movement from the list
+#			m.line_id=self.id
+      m.order_id=self.id
+			m.save
+			qty=m.quantity || 0
+
+			p=Product.find(m.product_id)
+			if p.product_type_id==1
+				i=p.inventories.find_by_entity_id(m.entity_id)
+				if i # Don't worry about it if they dont have a i, its probably a client
+					i.quantity=i.quantity + m.quantity
+					i.save
+				end
+			end
+			# Update costs
+#			p.cost=p.calculate_cost  <---- This has been moved to order.after_create_lines and order.after_update_lines
+    # This has been moved back cause order.create_lines and order.save_lines served no purpose since the lines were already being saved
+            p.update_cost
+
+		end
+		# Erase list
+		@movements_to_create.clear
+	end
+	def quantity_change_direction(new, old)
+		logger.debug "Checking movement direction"
+		if new.received and !old.received 		# The line was marked received
+			logger.debug "The line was marked received"
+			return 1
+		elsif old.received and !new.received	# The line was unmarked received
+			logger.debug "The line was unmarked received"
+			return -1 
+		elsif old.received and new.received		# The line was always received
+			logger.debug "The line was always received"
+			if new.quantity > old.quantity			# The quantity increased
+				return 1
+			elsif new.quantity < old.quantity		# The quantity decreased
+				return -1
+			end
+		end
+		logger.debug "The line was never received"
+		return 0
+	end
+	def quantity_change(new, old)
+		if old
+			if new.received == old.received
+				return new.quantity - old.quantity
+			else
+				if new.received
+					return new.quantity
+				else
+					return -new.quantity		
+				end		
+			end
+		else
+			return new.quantity
+		end
+	end
+	def movement_type_id(direction)
+		case order_type_id
+			when 1
+				if direction==1
+					return 1
+				else
+					return 5
+				end
+			when 3
+				if direction==1
+					return 8
+				else
+					return 9
+				end
+			when 2
+				if direction==1
+					return 2
+				else
+					return 6
+				end
+			when 4
+				if direction==1
+					return 3
+				else
+					return 7			
+				end
+			when 5
+				return 4
+			else
+				return 4
+		end		
+	end
+  ###################################################################################
+  # prepares a single movement to be created but DOES NOT SAVE IT
+  ##################################################################################
+	def create_movement_for(line, entity_id, movement_type_id, quantity)
+	  value = (line.price||0) * (line.quantity||0)
+		m=Movement.new(:entity_id => entity_id, :comments => self.comments, :product_id => line.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => line.serialized_product_id, :value => value)
+		@movements_to_create = [] if !@movements_to_create 
+		@movements_to_create.push(m)
+	end
 	
+  ###################################################################################
+  # creates posts for transactions but DOES NOT SAVE THEM
+  ##################################################################################
+	def prepare_transaction
+	  case order_type_id
+    when 1 # Venta
+      puts "self.vendor.revenue_account.balance"+ self.vendor.revenue_account.balance.inspect
+      puts "self.total_price"+ self.total_price.inspect
+      vendor = Post.new(:account => self.vendor.revenue_account, :value=>self.total_price, :post_type_id =>2, :balance => (self.vendor.revenue_account.balance||0) + (self.total_price||0))
+      client = Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>1, :balance => (self.client.cash_account.balance||0) + (self.total_price||0))
+      tax    = Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>2, :balance => (self.vendor.tax_account.balance||0) + (self.total_price||0))
+      inventory = Post.new(:account => self.vendor.inventory_account, :value=>self.total_cost, :post_type_id =>2, :balance => (self.vendor.inventory_account.balance||0) - (self.total_price||0))
+      expense = Post.new(:account => self.vendor.expense_account, :value=>self.total_cost, :post_type_id =>1, :balance => (self.vendor.expense_account.balance||0) + (self.total_price||0))
+      @transactions_to_create = [[vendor, client, tax], [inventory, expense]]
+	  when 2 # Compra
+	    puts self.vendor.cash_account.to_s
+	    puts self.total_price_with_tax.to_s
+	    vendor = Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>2, :balance => (self.vendor.cash_account.balance||0) + (self.total_price||0))
+      client = Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>1, :balance => (self.client.inventory_account.balance||0) + (self.total_price||0))
+      @transactions_to_create = [[vendor, client]]	    
+	  end
+	end
+  ###################################################################################
+  # checks if there are any transactions to be made, if so, it calls prepare_transaction
+  ##################################################################################
+	def check_for_transactions
+	  if self.new_record?
+	    prepare_transaction
+	  else
+	    old = Order.find(self.id)
+	    if self.total_price != old.total_price or self.total_tax != old.total_tax
+	      prepare_transaction
+	    end
+	  end	
+	end
+  ###################################################################################
+  # prepares the movements to be created but DOES NOT SAVE THEM
+  ##################################################################################
+	def prepare_movements(line)
+	  logger.debug "==============line.product.product_type_id=#{line.product.inspect}"
+	  if line.product.product_type_id == 1
+		  old = Line.find_by_id(line.id)
+		  puts old.inspect
+		  if old
+			  dir = quantity_change_direction(line, old)
+		  else
+			  if line.received
+				  dir = 1
+			  else
+				  dir = 0
+			  end
+		  end
+#			puts "----------------->" + dir.to_s
+		  if dir != 0
+			  case movement_type_id(dir)
+				  when 1
+					  create_movement_for(line, self.vendor_id, 1, -quantity_change(line, old))
+					  create_movement_for(line, self.client_id, 1, quantity_change(line, old))
+				  when 2
+					  create_movement_for(line, self.client_id, 2, quantity_change(line, old))
+				  when 3
+					  create_movement_for(line, self.client_id, 3, quantity_change(line, old))
+					  create_movement_for(line, self.vendor_id, 3, -quantity_change(line, old))
+				  # We won't touch physical counts. The Physical Count model will take care of that.
+				  when 5
+					  create_movement_for(line, self.vendor_id, 5, -quantity_change(line, old))
+				  when 6
+					  create_movement_for(line, self.client_id, 6, quantity_change(line, old))
+				  when 7
+					  create_movement_for(line, self.client_id, 7, quantity_change(line, old))
+					  create_movement_for(line, self.vendor_id, 7, -quantity_change(line, old))
+				  when 8
+					  create_movement_for(line, self.vendor_id, 8, -quantity_change(line, old))
+				  when 9
+					  create_movement_for(line, self.vendor_id, 9, -quantity_change(line, old))
+			  end
+		  end
+	  end
+	end
+	
+	
+
+  ###################################################################################
+  # creates new lines and fills them with the contents specified. DOES NOT SAVE THEM
+  ##################################################################################
+	def create_all_lines(lines)
+	  lines=[] if !lines
+  	for l in lines
+  		new_line = Line.new(:order_id=>self.id)
+  		#new_line.product_name = l[:product_name]  		
+  		new_line.product_id = l[:product_id]  	
+			new_line.quantity = l[:quantity]  
+			#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])
+  		#logger.debug "product id:   ->" + l[:product_name]
+  		logger.debug "new_line.warranty.to_s before=" + new_line.warranty.to_s.to_s
+  		new_line.attributes = l
+  		logger.debug "new_line.warranty.to_s= after" + new_line.warranty.to_s.to_s
+  		self.lines << new_line
+  		prepare_movements(new_line)
+  		check_for_transactions
+  	end
+	end
+  ###################################################################################
+  # updates existing lines on the order, adds new ones and deletes missing ones. DOES NOT SAVE THEM
+  ##################################################################################
+	def update_all_lines(new_lines=[], existing_lines=[])
+	lines_to_delete=[]
+    #Update existing lines
+    for l in self.lines
+#			logger.debug "l.id=" + l.id.to_s
+#			if existing_lines
+##				logger.debug "params['existing_lines'][l.id.to_s]=" + params['existing_lines'][l.id.to_s].to_s
+#			end
+			if existing_lines
+				if existing_lines[l.id.to_s]
+#					logger.debug "setting attribs for line #{l.id}"
+#					logger.debug "l.warranty before=#{l.warranty.to_s}"
+					l.attributes = existing_lines[l.id.to_s]
+#					logger.debug "l.warranty afterz=#{l.warranty.to_s}"
+				else # We really shouldn't delete these lines yet, but leave them marked so they get deleted when the model is saved
+#					logger.debug "deleting line #{l.id}"
+					lines_to_delete << l
+				end
+			else
+#				logger.debug "deleting line #{l.id}"
+				lines_to_delete << l
+			end
+		end
+		for l in lines_to_delete
+			self.lines.delete(l)
+		end
+		new_lines=[] if !new_lines
+		# Update New lines
+  	for l in new_lines
+  		new_line = Line.new(:order_id=>self.id)
+  		new_line.product_id = l[:product_id]		
+  		new_line.quantity = l[:quantity]
+  		new_line.attributes=l  
+#  		logger.debug "about to push #{new_line.inspect}"  	
+  		self.lines.push(new_line)
+  	end
+  	for l in self.lines
+  		prepare_movements(l)
+  	end
+	  check_for_transactions	
+	end
   ###################################################################################
   # Returns an array of all of the discounts in the system
   ##################################################################################
@@ -149,9 +456,19 @@ class Order < ActiveRecord::Base
 	def total_price
 		total=0
 		for l in self.lines
-			total = total + (l.total_price)
+			total = (total||0) + (l.total_price||0)
 		end
-		return total
+		return (total||0)
+	end
+  ###################################################################################
+	# Returns the total cost of all of the products in the order
+	###################################################################################
+	def total_cost
+		total=0
+		for l in self.lines
+			total = (total||0) + (l.total_cost||0)
+		end
+		return (total||0)
 	end
 	###################################################################################
 	# Returns the total tax to be charged the user.
@@ -159,9 +476,9 @@ class Order < ActiveRecord::Base
 	def total_tax
 		total=0
 		for l in self.lines
-			total = total + (l.tax)
+			total = (total||0) + (l.tax||0)
 		end
-		return total
+		return (total||0)
 	end
 	
 	###################################################################################
@@ -172,26 +489,19 @@ class Order < ActiveRecord::Base
 		if client
 			if client.entity_type_id == 2
 				for l in self.lines
-					total = total + (l.total_price)
+					total = (total||0) + (l.total_price||0)
 				end
 			else
 				for l in self.lines
-					total = total + (l.total_price_with_tax)
+					total = (total||0) + (l.total_price_with_tax||0)
 				end
 			end
 		else
 			for l in self.lines
-				total = total + (l.total_price)
+				total = (total||0) + (l.total_price||0)
 			end
 		end
-		return total
-	end
-	
-	###################################################################################
-	# Returns the total price of all of the products in the order with tax spelled out in spanish
-	###################################################################################
-	def total_price_with_tax_in_spanish
-		return number_to_spanish(self.total_price_with_tax)
+		return (total||0)
 	end
 	
 	###################################################################################
@@ -456,6 +766,10 @@ class Order < ActiveRecord::Base
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
+	
+	def recent_payments(limit)
+		return payments(:limit=>limit, :order=>'created_at DESC')
+	end
 	###################################################################################
 	# returns result of a search taking into consideration the current user's rights'
 	###################################################################################
@@ -499,136 +813,5 @@ class Order < ActiveRecord::Base
 						 :conditions => ['(last_batch=True) AND (vendors.name like :search OR clients.name like :search OR orders.id like :search) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
-	end
-	def tens_to_spanish(num)
-#		# puts "received:" + num.to_s
-		case num
-			when 20
-#				# puts "returning veinte"
-				return 'veinte'
-			when 30
-				return 'treinta'
-			when 40
-				return 'cuarenta'
-			when 50
-				return 'cincuenta'
-			when 60
-				return 'sesenta'
-			when 70
-				return 'setenta'
-			when 80
-				return 'ochenta'
-			when 90
-				return 'noventa'
-			else
-				return ''
-		end
-	end
-	def hundreds_to_spanish(num)
-		# handles only hundreds place
-#		# puts "received:" + num.to_s
-		case num
-			when 100
-				return 'ciento'
-			when 200
-				return 'doscientos'
-			when 300
-				return 'trescientos'
-			when 400
-				return 'cuatrocientos'
-			when 500
-				return 'quinientos'
-			when 600
-				return 'seiscientos'
-			when 700
-				return 'setecientos'
-			when 800
-				return 'ochocientos'
-			when 900
-				return 'novecientos'
-			else
-				return ''
-		end
-	end
-	def number_to_spanish (num)
- 		# depends on tens_to_spanish(num) and hundreds_to_spanish() and number_to_spanish() 
- 		# to handle  numbers 0-999,999,999
-		answer=""
-		millions = digits_to_spanish((num/1000000).to_i)		
-		thousands = digits_to_spanish((num/1000).to_i%1000)
-		ones = digits_to_spanish((num%1000).to_i)
-		cents = digits_to_spanish((num*100).to_i%100)
-		answer = millions + ' milliones,' if (num/1000000).to_i > 1
-		answer = 'un million,' if (num/1000000).to_i == 1
-		answer += ' ' if answer != '' and (num/1000).to_i%1000 > 0
-		answer += thousands + ' mil,' if (num/1000).to_i%1000 > 0
-		answer += ' ' if answer != '' and (num%1000).to_i > 0
-		answer += ones + ' dolares' if (num%1000).to_i > 1
-		answer += 'un dolar' if (num%1000).to_i == 1
-		answer = 'cero dolares' if answer == '' or answer == nil
-		answer += ' con un centavo' if (num*100).to_i%100 == 1
-		answer += ' con '+ cents + ' centavos' if (num*100).to_i%100 > 1
-		return answer
-	end
-	def digits_to_spanish(num)
-		if num == 100
-			return 'cien'
-		end
- 		# depends on tens_to_spanish(num) and hundreds_to_spanish() to handle  numbers 1-999
-		answer = hundreds_to_spanish((num/100).to_i%10*100)
-		answer += ' ' if answer != '' and (num%100 > 0)
-		answer += tens_to_spanish((num/10).to_i%10*10) if ((num%100).to_i > 19)
-		answer += ' y ' if ((num/10).to_i%10*10 > 19) and (num%10 > 0)
-		if (num%100).to_i < 20
-			answer += ones_to_spanish((num%100).to_i)
-		else
-			answer += ones_to_spanish((num%10).to_i)
-		end
-		#answer = 'cero' if answer == ''
-	end
-	def ones_to_spanish (num)
-	
-		case num
-			when 1
-				return 'un'
-			when 2
-				return 'dos'
-			when 3
-				return 'tres'
-			when 4
-				return 'cuatro'
-			when 5
-				return 'cinco'
-			when 6
-				return 'seis'
-			when 7
-				return 'siete'
-			when 8
-				return 'ocho'
-			when 9
-				return 'nueve'
-			when 10
-				return 'diez'
-			when 11
-				return 'once'
-			when 12
-				return 'doce'
-			when 13
-				return 'trece'
-			when 14
-				return 'catorse'
-			when 15
-				return 'quince'
-			when 16
-				return 'dieciseis'
-			when 17
-				return 'dieciseite'
-			when 18
-				return 'dieciocho'
-			when 19
-				return 'diecinueve'
-			else
-				return ''
-		end
 	end
 end

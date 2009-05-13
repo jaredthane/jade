@@ -10,10 +10,21 @@
 		<b>Nombre</b><br />
 		<%= f.text_field :name, :class => 'field' %>
 	</p>
+	<% if @entity.entity_type_id == 3 %>
+	  <p>
+		  <b>Cuenta de Efectivo</b><br />
+			<%= f.collection_select(:cash_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+		</p>
+		<p>
+		  <b>Cuenta de Inventario</b><br />
+			<%= f.collection_select(:inventory_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+		</p>
+	
+	<% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>
 			<b>Nacimiento</b><br />
-			<%= f.date_select :birth %>		
+			<%= calendar_date_select "entity", :birth, :time => false, :year_range => 100.years.ago..0.years.ago, :size=>20 %>
 		</p>
 	<% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
@@ -34,6 +45,10 @@
 			<b>Grupo de Precios</b><br />
 			<%= f.collection_select(:price_group_name_id, get_price_group_names, :id, :name) %>
 		</p>
+		<p>
+			<b>Sitio</b><br />
+			<%= f.collection_select(:site_id, get_locations, :id, :name) %>
+		</p>
 			<p>
 				<b>Asesor</b><br />
 				<%= f.collection_select(:user_id, get_users, :id, :login) %>
@@ -48,7 +63,33 @@
 	<% end %>
 </div>
 <div class="column2-unit-right">
+  <% if @entity.entity_type.id == 3 %>
+	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+		  <p>
+		    <b>Cuenta de Ingresos</b><br />
+			  <%= f.collection_select(:revenue_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+		  </p>
+		  <p>
+		    <b>Cuenta de Gastos</b><br />
+			  <%= f.collection_select(:expense_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+		  </p>
+		  <p>
+		    <b>Cuenta de Impuestos</b><br />
+			  <%= f.collection_select(:tax_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+		  </p>
+		<% end %>
+  <% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
+	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+	    <p>
+        <b>Cuenta para Cobrar</b><br />
+	      <%= f.collection_select(:cash_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+      </p>
+	    <p>
+        <b>Cuenta para Recibir Pagos</b><br />
+	      <%= f.collection_select(:revenue_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+      </p>
+    <% end %>
 	<p>
 		<b>Telefono Fijo</b><br />
 		<%= f.text_field :home_phone_number, :class => 'field' %>

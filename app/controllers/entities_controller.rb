@@ -115,16 +115,18 @@ class EntitiesController < ApplicationController
     return false if !allowed((params[:entity_type] || 'entities'))
     logger.info "entity type = " + @entity_type
     @entities = Entity.search(params[:search], params[:page], @entity_type)
+    logger.info "here"
     respond_to do |format|
       format.html {
+        logger.debug "Shouldnt be here"
 		    if @entities.length == 1
 					@entity=@entities[0]
 					redirect_to(entity_url(@entity.id))
 					return false
 				end
-      }
+       }
       format.xml  { render :xml => @entities }
-      format.js
+      format.js {logger.debug "Should be here" }
     end
   end
   # GET /entities
@@ -204,6 +206,7 @@ class EntitiesController < ApplicationController
     	@entity = Entity.new(:entity_type_id=> 1)    	
     when 'clients'
     	@entity = Entity.new(:entity_type_id=> 2)
+    	@entity.site_id = User.current_user.location_id
     when 'entities'
     	@entity = Entity.new()
     end    
@@ -227,17 +230,24 @@ class EntitiesController < ApplicationController
 
     respond_to do |format|
       if @entity.save
-      	if params[:entity_type_id] == 3
+      	logger.debug "creating entity workd"
+      	logger.debug "|" + params[:entity][:entity_type_id].to_s + "|"
+      	if params[:entity][:entity_type_id] == '3'
+      	    logger.debug "its a site"
 		    	for p in Product.all
 		    		i=Inventory.create(:entity=>@entity, :product=>p, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
 		    	end  
+		    	logger.debug "made the inventories"
+            	for pgn in PriceGroupName.all
+                    pg=PriceGroup.create(:price_group_name=>pgn, :entity=>@entity)
+                end  
+                logger.debug " made the price groups"
 		    end    	
-#      	puts "creating entity workd"
         flash[:notice] = 'Entidad ha sido creado exitosamente.'
-        format.html { redirect_to(entities_url) }
+        format.html { redirect_to(@entity) }
         format.xml  { render :xml => @entity, :status => :created, :location => @entity }
       else
-#      	puts "creating entity didnt workd"
+      	logger.debug "creating entity didnt workd"
         format.html { render :action => "new" }
         format.xml  { render :xml => @entity.errors, :status => :unprocessable_entity }
       end
@@ -255,7 +265,7 @@ class EntitiesController < ApplicationController
         logger.debug "entity_type="+ Entity.find(@entity.id).entity_type_id.to_s
         
         flash[:notice] = 'Entidad  ha sido actualizado exitosamente.'
-        format.html { redirect_to(entities_url) }
+        format.html { redirect_to(@entity) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

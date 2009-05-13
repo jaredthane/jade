@@ -37,10 +37,6 @@
 									{:class => 'field', :size=>20, :onblur=>'set_client_name(value)' }, 
 									{:url => '/clients.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 			</p>
-			<p>
-				<b>Numero de Factura</b><br />
-				<%= f.text_field :receipt_number, :class => 'field' %>
-			</p>
 			<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 		</div>
 	<% when 3 %>
@@ -72,7 +68,7 @@
 <div class="column3-unit-right">
 	<p>
 		<b>Fecha de Pedido</b><br />
-		<%= f.date_select :ordered %>
+		<%= f.date_select :created_at %>
 	</p>
 	<%= f.hidden_field :user_id, :value => current_user.id %>
 </div>
