@@ -77,7 +77,8 @@ class OrdersController < ApplicationController
 		if @orders.length == 1
 			@order=@orders[0]
 			return false if !allowed(@order.order_type_id, 'view')
-			render :action => 'show'
+			logger.debug "orderis" + @order.inspect
+			render :action => 'show_products'
 			return false
 		end
 		return false if !allowed(@order_type_id, 'view')
