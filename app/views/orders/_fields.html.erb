@@ -23,10 +23,6 @@
 									{:class => 'field', :size=>20 }, 
 									{:url => '/vendors.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 			</p>
-			<p>
-				<b>Numero de Factura</b><br />
-				<%= f.text_field :receipt_number, :class => 'field' %>
-			</p>
 			<%= f.hidden_field :client_id, :value => current_user.location.id %>
 		</div>
 	<% when 1 %>
@@ -50,10 +46,6 @@
 									{:class => 'field', :size=>20 }, 
 									{:url => '/vendors.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 			</p>
-			<p>
-				<b>Numero de Factura</b><br />
-				<%= f.text_field :receipt_number, :class => 'field' %>
-			</p>
 		</div>
 		<div class="column3-unit-middle">
 			<p>
@@ -62,7 +54,7 @@
 									{:class => 'field', :size=>20 }, 
 									{:url => '/clients.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 			</p>
-		</div>
+		</div>16
 <% end %>
 	
 <div class="column3-unit-right">

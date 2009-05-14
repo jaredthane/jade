@@ -7,6 +7,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :product_categories
   map.resources :accounts
   map.resources :prices
+  map.new_transaction 'transactions/new', :controller => 'trans', :action => 'new'
+  map.create_transaction 'transactions/create', :controller => 'trans', :action => 'create'
   map.consumidor_final_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>2, :format =>'pdf'
   map.credito_fiscal_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>5, :format =>'pdf'
   map.pay_off_receipt 'receipts/:id/pay_off', :controller => 'receipts', :action => 'pay_off'
@@ -77,9 +79,9 @@ ActionController::Routing::Routes.draw do |map|
   map.new_purchase 	'purchases/new', :controller => 'orders', :action => 'new', :order_type_id => 2
   map.new_sale 	'sales/new', :controller => 'orders', :action => 'new', :order_type_id => 1
   map.new_internal 	'internal/new', :controller => 'orders', :action => 'new', :order_type_id => 3
-  map.purchases 'purchases/', :controller => 'orders', :order_type_id => 2
-  map.internal 'internal/', :controller => 'orders', :order_type_id => 3
-  map.sales 'sales/', :controller => 'orders', :order_type_id => 1
+  map.purchases 'purchases/', :controller => 'orders', :action => 'index', :order_type_id => 2
+  map.internal 'internal/', :controller => 'orders', :action => 'index', :order_type_id => 3
+  map.sales 'sales/', :controller => 'orders', :action => 'index', :order_type_id => 1
 
 	map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate', :activation_code => nil
 	map.new_user '/users/new', :controller => 'users', :action => 'new'
