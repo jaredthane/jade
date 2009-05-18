@@ -1,7 +1,7 @@
 pdf.font_size = 9
 o={:x=>-10,:y=>10}
 pdf.text @receipt.order.client.name, :at=>[90+o[:x],310+o[:y]]
-pdf.text @receipt.order.client.address, :at=>[100+o[:x],308+o[:y]]
+pdf.text @receipt.order.client.address, :at=>[100+o[:x],298+o[:y]]
 pdf.text @receipt.order.created_at.to_date.to_s, :at=>[220+o[:x],325+o[:y]]
 pdf.bounding_box([60+o[:x],270+o[:y]], :width => 255, :height => 220) do
   pdf.table(@data,

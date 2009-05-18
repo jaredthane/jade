@@ -51,7 +51,7 @@ class ReceiptsController < ApplicationController
       logger.debug "lines_on_receipt" + lines_on_receipt.to_s
       if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt == 0) 
         # Create a new receipt
-        r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt #{start_id}.pdf", :user=> User.current_user)
+        r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{start_id}.pdf", :user=> User.current_user)
         order.receipt_printed=Date.today
         order.save
         lines_on_receipt = 0

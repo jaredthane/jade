@@ -1,6 +1,10 @@
 
 <% content_for :title do %>Lista de Facturas No Pagadas<% end %>
 
+<% content_for :actions do %>
+	<dt><%= link_to 'Facturas hechas hoy', todays_receipts_path %></dt>
+	<dt><%= link_to 'Suscrip. procesadas', show_batch_path %></dt>
+<% end %>
 <br />
 <%= will_paginate @receipts, :class => 'pagination' %>
 <div>

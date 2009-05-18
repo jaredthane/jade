@@ -83,12 +83,10 @@ class Subscription < ActiveRecord::Base
 	          subs_to_fill_for_client[sub.vendor_id] << sub
 	        end
 	      else
-	        if sub.created_at.to_date >> 1 < Date.today
-	          puts "dsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
-	          subs_to_fill_for_client[sub.vendor_id] = [] if !subs_to_fill_for_client[sub.vendor_id]
-    	      puts "esubs_to_fill_for_client" + subs_to_fill_for_client.inspect  
-	          subs_to_fill_for_client[sub.vendor_id] << sub
-          end
+          puts "dsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+          subs_to_fill_for_client[sub.vendor_id] = [] if !subs_to_fill_for_client[sub.vendor_id]
+  	      puts "esubs_to_fill_for_client" + subs_to_fill_for_client.inspect  
+          subs_to_fill_for_client[sub.vendor_id] << sub
 	      end
   	  end
   	  puts "fsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
