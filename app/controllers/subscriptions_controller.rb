@@ -51,7 +51,7 @@ class SubscriptionsController < ApplicationController
     end
   end
   def show_batch
-		@orders = Order.search_batch(params[:search], params[:page])
+		@orders = Order.search_receipt_batch(params[:search], params[:page])
 		@order_type_id	= 1
 		@subscriptions = true
 		respond_to do |format|

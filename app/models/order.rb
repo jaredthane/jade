@@ -808,9 +808,15 @@ class Order < ActiveRecord::Base
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as location on location.id = orders.vendor_id"
 	end
-	def self.search_batch(search, page)
+	def self.search_purchase_batch(search, page)
 		paginate :per_page => 20, :page => page,
-						 :conditions => ['(last_batch=True) AND (vendors.name like :search OR clients.name like :search OR orders.id like :search) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+						 :conditions => ['(last_batch=True) AND (orders.order_type_id=2) AND (vendors.name like :search OR clients.name like :search OR orders.id like :search) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+						 :order => 'created_at desc',
+						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
+	end
+	def self.search_receipt_batch(search, page)
+		paginate :per_page => 20, :page => page,
+						 :conditions => ['(last_batch=True) AND (orders.order_type_id=1)AND(vendors.name like :search OR clients.name like :search OR orders.id like :search) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end

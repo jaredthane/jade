@@ -166,7 +166,7 @@ class OrdersController < ApplicationController
   # GET /orders/show_batch
   # GET /orders/show_batch.xml
   def show_batch
-		@orders = Order.search_batch(params[:search], params[:page])
+		@orders = Order.search_purchase_batch(params[:search], params[:page])
 		@order_type_id	= 2
 		respond_to do |format|
       format.html {render :template=> "/orders/index"}
