@@ -165,6 +165,19 @@ class ReceiptsController < ApplicationController
     redirect_to todays_receipts_path
     return false
   end
+  def new_batch
+    return false if !allowed(1, 'edit')
+    if last=Receipt.last
+      logger.debug "Strange... Couldn't find the last receipt made, assuming there are none"
+      @next = (last.number.to_i || 0 )+1
+    else
+      @next=nil
+    end
+    respond_to do |format|
+      format.html # new.html.erb
+      format.xml  { render :xml => @order }
+    end
+  end
   def unpaid
     @receipts = Receipt.search_unpaid(params[:page])
     respond_to do |format|

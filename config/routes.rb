@@ -14,6 +14,7 @@ ActionController::Routing::Routes.draw do |map|
   map.pay_off_receipt 'receipts/:id/pay_off', :controller => 'receipts', :action => 'pay_off'
   map.todays_receipts 'receipts/today/', :controller => 'receipts', :action => 'show_today'
   map.unpaid_receipts 'receipts/unpaid/', :controller => 'receipts', :action => 'unpaid'
+  map.new_batch_receipts 'subscriptions/new_receipts', :controller => 'receipts', :action => 'new_batch'
   map.create_batch_receipts 'subscriptions/create_receipts', :controller => 'receipts', :action => 'create_batch'
   map.create_receipt 'receipts/:id/create', :controller => 'receipts', :action => 'create'
   map.receipt 'receipts/:id/', :controller => 'receipts', :action => 'show'

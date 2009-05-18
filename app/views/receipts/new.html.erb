@@ -11,13 +11,12 @@
 <%= error_messages_for :receipt %>
 
 
-<% form_tag create_receipt_path, :method =>'post', :html => {:id => 'receipt_form' } do %>
+<% form_tag create_receipt_path, :method =>'post', :id => 'receipt_form'  do %>
 <br />
   <div class="column3-unit-center">
     <p>
       <b>Cual será el primer numero de factura?</b><br />
     <%= text_field_tag :number, @next, :class => 'field'%>
-    <%= submit_tag "Generar Pedido", :name => nil, :class => 'button' %>
     </p>
   </div>
 <% end %>

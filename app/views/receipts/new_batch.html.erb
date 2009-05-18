@@ -5,13 +5,13 @@
 <% content_for :actions do %>
 
 	<dt><%= link_to 'Cancelar', subscriptions_url %></dt>
-	<dt><%= link_to_function 'Generar', 'submit("receipt_form")' %></dt>
+	<dt><%= link_to_function 'Generar', '$("receipt_form").submit();' %></dt>
 <% end %>
 
 <%= error_messages_for :receipt %>
 
 
-<% form_tag create_receipt_path, :method =>'post', :html => {:id => 'receipt_form' } do %>
+<% form_tag create_batch_receipts_url, :method =>'post', :id => 'receipt_form' do %>
 <br />
   <div class="column3-unit-center">
     <p>

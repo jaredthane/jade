@@ -40,9 +40,6 @@ class SubscriptionsController < ApplicationController
       format.xml  { render :xml => @subscription }
     end
   end
-
-  # GET /subscriptions/new
-  # GET /subscriptions/new.xml
   def create_orders
     Subscription.first.create_orders
     respond_to do |format|
