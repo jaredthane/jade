@@ -24,8 +24,11 @@ else
     
     # Install MySQL
     echo "Installing MySQL"
-    sudo aptitude install mysql-server libmysqlclient-dev
+    sudo aptitude install mysql-server mysql-client libmysqlclient-dev build-essential
 
+		# Install Apache2
+		sudo apt-get install apache2 apache2-mpm-prefork apache2-prefork-dev
+		sudo a2enmod rewrite
     # Install Rails
     echo "Installing Rails"
     sudo gem install rails
@@ -35,9 +38,15 @@ else
     sudo gem install will_paginate
     echo "Installing MySQL Gem"
     sudo gem install mysql
+    echo "Installing Passenger"
+    sudo gem install passenger
+    sudo passenger-install-apache2-module
+    sudo echo "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-2.2.2/ext/apache2/mod_passenger.so
+   PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-2.2.2
+   PassengerRuby /usr/bin/ruby1.8" >> /etc/apache2/apache2.conf
     echo "Installing Calander Date Picker"
     sudo gem install calendar_date_select
-    sudo cp public/javascripts/calendar_date_select/locale/es.js /usr/local/lib/ruby/gems/1.8/gems/calendar_date_select*/public/javascripts/calendar_date_select/locale/
+    sudo cp public/javascripts/calendar_date_select/locale/es.js /usr/lib/ruby/gems/1.8/gems/calendar_date_select-1.15/public/javascripts/calendar_date_select/locale/
     echo "Installing Jade database"
     sudo mysql -p$2 -e "create database Jade"
     sudo mysql -p$2 Jade < clean.sql

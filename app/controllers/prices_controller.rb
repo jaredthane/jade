@@ -61,7 +61,7 @@ class PricesController < ApplicationController
 		else
 		    flash[:notice] = 'Alugnos precios no se puedieron guardar.'
 		end
-		if params[:prices].count == 1
+		if params[:prices].length == 1
 		    logger.debug params[:prices].keys[0]
 		    @price = Price.find(params[:prices].keys[0].to_i)
 		    redirect_to(@price.product)
