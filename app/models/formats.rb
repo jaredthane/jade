@@ -19,11 +19,11 @@ module Formats
 		  total += l.total_price
 		end  
 		logger.debug "@data ->" + @data.inspect
-    prawnto :prawn => { :page_size => 'LETTER',#RECEIPT
+    prawnto :prawn => { :page_size => 'HALF-LETTER-LAND',#RECEIPT
 					              :left_margin=>27,# was 27
 										    :right_margin=>5,
 										    :top_margin=>90, #was 90
-										    :bottom_margin=>18}
+										    :bottom_margin=>18 }
     pdf_string = render_to_string :template => 'receipts/consumidor_final.pdf.prawn', :layout => false
     File.open(receipt.filename, 'w') { |f| f.write(pdf_string) }
   end

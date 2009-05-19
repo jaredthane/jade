@@ -4,3 +4,5 @@ config/database.yml
 *~
 **/*~
 *.pdf
+*.prawn
+formats.rb
