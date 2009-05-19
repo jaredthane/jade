@@ -39,7 +39,7 @@ module Formats
 				  @data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
 			  end
 		  else
-		  	if l.received - Date.today < 2.months
+		  	if (l.received + 2.months >= Date.today)
 				  @data << [l.quantity.to_s, l.product.name + " " + (l.received-1.month).to_date.to_s(:long) + " - " + (l.received).to_date.to_s(:long), x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
 				else
 				  @data << [l.quantity.to_s, l.product.name + " (" + (l.received).month + ")", x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
