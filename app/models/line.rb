@@ -38,7 +38,7 @@ class Line < ActiveRecord::Base
 	belongs_to :serialized_product
 
 	def set_taxes
-		self.tax = self.total_price * 0.15
+		self.tax = self.total_price * 0.13
 	end
 	def validate
 		logger.debug  "validating line"

@@ -1,5 +1,5 @@
 cd /srv/jade
 sudo git pull
-sudo chown -R jade /srv/Jade
-sudo mysql -p Jade < update_db.sql
+sudo chown -R www-data /srv/Jade
+#sudo mysql -p Jade < update_db.sql
 sudo /etc/init.d/apache2 restart
