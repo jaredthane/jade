@@ -33,9 +33,14 @@ class Subscription < ActiveRecord::Base
 	  for vendor_id, list in subs
 	    puts "vendor_id=" + vendor_id.inspect
 	    puts "list=" + list.inspect
-	    o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+	    if sub.last_order
+	    	orderdate=sub.last_order.created_at.to_date >> sub.frequency
+	    else
+	    	orderdate=sub.created_at
+	    end
+	    o=Order.create(:vendor => list[0].vendor, :created_at=>orderdate, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 	    for sub in list
-	      l=Line.create(:order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price)
+	      l=Line.create(:order => o, :created_at=>orderdate, :product => sub.product, :quantity=> sub.quantity, :price => sub.price)
 	      puts "last order = " + sub.last_order.inspect
 	      puts "o = " + o.inspect
 	      puts "sub=" + sub.inspect
@@ -71,12 +76,14 @@ class Subscription < ActiveRecord::Base
   		o.last_batch=false
   		o.save
   	end
+  	cutoff_date=Date.today
+  	cutoff_date=cutoff_date+1 if Date.today.wday==6
   	for client in Entity.find_all_clients
   	  subs_to_fill_for_client = {}
   	  puts "asubs_to_fill_for_client" + subs_to_fill_for_client.inspect
   	  for sub in Subscription.find_all_by_client_id(client.id)
   	    if sub.last_order
-	        if sub.last_order.created_at.to_date >> 1 < Date.today
+	        if sub.last_order.created_at.to_date >> sub.frequency <= cutoff_date
   	        puts "bsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
 	          subs_to_fill_for_client[sub.vendor_id] = [] if !subs_to_fill_for_client[sub.vendor_id]
   	        puts "csubs_to_fill_for_client" + subs_to_fill_for_client.inspect
