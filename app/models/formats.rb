@@ -40,7 +40,7 @@ module Formats
 			  end
 		  else
 		  	if (l.received + 2.months >= Date.today)
-				  @data << [l.quantity.to_s, l.product.name + " " + (l.received-1.month).to_date.to_s(:long) + " - " + (l.received).to_date.to_s(:long), x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
+				  @data << [l.quantity.to_s, l.product.name + " " + (l.received).to_date.to_s(:long) + " - " + (l.received>>1).to_date.to_s(:long), x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
 				else
 				  @data << [l.quantity.to_s, l.product.name + " (" + (l.received).month + ")", x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
 				end

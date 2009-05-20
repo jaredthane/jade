@@ -21,7 +21,7 @@ class Subscription < ActiveRecord::Base
 	belongs_to :client, :class_name => "Entity", :foreign_key => "client_id"
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => "vendor_id"
 	belongs_to :product
-	belongs_to :last_order, :class_name => "Order", :foreign_key => "last_order_id"
+	belongs_to :last_line, :class_name => "Line", :foreign_key => "last_line_id"
 	def client_name
  		client.name if client
 	end
@@ -33,21 +33,22 @@ class Subscription < ActiveRecord::Base
 	  for vendor_id, list in subs
 	    puts "vendor_id=" + vendor_id.inspect
 	    puts "list=" + list.inspect
-	    if sub.last_order
-	    	orderdate=sub.last_order.created_at.to_date >> sub.frequency
-	    else
-	    	orderdate=sub.created_at
-	    end
-	    o=Order.create(:vendor => list[0].vendor, :created_at=>orderdate, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+	    o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 	    for sub in list
-	      l=Line.create(:order => o, :created_at=>orderdate, :product => sub.product, :quantity=> sub.quantity, :price => sub.price)
-	      puts "last order = " + sub.last_order.inspect
-	      puts "o = " + o.inspect
+	    	sub.end_times -= 1 if sub.end_times
+	    	if sub.last_line
+			  	received=sub.last_line.received.to_date >> sub.frequency
+			  else
+			  	received=sub.created_at
+			  end
+	      l=Line.create(:order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price, :received =>received)
+	      puts "last line = " + sub.last_line.inspect
+	      puts "l = " + l.inspect
 	      puts "sub=" + sub.inspect
-	      sub.last_order=o
-	      puts "last order after= " + sub.last_order.inspect
+	      sub.last_line_id = l.id
+	      puts "last line after= " + sub.last_line.inspect
         sub.save
-	      puts "make sure it saved= " + Subscription.find(sub.id).last_order.inspect
+	      puts "make sure it saved= " + Subscription.find(sub.id).last_line.inspect
       end
     end
 	end
@@ -81,9 +82,9 @@ class Subscription < ActiveRecord::Base
   	for client in Entity.find_all_clients
   	  subs_to_fill_for_client = {}
   	  puts "asubs_to_fill_for_client" + subs_to_fill_for_client.inspect
-  	  for sub in Subscription.find_all_by_client_id(client.id)
-  	    if sub.last_order
-	        if sub.last_order.created_at.to_date >> sub.frequency <= cutoff_date
+  	  for sub in Subscription.find(:all, :conditions=>'(subscriptions.end_date>CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>1 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + client.id.to_s + ')' )
+  	    if sub.last_line
+	        if sub.last_line.received.to_date >> sub.frequency <= cutoff_date
   	        puts "bsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
 	          subs_to_fill_for_client[sub.vendor_id] = [] if !subs_to_fill_for_client[sub.vendor_id]
   	        puts "csubs_to_fill_for_client" + subs_to_fill_for_client.inspect

@@ -25,8 +25,8 @@
   	<div class="table_cell_15"><%= link_to subscription.quantity, subscription %></div>
     <div class="table_cell_15"><%=h number_to_currency(subscription.price) %></div>
     <div class="table_cell_15">
-        <% if subscription.last_order %>
-            <%= link_to subscription.last_order.created_at.to_date.to_s(:long), subscription.last_order %>
+        <% if subscription.last_line %>
+            <%= link_to subscription.last_line.received.to_date.to_s(:long), subscription.last_line.order %>
         <% end %>
     </div>
     <div class="table_cell"><%= link_to 'Remover', subscription, :confirm => 'Esta seguro?', :method => :delete %></div>
