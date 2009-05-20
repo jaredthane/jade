@@ -102,6 +102,13 @@ class Subscription < ActiveRecord::Base
   	  create_order_for_client(subs_to_fill_for_client) if subs_to_fill_for_client.length > 0
   	end
 	end
+	def expiration
+		if end_date
+			return end_date.to_date
+		else
+			return nil
+		end
+	end
 	def self.search(search, page)
   	    paginate :per_page => 20, :page => page,
 		         :conditions => ['(products.name like :search or products.upc like :search or clients.name like :search)', {:search => "%#{search}%"}],

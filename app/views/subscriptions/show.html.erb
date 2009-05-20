@@ -17,18 +17,34 @@
 	</p>
 	<p>
 		<b>Precio Relativo:</b>
-		<%=h @subscription.relative_price %>
+		<%=h number_to_percentage(@subscription.relative_price||0) %>
 	</p>
+	<% if @subscription.end_date %>
+		<p>
+			<b>Fecha de Vencimiento:</b>
+			<%=h @subscription.end_date %>
+		</p>
+	<% end %>
 </div>
 <div class="column2-unit-right">
 	<p>
-		<b>Precio:</b>
-		<%=h @subscription.price %>
+		<b>Cliente:</b>
+		<%=link_to @subscription.client.name, @subscription.client %>
+	</p>
+	<p>
+		<b>Frequencia:</b> (En meses)
+		<%=h @subscription.frequency %>
 	</p>
 	<p>
 		<b>Precio Fijo:</b>
-		<%=h @subscription.fixed_price %>
+		<%=h number_to_currency(@subscription.fixed_price||0) %>
 	</p>
+	<% if @subscription.end_times %>
+		<p>
+			<b>Cantidad de Numeros Restantes:</b>
+			<%=h @subscription.end_times %>
+		</p>		
+	<% end %>
 </div>
 <hr class="clear-contentunit" />
 
