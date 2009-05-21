@@ -72,6 +72,14 @@
 		  <b>Ubicacion</b><br />
 		  <%= f.text_field :location, :class => 'field' %>
 		</p>
+		
+	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+			<p>
+				<b>Cuenta de Ingresos</b><br />
+				Si desea, puede especificar una cuenta en que poner los ingresos para este producto.<br />
+				<%= f.collection_select(:revenue_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+			</p>
+		<% end %>
 	</div>
 	<hr class="clear-contentunit" />
 	<div class="column3-unit-left">

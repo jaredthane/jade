@@ -49,6 +49,14 @@
     	<%=h @product.product_category.name %>
     <% end %>
   </p>
+  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+		<p>
+			<b>Cuenta de Ingresos</b><br />
+			<% if @product.revenue_account %>
+				<%=link_to @product.revenue_account.name, @product.revenue_account %>
+			<% end %>
+		</p>
+	<% end %>
 </div>
 <div class="column3-unit-right">
 	<% if current_user.has_rights(['admin','compras','gerente']) %>
