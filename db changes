@@ -39,5 +39,10 @@ alter table orders add column grand_total decimal(8,2) default 0;
 alter table `lines` add column note text;
 alter table users add column firm_account_id int(11);
 alter table users add column personal_account_id int(11);
+create table preferences( id int(11) not null auto_increment primary key, name varchar(255), value int(11));
+alter table preferences add column group varchar(255);
+alter table products add column revenue_account int(11);
+alter table product_categories add column revenue_account int(11);
+
 
 

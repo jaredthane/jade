@@ -102,6 +102,34 @@ class Line < ActiveRecord::Base
 		total = (product.cost ||0) * quantity
 		return total
 	end
+	def revenue_account
+		for pref in Preference.find(:all, :order=>'value')
+			case pref.id
+			when 1 #Product
+				return product.revenue_account if product.revenue_account
+			when 2 #Category
+				if product.product_category
+					return product.product_category.revenue_account if product.product_category.revenue_account
+				end
+			when 3 #Vendor
+				if product.vendor
+					return product.vendor.revenue_account if product.vendor.revenue_account
+				end
+			when 4 #Site
+				if order.vendor
+					return order.vendor.revenue_account if order.vendor.revenue_account
+				end
+			when 5 #Current User
+				return User.current_user.firm_account if User.current_user.firm_account
+			when 6 #Clients Rep
+				if order.client
+					return order.client.user.firm_account if order.client.user.firm_account
+				end
+			end
+		end
+		# If there are no other valid options, use the sites revenue account
+		return order.vendor.revenue_account
+	end
   ###################################################################################
 	# Returns the total price of the products on this line
 	###################################################################################

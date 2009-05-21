@@ -219,9 +219,12 @@ class Order < ActiveRecord::Base
       vendor = Post.new(:account => self.vendor.revenue_account, :value=>self.total_price, :post_type_id =>2, :balance => (self.vendor.revenue_account.balance||0) + (self.total_price||0))
       client = Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>1, :balance => (self.client.cash_account.balance||0) + (self.total_price||0))
       tax    = Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>2, :balance => (self.vendor.tax_account.balance||0) + (self.total_price||0))
-      inventory = Post.new(:account => self.vendor.inventory_account, :value=>self.total_cost, :post_type_id =>2, :balance => (self.vendor.inventory_account.balance||0) - (self.total_price||0))
-      expense = Post.new(:account => self.vendor.expense_account, :value=>self.total_cost, :post_type_id =>1, :balance => (self.vendor.expense_account.balance||0) + (self.total_price||0))
-      @transactions_to_create = [[vendor, client, tax], [inventory, expense]]
+      inventory_cost = self.inventory_value
+      if inventory_cost > 0
+		    inventory = Post.new(:account => self.vendor.inventory_account, :value=>self.inventory_cost, :post_type_id =>2, :balance => (self.vendor.inventory_account.balance||0) - (self.inventory_cost||0))
+		    expense = Post.new(:account => self.vendor.expense_account, :value=>self.inventory_cost, :post_type_id =>1, :balance => (self.vendor.expense_account.balance||0) + (self.inventory_cost||0))
+		    @transactions_to_create = [[vendor, client, tax], [inventory, expense]]
+		  end
 	  when 2 # Compra
 	    puts self.vendor.cash_account.to_s
 	    puts self.total_price_with_tax.to_s
@@ -374,6 +377,22 @@ class Order < ActiveRecord::Base
   		if line.product.id==product.id
   			## puts "found some"
   			sum+=line.quantity
+  		end
+  	end
+  	return sum
+  end
+  
+  ###################################################################################
+	# Returns total quantity of an item contained in this order
+	###################################################################################
+  def inventory_value
+  	sum=0
+  	## puts "num lines: " + o.lines.count.to_s
+  	for line in self.lines
+  		## puts "checking line#" + line.id.to_s
+  		if line.product.product_type_id==1
+  			## puts "found some"
+  			sum+=line.product.cost*line.quantity
   		end
   	end
   	return sum

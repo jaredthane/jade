@@ -50,6 +50,16 @@ class Subscription < ActiveRecord::Base
         sub.save
 	      puts "make sure it saved= " + Subscription.find(sub.id).last_line.inspect
       end
+		  sale = Trans.create(:order => o, :comments => o.comments)
+		  vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>2, :balance => (o.vendor.revenue_account.balance||0) + (o.total_price||0))
+		  client = Post.create(:trans=>sale, :account => o.client.cash_account, :value=>o.total_price_with_tax, :post_type_id =>1, :balance => (o.client.cash_account.balance||0) + (o.total_price||0))
+		  tax    = Post.create(:trans=>sale, :account => o.vendor.tax_account, :value=>o.total_tax, :post_type_id =>2, :balance => (o.vendor.tax_account.balance||0) + (o.total_price||0))
+		  inventory_cost = o.inventory_value
+		  if inventory_cost > 0 
+				itrans = Trans.create(:order => o, :comments => o.comments)
+				inventory = Post.create(:trans=>itrans, :account => o.vendor.inventory_account, :value=>o.inventory_cost, :post_type_id =>2, :balance => (o.vendor.inventory_account.balance||0) - (o.inventory_cost||0))
+				expense = Post.create(:trans=>itrans, :account => o.vendor.expense_account, :value=>o.inventory_cost, :post_type_id =>1, :balance => (o.vendor.expense_account.balance||0) + (o.inventory_cost||0))
+			end
     end
 	end
 	

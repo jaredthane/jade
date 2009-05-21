@@ -32,6 +32,8 @@ class Product < ActiveRecord::Base
   has_many :warranties
   has_many :inventories
 	has_many :lines
+	belongs_to :revenue_account, :class_name => "Account", :foreign_key => 'revenue_account_id'
+
 	belongs_to :product_category
 	has_many :movements
 	has_many :serialized_products
