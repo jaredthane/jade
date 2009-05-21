@@ -22,6 +22,43 @@ class Payment < ActiveRecord::Base
 	belongs_to :payment_method
 	belongs_to :user
 	belongs_to :receipt
+	before_save :prepare_transactions
+	after_save :create_transactions
+	attr_accessor :transactions_to_create
+	def prepare_transactions
+		if new_record?
+			amt=self.amount
+		else			
+			amt = self.amount - old.amount
+		end
+		case order.order_type_id
+		when 1 # Sale
+			debit = Post.new(:account => self.order.cash_account, :value=>amt, :post_type_id =>1, :balance => (self.order.cash_account.balance||0) + (amt||0))
+			credit = Post.new(:account => self.order.client.cash_account, :value=>amt, :post_type_id =>2, :balance => (self.order.client.cash_account.balance||0) - (amt||0))
+			@transactions_to_create = [[debit, credit]]
+		when 2 # Purchase
+			debit = Post.new(:account => self.order.vendor.cash_account, :value=>amt, :post_type_id =>1, :balance => (self.order.vendor.cash_account.balance||0) - (amt||0))
+			credit = Post.new(:account => self.order.client.cash_account, :value=>amt, :post_type_id =>2, :balance => (self.order.client.cash_account.balance||0) - (amt||0))
+			@transactions_to_create = [[debit, credit]]
+		end
+	end
+	def create_transactions
+	  puts "create transactions -> @transactions_to_create = "+@transactions_to_create.to_s
+	  @transactions_to_create = [] if !@transactions_to_create
+	  for t in @transactions_to_create
+	  	if self.order
+		    trans = Trans.create(:order => self.order, :comments => self.order.comments)
+		  else
+		    trans = Trans.create()
+		  end
+	    for p in t
+	      p.trans_id = trans.id
+	      puts "create transactions -> p = "+p.inspect
+	      puts "save result"+p.save.to_s
+	      p.errors.each {|e| puts "POst ERROR" + e.to_s}
+	    end
+	  end
+	end
 	def amount
 		return (self.presented||0)-(self.returned||0)
 	end

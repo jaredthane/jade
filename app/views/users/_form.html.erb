@@ -55,8 +55,12 @@
 		</p>
 		<% if current_user.has_rights(['admin','contabilidad','gerente']) %>
 		  <p>
-		    <b>Cuenta para Fondos de la Compañía</b><br />
-			  <%= f.collection_select(:firm_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+		    <b>Cuenta para Fondos Recibido por la Compañía</b><br />
+			  <%= f.collection_select(:cash_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+		  </p>
+		  <p>
+		    <b>Cuenta para Ingresos por Ventas Hechas</b><br />
+			  <%= f.collection_select(:revenue_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
 		  </p>
 		  <p>
 		    <b>Cuenta para Fondos Personales</b><br />

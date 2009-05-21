@@ -43,9 +43,15 @@
 	  (Para cambiar simplemente escoja un cliente de otro grupo de precios de la lista de clientes)
 	</p>
 	<p>
-	  <b>Cuenta para Fondos de la Compañía</b><br />
-	  <% if @user.firm_account %>
-	    <%= link_to @user.firm_account.name, @user.firm_account %>
+	  <b>Cuenta para Fondos Recibido por la Compañía</b><br />
+	  <% if @user.cash_account %>
+	    <%= link_to @user.cash_account.name, @user.cash_account %>
+	  <% end %>
+	</p>
+	<p>
+	  <b>Cuenta para Ingresos por Ventas Hechas</b><br />
+	  <% if @user.revenue_account %>
+	    <%= link_to @user.revenue_account.name, @user.revenue_account %>
 	  <% end %>
 	</p>
 	<p>

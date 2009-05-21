@@ -82,7 +82,11 @@
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
 	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
 	    <p>
-        <b>Cuenta para Cobrar</b><br />
+	    	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
+        	<b>Cuenta del Cliente</b><br />
+        <% else %>
+        	<b>Cuenta del Proveedor</b><br />
+        <% end %>
 	      <%= f.collection_select(:cash_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
       </p>
 	    <p>

@@ -6,8 +6,8 @@
     <dt><%= link_to 'Nueva Categoria', new_product_category_path %></dt>
     <dt><%= link_to 'Cambiar', edit_product_category_path(@product_category) %></dt>
     <dt><%= link_to "Borrar esta Categoría", @product_category, :confirm => 'Esta seguro?', :method => :delete %></dt>
-    <dt><%= link_to 'Reaprovisionar', '/products/bulk_edit?search=' + @search %></dt>
-    <dt><%= link_to "Cambiar Precios", '/products/edit_prices?search=' + @search %></dt>
+    <dt><%= link_to 'Reaprovisionar', '/products/bulk_edit?search=' + @search.to_s %></dt>
+    <dt><%= link_to "Cambiar Precios", '/products/edit_prices?search=' + @search.to_s %></dt>
 	<% end %>
   <dt><%= link_to 'Lista', product_categories_path %></dt>
 <% end %>

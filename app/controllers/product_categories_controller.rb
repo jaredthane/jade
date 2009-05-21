@@ -67,15 +67,15 @@ class ProductCategoriesController < ApplicationController
   # PUT /categories/1
   # PUT /categories/1.xml
   def update
-    @category = ProductCategory.find(params[:id])
+    @product_category = ProductCategory.find(params[:id])
     respond_to do |format|
-      if @category.update_attributes(params[:category])
-        flash[:notice] = 'Garantía ha sido actualizado exitosamente.'
-        format.html { render :action => "index" }
+      if @product_category.update_attributes(params[:product_category])
+        flash[:notice] = 'Categoria ha sido actualizado exitosamente.'
+        format.html { render :action => "show" }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }
-        format.xml  { render :xml => @category.errors, :status => :unprocessable_entity }
+        format.xml  { render :xml => @product_category.errors, :status => :unprocessable_entity }
       end
     end
   end

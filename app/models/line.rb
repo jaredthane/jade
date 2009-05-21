@@ -102,35 +102,35 @@ class Line < ActiveRecord::Base
 		total = (product.cost ||0) * quantity
 		return total
 	end
-	def revenue_account
-		for pref in Preference.find(:all, :order=>'value')
+	def revenue_account(order=self.order)
+		for pref in Preference.find(:all, :order=>'value', :conditions=>"pref_group='revenue'")
 			case pref.id
 			when 1 #Product
-				logger.debug " Grabbing revenue account from Product"
+				puts " Grabbing revenue account from Product"
 				return product.revenue_account if product.revenue_account
 			when 2 #Category
-				logger.debug " Grabbing revenue account from Category"
+				puts " Grabbing revenue account from Category"
 				if product.product_category
 					return product.product_category.revenue_account if product.product_category.revenue_account
 				end
 			when 3 #Vendor
-				logger.debug " Grabbing revenue account from Vendor"
+				puts " Grabbing revenue account from Vendor"
 				if product.vendor
 					return product.vendor.revenue_account if product.vendor.revenue_account
 				end
 			when 4 #Site
-				logger.debug " Grabbing revenue account from Site"
+				puts " Grabbing revenue account from Site"
 				if order.vendor
 					return order.vendor.revenue_account if order.vendor.revenue_account
 				end
-			when 5 #Current User
-				logger.debug " Grabbing revenue account from Current User"
-				return User.current_user.firm_account if User.current_user.firm_account
-			when 6 #Clients Rep
-				logger.debug " Grabbing revenue account from Clients Rep"
+			when 5 #Clients Rep
+				puts " Grabbing revenue account from Clients Rep"
 				if order.client
-					return order.client.user.firm_account if order.client.user.firm_account
+					return order.client.user.revenue_account if order.client.user.revenue_account
 				end
+			when 6 #Current User
+				puts " Grabbing revenue account from Current User"
+				return User.current_user.revenue_account if User.current_user.revenue_account
 			end
 		end
 		# If there are no other valid options, use the sites revenue account

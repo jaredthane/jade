@@ -96,6 +96,27 @@ class Order < ActiveRecord::Base
 	  r=Receipt.create(:order=>params[:order_id], :number =>params[:number], :filename=>"#{RAILS_ROOT}/invoice_pdfs/order #{self.id}.pdf")
 	  return r
 	end
+	def cash_account
+		for pref in Preference.find(:all, :order=>'value', :conditions=>"pref_group='cash'")
+			case pref.id
+			when 7 #Site
+				logger.debug " Grabbing revenue account from Site"
+				if self.vendor
+					return self.vendor.cash_account if self.vendor.cash_account
+				end
+			when 8 #Current User
+				logger.debug " Grabbing revenue account from Current User"
+				return User.current_user.cash_account if User.current_user.cash_account
+			when 9 #Clients Rep
+				logger.debug " Grabbing revenue account from Clients Rep"
+				if self.client
+					return self.client.user.cash_account if self.client.user.cash_account
+				end
+			end
+		end
+		# If there are no other valid options, use the sites revenue account
+		return self.vendor.cash_account
+	end
 	def create_movements
 		@movements_to_create = [] if !@movements_to_create
 		#collect the values of each movement type
@@ -214,16 +235,32 @@ class Order < ActiveRecord::Base
 	def prepare_transaction
 	  case order_type_id
     when 1 # Venta
-      puts "self.vendor.revenue_account.balance"+ self.vendor.revenue_account.balance.inspect
       puts "self.total_price"+ self.total_price.inspect
-      vendor = Post.new(:account => self.vendor.revenue_account, :value=>self.total_price, :post_type_id =>2, :balance => (self.vendor.revenue_account.balance||0) + (self.total_price||0))
-      client = Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>1, :balance => (self.client.cash_account.balance||0) + (self.total_price||0))
-      tax    = Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>2, :balance => (self.vendor.tax_account.balance||0) + (self.total_price||0))
+      @transactions_to_create=[]
+      @transactions_to_create << [ Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>1, :balance => (self.client.cash_account.balance||0) + (self.total_price||0))]
+      if self.total_tax != 0
+      	@transactions_to_create[0] << Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>2, :balance => (self.vendor.tax_account.balance||0) + (self.total_price||0))
+      end
+      
+      revenue_accts={}
+      for line in self.lines
+      	r=line.revenue_account(self).id
+      	if revenue_accts[r]
+      		revenue_accts[r] += line.total_price
+      	else
+      		revenue_accts[r] = line.total_price
+      	end
+      end
+      revenue_accts.each { |key, value| 
+      	acct= Account.find(key)
+				p = Post.new(:account => acct, :value=>value, :post_type_id =>2, :balance => (acct.balance||0) + (value||0))
+				@transactions_to_create[0] << p
+			}       
       inventory_cost = self.inventory_value
       if inventory_cost > 0
-		    inventory = Post.new(:account => self.vendor.inventory_account, :value=>self.inventory_cost, :post_type_id =>2, :balance => (self.vendor.inventory_account.balance||0) - (self.inventory_cost||0))
-		    expense = Post.new(:account => self.vendor.expense_account, :value=>self.inventory_cost, :post_type_id =>1, :balance => (self.vendor.expense_account.balance||0) + (self.inventory_cost||0))
-		    @transactions_to_create = [[vendor, client, tax], [inventory, expense]]
+		    inventory = Post.new(:account => self.vendor.inventory_account, :value=>inventory_cost, :post_type_id =>2, :balance => (self.vendor.inventory_account.balance||0) - (inventory_cost||0))
+		    expense = Post.new(:account => self.vendor.expense_account, :value=>inventory_cost, :post_type_id =>1, :balance => (self.vendor.expense_account.balance||0) + (inventory_cost||0))
+		    @transactions_to_create<<[inventory,expense]
 		  end
 	  when 2 # Compra
 	    puts self.vendor.cash_account.to_s

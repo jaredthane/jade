@@ -160,7 +160,8 @@ class UsersController < ApplicationController
   		@user.roles_users.push(new_role)
   	end
   	if current_user.has_rights(['admin','gerente','contabilidad'])
-  	  @user.firm_account_id = params[:user][:firm_account_id]
+  	  @user.cash_account_id = params[:user][:cash_account_id]
+  	  @user.revenue_account_id = params[:user][:revenue_account_id]
   	  @user.personal_account_id = params[:user][:personal_account_id]
   	end
 		if  @user.update_attributes(params[:user])
