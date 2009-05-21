@@ -1,18 +1,33 @@
 
 <% content_for :title do %>Lista de Categorías<% end %>
 <br />
+<% content_for :actions do %>
+	<dt><%= link_to 'Nueva Categoria', new_product_category_url %></dt>
+<% end %>
 <%= will_paginate @product_categories, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
-    <div class="table_cell_50">Categoría</div>
-    <div class="table_cell">Acciones</div>
+	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+		  <div class="table_cell_50">Categoría</div>
+		  <div class="table_cell">Cuenta de Ingresos</div>
+    <% else %>
+    	<div class="table_cell">Categoría</div>
+    <% end %>
   </div>
 
 
 <% for product_category in @product_categories %>
   <div class="table_row">
-    <div class="table_cell_50"><%= link_to product_category.name, product_category %></div>
-    <div class="table_cell"><%= link_to "Remover | ", product_category, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></div>
+	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+		  <div class="table_cell_50"><%= link_to product_category.name, product_category %></div>
+		  <div class="table_cell">
+		  	<% if product_category.revenue_account %>
+		  		<%= link_to product_category.revenue_account.name, product_category.revenue_account %>
+		  	<% end %>
+		  </div>
+	  <% else %>
+    	<div class="table_cell"><%= link_to product_category.name, product_category %></div>
+    <% end %>
 	</div>
 <% end %>
 </div>
