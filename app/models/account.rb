@@ -22,6 +22,9 @@ class Account < ActiveRecord::Base
 	belongs_to :entity
 	has_many :posts
 	has_many :trans, :through => :posts
+	CREDIT = -1
+	DEBIT = 1
+	
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['(accounts.name like :search)', {:search => "%#{search}%"}],

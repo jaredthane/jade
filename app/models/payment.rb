@@ -33,12 +33,12 @@ class Payment < ActiveRecord::Base
 		end
 		case order.order_type_id
 		when 1 # Sale
-			debit = Post.new(:account => self.order.cash_account, :value=>amt, :post_type_id =>1, :balance => (self.order.cash_account.balance||0) + (amt||0))
-			credit = Post.new(:account => self.order.client.cash_account, :value=>amt, :post_type_id =>2, :balance => (self.order.client.cash_account.balance||0) - (amt||0))
+			debit = Post.new(:account => self.order.cash_account, :value=>amt, :post_type_id =>Post::DEBIT)
+			credit = Post.new(:account => self.order.client.cash_account, :value=>amt, :post_type_id =>Post::CREDIT)
 			@transactions_to_create = [[debit, credit]]
 		when 2 # Purchase
-			debit = Post.new(:account => self.order.vendor.cash_account, :value=>amt, :post_type_id =>1, :balance => (self.order.vendor.cash_account.balance||0) - (amt||0))
-			credit = Post.new(:account => self.order.client.cash_account, :value=>amt, :post_type_id =>2, :balance => (self.order.client.cash_account.balance||0) - (amt||0))
+			debit = Post.new(:account => self.order.vendor.cash_account, :value=>amt, :post_type_id =>Post::DEBIT)
+			credit = Post.new(:account => self.order.client.cash_account, :value=>amt, :post_type_id =>Post::CREDIT)
 			@transactions_to_create = [[debit, credit]]
 		end
 	end

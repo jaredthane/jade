@@ -44,9 +44,25 @@ class TransController < ApplicationController
     for a in Account.find(:all, :conditions=> 'postable = True')
       @accounts[a.number.to_s+' '+a.name]=a.id
     end
-
+		@trans = Trans.new()
+		@credit = Post.new(:post_type_id=>1, :trans=>@trans)
+		@debit = Post.new(:post_type_id=>1, :trans=>@trans)
     respond_to do |format|
       format.html # new.html.erb
+      format.xml  { render :xml => @trans }
+    end
+  end
+  # GET /posts/new
+  # GET /posts/new.xml
+  def new_post
+  	@post=Post.new(:trans=>params[:trans_id])
+    @accounts ={} 
+    for a in Account.find(:all, :conditions=> 'postable = True')
+      @accounts[a.number.to_s+' '+a.name]=a.id
+    end
+    respond_to do |format|
+      format.html # new.html.erb
+      format.js # new.html.erb
       format.xml  { render :xml => @trans }
     end
   end
@@ -55,11 +71,11 @@ class TransController < ApplicationController
   # POST /trans.xml
   def create
     @trans = Trans.new(params[:trans])
-
+		@trans.add_posts(params[:new_posts])
     respond_to do |format|
       if @trans.save
         flash[:notice] = 'Garantía ha sido creado exitosamente.'
-        format.html { redirect_to(trans_url) }
+        format.html { redirect_to(accounts_url) }
         format.xml  { render :xml => @trans, :status => :created, :location => @trans }
       else
         format.html { render :action => "new" }

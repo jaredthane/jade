@@ -46,5 +46,5 @@ alter table preferences add column group varchar(255);
 alter table products add column revenue_account_id int(11);
 alter table product_categories add column revenue_account_id int(11);
 alter table users change column firm_account_id cash_account_id int(11);
-
+alter table accounts add column modifier int(2);
 

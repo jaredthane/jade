@@ -22,16 +22,16 @@
 	<h1>Cuentas</h1>
 	<div>
 	  <div class="table_header_row">
-		  <div class="table_cell_30">Cuenta</div>
-		  <div class="table_cell_10">Tipo</div>
+		  <div class="table_cell_25">Cuenta</div>
+		  <div class="table_cell_25">Tipo</div>
+		  <div class="table_cell_25">Valor</div>
 		  <div class="table_cell">Valor</div>
 	  </div>
 	<div id="posts">
-	  <div class="table_row">
-	    <div class="table_cell_30"><%= select_tag("post[][account_id]", options_for_select(@accounts, 'name'), {:include_blank => true}) %></div>
-	    <div class="table_cell_30"><%= select_tag("post[][tipo]", options_for_select(@accounts, 'name'), {:include_blank => true}) %></div>
-	  </div>
-	  
+		<%= render :partial => 'post', :collection => @trans.posts %>
 	</div>
+	<div id="posts_errors"></div>
+	<%= link_to_remote "Añadir otra cuenta", :url => new_post_url, :html_options=>{:class=>'action'} %>
+
 <% end %>
 

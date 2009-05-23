@@ -21,4 +21,18 @@ class Post < ActiveRecord::Base
   belongs_to :post_type
   belongs_to :trans
 	belongs_to :account
+	before_save :calculate_balance
+	
+	CREDIT = -1
+	DEBIT = 1
+	def opposite_type
+		return -1 if post_type==1
+		return 1
+	end
+	def calculate_balance
+		# Make value positive if its negative
+		self.value = self.value * -1 if self.value < 0
+		# Now calculate the balance
+		self.balance=self.account.balance + self.value * self.post_type_id * self.account.modifier
+	end
 end

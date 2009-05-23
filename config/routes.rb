@@ -7,6 +7,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :product_categories
   map.resources :accounts
   map.resources :prices
+  map.new_post 'posts/new', :controller => 'posts', :action => 'new', :format =>'js'
   map.new_transaction 'transactions/new', :controller => 'trans', :action => 'new'
   map.create_transaction 'transactions/create', :controller => 'trans', :action => 'create'
   map.consumidor_final_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>2, :format =>'pdf'

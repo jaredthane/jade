@@ -26,8 +26,8 @@ class Line < ActiveRecord::Base
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
   belongs_to :receipt
-  before_create :set_taxes
-  before_update :set_taxes
+#  before_create :set_taxes
+#  before_update :set_taxes
 	belongs_to :order
 	belongs_to :warranty
 	belongs_to :product	
@@ -37,8 +37,11 @@ class Line < ActiveRecord::Base
 	attr_accessor :order_type_id
 	belongs_to :serialized_product
 
-	def set_taxes
-		self.tax = self.total_price * 0.13
+#	def set_taxes
+#		self.sales_tax = self.total_price * 0.13
+#	end
+	def tax	
+		return self.total_price * 0.13
 	end
 	def validate
 		logger.debug  "validating line"
@@ -147,7 +150,7 @@ class Line < ActiveRecord::Base
 	# Returns the total price of the products on this line plus tax
 	###################################################################################
 	def total_price_with_tax
-		total = (total_price||0) + (tax||0)
+		total = (self.total_price||0) + (self.tax||0)
 		return total
 	end
 	def isreceived_str

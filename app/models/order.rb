@@ -54,21 +54,19 @@ class Order < ActiveRecord::Base
 	validates_presence_of(:user, :message => "debe ser valido")
 	############################## End of Creating Movements ####################################
 	attr_accessor :movements_to_create
-	attr_accessor :transactions_to_create # list of lists of posts
+	attr_accessor :transactions_to_create # list of trans to create
 	def	update_grand_total
     self.grand_total = self.total_price_with_tax
   end
 	def create_transactions
+		puts "credit = " + Account::CREDIT.to_s
 	  puts "create transactions -> @transactions_to_create = "+@transactions_to_create.to_s
 	  @transactions_to_create = [] if !@transactions_to_create
 	  for t in @transactions_to_create
-	    trans = Trans.create(:order => self, :comments => self.comments)
-	    for p in t
-	      p.trans_id = trans.id
-	      puts "create transactions -> p = "+p.inspect
-	      puts "save result"+p.save.to_s
-	      p.errors.each {|e| puts "POst ERROR" + e.to_s}
-	    end
+	  	if t
+				t.order_id=self.id
+			  t.save
+			end
 	  end
 	end
 	def create_receipts
@@ -230,18 +228,100 @@ class Order < ActiveRecord::Base
 	end
 	
   ###################################################################################
-  # creates posts for transactions but DOES NOT SAVE THEM
+  # Returns a collection of transactions that represent the initial transaction for the lines given
+  # The info returned from this function will be used to create the transactions if we are creating the order now
+  # If we are updating an order, a diff will be made between the output given based on before and after line collections
   ##################################################################################
-	def prepare_transaction
-	  case order_type_id
-    when 1 # Venta
-      puts "self.total_price"+ self.total_price.inspect
-      @transactions_to_create=[]
-      @transactions_to_create << [ Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>1, :balance => (self.client.cash_account.balance||0) + (self.total_price||0))]
+#	def transactions_for_lines(lines)
+#	case order_type_id
+#    when 1 # Venta
+#      puts "self.total_price"+ self.total_price.inspect
+#      sale=Trans.new()
+#      results=[sale]
+#      sale.posts << Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)
+#      if self.total_tax != 0
+#      	sale.posts << Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>Post::CREDIT)
+#      end
+#      revenue_accts={}
+#      for line in self.lines
+#      	r=line.revenue_account(self).id
+#      	if revenue_accts[r]
+#      		revenue_accts[r] += line.total_price
+#      	else
+#      		revenue_accts[r] = line.total_price
+#      	end
+#      end
+#      revenue_accts.each { |key, value| 
+#      	acct= Account.find(key)
+#				sale.posts << Post.new(:account => acct, :value=>value, :post_type_id =>Post::CREDIT)
+#			}       
+#      inventory_cost = self.inventory_value
+#      if inventory_cost > 0
+#      	inventory = Trans.new()
+#		    inventory.posts << Post.new(:account => self.vendor.inventory_account, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
+#		    inventory.posts << Post.new(:account => self.vendor.expense_account, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
+#		    results << inventory
+#		  end
+#	  when 2 # Compra
+#	    puts self.vendor.cash_account.to_s
+#	    puts self.total_price_with_tax.to_s
+#	    purchase = Trans.new()
+#	    purchase.posts << Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
+#      purchase.posts << Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
+#      results = [purchase]
+#	  end
+#	  return results
+#	end
+#  ###################################################################################
+#  # creates posts for transactions but DOES NOT SAVE THEM
+#  ##################################################################################
+#	def prepare_transaction
+#	  case order_type_id
+#    when 1 # Venta
+#      puts "self.total_price"+ self.total_price.inspect
+#      @transactions_to_create=[]
+#      @transactions_to_create << [ Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)]
+#      if self.total_tax != 0
+#      	@transactions_to_create[0] << Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>Post::CREDIT)
+#      end
+#      
+#      revenue_accts={}
+#      for line in self.lines
+#      	r=line.revenue_account(self).id
+#      	if revenue_accts[r]
+#      		revenue_accts[r] += line.total_price
+#      	else
+#      		revenue_accts[r] = line.total_price
+#      	end
+#      end
+#      revenue_accts.each { |key, value| 
+#      	acct= Account.find(key)
+#				p = Post.new(:account => acct, :value=>value, :post_type_id =>Post::CREDIT, :balance => (acct.balance||0) + (value||0))
+#				@transactions_to_create[0] << p
+#			}       
+#      inventory_cost = self.inventory_value
+#      if inventory_cost > 0
+#		    inventory = Post.new(:account => self.vendor.inventory_account, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
+#		    expense = Post.new(:account => self.vendor.expense_account, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
+#		    @transactions_to_create<<[inventory,expense]
+#		  end
+#	  when 2 # Compra
+#	    puts self.vendor.cash_account.to_s
+#	    puts self.total_price_with_tax.to_s
+#	    vendor = Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
+#      client = Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
+#      @transactions_to_create = [[vendor, client]]	    
+#	  end
+#	end
+	def main_transaction
+		case order_type_id
+		when 1
+			sale=Trans.new()
+      sale.posts << Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)
       if self.total_tax != 0
-      	@transactions_to_create[0] << Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>2, :balance => (self.vendor.tax_account.balance||0) + (self.total_price||0))
+      	puts "=======================adding tax self.total_tax="+self.total_tax.to_s
+      	sale.posts << Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>Post::CREDIT)
       end
-      
       revenue_accts={}
       for line in self.lines
       	r=line.revenue_account(self).id
@@ -253,33 +333,98 @@ class Order < ActiveRecord::Base
       end
       revenue_accts.each { |key, value| 
       	acct= Account.find(key)
-				p = Post.new(:account => acct, :value=>value, :post_type_id =>2, :balance => (acct.balance||0) + (value||0))
-				@transactions_to_create[0] << p
-			}       
-      inventory_cost = self.inventory_value
-      if inventory_cost > 0
-		    inventory = Post.new(:account => self.vendor.inventory_account, :value=>inventory_cost, :post_type_id =>2, :balance => (self.vendor.inventory_account.balance||0) - (inventory_cost||0))
-		    expense = Post.new(:account => self.vendor.expense_account, :value=>inventory_cost, :post_type_id =>1, :balance => (self.vendor.expense_account.balance||0) + (inventory_cost||0))
-		    @transactions_to_create<<[inventory,expense]
-		  end
-	  when 2 # Compra
+				sale.posts << Post.new(:account => acct, :value=>value, :post_type_id =>Post::CREDIT)
+			}    
+			return sale   
+		when 2 # Compra
 	    puts self.vendor.cash_account.to_s
 	    puts self.total_price_with_tax.to_s
-	    vendor = Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>2, :balance => (self.vendor.cash_account.balance||0) + (self.total_price||0))
-      client = Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>1, :balance => (self.client.inventory_account.balance||0) + (self.total_price||0))
-      @transactions_to_create = [[vendor, client]]	    
+	    purchase = Trans.new()
+	    purchase.posts << Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
+      purchase.posts << Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
+			return purchase
+    end
+	end
+	def inventory_transaction
+		inventory_cost = self.inventory_value
+    if inventory_cost > 0
+    	inventory = Trans.new()
+	    inventory.posts << Post.new(:account => self.vendor.inventory_account, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
+	    inventory.posts << Post.new(:account => self.vendor.expense_account, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
 	  end
+	  return inventory
+	end
+  ###################################################################################
+  # compares two transactions and subtracts the second from the first
+  ##################################################################################
+	def transaction_diff(old, newtrans)
+		accounts_done=[]
+		diff=Trans.new()
+		if old and !newtrans
+#			puts "newtrans is null"
+			for oldpost in old.posts
+				diff.posts << Post.new(:account =>oldpost.account, :value=> oldpost.value, :post_type_id=>oldpost.opposite_type)
+			end
+		elsif newtrans and !old
+#			puts "old trans is null"
+			for newpost in newtrans.posts
+				diff.posts << newpost
+			end
+		elsif newtrans and old
+#			puts "we have both trans"
+			for oldpost in old.posts
+				#find the matching post
+#			puts "newtrans has the following posts" + newtrans.posts.inspect
+#			puts "newtrans.posts.find_by_account_id(5)" + newtrans.posts.find_by_post_type_id(1).to_s
+
+				newpost = newtrans.post_by_account_id(oldpost.account_id)
+#				puts "old post.account_id="+ oldpost.account_id.to_s
+#				puts "newpost.inspect="+ newpost.inspect
+				if newpost
+					if oldpost.value > newpost.value
+#						puts "Difference in values " + oldpost.value.to_s + "-" + newtrans.value.to_s + "=" + (oldpost.value-newtrans.value).to_s
+						diff.posts << Post.new(:account =>oldpost.account, :value=> oldpost.value-newtrans.value, :post_type_id=>oldpost.opposite_type)
+					elsif oldpost.value < newpost.value
+						diff.posts << Post.new(:account =>oldpost.account, :value=> newpost.value-oldpost.value, :post_type_id=>oldpost.post_type_id)					
+					end
+				else
+#					puts "missing new post for account#" + oldpost.account.id.to_s
+					diff.posts << Post.new(:account =>oldpost.account, :value=> oldpost.value, :post_type_id=>oldpost.opposite_type)
+				end
+				accounts_done << oldpost.account_id
+			end
+			for newpost in newtrans.posts
+				if !accounts_done.include?(newpost.account_id)
+					diff.posts << newpost
+				end			
+			end
+		end
+		return nil if diff.posts.length==0
+		return diff
 	end
   ###################################################################################
   # checks if there are any transactions to be made, if so, it calls prepare_transaction
   ##################################################################################
 	def check_for_transactions
 	  if self.new_record?
-	    prepare_transaction
+	    @transactions_to_create = [main_transaction, inventory_transaction]
 	  else
+	  	puts "Checking for transactions in this update"
+	  	puts "current total price: " + self.total_price.to_s
+	  	puts "current total price: " + self.total_price.to_s
 	    old = Order.find(self.id)
+	  	puts "old.total_price" + old.total_price.to_s
 	    if self.total_price != old.total_price or self.total_tax != old.total_tax
-	      prepare_transaction
+	    	puts "yup, we gotta make a transaction for this one"
+	    	puts "old main transaction" + old.main_transaction.posts.inspect
+	    	puts "new main transaction" + self.main_transaction.posts.inspect
+	    	puts "dif main transaction" + transaction_diff(old.main_transaction, self.main_transaction).posts.inspect
+	    	@transactions_to_create = [transaction_diff(old.main_transaction, self.main_transaction)]
+	    	puts "old inventory transaction" + old.inventory_transaction.posts.inspect if old.inventory_transaction
+	    	puts "new inventory transaction" + self.inventory_transaction.posts.inspect if self.inventory_transaction
+#	    	puts "dif inventory transaction" + transaction_diff(old.inventory_transaction, self.inventory_transaction).posts.inspect
+	    	i=transaction_diff(old.inventory_transaction, self.inventory_transaction)
+	    	@transactions_to_create << i if i
 	    end
 	  end	
 	end
@@ -327,9 +472,6 @@ class Order < ActiveRecord::Base
 		  end
 	  end
 	end
-	
-	
-
   ###################################################################################
   # creates new lines and fills them with the contents specified. DOES NOT SAVE THEM
   ##################################################################################
@@ -354,30 +496,27 @@ class Order < ActiveRecord::Base
   # updates existing lines on the order, adds new ones and deletes missing ones. DOES NOT SAVE THEM
   ##################################################################################
 	def update_all_lines(new_lines=[], existing_lines=[])
-	lines_to_delete=[]
+		lines_changed_for_accounting = []
+		puts "====================UPDATEING ALL LINES===================="
+		lines_to_delete=[]
     #Update existing lines
-    for l in self.lines
-#			logger.debug "l.id=" + l.id.to_s
-#			if existing_lines
-##				logger.debug "params['existing_lines'][l.id.to_s]=" + params['existing_lines'][l.id.to_s].to_s
-#			end
-			if existing_lines
+    if existing_lines
+		  for l in self.lines
 				if existing_lines[l.id.to_s]
-#					logger.debug "setting attribs for line #{l.id}"
-#					logger.debug "l.warranty before=#{l.warranty.to_s}"
+					if l.quantity != existing_lines[l.id.to_s][:quantity] or l.price != existing_lines[l.id.to_s][:price]
+						lines_changed_for_accounting << l
+					end
 					l.attributes = existing_lines[l.id.to_s]
-#					logger.debug "l.warranty afterz=#{l.warranty.to_s}"
 				else # We really shouldn't delete these lines yet, but leave them marked so they get deleted when the model is saved
-#					logger.debug "deleting line #{l.id}"
+					lines_changed_for_accounting << l
 					lines_to_delete << l
 				end
-			else
-#				logger.debug "deleting line #{l.id}"
-				lines_to_delete << l
 			end
-		end
-		for l in lines_to_delete
-			self.lines.delete(l)
+			for l in lines_to_delete
+				self.lines.delete(l)
+			end
+		else
+			self.lines.clear
 		end
 		new_lines=[] if !new_lines
 		# Update New lines
@@ -530,11 +669,19 @@ class Order < ActiveRecord::Base
 	# Returns the total tax to be charged the user.
 	###################################################################################
 	def total_tax
-		total=0
-		for l in self.lines
-			total = (total||0) + (l.tax||0)
+		if client
+			if client.entity_type_id == 2
+				return 0
+			else
+				total=0
+				for l in self.lines
+					total = (total||0) + (l.tax||0)
+				end
+				return (total||0)
+			end
+		else
+			return 0
 		end
-		return (total||0)
 	end
 	
 	###################################################################################

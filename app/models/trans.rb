@@ -21,4 +21,25 @@ class Trans < ActiveRecord::Base
   has_many :posts
   has_many :entities , :through => :posts
 	belongs_to :order
+	after_save :save_posts
+#	def add_posts(posts)
+#		for post in posts
+#			p=Post.new(post)
+#			self.posts << p
+#		end
+#	end
+	def save_posts
+		#need to make sure they are balanced
+		# and that no account is repeated
+		for p in self.posts
+			p.trans_id=self.id
+			p.save
+			p.errors.each {|e| puts "POst ERROR" + e.to_s}
+		end
+	end
+	def post_by_account_id(id)
+		for post in posts
+			return post if post.account_id=id
+		end
+	end
 end
