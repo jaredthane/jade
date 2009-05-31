@@ -496,6 +496,7 @@ class Order < ActiveRecord::Base
   # updates existing lines on the order, adds new ones and deletes missing ones. DOES NOT SAVE THEM
   ##################################################################################
 	def update_all_lines(new_lines=[], existing_lines=[])
+	  puts "Lines before updating" + self.lines.length.to_s
 		lines_changed_for_accounting = []
 		puts "====================UPDATEING ALL LINES===================="
 		lines_to_delete=[]
@@ -519,18 +520,25 @@ class Order < ActiveRecord::Base
 			self.lines.clear
 		end
 		new_lines=[] if !new_lines
+	  puts "Lines before updating new ones" + Order.find(self.id).lines.length.to_s
 		# Update New lines
   	for l in new_lines
   		new_line = Line.new(:order_id=>self.id)
   		new_line.product_id = l[:product_id]		
   		new_line.quantity = l[:quantity]
+	  puts "Lines before setting attributes" + Order.find(self.id).lines.length.to_s
   		new_line.attributes=l  
 #  		logger.debug "about to push #{new_line.inspect}"  	
-  		self.lines.push(new_line)
+	  puts "Lines before pushing new lines" + Order.find(self.id).lines.length.to_s
+  		self.lines << new_line
   	end
+	  puts "Lines before preparing movements" + Order.find(self.id).lines.length.to_s
   	for l in self.lines
   		prepare_movements(l)
   	end
+	  puts "Lines before checking for transactions" + Order.find(self.id).lines.length.to_s
+	  total=new_lines.inject(0) { |s,l| s += l[:quantity]*l[:price] }
+	  total = existing_lines.inject(total) { |s,l| s += l[:quantity]*l[:price] }
 	  check_for_transactions	
 	end
   ###################################################################################
@@ -578,23 +586,22 @@ class Order < ActiveRecord::Base
 	# Returns the number of times an order qualifies for a discount or 0 if it does not
 	###################################################################################
   def discount_qualifies(discount)
-  	
   	@qualify=10000
-	#Check if we have enough of each product
-	for req in discount.requirements do        
-		@wehave = get_sum(req.required)
-		@weneed = req.quantity
-		# puts "@wehave ->" + @wehave.to_s + "<-"
-		# puts "@weneed ->" + @weneed.to_s + "<-"
-		@temp = @wehave / @weneed
+	  #Check if we have enough of each product
+	  for req in discount.requirements do        
+		  @wehave = get_sum(req.required)
+		  @weneed = req.quantity
+		  # puts "@wehave ->" + @wehave.to_s + "<-"
+		  # puts "@weneed ->" + @weneed.to_s + "<-"
+		  @temp = @wehave / @weneed
 		
-		# puts "@temp ->" + @temp.to_s + "<-"
-		# puts "@qualify ->" + @qualify.to_s + "<-"
-		@qualify= [@qualify, @temp].min
-		# puts "@qualify ->" + @qualify.to_s + "<-"
-	end #req in discount.requirements
-	return nil if @qualify == 10000
-  	return @qualify
+		  # puts "@temp ->" + @temp.to_s + "<-"
+		  # puts "@qualify ->" + @qualify.to_s + "<-"
+		  @qualify= [@qualify, @temp].min
+		  # puts "@qualify ->" + @qualify.to_s + "<-"
+	  end #req in discount.requirements
+	  return nil if @qualify == 10000
+    return @qualify
   end
 	
   ###################################################################################
