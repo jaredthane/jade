@@ -121,7 +121,7 @@ class Subscription < ActiveRecord::Base
 	end
 	def self.search(search, page)
   	    paginate :per_page => 20, :page => page,
-		         :conditions => ['(products.name like :search or products.upc like :search or clients.name like :search)', {:search => "%#{search}%"}],
+		         :conditions => ['(products.name like :search or products.upc like :search or clients.name like :search) AND clients.site_id = :site', {:search => "%#{search}%", :site => User.current_user.location_id.to_s}],
 		         :order => 'products.name',
 		         :joins => 'inner join products on products.id = subscriptions.product_id inner join entities as clients on clients.id = subscriptions.client_id'
 	end

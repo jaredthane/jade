@@ -9,7 +9,7 @@
 		<% if @user_id %>
 			<% content_for :title do %>Lista de Mis Clientes<% end %>
 		<% else %>
-			<% content_for :title do %>Lista de Clientes<% end %>
+			<% content_for :title do %>Lista de Clientes en <%= current_user.location.name %><% end %>
 		<% end %>
 	<% when 'end_users' %>
 		<% content_for :title do %>Lista de Mis Clientes Consumidor Final<% end %>

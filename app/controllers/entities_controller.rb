@@ -151,11 +151,13 @@ class EntitiesController < ApplicationController
 		end
 		logger.debug "@entity.entity_type_id=#{@entity.entity_type_id.to_s}"
 		if @entity.entity_type_id == 2 or @entity.entity_type_id == 5
+		  @subs=Subscription.find(:all, 
+                              :conditions => ['client_id=:clientid AND (end_times>0 or end_times is null) and (end_date>now() or end_date is null)', {:clientid => @entity.id.to_s}],
+                              :limit => 10, 
+                              :order => 'created_at DESC')
+      @subs=nil if @subs.length==0
 			current_user.price_group_name_id = @entity.price_group_name_id
 			current_user.save
-		end
-		logger.debug "@entity_type=#{@entity_type.to_s}"
-		if @entity_type == 2 or @entity_type == 5
 			logger.debug "setting price group id"
 			current_user.price_group_name_id = @entity.price_group_name_id
 			current_user.save

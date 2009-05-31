@@ -30,7 +30,10 @@
             <%= link_to subscription.last_line.received.to_date.to_s(:long), subscription.last_line.order %>
         <% end %>
     </div>
-    <div class="table_cell"><%= link_to 'Remover', subscription, :confirm => 'Esta seguro?', :method => :delete %></div>
+    <div class="table_cell">
+      <%= link_to 'Ver Detalles', subscription %><br />
+      <%= link_to 'Remover', subscription, :confirm => 'Esta seguro?', :method => :delete %>
+    </div>
     <% if ((subscription.expiration || Date.today) < Date.today) or ((subscription.end_times||9) < 1) %></div><% end %>
 	</div>
 <% end %>

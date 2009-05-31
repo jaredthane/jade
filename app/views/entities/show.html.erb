@@ -61,7 +61,7 @@
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
 		<p>
 			<b>Direcion</b><br />
-			<%=h @entity.address %>
+			<%=@entity.address.gsub("\n","<br />") %>
 		</p>
 		<p>
 			<b>Departamento</b><br />		
@@ -78,6 +78,10 @@
 			<% end %>
 			
 		</p>
+		<p>
+			<b>Notas:</b><br />
+			<%= @entity.notes.gsub("\n","<br />") %>
+		</p>
 	<% end %>
 	<% if @entity.entity_type.id == 3 %>
 		<p>
@@ -93,6 +97,12 @@
 			<b>Asesor de Cliente</b><br />		
 				<% if @entity.user %>
 					<%=link_to @entity.user.login, @entity.user %>
+				<% end %>
+		</p>
+		<p>
+			<b>Sitio</b><br />		
+				<% if @entity.site %>
+					<%=link_to @entity.site.name, @entity.site %>
 				<% end %>
 		</p>
 	<% end %>
@@ -177,8 +187,41 @@
 <hr class="clear-contentunit" />
 <% case @entity.entity_type_id 
 	when 1,2,5 %>
+	  <% if @subs %>
+	    <p>
+			  <b>Suscripciones Activos:</b>
+			  <h2>Haga clic en la cantidad para ver los detalles de la suscripción.</h2>
+			  <div>
+				  <div class="table_header_row">
+					  <div class="table_cell_20">Producto</div>
+					  <div class="table_cell_20">Cantidad</div>
+					  <div class="table_cell_20">Precio</div>
+					  <div class="table_cell_20">Ultima Venta</div>
+					  <div class="table_cell">Acciones</div>
+				  </div>
+				  <% for s in @subs %>
+					  <div class="table_row">
+						  <div class="table_cell_20"><%= link_to s.product.name, s.product %></div>
+						  <div class="table_cell_20"><%= link_to s.quantity, s %></div>
+						  <div class="table_cell_20"><%=h number_to_currency(s.price) %></div>
+              <div class="table_cell_20">
+                  <% if s.last_line %>
+                      <%= link_to s.last_line.received.to_date.to_s(:long), s.last_line.order %>
+                  <% end %>
+              </div>
+              <div class="table_cell">
+                <%= link_to 'Ver Detalles', s %><br />
+		            <%= link_to 'Remover', s, :confirm => 'Esta seguro?', :method => :delete %>
+		          </div>
+					  </div>
+				  <% end %>
+			  </div>
+		  </p>
+		  <br />
+      <hr class="clear-contentunit" />
+	  <% end %>
 		<p>
-			<b>Compras:</b>
+			<b>Compras Recientes:</b>
 			<div>
 				<div class="table_header_row">
 					<div class="table_cell_10">Numero</div>
