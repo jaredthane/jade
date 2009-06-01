@@ -61,7 +61,9 @@
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
 		<p>
 			<b>Direcion</b><br />
-			<%=@entity.address.gsub("\n","<br />") %>
+			<% if @entity.address %>
+			  <%=@entity.address.gsub("\n","<br />") %>
+			<% end %>
 		</p>
 		<p>
 			<b>Departamento</b><br />		
@@ -80,7 +82,9 @@
 		</p>
 		<p>
 			<b>Notas:</b><br />
-			<%= @entity.notes.gsub("\n","<br />") %>
+			<% if @entity.notes %>
+			  <%= @entity.notes.gsub("\n","<br />") %>
+			<% end %>
 		</p>
 	<% end %>
 	<% if @entity.entity_type.id == 3 %>

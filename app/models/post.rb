@@ -31,8 +31,8 @@ class Post < ActiveRecord::Base
 	end
 	def calculate_balance
 		# Make value positive if its negative
-		self.value = self.value * -1 if self.value < 0
+		self.value = (self.value || 0 ) * -1 if (self.value || 0 ) < 0
 		# Now calculate the balance
-		self.balance=self.account.balance + self.value * self.post_type_id * self.account.modifier
+		self.balance=(self.account.balance || 0 ) + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
 	end
 end
