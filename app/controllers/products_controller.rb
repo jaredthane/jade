@@ -50,13 +50,17 @@ class ProductsController < ApplicationController
     end
   end
 def price_list
-    @products = Product.search_all_wo_pagination(params[:search], params[:page])
-    @data=[]
-   total=0
+  @products = Product.search_all_wo_pagination(params[:search], params[:page])
+  @data=[]
+  total=0
    for p in @products
      x = Object.new.extend(ActionView::Helpers::NumberHelper)
-     if p.description.length > 60
-       d=p.description[0..60] + "..."
+     if p.description
+     	 if p.description.length > 60
+       	d=p.description[0..60] + "..."
+      else 
+      	d=p.description
+      end
      else
        d=p.description
      end
