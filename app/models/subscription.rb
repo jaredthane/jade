@@ -92,7 +92,7 @@ class Subscription < ActiveRecord::Base
   	for client in Entity.find(:all, :conditions=> '(entity_type_id=2 or entity_type_id=5) AND site_id=' + User.current_user.location_id.to_s)
   	  subs_to_fill_for_client = {}
   	  puts "asubs_to_fill_for_client" + subs_to_fill_for_client.inspect
-  	  for sub in Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>1 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + client.id.to_s + ')' )
+  	  for sub in Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + client.id.to_s + ')' )
   	    if sub.last_line
 	        if sub.last_line.received.to_date >> sub.frequency <= cutoff_date
   	        puts "bsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
@@ -120,10 +120,29 @@ class Subscription < ActiveRecord::Base
 		end
 	end
 	def self.search(search, page)
-  	    paginate :per_page => 20, :page => page,
-		         :conditions => ['(products.name like :search or products.upc like :search or clients.name like :search) AND clients.site_id = :site', {:search => "%#{search}%", :site => User.current_user.location_id.to_s}],
-		         :order => 'products.name',
-		         :joins => 'inner join products on products.id = subscriptions.product_id inner join entities as clients on clients.id = subscriptions.client_id'
+		if search
+			if search[0..7] == 'inactivo'
+				paginate :per_page => 20, :page => page,
+				       :conditions => ['((subscriptions.end_date <= CURRENT_DATE) OR (subscriptions.end_times<1) AND (products.name like :search or products.upc like :search or clients.name like :search)) AND clients.site_id = :site', {:search => "%#{search[8..search.length]}%", :site => User.current_user.location_id.to_s}],
+				       :order => 'products.name',
+				       :joins => 'inner join products on products.id = subscriptions.product_id inner join entities as clients on clients.id = subscriptions.client_id'
+			elsif search[0..5] == 'activo'
+				paginate :per_page => 20, :page => page,
+				       :conditions => ['(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (products.name like :search or products.upc like :search or clients.name like :search) AND clients.site_id = :site', {:search => "%#{search[6..search.length]}%", :site => User.current_user.location_id.to_s}],
+				       :order => 'products.name',
+				       :joins => 'inner join products on products.id = subscriptions.product_id inner join entities as clients on clients.id = subscriptions.client_id'
+			else
+			  paginate :per_page => 20, :page => page,
+			       :conditions => ['(products.name like :search or products.upc like :search or clients.name like :search) AND clients.site_id = :site', {:search => "%#{search}%", :site => User.current_user.location_id.to_s}],
+			       :order => 'products.name',
+			       :joins => 'inner join products on products.id = subscriptions.product_id inner join entities as clients on clients.id = subscriptions.client_id'
+			end
+		else
+			paginate :per_page => 20, :page => page,
+			       :conditions => ['clients.site_id = :site', {:site => User.current_user.location_id.to_s}],
+			       :order => 'products.name',
+			       :joins => 'inner join products on products.id = subscriptions.product_id inner join entities as clients on clients.id = subscriptions.client_id'
+		end
 	end
 	def price(price_group = User.current_user.current_price_group)
 	    return (self.product.price||0) * (relative_price||0) + (fixed_price||0)
