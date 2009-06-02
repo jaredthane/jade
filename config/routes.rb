@@ -3,9 +3,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :roles
   map.resources :serialized_products
   map.resource :session
+  map.preview_orders 'subscriptions/preview_orders', :controller => 'subscriptions', :action => 'preview_orders'
   map.attachment 'orders/attachment', :controller => 'orders', :action => 'attachment'
   map.resources :product_categories
   map.resources :accounts
+  map.price_list 'products/price_list', :controller => 'products', :action => 'price_list', :format =>'pdf'
   map.resources :prices
   map.new_post 'posts/new', :controller => 'posts', :action => 'new', :format =>'js'
   map.new_transaction 'transactions/new', :controller => 'trans', :action => 'new'

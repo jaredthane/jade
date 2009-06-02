@@ -47,13 +47,33 @@ class SubscriptionsController < ApplicationController
       format.xml  { render :xml => @subscription }
     end
   end
+  def preview_orders
+  	@subscriptions = []
+  	cutoff_date=Date.today
+  	cutoff_date=cutoff_date+1 if Date.today.wday==6
+  	for client in Entity.find(:all, :conditions=> '(entity_type_id=2 or entity_type_id=5) AND site_id=' + User.current_user.location_id.to_s)
+			for sub in Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>1 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + client.id.to_s + ')' )
+			  if sub.last_line
+		      if sub.last_line.received.to_date >> sub.frequency <= cutoff_date
+		      	@subscriptions << sub if !@subscriptions.include?(sub)
+		      end
+		    else
+		    	@subscriptions << sub if !@subscriptions.include?(sub)
+		    end
+			end
+		end
+    respond_to do |format|
+      format.html 
+      format.xml  { render :xml => @subscriptions }
+    end
+  end
   def show_batch
 		@orders = Order.search_receipt_batch(params[:search], params[:page])
 		@order_type_id	= 1
 		@subscriptions = true
 		respond_to do |format|
       format.html {render :template=> "/orders/index"}
-      format.xml  { render :xml => @orders }
+      format.xml  { render :xml => @subscriptions }
     end
   end
   # GET /subscriptions/new

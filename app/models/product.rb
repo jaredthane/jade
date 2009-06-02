@@ -256,7 +256,7 @@ class Product < ActiveRecord::Base
 				logger.debug "checking a req"
 				sum += req.price(price_group)
 			end
-			logger.debug "sum=#{sum.to_s}"
+			logger.debug "sum=#{self.id.to_s}"
 			if self.product_type_id == 2
 				price = (sum * relative_price) - static_price
 			else
@@ -266,7 +266,9 @@ class Product < ActiveRecord::Base
 		elsif (self.product_type_id == 3 and !final)
 			return (static_price||0)
 		else
+			logger.debug "getting price for "
 			priceobj = price_group.prices.find_by_product_id(self.id)
+			priceobj = PriceGroup.find(User.current_user.location.price_group_id).prices.find_by_product_id(self.id) if !priceobj
 			relative_price = priceobj.relative
 			static_price = priceobj.fixed
 			price = (cost(price_group.entity)||0) * (relative_price||0) + (static_price||0)

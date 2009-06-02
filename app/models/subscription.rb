@@ -92,7 +92,7 @@ class Subscription < ActiveRecord::Base
   	for client in Entity.find(:all, :conditions=> '(entity_type_id=2 or entity_type_id=5) AND site_id=' + User.current_user.location_id.to_s)
   	  subs_to_fill_for_client = {}
   	  puts "asubs_to_fill_for_client" + subs_to_fill_for_client.inspect
-  	  for sub in Subscription.find(:all, :conditions=>'(subscriptions.end_date>CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>1 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + client.id.to_s + ')' )
+  	  for sub in Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>1 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + client.id.to_s + ')' )
   	    if sub.last_line
 	        if sub.last_line.received.to_date >> sub.frequency <= cutoff_date
   	        puts "bsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
