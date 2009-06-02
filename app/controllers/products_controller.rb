@@ -49,7 +49,26 @@ class ProductsController < ApplicationController
       format.js
     end
   end
-
+def price_list
+    @products = Product.search_all_wo_pagination(params[:search], params[:page])
+    @data=[]
+   total=0
+   for p in @products
+     x = Object.new.extend(ActionView::Helpers::NumberHelper)
+     if p.description.length > 60
+       d=p.description[0..60] + "..."
+     else
+       d=p.description
+     end
+     @data << [p.name, d, x.number_to_currency(p.price)]
+    end
+    prawnto :prawn => { :page_size => 'LETTER'}
+    params[:format] = 'pdf'
+    respond_to do |format|
+      format.pdf { render :layout => false }
+    end
+  
+  end
   # GET /products/1
   # GET /products/1.xml
   def show
