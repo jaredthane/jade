@@ -238,7 +238,7 @@ class Entity < ActiveRecord::Base
   		elsif word[0..5]=='asesor'
   			condition += ' AND entities.user_id=' + word[7..word.length+1].to_s
   		elsif word[0..2]=='dia'
-  			condition += ' AND entities.subscription_day=' + word[4..word.length+1].to_s
+  			condition += ' AND entities.active=TRUE AND entities.subscription_day=' + word[4..word.length+1].to_s
   		else
   			search_words << word
   		end
