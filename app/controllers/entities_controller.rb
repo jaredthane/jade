@@ -57,12 +57,12 @@ class EntitiesController < ApplicationController
     return true  
 	end
 	def my_clients
-		@user_id = User.current_user.id
-		@entity_type = 'clients'
     return false if !allowed('clients')
     @search = (params[:search]||'') + (params[:filter]||'')
+    @filters = params[:filter]||''
+    @search += ' tipo:clientes asesor:'+ User.current_user.id.to_s
 #    puts "entity type = " + @entity_type
-    @entities = Entity.search(@search, params[:page], @entity_type, @user_id)
+    @entities = Entity.search(@search, params[:page])
     if @entities.length == 1
 			@entity=@entities[0]
 			render :action => 'show'
@@ -94,9 +94,11 @@ class EntitiesController < ApplicationController
 	def my_end_users
 		@user_id = User.current_user.id
 		@entity_type = 'end_users'
+    @search = (params[:search]||'')
+    @search += ' tipo:consumidor asesor:'+ User.current_user.id.to_s
     return false if !allowed('clients')
 #    puts "entity type = " + @entity_type
-    @entities = Entity.search(params[:search], params[:page], @entity_type, @user_id)
+    @entities = Entity.search(params[:search], params[:page])
     if @entities.length == 1
 			@entity=@entities[0]
 			render :action => 'show'
@@ -108,12 +110,14 @@ class EntitiesController < ApplicationController
       format.js
     end
 	end
-	def my_cedito_fiscal
+	def my_credito_fiscal
 		@user_id = User.current_user.id
 		@entity_type = 'wholesale_clients'
     return false if !allowed('clients')
 #    puts "entity type = " + @entity_type
-    @entities = Entity.search(params[:search], params[:page], @entity_type, @user_id)
+    @search = (params[:search]||'')
+    @search += ' tipo:credito asesor:'+ User.current_user.id.to_s
+    @entities = Entity.search(@search, params[:page])
     if @entities.length == 1
 			@entity=@entities[0]
 			render :action => 'show'
@@ -128,15 +132,28 @@ class EntitiesController < ApplicationController
   # GET /entities
   # GET /entities.xml
   def index
-    @entity_type = params[:entity_type] || 'all'
+    case params[:filter]
+    when ' tipo:cliente'
+    	@entity_type = 'clients'
+    when ' tipo:client'
+    	@entity_type = 'clients'
+    when ' tipo:vendor'
+    	@entity_type = 'vendors'
+    when ' tipo:consumidor'
+    	@entity_type = 'end_users'
+    when ' tipo:credito'
+    	@entity_type = 'wholesale_clients'
+    when ' tipo:site'
+    	@entity_type = 'sites'
+    
+    end
     return false if !allowed((params[:entity_type] || 'entities'))
     logger.info "entity type = " + @entity_type
-    params[:sub_day]=nil if params[:sub_day]==''
-    @entities = Entity.search(params[:search], params[:page], @entity_type,nil , nil, params[:sub_day])
-    logger.info "here"
+    search = (params[:search]||'') + (params[:filter]||'')
+    search += ' tipo:' + @entity_type if @entity_type != 'all'
+    @entities = Entity.search(search, params[:page])
     respond_to do |format|
       format.html {
-        logger.debug "Shouldnt be here"
 		    if @entities.length == 1
 					@entity=@entities[0]
 					redirect_to(entity_url(@entity.id))

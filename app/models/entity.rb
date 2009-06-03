@@ -192,36 +192,144 @@ class Entity < ActiveRecord::Base
   def nit_number=(number)
   	self.nit=strip(number, ['-',' '])
   end
-  def self.search(search, page, entity_type='all', user_id=nil, filter='', sub_day=nil)
-  	#puts "search=" + search
+  def self.search(search, page)
   	search = search || ""
-  	#puts "search=" + search
-  	case entity_type
-			when 'clients'
-				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND (entity_type_id = 2 OR entity_type_id = 5)"
-			when 'end_users'
-				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entity_type_id = 2"
-			when 'wholesale_clients'
-				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entity_type_id = 5"
-			when 'vendors'
-				condition = "(entities.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entity_type_id = 1"
-			when 'sites'
-				condition = "(entities.name like '%" + search +"%' OR site_group.name like '%" + search +"%' OR entities.id like '%" + search +"%') AND entity_type_id = 3"
-			else
-				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR site_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entities.id!=1"
+  	logger.debug "search="+ search
+  	
+  	condition="("
+  	fields_to_search=[]
+  	join=""
+  	search_words=[]
+  	words = search.downcase.split( / *"(.*?)" *| / ) 
+  	for word in words
+  		if word[0..6]=='activo'
+  			condition += ' AND entities.active=TRUE' if word[7..word.length+1] == ':si'
+  			condition += ' AND entities.active=FALSE' if word[7..word.length+1] == ':no'  		
+  		elsif word[0..3]=='tipo'
+  			if word[4..word.length+1] == ':cliente' or word[4..word.length+1] == ':clients'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "client_group.name"
+  				fields_to_search << "entities.id"
+  				fields_to_search << "users.login"
+  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND (entity_type_id = 2 OR entity_type_id = 5)"
+  			elsif word[4..word.length+1] == ':credito' or word[4..word.length+1] == ':wholesale_clients'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "client_group.name"
+  				fields_to_search << "entities.id"
+  				fields_to_search << "users.login"
+  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 5"
+  			elsif word[4..word.length+1] == ':consumidor' or word[4..word.length+1] == ':end_users'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "client_group.name"
+  				fields_to_search << "entities.id"
+  				fields_to_search << "users.login"
+  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 2"
+  			elsif word[4..word.length+1] == ':proveedor' or word[4..word.length+1] == ':vendors'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "entities.id"
+  				fields_to_search << "users.login"
+  				condition += " AND entity_type_id = 1"
+  			elsif word[4..word.length+1] == ':sitio' or word[4..word.length+1] == ':site'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "site_group.name"
+  				fields_to_search << "entities.id"
+  				condition += " AND entity_type_id = 3"
+  			end
+  		elsif word[0..5]=='asesor'
+  			condition += ' AND entities.user_id=' + word[7..word.length+1].to_s
+  		elsif word[0..2]=='dia'
+  			condition += ' AND entities.subscription_day=' + word[4..word.length+1].to_s
+  		else
+  			search_words << word
+  		end
   	end
-  	condition += ' AND entities.subscription_day = ' + sub_day.to_s if sub_day
-  	condition += ' AND entities.user_id = ' + user_id.to_s if user_id
-  	if entity_type=='clients' or entity_type=='end_users' or entity_type=='wholesale_clients'
-  	    # only show for this site, but always include anonimo and no spcificado
-      	condition += ' AND (entities.site_id = ' + User.current_user.location_id.to_s + ' or entities.id=3 or entities.id=4) ' 
-    end
-  	#puts "condition=" + condition
-		paginate :per_page => 20, :page => page,
+ 	
+  	#add in actual searching of fields
+  	condition += " AND ("
+  	for word in search_words
+  		condition+= " AND ("
+  		for field in fields_to_search
+  			condition+= " OR " + field + " like '%" + word + "%'"
+  		end
+  		condition += ")"
+  	end
+  	condition += "))"
+  	logger.debug "condition1="+condition
+   	# remove all '( AND's and '( OR's
+#   	condition = condition[5..condition.length+1]
+   	condition =condition.gsub("( AND ", "(")
+  	logger.debug "condition2="+condition
+   	condition =condition.gsub("( OR ", "(")
+  	logger.debug "condition3="+condition
+#   	condition =condition.gsub("( AND )", " ")
+  	logger.debug "condition4="+condition
+#   	condition =condition.gsub("( OR )", "")
+  	logger.debug "condition5="+condition
+   	condition =condition.gsub("()", "")
+  	logger.debug "condition6="+condition
+   	condition =condition.gsub("()", "")
+#   	condition =condition.gsub("( AND )", " ")
+  	logger.debug "condition7="+condition
+   	condition =condition.gsub("()", "")
+#   	condition =condition.gsub("( OR )", "")
+  	logger.debug "condition8="+condition
+   	condition =condition.gsub("AND )", ")")
+  	logger.debug "condition9="+condition
+   	condition="" if condition == " AND "
+  	logger.debug "condition10="+condition
+   	
+   	paginate :per_page => 20, :page => page,
 		       :conditions => condition,
 		       :joins => 'left join price_group_names as client_group on client_group.id=entities.price_group_name_id left join price_groups on entities.price_group_id=price_groups.id left join price_group_names as site_group on site_group.id = price_groups.price_group_name_id left join users on users.id=entities.user_id',
 		       :order => 'name'
-	end
+  end
+############################################################################################
+# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
+############################################################################################
+#  def self.search(search, page, entity_type='all', user_id=nil, sub_day=nil)
+#  	#puts "search=" + search
+#  	search = search || ""
+#  	if search[0..6]=='activos'
+#  		active=1
+#  		search=[7..search.length]
+#  	elsif search[0..8]=='inactivos'
+#  		active=0
+#  		search=[9..search.length]
+#  	end
+#  	#puts "search=" + search
+#  	case entity_type
+#			when 'clients'
+#				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND (entity_type_id = 2 OR entity_type_id = 5)"
+#			when 'end_users'
+#				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entity_type_id = 2"
+#			when 'wholesale_clients'
+#				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entity_type_id = 5"
+#			when 'vendors'
+#				condition = "(entities.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entity_type_id = 1"
+#			when 'sites'
+#				condition = "(entities.name like '%" + search +"%' OR site_group.name like '%" + search +"%' OR entities.id like '%" + search +"%') AND entity_type_id = 3"
+#			else
+#				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR site_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entities.id!=1"
+#  	end
+#  	if active==1
+#  		condition += ' AND entities.active = TRUE'
+#  	elsif active==0
+#  		condition += ' AND entities.active = FALSE'
+#  	elsif active==3
+#  		condition += ' AND entities.retired = TRUE'
+#  	end
+#  	condition += ' AND entities.subscription_day = ' + sub_day.to_s if sub_day
+#  	condition += ' AND entities.user_id = ' + user_id.to_s if user_id
+#  	if entity_type=='clients' or entity_type=='end_users' or entity_type=='wholesale_clients'
+#  	    # only show for this site, but always include anonimo and no spcificado
+#      	condition += ' AND (entities.site_id = ' + User.current_user.location_id.to_s + ' or entities.id=3 or entities.id=4) ' 
+#    end
+#  	#puts "condition=" + condition
+#		paginate :per_page => 20, :page => page,
+#		       :conditions => condition,
+#		       :joins => 'left join price_group_names as client_group on client_group.id=entities.price_group_name_id left join price_groups on entities.price_group_id=price_groups.id left join price_group_names as site_group on site_group.id = price_groups.price_group_name_id left join users on users.id=entities.user_id',
+#		       :order => 'name'
+#	end
 	def self.find_all_clients
 	  condition = "(entity_type_id = 2 OR entity_type_id = 5)"
   	condition += ' AND entities.site_id = ' + User.current_user.location_id.to_s
@@ -251,8 +359,7 @@ class Entity < ActiveRecord::Base
 			end
 		else
 			return false
-		end
-		
+		end		
 	end
 	def inventory(product)
 		puts "product.id=" + product.id.to_s
