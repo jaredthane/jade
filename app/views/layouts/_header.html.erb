@@ -166,14 +166,19 @@
 	  </li>
 	  <li><a href="/sites" title="Sitios">Sitios</a>
 	  	<ul>
-  			<% for location in get_locations %>
+  			<% for location in get_sites %>
   				<li><a href="/entities/<%= location.id %>" title=<%= location.name %>><%= location.name %></a></li>
   			<% end %>
   			<li><a href="/physical_counts" title="Cuentas Fisicas">Cuentas Fisicas</a></li>
   		</ul>
   	</li>
   	<% if current_user.has_rights(['admin','gerente','ventas']) %>
-	  	<li><a href="/payments" title="Pagos">Pagos</a></li>
+	  	<li><a href="/payments" title="Pagos">Pagos</a>
+	  		<ul>
+	  			<li><a href=<%= payments_path %> title=Pagos>Pagos</a></li>
+	  			<li><a href=<%= unpaid_receipts_path %> title=Facturas No Canceladas>Facturas No Canceladas</a></li>
+	  		</ul>
+	  	</li>
 	  <% end %>
   	<% if current_user.has_rights(['admin','gerente']) %>
 	  	<li><a href="/users" title="Usuarios">Usuarios</a></li>

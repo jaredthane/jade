@@ -14,7 +14,25 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
+##################################################################################################
+# A note on uses of account fields with different entity types
+#################################################################################################
+# Most field names are named for their uses with a site
+# Client:
+#			Cash_account is the clients main account this is a receiveable(Debit) account
+#   		Use it for charging a client and recording his payments
+# 		Revenue account is the account that will record the amount of revenue earned from the client
+# 			This should be a Revenue(Credit) account
+# Vendor:
+#			Cash_account is the Vendor main account this is a payable(credit) account
+#   		Use it for creating an order and recording our payments
+#			Revenue account is the account that will record the amount of revenue earned from this vendors products
+#   		This should be a Revenue(Credit) account
+#
+#
+#
+#
+#
 class Entity < ActiveRecord::Base
 	validates_presence_of(:name, :message => "Debe introducir el nombre de la entidad.")
   validates_uniqueness_of(:name, :message => "El nombre de entidad ya existe.") 
@@ -71,11 +89,13 @@ class Entity < ActiveRecord::Base
 		# If the client has subscriptions to be processed, will create an order with a line for each.
 		#################################################################################################
 		# figure out the cutoff date
+		puts "creating order for " + self.name
   	cutoff_date=Date.today
   	cutoff_date=cutoff_date+1 if Date.today.wday==6
     # this hash will have a list of subs for each vendor
 	  subscriptions = {}
-	  for sub in Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + client.id.to_s + ')' )
+		puts "making a list of vendors involved"
+	  for sub in Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + self.id.to_s + ')' )
 	  	# check if this sub needs to be processed
 	    if sub.last_line
         if sub.last_line.received.to_date >> sub.frequency <= cutoff_date
@@ -90,22 +110,24 @@ class Entity < ActiveRecord::Base
       end
  	  	# Now we got a nice list grouped by vendor, lets make the subs
   	  for vendor_id, list in subscriptions
+  	  	puts "making an order for vendor: "+list[0].vendor.name
 			  o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 			  for sub in list
+  	  		puts "adding a line for: "+sub.name
 			  	sub.process(o)
 		    end
 		    # now for the accounting
-				sale = Trans.create(:order => o, :comments => o.comments)
-				vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>2, :balance => (o.vendor.revenue_account.balance||0) + (o.total_price||0))
-				client = Post.create(:trans=>sale, :account => o.client.cash_account, :value=>o.total_price_with_tax, :post_type_id =>1, :balance => (o.client.cash_account.balance||0) + (o.total_price||0))
-				tax    = Post.create(:trans=>sale, :account => o.vendor.tax_account, :value=>o.total_tax, :post_type_id =>2, :balance => (o.vendor.tax_account.balance||0) + (o.total_price||0))
-				inventory_cost = o.inventory_value
-				# if the sub included inventory items, we have to make that transaction also...
-				if inventory_cost > 0 
-					itrans = Trans.create(:order => o, :comments => o.comments)
-					inventory = Post.create(:trans=>itrans, :account => o.vendor.inventory_account, :value=>o.inventory_cost, :post_type_id =>2, :balance => (o.vendor.inventory_account.balance||0) - (o.inventory_cost||0))
-					expense = Post.create(:trans=>itrans, :account => o.vendor.expense_account, :value=>o.inventory_cost, :post_type_id =>1, :balance => (o.vendor.expense_account.balance||0) + (o.inventory_cost||0))
-				end
+#				sale = Trans.create(:order => o, :comments => o.comments)
+#				vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>2, :balance => (o.vendor.revenue_account.balance||0) + (o.total_price||0))
+#				client = Post.create(:trans=>sale, :account => o.client.cash_account, :value=>o.total_price_with_tax, :post_type_id =>1, :balance => (o.client.cash_account.balance||0) + (o.total_price||0))
+#				tax    = Post.create(:trans=>sale, :account => o.vendor.tax_account, :value=>o.total_tax, :post_type_id =>2, :balance => (o.vendor.tax_account.balance||0) + (o.total_price||0))
+#				inventory_cost = o.inventory_value
+#				# if the sub included inventory items, we have to make that transaction also...
+#				if inventory_cost > 0 
+#					itrans = Trans.create(:order => o, :comments => o.comments)
+#					inventory = Post.create(:trans=>itrans, :account => o.vendor.inventory_account, :value=>o.inventory_cost, :post_type_id =>2, :balance => (o.vendor.inventory_account.balance||0) - (o.inventory_cost||0))
+#					expense = Post.create(:trans=>itrans, :account => o.vendor.expense_account, :value=>o.inventory_cost, :post_type_id =>1, :balance => (o.vendor.expense_account.balance||0) + (o.inventory_cost||0))
+#				end
 		  end
   	end
 	end
@@ -192,7 +214,7 @@ class Entity < ActiveRecord::Base
   def nit_number=(number)
   	self.nit=strip(number, ['-',' '])
   end
-  def self.search(search, page)
+  def compile_condition(search)
   	search = search || ""
   	logger.debug "search="+ search
   	
@@ -206,7 +228,7 @@ class Entity < ActiveRecord::Base
   			condition += ' AND entities.active=TRUE' if word[6..word.length+1] == ':si'
   			condition += ' AND entities.active=FALSE' if word[6..word.length+1] == ':no'  		
   		elsif word[0..3]=='tipo'
-  			if word[4..word.length+1] == ':cliente' or word[4..word.length+1] == ':clients'
+  			if word[4..word.length+1] == ':cliente' or word[4..word.length+1] == ':clients' or word[4..word.length+1] == ':clientes'
   				fields_to_search << "entities.name"
   				fields_to_search << "client_group.name"
   				fields_to_search << "entities.id"
@@ -224,7 +246,7 @@ class Entity < ActiveRecord::Base
   				fields_to_search << "entities.id"
   				fields_to_search << "users.login"
   				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 2"
-  			elsif word[4..word.length+1] == ':proveedor' or word[4..word.length+1] == ':vendors'
+  			elsif word[4..word.length+1] == ':proveedor' or word[4..word.length+1] == ':vendors' or word[4..word.length+1] == ':proveedores'
   				fields_to_search << "entities.name"
   				fields_to_search << "entities.id"
   				fields_to_search << "users.login"
@@ -236,9 +258,9 @@ class Entity < ActiveRecord::Base
   				condition += " AND entity_type_id = 3"
   			end
   		elsif word[0..5]=='asesor'
-  			condition += ' AND entities.user_id=' + word[7..word.length+1].to_s
+  			condition += ' AND entities.user_id=' + (word[7..word.length+1]||0).to_s
   		elsif word[0..2]=='dia'
-  			condition += ' AND entities.active=TRUE AND entities.subscription_day=' + word[4..word.length+1].to_s
+  			condition += ' AND entities.active = TRUE AND entities.subscription_day = ' + (word[4..word.length+1]||0).to_s
   		else
   			search_words << word
   		end
@@ -277,8 +299,184 @@ class Entity < ActiveRecord::Base
   	logger.debug "condition9="+condition
    	condition="" if condition == " AND "
   	logger.debug "condition10="+condition
-   	
+  	return condition
+  end
+  def self.search(search, page)
+  	search = search || ""
+  	logger.debug "search="+ search
+  	
+  	condition="("
+  	fields_to_search=[]
+  	join=""
+  	search_words=[]
+  	words = search.downcase.split( / *"(.*?)" *| / ) 
+  	for word in words
+  		if word[0..5]=='activo'
+  			condition += ' AND entities.active=TRUE' if word[6..word.length+1] == ':si'
+  			condition += ' AND entities.active=FALSE' if word[6..word.length+1] == ':no'  		
+  		elsif word[0..3]=='tipo'
+  			if word[4..word.length+1] == ':cliente' or word[4..word.length+1] == ':clients' or word[4..word.length+1] == ':clientes'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "client_group.name"
+  				fields_to_search << "entities.id"
+  				fields_to_search << "users.login"
+  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND (entity_type_id = 2 OR entity_type_id = 5)"
+  			elsif word[4..word.length+1] == ':credito' or word[4..word.length+1] == ':wholesale_clients'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "client_group.name"
+  				fields_to_search << "entities.id"
+  				fields_to_search << "users.login"
+  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 5"
+  			elsif word[4..word.length+1] == ':consumidor' or word[4..word.length+1] == ':end_users'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "client_group.name"
+  				fields_to_search << "entities.id"
+  				fields_to_search << "users.login"
+  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 2"
+  			elsif word[4..word.length+1] == ':proveedor' or word[4..word.length+1] == ':vendors' or word[4..word.length+1] == ':proveedores'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "entities.id"
+  				fields_to_search << "users.login"
+  				condition += " AND entity_type_id = 1"
+  			elsif word[4..word.length+1] == ':sitio' or word[4..word.length+1] == ':site'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "site_group.name"
+  				fields_to_search << "entities.id"
+  				condition += " AND entity_type_id = 3"
+  			end
+  		elsif word[0..5]=='asesor'
+  			condition += ' AND entities.user_id=' + word[7..word.length+1].to_s if word[7..word.length+1].to_s != ""
+  		elsif word[0..2]=='dia'
+  			condition += ' AND entities.active=TRUE AND entities.subscription_day=' + word[4..word.length+1].to_s if word[4..word.length+1].to_s != ""
+  		else
+  			search_words << word
+  		end
+  	end
+ 	
+  	#add in actual searching of fields
+  	condition += " AND ("
+  	for word in search_words
+  		condition+= " AND ("
+  		for field in fields_to_search
+  			condition+= " OR " + field + " like '%" + word + "%'"
+  		end
+  		condition += ")"
+  	end
+  	condition += "))"
+  	logger.debug "condition1="+condition
+   	# remove all '( AND's and '( OR's
+#   	condition = condition[5..condition.length+1]
+   	condition =condition.gsub("( AND ", "(")
+  	logger.debug "condition2="+condition
+   	condition =condition.gsub("( OR ", "(")
+  	logger.debug "condition3="+condition
+#   	condition =condition.gsub("( AND )", " ")
+  	logger.debug "condition4="+condition
+#   	condition =condition.gsub("( OR )", "")
+  	logger.debug "condition5="+condition
+   	condition =condition.gsub("()", "")
+  	logger.debug "condition6="+condition
+   	condition =condition.gsub("()", "")
+#   	condition =condition.gsub("( AND )", " ")
+  	logger.debug "condition7="+condition
+   	condition =condition.gsub("()", "")
+#   	condition =condition.gsub("( OR )", "")
+  	logger.debug "condition8="+condition
+   	condition =condition.gsub("AND )", ")")
+  	logger.debug "condition9="+condition
+   	condition="" if condition == " AND "
+  	logger.debug "condition10="+condition
    	paginate :per_page => 20, :page => page,
+		       :conditions => condition,
+		       :joins => 'left join price_group_names as client_group on client_group.id=entities.price_group_name_id left join price_groups on entities.price_group_id=price_groups.id left join price_group_names as site_group on site_group.id = price_groups.price_group_name_id left join users on users.id=entities.user_id',
+		       :order => 'name'
+  end
+  def self.search_without_pagination(search)
+  	search = search || ""
+  	logger.debug "search="+ search
+  	
+  	condition="("
+  	fields_to_search=[]
+  	join=""
+  	search_words=[]
+  	words = search.downcase.split( / *"(.*?)" *| / ) 
+  	for word in words
+  		if word[0..5]=='activo'
+  			condition += ' AND entities.active=TRUE' if word[6..word.length+1] == ':si'
+  			condition += ' AND entities.active=FALSE' if word[6..word.length+1] == ':no'  		
+  		elsif word[0..3]=='tipo'
+  			if word[4..word.length+1] == ':cliente' or word[4..word.length+1] == ':clients' or word[4..word.length+1] == ':clientes'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "client_group.name"
+  				fields_to_search << "entities.id"
+  				fields_to_search << "users.login"
+  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND (entity_type_id = 2 OR entity_type_id = 5)"
+  			elsif word[4..word.length+1] == ':credito' or word[4..word.length+1] == ':wholesale_clients'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "client_group.name"
+  				fields_to_search << "entities.id"
+  				fields_to_search << "users.login"
+  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 5"
+  			elsif word[4..word.length+1] == ':consumidor' or word[4..word.length+1] == ':end_users'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "client_group.name"
+  				fields_to_search << "entities.id"
+  				fields_to_search << "users.login"
+  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 2"
+  			elsif word[4..word.length+1] == ':proveedor' or word[4..word.length+1] == ':vendors' or word[4..word.length+1] == ':proveedores'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "entities.id"
+  				fields_to_search << "users.login"
+  				condition += " AND entity_type_id = 1"
+  			elsif word[4..word.length+1] == ':sitio' or word[4..word.length+1] == ':site'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "site_group.name"
+  				fields_to_search << "entities.id"
+  				condition += " AND entity_type_id = 3"
+  			end
+  		elsif word[0..5]=='asesor'
+  			condition += ' AND entities.user_id=' + word[7..word.length+1].to_s if word[7..word.length+1].to_s != ""
+  		elsif word[0..2]=='dia'
+  			condition += ' AND entities.active=TRUE AND entities.subscription_day=' + word[4..word.length+1].to_s if word[4..word.length+1].to_s != ""
+  		else
+  			search_words << word
+  		end
+  	end
+ 	
+  	#add in actual searching of fields
+  	condition += " AND ("
+  	for word in search_words
+  		condition+= " AND ("
+  		for field in fields_to_search
+  			condition+= " OR " + field + " like '%" + word + "%'"
+  		end
+  		condition += ")"
+  	end
+  	condition += "))"
+  	logger.debug "condition1="+condition
+   	# remove all '( AND's and '( OR's
+#   	condition = condition[5..condition.length+1]
+   	condition =condition.gsub("( AND ", "(")
+  	logger.debug "condition2="+condition
+   	condition =condition.gsub("( OR ", "(")
+  	logger.debug "condition3="+condition
+#   	condition =condition.gsub("( AND )", " ")
+  	logger.debug "condition4="+condition
+#   	condition =condition.gsub("( OR )", "")
+  	logger.debug "condition5="+condition
+   	condition =condition.gsub("()", "")
+  	logger.debug "condition6="+condition
+   	condition =condition.gsub("()", "")
+#   	condition =condition.gsub("( AND )", " ")
+  	logger.debug "condition7="+condition
+   	condition =condition.gsub("()", "")
+#   	condition =condition.gsub("( OR )", "")
+  	logger.debug "condition8="+condition
+   	condition =condition.gsub("AND )", ")")
+  	logger.debug "condition9="+condition
+   	condition="" if condition == " AND "
+  	logger.debug "condition10="+condition
+   	find 	 :all,
 		       :conditions => condition,
 		       :joins => 'left join price_group_names as client_group on client_group.id=entities.price_group_name_id left join price_groups on entities.price_group_id=price_groups.id left join price_group_names as site_group on site_group.id = price_groups.price_group_name_id left join users on users.id=entities.user_id',
 		       :order => 'name'

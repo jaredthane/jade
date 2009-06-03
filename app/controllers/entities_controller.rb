@@ -79,12 +79,15 @@ class EntitiesController < ApplicationController
 	#################################################################################################
 	def process_subscriptions
     return false if !allowed('clients')
-  	@clients = Entity.search_clients_without_pagination(params[:search], params[:sub_day])
+    search = (params[:search]||'') + " activo:si tipo:clientes"
+    logger.debug "my search->"+ search
+  	@clients = Entity.search_without_pagination(search)
+  	logger.debug @clients.inspect
   	for client in @clients
   		client.process_subscriptions()
   	end
     respond_to do |format|
-      format.html { redirect_to(subscriptions_results_path) }
+      format.html { redirect_to(todays_sales_path) }
       format.xml  { render :xml => @subscription }
     end
   end
@@ -110,6 +113,29 @@ class EntitiesController < ApplicationController
       format.js
     end
 	end
+############################################################################################
+# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
+############################################################################################
+#	def process_subscriptions
+#		return false if !allowed('clients')
+#    search = (params[:search]||'') + "activo:si tipo:clientes"
+#    @entities = Entity.search_without_pagination(search)
+#    for entity in @entities
+#    	entity.process_subscriptions
+#    end
+#    respond_to do |format|
+#      format.html {
+#		    if @entities.length == 1
+#					@entity=@entities[0]
+#					redirect_to(entity_url(@entity.id))
+#					return false
+#				end
+#       }
+#      format.xml  { render :xml => @entities }
+#      format.js {logger.debug "Should be here" }
+#    end
+#	
+#	end
 	def my_credito_fiscal
 		@user_id = User.current_user.id
 		@entity_type = 'wholesale_clients'
@@ -144,11 +170,11 @@ class EntitiesController < ApplicationController
     when ' tipo:credito'
     	@entity_type = 'wholesale_clients'
     when ' tipo:site'
-    	@entity_type = 'sites'
-    
+    	@entity_type = 'sites'  
+    else
+    	@entity_type = 'entities'  
     end
     return false if !allowed((params[:entity_type] || 'entities'))
-    logger.info "entity type = " + @entity_type
     search = (params[:search]||'') + (params[:filter]||'')
     search += ' tipo:' + @entity_type if @entity_type != 'all'
     @entities = Entity.search(search, params[:page])

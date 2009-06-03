@@ -31,6 +31,7 @@
 		<% when 'clients' %>
 		 	<% if current_user.has_rights(['admin','compras','gerente','ventas']) %>
 				<dt><%= link_to 'Nuevo cliente', "/clients/new", :class => 'action' %></dt>
+				<dt><%= link_to 'Procesar Subscripciones', "/clients/process_subscriptions?search="+(params[:search]||""), :class => 'action' %></dt>
 			<% end %>
 	<% end %>
 <% end %>

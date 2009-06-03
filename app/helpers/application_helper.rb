@@ -18,8 +18,8 @@
 # Likewise, all the methods added will be available for all controllers.
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-	def get_locations
-    @locations = Location.find(:all, :order => "name")
+	def get_sites
+    @clients = Entity.find(:all, :order => "name", :conditions =>"entity_type_id=3")
   end
   def get_entity_types
     @entity_types = EntityType.find(:all, :order => "name")

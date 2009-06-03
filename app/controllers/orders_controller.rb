@@ -90,7 +90,7 @@ class OrdersController < ApplicationController
   def show_todays_sales
   	
 		return false if !allowed(1, 'view')
-    @orders = Order.search_todays_sales(params[:search])
+    @orders = Order.search_todays_sales(params[:search], params[:page])
 		if @orders.length == 1
 			@order=@orders[0]
 			return false if !allowed(@order.order_type_id, 'view')
@@ -98,7 +98,7 @@ class OrdersController < ApplicationController
 			return false
 		end
     respond_to do |format|
-      format.html # index.html.erb
+      format.html { render :action => 'index' }
       format.xml  { render :xml => @orders }
     end
   end

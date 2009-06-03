@@ -15,7 +15,7 @@ ActionController::Routing::Routes.draw do |map|
   map.consumidor_final_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>2, :format =>'pdf'
   map.credito_fiscal_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>5, :format =>'pdf'
   map.pay_off_receipt 'receipts/:id/pay_off', :controller => 'receipts', :action => 'pay_off'
-  map.todays_orders 'orders/today/', :controller => 'orders', :action => 'show_todays'
+  map.todays_sales 'orders/todays_sales/', :controller => 'orders', :action => 'show_todays_sales'
   map.todays_receipts 'receipts/today/', :controller => 'receipts', :action => 'show_today'
   map.unpaid_receipts 'receipts/unpaid/', :controller => 'receipts', :action => 'unpaid'
   map.new_batch_receipts 'subscriptions/new_receipts', :controller => 'receipts', :action => 'new_batch'
@@ -23,7 +23,7 @@ ActionController::Routing::Routes.draw do |map|
   map.create_receipt 'receipts/:id/create', :controller => 'receipts', :action => 'create'
   map.receipt 'receipts/:id/', :controller => 'receipts', :action => 'show'
   map.new_receipt 'receipts/:id/new', :controller => 'receipts', :action => 'new'
-  map.process_subscriptions 'subscriptions/process', :controller => 'subscriptions', :action => 'create_orders'
+  map.process_subscriptions 'clients/process_subscriptions', :controller => 'entities', :action => 'process_subscriptions'
   map.subscriptions_results 'subscriptions/results', :controller => 'subscriptions', :action => 'show_batch'
   map.resources :subscriptions
 	map.resources :discounts

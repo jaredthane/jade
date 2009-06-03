@@ -108,7 +108,9 @@ class Order < ActiveRecord::Base
 			when 9 #Clients Rep
 				logger.debug " Grabbing revenue account from Clients Rep"
 				if self.client
-					return self.client.user.cash_account if self.client.user.cash_account
+					if self.client.user
+						return self.client.user.cash_account if self.client.user.cash_account
+					end
 				end
 			end
 		end
@@ -1002,8 +1004,8 @@ class Order < ActiveRecord::Base
 	end
 	def self.search_todays_sales(search, page)
 		paginate :per_page => 20, :page => page,
-						 :conditions => ['(order_type_id = 1) AND (clients.name like :search) AND (vendors.id=:current_location OR clients.id=:current_location) AND (clients.id != 1) AND (date(created_at)=curdate())', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
-						 :order => 'created_at desc',
+						 :conditions => ['(order_type_id = 1) AND (clients.name like :search) AND (vendors.id=:current_location OR clients.id=:current_location) AND (clients.id != 1) AND (date(orders.created_at)=curdate())', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+						 :order => 'orders.created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
 	def self.search_purchases(search, page)
