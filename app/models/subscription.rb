@@ -28,20 +28,22 @@ class Subscription < ActiveRecord::Base
 	def client_name=(name)
 		self.client = Entity.find_by_name(name) unless name.blank?
 	end
-	def process(order=nil)
+	def process(order=nil, received=nil)
 		# processes the subscription for the next unprocessed period no matter what.
 		# If you give it an order, it will append the new line to the specified order
 		# if not, it will make an appropriate order and append the line to it.
-		if !order
-			order = Order.create(:vendor => self.vendor, :client => self.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
-		end
 		self.end_times -= 1 if self.end_times
-  	if self.last_line
-	  	received=self.last_line.received.to_date >> self.frequency
-	  else
-	  	received=self.created_at
-	  end
-    l=Line.create(:order => order, :product => self.product, :quantity=> self.quantity, :price => self.price, :received =>received)
+		if !received
+			if self.last_line
+				received=self.last_line.received.to_date >> self.frequency
+			else
+				received=self.created_at
+			end
+		end
+		if !order
+			order = Order.create(:created_at=>received, :vendor => self.vendor, :client => self.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+		end
+    l=Line.create(:created_at=>received, :order => order, :product => self.product, :quantity=> self.quantity, :price => self.price, :received =>received)
     self.last_line_id = l.id
     self.save
 	end

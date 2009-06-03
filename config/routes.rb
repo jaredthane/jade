@@ -9,6 +9,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :accounts
   map.price_list 'products/price_list', :controller => 'products', :action => 'price_list', :format =>'pdf'
   map.resources :prices
+  map.new_history 'entities/:id/new_history', :controller => 'entities', :action => 'new_history', :filter => ' tipo:cliente'
+  map.create_history 'entities/:id/create_history', :controller => 'entities', :action => 'create_history', :filter => ' tipo:cliente'
   map.new_post 'posts/new', :controller => 'posts', :action => 'new', :format =>'js'
   map.new_transaction 'transactions/new', :controller => 'trans', :action => 'new'
   map.create_transaction 'transactions/create', :controller => 'trans', :action => 'create'

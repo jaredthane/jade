@@ -33,6 +33,7 @@ class Post < ActiveRecord::Base
 		# Make value positive if its negative
 		self.value = (self.value || 0 ) * -1 if (self.value || 0 ) < 0
 		# Now calculate the balance
+		puts 'OLD BALANCE=' + self.account.balance.to_s + '+ VALUE=' +self.value.to_s + ' * POST_TYPE=' + self.post_type_id.to_s + ' * MODIFIER='+self.account.modifier.to_s
 		self.balance=(self.account.balance || 0 ) + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
 	end
 end

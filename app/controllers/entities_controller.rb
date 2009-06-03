@@ -136,6 +136,49 @@ class EntitiesController < ApplicationController
 #    end
 #	
 #	end
+def new_history
+  @entity = Entity.find(params[:id])
+  return false if !allowed('clients')
+  respond_to do |format|
+    format.html # new.html.erb
+    format.xml  { render :xml => @entity }
+  end
+end
+def create_history
+  @entity = Entity.find(params[:id])
+  months=(params[:number].to_i||0)
+  logger.debug 'months='+months.to_s
+  sub=Subscription.find_by_client_id(@entity.id)
+  for i in 1..months
+  	logger.debug "doing round:"+i.to_s
+  	d=Date.new(2009, 6, @entity.subscription_day) << i
+  	o=Order.create(:received => d, :created_at=>d, :vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+	  sub.process(o, d)
+	end
+	@entity_type = @entity.entity_type_id
+	return if !allowed(@entity.entity_type_id || 'entities')
+	if @entity_type == 3
+		current_user.location_id = params[:id]
+		current_user.save
+	end
+	if @entity.entity_type_id == 2 or @entity.entity_type_id == 5
+	  @subs=Subscription.find(:all, 
+                            :conditions => ['client_id=:clientid AND (end_times>0 or end_times is null) and (end_date>now() or end_date is null)', {:clientid => @entity.id.to_s}],
+                            :limit => 10, 
+                            :order => 'created_at DESC')
+    @subs=nil if @subs.length==0
+		current_user.price_group_name_id = @entity.price_group_name_id
+		current_user.save
+		logger.debug "setting price group id"
+		current_user.price_group_name_id = @entity.price_group_name_id
+		current_user.save
+		logger.debug "current_user.price_group_name_id=#{current_user.price_group_name_id.to_s}"
+	end
+  respond_to do |format|
+    format.html { render :action => 'show' }
+    format.xml  { render :xml => @entity }
+  end
+end
 	def my_credito_fiscal
 		@user_id = User.current_user.id
 		@entity_type = 'wholesale_clients'
