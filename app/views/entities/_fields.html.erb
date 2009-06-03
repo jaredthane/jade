@@ -57,6 +57,10 @@
 			<b>Sitio</b><br />
 			<%= f.collection_select(:site_id, get_locations, :id, :name) %>
 		</p>
+		<p>
+			<b>Dia de Procesar Subscripciones</b><br />
+			<%= f.text_field :subscription_day, :class => 'field' %>
+		</p>
 		<% end %>
 	<% end %>
 	<p>

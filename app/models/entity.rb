@@ -66,27 +66,47 @@ class Entity < ActiveRecord::Base
       movements.build(attributes)
     end
   end
-
-	def create_orders_from_subscriptions
+	def process_subscriptions
+		#################################################################################################
+		# If the client has subscriptions to be processed, will create an order with a line for each.
+		#################################################################################################
+		# figure out the cutoff date
   	cutoff_date=Date.today
   	cutoff_date=cutoff_date+1 if Date.today.wday==6
-	  subs_to_fill_for_client = {}
-	  puts "asubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+    # this hash will have a list of subs for each vendor
+	  subscriptions = {}
 	  for sub in Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + client.id.to_s + ')' )
+	  	# check if this sub needs to be processed
 	    if sub.last_line
         if sub.last_line.received.to_date >> sub.frequency <= cutoff_date
-	        puts "bsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
-          subs_to_fill_for_client[sub.vendor_id] = [] if !subs_to_fill_for_client[sub.vendor_id]
-	        puts "csubs_to_fill_for_client" + subs_to_fill_for_client.inspect
-          subs_to_fill_for_client[sub.vendor_id] << sub
+        	# add the vendor if its not already in the list
+          subscriptions[sub.vendor_id] = [] if !subscriptions[sub.vendor_id]
+          # add the sub to the list
+          subscriptions[sub.vendor_id] << sub
         end
-      else
-        puts "dsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
-        subs_to_fill_for_client[sub.vendor_id] = [] if !subs_to_fill_for_client[sub.vendor_id]
-	      puts "esubs_to_fill_for_client" + subs_to_fill_for_client.inspect  
-        subs_to_fill_for_client[sub.vendor_id] << sub
+      else  # this sub has never been processed, lets do it now
+        subscriptions[sub.vendor_id] = [] if !subscriptions[sub.vendor_id]
+        subscriptions[sub.vendor_id] << sub
       end
-  	  create_order_for_client(subs_to_fill_for_client) if subs_to_fill_for_client.length > 0
+ 	  	# Now we got a nice list grouped by vendor, lets make the subs
+  	  for vendor_id, list in subscriptions
+			  o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+			  for sub in list
+			  	sub.process(o)
+		    end
+		    # now for the accounting
+				sale = Trans.create(:order => o, :comments => o.comments)
+				vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>2, :balance => (o.vendor.revenue_account.balance||0) + (o.total_price||0))
+				client = Post.create(:trans=>sale, :account => o.client.cash_account, :value=>o.total_price_with_tax, :post_type_id =>1, :balance => (o.client.cash_account.balance||0) + (o.total_price||0))
+				tax    = Post.create(:trans=>sale, :account => o.vendor.tax_account, :value=>o.total_tax, :post_type_id =>2, :balance => (o.vendor.tax_account.balance||0) + (o.total_price||0))
+				inventory_cost = o.inventory_value
+				# if the sub included inventory items, we have to make that transaction also...
+				if inventory_cost > 0 
+					itrans = Trans.create(:order => o, :comments => o.comments)
+					inventory = Post.create(:trans=>itrans, :account => o.vendor.inventory_account, :value=>o.inventory_cost, :post_type_id =>2, :balance => (o.vendor.inventory_account.balance||0) - (o.inventory_cost||0))
+					expense = Post.create(:trans=>itrans, :account => o.vendor.expense_account, :value=>o.inventory_cost, :post_type_id =>1, :balance => (o.vendor.expense_account.balance||0) + (o.inventory_cost||0))
+				end
+		  end
   	end
 	end
 
