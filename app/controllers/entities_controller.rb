@@ -131,6 +131,7 @@ class EntitiesController < ApplicationController
     @entity_type = params[:entity_type] || 'all'
     return false if !allowed((params[:entity_type] || 'entities'))
     logger.info "entity type = " + @entity_type
+    params[:sub_day]=nil if params[:sub_day]==''
     @entities = Entity.search(params[:search], params[:page], @entity_type,nil , nil, params[:sub_day])
     logger.info "here"
     respond_to do |format|
