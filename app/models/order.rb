@@ -115,6 +115,8 @@ class Order < ActiveRecord::Base
 			end
 		end
 		# If there are no other valid options, use the sites revenue account
+		puts "vendor:" + self.vendor_id.to_s
+		puts "Couldnt find any other valid accounts, so we're using the vendors account:" + self.vendor.cash_account_id
 		return self.vendor.cash_account
 	end
 	def create_movements

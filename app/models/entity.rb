@@ -353,6 +353,8 @@ class Entity < ActiveRecord::Base
   			condition += ' AND entities.user_id=' + word[7..word.length+1].to_s if word[7..word.length+1].to_s != ""
   		elsif word[0..2]=='dia'
   			condition += ' AND entities.active=TRUE AND entities.subscription_day=' + word[4..word.length+1].to_s if word[4..word.length+1].to_s != ""
+  		elsif word[0..1]=='id'
+  			condition += ' AND entities.id=' + word[3..word.length+1].to_s
   		else
   			search_words << word
   		end
@@ -443,6 +445,8 @@ class Entity < ActiveRecord::Base
   			condition += ' AND entities.user_id=' + word[7..word.length+1].to_s if word[7..word.length+1].to_s != ""
   		elsif word[0..2]=='dia'
   			condition += ' AND entities.active=TRUE AND entities.subscription_day=' + word[4..word.length+1].to_s if word[4..word.length+1].to_s != ""
+  		elsif word[0..1]=='id'
+  			condition += ' AND entities.id=' + word[3..word.length+1].to_s
   		else
   			search_words << word
   		end

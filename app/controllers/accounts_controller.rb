@@ -18,7 +18,7 @@
 class AccountsController < ApplicationController
   before_filter :login_required
 	#before_filter {privilege_required('sales')}
-	access_control [:new, :create, :update, :edit, :index, :show] => '(gerente | admin | contabilidad)' 
+	access_control [:new, :create, :update, :edit, :index, :show, :new_balance_move, :create_balance_move] => '(gerente | admin | Contabilidad)' 
 	access_control [:destroy] => '(admin)'
   # GET /accounts
   # GET /accounts.xml
@@ -42,6 +42,31 @@ class AccountsController < ApplicationController
     end
   end
 
+	def new_balance_transfer
+    @account = Account.find(params[:id])
+    if @account.posts.last
+			@amt = @account.posts.last.balance
+			
+		else
+			@amt = 0
+		end
+    respond_to do |format|
+      format.html # show.html.erb
+      format.xml  { render :xml => @account }
+    end		
+	end
+	def create_balance_transfer
+		account = Account.find(params[:id])
+		other=Account.find(params[:number].to_i)
+		if !account.posts.last
+			flash[:error] = "La cuenta no tiene ningun saldo para trasferir."
+			redirect_to account
+			return false
+		end
+    flash[:info] = "El saldo se ha transferido existosamente" if account.transfer_balance_to(other)
+    redirect_to account
+    return false
+	end
   # GET /accounts/new
   # GET /accounts/new.xml
   def new

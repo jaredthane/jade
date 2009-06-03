@@ -225,7 +225,7 @@ end
       format.html {
 		    if @entities.length == 1
 					@entity=@entities[0]
-					redirect_to(entity_url(@entity.id))
+					redirect_to(entity_url(:id=>@entity.id, :search=>params[:search]))
 					return false
 				end
        }

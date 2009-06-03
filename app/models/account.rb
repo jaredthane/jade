@@ -48,4 +48,16 @@ class Account < ActiveRecord::Base
   	end
   	return total
 	end
+	def transfer_balance_to(account)
+		trans = Trans.create()
+		amt=posts.last.balance
+		puts "amt="+amt.to_s
+		if account.modifier==1 and self.modifier==1
+			act1 = Post.create(:trans=>trans, :account => self, :value=>amt, :post_type_id =>Post::CREDIT)
+			act2 = Post.create(:trans=>trans, :account => account, :value=>amt, :post_type_id =>Post::DEBIT)
+		elsif account.modifier==-1 and self.modifier==-1
+			act1 = Post.create(:trans=>trans, :account => self, :value=>amt, :post_type_id =>Post::DEBIT)
+			act2 = Post.create(:trans=>trans, :account => account, :value=>amt, :post_type_id =>Post::CREDIT)		
+		end
+	end
 end

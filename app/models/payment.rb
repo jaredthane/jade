@@ -33,7 +33,9 @@ class Payment < ActiveRecord::Base
 		end
 		case order.order_type_id
 		when 1 # Sale
+			puts 'DEBIT Cash account=' + self.order.cash_account.id.to_s
 			debit = Post.new(:account => self.order.cash_account, :value=>amt, :post_type_id =>Post::DEBIT)
+			puts 'credit Cash account=' + self.order.client.cash_account_id.to_s
 			credit = Post.new(:account => self.order.client.cash_account, :value=>amt, :post_type_id =>Post::CREDIT)
 			@transactions_to_create = [[debit, credit]]
 		when 2 # Purchase

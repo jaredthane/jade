@@ -8,12 +8,10 @@
 	<dt> <%= link_to 'Lista de Productos', products_url, :class => 'action' %>  </dt>
 <% end %>
 <h2>
-	
-
-<% form_for :user, @current_user, :html => {:id => 'scope_form' }, :url => {:controller=>'prices' , :search => params[:search], :action => "change_scope" } do |u| %>
-  Con precios del grupo: <%= u.collection_select (:price_group_name_id, get_price_group_names, :id, :name, {}, {:onchange=>'submit("scope_form")'} )%>
-  En :                   <%= u.collection_select (:location_id, get_locations, :id, :name,  {}, {:onchange=>'submit("scope_form")'})%>
-<% end %>
+	<% form_for :user, @current_user, :html => {:id => 'scope_form' }, :url => {:controller=>'prices' , :search => params[:search], :action => "change_scope" } do |u| %>
+		Con precios del grupo: <%= u.collection_select (:price_group_name_id, get_price_group_names, :id, :name, {}, {:onchange=>'submit("scope_form")'} )%>
+		En :                   <%= u.collection_select (:location_id, get_locations, :id, :name,  {}, {:onchange=>'submit("scope_form")'})%>
+	<% end %>
 </h2>
 <%= will_paginate @prices, :class => 'pagination' %>
 <% form_for :@prices, :html => {:id => 'prices_form' }, :url => {:action => 'update'}, id => 1 do |f| %>
