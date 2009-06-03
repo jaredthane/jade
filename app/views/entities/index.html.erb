@@ -45,11 +45,13 @@
 
 <% for entity in @entities %>
   <% if allowed(entity.entity_type_id) %>
+  	<% if (!entity.active) %><div class="strikethrough"><% end %>
 		<div class="table_row">
 		  <div class="table_cell_30"><%= link_to entity.id, entity %></div>
 		  <div class="table_cell_30"><%= link_to entity.name[0..25], entity %></div>
 		  <div class="table_cell"><% if entity.entity_type %><%=h entity.entity_type.name %><% end %></div>
 		</div>
+		<% if (!entity.active) %></div><% end %>
 	<% end %>
 <% end %>
 </div>

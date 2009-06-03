@@ -130,21 +130,18 @@
 	</p>
 	<% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
-	<p>
-		<b>Registro</b><br />
-		<%= f.text_field :register, :class => 'field' %>
-	</p>
-	<p>
-		<b>NIT</b><br />
-		<%= f.text_field :nit_number, :class => 'field' %>
-	</p>
-	<p>
-		<b>Giro</b>
-		<%= f.text_field :giro, :class => 'field' %>
-	</p>
-	<% end %>
-<br/>
-	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
+		<p>
+			<b>Registro</b><br />
+			<%= f.text_field :register, :class => 'field' %>
+		</p>
+		<p>
+			<b>NIT</b><br />
+			<%= f.text_field :nit_number, :class => 'field' %>
+		</p>
+		<p>
+			<b>Giro</b>
+			<%= f.text_field :giro, :class => 'field' %>
+		</p>
 		<p>
 			<b>Tipo</b><br />
 			<%= f.collection_select(:entity_type_id, get_client_types, :id, :name) %>
@@ -152,6 +149,10 @@
 	<% else %>
 	  <%= f.hidden_field :entity_type_id, :value => @entity.entity_type_id %>
 	<% end %>
+	<p>
+		<b>Activo</b><br />
+		<%= f.check_box :active %>
+	</p>
 </div>
 <hr class="clear-contentunit" />
 

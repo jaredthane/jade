@@ -31,6 +31,9 @@
   <% if @entity.entity_type_id !=3 and @entity.birthday? %>  
   	<% flash[:important] = 'Este cliente esta cumpliendo anos..' %> 
   <% end %>
+  <% if !@entity.active %>  
+  	<% flash[:important] = 'Este cliente ha sido desactivado.' %> 
+  <% end %>
 <div class="column2-unit-left">
 	<p>
 		<b>Nombre</b><br />		
@@ -196,7 +199,6 @@
 				<%=h @entity.subscription_day %>
 			</p>
 		<% end %>
-		
 	<% end %>
 </div>
 <hr class="clear-contentunit" />
