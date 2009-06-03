@@ -87,6 +87,21 @@ class OrdersController < ApplicationController
       format.xml  { render :xml => @orders }
     end
   end
+  def show_todays_sales
+  	
+		return false if !allowed(1, 'view')
+    @orders = Order.search_todays_sales(params[:search])
+		if @orders.length == 1
+			@order=@orders[0]
+			return false if !allowed(@order.order_type_id, 'view')
+			render :action => 'show_products'
+			return false
+		end
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @orders }
+    end
+  end
 	# GET /orders/create_batch
   # GET /orders/create_batch.xml
   def create_batch

@@ -22,11 +22,12 @@
 			
 */
 /* MAIN NAVIGATION */
-.nav1 .searchform {width:225px; margin:0 20px 0 20px;}
+.nav1 .searchform {width:270px; margin:0px 0px 0px -30px;}
 .nav1 .searchform p {clear:both; margin:0; padding:0;}
 .nav1 .searchform fieldset {border:none;}
-.nav1 .searchform input.field {float:left; width:158px; padding:0.1em 0 0.2em 0 !important /*Non-IE6*/; padding:0.2em 0 0.3em 0 /*IE6*/; border:1px solid rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:120%;}
-.nav1 .searchform input.button {float:right; width:5.0em;  padding:1px; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:120%;}
+.nav1 .searchform input.field {margin:0px 10px 0px 0px;float:left; width:158px; padding:0.1em 0 0.2em 0 !important /*Non-IE6*/; padding:0.2em 0 0.3em 0 /*IE6*/; border:1px solid rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:120%;}
+.nav1 .searchform input.dayfield {margin:0px 10px 0px 0px; float:left; width:25px; padding:0.1em 0 0.2em 0 !important /*Non-IE6*/; padding:0.2em 0 0.3em 0 /*IE6*/; border:1px solid rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:120%;}
+.nav1 .searchform input.button {float:left; width:5.0em;  padding:1px; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:120%;}
 .nav1 .searchform input.button:hover {cursor:pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:#96c09c;}
 
 .nav3-grid {width:199px; border-bottom:solid 1px rgb(200,200,200);}

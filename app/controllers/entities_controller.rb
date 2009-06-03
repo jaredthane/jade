@@ -74,6 +74,23 @@ class EntitiesController < ApplicationController
       format.js
     end
 	end
+	##################################################################################################
+	# Processes subscriptions for all clients in current view and redirects to todays orders
+	#################################################################################################
+	def process_subscriptions
+    return false if !allowed('clients')
+  	@clients = Entity.search_clients_without_pagination(params[:search], params[:sub_day])
+  	for client in @clients
+  		client.process_subscriptions()
+  	end
+    respond_to do |format|
+      format.html { redirect_to(subscriptions_results_path) }
+      format.xml  { render :xml => @subscription }
+    end
+  end
+  ##################################################################################################
+  # Displays end users assigned to user
+  #################################################################################################
 	def my_end_users
 		@user_id = User.current_user.id
 		@entity_type = 'end_users'
@@ -114,7 +131,7 @@ class EntitiesController < ApplicationController
     @entity_type = params[:entity_type] || 'all'
     return false if !allowed((params[:entity_type] || 'entities'))
     logger.info "entity type = " + @entity_type
-    @entities = Entity.search(params[:search], params[:page], @entity_type)
+    @entities = Entity.search(params[:search], params[:page], @entity_type,nil , nil, params[:sub_day])
     logger.info "here"
     respond_to do |format|
       format.html {

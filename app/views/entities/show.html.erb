@@ -3,7 +3,11 @@
 <% else %>
 	<% content_for :title do %>Detalles del <%= @entity.entity_type.name %> "<%= @entity.name %>" #<%= @entity.id %><% end %>
 <% end %>
-
+<% if current_user.has_rights(['Suscripciones']) %>
+	<% content_for :more_search do %>
+		<%= text_field_tag :sub_day, params[:sub_day], :class => 'dayfield'%>
+	<% end %>
+<% end %>
 <% content_for :actions do %>
 	<% if @entity.entity_type.id == 3 %>
 	    <dt><%= link_to 'Nuevo', new_site_path, :class => 'action' %></dt>
@@ -186,10 +190,13 @@
 			<b>Giro</b><br />
 			<%=h @entity.giro %>
 		</p>
-		<p>
-			<b>Dia de Procesar Subscripciones</b><br />
-			<%=h @entity.subscription_day %>
-		</p>
+		<% if @entity.subscription_day %>
+			<p>
+				<b>Dia de Procesar Subscripciones</b><br />
+				<%=h @entity.subscription_day %>
+			</p>
+		<% end %>
+		
 	<% end %>
 </div>
 <hr class="clear-contentunit" />

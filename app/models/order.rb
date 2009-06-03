@@ -1000,6 +1000,12 @@ class Order < ActiveRecord::Base
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
+	def self.search_todays_sales(search, page)
+		paginate :per_page => 20, :page => page,
+						 :conditions => ['(order_type_id = 1) AND (clients.name like :search) AND (vendors.id=:current_location OR clients.id=:current_location) AND (clients.id != 1) AND (date(created_at)=curdate())', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+						 :order => 'created_at desc',
+						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
+	end
 	def self.search_purchases(search, page)
 		paginate :per_page => 20, :page => page,
 						 :conditions => ['(vendors.name like :search AND order_type_id = 2 and clients.entity_type_id = 3) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],

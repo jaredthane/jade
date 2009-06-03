@@ -192,7 +192,7 @@ class Entity < ActiveRecord::Base
   def nit_number=(number)
   	self.nit=strip(number, ['-',' '])
   end
-  def self.search(search, page, entity_type='all', user_id=0, filter='')
+  def self.search(search, page, entity_type='all', user_id=nil, filter='', sub_day=nil)
   	#puts "search=" + search
   	search = search || ""
   	#puts "search=" + search
@@ -210,7 +210,8 @@ class Entity < ActiveRecord::Base
 			else
 				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR site_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND entities.id!=1"
   	end
-  	condition += ' AND entities.user_id = ' + user_id.to_s if user_id != 0 
+  	condition += ' AND entities.subscription_day = ' + sub_day.to_s if sub_day
+  	condition += ' AND entities.user_id = ' + user_id.to_s if user_id
   	if entity_type=='clients' or entity_type=='end_users' or entity_type=='wholesale_clients'
   	    # only show for this site, but always include anonimo and no spcificado
       	condition += ' AND (entities.site_id = ' + User.current_user.location_id.to_s + ' or entities.id=3 or entities.id=4) ' 
@@ -223,6 +224,12 @@ class Entity < ActiveRecord::Base
 	end
 	def self.find_all_clients
 	  condition = "(entity_type_id = 2 OR entity_type_id = 5)"
+  	condition += ' AND entities.site_id = ' + User.current_user.location_id.to_s
+		find :all, :conditions => condition, :order => 'name'
+	end
+	def self.search_clients_without_pagination(search, sub_day=nil)
+		condition = "(entities.name like '%" + search + "%' OR client_group.name like '%" + search + "%' OR entities.id like '%" + search + "%' OR users.login like '%" + search + "%') AND (entity_type_id=2 OR entity_type_id = 5)"
+  	condition += ' AND entities.subscription_day = ' + sub_day.to_s if sub_day
   	condition += ' AND entities.site_id = ' + User.current_user.location_id.to_s
 		find :all, :conditions => condition, :order => 'name'
 	end

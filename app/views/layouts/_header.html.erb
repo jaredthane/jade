@@ -80,7 +80,9 @@
             <!-- Search form -->  
 					<div class="searchform">
 						<% form_tag search_path, :method =>'get' do %>
-							<%= text_field_tag :search, params[:search], :class => 'field'%><%= submit_tag "Buscar", :name => nil, :class => 'button' %>
+							<%= yield :more_search %>
+							<%= text_field_tag :search, params[:search], :class => 'field'%>
+							<%= submit_tag "Buscar", :name => nil, :class => 'button' %>
 						<% end %>
 					</div>
         </div>              
