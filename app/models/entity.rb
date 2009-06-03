@@ -202,9 +202,9 @@ class Entity < ActiveRecord::Base
   	search_words=[]
   	words = search.downcase.split( / *"(.*?)" *| / ) 
   	for word in words
-  		if word[0..6]=='activo'
-  			condition += ' AND entities.active=TRUE' if word[7..word.length+1] == ':si'
-  			condition += ' AND entities.active=FALSE' if word[7..word.length+1] == ':no'  		
+  		if word[0..5]=='activo'
+  			condition += ' AND entities.active=TRUE' if word[6..word.length+1] == ':si'
+  			condition += ' AND entities.active=FALSE' if word[6..word.length+1] == ':no'  		
   		elsif word[0..3]=='tipo'
   			if word[4..word.length+1] == ':cliente' or word[4..word.length+1] == ':clients'
   				fields_to_search << "entities.name"
