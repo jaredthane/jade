@@ -16,9 +16,8 @@
     <div class="table_cell">Balance</div>
   </div>
 
-
 <% for account in @accounts %>
-  <% if account.postable %><div class="table_row_green"><% else %><div class="table_row"><% end %>
+  <div class="table_row">
     <div class="table_cell_20"><%= link_to account.number, account %></div>
   	<div class="table_cell_20"><%= link_to account.name, account %></div>
     <div class="table_cell_20">
