@@ -49,3 +49,4 @@ alter table users change column firm_account_id cash_account_id int(11);
 alter table accounts add column modifier int(2);
 alter table entities add column notes text;
 alter table subscriptions change column last_order_id last_line_id int(11);
+alter table `lines` change column sales_tax sales_tax decimal(8,2) default 0;

@@ -90,6 +90,7 @@ class OrdersController < ApplicationController
   def show_todays_sales
   	
 		return false if !allowed(1, 'view')
+		@order_type_id=1
     @orders = Order.search_todays_sales(params[:search], params[:page])
 		if @orders.length == 1
 			@order=@orders[0]

@@ -53,8 +53,9 @@ class ReceiptsController < ApplicationController
 		    if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt == 0) 
 		      # Create a new receipt
 		      r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{start_id}.pdf", :user=> User.current_user)
-		      order.receipt_printed=Date.today
-		      order.save
+		      o=Order.find(order.id)
+		      o.receipt_printed=Date.today
+		      o.save
 		      lines_on_receipt = 0
 		      logger.debug "reseting lines on receipt"
 		      start_id += 1
@@ -83,27 +84,10 @@ class ReceiptsController < ApplicationController
     return start_id
   end
   def generate_receipts_for_up_to_date_accounts(start_id=1)
-    next_id = start_id
-    # Get a list of clients
-    clients=[]
-    for sub in Subscription.all
-      if !clients.include?(sub.client)
-        last = Order.find(:last, :conditions => ['(client_id=:client_id) AND (receipt_printed is not null)', {:client_id => "#{sub.client.id}"}], :order => 'id')
-        if last
-          if last.total_price_with_tax <= last.amount_paid
-            clients << sub.client
-          end
-        else 
-          clients << sub.client
-        end
-      end
-    end
-    for client in clients
-      order = Order.find(:first, :conditions => ['(client_id=:client_id) AND (receipt_printed is null)', {:client_id => "#{client.id}"}], :order => 'id')
-      if order
-        start_id = generate_receipts(order, start_id)
-      end
-    end
+    list = Order.find(:all, :joins=>'inner join (select min(orders.id) as id from orders inner join (select id, name from (select clients.id,clients.name, sum(line.price*line.quantity*(1+sales_tax)) as owed, sum(payments.presented-payments.returned) as paid from entities as clients left join orders on clients.id=orders.client_id and receipt_printed is not null left join `lines` as line on line.order_id=orders.id left join payments on payments.order_id=orders.id group by clients.id) as clients where paid>= owed or owed is null) as clients on clients.id=orders.client_id where (orders.receipt_printed is null) group by clients.id) as ready on ready.id=orders.id;')
+		for o in list
+			start_id = generate_receipts(o, start_id)
+		end
   end
   def pay_off
 		@receipt = Receipt.find(params[:id])
