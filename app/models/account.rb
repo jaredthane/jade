@@ -32,14 +32,38 @@ class Account < ActiveRecord::Base
 	end
 	def children
 	  return Account.find_all_by_parent_id(self.id)
-	end
-	def all_posts
-	  list = self.posts
-    for child in children
-  	    list += child.all_posts
-  	end
+	end	
+	def all_children
+		list=Account.find_all_by_parent_id(self.id)
+	  for child in list
+	  	list +=child.all_children
+	  end
 	  return list
 	end
+	def all_posts
+	  c = 'account_id=' + self.id.to_s
+    for child in all_children
+    	c += ' OR account_id=' + child.id.to_s
+    end
+    list=Post.find(:all, :conditions=>c, :order=>'id DESC')
+	  return list
+	end
+	def recent_posts(limit)
+	  c = 'account_id=' + self.id.to_s
+    for child in all_children
+    	c += ' OR account_id=' + child.id.to_s
+    end
+    list=Post.find(:all, :conditions=>c, :order=>'id DESC',:limit=>limit)
+	  return list
+	end
+	
+#	def all_posts
+#	  list = self.posts
+#    for child in children
+#  	    list += child.all_posts
+#  	end
+#	  return list
+#	end
 	def balance
 	  total=0
   	total += posts.last.balance if posts.length > 0
@@ -47,6 +71,13 @@ class Account < ActiveRecord::Base
   	  total += child.balance
   	end
   	return total
+	end
+	def simple_balance
+	  if posts.length > 0
+	  	return posts.last.balance
+	  else
+	  	return 0
+  	end
 	end
 	def transfer_balance_to(account)
 		trans = Trans.create()

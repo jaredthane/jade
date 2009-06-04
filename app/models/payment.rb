@@ -24,42 +24,29 @@ class Payment < ActiveRecord::Base
 	belongs_to :receipt
 	before_save :prepare_transactions
 	after_save :create_transactions
-	attr_accessor :transactions_to_create
+	attr_accessor :amt
 	def prepare_transactions
 		if new_record?
 			amt=self.amount
-		else			
+		else
 			amt = self.amount - old.amount
 		end
-		case order.order_type_id
-		when 1 # Sale
-			puts 'DEBIT Cash account=' + self.order.cash_account.id.to_s
-			debit = Post.new(:account => self.order.cash_account, :value=>amt, :post_type_id =>Post::DEBIT)
-			puts 'credit Cash account=' + self.order.client.cash_account_id.to_s
-			credit = Post.new(:account => self.order.client.cash_account, :value=>amt, :post_type_id =>Post::CREDIT)
-			@transactions_to_create = [[debit, credit]]
-		when 2 # Purchase
-			debit = Post.new(:account => self.order.vendor.cash_account, :value=>amt, :post_type_id =>Post::DEBIT)
-			credit = Post.new(:account => self.order.client.cash_account, :value=>amt, :post_type_id =>Post::CREDIT)
-			@transactions_to_create = [[debit, credit]]
-		end
+		@amt=amt
 	end
 	def create_transactions
-	  puts "create transactions -> @transactions_to_create = "+@transactions_to_create.to_s
-	  @transactions_to_create = [] if !@transactions_to_create
-	  for t in @transactions_to_create
-	  	if self.order
-		    trans = Trans.create(:order => self.order, :comments => self.order.comments)
-		  else
-		    trans = Trans.create()
-		  end
-	    for p in t
-	      p.trans_id = trans.id
-	      puts "create transactions -> p = "+p.inspect
-	      puts "save result"+p.save.to_s
-	      p.errors.each {|e| puts "POst ERROR" + e.to_s}
-	    end
+  	if self.order
+	    trans = Trans.create(:order => self.order, :comments => self.order.comments)
+	  else
+	    trans = Trans.create()
 	  end
+		case order.order_type_id
+		when 1 # Sale
+			debit = Post.create(:trans=>trans, :account => self.order.cash_account, :value=>@amt, :post_type_id =>Post::DEBIT)
+			credit = Post.create(:trans=>trans, :account => self.order.client.cash_account, :value=>@amt, :post_type_id =>Post::CREDIT)
+		when 2 # Purchase
+			debit = Post.create(:trans=>trans, :account => self.order.vendor.cash_account, :value=>@amt, :post_type_id =>Post::DEBIT)
+			credit = Post.create(:trans=>trans, :account => self.order.client.cash_account, :value=>@amt, :post_type_id =>Post::CREDIT)
+		end
 	end
 	def amount
 		return (self.presented||0)-(self.returned||0)
