@@ -14,7 +14,11 @@
     <div class="table_cell_25"><%= h receipt.created_at.to_date.to_s(:long) %></div>
     <div class="table_cell_25"><%= link_to receipt.number, receipt %></div>
     <div class="table_cell_25"><%= h number_to_currency(receipt.total_price_with_tax) %></div>
-    <div class="table_cell"><%=link_to receipt.user.login, receipt.user %></div>
+    <div class="table_cell">
+    	<% if receipt.user %>  	
+    		<%=link_to receipt.user.login, receipt.user %>
+    	<% end %>
+    </div>
 	</div>
 <% end %>
 	</div>

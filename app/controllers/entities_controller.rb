@@ -151,7 +151,7 @@ def create_history
   sub=Subscription.find_by_client_id(@entity.id)
   for i in 1..months
   	logger.debug "doing round:"+i.to_s
-  	d=Date.new(2009, 6, @entity.subscription_day) << i
+  	d=Date.new(2009, 6, @entity.subscription_day) << months-i+1
   	o=Order.create(:received => d, :created_at=>d, :vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 	  sub.process(o, d)
 	end
