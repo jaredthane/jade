@@ -154,6 +154,7 @@ def create_history
   	d=Date.new(2009, 6, @entity.subscription_day) << months-i+1
   	o=Order.create(:received => d, :created_at=>d, :vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 	  sub.process(o, d)
+  	logger.info "created history id:"+o.id.to_s
 	end
 	@entity_type = @entity.entity_type_id
 	return if !allowed(@entity.entity_type_id || 'entities')
