@@ -28,8 +28,12 @@
     <div class="table_cell_10"><%= link_to receipt.number, receipt %></div>
     <div class="table_cell_10"><%= h number_to_currency(receipt.total_price_with_tax) %></div>
     <div class="table_cell_10"><%= h number_to_currency(receipt.order.amount_paid) %></div>
-    <div class="table_cell_10"><%=link_to receipt.user.login, receipt.user %></div>
-    <div class="table_cell"><%=link_to 'Marcar Pagada', pay_off_receipt_url(receipt) %></div>
+    <div class="table_cell_10">
+			<% if receipt.user %>
+				<%=link_to receipt.user.login, receipt.user %>
+			<% end %>
+    </div>
+    <div class="table_cell"><%=link_to 'Marcar Pagada', pay_off_url(receipt.order) %></div>
 	</div>
 <% end %>
 </div>

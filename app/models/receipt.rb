@@ -205,18 +205,12 @@ class Receipt < ActiveRecord::Base
 				return ''
 		end
 	end
-	def pay_off
-	  if order.grand_total > order.amount_paid
-  	  Payment.create(:order=>order, :amount=>order.grand_total-order.amount_paid, :payment_method_id=>1, :user=>User.current_user, :receipt=>self, :presented=>order.grand_total-order.amount_paid)
-    end
-	end
 	###################################################################################
 	# Returns the total price of all of the products requested with tax spelled out in spanish
 	###################################################################################
 	def total_price_with_tax_in_spanish
 		return number_to_spanish(self.total_price_with_tax)
 	end
-	
 	def self.consumidor_final_today(page)
   	paginate :per_page => 20, :page => page,
 		         :conditions => 'date(receipts.created_at) = curdate() AND clients.entity_type_id=2',
@@ -229,15 +223,17 @@ class Receipt < ActiveRecord::Base
 		         :order => 'receipts.created_at',
 		         :joins => 'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id = orders.client_id'
 	end
-	def self.search_unpaid(page)
-  	paginate :per_page => 20, :page => page,
-		         :order => 'created_at',
-		         :joins => 'inner join (select id from (select orders.id, orders.grand_total, sum(payments.presented-payments.returned) as paid from orders left join payments on payments.order_id=orders.id group by orders.id) as payments where grand_total > paid or paid is null) as openorders  on receipts.order_id=openorders.id'
-	end
+
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['(order.id like :search or vendor.name like :search or client.name like :search)', {:search => "%#{search}%"}],
 		         :order => 'products.name',
 		         :joins => 'inner join orders on receipts.order_id = orders.id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
+	end
+	def self.search_unpaid(search, page)
+  	paginate :per_page => 20, :page => page,
+ 						 :conditions => ['(amount_paid < grand_total) AND (order_type_id = 1) AND (clients.name like :search) AND (vendors.id=:current_location OR clients.id=:current_location) AND (clients.id != 1)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+		         :order => 'created_at',
+						 :joins => "inner join orders on order_id=orders.id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
 end

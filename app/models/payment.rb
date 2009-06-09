@@ -26,6 +26,7 @@ class Payment < ActiveRecord::Base
 	after_save :create_transactions
 	attr_accessor :amt
 	def prepare_transactions
+		self.amount=self.presented-self.returned
 		if new_record?
 			amt=self.amount
 		else
@@ -34,7 +35,12 @@ class Payment < ActiveRecord::Base
 		@amt=amt
 	end
 	def create_transactions
+		puts "running here.."
   	if self.order
+  		
+		puts "running here too.."
+  		order.amount_paid+=self.amount
+  		order.save
 	    trans = Trans.create(:order => self.order, :comments => self.order.comments)
 	  else
 	    trans = Trans.create()

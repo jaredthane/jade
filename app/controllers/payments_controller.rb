@@ -51,13 +51,17 @@ class PaymentsController < ApplicationController
       format.xml  { render :xml => @payment }
     end
   end
-
-  # GET /payments/1/edit
-  def edit
-    @payment = Payment.find(params[:id])
-		@paid = @payment.order.amount_paid-@payment.amount
-		logger.debug "amount already paid = "+@paid.to_s + " or " + @payment.order.amount_paid.to_s
-  end
+  
+############################################################################################
+# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
+############################################################################################
+# We can no longer change payments once they're made
+#  # GET /payments/1/edit
+#  def edit
+#    @payment = Payment.find(params[:id])
+#		@paid = @payment.order.amount_paid-@payment.amount
+#		logger.debug "amount already paid = "+@paid.to_s + " or " + @payment.order.amount_paid.to_s
+#  end
 
   # POST /payments
   # POST /payments.xml
@@ -74,33 +78,37 @@ class PaymentsController < ApplicationController
       end
     end
   end
+############################################################################################
+# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
+############################################################################################
+#  # PUT /payments/1
+#  # PUT /payments/1.xml
+#  def update
+#    @payment = Payment.find(params[:id])
 
-  # PUT /payments/1
-  # PUT /payments/1.xml
-  def update
-    @payment = Payment.find(params[:id])
+#    respond_to do |format|
+#      if @payment.update_attributes(params[:payment])
+#        flash[:notice] = 'Pago ha sido actualizado exitosamente.'
+#        format.html { redirect_to(@payment.order) }
+#        format.xml  { head :ok }
+#      else
+#        format.html { render :action => "edit" }
+#        format.xml  { render :xml => @payment.errors, :status => :unprocessable_entity }
+#      end
+#    end
+#  end
+############################################################################################
+# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
+############################################################################################
+#  # DELETE /payments/1
+#  # DELETE /payments/1.xml
+#  def destroy
+#    @payment = Payment.find(params[:id])
+#    @payment.destroy
 
-    respond_to do |format|
-      if @payment.update_attributes(params[:payment])
-        flash[:notice] = 'Pago ha sido actualizado exitosamente.'
-        format.html { redirect_to(@payment.order) }
-        format.xml  { head :ok }
-      else
-        format.html { render :action => "edit" }
-        format.xml  { render :xml => @payment.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /payments/1
-  # DELETE /payments/1.xml
-  def destroy
-    @payment = Payment.find(params[:id])
-    @payment.destroy
-
-    respond_to do |format|
-      format.html { redirect_to(payments_url) }
-      format.xml  { head :ok }
-    end
-  end
+#    respond_to do |format|
+#      format.html { redirect_to(payments_url) }
+#      format.xml  { head :ok }
+#    end
+#  end
 end

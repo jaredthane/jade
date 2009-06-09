@@ -717,13 +717,20 @@ class Order < ActiveRecord::Base
 		end
 		return (total||0)
 	end
-	
-	###################################################################################
-	# Returns the total of all the payments made for this order
-	###################################################################################
-	def amount_paid
-		return self.payments.sum(:presented)-self.payments.sum(:returned)
+	def pay_off()
+	  if grand_total > amount_paid
+  	  Payment.create(:order=>self, :amount=>grand_total-amount_paid, :payment_method_id=>1, :user=>User.current_user, :receipt=>self.receipts.first, :presented=>grand_total-amount_paid)
+    end
 	end
+############################################################################################
+# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
+############################################################################################
+#	###################################################################################
+#	# Returns the total of all the payments made for this order
+#	###################################################################################
+#	def amount_paid
+#		return self.payments.sum(:presented)-self.payments.sum(:returned)
+#	end
 	
 	###################################################################################
 	# Returns the name of the Vendor as a string
@@ -1038,6 +1045,12 @@ class Order < ActiveRecord::Base
 		paginate :per_page => 20, :page => page,
 						 :conditions => ['(last_batch=True) AND (orders.order_type_id=1)AND(vendors.name like :search OR clients.name like :search OR orders.id like :search) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
 						 :order => 'created_at desc',
+						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
+	end
+	def self.search_unpaid(search, page)
+  	paginate :per_page => 20, :page => page,
+ 						 :conditions => ['(amount_paid < grand_total) AND (order_type_id = 1) AND (clients.name like :search) AND (vendors.id=:current_location OR clients.id=:current_location) AND (clients.id != 1)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+		         :order => 'created_at',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
 end

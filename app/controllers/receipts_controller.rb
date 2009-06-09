@@ -84,23 +84,12 @@ class ReceiptsController < ApplicationController
     return start_id
   end
   def generate_receipts_for_up_to_date_accounts(start_id=1)
-    list = Order.find(:all, :joins=>'inner join (select min(orders.id) as id from orders inner join (select id, name from (select clients.id,clients.name, sum(line.price*line.quantity*(1+sales_tax)) as owed, sum(payments.presented-payments.returned) as paid from entities as clients left join orders on clients.id=orders.client_id and receipt_printed is not null left join `lines` as line on line.order_id=orders.id left join payments on payments.order_id=orders.id group by clients.id) as clients where paid>= owed or owed is null) as clients on clients.id=orders.client_id where (orders.receipt_printed is null) group by clients.id) as ready on ready.id=orders.id;')
+    list = Order.find(:all, :joins=>'inner join (select sales.orderid as id from (select * from (select id as orderid, client_id from orders where receipt_printed is null order by orders.id) as orders group by client_id) as sales inner join (select entities.id as clientid from entities left join (select * from (select id, client_id, amount_paid, grand_total from orders where receipt_printed is not null order by id DESC) as orders group by client_id) as orders on orders.client_id=entities.id where amount_paid >= grand_total OR orders.id is null) as clients on clientid=client_id) as unprinted on unprinted.id=orders.id')
+    
+#    :joins=>'inner join (select min(orders.id) as id from orders inner join (select id, name from (select clients.id,clients.name, sum(line.price*line.quantity*(1+sales_tax)) as owed, sum(payments.presented-payments.returned) as paid from entities as clients left join orders on clients.id=orders.client_id and receipt_printed is not null left join `lines` as line on line.order_id=orders.id left join payments on payments.order_id=orders.id group by clients.id) as clients where paid>= owed or owed is null) as clients on clients.id=orders.client_id where (orders.receipt_printed is null) group by clients.id) as ready on ready.id=orders.id;')
 		for o in list
 			start_id = generate_receipts(o, start_id)
 		end
-  end
-  def pay_off
-		@receipt = Receipt.find(params[:id])
-    if @receipt
-      @receipt.pay_off
-			flash[:info] = "Pago se ha hecho exitosamente"
-			redirect_to unpaid_receipts_url
-			return false
-    else
-      redirect_back_or_default(sales_url)
-			flash[:error] = "No hay ninguna factura en el sistema con ese numero"
-      return false
-    end
   end
   def concat_pdf
     if @entity_type_id == 2
@@ -165,7 +154,8 @@ class ReceiptsController < ApplicationController
     end
   end
   def unpaid
-    @receipts = Receipt.search_unpaid(params[:page])
+    @receipts = Receipt.search_unpaid(params[:search], params[:page])
+    
     respond_to do |format|
       format.html {render :locals=> {:title=>'Lista de Facturas No Canceladas'}}
       format.xml  { render :xml => @receipts }

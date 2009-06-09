@@ -88,7 +88,6 @@ class OrdersController < ApplicationController
     end
   end
   def show_todays_sales
-  	
 		return false if !allowed(1, 'view')
 		@order_type_id=1
     @orders = Order.search_todays_sales(params[:search], params[:page])
@@ -101,6 +100,19 @@ class OrdersController < ApplicationController
     respond_to do |format|
       format.html { render :action => 'index' }
       format.xml  { render :xml => @orders }
+    end
+  end
+  def pay_off
+		@order = Order.find(params[:id])
+    if @order
+      @order.pay_off
+			flash[:info] = "Pago se ha hecho exitosamente"
+			redirect_to unpaid_receipts_url
+			return false
+    else
+      redirect_back_or_default(sales_url)
+			flash[:error] = "No hay ningun pedido en el sistema con ese numero"
+      return false
     end
   end
 	# GET /orders/create_batch
