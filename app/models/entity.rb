@@ -85,6 +85,14 @@ class Entity < ActiveRecord::Base
       movements.build(attributes)
     end
   end
+  def unpaid_orders
+  	Order.find(:all, :conditions=> '(amount_paid < grand_total OR amount_paid is null) AND (client_id=' + self.id.to_s + ')')
+  end
+  def unpaid_receipts
+  	Receipt.find(:all, 
+  							 :conditions=> '(amount_paid < grand_total OR amount_paid is null) AND (client_id=' + self.id.to_s + ')',
+  							 :joins => 'inner join orders on orders.id=receipts.order_id')
+  end
 	def process_subscriptions
 		#################################################################################################
 		# If the client has subscriptions to be processed, will create an order with a line for each.
