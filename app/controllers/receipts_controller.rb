@@ -164,9 +164,16 @@ class ReceiptsController < ApplicationController
   def show
     @receipt = Receipt.find(params[:id])
     if @receipt
-      #send_data @receipt.filename, :disposition => 'inline'
-      # This is good for if the user wants to download the file
-      send_file @receipt.filename, :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
+    	if FileTest.exists?(@receipt.filename)
+			 	send_file @receipt.filename, :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
+		    #send_data @receipt.filename, :disposition => 'inline'
+		    # This is good for if the user wants to download the file
+			else
+				redirect_back_or_default(sales_url)
+				flash[:error] = "Esta factura no se encuentra entre los archivos"
+		    return false
+			end
+      
     else
       redirect_back_or_default(sales_url)
 			flash[:error] = "No hay ninguna factura en el sistema con ese numero"
