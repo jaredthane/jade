@@ -8,15 +8,17 @@
 <%= will_paginate @users, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
-    <div class="table_cell_25">Nombre</div>
-    <div class="table_cell_25">Correo E.</div>
+    <div class="table_cell_10">Numero</div>
+    <div class="table_cell_20">Nombre</div>
+    <div class="table_cell_20">Correo E.</div>
     <div class="table_cell_15">Recibido por defecto</div>
     <div class="table_cell">Locacion Actual</div>
   </div>
 <% for user in @users %>
   <div class="table_row"> 
-    <div class="table_cell_25"><%= link_to user.login, user %></div>
-    <div class="table_cell_25"><%= h user.email %></div>
+    <div class="table_cell_10"><%= h user.id %></div>
+    <div class="table_cell_20"><%= link_to user.login, user %></div>
+    <div class="table_cell_20"><%= h user.email %></div>
     <div class="table_cell_15"><%= h user.default_received %></div>
     <div class="table_cell">
     	<% if user.location %>
