@@ -67,7 +67,7 @@ def price_list
 		if d.length > 203
 		 	d=d[0..200] + "..."
 		end
-		@data << [p.name, d, x.number_to_currency(p.price)]
+		@data << [d, x.number_to_currency(p.price)]
 	end
 	prawnto :prawn => { :page_size => 'LETTER'}
 	params[:format] = 'pdf'
