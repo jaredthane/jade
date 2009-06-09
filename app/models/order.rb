@@ -55,9 +55,15 @@ class Order < ActiveRecord::Base
 	############################## End of Creating Movements ####################################
 	attr_accessor :movements_to_create
 	attr_accessor :transactions_to_create # list of trans to create
+	##################################################################################################
+	# 
+	#################################################################################################
 	def	update_grand_total
     self.grand_total = self.total_price_with_tax
   end
+  ##################################################################################################
+  # 
+  #################################################################################################
 	def create_transactions
 		puts "credit = " + Account::CREDIT.to_s
 	  puts "create transactions -> @transactions_to_create = "+@transactions_to_create.to_s
@@ -69,6 +75,9 @@ class Order < ActiveRecord::Base
 			end
 	  end
 	end
+	##################################################################################################
+	# 
+	#################################################################################################
 	def create_receipts
 	  # Prepare the data           ------------------------------------------------
 	  @data=[]
@@ -94,6 +103,9 @@ class Order < ActiveRecord::Base
 	  r=Receipt.create(:order=>params[:order_id], :number =>params[:number], :filename=>"#{RAILS_ROOT}/invoice_pdfs/order #{self.id}.pdf")
 	  return r
 	end
+	##################################################################################################
+	# 
+	#################################################################################################
 	def cash_account
 		for pref in Preference.find(:all, :order=>'value', :conditions=>"pref_group='cash'")
 			case pref.id
@@ -119,6 +131,9 @@ class Order < ActiveRecord::Base
 		puts "Couldnt find any other valid accounts, so we're using the vendors account:" + self.vendor.cash_account_id
 		return self.vendor.cash_account
 	end
+	##################################################################################################
+	# 
+	#################################################################################################
 	def create_movements
 		@movements_to_create = [] if !@movements_to_create
 		#collect the values of each movement type
@@ -155,6 +170,9 @@ class Order < ActiveRecord::Base
 		# Erase list
 		@movements_to_create.clear
 	end
+	##################################################################################################
+	# 
+	#################################################################################################
 	def quantity_change_direction(new, old)
 		logger.debug "Checking movement direction"
 		if new.received and !old.received 		# The line was marked received
@@ -174,6 +192,9 @@ class Order < ActiveRecord::Base
 		logger.debug "The line was never received"
 		return 0
 	end
+	##################################################################################################
+	# 
+	#################################################################################################
 	def quantity_change(new, old)
 		if old
 			if new.received == old.received
@@ -189,6 +210,9 @@ class Order < ActiveRecord::Base
 			return new.quantity
 		end
 	end
+	##################################################################################################
+	# 
+	#################################################################################################
 	def movement_type_id(direction)
 		case order_type_id
 			when 1
@@ -717,6 +741,9 @@ class Order < ActiveRecord::Base
 		end
 		return (total||0)
 	end
+	##################################################################################################
+	# 
+	#################################################################################################
 	def pay_off()
 	  if grand_total > amount_paid
   	  Payment.create(:order=>self, :amount=>grand_total-amount_paid, :payment_method_id=>1, :user=>User.current_user, :receipt=>self.receipts.first, :presented=>grand_total-amount_paid)
