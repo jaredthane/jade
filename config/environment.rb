@@ -59,6 +59,7 @@ Rails::Initializer.run do |config|
 end
 require "will_paginate" 
 require "prawn"
+require 'prawn/layout' 
 
 logfile = File.open('log/audit.log', 'a')   
 logfile.sync = true  #remove this for production 
