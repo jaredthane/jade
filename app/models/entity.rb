@@ -86,11 +86,11 @@ class Entity < ActiveRecord::Base
     end
   end
   def unpaid_orders
-  	Order.find(:all, :conditions=> '(amount_paid < grand_total OR amount_paid is null) AND (client_id=' + self.id.to_s + ')')
+  	Order.find(:all, :conditions=> 'deleted=false AND (amount_paid < grand_total OR amount_paid is null) AND (client_id=' + self.id.to_s + ')')
   end
   def unpaid_receipts
   	Receipt.find(:all, 
-  							 :conditions=> '(amount_paid < grand_total OR amount_paid is null) AND (client_id=' + self.id.to_s + ')',
+  							 :conditions=> 'deleted=false AND (amount_paid < grand_total OR amount_paid is null) AND (client_id=' + self.id.to_s + ')',
   							 :joins => 'inner join orders on orders.id=receipts.order_id')
   end
 	def process_subscriptions

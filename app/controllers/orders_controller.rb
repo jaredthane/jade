@@ -336,8 +336,8 @@ class OrdersController < ApplicationController
     #you can't null an order if we received money for it.
     if @order.amount_paid != 0 
         redirect_back_or_default('/orders')
-		flash[:error] = "No se puede anular un pedido hasta que el total de los pagos es cero"
-		return false
+			flash[:error] = "No se puede anular un pedido hasta que el total de los pagos es cero"
+			return false
     end
     @order.deleted = 1
     for line in @order.lines

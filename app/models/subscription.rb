@@ -169,6 +169,6 @@ class Subscription < ActiveRecord::Base
 		end
 	end
 	def price(price_group = User.current_user.current_price_group)
-	    return (self.product.price||0) * (relative_price||0) + (fixed_price||0)
+	    return (self.product.price||0) * (self.relative_price||0) + (self.fixed_price||0)
 	end
 end

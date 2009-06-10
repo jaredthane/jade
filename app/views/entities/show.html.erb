@@ -251,7 +251,7 @@
 			  <div class="table_row">
 				  <div class="table_cell_20"><%= link_to s.product.name, s.product %></div>
 				  <div class="table_cell_20"><%= link_to s.quantity, s %></div>
-				  <div class="table_cell_20"><%=h number_to_currency(s.price) %></div>
+				  <div class="table_cell_20"><%=h number_to_currency((s.price||0)) %></div>
           <div class="table_cell_20">
               <% if s.last_line %>
                   <%= link_to s.last_line.received.to_date.to_s(:long), s.last_line.order %>

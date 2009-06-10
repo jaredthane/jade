@@ -154,7 +154,7 @@ def create_history
   	day=@entity.subscription_day
   	day=30 if day > 30
   	d=Date.new(2009, 6, day) << months-i+1
-  	o=Order.create(:received => d, :created_at=>d, :vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+  	o=Order.create(:grand_total => sub.fixed_price, :received => d, :created_at=>d, :vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 	  sub.process(o, d)
   	logger.info "created history id:"+o.id.to_s
 	end
