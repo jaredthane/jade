@@ -105,7 +105,9 @@ class Entity < ActiveRecord::Base
 	  subscriptions = {}
 		logger.info "making a list of vendors involved"
 		list=Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + self.id.to_s + ')' )
+		logger.info "list.length " + list.length.to_s
 		for sub in list
+	  	logger.info "Here"
 	  	# check if this sub needs to be processed
 	    if sub.last_line
         if sub.last_line.received.to_date >> sub.frequency <= cutoff_date
