@@ -156,27 +156,8 @@ def create_history
 	  sub.process(o, d)
   	logger.info "created history id:"+o.id.to_s
 	end
-	@entity_type = @entity.entity_type_id
-	return if !allowed(@entity.entity_type_id || 'entities')
-	if @entity_type == 3
-		current_user.location_id = params[:id]
-		current_user.save
-	end
-	if @entity.entity_type_id == 2 or @entity.entity_type_id == 5
-	  @subs=Subscription.find(:all, 
-                            :conditions => ['client_id=:clientid AND (end_times>0 or end_times is null) and (end_date>now() or end_date is null)', {:clientid => @entity.id.to_s}],
-                            :limit => 10, 
-                            :order => 'created_at DESC')
-    @subs=nil if @subs.length==0
-		current_user.price_group_name_id = @entity.price_group_name_id
-		current_user.save
-		logger.debug "setting price group id"
-		current_user.price_group_name_id = @entity.price_group_name_id
-		current_user.save
-		logger.debug "current_user.price_group_name_id=#{current_user.price_group_name_id.to_s}"
-	end
   respond_to do |format|
-    format.html { render :action => 'show' }
+    format.html { redirect_to(@entity) }
     format.xml  { render :xml => @entity }
   end
 end
@@ -262,6 +243,8 @@ end
                               :order => 'created_at DESC')
       @subs=nil if @subs.length==0
       @unpaid = @entity.unpaid_orders
+      puts "unpaid = " + @unpaid.inspect
+      puts "unpaid length = " +  @unpaid.length.to_s
       @unpaid=nil if @unpaid.length==0
 			current_user.price_group_name_id = @entity.price_group_name_id
 			current_user.save

@@ -107,13 +107,11 @@ class OrdersController < ApplicationController
     if @order
       @order.pay_off
 			flash[:info] = "Pago se ha hecho exitosamente"
-			redirect_back_or_default(unpaid_receipts_url)
-			return false
     else
 			flash[:error] = "No hay ningun pedido en el sistema con ese numero"
-      redirect_back_or_default(unpaid_receipts_url)
-      return false
     end
+    redirect_back_or_default(@order)
+    return false
   end
 	# GET /orders/create_batch
   # GET /orders/create_batch.xml
