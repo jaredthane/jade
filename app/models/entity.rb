@@ -122,7 +122,7 @@ class Entity < ActiveRecord::Base
   	  	puts "making an order for vendor: "+list[0].vendor.name
 			  o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 			  for sub in list
-  	  		puts "adding a line for: "+sub.name
+#  	  		puts "adding a line for: "+sub.name
 			  	sub.process(o)
 		    end
 		    # now for the accounting
