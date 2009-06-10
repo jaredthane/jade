@@ -87,7 +87,7 @@ class EntitiesController < ApplicationController
   		client.process_subscriptions()
   	end
     respond_to do |format|
-      format.html { redirect_to(clients_path) }
+      format.html { redirect_to(clients_path(:params=>{:search=>params[:search], :filter=>params[:filter]})) }
       format.xml  { render :xml => @subscription }
     end
   end

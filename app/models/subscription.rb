@@ -41,7 +41,7 @@ class Subscription < ActiveRecord::Base
 			end
 		end
 		if !order
-			order = Order.create(:created_at=>received, :vendor => self.vendor, :client => self.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+			order = Order.create(:received=>received, :created_at=>received, :vendor => self.vendor, :client => self.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 		end
     l=Line.create(:created_at=>received, :order => order, :product => self.product, :quantity=> self.quantity, :price => self.price, :received =>received)
     self.last_line_id = l.id
