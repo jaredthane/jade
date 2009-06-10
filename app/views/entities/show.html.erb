@@ -216,14 +216,18 @@
 					<div class="table_cell_15">Pagos</div>
 					<div class="table_cell">Acciones</div>
 				</div>
-		  <% for receipt in @unpaid %>
+		  <% for order in @unpaid %>
 			  <div class="table_row">
-					<div class="table_cell_15"><%= h receipt.created_at.to_date.to_s(:long) %></div>
-					<div class="table_cell_15"><%= link_to receipt.order_id, receipt.order %></div>
-					<div class="table_cell_15"><%= link_to receipt.number, receipt %></div>
-					<div class="table_cell_15"><%= h number_to_currency(receipt.total_price_with_tax) %></div>
-					<div class="table_cell_15"><%= h number_to_currency(receipt.order.amount_paid) %></div>
-					<div class="table_cell"><%=link_to 'Marcar Pagada', pay_off_url(receipt.order) %></div>
+					<div class="table_cell_15"><%= h order.created_at.to_date.to_s(:long) %></div>
+					<div class="table_cell_15"><%= link_to order.id, order %></div>
+					<div class="table_cell_15">
+						<% if order.receipts.length > 0 %>
+							<%= link_to order.receipts[0].number, order.receipts[0] %>
+						<% end %>
+					</div>
+					<div class="table_cell_15"><%= h number_to_currency(order.grand_total) %></div>
+					<div class="table_cell_15"><%= h number_to_currency(order.amount_paid) %></div>
+					<div class="table_cell"><%=link_to 'Marcar Pagada', pay_off_url(order) %></div>
 				</div>
 		  <% end %>
 	  </div>
@@ -265,9 +269,9 @@
   <hr class="clear-contentunit" />
 <% end %>
 <p>
-	<b>Compras Recientes:</b>
-	<div>
-		<% if @entity.entity_type_id == 1 %>
+	<% if @entity.entity_type_id == 1 %>
+		<b>Compras Recientes de este Proveedor:</b>
+		<div>
 			<div class="table_header_row">
 				<div class="table_cell_15">Numero</div>
 				<div class="table_cell_20">Proveedor</div>
@@ -286,7 +290,9 @@
 					<div class="table_cell"><%=h order.created_at.to_date.to_s %></div>
 				</div>
 			<% end %>
-		<% elsif @entity.entity_type_id == 3 %>
+	<% elsif @entity.entity_type_id == 3 %>
+		<b>Ventas Recientes en este Sitio:</b>
+		<div>
 			<div class="table_header_row">
 				<div class="table_cell_15">Numero</div>
 				<div class="table_cell_20">Cliente</div>
@@ -306,6 +312,8 @@
 				</div>
 			<% end %>
 		<% else %>
+		<b>Ventas Recientes a este Cliente:</b>
+		<div>
 			<div class="table_header_row">
 				<div class="table_cell_15">Numero</div>
 				<div class="table_cell_20">Proveedor</div>

@@ -33,13 +33,13 @@ module OrdersHelper
 			if order.order_type_id==5
 				return "En Proceso"
 			else
-				return "Entrega"
+				return "Esperando Entrega"
 			end
 		else
-			if order.amount_paid == order.total_price_with_tax or order.order_type_id==5
+			if order.amount_paid == order.grand_total or order.order_type_id==5
 				return "Terminado"
 			else
-				return "Pago" 
+				return "Esperando Pago" 
 			end
 		end
 	end
