@@ -40,12 +40,11 @@ class SubscriptionsController < ApplicationController
       format.xml  { render :xml => @subscription }
     end
   end
-  def process
+  def process_me
     @subscription = Subscription.find(params[:id])
 		@subscription.process
     respond_to do |format|
-      format.html { redirect_to @subscription }
-      format.xml  { redirect_to @subscription }
+      format.html { redirect_to(@subscription.client) }
     end
   end
 ############################################################################################
