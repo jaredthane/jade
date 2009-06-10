@@ -98,12 +98,12 @@ class Entity < ActiveRecord::Base
 		# If the client has subscriptions to be processed, will create an order with a line for each.
 		#################################################################################################
 		# figure out the cutoff date
-		puts "creating order for " + self.name
+		logger.info "creating order for " + self.name
   	cutoff_date=Date.today
   	cutoff_date=cutoff_date+1 if Date.today.wday==6
     # this hash will have a list of subs for each vendor
 	  subscriptions = {}
-		puts "making a list of vendors involved"
+		logger.info "making a list of vendors involved"
 	  for sub in Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + self.id.to_s + ')' )
 	  	# check if this sub needs to be processed
 	    if sub.last_line
@@ -119,21 +119,21 @@ class Entity < ActiveRecord::Base
       end
  	  	# Now we got a nice list grouped by vendor, lets make the subs
   	  for vendor_id, list in subscriptions
-  	  	puts "making an order for vendor: "+list[0].vendor.name
+  	  	logger.info "making an order for vendor: "+list[0].vendor.name
 			  o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 			  for sub in list
-#  	  		puts "adding a line for: "+sub.name
+#  	  		logger.info "adding a line for: "+sub.name
 			  	sub.process(o)
 		    end
 		    # now for the accounting
 		    o=Order.find(o.id)
 		    o.save
 				sale = Trans.create(:order => o, :comments => o.comments)
-				puts "VENDOR:" + o.total_price.to_s
+				logger.info "VENDOR:" + o.total_price.to_s
 				vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>Post::CREDIT)
-				puts "CLIENT:" + o.total_price_with_tax.to_s
+				logger.info "CLIENT:" + o.total_price_with_tax.to_s
 				client = Post.create(:trans=>sale, :account => o.client.cash_account, :value=>o.total_price_with_tax, :post_type_id =>Post::DEBIT)
-				puts "TAX:" + o.total_tax.to_s
+				logger.info "TAX:" + o.total_tax.to_s
 				tax    = Post.create(:trans=>sale, :account => o.vendor.tax_account, :value=>o.total_tax, :post_type_id =>Post::CREDIT)
 				inventory_cost = o.inventory_value
 				# if the sub included inventory items, we have to make that transaction also...
@@ -503,7 +503,7 @@ class Entity < ActiveRecord::Base
 # DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
 ############################################################################################
 #  def self.search(search, page, entity_type='all', user_id=nil, sub_day=nil)
-#  	#puts "search=" + search
+#  	#logger.info "search=" + search
 #  	search = search || ""
 #  	if search[0..6]=='activos'
 #  		active=1
@@ -512,7 +512,7 @@ class Entity < ActiveRecord::Base
 #  		active=0
 #  		search=[9..search.length]
 #  	end
-#  	#puts "search=" + search
+#  	#logger.info "search=" + search
 #  	case entity_type
 #			when 'clients'
 #				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND (entity_type_id = 2 OR entity_type_id = 5)"
@@ -540,7 +540,7 @@ class Entity < ActiveRecord::Base
 #  	    # only show for this site, but always include anonimo and no spcificado
 #      	condition += ' AND (entities.site_id = ' + User.current_user.location_id.to_s + ' or entities.id=3 or entities.id=4) ' 
 #    end
-#  	#puts "condition=" + condition
+#  	#logger.info "condition=" + condition
 #		paginate :per_page => 20, :page => page,
 #		       :conditions => condition,
 #		       :joins => 'left join price_group_names as client_group on client_group.id=entities.price_group_name_id left join price_groups on entities.price_group_id=price_groups.id left join price_group_names as site_group on site_group.id = price_groups.price_group_name_id left join users on users.id=entities.user_id',
@@ -578,8 +578,8 @@ class Entity < ActiveRecord::Base
 		end		
 	end
 	def inventory(product)
-		puts "product.id=" + product.id.to_s
-		puts "self.id=" + self.id.to_s
+		logger.info "product.id=" + product.id.to_s
+		logger.info "self.id=" + self.id.to_s
 		if product.inventories.find_by_entity_id(self.id)
 			return product.inventories.find_by_entity_id(self.id).quantity
 		else
