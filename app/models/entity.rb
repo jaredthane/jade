@@ -115,7 +115,7 @@ class Entity < ActiveRecord::Base
           # add the sub to the list
           subscriptions[sub.vendor_id] << sub
         else
-        	logger.info sub.name+" will not be added - last received:" + sub.last_line.received.to_date.to_s(:long) + " cuttoff:" + cutoff_date.to_s(:long)
+        	logger.info (sub.name||"") + " will not be added - last received:" + (sub.last_line.received.to_date.to_s(:long)||"") + " cuttoff:" + (cutoff_date.to_s(:long)||"")
         end
       else  # this sub has never been processed, lets do it now
       	logger.info sub.name+" will be added cause its never been done"
