@@ -99,7 +99,7 @@ class Entity < ActiveRecord::Base
 		#################################################################################################
 		# figure out the cutoff date
 		logger.info "creating order for " + self.name
-  	cutoff_date=Date.today
+  	cutoff_date=Date.today+1
   	cutoff_date=cutoff_date+1 if Date.today.wday==6
     # this hash will have a list of subs for each vendor
 	  subscriptions = {}
