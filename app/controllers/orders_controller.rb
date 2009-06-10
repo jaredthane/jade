@@ -110,7 +110,7 @@ class OrdersController < ApplicationController
     else
 			flash[:error] = "No hay ningun pedido en el sistema con ese numero"
     end
-    redirect_back_or_default(@order)
+    redirect_back_or_default(@order.client)
     return false
   end
 	# GET /orders/create_batch

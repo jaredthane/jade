@@ -127,6 +127,7 @@ class Entity < ActiveRecord::Base
 		    end
 		    # now for the accounting
 		    o=Order.find(o.id)
+		    o.save
 				sale = Trans.create(:order => o, :comments => o.comments)
 				puts "VENDOR:" + o.total_price.to_s
 				vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>Post::CREDIT)
