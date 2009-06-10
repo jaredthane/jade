@@ -5,6 +5,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :session
   map.new_balance_transfer 'accounts/:id/new_balance_transfer', :controller => 'accounts', :action => 'new_balance_transfer'
   map.create_balance_transfer 'accounts/:id/create_balance_transfer', :controller => 'accounts', :action => 'create_balance_transfer'
+  map.process_subscription 'subscriptions/:id/process', :controller => 'subscriptions', :action => 'process'
   map.preview_orders 'subscriptions/preview_orders', :controller => 'subscriptions', :action => 'preview_orders'
   map.attachment 'orders/attachment', :controller => 'orders', :action => 'attachment'
   map.resources :product_categories
