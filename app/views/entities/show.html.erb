@@ -224,7 +224,7 @@
 						<% if order.receipts.length > 0 %>
 							<%= link_to order.receipts[0].number, order.receipts[0] %>
 						<% else %>
-							<%= link_to 'Facturar', new_receipt_path(order)order %>
+							<%= link_to 'Facturar', new_receipt_path(order) %>
 						<% end %>
 					</div>
 					<div class="table_cell_15"><%= h number_to_currency(order.grand_total) %></div>
