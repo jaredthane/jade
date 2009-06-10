@@ -136,8 +136,11 @@
   <%=h number_to_currency(@order.amount_paid) %>
 </p>
 <% end %>
-<% if @order.notes %>
-	
+<% if @order.comments %>
+	<p>
+  <b>Comentarios:</b>
+  <%=h @order.comments %>
+</p>
 <% end %>
 </div>
 <hr class="clear-contentunit" />
