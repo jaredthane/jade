@@ -144,6 +144,7 @@ class Entity < ActiveRecord::Base
 			  	received=new_line.received if new_line.received > received
 		    end
 		    o.received=received
+		    o.save
 		    # now for the accounting
 		    o=Order.find(o.id)
 		    o.received= 
