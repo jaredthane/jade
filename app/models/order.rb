@@ -566,7 +566,10 @@ class Order < ActiveRecord::Base
   	end
 	  puts "Lines before checking for transactions" + Order.find(self.id).lines.length.to_s
 	  total=new_lines.inject(0) { |s,l| s += l[:quantity]*l[:price] }
-	  total = existing_lines.inject(total) { |s,l| s += l[:quantity]*l[:price] }
+#	  total = existing_lines.inject(total) { |s,l| s += l[:quantity]*l[:price] }
+	  for s, l in existing_lines
+	  	total += l["quantity"].to_i * l["price"].to_i
+	  end
 	  check_for_transactions	
 	end
   ###################################################################################
