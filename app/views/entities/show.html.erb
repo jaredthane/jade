@@ -218,7 +218,11 @@
 				</div>
 		  <% for order in @unpaid %>
 			  <div class="table_row">
-					<div class="table_cell_15"><%= h order.received %></div>
+					<div class="table_cell_15">
+						<% if order.received %>
+							<%= h order.received.to_date.to_s(:long) %>
+						<% end %>
+					</div>
 					<div class="table_cell_15"><%= link_to order.id, order %></div>
 					<div class="table_cell_15">
 						<% if order.receipts.length > 0 %>
