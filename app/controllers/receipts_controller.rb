@@ -41,7 +41,11 @@ class ReceiptsController < ApplicationController
 	end
 	
   def generate_receipts(order, start_id=1, force=false)
+  	receipts_made=[]
+  	logger.debug "Here" + order.receipts.length.to_s
   	if order.receipts.length==0
+  		
+  	logger.debug "Here too"
 		  if order.client.entity_type.id == 2
 		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_RECIEPT
 		  else
@@ -53,6 +57,7 @@ class ReceiptsController < ApplicationController
 		    if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt == 0) 
 		      # Create a new receipt
 		      r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{start_id}.pdf", :user=> User.current_user)
+		      receipts_made << r
 		      o=Order.find(order.id)
 		      o.receipt_printed=Date.today
 		      o.save
@@ -73,7 +78,7 @@ class ReceiptsController < ApplicationController
 		    logger.debug "the receipt:" + Receipt.find(r.id).inspect
 		  end
 		  # Generate the PDF's
-		  for receipt in Order.find(order.id).receipts
+		  for receipt in receipts_made #Order.find(order.id).receipts
 		    if receipt.order.client.entity_type.id == 2
 			    consumidor_final(receipt) # from the formats.rb file
 			  else
@@ -84,7 +89,8 @@ class ReceiptsController < ApplicationController
     return start_id
   end
   def generate_receipts_for_up_to_date_accounts(start_id=1)
-    list = Order.find(:all, :joins=>'inner join (select sales.orderid as id from (select * from (select id as orderid, client_id from orders where receipt_printed is null order by orders.id) as orders group by client_id) as sales inner join (select entities.id as clientid from entities left join (select * from (select id, client_id, amount_paid, grand_total from orders where receipt_printed is not null order by id DESC) as orders group by client_id) as orders on orders.client_id=entities.id where amount_paid >= grand_total OR orders.id is null) as clients on clientid=client_id) as unprinted on unprinted.id=orders.id')
+  	list = Order.find(:all, :joins=>'inner join (select orders.id from (select * from (select * from orders where receipt_printed is null order by orders.id) as orders group by client_id) as orders inner join (select client_id as id from (select sum(amount_paid) as paid, sum(grand_total) as owed, client_id from orders group by client_id) as orders where paid>=owed) as clients on clients.id=orders.client_id) as ids on ids.id=orders.id')
+#    list = Order.find(:all, :joins=>'inner join (select sales.orderid as id from (select * from (select id as orderid, client_id from orders where receipt_printed is null order by orders.id) as orders group by client_id) as sales inner join (select entities.id as clientid from entities left join (select * from (select id, client_id, amount_paid, grand_total from orders where receipt_printed is not null order by id DESC) as orders group by client_id) as orders on orders.client_id=entities.id where amount_paid >= grand_total OR orders.id is null) as clients on clientid=client_id) as unprinted on unprinted.id=orders.id')
     
 #    :joins=>'inner join (select min(orders.id) as id from orders inner join (select id, name from (select clients.id,clients.name, sum(line.price*line.quantity*(1+sales_tax)) as owed, sum(payments.presented-payments.returned) as paid from entities as clients left join orders on clients.id=orders.client_id and receipt_printed is not null left join `lines` as line on line.order_id=orders.id left join payments on payments.order_id=orders.id group by clients.id) as clients where paid>= owed or owed is null) as clients on clients.id=orders.client_id where (orders.receipt_printed is null) group by clients.id) as ready on ready.id=orders.id;')
 		for o in list

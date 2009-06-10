@@ -1,5 +1,5 @@
 # Jade Inventory Control System
-#Copyright (C) 2009  Jared T. Martin
+# Copyright (C) 2009  Jared T. Martin
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -36,7 +36,7 @@ module EntitiesHelper
 				return "Esperando Entrega"
 			end
 		else
-			if order.amount_paid == order.total_price_with_tax or order.order_type_id==5
+			if order.amount_paid == order.grand_total or order.order_type_id==5
 				return "Terminado"
 			else
 				return "Esperando Pago" 
