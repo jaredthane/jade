@@ -209,7 +209,7 @@
 	  <b>Ventas No Pagadas:</b>
 	  <div>
 			<div class="table_header_row">
-					<div class="table_cell_15">Fecha</div>
+					<div class="table_cell_15">Fecha Entregado</div>
 					<div class="table_cell_15">Venta</div>
 					<div class="table_cell_15">Factura</div>
 					<div class="table_cell_15">Total</div>
@@ -218,7 +218,7 @@
 				</div>
 		  <% for order in @unpaid %>
 			  <div class="table_row">
-					<div class="table_cell_15"><%= h order.created_at.to_date.to_s(:long) %></div>
+					<div class="table_cell_15"><%= h order.received.to_date.to_s(:long) %></div>
 					<div class="table_cell_15"><%= link_to order.id, order %></div>
 					<div class="table_cell_15">
 						<% if order.receipts.length > 0 %>

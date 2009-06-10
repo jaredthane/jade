@@ -143,7 +143,7 @@ class Line < ActiveRecord::Base
 	# Returns the total price of the products on this line
 	###################################################################################
 	def total_price
-		total = ((price ||0) + (warranty_price || 0)) * quantity
+		total = ((price ||0) + (warranty_price || 0)) * (quantity || 0)
 		return total
 	end
 	###################################################################################
