@@ -123,6 +123,8 @@ class Entity < ActiveRecord::Base
         else
         	logger.info (sub.name||"") + " will not be added - last received:" + (sub.last_line.received.to_date.to_s(:long)||"") + " cuttoff:" + (cutoff_date.to_s(:long)||"")
 		logger.info "5"
+		logger.info sub.last_line.received.to_s
+		logger.info cutoff_date.to_s
         end
       else  # this sub has never been processed, lets do it now
       	logger.info sub.name+" will be added cause its never been done"
