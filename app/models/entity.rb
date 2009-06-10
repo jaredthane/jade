@@ -104,13 +104,17 @@ class Entity < ActiveRecord::Base
     # this hash will have a list of subs for each vendor
 	  subscriptions = {}
 		logger.info "making a list of vendors involved"
+		logger.info "1"
 		list=Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + self.id.to_s + ')' )
 		logger.info "list.length " + list.length.to_s
+		logger.info "2"
 		for sub in list
 	  	logger.info "Here"
+		logger.info "3"
 	  	# check if this sub needs to be processed
 	    if sub.last_line
         if sub.last_line.received.to_date >> sub.frequency <= cutoff_date
+		logger.info "4"
         	logger.info sub.name+" will be added - last received:" + sub.last_line.received.to_date.to_s(:long) + " cuttoff:" + cutoff_date.to_s(:long)
         	# add the vendor if its not already in the list
           subscriptions[sub.vendor_id] = [] if !subscriptions[sub.vendor_id]
@@ -118,9 +122,11 @@ class Entity < ActiveRecord::Base
           subscriptions[sub.vendor_id] << sub
         else
         	logger.info (sub.name||"") + " will not be added - last received:" + (sub.last_line.received.to_date.to_s(:long)||"") + " cuttoff:" + (cutoff_date.to_s(:long)||"")
+		logger.info "5"
         end
       else  # this sub has never been processed, lets do it now
       	logger.info sub.name+" will be added cause its never been done"
+		logger.info "6"
         subscriptions[sub.vendor_id] = [] if !subscriptions[sub.vendor_id]
         subscriptions[sub.vendor_id] << sub
       end
