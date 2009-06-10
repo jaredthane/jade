@@ -136,12 +136,17 @@ class Entity < ActiveRecord::Base
   	  for vendor_id, list in subscriptions
   	  	logger.info "making an order for vendor: "+list[0].vendor.name
 			  o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+			  received=nil
 			  for sub in list
 #  	  		logger.info "adding a line for: "+sub.name
-			  	sub.process(o)
+			  	new_line = sub.process(o)
+			  	received=new_line.received if !received
+			  	received=new_line.received if new_line.received > received
 		    end
+		    o.received=received
 		    # now for the accounting
 		    o=Order.find(o.id)
+		    o.received= 
 		    o.save
 				sale = Trans.create(:order => o, :comments => o.comments)
 				logger.info "VENDOR:" + o.total_price.to_s

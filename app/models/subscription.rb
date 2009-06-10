@@ -46,6 +46,7 @@ class Subscription < ActiveRecord::Base
     l=Line.create(:created_at=>received, :order => order, :product => self.product, :quantity=> self.quantity, :price => self.price, :received =>received)
     self.last_line_id = l.id
     self.save
+    return l
 	end
 ############################################################################################
 # DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
