@@ -127,7 +127,7 @@ class Entity < ActiveRecord::Base
 		logger.info cutoff_date.to_s
         end
       else  # this sub has never been processed, lets do it now
-      	logger.info sub.name+" will be added cause its never been done"
+#      	logger.info sub.name+" will be added cause its never been done"
 		logger.info "6"
         subscriptions[sub.vendor_id] = [] if !subscriptions[sub.vendor_id]
         subscriptions[sub.vendor_id] << sub
