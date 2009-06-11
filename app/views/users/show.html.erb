@@ -23,10 +23,21 @@
 	  (Para cambiar simplemente escoja otro sitio de la lista de sitios)
 	</p>
 	<p>
-		<b> Marcar pedidos como Recibido como defecto?</b><br />
-		<%= h @user.default_received %>
+		<b>Marcar pedidos como Recibido como defecto?</b><br />
+		<% if @user.default_received %>
+			<%= h 'Si' %>
+		<% else %>
+			<%= h 'No' %>
+		<% end %>
 	</p>
-	
+	<p>
+		<b>Hacer contabilidad?</b><br />
+		<% if @user.do_accounting %>
+			<%= h 'Si' %>
+		<% else %>
+			<%= h 'No' %>
+		<% end %>
+	</p>
 </div>
 <div class="column2-unit-right">
 

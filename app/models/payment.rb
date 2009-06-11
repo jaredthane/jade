@@ -26,13 +26,15 @@ class Payment < ActiveRecord::Base
 	after_save :create_transactions
 	attr_accessor :amt
 	def prepare_transactions
-		self.amount=self.presented-self.returned
-		if new_record?
-			amt=self.amount
-		else
-			amt = self.amount - old.amount
+		if User.current_user.do_accounting
+			self.amount=self.presented-self.returned
+			if new_record?
+				amt=self.amount
+			else
+				amt = self.amount - old.amount
+			end
+			@amt=amt
 		end
-		@amt=amt
 	end
 	def create_transactions
 		puts "running here.."

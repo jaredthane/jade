@@ -454,27 +454,29 @@ class Order < ActiveRecord::Base
   # checks if there are any transactions to be made, if so, it calls prepare_transaction
   ##################################################################################
 	def check_for_transactions
-	  if self.new_record?
-	    @transactions_to_create = [main_transaction, inventory_transaction]
-	  else
-	  	puts "Checking for transactions in this update"
-	  	puts "current total price: " + self.total_price.to_s
-	  	puts "current total price: " + self.total_price.to_s
-	    old = Order.find(self.id)
-	  	puts "old.total_price" + old.total_price.to_s
-	    if self.total_price != old.total_price or self.total_tax != old.total_tax
-	    	puts "yup, we gotta make a transaction for this one"
-	    	puts "old main transaction" + old.main_transaction.posts.inspect
-	    	puts "new main transaction" + self.main_transaction.posts.inspect
-	    	puts "dif main transaction" + transaction_diff(old.main_transaction, self.main_transaction).posts.inspect
-	    	@transactions_to_create = [transaction_diff(old.main_transaction, self.main_transaction)]
-	    	puts "old inventory transaction" + old.inventory_transaction.posts.inspect if old.inventory_transaction
-	    	puts "new inventory transaction" + self.inventory_transaction.posts.inspect if self.inventory_transaction
-#	    	puts "dif inventory transaction" + transaction_diff(old.inventory_transaction, self.inventory_transaction).posts.inspect
-	    	i=transaction_diff(old.inventory_transaction, self.inventory_transaction)
-	    	@transactions_to_create << i if i
-	    end
-	  end	
+		if User.current_user.do_accounting
+			if self.new_record?
+			  @transactions_to_create = [main_transaction, inventory_transaction]
+			else
+				puts "Checking for transactions in this update"
+				puts "current total price: " + self.total_price.to_s
+				puts "current total price: " + self.total_price.to_s
+			  old = Order.find(self.id)
+				puts "old.total_price" + old.total_price.to_s
+			  if self.total_price != old.total_price or self.total_tax != old.total_tax
+			  	puts "yup, we gotta make a transaction for this one"
+			  	puts "old main transaction" + old.main_transaction.posts.inspect
+			  	puts "new main transaction" + self.main_transaction.posts.inspect
+			  	puts "dif main transaction" + transaction_diff(old.main_transaction, self.main_transaction).posts.inspect
+			  	@transactions_to_create = [transaction_diff(old.main_transaction, self.main_transaction)]
+			  	puts "old inventory transaction" + old.inventory_transaction.posts.inspect if old.inventory_transaction
+			  	puts "new inventory transaction" + self.inventory_transaction.posts.inspect if self.inventory_transaction
+	#	    	puts "dif inventory transaction" + transaction_diff(old.inventory_transaction, self.inventory_transaction).posts.inspect
+			  	i=transaction_diff(old.inventory_transaction, self.inventory_transaction)
+			  	@transactions_to_create << i if i
+			  end
+			end	
+		end
 	end
   ###################################################################################
   # prepares the movements to be created but DOES NOT SAVE THEM
