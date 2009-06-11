@@ -41,9 +41,9 @@ class Payment < ActiveRecord::Base
 		puts "running here too.."
   		order.amount_paid+=self.amount
   		order.save
-	    trans = Trans.create(:order => self.order, :comments => self.order.comments)
+	    trans = Trans.create(:user=>User.current_user, :order => self.order, :comments => self.order.comments)
 	  else
-	    trans = Trans.create()
+	    trans = Trans.create(:user=>User.current_user)
 	  end
 		case order.order_type_id
 		when 1 # Sale

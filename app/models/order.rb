@@ -344,7 +344,7 @@ class Order < ActiveRecord::Base
 	def main_transaction
 		case order_type_id
 		when 1
-			sale=Trans.new()
+			sale=Trans.new(:user=>User.current_user)
       sale.posts << Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)
       if self.total_tax != 0
       	puts "=======================adding tax self.total_tax="+self.total_tax.to_s
@@ -367,7 +367,7 @@ class Order < ActiveRecord::Base
 		when 2 # Compra
 	    puts self.vendor.cash_account.to_s
 	    puts self.total_price_with_tax.to_s
-	    purchase = Trans.new()
+	    purchase = Trans.new(:user=>User.current_user)
 	    purchase.posts << Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
       purchase.posts << Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
 			return purchase
@@ -376,7 +376,7 @@ class Order < ActiveRecord::Base
 	def inventory_transaction
 		inventory_cost = self.inventory_value
     if inventory_cost > 0
-    	inventory = Trans.new()
+    	inventory = Trans.new(:user=>User.current_user)
 	    inventory.posts << Post.new(:account => self.vendor.inventory_account, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
 	    inventory.posts << Post.new(:account => self.vendor.expense_account, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
 	  end
@@ -387,7 +387,7 @@ class Order < ActiveRecord::Base
   ##################################################################################
 	def transaction_diff(old, newtrans)
 		accounts_done=[]
-		diff=Trans.new()
+		diff=Trans.new(:user=>User.current_user)
 		if old and !newtrans
 #			puts "newtrans is null"
 			for oldpost in old.posts

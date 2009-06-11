@@ -21,6 +21,7 @@ class Trans < ActiveRecord::Base
   has_many :posts
   has_many :entities , :through => :posts
 	belongs_to :order
+	belongs_to :user
 	after_save :save_posts
 #	def add_posts(posts)
 #		for post in posts

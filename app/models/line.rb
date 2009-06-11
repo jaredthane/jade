@@ -129,7 +129,9 @@ class Line < ActiveRecord::Base
 			when 5 #Clients Rep
 				puts " Grabbing revenue account from Clients Rep"
 				if order.client
-					return order.client.user.revenue_account if order.client.user.revenue_account
+					if order.client.user
+						return order.client.user.revenue_account if order.client.user.revenue_account
+					end
 				end
 			when 6 #Current User
 				puts " Grabbing revenue account from Current User"

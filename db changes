@@ -50,3 +50,5 @@ alter table accounts add column modifier int(2);
 alter table entities add column notes text;
 alter table subscriptions change column last_order_id last_line_id int(11);
 alter table `lines` change column sales_tax sales_tax decimal(8,2) default 0;
+alter table trans add column user_id int(11);
+set all money and quantity fields from order and line to default to 0
