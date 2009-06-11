@@ -39,7 +39,24 @@ class ReceiptsController < ApplicationController
     end  
     return true  
 	end
-	
+	def todays_receipts_report
+		@receipts = Receipt.all_today(params[:page])
+		@data=[]
+		total=0
+		x = Object.new.extend(ActionView::Helpers::NumberHelper)
+		for receipt in @receipts
+		  if receipt.order.client.user
+			  @data << [receipt.number, receipt.order.client.name, receipt.order.received, x.number_to_currency(receipt.order.grand_total), receipt.order.client.user.login]
+			else
+				@data << [receipt.number, receipt.order.client.name, receipt.order.received, x.number_to_currency(receipt.order.grand_total), ""]
+			end
+		end
+		prawnto :prawn => { :page_size => 'LETTER'}
+		params[:format] = 'pdf'
+		respond_to do |format|
+		  format.pdf { render :layout => false }
+		end
+	end
   def generate_receipts(order, start_id=1, force=false)
   	receipts_made=[]
   	logger.debug "Here" + order.receipts.length.to_s
@@ -88,6 +105,36 @@ class ReceiptsController < ApplicationController
 		end
     return start_id
   end
+  def price_list
+  @products = Product.search_all_wo_pagination(params[:search], params[:page])
+  @data=[]
+  total=0
+  for p in @products
+    x = Object.new.extend(ActionView::Helpers::NumberHelper)
+    if p.name and p.description
+      if p.name!='' and p.description!=''
+        d=(p.name||'') + ' - ' + (p.description||'')
+      else
+        d=(p.name||'') + (p.description||'')
+      end
+    else
+      d=(p.name||'') + (p.description||'')
+    end
+    if d.length > 203
+       d=d[0..200] + "..."
+    end
+    @data << [d, x.number_to_currency(p.price)]
+  end
+  prawnto :prawn => { :page_size => 'LETTER'}
+  params[:format] = 'pdf'
+  respond_to do |format|
+    format.pdf { render :layout => false }
+  end
+  
+  end
+  
+  
+  
   def generate_receipts_for_up_to_date_accounts(start_id=1)
   	list = Order.find(:all, :joins=>'inner join (select orders.id from (select * from (select * from orders where receipt_printed is null order by orders.id) as orders group by client_id) as orders inner join (select client_id as id from (select sum(amount_paid) as paid, sum(grand_total) as owed, client_id from orders group by client_id) as orders where paid>=owed) as clients on clients.id=orders.client_id) as ids on ids.id=orders.id')
 #    list = Order.find(:all, :joins=>'inner join (select sales.orderid as id from (select * from (select id as orderid, client_id from orders where receipt_printed is null order by orders.id) as orders group by client_id) as sales inner join (select entities.id as clientid from entities left join (select * from (select id, client_id, amount_paid, grand_total from orders where receipt_printed is not null order by id DESC) as orders group by client_id) as orders on orders.client_id=entities.id where amount_paid >= grand_total OR orders.id is null) as clients on clientid=client_id) as unprinted on unprinted.id=orders.id')

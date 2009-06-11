@@ -21,6 +21,7 @@ ActionController::Routing::Routes.draw do |map|
   map.credito_fiscal_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>5, :format =>'pdf'
   map.pay_off 'orders/:id/pay_off', :controller => 'orders', :action => 'pay_off'
   map.todays_sales 'orders/todays_sales/', :controller => 'orders', :action => 'show_todays_sales'
+  map.todays_receipts_report 'receipts/todays_report', :controller => 'receipts', :action => 'todays_receipts_report'
   map.todays_receipts 'receipts/today/', :controller => 'receipts', :action => 'show_today'
   map.unpaid_receipts 'receipts/unpaid/', :controller => 'receipts', :action => 'unpaid'
   map.new_batch_receipts 'subscriptions/new_receipts', :controller => 'receipts', :action => 'new_batch'
