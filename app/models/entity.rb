@@ -137,13 +137,16 @@ class Entity < ActiveRecord::Base
   	  	logger.info "making an order for vendor: "+list[0].vendor.name
 			  o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 			  received=nil
+			  total=0
 			  for sub in list
 #  	  		logger.info "adding a line for: "+sub.name
 			  	new_line = sub.process(o)
 			  	received=new_line.received if !received
 			  	received=new_line.received if new_line.received > received
+			  	total += new_line.total_price_with_tax
 		    end
 		    o.received=received
+		    o.grand_total=total
 		    o.save
 		    # now for the accounting
 		    o=Order.find(o.id)
