@@ -35,6 +35,12 @@
 			</p>
 			<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 		</div>
+		<div class="column3-unit-middle">
+			<p>
+				<b>Fecha Recibido</b>
+				<%= calendar_date_select "order", :markreceived, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20 %>
+			</p>
+		</div>
 	<% when 3 %>
 		<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 		<%= f.hidden_field :client_id, :value => 1 %>

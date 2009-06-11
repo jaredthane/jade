@@ -132,6 +132,26 @@ class Order < ActiveRecord::Base
 		return self.vendor.cash_account
 	end
 	##################################################################################################
+	# This function is to complement markreceived so we can set the received date on an order and its 
+	# lines but have the widget stay null by default
+	#################################################################################################
+	def markreceived=(fecha)
+		if fecha
+			self.received = fecha
+			for line in lines
+				line.received = fecha
+				line.save
+			end
+		end
+	end
+	##################################################################################################
+	# This function is to complement markreceived so we can set the received date on an order and its 
+	# lines but have the widget stay null by default
+	#################################################################################################
+	def markreceived
+		return nil
+	end
+	##################################################################################################
 	# 
 	#################################################################################################
 	def create_movements
