@@ -250,7 +250,7 @@
 			  <div class="table_cell_20">Producto</div>
 			  <div class="table_cell_20">Cantidad</div>
 			  <div class="table_cell_20">Precio</div>
-			  <div class="table_cell_20">Ultima Venta</div>
+			  <div class="table_cell_20">Proxima Venta</div>
 			  <div class="table_cell">Acciones</div>
 		  </div>
 		  <% for s in @subs %>
@@ -259,8 +259,8 @@
 				  <div class="table_cell_20"><%= link_to s.quantity, s %></div>
 				  <div class="table_cell_20"><%=h number_to_currency((s.price||0)) %></div>
           <div class="table_cell_20">
-              <% if s.last_line %>
-                  <%= link_to s.last_line.received.to_date.to_s(:long), s.last_line.order %>
+              <% if s.next_order_date %>
+                  <%= h s.next_order_date.to_date.to_s(:long) %>
               <% end %>
           </div>
           <div class="table_cell">

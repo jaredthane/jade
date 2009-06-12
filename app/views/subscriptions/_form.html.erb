@@ -50,6 +50,10 @@
 			<%= f.text_field :relative_price, :class => 'field' %>
 		</p>
 		<p>
+			<b>Proxima Fecha</b>
+			<%= calendar_date_select "subscription", :next_order_date, :time => false, :year_range => 5.years.ago..0.years.ago, :size=>20 %>
+		</p>
+		<p>
 			<b>Cantidad de Números</b><br />
 			(Deje en blanco para no usar esta opción)
 			<%= f.text_field :end_times, :class => 'field' %>
