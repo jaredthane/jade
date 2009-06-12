@@ -113,8 +113,9 @@ class Subscription < ActiveRecord::Base
 				o.received=sub.next_order_date
 				o.grand_total=l.total_price_with_tax
 				o.save
-				sub.next_order_date = sub.next_order_date.to_date >> sub.frequency
-				sub.save
+				s=Subscription.find(sub.id)
+				s.next_order_date = sub.next_order_date.to_date >> sub.frequency
+				s.save
 			end
 			#puts "Length:"+ list.length.to_s
 #	    # now for the accounting
