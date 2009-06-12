@@ -57,11 +57,11 @@ class Subscription < ActiveRecord::Base
 								 :joins => 'inner join entities on entities.id=subscriptions.client_id')
 		subs={} # a hash of hashes with clients on the first and vendors on the second
 		for sub in list
-			puts "client name="+sub.client.name
+			#puts "client name="+sub.client.name
 			subs[sub.client] = {} if !subs[sub.client]
 			subs[sub.client][sub.vendor] = [] if !subs[sub.client][sub.vendor]
 			subs[sub.client][sub.vendor] << sub	
-			puts "subs[sub.client].inspect" + subs[sub.client].inspect
+			#puts "subs[sub.client].inspect" + subs[sub.client].inspect
 		end	
 		# Now we got a nice list grouped by vendor, lets make the subs
 	  for client, vendor_list in subs
@@ -70,7 +70,7 @@ class Subscription < ActiveRecord::Base
 			  order_received=nil
 			  total=0
 			  for sub in list
-#  	  		#puts "adding a line for: "+sub.name
+#  	  		##puts "adding a line for: "+sub.name
 			  	l=Line.create(:created_at=>sub.next_order_date, :order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price, :received =>sub.next_order_date)
 					sub.next_order_date = sub.next_order_date.to_date >> 1
 					sub.save
@@ -78,8 +78,8 @@ class Subscription < ActiveRecord::Base
 			  	order_received=l.received if l.received > order_received
 			  	total += l.total_price_with_tax
 		    end
-		    puts "o.id=" + o.id.to_s
-		    puts o.errors.inspect
+		    #puts "o.id=" + o.id.to_s
+		    #puts o.errors.inspect
 		    o=Order.find(o.id)
 		    o.received=order_received
 		    o.grand_total=total
@@ -116,7 +116,7 @@ class Subscription < ActiveRecord::Base
 				sub.next_order_date = sub.next_order_date.to_date >> sub.frequency
 				sub.save
 			end
-			puts "Length:"+ list.length.to_s
+			#puts "Length:"+ list.length.to_s
 #	    # now for the accounting
 #			sale = Trans.create(:order => o, :comments => o.comments)
 #			vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>Post::CREDIT)
@@ -135,10 +135,10 @@ class Subscription < ActiveRecord::Base
 # DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
 ############################################################################################
 #	def create_order_for_client(subs)
-#	  puts "subs:" +  subs.inspect
+#	  #puts "subs:" +  subs.inspect
 #	  for vendor_id, list in subs
-#	    puts "vendor_id=" + vendor_id.inspect
-#	    puts "list=" + list.inspect
+#	    #puts "vendor_id=" + vendor_id.inspect
+#	    #puts "list=" + list.inspect
 #	    o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 #	    for sub in list
 #	    	sub.end_times -= 1 if sub.end_times
@@ -148,13 +148,13 @@ class Subscription < ActiveRecord::Base
 #			  	received=sub.created_at
 #			  end
 #	      l=Line.create(:order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price, :received =>received)
-#	      puts "last line = " + sub.last_line.inspect
-#	      puts "l = " + l.inspect
-#	      puts "sub=" + sub.inspect
+#	      #puts "last line = " + sub.last_line.inspect
+#	      #puts "l = " + l.inspect
+#	      #puts "sub=" + sub.inspect
 #	      sub.last_line_id = l.id
-#	      puts "last line after= " + sub.last_line.inspect
+#	      #puts "last line after= " + sub.last_line.inspect
 #        sub.save
-#	      puts "make sure it saved= " + Subscription.find(sub.id).last_line.inspect
+#	      #puts "make sure it saved= " + Subscription.find(sub.id).last_line.inspect
 #      end
 #		  sale = Trans.create(:order => o, :comments => o.comments)
 #		  vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>2, :balance => (o.vendor.revenue_account.balance||0) + (o.total_price||0))
@@ -199,24 +199,24 @@ class Subscription < ActiveRecord::Base
 #  	cutoff_date=cutoff_date+1 if Date.today.wday==6
 #  	for client in Entity.find(:all, :conditions=> '(entity_type_id=2 or entity_type_id=5) AND site_id=' + User.current_user.location_id.to_s)
 #  	  subs_to_fill_for_client = {}
-#  	  puts "asubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+#  	  #puts "asubs_to_fill_for_client" + subs_to_fill_for_client.inspect
 #  	  for sub in Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + client.id.to_s + ')' )
 #  	    if sub.last_line
 #	        if sub.last_line.received.to_date >> sub.frequency <= cutoff_date
-#  	        puts "bsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+#  	        #puts "bsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
 #	          subs_to_fill_for_client[sub.vendor_id] = [] if !subs_to_fill_for_client[sub.vendor_id]
-#  	        puts "csubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+#  	        #puts "csubs_to_fill_for_client" + subs_to_fill_for_client.inspect
 #	          subs_to_fill_for_client[sub.vendor_id] << sub
 #	        end
 #	      else
-#          puts "dsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+#          #puts "dsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
 #          subs_to_fill_for_client[sub.vendor_id] = [] if !subs_to_fill_for_client[sub.vendor_id]
-#  	      puts "esubs_to_fill_for_client" + subs_to_fill_for_client.inspect  
+#  	      #puts "esubs_to_fill_for_client" + subs_to_fill_for_client.inspect  
 #          subs_to_fill_for_client[sub.vendor_id] << sub
 #	      end
 #  	  end
-#  	  puts "fsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
-#  	  puts "lenght="+subs_to_fill_for_client.length.to_s
+#  	  #puts "fsubs_to_fill_for_client" + subs_to_fill_for_client.inspect
+#  	  #puts "lenght="+subs_to_fill_for_client.length.to_s
 #  	  create_order_for_client(subs_to_fill_for_client) if subs_to_fill_for_client.length > 0
 #  	end
 #	end

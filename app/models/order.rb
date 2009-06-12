@@ -34,7 +34,7 @@ class Order < ActiveRecord::Base
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
   def validate
-  	## #puts "validating order"
+  	## ##puts "validating order"
   end
 	after_update :save_lines
 	after_create :create_lines
@@ -65,8 +65,8 @@ class Order < ActiveRecord::Base
   # 
   #################################################################################################
 	def create_transactions
-		#puts "credit = " + Account::CREDIT.to_s
-	  #puts "create transactions -> @transactions_to_create = "+@transactions_to_create.to_s
+		##puts "credit = " + Account::CREDIT.to_s
+	  ##puts "create transactions -> @transactions_to_create = "+@transactions_to_create.to_s
 	  @transactions_to_create = [] if !@transactions_to_create
 	  for t in @transactions_to_create
 	  	if t
@@ -127,8 +127,8 @@ class Order < ActiveRecord::Base
 			end
 		end
 		# If there are no other valid options, use the sites revenue account
-		#puts "vendor:" + self.vendor_id.to_s
-		#puts "Couldnt find any other valid accounts, so we're using the vendors account:" + self.vendor.cash_account_id
+		##puts "vendor:" + self.vendor_id.to_s
+		##puts "Couldnt find any other valid accounts, so we're using the vendors account:" + self.vendor.cash_account_id
 		return self.vendor.cash_account
 	end
 	##################################################################################################
@@ -283,7 +283,7 @@ class Order < ActiveRecord::Base
 #	def transactions_for_lines(lines)
 #	case order_type_id
 #    when 1 # Venta
-#      #puts "self.total_price"+ self.total_price.inspect
+#      ##puts "self.total_price"+ self.total_price.inspect
 #      sale=Trans.new()
 #      results=[sale]
 #      sale.posts << Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)
@@ -311,8 +311,8 @@ class Order < ActiveRecord::Base
 #		    results << inventory
 #		  end
 #	  when 2 # Compra
-#	    #puts self.vendor.cash_account.to_s
-#	    #puts self.total_price_with_tax.to_s
+#	    ##puts self.vendor.cash_account.to_s
+#	    ##puts self.total_price_with_tax.to_s
 #	    purchase = Trans.new()
 #	    purchase.posts << Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
 #      purchase.posts << Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
@@ -326,7 +326,7 @@ class Order < ActiveRecord::Base
 #	def prepare_transaction
 #	  case order_type_id
 #    when 1 # Venta
-#      #puts "self.total_price"+ self.total_price.inspect
+#      ##puts "self.total_price"+ self.total_price.inspect
 #      @transactions_to_create=[]
 #      @transactions_to_create << [ Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)]
 #      if self.total_tax != 0
@@ -354,8 +354,8 @@ class Order < ActiveRecord::Base
 #		    @transactions_to_create<<[inventory,expense]
 #		  end
 #	  when 2 # Compra
-#	    #puts self.vendor.cash_account.to_s
-#	    #puts self.total_price_with_tax.to_s
+#	    ##puts self.vendor.cash_account.to_s
+#	    ##puts self.total_price_with_tax.to_s
 #	    vendor = Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
 #      client = Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
 #      @transactions_to_create = [[vendor, client]]	    
@@ -367,7 +367,7 @@ class Order < ActiveRecord::Base
 			sale=Trans.new(:user=>User.current_user)
       sale.posts << Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)
       if self.total_tax != 0
-      	#puts "=======================adding tax self.total_tax="+self.total_tax.to_s
+      	##puts "=======================adding tax self.total_tax="+self.total_tax.to_s
       	sale.posts << Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>Post::CREDIT)
       end
       revenue_accts={}
@@ -385,8 +385,8 @@ class Order < ActiveRecord::Base
 			}    
 			return sale   
 		when 2 # Compra
-	    #puts self.vendor.cash_account.to_s
-	    #puts self.total_price_with_tax.to_s
+	    ##puts self.vendor.cash_account.to_s
+	    ##puts self.total_price_with_tax.to_s
 	    purchase = Trans.new(:user=>User.current_user)
 	    purchase.posts << Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
       purchase.posts << Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
@@ -409,34 +409,34 @@ class Order < ActiveRecord::Base
 		accounts_done=[]
 		diff=Trans.new(:user=>User.current_user)
 		if old and !newtrans
-#			#puts "newtrans is null"
+#			##puts "newtrans is null"
 			for oldpost in old.posts
 				diff.posts << Post.new(:account =>oldpost.account, :value=> oldpost.value, :post_type_id=>oldpost.opposite_type)
 			end
 		elsif newtrans and !old
-#			#puts "old trans is null"
+#			##puts "old trans is null"
 			for newpost in newtrans.posts
 				diff.posts << newpost
 			end
 		elsif newtrans and old
-#			#puts "we have both trans"
+#			##puts "we have both trans"
 			for oldpost in old.posts
 				#find the matching post
-#			#puts "newtrans has the following posts" + newtrans.posts.inspect
-#			#puts "newtrans.posts.find_by_account_id(5)" + newtrans.posts.find_by_post_type_id(1).to_s
+#			##puts "newtrans has the following posts" + newtrans.posts.inspect
+#			##puts "newtrans.posts.find_by_account_id(5)" + newtrans.posts.find_by_post_type_id(1).to_s
 
 				newpost = newtrans.post_by_account_id(oldpost.account_id)
-#				#puts "old post.account_id="+ oldpost.account_id.to_s
-#				#puts "newpost.inspect="+ newpost.inspect
+#				##puts "old post.account_id="+ oldpost.account_id.to_s
+#				##puts "newpost.inspect="+ newpost.inspect
 				if newpost
 					if oldpost.value > newpost.value
-#						#puts "Difference in values " + oldpost.value.to_s + "-" + newtrans.value.to_s + "=" + (oldpost.value-newtrans.value).to_s
+#						##puts "Difference in values " + oldpost.value.to_s + "-" + newtrans.value.to_s + "=" + (oldpost.value-newtrans.value).to_s
 						diff.posts << Post.new(:account =>oldpost.account, :value=> oldpost.value-newtrans.value, :post_type_id=>oldpost.opposite_type)
 					elsif oldpost.value < newpost.value
 						diff.posts << Post.new(:account =>oldpost.account, :value=> newpost.value-oldpost.value, :post_type_id=>oldpost.post_type_id)					
 					end
 				else
-#					#puts "missing new post for account#" + oldpost.account.id.to_s
+#					##puts "missing new post for account#" + oldpost.account.id.to_s
 					diff.posts << Post.new(:account =>oldpost.account, :value=> oldpost.value, :post_type_id=>oldpost.opposite_type)
 				end
 				accounts_done << oldpost.account_id
@@ -458,20 +458,20 @@ class Order < ActiveRecord::Base
 			if self.new_record?
 			  @transactions_to_create = [main_transaction, inventory_transaction]
 			else
-				#puts "Checking for transactions in this update"
-				#puts "current total price: " + self.total_price.to_s
-				#puts "current total price: " + self.total_price.to_s
+				##puts "Checking for transactions in this update"
+				##puts "current total price: " + self.total_price.to_s
+				##puts "current total price: " + self.total_price.to_s
 			  old = Order.find(self.id)
-				#puts "old.total_price" + old.total_price.to_s
+				##puts "old.total_price" + old.total_price.to_s
 			  if self.total_price != old.total_price or self.total_tax != old.total_tax
-			  	#puts "yup, we gotta make a transaction for this one"
-			  	#puts "old main transaction" + old.main_transaction.posts.inspect
-			  	#puts "new main transaction" + self.main_transaction.posts.inspect
-			  	#puts "dif main transaction" + transaction_diff(old.main_transaction, self.main_transaction).posts.inspect
+			  	##puts "yup, we gotta make a transaction for this one"
+			  	##puts "old main transaction" + old.main_transaction.posts.inspect
+			  	##puts "new main transaction" + self.main_transaction.posts.inspect
+			  	##puts "dif main transaction" + transaction_diff(old.main_transaction, self.main_transaction).posts.inspect
 			  	@transactions_to_create = [transaction_diff(old.main_transaction, self.main_transaction)]
-			  	#puts "old inventory transaction" + old.inventory_transaction.posts.inspect if old.inventory_transaction
-			  	#puts "new inventory transaction" + self.inventory_transaction.posts.inspect if self.inventory_transaction
-	#	    	#puts "dif inventory transaction" + transaction_diff(old.inventory_transaction, self.inventory_transaction).posts.inspect
+			  	##puts "old inventory transaction" + old.inventory_transaction.posts.inspect if old.inventory_transaction
+			  	##puts "new inventory transaction" + self.inventory_transaction.posts.inspect if self.inventory_transaction
+	#	    	##puts "dif inventory transaction" + transaction_diff(old.inventory_transaction, self.inventory_transaction).posts.inspect
 			  	i=transaction_diff(old.inventory_transaction, self.inventory_transaction)
 			  	@transactions_to_create << i if i
 			  end
@@ -485,7 +485,7 @@ class Order < ActiveRecord::Base
 	  logger.debug "==============line.product.product_type_id=#{line.product.inspect}"
 	  if line.product.product_type_id == 1
 		  old = Line.find_by_id(line.id)
-		  #puts old.inspect
+		  ##puts old.inspect
 		  if old
 			  dir = quantity_change_direction(line, old)
 		  else
@@ -495,7 +495,7 @@ class Order < ActiveRecord::Base
 				  dir = 0
 			  end
 		  end
-#			#puts "----------------->" + dir.to_s
+#			##puts "----------------->" + dir.to_s
 		  if dir != 0
 			  case movement_type_id(dir)
 				  when 1
@@ -546,9 +546,9 @@ class Order < ActiveRecord::Base
   # updates existing lines on the order, adds new ones and deletes missing ones. DOES NOT SAVE THEM
   ##################################################################################
 	def update_all_lines(new_lines=[], existing_lines=[])
-	  #puts "Lines before updating" + self.lines.length.to_s
+	  ##puts "Lines before updating" + self.lines.length.to_s
 		lines_changed_for_accounting = []
-		#puts "====================UPDATEING ALL LINES===================="
+		##puts "====================UPDATEING ALL LINES===================="
 		lines_to_delete=[]
     #Update existing lines
     if existing_lines
@@ -570,23 +570,23 @@ class Order < ActiveRecord::Base
 			self.lines.clear
 		end
 		new_lines=[] if !new_lines
-	  #puts "Lines before updating new ones" + Order.find(self.id).lines.length.to_s
+	  ##puts "Lines before updating new ones" + Order.find(self.id).lines.length.to_s
 		# Update New lines
   	for l in new_lines
   		new_line = Line.new(:order_id=>self.id)
   		new_line.product_id = l[:product_id]		
   		new_line.quantity = l[:quantity]
-	  #puts "Lines before setting attributes" + Order.find(self.id).lines.length.to_s
+	  ##puts "Lines before setting attributes" + Order.find(self.id).lines.length.to_s
   		new_line.attributes=l  
 #  		logger.debug "about to push #{new_line.inspect}"  	
-	  #puts "Lines before pushing new lines" + Order.find(self.id).lines.length.to_s
+	  ##puts "Lines before pushing new lines" + Order.find(self.id).lines.length.to_s
   		self.lines << new_line
   	end
-	  #puts "Lines before preparing movements" + Order.find(self.id).lines.length.to_s
+	  ##puts "Lines before preparing movements" + Order.find(self.id).lines.length.to_s
   	for l in self.lines
   		prepare_movements(l)
   	end
-	  #puts "Lines before checking for transactions" + Order.find(self.id).lines.length.to_s
+	  ##puts "Lines before checking for transactions" + Order.find(self.id).lines.length.to_s
 	  total=new_lines.inject(0) { |s,l| s += l[:quantity].to_i*l[:price].to_i }
 #	  total = existing_lines.inject(total) { |s,l| s += l[:quantity]*l[:price] }
 		if existing_lines
@@ -610,11 +610,11 @@ class Order < ActiveRecord::Base
   def get_sum(product)
   	sum=0
   	o=Order.find(self.id)
-  	## #puts "num lines: " + o.lines.count.to_s
+  	## ##puts "num lines: " + o.lines.count.to_s
   	for line in o.lines
-  		## #puts "checking line#" + line.id.to_s
+  		## ##puts "checking line#" + line.id.to_s
   		if line.product.id==product.id
-  			## #puts "found some"
+  			## ##puts "found some"
   			sum+=line.quantity
   		end
   	end
@@ -626,11 +626,11 @@ class Order < ActiveRecord::Base
 	###################################################################################
   def inventory_value
   	sum=0
-  	## #puts "num lines: " + o.lines.count.to_s
+  	## ##puts "num lines: " + o.lines.count.to_s
   	for line in self.lines
-  		## #puts "checking line#" + line.id.to_s
+  		## ##puts "checking line#" + line.id.to_s
   		if line.product.product_type_id==1
-  			## #puts "found some"
+  			## ##puts "found some"
   			sum+=line.product.cost*line.quantity
   		end
   	end
@@ -646,14 +646,14 @@ class Order < ActiveRecord::Base
 	  for req in discount.requirements do        
 		  @wehave = get_sum(req.required)
 		  @weneed = req.quantity
-		  # #puts "@wehave ->" + @wehave.to_s + "<-"
-		  # #puts "@weneed ->" + @weneed.to_s + "<-"
+		  # ##puts "@wehave ->" + @wehave.to_s + "<-"
+		  # ##puts "@weneed ->" + @weneed.to_s + "<-"
 		  @temp = @wehave / @weneed
 		
-		  # #puts "@temp ->" + @temp.to_s + "<-"
-		  # #puts "@qualify ->" + @qualify.to_s + "<-"
+		  # ##puts "@temp ->" + @temp.to_s + "<-"
+		  # ##puts "@qualify ->" + @qualify.to_s + "<-"
 		  @qualify= [@qualify, @temp].min
-		  # #puts "@qualify ->" + @qualify.to_s + "<-"
+		  # ##puts "@qualify ->" + @qualify.to_s + "<-"
 	  end #req in discount.requirements
 	  return nil if @qualify == 10000
     return @qualify
@@ -663,15 +663,15 @@ class Order < ActiveRecord::Base
 	# Checks if the order qualifies for any discounts and adds lines for them ass necisary
 	###################################################################################
   def check_for_discounts
-  	# #puts "checking existing discounts"
+  	# ##puts "checking existing discounts"
   	# Go through each discount in the order and see if it still qualifys
-  	# #puts "self.order_type_id"+(self.order_type_id==1).to_s
+  	# ##puts "self.order_type_id"+(self.order_type_id==1).to_s
   	if self.order_type_id==1
 			@discounts_in_order= []
 			for line in self.lines.find(:all, 
 																	:conditions => ' products.product_type_id = 2 ',
 																	:joins => ' inner join products on lines.product_id=products.id ')
-	  		# #puts "checking " + line.product.name
+	  		# ##puts "checking " + line.product.name
 				@discounts_in_order << line.product
 				@qualify = discount_qualifies(line.product)
 				if @qualify > 0
@@ -680,23 +680,23 @@ class Order < ActiveRecord::Base
 					line.save()
 				else
 					# Remove discount since we no longer qualify
-					# #puts line.id.to_s
+					# ##puts line.id.to_s
 					self.lines.delete(line)
 				end
 			end
 			# Go through each discount and see if the order qualifies
-	  	# #puts "checking new discounts"
+	  	# ##puts "checking new discounts"
 			for discount in get_discounts do 
-				# #puts "checking" + discount.name
+				# ##puts "checking" + discount.name
 				#make sure we dont add a discount thats already in the order
 				if !@discounts_in_order.include?(discount)
 					# make sure the discount is available in this site
 					if discount.available
-						# #puts discount.name + "available" 
+						# ##puts discount.name + "available" 
 						@qualify = discount_qualifies(discount)
 						#If the order qualifies, add it.
 						if @qualify >= 1			                     		
-							# #puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
+							# ##puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
 							l=Line.new(:order_id => self.id, :product_id => discount.id, :quantity => @qualify, :price => discount.price, :received => 1)
 							l.save
 						end #if qualify==1
@@ -983,11 +983,11 @@ class Order < ActiveRecord::Base
 	###################################################################################
 	def save_lines
 		sucessful = true
-		 #puts "saving lines"
+		 ##puts "saving lines"
 		logger.debug "saving lines"
 		lines.each do |line|
 			sucessful = false if !line.save(false)
-			#puts "saving a line"
+			##puts "saving a line"
 #			logger.debug "new cost:" + p.cost().to_s
 		end
 		return sucessful
@@ -998,34 +998,34 @@ class Order < ActiveRecord::Base
 	# creates a new line for this order
 	###################################################################################
 	def create_lines
-		 #puts "creating lines"
+		 ##puts "creating lines"
 		sucessful = true
-		# #puts lines.inspect
+		# ##puts lines.inspect
 		self.lines.each do |line|
-			#puts "setting order_id to " + self.id.to_s
-			#puts "creating a line"
+			##puts "setting order_id to " + self.id.to_s
+			##puts "creating a line"
 			line.order_id = self.id 
 			sucessful = false if !line.save(true)
 		end		
-		# #puts "end"
+		# ##puts "end"
 		return sucessful
 	end
 	###################################################################################
 	# returns the date the last product to be received was received or nil if any lines are pending
 	###################################################################################
 	def last_received
-		### #puts "Checking for order number "+self.id.to_s
+		### ##puts "Checking for order number "+self.id.to_s
 		@received=nil
 		for line in self.lines do
 			return nil if line.received == nil
 			if @received == nil
 				@received=line.received
-				### #puts line.product.name + " was received " + line.received.to_s + " 2received set to "+@received.to_s
+				### ##puts line.product.name + " was received " + line.received.to_s + " 2received set to "+@received.to_s
 			else 
 				if line.received > @received
-					### #puts line.product.name + " was received " + line.received.to_s + " received is already "+@received.to_s
+					### ##puts line.product.name + " was received " + line.received.to_s + " received is already "+@received.to_s
 					@received=line.received
-					### #puts line.product.name + " was received " + line.received.to_s + " 1received set to "+@received.to_s
+					### ##puts line.product.name + " was received " + line.received.to_s + " 1received set to "+@received.to_s
 				end
 			end
 		end
