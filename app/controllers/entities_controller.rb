@@ -74,23 +74,26 @@ class EntitiesController < ApplicationController
       format.js
     end
 	end
-	##################################################################################################
-	# Processes subscriptions for all clients in current view and redirects to todays orders
-	#################################################################################################
-	def process_subscriptions
-    return false if !allowed('clients')
-    search = (params[:search]||'') + " activo:si tipo:clientes"
-    logger.debug "my search->"+ search
-  	@clients = Entity.search_without_pagination(search)
-  	logger.debug @clients.inspect
-  	for client in @clients
-  		client.process_subscriptions()
-  	end
-    respond_to do |format|
-      format.html { redirect_to(todays_sales_path) }
-      format.xml  { render :xml => @subscription }
-    end
-  end
+############################################################################################
+# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
+############################################################################################
+#	##################################################################################################
+#	# Processes subscriptions for all clients in current view and redirects to todays orders
+#	#################################################################################################
+#	def process_subscriptions
+#    return false if !allowed('clients')
+#    search = (params[:search]||'') + " activo:si tipo:clientes"
+#    logger.debug "my search->"+ search
+#  	@clients = Entity.search_without_pagination(search)
+#  	logger.debug @clients.inspect
+#  	for client in @clients
+#  		client.process_subscriptions()
+#  	end
+#    respond_to do |format|
+#      format.html { redirect_to(todays_sales_path) }
+#      format.xml  { render :xml => @subscription }
+#    end
+#  end
   ##################################################################################################
   # Displays end users assigned to user
   #################################################################################################

@@ -5,7 +5,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :session
   map.new_balance_transfer 'accounts/:id/new_balance_transfer', :controller => 'accounts', :action => 'new_balance_transfer'
   map.create_balance_transfer 'accounts/:id/create_balance_transfer', :controller => 'accounts', :action => 'create_balance_transfer'
-  map.process_subscription 'subscriptions/:id/process', :controller => 'subscriptions', :action => 'process_me'
   map.preview_orders 'subscriptions/preview_orders', :controller => 'subscriptions', :action => 'preview_orders'
   map.attachment 'orders/attachment', :controller => 'orders', :action => 'attachment'
   map.resources :product_categories
@@ -29,8 +28,8 @@ ActionController::Routing::Routes.draw do |map|
   map.create_receipt 'receipts/:id/create', :controller => 'receipts', :action => 'create'
   map.receipt 'receipts/:id/', :controller => 'receipts', :action => 'show'
   map.new_receipt 'receipts/:id/new', :controller => 'receipts', :action => 'new'
-  map.process_subscriptions 'clients/process_subscriptions', :controller => 'entities', :action => 'process_subscriptions'
-  map.subscriptions_results 'subscriptions/results', :controller => 'subscriptions', :action => 'show_batch'
+  map.process_subscriptions 'subscriptions/process', :controller => 'subscriptions', :action => 'process_all'
+  map.process_subscriptions 'subscriptions/fast_process', :controller => 'subscriptions', :action => 'fast_process'
   map.resources :subscriptions
 	map.resources :discounts
 	map.resources :combos

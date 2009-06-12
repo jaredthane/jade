@@ -28,25 +28,103 @@ class Subscription < ActiveRecord::Base
 	def client_name=(name)
 		self.client = Entity.find_by_name(name) unless name.blank?
 	end
-	def process(order=nil, received=nil)
-		# processes the subscription for the next unprocessed period no matter what.
-		# If you give it an order, it will append the new line to the specified order
-		# if not, it will make an appropriate order and append the line to it.
-		self.end_times -= 1 if self.end_times
-		if !received
-			if self.last_line
-				received=self.last_line.received.to_date >> self.frequency
-			else
-				received=self.created_at
+############################################################################################
+# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
+############################################################################################
+#	def process(order=nil, received=nil)
+#		# processes the subscription for the next unprocessed period no matter what.
+#		# If you give it an order, it will append the new line to the specified order
+#		# if not, it will make an appropriate order and append the line to it.
+#		self.end_times -= 1 if self.end_times
+#		if !received
+#			if self.last_line
+#				received=self.last_line.received.to_date >> self.frequency
+#			else
+#				received=self.created_at
+#			end
+#		end
+#		if !order
+#			order = Order.create(:received=>received, :created_at=>received, :vendor => self.vendor, :client => self.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+#		end
+#    l=Line.create(:created_at=>received, :order => order, :product => self.product, :quantity=> self.quantity, :price => self.price, :received =>received)
+#    self.last_line_id = l.id
+#    self.save
+#    return l
+#	end
+	def self.process
+		list= find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE)' )
+		subs={} # a hash of hashes with clients on the first and vendors on the second
+		for sub in list
+			puts "client name="+sub.client.name
+			subs[sub.client] = {} if !subs[sub.client]
+			subs[sub.client][sub.vendor] = [] if !subs[sub.client][sub.vendor]
+			subs[sub.client][sub.vendor] << sub	
+			puts "subs[sub.client].inspect" + subs[sub.client].inspect
+		end	
+		# Now we got a nice list grouped by vendor, lets make the subs
+	  for client, vendor_list in subs
+	  	for vendor, list in vendor_list
+				o=Order.create(:vendor => vendor, :client => client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+			  order_received=nil
+			  total=0
+			  for sub in list
+#  	  		#puts "adding a line for: "+sub.name
+			  	l=Line.create(:created_at=>sub.next_order_date, :order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price, :received =>sub.next_order_date)
+					sub.next_order_date = sub.next_order_date.to_date >> 1
+					sub.save
+			  	order_received=l.received if !order_received
+			  	order_received=l.received if l.received > order_received
+			  	total += l.total_price_with_tax
+		    end
+		    puts "o.id=" + o.id.to_s
+		    puts o.errors.inspect
+		    o=Order.find(o.id)
+		    o.received=order_received
+		    o.grand_total=total
+		    o.save
+		    # now for the accounting
+				sale = Trans.create(:order => o, :comments => o.comments)
+				vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>Post::CREDIT)
+				client = Post.create(:trans=>sale, :account => o.client.cash_account, :value=>o.total_price_with_tax, :post_type_id =>Post::DEBIT)
+				tax    = Post.create(:trans=>sale, :account => o.vendor.tax_account, :value=>o.total_tax, :post_type_id =>Post::CREDIT)
+				inventory_cost = o.inventory_value
+				# if the sub included inventory items, we have to make that transaction also...
+				if inventory_cost > 0 
+					itrans = Trans.create(:order => o, :comments => o.comments)
+					inventory = Post.create(:trans=>itrans, :account => o.vendor.inventory_account, :value=>o.inventory_cost, :post_type_id =>2, :balance => (o.vendor.inventory_account.balance||0) - (o.inventory_cost||0))
+					expense = Post.create(:trans=>itrans, :account => o.vendor.expense_account, :value=>o.inventory_cost, :post_type_id =>1, :balance => (o.vendor.expense_account.balance||0) + (o.inventory_cost||0))
+				end
 			end
-		end
-		if !order
-			order = Order.create(:received=>received, :created_at=>received, :vendor => self.vendor, :client => self.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
-		end
-    l=Line.create(:created_at=>received, :order => order, :product => self.product, :quantity=> self.quantity, :price => self.price, :received =>received)
-    self.last_line_id = l.id
-    self.save
-    return l
+	  end
+	end
+	def self.fast_process
+		list=[1,2,3]
+		until list.length == 0
+			list= find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE)' )
+			for sub in list
+				o=Order.create(:vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+				l=Line.create(:created_at=>sub.next_order_date, :order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price, :received =>sub.next_order_date)
+				o=Order.find(o.id)
+				o.received=sub.next_order_date
+				o.grand_total=l.total_price_with_tax
+				o.save
+				sub.next_order_date = sub.next_order_date.to_date >> 1
+				sub.save
+			end
+			puts "Length:"+ list.length.to_s
+#	    # now for the accounting
+#			sale = Trans.create(:order => o, :comments => o.comments)
+#			vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>Post::CREDIT)
+#			client = Post.create(:trans=>sale, :account => o.client.cash_account, :value=>o.total_price_with_tax, :post_type_id =>Post::DEBIT)
+#			tax    = Post.create(:trans=>sale, :account => o.vendor.tax_account, :value=>o.total_tax, :post_type_id =>Post::CREDIT)
+#			inventory_cost = o.inventory_value
+#			# if the sub included inventory items, we have to make that transaction also...
+#			if inventory_cost > 0 
+#				itrans = Trans.create(:order => o, :comments => o.comments)
+#				inventory = Post.create(:trans=>itrans, :account => o.vendor.inventory_account, :value=>o.inventory_cost, :post_type_id =>2, :balance => (o.vendor.inventory_account.balance||0) - (o.inventory_cost||0))
+#				expense = Post.create(:trans=>itrans, :account => o.vendor.expense_account, :value=>o.inventory_cost, :post_type_id =>1, :balance => (o.vendor.expense_account.balance||0) + (o.inventory_cost||0))
+#			end
+	  end
 	end
 ############################################################################################
 # DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #

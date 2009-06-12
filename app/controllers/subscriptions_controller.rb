@@ -47,6 +47,20 @@ class SubscriptionsController < ApplicationController
       format.html { redirect_to(@subscription.client) }
     end
   end
+  def process_all
+  	Subscription.process
+    respond_to do |format|
+      format.html { redirect_to(todays_sales_path) }
+      format.xml  { render :xml => @subscription }
+    end
+  end
+  def fast_process
+  	Subscription.fast_process
+    respond_to do |format|
+      format.html { redirect_to(todays_sales_path) }
+      format.xml  { render :xml => @subscription }
+    end
+  end
 ############################################################################################
 # DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
 ############################################################################################
