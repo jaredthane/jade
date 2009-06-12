@@ -3,7 +3,6 @@
     <% if current_user.has_rights(['admin','ventas','gerente']) %>
         <dt><%= link_to 'Nuevo', new_subscription_path %></dt>
         <dt><%= link_to 'Cambiar', edit_subscription_path(@subscription) %></dt>
-        <dt><%= link_to 'Procesar', process_subscriptions_path(@subscription) %></dt>
     <% end %>
     <dt><%= link_to 'Lista', subscriptions_path %></dt>
 <% end %>
