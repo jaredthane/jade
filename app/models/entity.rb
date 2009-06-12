@@ -98,66 +98,71 @@ class Entity < ActiveRecord::Base
 		# If the client has subscriptions to be processed, will create an order with a line for each.
 		#################################################################################################
 		# figure out the cutoff date
-		logger.info "creating order for " + self.name
+		#puts "creating order for " + self.name
   	cutoff_date=Date.today+1
   	cutoff_date=cutoff_date+1 if Date.today.wday==6
     # this hash will have a list of subs for each vendor
 	  subscriptions = {}
-		logger.info "making a list of vendors involved"
-		logger.info "1"
+		#puts "making a list of vendors involved"
+		#puts "1"
 		list=Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + self.id.to_s + ')' )
-		logger.info "list.length " + list.length.to_s
-		logger.info "2"
+		#puts "list.length " + list.length.to_s
+		#puts "2"
 		for sub in list
-	  	logger.info "Here"
-		logger.info "3"
+	  	#puts "Here"
+		#puts "3"
 	  	# check if this sub needs to be processed
 	    if sub.last_line
         if sub.last_line.received.to_date >> sub.frequency <= cutoff_date
-		logger.info "4"
-        	logger.info sub.name+" will be added - last received:" + sub.last_line.received.to_date.to_s(:long) + " cuttoff:" + cutoff_date.to_s(:long)
+		#puts "4"
+        	#puts sub.name+" will be added - last received:" + sub.last_line.received.to_date.to_s(:long) + " cuttoff:" + cutoff_date.to_s(:long)
         	# add the vendor if its not already in the list
           subscriptions[sub.vendor_id] = [] if !subscriptions[sub.vendor_id]
           # add the sub to the list
           subscriptions[sub.vendor_id] << sub
         else
-        	logger.info (sub.name||"") + " will not be added - last received:" + (sub.last_line.received.to_date.to_s(:long)||"") + " cuttoff:" + (cutoff_date.to_s(:long)||"")
-		logger.info "5"
-		logger.info "sub.last_line="+sub.last_line.received.to_s
-		logger.info cutoff_date.to_s
+        	#puts (sub.name||"") + " will not be added - last received:" + (sub.last_line.received.to_date.to_s(:long)||"") + " cuttoff:" + (cutoff_date.to_s(:long)||"")
+					#puts "5"
+					#puts "sub.last_line="+sub.last_line.received.to_s
+					#puts cutoff_date.to_s
         end
       else  # this sub has never been processed, lets do it now
-#      	logger.info sub.name+" will be added cause its never been done"
-		logger.info "6"
+#      	#puts sub.name+" will be added cause its never been done"
+#				#puts "6"
         subscriptions[sub.vendor_id] = [] if !subscriptions[sub.vendor_id]
         subscriptions[sub.vendor_id] << sub
       end
  	  	# Now we got a nice list grouped by vendor, lets make the subs
   	  for vendor_id, list in subscriptions
-  	  	logger.info "making an order for vendor: "+list[0].vendor.name
+#  	  	#puts "making an order for vendor: "+list[0].vendor.name
 			  o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 			  received=nil
 			  total=0
 			  for sub in list
-#  	  		logger.info "adding a line for: "+sub.name
+#  	  		#puts "adding a line for: "+sub.name
 			  	new_line = sub.process(o)
 			  	received=new_line.received if !received
 			  	received=new_line.received if new_line.received > received
 			  	total += new_line.total_price_with_tax
+			  	puts "new_line.total_price_with_tax"+new_line.total_price_with_tax.to_s
+			  	puts "new_line.price*new_line.quantity="+(new_line.price*new_line.quantity).to_s
 		    end
+		    puts "total=" + total.to_s
+		    o=Order.find(o.id)
 		    o.received=received
 		    o.grand_total=total
+		    puts "o.grand_total=" + o.grand_total.to_s
 		    o.save
-		    # now for the accounting
 		    o=Order.find(o.id)
-		    o.received= 
-		    o.save
+		    puts "o.grand_total=" + o.grand_total.to_s
+		    # now for the accounting
+#		    o=Order.find(o.id)
 				sale = Trans.create(:order => o, :comments => o.comments)
-				logger.info "VENDOR:" + o.total_price.to_s
+#				#puts "VENDOR:" + o.total_price.to_s
 				vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>Post::CREDIT)
-				logger.info "CLIENT:" + o.total_price_with_tax.to_s
+#				#puts "CLIENT:" + o.total_price_with_tax.to_s
 				client = Post.create(:trans=>sale, :account => o.client.cash_account, :value=>o.total_price_with_tax, :post_type_id =>Post::DEBIT)
-				logger.info "TAX:" + o.total_tax.to_s
+#				#puts "TAX:" + o.total_tax.to_s
 				tax    = Post.create(:trans=>sale, :account => o.vendor.tax_account, :value=>o.total_tax, :post_type_id =>Post::CREDIT)
 				inventory_cost = o.inventory_value
 				# if the sub included inventory items, we have to make that transaction also...
@@ -527,7 +532,7 @@ class Entity < ActiveRecord::Base
 # DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
 ############################################################################################
 #  def self.search(search, page, entity_type='all', user_id=nil, sub_day=nil)
-#  	#logger.info "search=" + search
+#  	##puts "search=" + search
 #  	search = search || ""
 #  	if search[0..6]=='activos'
 #  		active=1
@@ -536,7 +541,7 @@ class Entity < ActiveRecord::Base
 #  		active=0
 #  		search=[9..search.length]
 #  	end
-#  	#logger.info "search=" + search
+#  	##puts "search=" + search
 #  	case entity_type
 #			when 'clients'
 #				condition = "(entities.name like '%" + search +"%' OR client_group.name like '%" + search +"%' OR entities.id like '%" + search +"%' OR users.login like '%" + search +"%') AND (entity_type_id = 2 OR entity_type_id = 5)"
@@ -564,7 +569,7 @@ class Entity < ActiveRecord::Base
 #  	    # only show for this site, but always include anonimo and no spcificado
 #      	condition += ' AND (entities.site_id = ' + User.current_user.location_id.to_s + ' or entities.id=3 or entities.id=4) ' 
 #    end
-#  	#logger.info "condition=" + condition
+#  	##puts "condition=" + condition
 #		paginate :per_page => 20, :page => page,
 #		       :conditions => condition,
 #		       :joins => 'left join price_group_names as client_group on client_group.id=entities.price_group_name_id left join price_groups on entities.price_group_id=price_groups.id left join price_group_names as site_group on site_group.id = price_groups.price_group_name_id left join users on users.id=entities.user_id',
@@ -602,8 +607,8 @@ class Entity < ActiveRecord::Base
 		end		
 	end
 	def inventory(product)
-		logger.info "product.id=" + product.id.to_s
-		logger.info "self.id=" + self.id.to_s
+		#puts "product.id=" + product.id.to_s
+		#puts "self.id=" + self.id.to_s
 		if product.inventories.find_by_entity_id(self.id)
 			return product.inventories.find_by_entity_id(self.id).quantity
 		else

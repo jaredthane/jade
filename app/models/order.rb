@@ -587,7 +587,7 @@ class Order < ActiveRecord::Base
   		prepare_movements(l)
   	end
 	  puts "Lines before checking for transactions" + Order.find(self.id).lines.length.to_s
-	  total=new_lines.inject(0) { |s,l| s += l[:quantity]*l[:price] }
+	  total=new_lines.inject(0) { |s,l| s += l[:quantity].to_i*l[:price].to_i }
 #	  total = existing_lines.inject(total) { |s,l| s += l[:quantity]*l[:price] }
 	  for s, l in existing_lines
 	  	total += l["quantity"].to_i * l["price"].to_i
