@@ -54,7 +54,7 @@ class Subscription < ActiveRecord::Base
 	def self.process
 			list= find(:all, 
 								 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (entities.active=true)',
-								 :joins => 'inner join entities on entities.id=subscriptions.client_id'
+								 :joins => 'inner join entities on entities.id=subscriptions.client_id')
 		subs={} # a hash of hashes with clients on the first and vendors on the second
 		for sub in list
 			puts "client name="+sub.client.name
@@ -104,8 +104,7 @@ class Subscription < ActiveRecord::Base
 		until list.length == 0
 			list= find(:all, 
 								 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (entities.active=true)',
-								 :joins => 'inner join entities on entities.id=subscriptions.client_id'
-								 
+								 :joins => 'inner join entities on entities.id=subscriptions.client_id'					 
 								 )
 			for sub in list
 				o=Order.create(:vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
