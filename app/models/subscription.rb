@@ -51,18 +51,24 @@ class Subscription < ActiveRecord::Base
 #    self.save
 #    return l
 #	end
+	def self.process
+		list = find(:all,
+								:conditions => '(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (entities.active=true) AND unpaid.client_id is null',								
+								:joins => 'inner join entities on entities.id=subscriptions.client_id left join (select client_id from orders where deleted=false AND (amount_paid < grand_total OR amount_paid is null) group by client_id) as unpaid on unpaid.client_id=entities.id'
+							)
+	end
 	def self.process_client(client)
 		list= find(:all, 
 							 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (entities.active=true) AND entities.id=' + client.id.to_s,
 							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
 		process_list(list)
 	end
-	def self.process
-		list= find(:all, 
-							 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (entities.active=true)',
-							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
-		process_list(list)
-	end
+#	def self.process
+#		list= find(:all, 
+#							 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (entities.active=true)',
+#							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
+#		process_list(list)
+#	end
 	def self.process_list(list)
 		subs={} # a hash of hashes with clients on the first and vendors on the second
 		for sub in list

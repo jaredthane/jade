@@ -59,6 +59,11 @@ class Payment < ActiveRecord::Base
 	def amount
 		return (self.presented||0)-(self.returned||0)
 	end
+	def self.all_today()
+  	find 		 :all,
+		         :conditions => 'date(payments.created_at) = curdate()',
+		         :order => 'payments.created_at'
+	end
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['(payments.order_id like :search OR payment_methods.name like :search )', {:search => "%#{search}%"}],

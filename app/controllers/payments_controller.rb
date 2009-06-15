@@ -51,7 +51,20 @@ class PaymentsController < ApplicationController
       format.xml  { render :xml => @payment }
     end
   end
-  
+  def todays_accounting_report
+		@payments = Payment.all_today(params[:page])
+		@data=[]
+		total=0
+		x = Object.new.extend(ActionView::Helpers::NumberHelper)
+		for payment in @payments
+		  @data << ["%05d" % receipt.number, receipt.created_at.to_date, receipt.order.client.name, x.number_to_currency(receipt.order.grand_total)]
+		end
+		prawnto :prawn => { :page_size => 'LETTER'}
+		params[:format] = 'pdf'
+		respond_to do |format|
+		  format.pdf { render :layout => false }
+		end
+	end
 ############################################################################################
 # DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
 ############################################################################################

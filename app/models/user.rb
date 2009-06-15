@@ -34,7 +34,7 @@ class User < ActiveRecord::Base
 	has_many :roles_users
 	has_many :roles, :through => :roles_users
 	has_and_belongs_to_many :roles
-  validates_presence_of     :login, :email
+  validates_presence_of     :login
   validates_presence_of     :password,                   :if => :password_required?
   validates_presence_of     :password_confirmation,      :if => :password_required?
   validates_length_of       :password, :within => 4..40, :if => :password_required?

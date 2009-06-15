@@ -24,7 +24,7 @@
     <div class="table_cell_15"><%= h receipt.created_at.to_date.to_s(:long) %></div>
     <div class="table_cell_15"><%= link_to receipt.order.client.name, receipt.order.client %></div>
     <div class="table_cell_15"><%= link_to receipt.order_id, receipt.order %></div>
-    <div class="table_cell_15"><%= link_to receipt.number, receipt %></div>
+    <div class="table_cell_15"><%= link_to "%05d" % receipt.number, receipt %></div>
     <div class="table_cell_10"><%= h number_to_currency(receipt.total_price_with_tax) %></div>
     <div class="table_cell_10"><%= h number_to_currency(receipt.order.amount_paid) %></div>
     <div class="table_cell"><%=link_to 'Marcar Pagada', pay_off_url(receipt.order) %></div>

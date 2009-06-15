@@ -226,7 +226,7 @@
 					<div class="table_cell_15"><%= link_to order.id, order %></div>
 					<div class="table_cell_15">
 						<% if order.receipts.length > 0 %>
-							<%= link_to order.receipts[0].number, order.receipts[0] %>
+							<%= link_to "%05d" % order.receipts[0].number, order.receipts[0] %>
 						<% else %>
 							<%= link_to 'Facturar', new_receipt_path(order) %>
 						<% end %>

@@ -46,10 +46,24 @@ class ReceiptsController < ApplicationController
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for receipt in @receipts
 		  if receipt.order.client.user
-			  @data << [receipt.number, receipt.order.client.name, receipt.order.received, x.number_to_currency(receipt.order.grand_total), receipt.order.client.user.login]
+			  @data << ["%05d" % receipt.number, receipt.order.client.name, receipt.order.received, x.number_to_currency(receipt.order.grand_total), receipt.order.client.user.login]
 			else
-				@data << [receipt.number, receipt.order.client.name, receipt.order.received, x.number_to_currency(receipt.order.grand_total), ""]
+				@data << ["%05d" % receipt.number, receipt.order.client.name, receipt.order.received, x.number_to_currency(receipt.order.grand_total), ""]
 			end
+		end
+		prawnto :prawn => { :page_size => 'LETTER'}
+		params[:format] = 'pdf'
+		respond_to do |format|
+		  format.pdf { render :layout => false }
+		end
+	end
+	def todays_accounting_report
+		@receipts = Receipt.all_today(params[:page])
+		@data=[]
+		total=0
+		x = Object.new.extend(ActionView::Helpers::NumberHelper)
+		for receipt in @receipts
+		  @data << ["%05d" % receipt.number, receipt.created_at.to_date, receipt.order.client.name, x.number_to_currency(receipt.order.grand_total)]
 		end
 		prawnto :prawn => { :page_size => 'LETTER'}
 		params[:format] = 'pdf'
