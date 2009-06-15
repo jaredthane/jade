@@ -63,7 +63,7 @@ class Subscription < ActiveRecord::Base
 							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
 		process_list(list)
 	end
-	def process_list(list)
+	def self.process_list(list)
 		subs={} # a hash of hashes with clients on the first and vendors on the second
 		for sub in list
 			#puts "client name="+sub.client.name

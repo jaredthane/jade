@@ -30,6 +30,7 @@ ActionController::Routing::Routes.draw do |map|
   map.new_receipt 'receipts/:id/new', :controller => 'receipts', :action => 'new'
   map.process_subscriptions 'subscriptions/process', :controller => 'subscriptions', :action => 'process_all'
   map.fast_process_subscriptions 'subscriptions/fast_process', :controller => 'subscriptions', :action => 'fast_process'
+  map.process_client 'clients/:client_id/process', :controller => 'subscriptions', :action => 'process_client'
   map.resources :subscriptions
 	map.resources :discounts
 	map.resources :combos
