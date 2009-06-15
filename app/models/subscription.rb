@@ -51,10 +51,19 @@ class Subscription < ActiveRecord::Base
 #    self.save
 #    return l
 #	end
+	def self.process_client(client)
+		list= find(:all, 
+							 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (entities.active=true) AND entities.id=' + client.id.to_s,
+							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
+		process_list(list)
+	end
 	def self.process
-			list= find(:all, 
-								 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (entities.active=true)',
-								 :joins => 'inner join entities on entities.id=subscriptions.client_id')
+		list= find(:all, 
+							 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (entities.active=true)',
+							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
+		process_list(list)
+	end
+	def process_list(list)
 		subs={} # a hash of hashes with clients on the first and vendors on the second
 		for sub in list
 			#puts "client name="+sub.client.name
@@ -72,8 +81,9 @@ class Subscription < ActiveRecord::Base
 			  for sub in list
 #  	  		##puts "adding a line for: "+sub.name
 			  	l=Line.create(:created_at=>sub.next_order_date, :order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price, :received =>sub.next_order_date)
-					sub.next_order_date = sub.next_order_date.to_date >> 1
-					sub.save
+					s=Subscription.find(sub.id)
+					s.next_order_date = s.next_order_date.to_date >> 1
+					s.save
 			  	order_received=l.received if !order_received
 			  	order_received=l.received if l.received > order_received
 			  	total += l.total_price_with_tax
