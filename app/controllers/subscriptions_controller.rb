@@ -16,7 +16,7 @@
 
 
 class SubscriptionsController < ApplicationController
-  before_filter :login_required
+  before_filter :login_required, :only => [ :index, :show, :process_me, :edit, :update, :destroy, :new, :create ]
 	#before_filter {privilege_required('sales')}
 	access_control [:new, :create, :update, :edit] => '(gerente | admin | ventas)' 
 	access_control [:destroy] => '(admin)'
