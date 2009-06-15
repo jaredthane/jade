@@ -55,7 +55,9 @@ class SubscriptionsController < ApplicationController
     end
   end
   def fast_process
+  	User.current_user=User.find(1) if !User.current_user
   	Subscription.fast_process
+  	User.current_user=nil if User.current_user.id=1
     respond_to do |format|
       format.html { redirect_to(todays_sales_path) }
       format.xml  { render :xml => @subscription }
