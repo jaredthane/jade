@@ -2,9 +2,9 @@
 <% content_for :title do %>Lista de Suscripciones que se Procesaran<% end %>
 <% content_for :actions do %>
 	<dt><%= link_to 'Suscripción Nuevo', new_subscription_path %></dt>
-	<dt><%= link_to 'Procesar', process_subscriptions_path %></dt>
+	<dt><%= link_to 'Procesar', process_subscriptions_path(:search=>@search) %></dt>
 <% end %>
-<h2>Haga clic en la cantidad para ver los detalles de la suscripción.</h2>
+<h2>Haga clic en la cantidad para ver los detalles de la suscripción.<%= @search %></h2>
 <br />
 <div>
   <div class="table_header_row">
@@ -16,26 +16,28 @@
     <div class="table_cell">Acciones</div>
   </div>
 
-<% for subscription in @subscriptions %>
-	
-  <div class="table_row">
-  	<% if ((subscription.expiration || Date.today) < Date.today) or ((subscription.end_times||9) < 1) %><div class="strikethrough"><% end %>
-    <div class="table_cell_20"><%= link_to subscription.client.name, subscription.client %></div>
-    <div class="table_cell_20"><%= link_to subscription.product.name, subscription.product %></div>
-  	<div class="table_cell_15"><%= link_to subscription.quantity, subscription %></div>
-    <div class="table_cell_15"><%=h number_to_currency(subscription.price) %></div>
-    <div class="table_cell_15">
-        <% if subscription.last_line %>
-            <%= link_to subscription.last_line.received.to_date.to_s(:long), subscription.last_line.order %>
-        <% end %>
-    </div>
-    <div class="table_cell">
-      <%= link_to 'Ver Detalles', subscription %><br />
-      <%= link_to 'Remover', subscription, :confirm => 'Esta seguro?', :method => :delete %>
-    </div>
-    <% if ((subscription.expiration || Date.today) < Date.today) or ((subscription.end_times||9) < 1) %></div><% end %>
-	</div>
-<% end %>
+	<% for subscription in @subscriptions %>
+		<div class="table_row">
+			<% if ((subscription.expiration || Date.today) < Date.today) or ((subscription.end_times||9) < 1) %><div class="strikethrough"><% end %>
+		  <div class="table_cell_20"><%= link_to subscription.client.name, subscription.client %></div>
+		  <div class="table_cell_20"><%= link_to subscription.product.name, subscription.product %></div>
+			<div class="table_cell_15"><%= link_to subscription.quantity, subscription %></div>
+		  <div class="table_cell_15"><%=h number_to_currency(subscription.price) %></div>
+		  <div class="table_cell_15">
+		      <% if subscription.last_line %>
+		      	<% if subscription.last_line.received %>
+		          <%= link_to subscription.last_line.received.to_date.to_s(:long), subscription.last_line.order %>
+		      	<% end %>
+		      <% end %>
+		  </div>
+		  <div class="table_cell">
+		    <%= link_to 'Ver Detalles', subscription %><br />
+		    <%= link_to 'Remover', subscription, :confirm => 'Esta seguro?', :method => :delete %>
+		  </div>
+		  <% if ((subscription.expiration || Date.today) < Date.today) or ((subscription.end_times||9) < 1) %></div><% end %>
+		</div>
+	<% end %>
 </div>
+Total de Provisiones Recomendadas: <%= @subscriptions.length %>
 <br />
 

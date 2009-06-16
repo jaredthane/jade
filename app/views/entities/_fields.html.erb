@@ -24,6 +24,10 @@
 		  <b>Cuenta de Inventario</b><br />
 			<%= f.collection_select(:inventory_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
 		</p>
+		<p>
+			<b>Proximo Numero de Factura</b><br />
+			<%= f.text_field :next_receipt_number, :class => 'field' %>
+		</p>
 	
 	<% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>

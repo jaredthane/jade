@@ -71,20 +71,16 @@ class ReceiptsController < ApplicationController
 		  format.pdf { render :layout => false }
 		end
 	end
-  def generate_receipts(order, start_id=1, force=false)
-  	receipts_made=[]
-  	logger.debug "Here" + order.receipts.length.to_s
-  	if order.receipts.length==0
-  		
-  	logger.debug "Here too"
-		  if order.client.entity_type.id == 2
+	def generate_receipts(list, start_id=1)
+		receipts_made=[]
+		for order in list
+			if order.client.entity_type.id == 2
 		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_RECIEPT
 		  else
 		    lines_per_receipt = CREDITO_FISCAL_LINES_PER_RECIEPT
 		  end
 		  lines_on_receipt = 0
 		  for line in order.lines
-		    logger.debug "lines_on_receipt" + lines_on_receipt.to_s
 		    if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt == 0) 
 		      # Create a new receipt
 		      r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{start_id}.pdf", :user=> User.current_user)
@@ -93,20 +89,12 @@ class ReceiptsController < ApplicationController
 		      o.receipt_printed=Date.today
 		      o.save
 		      lines_on_receipt = 0
-		      logger.debug "reseting lines on receipt"
 		      start_id += 1
 		    end
 		    # Add line to receipt
-		    logger.debug "Setting line" + line.inspect
 		    line.receipt = r
-		    logger.debug "now with receipt_id" + line.inspect
 		    line.save
-		    logger.debug "double check it saved" + Line.find(line.id).inspect
 		    lines_on_receipt += 1
-		    
-		    logger.debug "+= 1 lines on receipt"
-		    logger.debug "lines on the receipt:" + Receipt.find(r.id).lines.inspect
-		    logger.debug "the receipt:" + Receipt.find(r.id).inspect
 		  end
 		  # Generate the PDF's
 		  for receipt in receipts_made #Order.find(order.id).receipts
@@ -116,9 +104,60 @@ class ReceiptsController < ApplicationController
 			    credito_fiscal(receipt) # from the formats.rb file
 			  end
 		  end
-		end
-    return start_id
-  end
+		end	
+		return start_id
+	end
+############################################################################################
+# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
+############################################################################################
+#  def generate_receipts(order, start_id=1, force=false)
+#  	receipts_made=[]
+#  	logger.debug "Here" + order.receipts.length.to_s
+#  	if order.receipts.length==0
+#  		
+#  	logger.debug "Here too"
+#		  if order.client.entity_type.id == 2
+#		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_RECIEPT
+#		  else
+#		    lines_per_receipt = CREDITO_FISCAL_LINES_PER_RECIEPT
+#		  end
+#		  lines_on_receipt = 0
+#		  for line in order.lines
+#		    logger.debug "lines_on_receipt" + lines_on_receipt.to_s
+#		    if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt == 0) 
+#		      # Create a new receipt
+#		      r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{start_id}.pdf", :user=> User.current_user)
+#		      receipts_made << r
+#		      o=Order.find(order.id)
+#		      o.receipt_printed=Date.today
+#		      o.save
+#		      lines_on_receipt = 0
+#		      logger.debug "reseting lines on receipt"
+#		      start_id += 1
+#		    end
+#		    # Add line to receipt
+#		    logger.debug "Setting line" + line.inspect
+#		    line.receipt = r
+#		    logger.debug "now with receipt_id" + line.inspect
+#		    line.save
+#		    logger.debug "double check it saved" + Line.find(line.id).inspect
+#		    lines_on_receipt += 1
+#		    
+#		    logger.debug "+= 1 lines on receipt"
+#		    logger.debug "lines on the receipt:" + Receipt.find(r.id).lines.inspect
+#		    logger.debug "the receipt:" + Receipt.find(r.id).inspect
+#		  end
+#		  # Generate the PDF's
+#		  for receipt in receipts_made #Order.find(order.id).receipts
+#		    if receipt.order.client.entity_type.id == 2
+#			    consumidor_final(receipt) # from the formats.rb file
+#			  else
+#			    credito_fiscal(receipt) # from the formats.rb file
+#			  end
+#		  end
+#		end
+#    return start_id
+#  end
   def price_list
   @products = Product.search_all_wo_pagination(params[:search], params[:page])
   @data=[]
@@ -149,15 +188,15 @@ class ReceiptsController < ApplicationController
   
   
   
-  def generate_receipts_for_up_to_date_accounts(start_id=1)
-  	list = Order.find(:all, :joins=>'inner join (select orders.id from (select * from (select * from orders where receipt_printed is null order by orders.id) as orders group by client_id) as orders inner join (select client_id as id from (select sum(amount_paid) as paid, sum(grand_total) as owed, client_id from orders group by client_id) as orders where paid>=owed) as clients on clients.id=orders.client_id) as ids on ids.id=orders.id')
-#    list = Order.find(:all, :joins=>'inner join (select sales.orderid as id from (select * from (select id as orderid, client_id from orders where receipt_printed is null order by orders.id) as orders group by client_id) as sales inner join (select entities.id as clientid from entities left join (select * from (select id, client_id, amount_paid, grand_total from orders where receipt_printed is not null order by id DESC) as orders group by client_id) as orders on orders.client_id=entities.id where amount_paid >= grand_total OR orders.id is null) as clients on clientid=client_id) as unprinted on unprinted.id=orders.id')
-    
-#    :joins=>'inner join (select min(orders.id) as id from orders inner join (select id, name from (select clients.id,clients.name, sum(line.price*line.quantity*(1+sales_tax)) as owed, sum(payments.presented-payments.returned) as paid from entities as clients left join orders on clients.id=orders.client_id and receipt_printed is not null left join `lines` as line on line.order_id=orders.id left join payments on payments.order_id=orders.id group by clients.id) as clients where paid>= owed or owed is null) as clients on clients.id=orders.client_id where (orders.receipt_printed is null) group by clients.id) as ready on ready.id=orders.id;')
-		for o in list
-			start_id = generate_receipts(o, start_id)
-		end
-  end
+#  def generate_receipts_for_up_to_date_accounts(start_id=1)
+#  	list = Order.find(:all, :joins=>'inner join (select orders.id from (select * from (select * from orders where receipt_printed is null order by orders.id) as orders group by client_id) as orders inner join (select client_id as id from (select sum(amount_paid) as paid, sum(grand_total) as owed, client_id from orders group by client_id) as orders where paid>=owed) as clients on clients.id=orders.client_id) as ids on ids.id=orders.id')
+##    list = Order.find(:all, :joins=>'inner join (select sales.orderid as id from (select * from (select id as orderid, client_id from orders where receipt_printed is null order by orders.id) as orders group by client_id) as sales inner join (select entities.id as clientid from entities left join (select * from (select id, client_id, amount_paid, grand_total from orders where receipt_printed is not null order by id DESC) as orders group by client_id) as orders on orders.client_id=entities.id where amount_paid >= grand_total OR orders.id is null) as clients on clientid=client_id) as unprinted on unprinted.id=orders.id')
+#    
+##    :joins=>'inner join (select min(orders.id) as id from orders inner join (select id, name from (select clients.id,clients.name, sum(line.price*line.quantity*(1+sales_tax)) as owed, sum(payments.presented-payments.returned) as paid from entities as clients left join orders on clients.id=orders.client_id and receipt_printed is not null left join `lines` as line on line.order_id=orders.id left join payments on payments.order_id=orders.id group by clients.id) as clients where paid>= owed or owed is null) as clients on clients.id=orders.client_id where (orders.receipt_printed is null) group by clients.id) as ready on ready.id=orders.id;')
+#		for o in list
+#			start_id = generate_receipts(o, start_id)
+#		end
+#  end
   def concat_pdf
     if @entity_type_id == 2
       @receipts = Receipt.credito_fiscal_today(params[:page])
@@ -183,12 +222,11 @@ class ReceiptsController < ApplicationController
   def new
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
-    if last=Receipt.last
-      logger.debug "Strange... Couldn't find the last receipt made, assuming there are none"
-      @next = (last.number.to_i || 0 )+1
-    else
-      @next=nil
-    end
+	  if User.current_user.location
+	  	@next = User.current_user.location.next_receipt_number
+	  else
+	    @next=nil
+	  end
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @order }
@@ -197,24 +235,67 @@ class ReceiptsController < ApplicationController
   def create
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
-    flash[:info] = "La factura ha sido generada existosamente" if generate_receipts(@order, params[:number].to_i)
+    @next = generate_receipts(@order, params[:number].to_i)
+    if @next 
+    	flash[:info] = "La factura ha sido generada existosamente"
+    	User.current_user.location.next_receipt_number=@next 
+    end
     redirect_to show_receipts_url(@order)
     return false
   end
+  
+  def new_for_client
+    @entity = Entity.find(params[:client_id])
+    if !current_user.has_rights(['admin','gerente','ventas'])
+			redirect_back_or_default('/products')
+			flash[:error] = "No tiene los derechos suficientes para ver los clientes"
+  	end
+	  if User.current_user.location
+	  	@next = User.current_user.location.next_receipt_number
+	  else
+	    @next=nil
+	  end
+    respond_to do |format|
+      format.html { render 'new'}
+      format.xml  { render :xml => @order }
+    end
+  end
+  def create_for_client
+    @entity = Entity.find(params[:client_id])
+  	if !current_user.has_rights(['admin','gerente','ventas'])
+			redirect_back_or_default('/products')
+			flash[:error] = "No tiene los derechos suficientes para ver los clientes"
+  	end
+  	list=Order.find(:all, :conditions=>'receipt_printed is null AND client_id=' + @entity.id.to_s)
+    @next = generate_receipts(list, params[:number].to_i)
+    if @next 
+    	flash[:info] = "Las facturas han sido generadas existosamente"
+    	User.current_user.location.next_receipt_number=@next 
+    	User.current_user.location.save
+    end
+    redirect_to entity_url(@entity)
+    return false
+  end
+		
   def create_batch
     return false if !allowed(1, 'edit')
-    flash[:info] = "Las facturas han sido generadas existosamente" if generate_receipts_for_up_to_date_accounts(params[:number].to_i)
+    list=Order.find(:all, :conditions=>'receipt_printed is null')
+    @next = generate_receipts(list, params[:number].to_i)
+    if @next 
+    	flash[:info] = "Las facturas han sido generadas existosamente"
+    	User.current_user.location.next_receipt_number=@next 
+    	User.current_user.location.save
+    end
     redirect_to todays_receipts_path
     return false
   end
   def new_batch
     return false if !allowed(1, 'edit')
-    if last=Receipt.last
-      logger.debug "Strange... Couldn't find the last receipt made, assuming there are none"
-      @next = (last.number.to_i || 0 )+1
-    else
-      @next=nil
-    end
+	  if User.current_user.location
+	  	@next = User.current_user.location.next_receipt_number
+	  else
+	    @next=nil
+	  end
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @order }

@@ -51,17 +51,81 @@ class Subscription < ActiveRecord::Base
 #    self.save
 #    return l
 #	end
-	def self.process
+#def self.to_process()
+#		list = find(:all,
+#								:conditions => '(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (subscriptions.next_order_date > CURRENT_DATE - interval 1 month) AND (entities.active=true) AND unpaid.client_id is null',								
+#								:joins => 'inner join entities on entities.id=subscriptions.client_id left join (select client_id from orders where deleted=false AND (amount_paid < grand_total OR amount_paid is null) group by client_id) as unpaid on unpaid.client_id=entities.id'
+#							)
+#	end
+
+	def self.to_process(search)
+		search = search || ""
+  	puts "search="+ search
+  	condition="(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (subscriptions.next_order_date > CURRENT_DATE - interval 1 month) AND (entities.active=true) AND unpaid.client_id is null AND ("
+  	fields_to_search=[]
+  	join=""
+  	search_words=[]
+  	words = search.downcase.split( / *"(.*?)" *| / ) 
+  	for word in words
+  		puts 'word=' + word
+  		if word[0..3]=='tipo'
+  			if word[4..word.length+1] == ':credito' or word[4..word.length+1] == ':wholesale_clients'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "users.login"
+  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 5"
+  			elsif word[4..word.length+1] == ':consumidor' or word[4..word.length+1] == ':end_users'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "users.login"
+  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 2"
+  			elsif word[4..word.length+1] == ':cliente' or word[4..word.length+1] == ':clients'
+  				fields_to_search << "entities.name"
+  				fields_to_search << "users.login"
+  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + ") AND (entity_type_id = 2 OR entity_type_id = 2)"
+  			end
+  		elsif word[0..5]=='asesor'
+  			condition += ' AND entities.user_id=' + word[7..word.length+1].to_s if word[7..word.length+1].to_s != ""
+  		elsif word[0..2]=='dia'
+  			condition += ' AND entities.active=TRUE AND entities.subscription_day=' + word[4..word.length+1].to_s if word[4..word.length+1].to_s != ""
+  		elsif word[0..1]=='id'
+  			condition += ' AND entities.id=' + word[3..word.length+1].to_s
+  		else
+  			search_words << word
+  		end
+  	end
+   	#puts 'condition=' + condition
+ 		puts 'fields_to_search'+ fields_to_search.inspect
+  	#add in actual searching of fields
+  	condition += " AND ("
+  	for word in search_words
+  		puts 'searchword=' + word
+  		condition+= " AND ("
+  		for field in fields_to_search
+  			condition+= " OR " + field + " like '%" + word + "%'"
+  		end
+  		condition += ")"
+  	end
+  	condition += "))"
+   	puts 'condition=' + condition
+   	condition =condition.gsub("( AND ", "(")
+   	condition =condition.gsub("( OR ", "(")
+   	condition =condition.gsub("()", "")
+   	condition =condition.gsub("()", "")
+   	condition =condition.gsub("()", "")
+   	condition =condition.gsub("AND )", ")")
+   	condition =condition.gsub("AND )", ")")
+   	condition =condition.gsub(/AND $/, "")
+   	condition="" if condition == " AND "	
+   	puts 'condition=' + condition
+	
 		list = find(:all,
-								:conditions => '(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (entities.active=true) AND unpaid.client_id is null',								
-								:joins => 'inner join entities on entities.id=subscriptions.client_id left join (select client_id from orders where deleted=false AND (amount_paid < grand_total OR amount_paid is null) group by client_id) as unpaid on unpaid.client_id=entities.id'
+								:conditions => condition,								
+								:joins => 'inner join entities on entities.id=subscriptions.client_id left join (select client_id from orders where deleted=false AND (amount_paid < grand_total OR amount_paid is null) group by client_id) as unpaid on unpaid.client_id=entities.id  left join users on users.id=entities.user_id'
 							)
 	end
-	def self.process_client(client)
+	def self.to_process_client(client)
 		list= find(:all, 
 							 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (entities.active=true) AND entities.id=' + client.id.to_s,
 							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
-		process_list(list)
 	end
 #	def self.process
 #		list= find(:all, 
@@ -69,7 +133,7 @@ class Subscription < ActiveRecord::Base
 #							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
 #		process_list(list)
 #	end
-	def self.process_list(list)
+	def self.process(list)
 		subs={} # a hash of hashes with clients on the first and vendors on the second
 		for sub in list
 			#puts "client name="+sub.client.name
@@ -115,24 +179,18 @@ class Subscription < ActiveRecord::Base
 			end
 	  end
 	end
-	def self.fast_process
-		list=[1,2,3]
-		until list.length == 0
-			list= find(:all, 
-								 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (entities.active=true)',
-								 :joins => 'inner join entities on entities.id=subscriptions.client_id'					 
-								 )
-			for sub in list
-				o=Order.create(:vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
-				l=Line.create(:created_at=>sub.next_order_date, :order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price, :received =>sub.next_order_date)
-				o=Order.find(o.id)
-				o.received=sub.next_order_date
-				o.grand_total=l.total_price_with_tax
-				o.save
-				s=Subscription.find(sub.id)
-				s.next_order_date = sub.next_order_date.to_date >> sub.frequency
-				s.save
-			end
+	def self.fast_process(list)
+		for sub in list
+			o=Order.create(:vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+			l=Line.create(:created_at=>sub.next_order_date, :order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price, :received =>sub.next_order_date)
+			o=Order.find(o.id)
+			o.received=sub.next_order_date
+			o.grand_total=l.total_price_with_tax
+			o.save
+			s=Subscription.find(sub.id)
+			s.next_order_date = sub.next_order_date.to_date >> sub.frequency
+			s.save
+		end
 			#puts "Length:"+ list.length.to_s
 #	    # now for the accounting
 #			sale = Trans.create(:order => o, :comments => o.comments)
@@ -146,7 +204,7 @@ class Subscription < ActiveRecord::Base
 #				inventory = Post.create(:trans=>itrans, :account => o.vendor.inventory_account, :value=>o.inventory_cost, :post_type_id =>2, :balance => (o.vendor.inventory_account.balance||0) - (o.inventory_cost||0))
 #				expense = Post.create(:trans=>itrans, :account => o.vendor.expense_account, :value=>o.inventory_cost, :post_type_id =>1, :balance => (o.vendor.expense_account.balance||0) + (o.inventory_cost||0))
 #			end
-	  end
+#	  end
 	end
 ############################################################################################
 # DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #

@@ -11,7 +11,11 @@
 	    <div class="table_row">
 		    <div class="table_cell_20"><%= link_to payment.order.id, payment.order %></div>
             <div class="table_cell_20"><%= link_to number_to_currency(payment.amount), payment %></div>
-            <div class="table_cell_20"><%=h payment.created_at.to_date %></div>
+            <div class="table_cell_20">
+		          <% if payment.created_at %>
+		          	<%=h payment.created_at.to_date %>
+		          <% end %>
+            </div>
             <div class="table_cell_20"><%=h payment.payment_method.name %></div>
             <div class="table_cell"><%= link_to payment.user.login, payment.user %></div>
 	    </div>

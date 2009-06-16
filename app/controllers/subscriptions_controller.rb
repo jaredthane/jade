@@ -16,7 +16,7 @@
 
 
 class SubscriptionsController < ApplicationController
-  before_filter :login_required, :only => [ :index, :show, :process_me, :edit, :update, :destroy, :new, :create ]
+  before_filter :login_required, :only => [ :index, :show, :edit, :update, :destroy, :new, :create ]
 	#before_filter {privilege_required('sales')}
 	access_control [:new, :create, :update, :edit] => '(gerente | admin | ventas)' 
 	access_control [:destroy] => '(admin)'
@@ -40,17 +40,23 @@ class SubscriptionsController < ApplicationController
       format.xml  { render :xml => @subscription }
     end
   end
-  def process_me
-    @subscription = Subscription.find(params[:id])
-		@subscription.process
-    respond_to do |format|
-      format.html { redirect_to(@subscription.client) }
-    end
-  end
+############################################################################################
+# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
+############################################################################################
+#  def process_me
+#    @subscription = Subscription.find(params[:id])
+#		@subscription.process
+#    respond_to do |format|
+#      format.html { redirect_to(@subscription.client) }
+#    end
+#  end
   def process_all
-  	Subscription.process
+  	User.current_user=User.find(1) if !User.current_user
+  	list=Subscription.to_process(params[:search])
+  	Subscription.process(list)
+  	User.current_user=nil if User.current_user.id=1
     respond_to do |format|
-      format.html { redirect_to(todays_sales_path) }
+      format.html { redirect_to(new_batch_receipts_path) }
       format.xml  { render :xml => @subscription }
     end
   end
@@ -60,7 +66,8 @@ class SubscriptionsController < ApplicationController
 			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para ver los clientes"
   	end
-  	Subscription.process_client(@client)
+  	list=Subscription.to_process_client(@client)
+  	Subscription.process(list)
     respond_to do |format|
       format.html { redirect_to(entity_path(@client)) }
       format.xml  { render :xml => @client }
@@ -68,12 +75,21 @@ class SubscriptionsController < ApplicationController
   end
   def fast_process
   	User.current_user=User.find(1) if !User.current_user
-  	Subscription.fast_process
+  	list=Subscription.to_process
+  	Subscription.fast_process(list)
   	User.current_user=nil if User.current_user.id=1
     respond_to do |format|
       format.html { redirect_to(todays_sales_path) }
       format.xml  { render :xml => @subscription }
     end
+  end
+  def preview_orders
+  	@subscriptions=Subscription.to_process(params[:search])
+  	@search=params[:search]
+		respond_to do |format|
+		  format.html { render :layout=>'process'}
+		  format.xml  { render :xml => @subscriptions }
+		end
   end
 ############################################################################################
 # DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
