@@ -102,11 +102,14 @@
 	  			<li><a href="/clients/new" title="Cliente">Cliente</a></li>
 	  		<% end %>
 	  		<% if current_user.has_rights(['admin','compras','gerente']) %>
-	  		<li><a href="/purchases/new" title="Compra">Compra</a></li>
-				<li><a href="/products/new" title="Producto">Producto</a></li>
-  			<li><a href="/discounts/new" title="Descuento">Descuento</a></li>
-  			<li><a href="/combos/new" title="Combo">Combo</a></li>
-	  		<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
+					<li><a href="/purchases/new" title="Compra">Compra</a></li>
+					<li><a href="/products/new" title="Producto">Producto</a></li>
+					<li><a href="/discounts/new" title="Descuento">Descuento</a></li>
+					<li><a href="/combos/new" title="Combo">Combo</a></li>
+					<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
+					<% if current_user.has_rights(['Suscripciones']) %>
+						<li><a href=new_subscription_path title="Suscripción">Suscripción</a></li>
+					<% end %>
 	  		<% end %>
 	  		<% if current_user.has_rights(['admin','inventario','gerente']) %>
         	<li><a href="/physical_counts/new" title="Cuenta Fisica">Cuenta Fisica</a></li>

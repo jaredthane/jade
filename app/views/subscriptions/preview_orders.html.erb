@@ -2,7 +2,7 @@
 <% content_for :title do %>Lista de Suscripciones que se Procesaran<% end %>
 <% content_for :actions do %>
 	<dt><%= link_to 'Suscripción Nuevo', new_subscription_path %></dt>
-	<dt><%= link_to 'Procesar', process_subscriptions_path(:search=>@search) %></dt>
+	<dt><%= link_to 'Provisionar', process_subscriptions_path(:search=>@search) %></dt>
 <% end %>
 <h2>Haga clic en la cantidad para ver los detalles de la suscripción.<%= @search %></h2>
 <br />
