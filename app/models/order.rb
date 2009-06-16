@@ -431,7 +431,7 @@ class Order < ActiveRecord::Base
 				if newpost
 					if oldpost.value > newpost.value
 #						##puts "Difference in values " + oldpost.value.to_s + "-" + newtrans.value.to_s + "=" + (oldpost.value-newtrans.value).to_s
-						diff.posts << Post.new(:account =>oldpost.account, :value=> oldpost.value-newtrans.value, :post_type_id=>oldpost.opposite_type)
+						diff.posts << Post.new(:account =>oldpost.account, :value=> oldpost.value-newpost.value, :post_type_id=>oldpost.opposite_type)
 					elsif oldpost.value < newpost.value
 						diff.posts << Post.new(:account =>oldpost.account, :value=> newpost.value-oldpost.value, :post_type_id=>oldpost.post_type_id)					
 					end
