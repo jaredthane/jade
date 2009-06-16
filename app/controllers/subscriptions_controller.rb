@@ -60,8 +60,11 @@ class SubscriptionsController < ApplicationController
       format.xml  { render :xml => @subscription }
     end
   end
+  
+    
   def process_client
   	@client=Entity.find(params[:client_id])
+  
   	if !current_user.has_rights(['admin','gerente','ventas'])
 			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para ver los clientes"

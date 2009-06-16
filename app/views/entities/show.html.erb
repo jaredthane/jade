@@ -22,7 +22,7 @@
 	    <dt><%= link_to 'Lista', clients_path, :class => 'action' %></dt>
 	    <dt><%= link_to 'Hacer Historia', new_history_path(@entity), :class => 'action' %></dt>
 	    <% if current_user.has_rights(['Suscripciones']) %>
-	    	<dt><%= link_to 'Provisionar', process_subscriptions_url(:search=>'id:'+@entity.id.to_s), :class => 'action' %></dt>
+	    	<dt><%= link_to 'Provisionar', process_client_url(@entity), :class => 'action' %></dt>
 	    <% end %>
 	<% end %>
 	<% if @entity.entity_type.id == 1 %>
