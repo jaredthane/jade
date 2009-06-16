@@ -95,9 +95,9 @@
         <div class="nav2">
         <% if current_user.has_rights(['admin','ventas','gerente','compras', 'Contabilidad']) %>
         	<ul>
+        	<% if current_user.has_rights(['admin','gerente','ventas']) %>
     <li><a title="Nuevo">Nuevo</a>
 			<ul>
-				<% if current_user.has_rights(['admin','ventas','gerente']) %>
 	  			<li><a href="/sales/new" title="Venta">Venta</a></li>
 	  			<li><a href="/clients/new" title="Cliente">Cliente</a></li>
 	  		<% end %>
@@ -114,8 +114,12 @@
 	  		<% if current_user.has_rights(['admin','inventario','gerente']) %>
         	<li><a href="/physical_counts/new" title="Cuenta Fisica">Cuenta Fisica</a></li>
         <% end %>
-  			<li><a href="/internal/new" title="Consumo Interno">Consumo Interno</a></li>
-  			<li><a href="/sites/new" title="Sitio">Sitio</a></li>
+        <% if current_user.has_rights(['admin','compras', 'ventas','gerente']) %>
+  				<li><a href="/internal/new" title="Consumo Interno">Consumo Interno</a></li>
+  			<% end %>
+  			<% if current_user.has_rights(['admin','gerente']) %>
+  				<li><a href="/sites/new" title="Sitio">Sitio</a></li>
+  			<% end %>
   			</ul>
 		</li>
 		<li><a href="/products" title="Productos">Productos</a>
@@ -141,15 +145,21 @@
 				</ul>
 			</li>
 	 	<% end %>
-	  <li><a href="/sales" title="Ventas">Ventas</a>		
-	  	<ul>
-	  		<li><a href="/sales" title="Ventas">Ventas</a></li>
-	  		<li><a href=<%= todays_sales_path %> title="Ventas de Hoy">Ventas de Hoy</a></li>
-	  		<li><a href=<%= todays_receipts_path %> title="Facturas de Hoy">Facturas de Hoy</a></li>
-	  		<li><a href="/subscriptions" title="Suscripciones">Suscripciones</a></li>
-	  		<li><a href="/internal" title="Consumo Interno">Consumo Interno</a></li>
-	  	</ul>				
-	  </li>												
+	 	<% if current_user.has_rights(['admin','gerente','ventas', 'Contabilidad']) %>
+			<li><a href="/sales" title="Ventas">Ventas</a>		
+				<ul>
+					<% if current_user.has_rights(['admin','gerente','ventas']) %>
+						<li><a href="/sales" title="Ventas">Ventas</a></li>
+					<% end %>
+					<li><a href=<%= todays_sales_path %> title="Ventas de Hoy">Ventas de Hoy</a></li>
+					<li><a href=<%= todays_receipts_path %> title="Facturas de Hoy">Facturas de Hoy</a></li>
+					<% if current_user.has_rights(['admin','gerente','ventas']) %>
+						<li><a href="/subscriptions" title="Suscripciones">Suscripciones</a></li>
+						<li><a href="/internal" title="Consumo Interno">Consumo Interno</a></li>
+					<% end %>
+				</ul>				
+			</li>
+	  <% end %>
 	  <li><a href="/entities" title="Entidades">Entidades</a>
 	  	<ul>
 	  		<% if current_user.has_rights(['admin','gerente','compras']) %>
