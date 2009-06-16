@@ -95,9 +95,10 @@
         <div class="nav2">
         <% if current_user.has_rights(['admin','ventas','gerente','compras', 'Contabilidad']) %>
         	<ul>
-        	<% if current_user.has_rights(['admin','gerente','ventas']) %>
+     <% if current_user.has_rights(['admin','ventas','gerente','compras']) %>   	
     <li><a title="Nuevo">Nuevo</a>
 			<ul>
+				<% if current_user.has_rights(['admin','ventas','gerente']) %>
 	  			<li><a href="/sales/new" title="Venta">Venta</a></li>
 	  			<li><a href="/clients/new" title="Cliente">Cliente</a></li>
 	  		<% end %>
@@ -114,14 +115,12 @@
 	  		<% if current_user.has_rights(['admin','inventario','gerente']) %>
         	<li><a href="/physical_counts/new" title="Cuenta Fisica">Cuenta Fisica</a></li>
         <% end %>
-        <% if current_user.has_rights(['admin','compras', 'ventas','gerente']) %>
-  				<li><a href="/internal/new" title="Consumo Interno">Consumo Interno</a></li>
-  			<% end %>
-  			<% if current_user.has_rights(['admin','gerente']) %>
-  				<li><a href="/sites/new" title="Sitio">Sitio</a></li>
-  			<% end %>
+  			<li><a href="/internal/new" title="Consumo Interno">Consumo Interno</a></li>
+  			<li><a href="/sites/new" title="Sitio">Sitio</a></li>
   			</ul>
 		</li>
+		<% end %>
+		<% if current_user.has_rights(['admin','ventas','gerente','compras', 'inventario']) %>
 		<li><a href="/products" title="Productos">Productos</a>
 			<ul>
 				<li><a href="/products" title="Productos">Productos</a></li>
@@ -137,6 +136,7 @@
 				<li><a href="/units" title="Unidades">Unidades</a></li>
 			</ul>
 		</li>
+		<% end %>
 		<% if current_user.has_rights(['admin','gerente','compras']) %>
 			<li><a href="/purchases" title="Compras">Compras</a>
 				<ul>
@@ -160,6 +160,7 @@
 				</ul>				
 			</li>
 	  <% end %>
+	  <% if current_user.has_rights(['admin','ventas','gerente','compras']) %>
 	  <li><a href="/entities" title="Entidades">Entidades</a>
 	  	<ul>
 	  		<% if current_user.has_rights(['admin','gerente','compras']) %>
@@ -179,6 +180,7 @@
 	  		<% end %>
 	  	</ul>
 	  </li>
+	  <% end %>
 	  <li><a href="/sites" title="Sitios">Sitios</a>
 	  	<ul>
   			<% for location in get_sites %>
@@ -200,7 +202,7 @@
 	  <% else %>
 	  	<li><a href="/me" title="Mi Cuenta">Mi Cuenta</a></li>
 	  <% end %>
-	  <% if current_user.has_rights(['admin','gerente', 'contabilidad']) %>
+	  <% if current_user.has_rights(['admin','gerente', 'Contabilidad']) %>
 	  	<li><a href="/accounts" title="Contabilidad">Contabilidad</a></li>
 	  <% end %>
 	</ul>
