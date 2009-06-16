@@ -152,7 +152,11 @@ class Subscription < ActiveRecord::Base
 #  	  		##puts "adding a line for: "+sub.name
 			  	l=Line.create(:created_at=>sub.next_order_date, :order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price, :received =>sub.next_order_date)
 					s=Subscription.find(sub.id)
-					s.next_order_date = s.next_order_date.to_date >> 1
+					if s.next_order_date
+						s.next_order_date = s.next_order_date.to_date >> 1
+					else
+						s.next_order_date = Date.today >> 1
+					end
 					s.save
 			  	order_received=l.received if !order_received
 			  	order_received=l.received if l.received > order_received
