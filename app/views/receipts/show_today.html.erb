@@ -3,7 +3,7 @@
 <% content_for :actions do %>
 	<dt><%= link_to 'Facturas no canceladas', unpaid_receipts_path %></dt>
 	<dt><%= link_to 'Suscrip. procesadas', todays_sales_path %></dt>
-	<dt><%= link_to 'Reporte', todays_receipts_report_path %></dt>
+	<dt><%= link_to 'Reporte', todays_receipts_accounting_report_path %></dt>
 <% end %>
 <br />
 <% if @consumidor_final_today.length >0 %>
