@@ -60,6 +60,7 @@ class ReceiptsController < ApplicationController
 	def todays_accounting_report
 		@receipts = Receipt.all_today(params[:page])
 		@data=[]
+		@site=User.current_user.location
 		total=0
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for receipt in @receipts
@@ -74,6 +75,7 @@ class ReceiptsController < ApplicationController
 	def generate_receipts(list, start_id=1)
 		receipts_made=[]
 		for order in list
+			puts "making receipt for order number" + order.id.to_s
 			if order.client.entity_type.id == 2
 		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_RECIEPT
 		  else
@@ -235,7 +237,10 @@ class ReceiptsController < ApplicationController
   def create
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
+    puts @order.inspect
+    puts params[:number]
     @next = generate_receipts([@order], params[:number].to_i)
+    puts @next
     if @next 
     	flash[:info] = "La factura ha sido generada existosamente"
     	User.current_user.location.next_receipt_number=@next 

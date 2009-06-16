@@ -225,9 +225,9 @@ class Receipt < ActiveRecord::Base
 	end
 	def self.all_today(page)
   	find 		 :all,
-		         :conditions => 'date(receipts.created_at) = curdate()',
-		         :order => 'receipts.number'
-		         #:joins => 'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id = orders.client_id'
+		         :conditions => 'date(receipts.created_at) = curdate() AND orders.vendor_id='+User.current_user.location_id.to_s,
+		         :order => 'receipts.number',
+		         :joins => 'inner join orders on orders.id=receipts.order_id'
 	end
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page,
