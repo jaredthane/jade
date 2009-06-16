@@ -93,7 +93,7 @@
       
         <!-- Navigation Level 2 (Drop-down menus) -->
         <div class="nav2">
-        <% if current_user.has_rights(['admin','ventas','gerente','compras']) %>
+        <% if current_user.has_rights(['admin','ventas','gerente','compras', 'Contabilidad']) %>
         	<ul>
     <li><a title="Nuevo">Nuevo</a>
 			<ul>
@@ -224,7 +224,7 @@
 		</dl>      
   <h1>Enlaces</h1>
 	<dl class="nav3-grid">
-	<% if current_user.has_rights(['admin','ventas','gerente','compras','inventario']) %>
+	<% if current_user.has_rights(['admin','ventas','gerente','compras', 'Contabilidad','inventario']) %>
 		<dt><a href="/products">Productos</a></dt>
 			<dd><a href="/products">Productos</a></dd>
 			<dd><a href="/services">Servicios</a></dd>
