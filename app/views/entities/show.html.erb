@@ -340,7 +340,11 @@
 					<div class="table_cell_15"><%=h order.received %></div>
 					<div class="table_cell_15"><%=h number_to_currency(order.grand_total) %></div>
 					<div class="table_cell_15"><%=h awaiting(order) %></div>
-					<div class="table_cell"><%=h order.created_at.to_date.to_s %></div>
+					<div class="table_cell">
+						<% if order.created_at %>
+							<%=h order.created_at.to_date.to_s %>
+						<% end %>
+					</div>
 				</div>
 			<% end %>
 		<% end %>
