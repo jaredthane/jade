@@ -35,7 +35,7 @@
 #
 class Entity < ActiveRecord::Base
 	validates_presence_of(:name, :message => "Debe introducir el nombre de la entidad.")
-  validates_uniqueness_of(:name, :message => "El nombre de entidad ya existe.") 
+  #validates_uniqueness_of(:name, :message => "El nombre de entidad ya existe.") 
   
   belongs_to :state
   

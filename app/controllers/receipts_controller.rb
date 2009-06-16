@@ -65,7 +65,10 @@ class ReceiptsController < ApplicationController
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for receipt in @receipts
 		  @data << ["%05d" % receipt.number, receipt.created_at.to_date, receipt.order.client.name, x.number_to_currency(receipt.order.grand_total)]
+		  total+=receipt.order.grand_total
 		end
+		@data << ["---", "---", "---", "---"]
+		@data << ["", "", "Total", x.number_to_currency(total)]
 		prawnto :prawn => { :page_size => 'LETTER'}
 		params[:format] = 'pdf'
 		respond_to do |format|
