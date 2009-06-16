@@ -137,10 +137,12 @@ class Order < ActiveRecord::Base
 	#################################################################################################
 	def markreceived=(fecha)
 		if fecha
-			self.received = fecha
-			for line in lines
-				line.received = fecha
-				line.save
+			if fecha != ""
+				self.received = fecha
+				for line in lines
+					line.received = fecha
+					line.save
+				end
 			end
 		end
 	end
