@@ -108,7 +108,7 @@
 					<li><a href="/combos/new" title="Combo">Combo</a></li>
 					<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
 					<% if current_user.has_rights(['Suscripciones']) %>
-						<li><a href=new_subscription_path title="Suscripción">Suscripción</a></li>
+						<li><a href=<%= new_subscription_url %> title="Suscripción">Suscripción</a></li>
 					<% end %>
 	  		<% end %>
 	  		<% if current_user.has_rights(['admin','inventario','gerente']) %>
