@@ -235,7 +235,7 @@ class ReceiptsController < ApplicationController
   def create
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
-    @next = generate_receipts(@order, params[:number].to_i)
+    @next = generate_receipts([@order], params[:number].to_i)
     if @next 
     	flash[:info] = "La factura ha sido generada existosamente"
     	User.current_user.location.next_receipt_number=@next 
