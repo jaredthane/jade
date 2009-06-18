@@ -244,7 +244,7 @@ class Receipt < ActiveRecord::Base
 	def self.search(search, page, from=Date.today, till=Date.today)
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till AND (orders.id like :search or vendors.name like :search or clients.name like :search) AND orders.vendor_id=:site_id', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id,:search => "%#{search}%"}],
-		         :order => 'receipts.id',
+		         :order => 'receipts.number',
 		         :joins => 'inner join orders on receipts.order_id = orders.id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
 	end
 	def self.search_unpaid(search, page)

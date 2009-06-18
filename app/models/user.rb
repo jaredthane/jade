@@ -110,8 +110,8 @@ class User < ActiveRecord::Base
 					last_rev_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id')
 					old_rev_balance=last_rev_post.balance if last_rev_post
 				end
-				rep[:final_balance]=(new_cash_balance||0) - (new_rev_balance||0)
-				rep[:previous_balance]=(old_cash_balance||0) - (old_rev_balance||0)
+				rep[:final_balance]=(new_rev_balance||0)-(new_cash_balance||0)
+				rep[:previous_balance]=(old_rev_balance||0)-(old_cash_balance||0)
 				reps << rep
 			end
 		end
