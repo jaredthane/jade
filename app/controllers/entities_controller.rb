@@ -248,8 +248,8 @@ end
                               :order => 'created_at DESC')
       @subs=nil if @subs.length==0
       @unpaid = @entity.unpaid_orders
-      puts "unpaid = " + @unpaid.inspect
-      puts "unpaid length = " +  @unpaid.length.to_s
+#      puts "unpaid = " + @unpaid.inspect
+#      puts "unpaid length = " +  @unpaid.length.to_s
       @unpaid=nil if @unpaid.length==0
 			current_user.price_group_name_id = @entity.price_group_name_id
 			current_user.save

@@ -168,17 +168,27 @@ class Subscription < ActiveRecord::Base
 		    o.grand_total=total
 		    o.save
 		    # now for the accounting
-				sale = Trans.create(:order => o, :comments => o.comments)
-				vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>Post::CREDIT)
-				client = Post.create(:trans=>sale, :account => o.client.cash_account, :value=>o.total_price_with_tax, :post_type_id =>Post::DEBIT)
-				tax    = Post.create(:trans=>sale, :account => o.vendor.tax_account, :value=>o.total_tax, :post_type_id =>Post::CREDIT)
-				inventory_cost = o.inventory_value
-				# if the sub included inventory items, we have to make that transaction also...
-				if inventory_cost > 0 
-					itrans = Trans.create(:order => o, :comments => o.comments)
-					inventory = Post.create(:trans=>itrans, :account => o.vendor.inventory_account, :value=>o.inventory_cost, :post_type_id =>2, :balance => (o.vendor.inventory_account.balance||0) - (o.inventory_cost||0))
-					expense = Post.create(:trans=>itrans, :account => o.vendor.expense_account, :value=>o.inventory_cost, :post_type_id =>1, :balance => (o.vendor.expense_account.balance||0) + (o.inventory_cost||0))
+		    sale = o.main_transaction
+		    if sale
+				  sale.order_id=o.id
+				  sale.save
+				 end
+#				sale = Trans.create(:order => o, :comments => o.comments)
+#				vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>Post::CREDIT)
+#				client = Post.create(:trans=>sale, :account => o.client.cash_account, :value=>o.total_price_with_tax, :post_type_id =>Post::DEBIT)
+#				tax    = Post.create(:trans=>sale, :account => o.vendor.tax_account, :value=>o.total_tax, :post_type_id =>Post::CREDIT)
+				inventory_trans = o.inventory_transaction
+		    if inventory_trans
+				  inventory_trans.order_id=o.id
+				  inventory_trans.save
 				end
+#				inventory_cost = o.inventory_value
+				# if the sub included inventory items, we have to make that transaction also...
+#				if inventory_cost > 0 
+#					itrans = Trans.create(:order => o, :comments => o.comments)
+#					inventory = Post.create(:trans=>itrans, :account => o.vendor.inventory_account, :value=>o.inventory_cost, :post_type_id =>2, :balance => (o.vendor.inventory_account.balance||0) - (o.inventory_cost||0))
+#					expense = Post.create(:trans=>itrans, :account => o.vendor.expense_account, :value=>o.inventory_cost, :post_type_id =>1, :balance => (o.vendor.expense_account.balance||0) + (o.inventory_cost||0))
+#				end
 			end
 	  end
 	end

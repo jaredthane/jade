@@ -364,8 +364,9 @@ class Order < ActiveRecord::Base
 #	  end
 #	end
 	def main_transaction
+		puts "Creating main transaction"
 		case order_type_id
-		when 1
+		when 1 #Venta
 			sale=Trans.new(:user=>User.current_user)
       sale.posts << Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)
       if self.total_tax != 0

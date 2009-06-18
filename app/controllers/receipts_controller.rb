@@ -57,14 +57,16 @@ class ReceiptsController < ApplicationController
 		  format.pdf { render :layout => false }
 		end
 	end
-	def todays_accounting_report
-		@receipts = Receipt.all_today(params[:page])
+	def report
+		@from=(params[:from] ||Date.today)
+  	@till=(params[:till] ||Date.today)
+		@receipts = Receipt.search(params[:search],params[:page],@from, @till)
 		@data=[]
 		@site=User.current_user.location
 		total=0
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for receipt in @receipts
-		  @data << ["%05d" % receipt.number, receipt.created_at.to_date, receipt.order.client.name, x.number_to_currency(receipt.order.grand_total)]
+		  @data << ["%05d" % receipt.number, receipt.created_at.to_date.to_s(:rfc822), receipt.order.client.name, x.number_to_currency(receipt.order.grand_total)]
 		  total+=receipt.order.grand_total
 		end
 		@data << ["---", "---", "---", "---"]
@@ -217,11 +219,22 @@ class ReceiptsController < ApplicationController
     send_file "#{RAILS_ROOT}/invoice_pdfs/concat.pdf", :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
   end
   def show_today
-		@credito_fiscal_today = Receipt.credito_fiscal_today(params[:page])
-		@consumidor_final_today = Receipt.consumidor_final_today(params[:page])
+		@credito_fiscal_today = Receipt.credito_fiscal(params[:page])
+		@consumidor_final_today = Receipt.consumidor_final(params[:page])
     respond_to do |format|
       format.html 
       format.xml  { render :xml => @receipts }
+    end
+  end
+  def index
+  	@from=(params[:from] ||Date.today)
+  	@till=(params[:till] ||Date.today)
+		@credito_fiscal_today = Receipt.search_credito_fiscal(params[:search],params[:page],@from, @till)
+		@consumidor_final_today = Receipt.search_consumidor_final(params[:search],params[:page],@from, @till)
+	
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @roles }
     end
   end
   def new

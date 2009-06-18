@@ -106,7 +106,9 @@ class Line < ActiveRecord::Base
 		return total
 	end
 	def revenue_account(order=self.order)
+		puts "REady to try accounts"
 		for pref in Preference.find(:all, :order=>'value', :conditions=>"pref_group='revenue'")
+			puts "Trying " + pref.name
 			case pref.id
 			when 1 #Product
 				#puts " Grabbing revenue account from Product"
@@ -139,6 +141,8 @@ class Line < ActiveRecord::Base
 			end
 		end
 		# If there are no other valid options, use the sites revenue account
+		
+		puts "we gave up"
 		return order.vendor.revenue_account
 	end
   ###################################################################################

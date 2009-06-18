@@ -211,28 +211,40 @@ class Receipt < ActiveRecord::Base
 	def total_price_with_tax_in_spanish
 		return number_to_spanish(self.total_price_with_tax)
 	end
-	def self.consumidor_final_today(page)
+#	def self.consumidor_final(page, from=Date.today, till=Date.today)
+#  	paginate :per_page => 20, :page => page,
+#		         :conditions => ['date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till AND clients.entity_type_id=2 AND orders.vendor_id=:site_id',{:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id}],
+#		         :order => 'receipts.id',
+#		         :joins => 'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id = orders.client_id'
+#	end
+#	def self.credito_fiscal(page, from=Date.today, till=Date.today)
+#  	paginate :per_page => 20, :page => page,
+#		         :conditions => ['date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till AND clients.entity_type_id=5 AND orders.vendor_id=:site_id',{:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id}],
+#		         :order => 'receipts.created_at',
+#		         :joins => 'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id = orders.client_id'
+#	end
+	def self.search_credito_fiscal(search, page, from=Date.today, till=Date.today)
   	paginate :per_page => 20, :page => page,
-		         :conditions => 'date(receipts.created_at) = curdate() AND clients.entity_type_id=2',
-		         :order => 'receipts.created_at',
-		         :joins => 'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id = orders.client_id'
+		         :conditions => ['date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till AND clients.entity_type_id=5 AND (orders.id like :search or vendors.name like :search or clients.name like :search) AND orders.vendor_id=:site_id', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id,:search => "%#{search}%"}],
+		         :order => 'receipts.id',
+		         :joins => 'inner join orders on receipts.order_id = orders.id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
 	end
-	def self.credito_fiscal_today(page)
+	def self.search_consumidor_final(search, page, from=Date.today, till=Date.today)
   	paginate :per_page => 20, :page => page,
-		         :conditions => 'date(receipts.created_at) = curdate() AND clients.entity_type_id=5',
-		         :order => 'receipts.created_at',
-		         :joins => 'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id = orders.client_id'
+		         :conditions => ['date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till AND clients.entity_type_id=2 AND (orders.id like :search or vendors.name like :search or clients.name like :search) AND orders.vendor_id=:site_id', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id,:search => "%#{search}%"}],
+		         :order => 'receipts.id',
+		         :joins => 'inner join orders on receipts.order_id = orders.id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
 	end
-	def self.all_today(page)
-  	find 		 :all,
-		         :conditions => 'date(receipts.created_at) = curdate() AND orders.vendor_id='+User.current_user.location_id.to_s,
-		         :order => 'receipts.number',
-		         :joins => 'inner join orders on orders.id=receipts.order_id'
-	end
-	def self.search(search, page)
+#	def self.all(page, from=Date.today, till=Date.today)
+#  	find 		 :all,
+#		         :conditions => ['date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till AND orders.vendor_id=:site_id',{:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id}],
+#		         :order => 'receipts.number',
+#		         :joins => 'inner join orders on orders.id=receipts.order_id'
+#	end
+	def self.search(search, page, from=Date.today, till=Date.today)
   	paginate :per_page => 20, :page => page,
-		         :conditions => ['(order.id like :search or vendor.name like :search or client.name like :search)', {:search => "%#{search}%"}],
-		         :order => 'products.name',
+		         :conditions => ['date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till AND (orders.id like :search or vendors.name like :search or clients.name like :search) AND orders.vendor_id=:site_id', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id,:search => "%#{search}%"}],
+		         :order => 'receipts.id',
 		         :joins => 'inner join orders on receipts.order_id = orders.id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
 	end
 	def self.search_unpaid(search, page)

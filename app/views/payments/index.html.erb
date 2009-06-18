@@ -1,4 +1,26 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :actions do %>
+	<dt><%= link_to_function 'Actualizar', 'submit("date_form")', :class => 'action' %></dt>
+	<dt><%= link_to 'Reporte', payments_report_path(:till=>@till, :from=>@from) %></dt>
+	<dt> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </dt>
+<% end %>
 <% content_for :title do %>Lista de Pagos<% end %>
+<h2>
+<% form_tag payments_path, :method =>'get', :id => 'date_form' do %>
+	<div class="column2-unit-left">
+      <b>Desde</b><br />
+    <%= calendar_date_select_tag "from", @from, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20 %>
+   </div>
+   <div class="column2-unit-right">
+      <b>Hasta</b><br />
+    <%= calendar_date_select_tag "till", @till, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20 %>
+   </div>
+<% end %>
+</h2>
+<hr class="clear-contentunit" />
+<%= will_paginate @payments, :class => 'pagination' %>
 <div>
     <div id="lines" class="table_header_row">
         <div class="table_cell_20">Pedido</div>
@@ -21,4 +43,5 @@
 	    </div>
 	<% end %>
 </div>
+<%= will_paginate @payments, :class => 'pagination' %>
 

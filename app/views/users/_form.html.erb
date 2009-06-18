@@ -56,7 +56,7 @@
 		<p>
 			<%= f.check_box :default_received, :class => 'field' %><b> Marcar pedidos como Recibido como defecto?</b>
 		</p>
-		<% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+		<% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
 		  <p>
 		    <b>Cuenta para Fondos Recibido por la Compañía</b><br />
 			  <%= f.collection_select(:cash_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
