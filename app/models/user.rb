@@ -47,7 +47,9 @@ class User < ActiveRecord::Base
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :password, :password_confirmation, :do_accounting
-	
+	def clients
+		return Entity.find_all_by_user_id(self.id)
+	end
 	def current_price_group
 #		logger.debug "location_id=#{location_id.to_s}"
 #		logger.debug "price_group_name=#{price_group_name.to_s}"
@@ -78,6 +80,7 @@ class User < ActiveRecord::Base
 		         :joins => "left outer join roles_users on roles_users.user_id=users.id left outer join roles on roles.id = roles_users.role_id", 
 		         :group => "users.id"
 	end
+	
 	def rights
 		rights=[]
 		for r in roles
