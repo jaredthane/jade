@@ -35,19 +35,22 @@ class SalesRepresentativesController < ApplicationController
 										:conditions=> ['clients.user_id=:rep_id AND date(payments.created_at) >=:from AND date(payments.created_at) <= :till', {:from=>@from.to_date.to_s('%Y-%m-%d'), :till=>@till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
 										:joins=>'inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id')
 				rep[:cash_received] = Post.find(:all, 
-						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>@from.to_date.to_s('%Y-%m-%d'), :till=>@till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],
+						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>@from.to_date.to_s('%Y-%m-%d'), :till=>@till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],
 						:joins=>'inner join trans on trans.id=posts.trans_id'
 					).collect(&:value).sum
-				if r.cash_account and r.revenue_account
-					rep[:final_balance]=r.cash_account.balance - r.revenue_account.balance
-				elsif r.revenue_account
-					rep[:final_balance]=r.revenue_account.balance
-				elsif r.cash_account
-					rep[:final_balance]=r.cash_account.balance
+				new_cash_balance, new_rev_balance, old_cash_balance, old_rev_balance=nil, nil, nil, nil
+				if r.cash_account
+					new_cash_balance=r.cash_account.balance
+					last_cash_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>@from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id')
+					old_cash_balance=last_cash_post.balance if last_cash_post
 				end
-				last_post = Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>@from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],
-									:joins=>'inner join trans on trans.id=posts.trans_id')
-				rep[:final_balance] = last_post.balance if last_post
+				if r.revenue_account
+					new_rev_balance=r.revenue_account.balance
+					last_rev_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>@from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id')
+					old_rev_balance=last_rev_post.balance if last_rev_post
+				end
+				rep[:final_balance]=(new_cash_balance||0) - (new_rev_balance||0)
+				rep[:previous_balance]=(old_cash_balance||0) - (old_rev_balance||0)
 				@reps << rep
 			end
 		end
