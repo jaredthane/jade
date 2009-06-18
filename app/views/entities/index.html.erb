@@ -21,15 +21,15 @@
 <% content_for :actions do %>
 	<% case @entity_type
 		 when 'sites' %>
-		 	<% if current_user.has_rights(['admin','gerente']) %>
+		 	<% if current_user.has_rights(['Admin','Gerente']) %>
 				<dt><%= link_to 'Nuevo sitio', "/sites/new", :class => 'action' %></dt>
 			<% end %>
 		<% when 'vendors' %>
-		 	<% if current_user.has_rights(['admin','compras','gerente']) %>
+		 	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
 				<dt><%= link_to 'Nuevo proveedor', "/vendors/new", :class => 'action' %></dt>
 			<% end %>
 		<% when 'clients' %>
-		 	<% if current_user.has_rights(['admin','compras','gerente','ventas']) %>
+		 	<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
 				<dt><%= link_to 'Nuevo cliente', "/clients/new", :class => 'action' %></dt>
 				<dt><%= link_to 'Procesar Subscripciones', "/clients/process_subscriptions?search="+(params[:search]||""), :class => 'action' %></dt>
 			<% end %>
@@ -45,7 +45,6 @@
   </div>
 
 <% for entity in @entities %>
-  <% if allowed(entity.entity_type_id) %>
   	<% if (!entity.active) %><div class="strikethrough"><% end %>
 		<div class="table_row">
 		  <div class="table_cell_30"><%= link_to entity.id, entity %></div>
@@ -53,7 +52,6 @@
 		  <div class="table_cell"><% if entity.entity_type %><%=h entity.entity_type.name %><% end %></div>
 		</div>
 		<% if (!entity.active) %></div><% end %>
-	<% end %>
 <% end %>
 </div>
 <br /><%= will_paginate @products, :class => 'pagination' %>

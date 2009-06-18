@@ -18,7 +18,7 @@ class DiscountsController < ApplicationController
   # GET /discounts.xml
   
 	before_filter :login_required
-	access_control [:new, :create, :update, :edit, :destroy] => '(gerente | admin)' 
+	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin)' 
   def index
     #@discounts = Product.find(:all)
 		@discounts = Product.search_for_discounts(params[:search], params[:page])

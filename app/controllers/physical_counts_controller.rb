@@ -18,7 +18,7 @@
 class PhysicalCountsController < ApplicationController
 	before_filter :login_required
 	def index
-  	if !current_user.has_rights(['admin','gerente','inventario'])
+  	if !current_user.has_rights(['Admin','Gerente','Inventario'])
 			redirect_back_or_default('/physical_counts')
 			flash[:error] = "No tiene los derechos suficientes para ver cuentas fisicas"
   	end
@@ -29,7 +29,7 @@ class PhysicalCountsController < ApplicationController
     end
   end
   def show
-  	if !current_user.has_rights(['admin','gerente','inventario'])
+  	if !current_user.has_rights(['Admin','Gerente','Inventario'])
 			redirect_back_or_default('/physical_counts')
 			flash[:error] = "No tiene los derechos suficientes para ver cuentas fisicas"
   	end
@@ -40,7 +40,7 @@ class PhysicalCountsController < ApplicationController
     end
   end
   def new
-  	if !current_user.has_rights(['admin','gerente','inventario'])
+  	if !current_user.has_rights(['Admin','Gerente','Inventario'])
 			redirect_back_or_default('/physical_counts')
 			flash[:error] = "No tiene los derechos suficientes para crear cuentas fisicas"
   	end
@@ -52,14 +52,14 @@ class PhysicalCountsController < ApplicationController
     end
   end
   def edit
-  	if !current_user.has_rights(['admin','gerente','inventario'])
+  	if !current_user.has_rights(['Admin','Gerente','Inventario'])
 			redirect_back_or_default('/physical_counts')
 			flash[:error] = "No tiene los derechos suficientes para cambiar cuentas fisicas"
   	end
    	@count = Order.find(params[:id])
   end
   def post
-    if !current_user.has_rights(['admin','gerente','inventario'])
+    if !current_user.has_rights(['Admin','Gerente','Inventario'])
       redirect_back_or_default('/physical_counts')
       flash[:error] = "No tiene los derechos suficientes para cambiar cuentas fisicas"
     end
@@ -111,7 +111,7 @@ class PhysicalCountsController < ApplicationController
   def create
 		@count = Order.new(:order_type_id => 3)
 		@count.attributes = params["count"]
-		if !current_user.has_rights(['admin','gerente','inventario'])
+		if !current_user.has_rights(['Admin','Gerente','Inventario'])
 			redirect_back_or_default('/physical_counts')
 			flash[:error] = "No tiene los derechos suficientes para crear cuentas fisicas"
 		end
@@ -150,7 +150,7 @@ class PhysicalCountsController < ApplicationController
   end
   def update
   	@count = Order.find(params[:id])
-  	if !current_user.has_rights(['admin','gerente','inventario'])
+  	if !current_user.has_rights(['Admin','Gerente','Inventario'])
 			redirect_back_or_default('/physical_counts')
 			flash[:error] = "No tiene los derechos suficientes para cambiar cuentas fisicas"
   	end
@@ -208,7 +208,7 @@ class PhysicalCountsController < ApplicationController
     end
   end
   def destroy
-  	if !current_user.has_rights(['admin','gerente','inventario'])
+  	if !current_user.has_rights(['Admin','Gerente','Inventario'])
 			redirect_back_or_default('/physical_counts')
 			flash[:error] = "No tiene los derechos suficientes para cambiar cuentas fisicas"
   	end
@@ -220,7 +220,7 @@ class PhysicalCountsController < ApplicationController
     end
   end
   def submit
-  	if !current_user.has_rights(['admin','gerente','inventario'])
+  	if !current_user.has_rights(['Admin','Gerente','Inventario'])
 			redirect_back_or_default('/physical_counts')
 			flash[:error] = "No tiene los derechos suficientes para cambiar cuentas fisicas"
   	end

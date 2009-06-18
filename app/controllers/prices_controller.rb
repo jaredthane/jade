@@ -16,8 +16,8 @@
 	
 class PricesController < ApplicationController
 	before_filter :login_required
-	access_control [:new, :show, :index, :create, :update, :edit] => '(gerente | admin)' 
-	access_control [:destroy] => '(admin)'
+	access_control [:new, :show, :index, :create, :update, :edit] => '(Gerente | Admin)' 
+	access_control [:destroy] => '(Admin)'
   # GET /prices
   # GET /prices.xml
   def index

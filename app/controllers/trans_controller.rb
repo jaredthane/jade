@@ -25,7 +25,7 @@ class TransController < ApplicationController
 #      format.xml  { render :xml => @trans }
 #    end
 #  end
-	access_control [:new, :create, :show, :new_post, :new_balance_move, :create_balance_move] => '(gerente | admin | Contabilidad)' 
+	access_control [:new, :create, :show, :new_post, :new_balance_move, :create_balance_move] => '(Gerente | Admin | Contabilidad)' 
   # GET /trans/1
   # GET /trans/1.xml
   def show

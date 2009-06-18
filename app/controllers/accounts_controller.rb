@@ -18,8 +18,8 @@
 class AccountsController < ApplicationController
   before_filter :login_required
 	#before_filter {privilege_required('sales')}
-	access_control [:new, :create, :update, :edit, :index, :show, :new_balance_move, :create_balance_move] => '(gerente | admin | Contabilidad)' 
-	access_control [:destroy] => '(admin)'
+	access_control [:new, :create, :update, :edit, :index, :show, :new_balance_move, :create_balance_move] => '(Gerente | Admin | Contabilidad)' 
+	access_control [:destroy] => '(Admin)'
   # GET /accounts
   # GET /accounts.xml
   def index

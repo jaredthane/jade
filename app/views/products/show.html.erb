@@ -1,6 +1,6 @@
 <% content_for :title do %><%=h @product.name %> - <%=h @product.upc %><% end %>
 <% content_for :actions do %>
-	<% if current_user.has_rights(['admin','compras','gerente']) %>
+	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
 		<dt><%= link_to 'Nuevo producto', new_product_path, :class => 'action' %></dt>
 		<dt><%= link_to 'Cambiar', edit_product_path(@product), :class =>'action' %> </dt>		
 		<dt><%= link_to 'Cambiar Precio', :controller => "prices",:action => "index", :search => @product.upc, :class =>'action' %> </dt>
@@ -9,7 +9,7 @@
   <dt><%= link_to 'Lista', products_path, :class =>'action' %></dt>
 <% end %>
 <div class="column3-unit-left">
-	<% if current_user.has_rights(['admin','compras','gerente']) %>
+	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
 	<p><b>Proveedor</b><br />
     <% if @product.vendor %>
     	<%=link_to @product.vendor.name, @product.vendor%>	
@@ -49,7 +49,7 @@
     	<%=h @product.product_category.name %>
     <% end %>
   </p>
-  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+  <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
 		<p>
 			<b>Cuenta de Ingresos</b><br />
 			<% if @product.revenue_account %>
@@ -59,7 +59,7 @@
 	<% end %>
 </div>
 <div class="column3-unit-right">
-	<% if current_user.has_rights(['admin','compras','gerente']) %>
+	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
 	
 
 		<p>

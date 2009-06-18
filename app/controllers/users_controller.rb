@@ -18,11 +18,11 @@
 class UsersController < ApplicationController
   # Be sure to include AuthenticationSystem in Application Controller instead
 	before_filter :login_required
-	access_control [:new, :create, :destroy] => '(gerente | admin)' 
+	access_control [:new, :create, :destroy] => '(Gerente | Admin)' 
   
 	def index
     @users = User.search(params[:search], params[:page])
-		if !current_user.has_rights(['admin','gerente'])
+		if !current_user.has_rights(['Admin','Gerente'])
 			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para alistar los usuarios"
 		end
@@ -62,8 +62,8 @@ class UsersController < ApplicationController
     @user = User.find(params[:id])
     logger.debug "@user=#{@user.to_s}"
     logger.debug "current_user=#{current_user.to_s}"
-    logger.debug "current_user.has_rights(['admin','gerente'])=#{current_user.has_rights(['admin','gerente']).to_s}"
-		if @user!=current_user and !current_user.has_rights(['admin','gerente'])
+    logger.debug "current_user.has_rights(['Admin','Gerente'])=#{current_user.has_rights(['Admin','Gerente']).to_s}"
+		if @user!=current_user and !current_user.has_rights(['Admin','Gerente'])
 			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para ver otros usuarios"
 		end
@@ -88,7 +88,7 @@ class UsersController < ApplicationController
   # GET /users/new.xml
   def new
     @user = User.new
-		if !current_user.has_rights(['admin','gerente'])
+		if !current_user.has_rights(['Admin','Gerente'])
 			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para crear nuevos usuarios"
 		end
@@ -102,7 +102,7 @@ class UsersController < ApplicationController
   # GET /users/1/edit
   def edit
     @user = User.find(params[:id])
-    if @user!=current_user and !current_user.has_rights(['admin','gerente'])
+    if @user!=current_user and !current_user.has_rights(['Admin','Gerente'])
 			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
 		end
@@ -130,7 +130,7 @@ class UsersController < ApplicationController
   # PUT /users/1.xml
   def update
     @user = User.find(params[:id])
-    if @user!=current_user and !current_user.has_rights(['admin','gerente'])
+    if @user!=current_user and !current_user.has_rights(['Admin','Gerente'])
 			redirect_back_or_default('/users')
 			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
 		end
@@ -159,7 +159,7 @@ class UsersController < ApplicationController
   		new_role.update_attributes(l)
   		@user.roles_users.push(new_role)
   	end
-  	if current_user.has_rights(['admin','gerente','contabilidad'])
+  	if current_user.has_rights(['Admin','Gerente','contabilidad'])
   	  @user.cash_account_id = params[:user][:cash_account_id]
   	  @user.revenue_account_id = params[:user][:revenue_account_id]
   	  @user.personal_account_id = params[:user][:personal_account_id]

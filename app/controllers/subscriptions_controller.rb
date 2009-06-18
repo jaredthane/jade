@@ -18,8 +18,8 @@
 class SubscriptionsController < ApplicationController
   before_filter :login_required, :only => [ :index, :show, :edit, :update, :destroy, :new, :create ]
 	#before_filter {privilege_required('sales')}
-	access_control [:new, :create, :update, :edit] => '(gerente | admin | ventas)' 
-	access_control [:destroy] => '(admin)'
+	access_control [:new, :create, :update, :edit] => '(Gerente | Admin | Ventas)' 
+	access_control [:destroy] => '(Admin)'
   # GET /subscriptions
   # GET /subscriptions.xml
   def index
@@ -65,7 +65,7 @@ class SubscriptionsController < ApplicationController
   def process_client
   	@client=Entity.find(params[:client_id])
   
-  	if !current_user.has_rights(['admin','gerente','ventas'])
+  	if !current_user.has_rights(['Admin','Gerente','Ventas'])
 			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para ver los clientes"
   	end

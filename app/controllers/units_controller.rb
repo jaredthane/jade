@@ -17,7 +17,7 @@
 
 class UnitsController < ApplicationController
 	before_filter :login_required
-	access_control [:new, :create, :update, :edit, :destroy] => '(gerente | admin)' 
+	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin)' 
   # GET /units
   # GET /units.xml
   def index

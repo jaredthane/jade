@@ -15,41 +15,41 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class EntitiesController < ApplicationController
 	before_filter :login_required
-	access_control [:new, :create, :update, :edit, :destroy] => '(gerente | admin | ventas | compras | inventario)' 
+	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin | Ventas | Compras | Inventario)' 
 	def allowed(entity_type)
 		case (entity_type)
 		  when 'sites'
-		  	if !current_user.has_rights(['admin','compras','gerente','ventas','inventario','invitado'])
+		  	if !current_user.has_rights(['Admin','Compras','Gerente','Ventas','Inventario','invitado'])
 					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los sitios"
 		  	end
 		  when 'clients'
-		  	if !current_user.has_rights(['admin','gerente','ventas'])
+		  	if !current_user.has_rights(['Admin','Gerente','Ventas'])
 					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los clientes"
 		  	end
 		  when 'vendors'
-		  	if !current_user.has_rights(['admin','compras','gerente'])
+		  	if !current_user.has_rights(['Admin','Compras','Gerente'])
 					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los proveedores"
 		  	end
 		  when 1
-		  	if !current_user.has_rights(['admin','compras','gerente'])
+		  	if !current_user.has_rights(['Admin','Compras','Gerente'])
 					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los proveedores"
 		  	end
 		  when 2
-		  	if !current_user.has_rights(['admin','gerente','ventas'])
+		  	if !current_user.has_rights(['Admin','Gerente','Ventas'])
 					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los clientes"
 		  	end
 		  when 3
-		  	if !current_user.has_rights(['admin','compras','gerente','ventas','inventario','invitado'])
+		  	if !current_user.has_rights(['Admin','Compras','Gerente','Ventas','Inventario','invitado'])
 					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los sitios"
 		  	end
 		  when 5
-		  	if !current_user.has_rights(['admin','gerente','ventas'])
+		  	if !current_user.has_rights(['Admin','Gerente','Ventas'])
 					redirect_back_or_default('/products')
 					flash[:error] = "No tiene los derechos suficientes para ver los clientes"
 		  	end

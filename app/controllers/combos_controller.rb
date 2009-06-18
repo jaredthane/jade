@@ -18,7 +18,7 @@ class CombosController < ApplicationController
   # GET /combos.xml
   
 	before_filter :login_required
-	access_control [:new, :create, :update, :edit, :destroy] => '(gerente | admin)' 
+	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin)' 
   def index
     #@combos = Product.find(:all)
 		@combos = Product.search_for_combos(params[:search], params[:page])

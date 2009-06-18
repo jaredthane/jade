@@ -15,7 +15,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class LinesController < ApplicationController
 	before_filter :login_required
-	access_control [:new, :create, :update, :edit, :destroy] => '(gerente | admin | ventas | compras)' 
+	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin | Ventas | Compras)' 
 
 	def add_line(upc, quantity, order_type_id, relative_price = 1)
 		@additional=Line.new()

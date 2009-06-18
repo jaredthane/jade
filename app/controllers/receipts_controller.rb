@@ -4,33 +4,33 @@ class ReceiptsController < ApplicationController
 		case (order_type_id)
 		  when 1
 		  	if action=="edit"
-					if !current_user.has_rights(['admin','gerente','ventas'])
+					if !current_user.has_rights(['Admin','Gerente','Ventas'])
 						redirect_back_or_default('/products')
-						flash[:error] = "No tiene los derechos suficientes para cambiar las ventas"
+						flash[:error] = "No tiene los derechos suficientes para cambiar las Ventas"
 						return false
 					end
 				elsif action=="view"
-					if !current_user.has_rights(['admin','gerente','ventas','compras','inventario'])
+					if !current_user.has_rights(['Admin','Gerente','Ventas','Compras','inventario'])
 						redirect_back_or_default('/products')
-						flash[:error] = "No tiene los derechos suficientes para ver las ventas"
+						flash[:error] = "No tiene los derechos suficientes para ver las Ventas"
 						return false
 					end
 				end
 		  when 2
-		  	if !current_user.has_rights(['admin','compras','gerente','inventario'])
+		  	if !current_user.has_rights(['Admin','Compras','Gerente','inventario'])
 					redirect_back_or_default('/products')
-					flash[:error] = "No tiene los derechos suficientes para ver las compras"
+					flash[:error] = "No tiene los derechos suficientes para ver las Compras"
 						return false
 		  	end
 		  when 3
 		  	if action=="edit"
-					if !current_user.has_rights(['admin','gerente','ventas','inventario'])
+					if !current_user.has_rights(['Admin','Gerente','Ventas','inventario'])
 						redirect_back_or_default('/products')
 						flash[:error] = "No tiene los derechos suficientes para cambiar el uso interno"
 						return false
 					end
 				elsif action=="view"
-					if !current_user.has_rights(['admin','gerente','ventas','compras','inventario'])
+					if !current_user.has_rights(['Admin','Gerente','Ventas','Compras','inventario'])
 						redirect_back_or_default('/products')
 						flash[:error] = "No tiene los derechos suficientes para ver el uso interno"
 						return false
@@ -254,7 +254,7 @@ class ReceiptsController < ApplicationController
   
   def new_for_client
     @entity = Entity.find(params[:client_id])
-    if !current_user.has_rights(['admin','gerente','ventas'])
+    if !current_user.has_rights(['Admin','Gerente','Ventas'])
 			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para ver los clientes"
   	end
@@ -270,7 +270,7 @@ class ReceiptsController < ApplicationController
   end
   def create_for_client
     @entity = Entity.find(params[:client_id])
-  	if !current_user.has_rights(['admin','gerente','ventas'])
+  	if !current_user.has_rights(['Admin','Gerente','Ventas'])
 			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para ver los clientes"
   	end

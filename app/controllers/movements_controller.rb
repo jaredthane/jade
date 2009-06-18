@@ -15,7 +15,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class MovementsController < ApplicationController
 	before_filter :login_required
-	access_control [:new, :create, :update, :edit, :destroy] => '(admin)' 
+	access_control [:new, :create, :update, :edit, :destroy] => '(Admin)' 
   # GET /movements
   # GET /movements.xml
   def for_product

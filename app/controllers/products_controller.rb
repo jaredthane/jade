@@ -20,9 +20,9 @@ class ProductsController < ApplicationController
   # GET /products.xml
 	before_filter :login_required
 	#before_filter {privilege_required('sales')}
-	access_control [:new, :create, :update, :edit, :bulk_edit, :bulk_update, :clear_quantities, :recommend_quantities] => '(gerente | admin | compras)' 
-	access_control [:update_prices, :edit_prices, :update_product] => '(gerente | admin)' 
-	access_control [:destroy] => '(admin)'
+	access_control [:new, :create, :update, :edit, :bulk_edit, :bulk_update, :clear_quantities, :recommend_quantities] => '(Gerente | Admin | Compras)' 
+	access_control [:update_prices, :edit_prices, :update_product] => '(Gerente | Admin)' 
+	access_control [:destroy] => '(Admin)'
   def index
     #@products = Product.find(:all)
     @search=params[:search] || ""
