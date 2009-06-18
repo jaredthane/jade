@@ -17,43 +17,10 @@
 
 class SalesRepresentativesController < ApplicationController
 	def index
-		@reps=[]
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
-		for r in User.find(:all)
-			logger.debug 'heres a user' + r.login + " - " + r.clients.length.to_s
-			if r.clients.length>0
-				rep={:user=>r, :previous_balance=>0, :num_receipts=>0, :revenue=>0, :num_payments=>0, :cash_received=>0, :final_balance=>0}
-				rep[:num_receipts] = Receipt.count(:all, 
-										:conditions => ['clients.user_id=:rep_id AND date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till', {:from=>@from.to_date.to_s('%Y-%m-%d'), :till=>@till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
-										:joins=>'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id=orders.client_id')
-				revenue_posts = Post.find(:all, 
-						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>@from.to_date.to_s('%Y-%m-%d'), :till=>@till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],
-						:joins=>'inner join trans on trans.id=posts.trans_id')
-				rep[:revenue]=revenue_posts.inject(0) { |result, element| result + element.value*element.post_type_id}.to_s
-				rep[:num_payments] = Payment.count(:all, 
-										:conditions=> ['clients.user_id=:rep_id AND date(payments.created_at) >=:from AND date(payments.created_at) <= :till', {:from=>@from.to_date.to_s('%Y-%m-%d'), :till=>@till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
-										:joins=>'inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id')
-				rep[:cash_received] = Post.find(:all, 
-						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>@from.to_date.to_s('%Y-%m-%d'), :till=>@till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],
-						:joins=>'inner join trans on trans.id=posts.trans_id'
-					).collect(&:value).sum
-				new_cash_balance, new_rev_balance, old_cash_balance, old_rev_balance=nil, nil, nil, nil
-				if r.cash_account
-					new_cash_balance=r.cash_account.balance
-					last_cash_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>@from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id')
-					old_cash_balance=last_cash_post.balance if last_cash_post
-				end
-				if r.revenue_account
-					new_rev_balance=r.revenue_account.balance
-					last_rev_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>@from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id')
-					old_rev_balance=last_rev_post.balance if last_rev_post
-				end
-				rep[:final_balance]=(new_cash_balance||0) - (new_rev_balance||0)
-				rep[:previous_balance]=(old_cash_balance||0) - (old_rev_balance||0)
-				@reps << rep
-			end
-		end
+  	@site=User.current_user.location
+		@reps=User.sales_reps_data(@from,@till,@site)
 		respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @reps }
@@ -61,6 +28,29 @@ class SalesRepresentativesController < ApplicationController
   end
 
 	def report
-
+		@from=(params[:from] ||Date.today)
+  	@till=(params[:till] ||Date.today)
+  	@site=User.current_user.location
+		@reps=User.sales_reps_data(@from,@till,@site)
+		
+		@data=[]
+		total={:previous_balance=>0, :num_receipts=>0, :revenue=>0, :num_payments=>0, :cash_received=>0, :final_balance=>0}
+		x = Object.new.extend(ActionView::Helpers::NumberHelper)
+		for rep in @reps
+		  @data << [rep[:user].login, x.number_to_currency(rep[:previous_balance]), rep[:num_receipts], x.number_to_currency(rep[:revenue]), rep[:num_payments], x.number_to_currency(rep[:cash_received]), x.number_to_currency(rep[:final_balance])]
+		  total[:previous_balance]+=rep[:previous_balance]
+		  total[:num_receipts]+=rep[:num_receipts]
+		  total[:revenue]+=rep[:revenue].to_i
+		  total[:num_payments]+=rep[:num_payments]
+		  total[:cash_received]+=rep[:cash_received]
+		  total[:final_balance]+=rep[:final_balance]
+		end
+		@data << ["---", "---", "---", "---", "---", "---", "---"]
+		@data << ["Totales", x.number_to_currency(total[:previous_balance]), total[:num_receipts], x.number_to_currency(total[:revenue]), total[:num_payments], x.number_to_currency(total[:cash_received]), x.number_to_currency(total[:final_balance])]
+		prawnto :prawn => { :page_size => 'LETTER'}
+		params[:format] = 'pdf'
+		respond_to do |format|
+		  format.pdf { render :layout => false }
+		end
 	end
 end

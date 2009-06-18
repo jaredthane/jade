@@ -11,6 +11,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :accounts
   map.price_list 'products/price_list', :controller => 'products', :action => 'price_list', :format =>'pdf'
   map.resources :prices
+  map.sales_representatives_report 'sales_representatives/report', :controller => 'sales_representatives', :action => 'report'
   map.resources :sales_representatives
   map.new_history 'entities/:id/new_history', :controller => 'entities', :action => 'new_history', :filter => ' tipo:cliente'
   map.create_history 'entities/:id/create_history', :controller => 'entities', :action => 'create_history', :filter => ' tipo:cliente'
@@ -23,7 +24,6 @@ ActionController::Routing::Routes.draw do |map|
   map.todays_sales 'orders/todays_sales/', :controller => 'orders', :action => 'show_todays_sales'
   map.receipts_report 'receipts/report', :controller => 'receipts', :action => 'report'
   map.payments_report 'payments/report', :controller => 'payments', :action => 'report'
-  map.sales_representatives_report 'sales_representatives/report', :controller => 'sales_representatives', :action => 'report'
   map.todays_accounting_report 'payments/todays_accounting_report', :controller => 'payments', :action => 'todays_accounting_report'
   map.todays_receipts 'receipts/today/', :controller => 'receipts', :action => 'show_today'
   map.unpaid_receipts 'receipts/unpaid/', :controller => 'receipts', :action => 'unpaid'
