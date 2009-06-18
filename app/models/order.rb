@@ -136,6 +136,7 @@ class Order < ActiveRecord::Base
 	# lines but have the widget stay null by default
 	#################################################################################################
 	def markreceived=(fecha)
+		puts "fecha:" + fecha.to_s
 		if fecha
 			if fecha != ""
 				self.received = fecha

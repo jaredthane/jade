@@ -38,6 +38,16 @@ class SalesRepresentativesController < ApplicationController
 						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>@from.to_date.to_s('%Y-%m-%d'), :till=>@till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],
 						:joins=>'inner join trans on trans.id=posts.trans_id'
 					).collect(&:value).sum
+				if r.cash_account and r.revenue_account
+					rep[:final_balance]=r.cash_account.balance - r.revenue_account.balance
+				elsif r.revenue_account
+					rep[:final_balance]=r.revenue_account.balance
+				elsif r.cash_account
+					rep[:final_balance]=r.cash_account.balance
+				end
+				last_post = Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>@from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],
+									:joins=>'inner join trans on trans.id=posts.trans_id')
+				rep[:final_balance] = last_post.balance if last_post
 				@reps << rep
 			end
 		end
