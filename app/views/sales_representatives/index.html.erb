@@ -8,7 +8,7 @@
 	<dt> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </dt>
 <% end %>
 <h2>
-<% form_tag receipts_path, :method =>'get', :id => 'date_form' do %>
+<% form_tag sales_representatives_path, :method =>'get', :id => 'date_form' do %>
 	<div class="column2-unit-left">
       <b>Desde</b><br />
     <%= calendar_date_select_tag "from", @from, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20 %>
