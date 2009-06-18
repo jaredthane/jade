@@ -4,5 +4,6 @@ config/database.yml
 *~
 **/*~
 *.pdf
-*.prawn
+consumidor_final.pdf.prawn
+credito_fiscal.pdf.prawn
 formats.rb
