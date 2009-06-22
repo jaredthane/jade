@@ -91,7 +91,7 @@ class User < ActiveRecord::Base
 				revenue_posts = Post.find(:all, 
 						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],
 						:joins=>'inner join trans on trans.id=posts.trans_id')
-				rep[:revenue]=revenue_posts.inject(0) { |result, element| result + element.value*element.post_type_id}.to_s
+				rep[:revenue]=revenue_posts.inject(0) { |result, element| result + element.value*element.post_type_id*-1}.to_s
 				rep[:num_payments] = Payment.count(:all, 
 										:conditions=> ['clients.user_id=:rep_id AND date(payments.created_at) >=:from AND date(payments.created_at) <= :till', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
 										:joins=>'inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id')
@@ -112,6 +112,10 @@ class User < ActiveRecord::Base
 				end
 				rep[:final_balance]=(new_rev_balance||0)-(new_cash_balance||0)
 				rep[:previous_balance]=(old_rev_balance||0)-(old_cash_balance||0)
+				puts "new rev" + new_rev_balance.to_s
+				puts "new cash" + new_cash_balance.to_s
+				puts "old rev" + old_rev_balance.to_s
+				puts "old cash" + old_cash_balance.to_s
 				reps << rep
 			end
 		end
