@@ -219,8 +219,8 @@ class ReceiptsController < ApplicationController
     send_file "#{RAILS_ROOT}/invoice_pdfs/concat.pdf", :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
   end
   def show_today
-		@credito_fiscal_today = Receipt.credito_fiscal(params[:page])
-		@consumidor_final_today = Receipt.consumidor_final(params[:page])
+		@credito_fiscal_today = Receipt.search_credito_fiscal("",params[:page])
+		@consumidor_final_today = Receipt.search_consumidor_final("",params[:page])
     respond_to do |format|
       format.html 
       format.xml  { render :xml => @receipts }
@@ -297,7 +297,24 @@ class ReceiptsController < ApplicationController
     redirect_to entity_url(@entity)
     return false
   end
-		
+	def process_subscriptions
+  	User.current_user=User.find(1) if !User.current_user
+  	subs=Subscription.to_process(params[:search])
+  	orders = Subscription.process(subs)
+  	@next = generate_receipts(orders, params[:number].to_i)
+  	User.current_user=nil if User.current_user.id=1
+    if @next 
+    	flash[:info] = "Las facturas han sido generadas existosamente"
+    	if User.current_user
+    	  if User.current_user.location
+    	   	User.current_user.location.next_receipt_number=@next 
+    	    User.current_user.location.save
+    	  end
+    	end
+    end
+    redirect_to receipts_path
+    return false
+  end
   def create_batch
     return false if !allowed(1, 'edit')
     list=Order.find(:all, :conditions=>'receipt_printed is null')

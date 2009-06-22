@@ -3,9 +3,11 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :roles
   map.resources :serialized_products
   map.resource :session
+  
+  map.process_subscriptions 'receipts/process_subscriptions', :controller => 'receipts', :action => 'process_subscriptions'
   map.new_balance_transfer 'accounts/:id/new_balance_transfer', :controller => 'accounts', :action => 'new_balance_transfer'
   map.create_balance_transfer 'accounts/:id/create_balance_transfer', :controller => 'accounts', :action => 'create_balance_transfer'
-  map.preview_orders 'subscriptions/preview_orders', :controller => 'subscriptions', :action => 'preview_orders'
+  map.preview_process 'subscriptions/preview_process', :controller => 'subscriptions', :action => 'preview_process'
   map.attachment 'orders/attachment', :controller => 'orders', :action => 'attachment'
   map.resources :product_categories
   map.resources :accounts
@@ -33,7 +35,6 @@ ActionController::Routing::Routes.draw do |map|
   map.receipts 'receipts', :controller => 'receipts', :action => 'index'
   map.receipt 'receipts/:id/', :controller => 'receipts', :action => 'show'
   map.new_receipt 'receipts/:id/new', :controller => 'receipts', :action => 'new'
-  map.process_subscriptions 'subscriptions/process', :controller => 'subscriptions', :action => 'process_all'
   map.fast_process_subscriptions 'subscriptions/fast_process', :controller => 'subscriptions', :action => 'fast_process'
   map.process_client 'clients/:client_id/process', :controller => 'subscriptions', :action => 'process_client'
   map.resources :subscriptions

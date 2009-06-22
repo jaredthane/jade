@@ -52,8 +52,9 @@ class SubscriptionsController < ApplicationController
 #  end
   def process_all
   	User.current_user=User.find(1) if !User.current_user
-  	list=Subscription.to_process(params[:search])
-  	Subscription.process(list)
+  	subs=Subscription.to_process(params[:search])
+  	orders = Subscription.process(subs)
+  	ReceiptsController.generate_receipts(list, params[:number].to_i)
   	User.current_user=nil if User.current_user.id=1
     respond_to do |format|
       format.html { redirect_to(new_batch_receipts_path) }
@@ -86,7 +87,7 @@ class SubscriptionsController < ApplicationController
       format.xml  { render :xml => @subscription }
     end
   end
-  def preview_orders
+  def preview_process
   	@subscriptions=Subscription.to_process(params[:search])
   	@search=params[:search]
 		respond_to do |format|

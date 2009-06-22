@@ -134,6 +134,7 @@ class Subscription < ActiveRecord::Base
 #		process_list(list)
 #	end
 	def self.process(list)
+	  orders_made = []
 		subs={} # a hash of hashes with clients on the first and vendors on the second
 		for sub in list
 			#puts "client name="+sub.client.name
@@ -166,6 +167,7 @@ class Subscription < ActiveRecord::Base
 		    o=Order.find(o.id)
 		    o.received=order_received
 		    o.grand_total=total
+				orders_made << o
 		    o.save
 		    # now for the accounting
 		    sale = o.main_transaction
@@ -191,6 +193,7 @@ class Subscription < ActiveRecord::Base
 #				end
 			end
 	  end
+	  return orders_made
 	end
 	def self.fast_process(list)
 		for sub in list
