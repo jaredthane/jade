@@ -14,6 +14,7 @@
     <div class="table_cell_15">Cantidad</div>
     <div class="table_cell_15">Precio</div>
     <div class="table_cell_15">Ultima Venta</div>
+    <div class="table_cell_20">Proximo Num de Factura</div>
     <div class="table_cell">Acciones</div>
   </div>
 
@@ -31,6 +32,14 @@
         <% end %>
     </div>
     <div class="table_cell">
+    <% form_tag process_subscriptions_url, :method =>'post', :id => 'receipt_form' do %>
+        <%= text_field_tag :number, @next, :class => 'field'%>
+        </p>
+        <%= hidden_field_tag :search, @search %>
+      </div>
+    <% end %>
+    
+    
       <%= link_to 'Ver Detalles', subscription %><br />
       <%= link_to 'Remover', subscription, :confirm => 'Esta seguro?', :method => :delete %>
     </div>

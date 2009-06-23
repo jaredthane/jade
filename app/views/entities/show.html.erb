@@ -8,6 +8,9 @@
 		<%= text_field_tag :sub_day, params[:sub_day], :class => 'dayfield'%>
 	<% end %>
 <% end %>
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
 <% content_for :actions do %>
 	<% if @entity.entity_type.id == 3 %>
 	    <dt><%= link_to 'Nuevo', new_site_path, :class => 'action' %></dt>
@@ -253,24 +256,28 @@
 	  <div>
 		  <div class="table_header_row">
 			  <div class="table_cell_20">Producto</div>
-			  <div class="table_cell_20">Cantidad</div>
-			  <div class="table_cell_20">Precio</div>
-			  <div class="table_cell_20">Proxima Venta</div>
+			  <div class="table_cell_10">Cantidad</div>
+			  <div class="table_cell_10">Precio</div>
+			  <div class="table_cell_15">Proxima Venta</div>
 			  <div class="table_cell">Acciones</div>
 		  </div>
 		  <% for s in @subs %>
 			  <div class="table_row">
 				  <div class="table_cell_20"><%= link_to s.product.name, s.product %></div>
-				  <div class="table_cell_20"><%= link_to s.quantity, s %></div>
-				  <div class="table_cell_20"><%=h number_to_currency((s.price||0)) %></div>
-          <div class="table_cell_20">
+				  <div class="table_cell_10"><%= link_to s.quantity, s %></div>
+				  <div class="table_cell_10"><%=h number_to_currency((s.price||0)) %></div>
+          <div class="table_cell_15">
               <% if s.next_order_date %>
                   <%= h s.next_order_date.to_date.to_s(:long) %>
               <% end %>
           </div>
+          <div class="table_cell_15">
+            <% form_tag process_client_url(@entity), :method =>'post', :id => 'sub_form' do %>
+              <%= text_field_tag :number, @next, :class => 'field'%>
+            <% end %>
+          </div>
           <div class="table_cell">
-            <%= link_to 'Ver Detalles', s %><br />
-            <%= link_to 'Remover', s, :confirm => 'Esta seguro?', :method => :delete %>
+            <%= link_to_function 'Provisionar', 'submit("sub_form")' %>
           </div>
 			  </div>
 		  <% end %>

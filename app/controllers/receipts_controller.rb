@@ -299,6 +299,29 @@ class ReceiptsController < ApplicationController
   end
 	def process_subscriptions
   	User.current_user=User.find(1) if !User.current_user
+  	if params[:search]
+  	  subs=Subscription.to_process(params[:search])
+  	elsif params[:client_id]
+  	  @client=Entity.find(params[:client_id])
+  	  subs=Subscription.to_process_client(@client)
+ 	  end
+  	orders = Subscription.process(subs)
+  	@next = generate_receipts(orders, params[:number].to_i)
+  	User.current_user=nil if User.current_user.id=1
+    if @next 
+    	flash[:info] = "Las facturas han sido generadas existosamente"
+    	if User.current_user
+    	  if User.current_user.location
+    	   	User.current_user.location.next_receipt_number=@next 
+    	    User.current_user.location.save
+    	  end
+    	end
+    end
+    redirect_to receipts_path
+    return false
+  end
+  def process_subscriptions_for_client
+  	User.current_user=User.find(1) if !User.current_user
   	subs=Subscription.to_process(params[:search])
   	orders = Subscription.process(subs)
   	@next = generate_receipts(orders, params[:number].to_i)

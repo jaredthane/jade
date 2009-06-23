@@ -52,9 +52,8 @@ class SubscriptionsController < ApplicationController
 #  end
   def process_all
   	User.current_user=User.find(1) if !User.current_user
-  	subs=Subscription.to_process(params[:search])
-  	orders = Subscription.process(subs)
-  	ReceiptsController.generate_receipts(list, params[:number].to_i)
+  	list=Subscription.to_process(params[:search])
+  	Subscription.process(list)
   	User.current_user=nil if User.current_user.id=1
     respond_to do |format|
       format.html { redirect_to(new_batch_receipts_path) }
@@ -70,8 +69,9 @@ class SubscriptionsController < ApplicationController
 			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para ver los clientes"
   	end
+  	
   	list=Subscription.to_process_client(@client)
-  	Subscription.process(list)
+  	orders=Subscription.process(list)
     respond_to do |format|
       format.html { redirect_to(entity_path(@client)) }
       format.xml  { render :xml => @client }
@@ -87,7 +87,7 @@ class SubscriptionsController < ApplicationController
       format.xml  { render :xml => @subscription }
     end
   end
-  def preview_process
+  def preview_orders
   	@subscriptions=Subscription.to_process(params[:search])
   	@search=params[:search]
 		respond_to do |format|
