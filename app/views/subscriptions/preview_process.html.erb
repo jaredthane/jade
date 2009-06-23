@@ -29,7 +29,7 @@
     <div class="table_cell">Acciones</div>
   </div>
 
-	<% for subscription in @subscriptions %>
+	<% for subscription in (@subscriptions||[]) %>
 		<div class="table_row">
 			<% if ((subscription.expiration || Date.today) < Date.today) or ((subscription.end_times||9) < 1) %><div class="strikethrough"><% end %>
 		  <div class="table_cell_20"><%= link_to subscription.client.name, subscription.client %></div>
