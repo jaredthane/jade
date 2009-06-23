@@ -39,8 +39,10 @@ class ReceiptsController < ApplicationController
     end  
     return true  
 	end
-	def todays_receipts_report
-		@receipts = Receipt.all_today(params[:page])
+	def list_to_print
+		@from=(params[:from] ||Date.today)
+  	@till=(params[:till] ||Date.today)
+		@receipts = Receipt.search_wo_pages(params[:search],@from, @till)
 		@data=[]
 		total=0
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
@@ -218,14 +220,14 @@ class ReceiptsController < ApplicationController
     system(command)
     send_file "#{RAILS_ROOT}/invoice_pdfs/concat.pdf", :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
   end
-  def show_today
-		@credito_fiscal_today = Receipt.search_credito_fiscal("",params[:page])
-		@consumidor_final_today = Receipt.search_consumidor_final("",params[:page])
-    respond_to do |format|
-      format.html 
-      format.xml  { render :xml => @receipts }
-    end
-  end
+#  def show_today
+#		@credito_fiscal_today = Receipt.search_credito_fiscal("",params[:page])
+#		@consumidor_final_today = Receipt.search_consumidor_final("",params[:page])
+#    respond_to do |format|
+#      format.html 
+#      format.xml  { render :xml => @receipts }
+#    end
+#  end
   def index
   	@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)

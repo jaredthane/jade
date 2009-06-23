@@ -28,6 +28,7 @@ ActionController::Routing::Routes.draw do |map|
   map.payments_report 'payments/report', :controller => 'payments', :action => 'report'
   map.todays_accounting_report 'payments/todays_accounting_report', :controller => 'payments', :action => 'todays_accounting_report'
   map.todays_receipts 'receipts/today/', :controller => 'receipts', :action => 'show_today'
+  map.receipts_list_to_print 'receipts/printable', :controller => 'receipts', :action => 'list_to_print'
   map.unpaid_receipts 'receipts/unpaid/', :controller => 'receipts', :action => 'unpaid'
   map.new_batch_receipts 'subscriptions/new_receipts', :controller => 'receipts', :action => 'new_batch'
   map.create_batch_receipts 'subscriptions/create_receipts', :controller => 'receipts', :action => 'create_batch'

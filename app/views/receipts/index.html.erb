@@ -5,6 +5,7 @@
 <% content_for :actions do %>
 	<dt><%= link_to_function 'Actualizar', 'submit("date_form")', :class => 'action' %></dt>
 	<dt><%= link_to 'Reporte', receipts_report_path(:till=>@till, :from=>@from) %></dt>
+	<dt><%= link_to 'Lista para Imprimir', receipts_list_to_print_url(:till=>@till, :from=>@from) %></dt>
 	<dt> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </dt>
 <% end %>
 <h2>
