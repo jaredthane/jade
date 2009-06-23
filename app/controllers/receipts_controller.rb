@@ -60,7 +60,7 @@ class ReceiptsController < ApplicationController
 	def report
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
-		@receipts = Receipt.search(params[:search],params[:page],@from, @till)
+		@receipts = Receipt.search_wo_pages(params[:search],@from, @till)
 		@data=[]
 		@site=User.current_user.location
 		total=0
