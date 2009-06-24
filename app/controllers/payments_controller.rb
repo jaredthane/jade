@@ -69,7 +69,7 @@ class PaymentsController < ApplicationController
 				receipt_number=0
 			end
 			if payment.order.client.user
-				rep=payment.order.client.user.login
+				rep=payment.order.client.user.name
 			else
 				rep=""
 			end

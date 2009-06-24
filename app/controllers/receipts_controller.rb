@@ -48,7 +48,7 @@ class ReceiptsController < ApplicationController
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for receipt in @receipts
 		  if receipt.order.client.user
-			  @data << ["%05d" % receipt.number, receipt.order.client.name, receipt.order.received, x.number_to_currency(receipt.order.grand_total), receipt.order.client.user.login]
+			  @data << ["%05d" % receipt.number, receipt.order.client.name, receipt.order.received, x.number_to_currency(receipt.order.grand_total), receipt.order.client.user.name]
 			else
 				@data << ["%05d" % receipt.number, receipt.order.client.name, receipt.order.received, x.number_to_currency(receipt.order.grand_total), ""]
 			end
@@ -69,7 +69,7 @@ class ReceiptsController < ApplicationController
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for receipt in @receipts
 			if receipt.order.client.user
-		  	@data << ["%05d" % receipt.number, receipt.created_at.to_date.to_s(:rfc822), receipt.order.client.name, x.number_to_currency(receipt.order.grand_total), receipt.order.client.user.login]
+		  	@data << ["%05d" % receipt.number, receipt.created_at.to_date.to_s(:rfc822), receipt.order.client.name, x.number_to_currency(receipt.order.grand_total), receipt.order.client.user.name]
 		  else
 		  	@data << ["%05d" % receipt.number, receipt.created_at.to_date.to_s(:rfc822), receipt.order.client.name, x.number_to_currency(receipt.order.grand_total), ""]
 		  end

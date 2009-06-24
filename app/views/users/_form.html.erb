@@ -22,6 +22,10 @@
 		  <%= f.text_field :login, :class => 'field' %>
 		</p>
 		<p>
+		  <b>Nombre Completo</b><br />
+		  <%= f.text_field :name, :class => 'field' %>
+		</p>
+		<p>
 		  <b>Sitio Actual:</b><br />
 		  <input disabled class="field" value= <% if @user.location %><%= @user.location.name %><% end %> >
 		  	

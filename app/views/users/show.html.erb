@@ -1,4 +1,4 @@
-<% content_for :title do %><%=h @user.login %><% end %>
+<% content_for :title do %><%=h @user.name %><% end %>
 <% content_for :actions do %>
 	<% if @user==current_user or current_user.has_rights(['Admin','Gerente']) %>
 		<dt><%= link_to 'Cambiar', edit_user_path(@user) %></dt>
@@ -12,6 +12,10 @@
 	<p>
 	  <b>Nombre de Usuario</b><br />
 	  <%= h @user.login %>
+	</p>
+	<p>
+	  <b>Nombre Completo</b><br />
+	  <%= h @user.name %>
 	</p>
 	<p>
 	  <b>Sitio Actual:</b><br />
