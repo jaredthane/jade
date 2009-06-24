@@ -68,7 +68,11 @@ class ReceiptsController < ApplicationController
 		total=0
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for receipt in @receipts
-		  @data << ["%05d" % receipt.number, receipt.created_at.to_date.to_s(:rfc822), receipt.order.client.name, x.number_to_currency(receipt.order.grand_total)]
+			if receipt.order.client.user
+		  	@data << ["%05d" % receipt.number, receipt.created_at.to_date.to_s(:rfc822), receipt.order.client.name, x.number_to_currency(receipt.order.grand_total), receipt.order.client.user.login]
+		  else
+		  	@data << ["%05d" % receipt.number, receipt.created_at.to_date.to_s(:rfc822), receipt.order.client.name, x.number_to_currency(receipt.order.grand_total), ""]
+		  end
 		  total+=receipt.order.grand_total
 		end
 		@data << ["---", "---", "---", "---"]

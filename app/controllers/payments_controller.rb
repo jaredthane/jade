@@ -63,7 +63,17 @@ class PaymentsController < ApplicationController
 		total=0
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for payment in @payments
-		  @data << ["%05d" % payment.order.receipts.first.number, payment.created_at.to_date.to_s(:rfc822), payment.order.client.name, x.number_to_currency(payment.amount)]
+		  if payment.order.receipts.first
+				receipt_number=payment.order.receipts.first.number 
+			else
+				receipt_number=0
+			end
+			if payment.order.client.user
+				rep=payment.order.client.user.login
+			else
+				rep=""
+			end
+		  @data << ["%05d" % receipt_number, payment.created_at.to_date.to_s(:rfc822), payment.order.client.name, x.number_to_currency(payment.amount),rep]
 		  total+=payment.amount
 		end
 		@data << ["---", "---", "---", "---"]
