@@ -11,7 +11,7 @@ pdf.table(@data,
    :vertical_padding => 1,
    :border_width => 0,
    :border_style => :underline_header,
-   :column_widths => { 0 => 100, 1 => 100, 2 => 200, 3 => 100, 4 => 100 },
+   :column_widths => { 0 => 80, 1 => 100, 2 => 200, 3 => 60, 4 => 160 },
    :align => { 0 => :left,1 => :left, 2 => :left, 3 => :left, 4 => :left })
    
  
