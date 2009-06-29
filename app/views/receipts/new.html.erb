@@ -3,20 +3,22 @@
 <% end %>
 <% content_for :title do %>Nueva Factura para <%= @order.order_type.name %> #<%= @order.id %><% end %>
 <% content_for :actions do %>
- 
   <dt><%= link_to 'Cancelar', @order %></dt>
   <dt><%= link_to_function 'Generar', 'submit("receipt_form")' %></dt>
 <% end %>
  
 <%= error_messages_for :receipt %>
  
- 
 <% form_tag create_receipt_path, :method =>'post', :id => 'receipt_form' do %>
 <br />
   <div class="column3-unit-center">
     <p>
       <b>Cual será el primer numero de factura?</b><br />
-    <%= text_field_tag :number, @next, :class => 'field'%>
+    	<%= text_field_tag :number, @next, :class => 'field'%>
+    </p>
+    <p>
+      <b>Fecha:</b><br />
+    	<%= calendar_date_select_tag "created_at", Date.today, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20 %>
     </p>
   </div>
 <% end %>

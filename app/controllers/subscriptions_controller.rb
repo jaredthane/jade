@@ -155,8 +155,8 @@ class SubscriptionsController < ApplicationController
 
     respond_to do |format|
       if @subscription.save
-        flash[:notice] = 'Garantía ha sido creado exitosamente.'
-        format.html { redirect_to(subscriptions_url) }
+        flash[:notice] = 'Suscripcion ha sido creado exitosamente.'
+        format.html { redirect_to(@subscription) }
         format.xml  { render :xml => @subscriptions, :status => :created, :location => @subscription }
       else
         format.html { render :action => "new" }
@@ -172,8 +172,8 @@ class SubscriptionsController < ApplicationController
 
     respond_to do |format|
       if @subscription.update_attributes(params[:subscription])
-        flash[:notice] = 'Garantía ha sido actualizado exitosamente.'
-        format.html { redirect_to(subscriptions_url) }
+        flash[:notice] = 'Suscripcion ha sido actualizado exitosamente.'
+        format.html { redirect_to(@subscription) }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

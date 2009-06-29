@@ -259,7 +259,8 @@
 			  <div class="table_cell_10">Cantidad</div>
 			  <div class="table_cell_10">Precio</div>
 			  <div class="table_cell_15">Proxima Venta</div>
-			  <div class="table_cell_15">Num. de Factura</div>
+			  <div class="table_cell_10">Factura</div>
+			  <div class="table_cell_10">Meses</div>
 			  <div class="table_cell">Acciones</div>
 		  </div>
 		  <% for s in @subs %>
@@ -272,11 +273,15 @@
                   <%= h s.next_order_date.to_date.to_s(:long) %>
               <% end %>
           </div>
-          <div class="table_cell_15">
-            <% form_tag process_client_url(@entity), :method =>'post', :id => 'sub_form' do %>
-              <%= text_field_tag :number, @next, :class => 'field'%>
-            <% end %>
-          </div>
+          
+		        <div class="table_cell_10">
+		        	<% form_tag process_subscription_url(s), :method =>'post', :id => 'sub_form' do %>
+	            <%= text_field_tag :number, @next, :class => 'field'%>
+		        </div>
+		        <div class="table_cell_10">
+	            <%= text_field_tag :num_months, 1, :class => 'field'%>
+		        </div>
+		      <% end %>
           <div class="table_cell">
             <%= link_to_function 'Provisionar', 'submit("sub_form")' %>
           </div>

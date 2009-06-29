@@ -83,7 +83,7 @@ class ReceiptsController < ApplicationController
 		  format.pdf { render :layout => false }
 		end
 	end
-	def generate_receipts(list, start_id=1)
+	def generate_receipts(list, start_id=1, created_at=Date.today)
 		receipts_made=[]
 		for order in list
 			puts "making receipt for order number" + order.id.to_s
@@ -96,7 +96,7 @@ class ReceiptsController < ApplicationController
 		  for line in order.lines
 		    if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt == 0) 
 		      # Create a new receipt
-		      r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{start_id}.pdf", :user=> User.current_user)
+		      r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{start_id}.pdf", :user=> User.current_user, :created_at=>created_at)
 		      receipts_made << r
 		      o=Order.find(order.id)
 		      o.receipt_printed=Date.today
@@ -259,10 +259,7 @@ class ReceiptsController < ApplicationController
   def create
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
-    puts @order.inspect
-    puts params[:number]
-    @next = generate_receipts([@order], params[:number].to_i)
-    puts @next
+    @next = generate_receipts([@order], params[:number].to_i, params[:created_at])
     if @next 
     	flash[:info] = "La factura ha sido generada existosamente"
     	User.current_user.location.next_receipt_number=@next 
@@ -310,21 +307,34 @@ class ReceiptsController < ApplicationController
   	elsif params[:client_id]
   	  @client=Entity.find(params[:client_id])
   	  subs=Subscription.to_process_client(@client)
+	  elsif params[:sub_id]
+  	  subs=[Subscription.find(params[:sub_id])]
  	  end
-  	orders = Subscription.process(subs)
-  	@next = generate_receipts(orders, params[:number].to_i)
-  	User.current_user=nil if User.current_user.id=1
-    if @next 
-    	flash[:info] = "Las facturas han sido generadas existosamente"
-    	if User.current_user
-    	  if User.current_user.location
-    	   	User.current_user.location.next_receipt_number=@next 
-    	    User.current_user.location.save
-    	  end
-    	end
-    end
-    redirect_to receipts_path
-    return false
+  	orders = Subscription.process(subs, params[:num_months].to_i)
+		flash[:info] = "Las suscripciones han sido provisionadas existosamente" if orders.length>0
+  	if params[:number] != ''
+			@next = generate_receipts(orders, params[:number].to_i)
+			User.current_user=nil if User.current_user.id=1
+		  if @next 
+		  	flash[:info] = "Las facturas han sido generadas existosamente"
+		  	if User.current_user
+		  	  if User.current_user.location
+		  	   	User.current_user.location.next_receipt_number=@next 
+		  	    User.current_user.location.save
+		  	  end
+		  	end
+		  end
+		end
+		if params[:client_id]
+		  redirect_to @client
+		  return false
+		elsif params[:sub_id]
+		  redirect_to subs[0].client
+		  return false
+		else
+		  redirect_to receipts_path
+		  return false
+		end
   end
   def process_subscriptions_for_client
   	User.current_user=User.find(1) if !User.current_user

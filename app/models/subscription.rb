@@ -133,7 +133,7 @@ class Subscription < ActiveRecord::Base
 #							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
 #		process_list(list)
 #	end
-	def self.process(list)
+	def self.process(list, months=1)
 	  orders_made = []
 		subs={} # a hash of hashes with clients on the first and vendors on the second
 		for sub in list
@@ -153,10 +153,10 @@ class Subscription < ActiveRecord::Base
 #  	  		##puts "adding a line for: "+sub.name
 					sub.next_order_date=Date.today if !sub.next_order_date
 					
-			  	l=Line.create(:created_at=>sub.next_order_date, :order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price, :received =>sub.next_order_date)
+			  	l=Line.create(:created_at=>sub.next_order_date, :order => o, :product => sub.product, :quantity=> sub.quantity*months, :price => sub.price, :received =>sub.next_order_date)
 					s=Subscription.find(sub.id)
 					s.next_order_date=Date.today if !s.next_order_date
-					s.next_order_date = s.next_order_date.to_date >> 1
+					s.next_order_date = s.next_order_date.to_date >> months
 					s.save
 			  	order_received=l.received if !order_received
 			  	order_received=l.received if l.received > order_received
