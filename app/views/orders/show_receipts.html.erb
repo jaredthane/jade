@@ -4,20 +4,24 @@
 	<b>Facturas:</b>
 	<div>
 		<div class="table_header_row">
-			<div class="table_cell_25">Fecha</div>
-		  <div class="table_cell_25">Factura</div>
-		  <div class="table_cell_25">Total</div>
-		  <div class="table_cell">Usuario</div>
+			<div class="table_cell_20">Fecha</div>
+		  <div class="table_cell_20">Factura</div>
+		  <div class="table_cell_20">Total</div>
+		  <div class="table_cell_20">Usuario</div>
+		  <div class="table_cell">Acciones</div>
 		</div>
 		<% for receipt in @receipts %>
   <div class="table_row">
-    <div class="table_cell_25"><%= h receipt.created_at.to_date.to_s(:long) %></div>
-    <div class="table_cell_25"><%= link_to "%05d" % receipt.number, receipt %></div>
-    <div class="table_cell_25"><%= h number_to_currency(receipt.total_price_with_tax) %></div>
-    <div class="table_cell">
+    <div class="table_cell_20"><%= h receipt.created_at.to_date.to_s(:long) %></div>
+    <div class="table_cell_20"><%= link_to "%05d" % receipt.number, receipt %></div>
+    <div class="table_cell_20"><%= h number_to_currency(receipt.total_price_with_tax) %></div>
+    <div class="table_cell_20">
     	<% if receipt.user %>  	
     		<%=link_to receipt.user.login, receipt.user %>
     	<% end %>
+    </div>
+    <div class="table_cell">
+    	<%=link_to "Borrar", destroy_receipt_path(receipt), :confirm => 'Esta seguro?' %>
     </div>
 	</div>
 <% end %>

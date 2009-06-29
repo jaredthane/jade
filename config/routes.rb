@@ -79,6 +79,7 @@ ActionController::Routing::Routes.draw do |map|
 	map.order_history 'orders/:id/history', :controller => 'orders', :action => 'show_history'
 	map.order_payments 'orders/:id/payments', :controller => 'orders', :action => 'show_payments'
 	map.order_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
+	map.destroy_receipt 'receipt/:id/destroy', :controller => 'receipts', :action => 'destroy'
 	map.connect 'lines/new', :controller => 'lines', :action => 'new', :format => 'js'
   map.resources :lines
 	map.resources :inventories
