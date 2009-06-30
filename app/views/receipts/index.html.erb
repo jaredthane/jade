@@ -37,6 +37,7 @@
 	  </div>
     <% for receipt in @consumidor_final_today %>
       <div class="table_row">
+    	<% if receipt.deleted %><div class="strikethrough"><% end %>
         <div class="table_cell_15"><%= h receipt.created_at.to_date.to_s(:long) %></div>
         <div class="table_cell_20"><%= link_to receipt.order.client.name, receipt.order.client %></div>
         <div class="table_cell_20"><%= link_to receipt.order_id, receipt.order %></div>
@@ -45,6 +46,7 @@
         <div class="table_cell"><%=link_to receipt.user.login, receipt.user %></div>
 	    </div>
     <% end %>
+    <% if receipt.deleted %></div><% end %>
   </div>
 	<%= will_paginate @consumidor_final_today, :class => 'pagination' %>
 <% end %>
