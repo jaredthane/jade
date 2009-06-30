@@ -407,8 +407,9 @@ class ReceiptsController < ApplicationController
   end
   def destroy
     @receipt = Receipt.find(params[:id])
-    @receipt.destroy
-		flash[:info] = "La factura han sido borrado del sistema"
+    @receipt.deleted=Date.today
+    @receipt.save
+		flash[:info] = "La factura han sido anulado"
     respond_to do |format|
       format.html { redirect_to(receipts_url) }
       format.xml  { head :ok }

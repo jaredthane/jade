@@ -343,9 +343,10 @@ class OrdersController < ApplicationController
     for line in @order.lines
         line.isreceived_str = "No"
     end
+    for receipt in @order.receipts
+        receipt.deleted=Date.today
+    end
     sucess = @order.save()
-#    @order.lines.errors.each {@order.errors << error}
-    puts "sucess =" + sucess.to_s + "*"
 
 
     respond_to do |format|
