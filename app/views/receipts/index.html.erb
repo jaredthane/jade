@@ -45,8 +45,8 @@
         <div class="table_cell_15"><%= h number_to_currency(receipt.total_price_with_tax) %></div>
         <div class="table_cell"><%=link_to receipt.user.login, receipt.user %></div>
 	    </div>
+	    <% if receipt.deleted %></div><% end %>
     <% end %>
-    <% if receipt.deleted %></div><% end %>
   </div>
 	<%= will_paginate @consumidor_final_today, :class => 'pagination' %>
 <% end %>

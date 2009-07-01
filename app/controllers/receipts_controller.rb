@@ -47,11 +47,21 @@ class ReceiptsController < ApplicationController
 		total=0
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for receipt in @receipts
-		  if receipt.order.client.user
-			  @data << ["%05d" % receipt.number, receipt.order.client.name, receipt.order.received, x.number_to_currency(receipt.order.grand_total), receipt.order.client.user.name]
-			else
-				@data << ["%05d" % receipt.number, receipt.order.client.name, receipt.order.received, x.number_to_currency(receipt.order.grand_total), ""]
-			end
+			if receipt.order.client.user
+		  	username=receipt.order.client.user.name
+		  else
+		  	username=""
+		  end
+		  if receipt.deleted
+		  	if receipt.created_at.to_date==Date.today
+		  		value='Anulado'
+		  	else
+		  		value=x.number_to_currency(-receipt.order.grand_total)
+		  	end
+		  else
+		  	value=x.number_to_currency(receipt.order.grand_total)
+		  end
+		  @data << ["%05d" % receipt.number, receipt.order.client.name, receipt.order.received, value, username]
 		end
 		prawnto :prawn => { :page_size => 'LETTER'}
 		params[:format] = 'pdf'
@@ -69,11 +79,23 @@ class ReceiptsController < ApplicationController
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for receipt in @receipts
 			if receipt.order.client.user
-		  	@data << ["%05d" % receipt.number, receipt.created_at.to_date.to_s(:rfc822), receipt.order.client.name, x.number_to_currency(receipt.order.grand_total), receipt.order.client.user.name]
+		  	username=receipt.order.client.user.name
 		  else
-		  	@data << ["%05d" % receipt.number, receipt.created_at.to_date.to_s(:rfc822), receipt.order.client.name, x.number_to_currency(receipt.order.grand_total), ""]
+		  	username=""
 		  end
-		  total+=receipt.order.grand_total
+		  if receipt.deleted
+		  	if receipt.created_at.to_date==Date.today
+		  		value='Anulado'
+		  	else
+		  		value=x.number_to_currency(-receipt.order.grand_total)
+		  		total-=receipt.order.grand_total
+		  	end
+		  else
+		  	value=x.number_to_currency(receipt.order.grand_total)
+		  	total+=receipt.order.grand_total
+		  end
+		  @data << ["%05d" % receipt.number, receipt.created_at.to_date.to_s(:rfc822), receipt.order.client.name, value, username]
+		  
 		end
 		@data << ["---", "---", "---", "---"]
 		@data << ["", "", "Total", x.number_to_currency(total)]

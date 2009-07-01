@@ -12,6 +12,7 @@
 		</div>
 		<% for receipt in @receipts %>
   <div class="table_row">
+   	<% if receipt.deleted %><div class="strikethrough"><% end %>
     <div class="table_cell_20"><%= h receipt.created_at.to_date.to_s(:long) %></div>
     <div class="table_cell_20"><%= link_to "%05d" % receipt.number, receipt %></div>
     <div class="table_cell_20"><%= h number_to_currency(receipt.total_price_with_tax) %></div>
@@ -21,8 +22,11 @@
     	<% end %>
     </div>
     <div class="table_cell">
-    	<%=link_to "Borrar", destroy_receipt_path(receipt), :confirm => 'Esta seguro?' %>
+    	<% if !receipt.deleted %>
+    		<%=link_to "Anular", destroy_receipt_path(receipt), :confirm => 'Esta seguro?' %>
+    	<% end %>
     </div>
+    <% if receipt.deleted %></div><% end %>
 	</div>
 <% end %>
 	</div>
