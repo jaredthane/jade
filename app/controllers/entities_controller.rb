@@ -240,6 +240,11 @@ end
 			current_user.location_id = params[:id]
 			current_user.save
 		end
+  	if User.current_user
+  	  if User.current_user.location
+				@next="%05d" % User.current_user.location.next_receipt_number
+  	  end
+  	end
 		logger.debug "@entity.entity_type_id=#{@entity.entity_type_id.to_s}"
 		if @entity.entity_type_id == 2 or @entity.entity_type_id == 5
 		  @subs=Subscription.find(:all, 

@@ -13,6 +13,7 @@
 			<% if current_user.has_rights(['Suscripciones','admin']) %>
 			  <dt><%= link_to 'Facturar Actualizadas', new_batch_receipts_url %></dt>
 			  <dt><%= link_to 'Lista de Suscripciones', subscriptions_url %></dt>
+			  <dt><%= link_to 'Anular No. de Factura', new_nul_receipt_number_url %></dt>
 			<% end %>
 		<% end %>
 	<% when 0 %>

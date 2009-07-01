@@ -3,7 +3,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :roles
   map.resources :serialized_products
   map.resource :session
-  
+  map.create_nul_receipt_number 'receipts/create_nul_number', :controller => 'receipts', :action => 'create_nul_number'
+  map.new_nul_receipt_number 'receipts/new_nul_number', :controller => 'receipts', :action => 'new_nul_number'
   map.process_subscriptions 'receipts/process_subscriptions', :controller => 'receipts', :action => 'process_subscriptions'
   map.new_balance_transfer 'accounts/:id/new_balance_transfer', :controller => 'accounts', :action => 'new_balance_transfer'
   map.create_balance_transfer 'accounts/:id/create_balance_transfer', :controller => 'accounts', :action => 'create_balance_transfer'

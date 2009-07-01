@@ -231,7 +231,7 @@ class Receipt < ActiveRecord::Base
 	end
 	def self.search_consumidor_final(search, page, from=Date.today, till=Date.today)
   	paginate :per_page => 20, :page => page,
-		         :conditions => ['((date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till) OR (date(receipts.deleted) >=:from AND date(receipts.deleted) <= :till)) AND clients.entity_type_id=2 AND (orders.id like :search or vendors.name like :search or clients.name like :search) AND users.location_id=:site_id', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id,:search => "%#{search}%"}],
+		         :conditions => ['((date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till) OR (date(receipts.deleted) >=:from AND date(receipts.deleted) <= :till)) AND (orders.id like :search or vendors.name like :search or clients.name like :search) AND users.location_id=:site_id', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id,:search => "%#{search}%"}],
 		         :order => 'receipts.id',
 		         :joins => 'inner join orders on receipts.order_id = orders.id left join users on users.id=orders.user_id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
 	end
