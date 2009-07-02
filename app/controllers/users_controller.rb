@@ -35,7 +35,18 @@ class UsersController < ApplicationController
   # render new.rhtml
 #  def new
 #  end
-
+	def update_scope
+    logger.debug "current_user.price_group_name_id=" + current_user.price_group_name_id.to_s
+    logger.debug "current_user.location_id=" + current_user.location_id.to_s
+    current_user.price_group_name_id = params[:user][:price_group_name_id].to_i if params[:user][:price_group_name_id]
+#    logger.debug "setting price group name ="+ params[:user][:price_group_name_id]
+    current_user.location_id = params[:user][:location_id].to_i if params[:user][:location_id]
+#    logger.debug "setting location ="+ params[:location_id]
+    current_user.save()
+    logger.debug "current_user.price_group_name_id=" + current_user.price_group_name_id.to_s
+    logger.debug "current_user.location_id=" + current_user.location_id.to_s
+	redirect_to(params[:redirect_url])
+  end
   def create
 #    cookies.delete :auth_token
     # protects against session fixation attacks, wreaks havoc with 

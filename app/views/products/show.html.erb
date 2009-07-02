@@ -8,6 +8,13 @@
   <% end %>
   <dt><%= link_to 'Lista', products_path, :class =>'action' %></dt>
 <% end %>
+<h2>
+<% form_for :user, @current_user, :html => {:id => 'scope_form' }, :url => update_scope_url do |u| %>
+  Con precios del grupo: <%= u.collection_select (:price_group_name_id, get_price_group_names, :id, :name, {}, {:onchange=>'submit("scope_form")'} )%>
+  En :                   <%= u.collection_select (:location_id, get_locations, :id, :name,  {}, {:onchange=>'submit("scope_form")'})%>
+  <%= hidden_field_tag :redirect_url, request.request_uri %>
+<% end %>
+</h2>
 <div class="column3-unit-left">
 	<% if current_user.has_rights(['admin','compras','gerente']) %>
 	<p><b>Proveedor</b><br />

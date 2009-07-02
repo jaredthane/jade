@@ -6,6 +6,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :product_categories
   map.resources :prices
   map.price_list 'products/price_list', :controller => 'products', :action => 'price_list', :format =>'pdf'
+  map.update_scope 'users/update_scope', :controller => 'users', :action => 'update_scope'
 	map.resources :discounts
 	map.resources :combos
 	map.post_physical_counts 'physical_counts/:id/post', :controller => 'physical_counts', :action => 'post'
