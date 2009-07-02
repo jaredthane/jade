@@ -22,9 +22,9 @@ Element.buildAndAppend = function(type, options, style)
 nil = null;
 
 Date.one_day = 24*60*60*1000;
-Date.weekdays = $w("S M T W T F S");
+Date.weekdays = $w("D L M M J V S");
 Date.first_day_of_week = 0;
-Date.months = $w("January February March April May June July August September October November December" );
+Date.months = $w("Enero Febrero Marzo Abril Mayo Junio Julio Augosto Septiembre Octubre Noviembre Deciembre" );
 Date.padded2 = function(hour) { var padded2 = parseInt(hour, 10); if (hour < 10) padded2 = "0" + padded2; return padded2; }
 Date.prototype.getPaddedMinutes = function() { return Date.padded2(this.getMinutes()); }
 Date.prototype.getAMPMHour = function() { var hour = this.getHours(); return (hour == 0) ? 12 : (hour > 12 ? hour - 12 : hour ) }
@@ -45,9 +45,9 @@ window.f_scrollTop = function() { return ([window.pageYOffset ? window.pageYOffs
 
 _translations = {
   "OK": "OK",
-  "Now": "Now",
-  "Today": "Today",
-  "Clear": "Clear"
+  "Now": "Ahora",
+  "Today": "Hoy",
+  "Clear": "Borrar"
 }
 SelectBox = Class.create();
 SelectBox.prototype = {

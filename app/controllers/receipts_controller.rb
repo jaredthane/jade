@@ -353,7 +353,10 @@ class ReceiptsController < ApplicationController
   	  @client=Entity.find(params[:client_id])
   	  subs=Subscription.to_process_client(@client)
 	  elsif params[:sub_id]
-  	  subs=[Subscription.find(params[:sub_id])]
+  	  sub=Subscription.find(params[:sub_id])
+  	  sub.next_order_date=params[:next_order_date]
+  	  sub.save
+  	  subs=[sub]
  	  end
   	orders = Subscription.process(subs, params[:num_months].to_i)
 		flash[:info] = "Las suscripciones han sido provisionadas existosamente" if orders.length>0

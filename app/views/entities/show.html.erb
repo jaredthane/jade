@@ -69,7 +69,6 @@
 			<% if @entity.birth %>
 				<%=h @entity.birth.strftime('%B %d') %>
 			<% end %>
-			
 		</p>
 	<% end %>
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
@@ -92,7 +91,6 @@
 			<% if @entity.price_group_name %>
 				<%=h @entity.price_group_name.name %>
 			<% end %>
-			
 		</p>
 		<p>
 			<b>Notas:</b><br />
@@ -175,7 +173,6 @@
 	<p>
 		<b>Telefono Fijo</b><br />
 		<%=h @entity.home_phone_number %>
-		
 	</p>
 	<p>
 		<b>Telefono Oficina</b><br />
@@ -258,7 +255,7 @@
 			  <div class="table_cell_20">Producto</div>
 			  <div class="table_cell_10">Cantidad</div>
 			  <div class="table_cell_10">Precio</div>
-			  <div class="table_cell_15">Proxima Venta</div>
+			  <div class="table_cell_25">Proxima Venta</div>
 			  <div class="table_cell_10">Factura</div>
 			  <div class="table_cell_10">Meses</div>
 			  <div class="table_cell">Acciones</div>
@@ -268,14 +265,11 @@
 				  <div class="table_cell_20"><%= link_to s.product.name, s.product %></div>
 				  <div class="table_cell_10"><%= link_to s.quantity, s %></div>
 				  <div class="table_cell_10"><%=h number_to_currency((s.price||0)) %></div>
-          <div class="table_cell_15">
-              <% if s.next_order_date %>
-                  <%= h s.next_order_date.to_date.to_s(:long) %>
-              <% end %>
+          <div class="table_cell_25">
+          	<% form_tag process_subscription_url(s), :method =>'post', :id => 'sub_form' do %>
+						<%= calendar_date_select_tag "next_order_date", s.next_order_date, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'calendar_field' %>
           </div>
-          
 		        <div class="table_cell_10">
-		        	<% form_tag process_subscription_url(s), :method =>'post', :id => 'sub_form' do %>
 	            <%= text_field_tag :number, @next, :class => 'field'%>
 		        </div>
 		        <div class="table_cell_10">

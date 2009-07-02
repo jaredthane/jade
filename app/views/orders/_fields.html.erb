@@ -38,7 +38,7 @@
 		<div class="column3-unit-middle">
 			<p>
 				<b>Fecha Recibido</b>
-				<%= calendar_date_select "order", :markreceived, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20 %>
+			<%= calendar_date_select "order", :markreceived, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'field' %>
 			</p>
 		</div>
 	<% when 3 %>
@@ -66,7 +66,7 @@
 <div class="column3-unit-right">
 	<p>
 		<b>Fecha de Pedido</b><br />
-		<%= f.date_select :created_at %>
+		<%= calendar_date_select "order", :created_at, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'field' %>
 	</p>
 	<%= f.hidden_field :user_id, :value => current_user.id %>
 </div>

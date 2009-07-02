@@ -112,6 +112,7 @@
 .main-content textarea {width:600px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .main-content textarea.comments {height:25px}
 .main-content input.field {padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-content input.calendar_field {background:none; width:80%; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .main-content input.serial {padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .main-content input.button {font-size:150%; font-weight:bold;float:left; width:9.0em; margin-right:20px; padding:1px !important /*Non-IE6*/; padding:0 /*IE6*/; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:110%;}
 .main-content input.button:hover {font-size:150%; font-weight:bold;cursor: pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:#96c09c;}
