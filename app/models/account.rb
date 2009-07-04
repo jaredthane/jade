@@ -66,15 +66,17 @@ class Account < ActiveRecord::Base
 #	end
 	def balance
 	  total=0
-  	total += posts.last.balance if posts.length > 0
+  	total += simple_balance
   	for child in children
   	  total += child.balance
   	end
   	return total
 	end
 	def simple_balance
-	  if posts.length > 0
-	  	return posts.last.balance
+		last=posts.find(:last, :order=>'created_at')
+		logger.debug "last post was:"+ last.id.to_s
+	  if last
+	  	return last.balance
 	  else
 	  	return 0
   	end

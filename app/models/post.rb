@@ -21,19 +21,59 @@ class Post < ActiveRecord::Base
   belongs_to :post_type
   belongs_to :trans
 	belongs_to :account
-	before_save :calculate_balance
+	before_create :prepare_for_create
+	before_destroy :prepare_for_destroy
 	
 	CREDIT = -1
 	DEBIT = 1
+	
+	def prepare_for_create
+		# Make value positive if its negative
+		logger.debug "making sure value is positive"
+		self.value = (self.value || 0 ) * -1 if (self.value || 0 ) < 0
+		# Calculate Balance
+		logger.debug "Calculate Balance"
+		calculate_balance
+		#Set created_at to match the Trans
+		logger.debug "Set created_at to match the Trans"
+		self.created_at=trans.created_at if trans
+		# If we're adding this post in the middle of the pile,
+		# We need to update the balance of all posts that happened after this new one.
+		logger.debug "checking for old posts"
+		if self.created_at
+			logger.debug "this is a new post and created at is pre-set"
+			recalculate_later_balances
+		end
+	end
+	def prepare_for_destroy
+		recalculate_later_balances(delete=true)
+	end
 	def opposite_type
 		return -1 if post_type==1
 		return 1
 	end
+	##################################################################################################
+	# Recalculates balances of all older posts
+	# Default is to prepare for a create
+	#################################################################################################	
+	def recalculate_later_balances(delete=false)
+		if delete 
+			mod=-1 
+		else
+			mod=1
+		end
+		# *************** THIS SHOULD BE CHANGED TO A MYSQL UPDATE QUERY *******************************
+		for post in Post.find(:all, :conditions=> "account_id= " + self.account_id.to_s + " AND created_at>'" + self.trans.created_at.to_s(:short) + "'")
+			post.balance=post.balance + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0) * mod
+			post.save
+		end
+	end
+	##################################################################################################
+	# Calculates balance based on accounts current balance + this posts value
+	#################################################################################################	
 	def calculate_balance
-		# Make value positive if its negative
-		self.value = (self.value || 0 ) * -1 if (self.value || 0 ) < 0
 		# Now calculate the balance
-		logger.info 'OLD BALANCE=' + self.account.simple_balance.to_s + '+ VALUE=' +self.value.to_s + ' * POST_TYPE=' + self.post_type_id.to_s + ' * MODIFIER='+self.account.modifier.to_s
+		logger.debug 'OLD BALANCE=' + self.account.simple_balance.to_s + '+ VALUE=' +self.value.to_s + ' * POST_TYPE=' + self.post_type_id.to_s + ' * MODIFIER='+self.account.modifier.to_s
 		self.balance=(self.account.simple_balance || 0 ) + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
 	end
 end
