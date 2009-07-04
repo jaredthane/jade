@@ -46,9 +46,15 @@ class User < ActiveRecord::Base
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :password, :password_confirmation, :do_accounting, :name, :today
+  attr_accessible :login, :email, :password, :password_confirmation, :do_accounting, :name, :date, :today
 	def clients
 		return Entity.find_all_by_user_id(self.id)
+	end
+	def today
+		return Time.now.change(:year=>self.date.year, :month=>self.date.month, :day=>self.date.day)
+	end
+	def today=(value)
+		self.date=value.to_date
 	end
 	def current_price_group
 #		logger.debug "location_id=#{location_id.to_s}"

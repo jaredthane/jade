@@ -48,7 +48,7 @@ class MovementsController < ApplicationController
   # GET /movements/new
   # GET /movements/new.xml
   def new
-    @movement = Movement.new
+    @movement = Movement.new(:created_at=>User.current_user.today)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -60,23 +60,27 @@ class MovementsController < ApplicationController
   def edit
     @movement = Movement.find(params[:id])
   end
-
-  # POST /movements
-  # POST /movements.xml
-  def create
-    @movement = Movement.new(params[:movement])
-		$audit.info "Creating movement"
-    respond_to do |format|
-      if @movement.save
-        flash[:notice] = 'Movement was successfully created.'
-        format.html { redirect_to(@movement) }
-        format.xml  { render :xml => @movement, :status => :created, :location => @movement }
-      else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @movement.errors, :status => :unprocessable_entity }
-      end
-    end
-  end
+############################################################################################
+# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
+# Dont think this is being used.																													 #
+############################################################################################
+# 
+#  # POST /movements
+#  # POST /movements.xml
+#  def create
+#    @movement = Movement.new(params[:movement], :created_at=>User.current_user.today)
+#		$audit.info "Creating movement"
+#    respond_to do |format|
+#      if @movement.save
+#        flash[:notice] = 'Movement was successfully created.'
+#        format.html { redirect_to(@movement) }
+#        format.xml  { render :xml => @movement, :status => :created, :location => @movement }
+#      else
+#        format.html { render :action => "new" }
+#        format.xml  { render :xml => @movement.errors, :status => :unprocessable_entity }
+#      end
+#    end
+#  end
 
   # PUT /movements/1
   # PUT /movements/1.xml

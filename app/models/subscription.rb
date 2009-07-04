@@ -146,14 +146,14 @@ class Subscription < ActiveRecord::Base
 		# Now we got a nice list grouped by vendor, lets make the subs
 	  for client, vendor_list in subs
 	  	for vendor, list in vendor_list
-				o=Order.create(:vendor => vendor, :client => client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+				o=Order.create(:created_at=>User.current_user.today, :vendor => vendor, :client => client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
 			  order_received=nil
 			  total=0
 			  for sub in list
 #  	  		##puts "adding a line for: "+sub.name
 					sub.next_order_date=Date.today if !sub.next_order_date
 					
-			  	l=Line.create(:created_at=>sub.next_order_date, :order => o, :product => sub.product, :quantity=> sub.quantity*months, :price => sub.price, :received =>sub.next_order_date)
+			  	l=Line.create(:created_at=>User.current_user.today, :order => o, :product => sub.product, :quantity=> sub.quantity*months, :price => sub.price, :received =>sub.next_order_date)
 					s=Subscription.find(sub.id)
 					s.next_order_date=Date.today if !s.next_order_date
 					s.next_order_date = s.next_order_date.to_date >> months
@@ -197,8 +197,8 @@ class Subscription < ActiveRecord::Base
 	end
 	def self.fast_process(list)
 		for sub in list
-			o=Order.create(:vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
-			l=Line.create(:created_at=>sub.next_order_date, :order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price, :received =>sub.next_order_date)
+			o=Order.create(:created_at=>User.current_user.today,:vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+			l=Line.create(:created_at=>User.current_user.today, :order => o, :product => sub.product, :quantity=> sub.quantity, :price => sub.price, :received =>sub.next_order_date)
 			o=Order.find(o.id)
 			o.received=sub.next_order_date
 			o.grand_total=l.total_price_with_tax

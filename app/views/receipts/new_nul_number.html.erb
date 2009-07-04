@@ -20,7 +20,7 @@
   <div class="column2-unit-right">
     <p>
       <b>Fecha:</b><br />
-    	<%= calendar_date_select_tag "created_at", Date.today, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20 %>
+    	<%= calendar_date_select_tag "created_at", User.current_user.today, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20 %>
     </p>
   </div>
 <% end %>

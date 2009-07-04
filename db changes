@@ -54,4 +54,4 @@ alter table trans add column user_id int(11);
 set all money and quantity fields from order and line to default to 0
 
 alter table posts add column created_at datetime;
-alter table users add column today date;
+alter table users add column date date;

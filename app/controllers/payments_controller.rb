@@ -43,7 +43,7 @@ class PaymentsController < ApplicationController
   # GET /payments/new
   # GET /payments/new.xml
   def new
-    @payment = Payment.new
+    @payment = Payment.new(:created_at=>User.current_user.today)
     @payment.order_id = params[:order_id]
 		@payment.payment_method_id = 1
 		@paid = @payment.order.amount_paid
@@ -99,6 +99,7 @@ class PaymentsController < ApplicationController
   # POST /payments.xml
   def create
     @payment = Payment.new(params[:payment])
+    @payment.created_at=User.current_user.today
     respond_to do |format|
       if @payment.save
         flash[:notice] = 'Pago ha sido creado exitosamente.'

@@ -100,7 +100,7 @@ class Order < ActiveRecord::Base
 	  else
 	    credito_fiscal # from the formats.rb file
 	  end
-	  r=Receipt.create(:order=>params[:order_id], :number =>params[:number], :filename=>"#{RAILS_ROOT}/invoice_pdfs/order #{self.id}.pdf")
+	  r=Receipt.create(:created_at=>User.current_user.today,:order=>params[:order_id], :number =>params[:number], :filename=>"#{RAILS_ROOT}/invoice_pdfs/order #{self.id}.pdf")
 	  return r
 	end
 	##################################################################################################
@@ -273,7 +273,7 @@ class Order < ActiveRecord::Base
   ##################################################################################
 	def create_movement_for(line, entity_id, movement_type_id, quantity)
 	  value = (line.price||0) * (line.quantity||0)
-		m=Movement.new(:entity_id => entity_id, :comments => self.comments, :product_id => line.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => line.serialized_product_id, :value => value)
+		m=Movement.new(:created_at=>User.current_user.today,:entity_id => entity_id, :comments => self.comments, :product_id => line.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => line.serialized_product_id, :value => value)
 		@movements_to_create = [] if !@movements_to_create 
 		@movements_to_create.push(m)
 	end
@@ -368,7 +368,7 @@ class Order < ActiveRecord::Base
 		puts "Creating main transaction"
 		case order_type_id
 		when 1 #Venta
-			sale=Trans.new(:user=>User.current_user)
+			sale=Trans.new(:user=>User.current_user,:created_at=>User.current_user.today)
       sale.posts << Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)
       if self.total_tax != 0
       	##puts "=======================adding tax self.total_tax="+self.total_tax.to_s
@@ -391,7 +391,7 @@ class Order < ActiveRecord::Base
 		when 2 # Compra
 	    ##puts self.vendor.cash_account.to_s
 	    ##puts self.total_price_with_tax.to_s
-	    purchase = Trans.new(:user=>User.current_user)
+	    purchase = Trans.new(:user=>User.current_user,:created_at=>User.current_user.today)
 	    purchase.posts << Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
       purchase.posts << Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
 			return purchase
@@ -400,7 +400,7 @@ class Order < ActiveRecord::Base
 	def inventory_transaction
 		inventory_cost = self.inventory_value
     if inventory_cost > 0
-    	inventory = Trans.new(:user=>User.current_user)
+    	inventory = Trans.new(:user=>User.current_user,:created_at=>User.current_user.today)
 	    inventory.posts << Post.new(:account => self.vendor.inventory_account, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
 	    inventory.posts << Post.new(:account => self.vendor.expense_account, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
 	  end
@@ -411,7 +411,7 @@ class Order < ActiveRecord::Base
   ##################################################################################
 	def transaction_diff(old, newtrans)
 		accounts_done=[]
-		diff=Trans.new(:user=>User.current_user)
+		diff=Trans.new(:user=>User.current_user,:created_at=>User.current_user.today)
 		if old and !newtrans
 #			##puts "newtrans is null"
 			for oldpost in old.posts
@@ -532,7 +532,7 @@ class Order < ActiveRecord::Base
 	def create_all_lines(lines)
 	  lines=[] if !lines
   	for l in lines
-  		new_line = Line.new(:order_id=>self.id)
+  		new_line = Line.new(:order_id=>self.id,:created_at=>User.current_user.today)
   		#new_line.product_name = l[:product_name]  		
   		new_line.product_id = l[:product_id]  	
 			new_line.quantity = l[:quantity]  
@@ -577,7 +577,7 @@ class Order < ActiveRecord::Base
 	  ##puts "Lines before updating new ones" + Order.find(self.id).lines.length.to_s
 		# Update New lines
   	for l in new_lines
-  		new_line = Line.new(:order_id=>self.id)
+  		new_line = Line.new(:order_id=>self.id,:created_at=>User.current_user.today)
   		new_line.product_id = l[:product_id]		
   		new_line.quantity = l[:quantity]
 	  ##puts "Lines before setting attributes" + Order.find(self.id).lines.length.to_s
@@ -701,7 +701,7 @@ class Order < ActiveRecord::Base
 						#If the order qualifies, add it.
 						if @qualify >= 1			                     		
 							# ##puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
-							l=Line.new(:order_id => self.id, :product_id => discount.id, :quantity => @qualify, :price => discount.price, :received => 1)
+							l=Line.new(:order_id => self.id, :product_id => discount.id, :quantity => @qualify, :price => discount.price, :received => 1,:created_at=>User.current_user.today)
 							l.save
 						end #if qualify==1
 					end # if available
@@ -777,7 +777,7 @@ class Order < ActiveRecord::Base
 	#################################################################################################
 	def pay_off()
 	  if grand_total > amount_paid
-  	  Payment.create(:order=>self, :amount=>grand_total-amount_paid, :payment_method_id=>1, :user=>User.current_user, :receipt=>self.receipts.first, :presented=>grand_total-amount_paid)
+  	  Payment.create(:order=>self, :amount=>grand_total-amount_paid, :payment_method_id=>1, :user=>User.current_user, :receipt=>self.receipts.first, :presented=>grand_total-amount_paid, :created_at=>User.current_user.today)
     end
 	end
 ############################################################################################
@@ -901,14 +901,14 @@ class Order < ActiveRecord::Base
 								if old_loc.entity_type== 3 # It was in a different site
 									logger.debug "old_loc.entity_type== 3"
 									# Make a movement to take it out of the other site
-									Movement.create(:entity_id => old_loc.id, :comments => self.comments, :product_id => l.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
+									Movement.create(:entity_id => old_loc.id, :comments => self.comments, :product_id => l.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id,:created_at=>User.current_user.today)
 									i=l.product.inventories.find_by_entity_id(old_loc.id)
 									i.quantity=i.quantity-1
 									i.save
 								end
 								logger.debug "Make a movement to bring it here"
 								# Make a movement to bring it here
-								Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
+								Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id,:created_at=>User.current_user.today)
 								i = l.product.inventories.find_by_entity_id(self.vendor_id)
 								logger.debug "===============> old i=#{i.inspect}"
 								i.quantity=i.quantity+1
@@ -918,7 +918,7 @@ class Order < ActiveRecord::Base
 						else	# This serial was just created
 							logger.debug "# This serial was just created"
 								# Make a movement to put it here
-								Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
+								Movement.create(:created_at=>User.current_user.today,:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
 								i = l.product.inventories.find_by_entity_id(self.vendor_id)
 								logger.debug "===============> old i=#{i.inspect}"
 								i.quantity=i.quantity+1
@@ -938,12 +938,12 @@ class Order < ActiveRecord::Base
 						if !serials.include?(s)
 							logger.debug "!serials.include?(s.id)"
 							# Make a movement to remove it from here
-							Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => s.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
+							Movement.create(:created_at=>User.current_user.today,:entity_id => self.vendor_id, :comments => self.comments, :product_id => s.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
 							i = s.product.inventories.find_by_entity_id(self.vendor_id)
 							i.quantity=i.quantity-1
 							i.save
 							# Make movement to move it to Internal Consumption
-							Movement.create(:entity_id => 1, :comments => self.comments, :product_id => s.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
+							Movement.create(:created_at=>User.current_user.today,:entity_id => 1, :comments => self.comments, :product_id => s.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
 						end
 					end
 					price_per = l.product.cost * (serials_here.length - old_qty) 
@@ -957,7 +957,7 @@ class Order < ActiveRecord::Base
 					logger.debug("previous qty = " + line.product.quantity.to_s)
         	line.price = (line.product.cost||0) * ((line.quantity||0) - (line.product.quantity||0))
 					if line.quantity != line.product.quantity
-						m=Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => line.quantity - line.product.quantity, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
+						m=Movement.create(:created_at=>User.current_user.today,:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => line.quantity - line.product.quantity, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
 						i=line.product.inventories.find_by_entity_id(self.vendor_id)
 						i.quantity=line.quantity
 						products_done << line.product_id

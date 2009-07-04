@@ -162,7 +162,7 @@ class OrdersController < ApplicationController
   				logger.debug "ordering product"
   				if order_made==0
   					#puts"creating new order for " + v.name
-  					o=Order.new(:vendor=>v, :client=>current_user.location, :user=>current_user, :last_batch=>true, :order_type_id => 2)
+  					o=Order.new(:vendor=>v, :client=>current_user.location, :user=>current_user, :last_batch=>true, :order_type_id => 2, :created_at=>User.current_user.today)
   					logger.debug "============> o.new=#{o.inspect}"
   					o.save
   					logger.debug "============> o.save=#{o.inspect}"
@@ -234,7 +234,7 @@ class OrdersController < ApplicationController
   # GET /orders/new
   # GET /orders/new.xml
   def new
-    @order = Order.new
+    @order = Order.new(:created_at=>User.current_user.today)
 		@order_type_id = params[:order_type_id] || 0
 		if @order_type_id == 1
 			@order.client_id = 1213
@@ -246,7 +246,7 @@ class OrdersController < ApplicationController
     end
   end
 	def new_purchase
-    @order = Order.new
+    @order = Order.new(:created_at=>User.current_user.today)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -254,7 +254,7 @@ class OrdersController < ApplicationController
     end
   end
   def new_sale
-    @order = Order.new
+    @order = Order.new(:created_at=>User.current_user.today)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -270,7 +270,7 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.xml
   def create
-    @order = Order.new(:order_type_id => params["order"]["order_type_id"])
+    @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
     @order.attributes = params["order"]
     return false if !allowed(@order.order_type_id, 'edit')
     @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
@@ -344,7 +344,7 @@ class OrdersController < ApplicationController
         line.isreceived_str = "No"
     end
     for receipt in @order.receipts
-        receipt.deleted=Date.today
+        receipt.deleted=User.current_user.today
     end
     sucess = @order.save()
 

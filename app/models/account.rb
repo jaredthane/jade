@@ -74,7 +74,6 @@ class Account < ActiveRecord::Base
 	end
 	def simple_balance
 		last=posts.find(:last, :order=>'created_at')
-		logger.debug "last post was:"+ last.id.to_s
 	  if last
 	  	return last.balance
 	  else
@@ -82,7 +81,7 @@ class Account < ActiveRecord::Base
   	end
 	end
 	def transfer_balance_to(account)
-		trans = Trans.create()
+		trans = Trans.create(:created_at=>User.current_user.today)
 		amt=posts.last.balance
 		puts "amt="+amt.to_s
 		if account.modifier==1 and self.modifier==1

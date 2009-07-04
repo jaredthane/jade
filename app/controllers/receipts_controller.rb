@@ -53,7 +53,7 @@ class ReceiptsController < ApplicationController
 		  	username=""
 		  end
 		  if receipt.deleted
-		  	if receipt.created_at.to_date==Date.today
+		  	if receipt.created_at.to_date==receipt.deleted
 		  		value='Anulado'
 		  	else
 		  		value=x.number_to_currency(-receipt.order.grand_total)
@@ -84,7 +84,7 @@ class ReceiptsController < ApplicationController
 		  	username=""
 		  end
 		  if receipt.deleted
-		  	if receipt.created_at.to_date==Date.today
+		  	if receipt.created_at.to_date==receipt.deleted
 		  		value='Anulado'
 		  	else
 		  		value=x.number_to_currency(-receipt.order.grand_total)
@@ -117,7 +117,7 @@ class ReceiptsController < ApplicationController
     end
 	end
 	def create_nul_number
-		o=Order.create(:vendor_id=>User.current_user.location_id, :client_id => 3, :user=> User.current_user, :order_type_id=>1, :receipt_printed=>Date.today, :created_at=>params[:created_at].to_date)
+		o=Order.create(:vendor_id=>User.current_user.location_id, :client_id => 3, :user=> User.current_user, :order_type_id=>1, :receipt_printed=>params[:created_at].to_date, :created_at=>params[:created_at].to_date)
 		r=Receipt.create(:order_id=>o.id, :number =>params[:number].to_i, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{params[:number].to_i}.pdf", :user=> User.current_user, :created_at=>params[:created_at].to_date, :deleted=>params[:created_at].to_date)
 		consumidor_final(r)
   	flash[:info] = "La factura ha sido anulado existosamente"
@@ -126,7 +126,7 @@ class ReceiptsController < ApplicationController
     redirect_to receipts_url
     return false
 	end
-	def generate_receipts(list, start_id=1, created_at=Date.today, nul=false)
+	def generate_receipts(list, start_id=1, created_at=User.current_user.today, nul=false)
 		receipts_made=[]
 		logger.debug "start_id is" + start_id.to_s
 		for order in list
@@ -354,10 +354,14 @@ class ReceiptsController < ApplicationController
   	  subs=Subscription.to_process_client(@client)
 	  elsif params[:sub_id]
   	  sub=Subscription.find(params[:sub_id])
+  	  logger.debug "next order date='" + params[:next_order_date]+"'"
   	  sub.next_order_date=params[:next_order_date]
+  	  logger.debug "next order date=" +sub.next_order_date.to_s
   	  sub.save
+  	  logger.debug "next order date=" +Subscription.find(sub.id).next_order_date.to_s
   	  subs=[sub]
  	  end
+ 	  logger.debug "-------------->" + subs.inspect
   	orders = Subscription.process(subs, params[:num_months].to_i)
 		flash[:info] = "Las suscripciones han sido provisionadas existosamente" if orders.length>0
   	if params[:number] != ''

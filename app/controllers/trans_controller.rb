@@ -44,7 +44,7 @@ class TransController < ApplicationController
     for a in Account.find(:all, :conditions=> 'postable = True')
       @accounts[a.number.to_s+' '+a.name]=a.id
     end
-		@trans = Trans.new()
+		@trans = Trans.new(:created_at=>User.current_user.today)
 		@credit = Post.new(:post_type_id=>1, :trans=>@trans)
 		@debit = Post.new(:post_type_id=>1, :trans=>@trans)
     respond_to do |format|
@@ -70,6 +70,7 @@ class TransController < ApplicationController
   # POST /trans.xml
   def create
     @trans = Trans.new(params[:trans])
+    @trans.created_at=User.current_user.today
 		@trans.add_posts(params[:new_posts])
     respond_to do |format|
       if @trans.save
