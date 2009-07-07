@@ -131,9 +131,9 @@ class ReceiptsController < ApplicationController
 		logger.debug "start_id is" + start_id.to_s
 		for order in list
 			if order.client.entity_type.id == 2
-		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_Receipt
+		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_RECEIPT
 		  else
-		    lines_per_receipt = CREDITO_FISCAL_LINES_PER_Receipt
+		    lines_per_receipt = CREDITO_FISCAL_LINES_PER_RECEIPT
 		  end
 		  lines_on_receipt = 0
 		  for line in order.lines
@@ -175,9 +175,9 @@ class ReceiptsController < ApplicationController
 #  		
 #  	logger.debug "Here too"
 #		  if order.client.entity_type.id == 2
-#		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_Receipt
+#		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_RECEIPT
 #		  else
-#		    lines_per_receipt = CREDITO_FISCAL_LINES_PER_Receipt
+#		    lines_per_receipt = CREDITO_FISCAL_LINES_PER_RECEIPT
 #		  end
 #		  lines_on_receipt = 0
 #		  for line in order.lines
