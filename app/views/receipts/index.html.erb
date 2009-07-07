@@ -44,7 +44,7 @@
         <div class="table_cell_20"><%= link_to receipt.order_id, receipt.order %></div>
         <div class="table_cell_15"><%= link_to "%05d" % receipt.number, receipt %></div>
         <div class="table_cell_15"><%= h number_to_currency(receipt.total_price_with_tax) %></div>
-        <div class="table_cell"><%=link_to receipt.user.login, receipt.user %></div>
+        <div class="table_cell"><%=link_to receipt.user.name, receipt.user %></div>
 	    </div>
 	    <% if receipt.deleted %></div><% end %>
     <% end %>

@@ -118,7 +118,7 @@ class ReceiptsController < ApplicationController
 	end
 	def create_nul_number
 		o=Order.create(:vendor_id=>User.current_user.location_id, :client_id => 3, :user=> User.current_user, :order_type_id=>1, :receipt_printed=>params[:created_at].to_date, :created_at=>params[:created_at].to_date)
-		r=Receipt.create(:order_id=>o.id, :number =>params[:number].to_i, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{params[:number].to_i}.pdf", :user=> User.current_user, :created_at=>params[:created_at].to_date, :deleted=>params[:created_at].to_date)
+		r=Receipt.create(:order_id=>o.id, :number =>params[:number].to_i, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{params[:id].to_i}.pdf", :user=> User.current_user, :created_at=>params[:created_at].to_date, :deleted=>params[:created_at].to_date)
 		consumidor_final(r)
   	flash[:info] = "La factura ha sido anulado existosamente"
   	User.current_user.location.next_receipt_number=params[:number].to_i+1
@@ -131,9 +131,9 @@ class ReceiptsController < ApplicationController
 		logger.debug "start_id is" + start_id.to_s
 		for order in list
 			if order.client.entity_type.id == 2
-		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_RECIEPT
+		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_Receipt
 		  else
-		    lines_per_receipt = CREDITO_FISCAL_LINES_PER_RECIEPT
+		    lines_per_receipt = CREDITO_FISCAL_LINES_PER_Receipt
 		  end
 		  lines_on_receipt = 0
 		  for line in order.lines
@@ -175,9 +175,9 @@ class ReceiptsController < ApplicationController
 #  		
 #  	logger.debug "Here too"
 #		  if order.client.entity_type.id == 2
-#		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_RECIEPT
+#		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_Receipt
 #		  else
-#		    lines_per_receipt = CREDITO_FISCAL_LINES_PER_RECIEPT
+#		    lines_per_receipt = CREDITO_FISCAL_LINES_PER_Receipt
 #		  end
 #		  lines_on_receipt = 0
 #		  for line in order.lines
@@ -425,6 +425,26 @@ class ReceiptsController < ApplicationController
       format.html # new.html.erb
       format.xml  { render :xml => @order }
     end
+  end
+  # GET /products/1/edit
+  def edit
+    @receipt = Receipt.find(params[:id])
+  end
+   
+  def update
+  	if !current_user.has_rights(['Admin','Edit Receipt'])
+			redirect_back_or_default(receipts_url)
+			flash[:error] = "No tiene los derechos suficientes para cambiar facturas"
+			return false 
+  	end
+    @receipt = Receipt.find(params[:id])
+	  if  @receipt.update_attributes(params[:receipt])
+			flash[:notice] = 'Factura ha sido actualizado exitosamente.'
+			redirect_back_or_default(receipts_url)
+			return false 
+		else
+			render :action => "edit"
+		end
   end
   def unpaid
     @receipts = Receipt.search_unpaid(params[:search], params[:page])

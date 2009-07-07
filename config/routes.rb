@@ -16,6 +16,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :prices
   map.sales_representatives_report 'sales_representatives/report', :controller => 'sales_representatives', :action => 'report'
   map.resources :sales_representatives
+  map.resources :receipts
   map.new_history 'entities/:id/new_history', :controller => 'entities', :action => 'new_history', :filter => ' tipo:cliente'
   map.create_history 'entities/:id/create_history', :controller => 'entities', :action => 'create_history', :filter => ' tipo:cliente'
   map.new_post 'posts/new', :controller => 'posts', :action => 'new', :format =>'js'
