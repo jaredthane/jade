@@ -31,20 +31,22 @@
     <div class="table_header_row">
 		  <div class="table_cell_15">Fecha</div>
 	    <div class="table_cell_20">Cliente</div>
-	    <div class="table_cell_20">Venta</div>
+	    <div class="table_cell_10">Venta</div>
 	    <div class="table_cell_15">Factura</div>
 	    <div class="table_cell_15">Total</div>
-	    <div class="table_cell">Usuario</div>
+	    <div class="table_cell_10">Usuario</div>
+	    <div class="table_cell">Acciones</div>
 	  </div>
     <% for receipt in @consumidor_final_today %>
       <div class="table_row">
     	<% if receipt.deleted %><div class="strikethrough"><% end %>
         <div class="table_cell_15"><%= h receipt.created_at.to_date.to_s(:long) %></div>
         <div class="table_cell_20"><%= link_to receipt.order.client.name, receipt.order.client %></div>
-        <div class="table_cell_20"><%= link_to receipt.order_id, receipt.order %></div>
+        <div class="table_cell_10"><%= link_to receipt.order_id, receipt.order %></div>
         <div class="table_cell_15"><%= link_to "%05d" % receipt.number, receipt %></div>
         <div class="table_cell_15"><%= h number_to_currency(receipt.total_price_with_tax) %></div>
-        <div class="table_cell"><%=link_to receipt.user.name, receipt.user %></div>
+        <div class="table_cell_10"><%=link_to receipt.user.name, receipt.user %></div>
+        <div class="table_cell"><%=link_to "Cambiar", edit_receipt_path(receipt) %></div>
 	    </div>
 	    <% if receipt.deleted %></div><% end %>
     <% end %>

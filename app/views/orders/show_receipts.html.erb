@@ -23,6 +23,7 @@
     </div>
     <div class="table_cell">
     	<% if !receipt.deleted %>
+    		<%=link_to "Cambiar", edit_receipt_path(receipt) %><br />
     		<%=link_to "Anular", destroy_receipt_path(receipt), :confirm => 'Esta seguro?' %>
     	<% end %>
     </div>
