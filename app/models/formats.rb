@@ -1,6 +1,6 @@
 module Formats
-  CREDITO_FISCAL_LINES_PER_RECIEPT = 3
-  CONSUMIDOR_FINAL_LINES_PER_RECIEPT = 2
+  CREDITO_FISCAL_LINES_PER_RECEIPT = 3
+  CONSUMIDOR_FINAL_LINES_PER_RECEIPT = 2
   def consumidor_final(receipt)
     @receipt = receipt
 		logger.debug "@receipt ->" + @receipt.inspect
