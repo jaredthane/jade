@@ -21,6 +21,8 @@ class Subscription < ActiveRecord::Base
 	belongs_to :client, :class_name => "Entity", :foreign_key => "client_id"
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => "vendor_id"
 	belongs_to :product
+	validates_presence_of(:client_id, :message => "debe ser valido")
+	validates_presence_of(:product_id, :message => "debe ser valido")
 	belongs_to :last_line, :class_name => "Line", :foreign_key => "last_line_id"
 	def client_name
  		client.name if client

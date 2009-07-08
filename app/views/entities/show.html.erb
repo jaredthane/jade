@@ -23,6 +23,9 @@
 	    <dt><%= link_to 'Nuevo', new_client_path, :class => 'action' %></dt>
 	    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
 	    <dt><%= link_to 'Lista', clients_path, :class => 'action' %></dt>
+	    <% if current_user.has_rights(['Ver Suscripciones']) %>
+	    	<dt><%= link_to 'Anadir Suscripcion', new_subscription_path(:client_id=>@entity.id), :class => 'action' %></dt>
+	    <% end %>
 	    <dt><%= link_to 'Hacer Historia', new_history_path(@entity), :class => 'action' %></dt>
 	    <% if current_user.has_rights(['Ver Suscripciones']) %>
 	    	<dt><%= link_to 'Provisionar', process_client_url(@entity), :class => 'action' %></dt>
