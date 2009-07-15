@@ -16,7 +16,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :prices
   map.sales_representatives_report 'sales_representatives/report', :controller => 'sales_representatives', :action => 'report'
   map.resources :sales_representatives
-  map.resources :receipts
   map.new_history 'entities/:id/new_history', :controller => 'entities', :action => 'new_history', :filter => ' tipo:cliente'
   map.create_history 'entities/:id/create_history', :controller => 'entities', :action => 'create_history', :filter => ' tipo:cliente'
   map.new_post 'posts/new', :controller => 'posts', :action => 'new', :format =>'js'
@@ -35,11 +34,10 @@ ActionController::Routing::Routes.draw do |map|
   map.new_batch_receipts 'subscriptions/new_receipts', :controller => 'receipts', :action => 'new_batch'
   map.create_batch_receipts 'subscriptions/create_receipts', :controller => 'receipts', :action => 'create_batch'
   map.create_receipt 'receipts/:id/create', :controller => 'receipts', :action => 'create'
-  map.receipts 'receipts', :controller => 'receipts', :action => 'index'
-  map.receipt 'receipts/:id/', :controller => 'receipts', :action => 'show'
   map.new_receipt 'receipts/:id/new', :controller => 'receipts', :action => 'new'
   map.fast_process_subscriptions 'subscriptions/fast_process', :controller => 'subscriptions', :action => 'fast_process'
   map.process_client 'clients/:client_id/process', :controller => 'receipts', :action => 'process_subscriptions'
+  map.resources :receipts
   map.process_subscription 'subscriptions/:sub_id/process', :controller => 'receipts', :action => 'process_subscriptions'
   map.resources :subscriptions
 	map.resources :discounts

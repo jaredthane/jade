@@ -43,6 +43,11 @@ class ReceiptsController < ApplicationController
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
 		@receipts = Receipt.search_wo_pages(params[:search],@from, @till)
+		if @receipts.length==0
+			flash[:error] = 'No hay Facturas para las fechas specificadas'
+			redirect_back_or_default(receipts_url)
+			return false
+		end
 		@data=[]
 		total=0
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
@@ -73,6 +78,11 @@ class ReceiptsController < ApplicationController
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
 		@receipts = Receipt.search_wo_pages(params[:search],@from, @till)
+		if @receipts.length==0
+			flash[:error] = 'No hay Facturas para las fechas specificadas'
+			redirect_back_or_default(receipts_url)
+			return false
+		end
 		@data=[]
 		@site=User.current_user.location
 		total=0

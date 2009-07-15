@@ -57,6 +57,11 @@ class PaymentsController < ApplicationController
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
 		@payments = Payment.search(params[:search], params[:page],@from, @till)
+		if @payments.length==0
+			flash[:error] = 'No hay Pagos para las fechas specificadas'
+			redirect_back_or_default(payments_url)
+			return false
+		end
 		order_id=params[:order_id]
 		@data=[]
 		@site=User.current_user.location

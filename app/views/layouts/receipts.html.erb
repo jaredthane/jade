@@ -9,6 +9,10 @@
 ) %>
 
 
+<% if flash[:error] %>
+	<p class="error_message"><%= flash[:error] %></p>
+<% end %>
+
 <p style="color: green"><%= flash[:notice] %></p>
 <h1 class="block"><%= yield :title %></h1>
 <%= yield  %>
