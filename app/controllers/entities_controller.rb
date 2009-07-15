@@ -328,6 +328,7 @@ end
   # POST /entities
   # POST /entities.xml
   def create
+  	params[:entity]
     @entity = Entity.new(params[:entity])
 
     respond_to do |format|

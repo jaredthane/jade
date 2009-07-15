@@ -305,9 +305,9 @@ class Entity < ActiveRecord::Base
   				fields_to_search << "entities.id"
   				condition += " AND entity_type_id = 3"
   			end
-  		elsif word[0..5]=='asesor'
+  		elsif word[0..6]=='asesor:'
   			condition += ' AND entities.user_id=' + (word[7..word.length+1]||0).to_s
-  		elsif word[0..2]=='dia'
+  		elsif word[0..3]=='dia:'
   			condition += ' AND entities.active = TRUE AND entities.subscription_day = ' + (word[4..word.length+1]||0).to_s
   		else
   			search_words << word
@@ -392,11 +392,11 @@ class Entity < ActiveRecord::Base
   				fields_to_search << "entities.id"
   				condition += " AND entity_type_id = 3"
   			end
-  		elsif word[0..5]=='asesor'
+  		elsif word[0..6]=='asesor:'
   			condition += ' AND entities.user_id=' + word[7..word.length+1].to_s if word[7..word.length+1].to_s != ""
-  		elsif word[0..2]=='dia'
+  		elsif word[0..3]=='dia:'
   			condition += ' AND entities.active=TRUE AND entities.subscription_day=' + word[4..word.length+1].to_s if word[4..word.length+1].to_s != ""
-  		elsif word[0..1]=='id'
+  		elsif word[0..2]=='id:'
   			condition += ' AND entities.id=' + word[3..word.length+1].to_s
   		else
   			search_words << word
@@ -484,11 +484,11 @@ class Entity < ActiveRecord::Base
   				fields_to_search << "entities.id"
   				condition += " AND entity_type_id = 3"
   			end
-  		elsif word[0..5]=='asesor'
+  		elsif word[0..6]=='asesor:'
   			condition += ' AND entities.user_id=' + word[7..word.length+1].to_s if word[7..word.length+1].to_s != ""
-  		elsif word[0..2]=='dia'
+  		elsif word[0..3]=='dia:'
   			condition += ' AND entities.active=TRUE AND entities.subscription_day=' + word[4..word.length+1].to_s if word[4..word.length+1].to_s != ""
-  		elsif word[0..1]=='id'
+  		elsif word[0..2]=='id:'
   			condition += ' AND entities.id=' + word[3..word.length+1].to_s
   		else
   			search_words << word

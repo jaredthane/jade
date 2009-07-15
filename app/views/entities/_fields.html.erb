@@ -33,7 +33,7 @@
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>
 			<b>Nacimiento</b><br />
-			<%= calendar_date_select "entity", :birth, :time => false, :year_range => 100.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+			<%= calendar_date_select "entity", :birth, :time => false, :year_range => 100.years.ago..0.years.ago, :size=>20, :class => 'field',:locale=>'es' %>
 		</p>
 	<% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
