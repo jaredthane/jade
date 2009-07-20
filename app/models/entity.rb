@@ -367,23 +367,27 @@ class Entity < ActiveRecord::Base
   				fields_to_search << "entities.name"
   				fields_to_search << "client_group.name"
   				fields_to_search << "entities.id"
+  				fields_to_search << "entities.oldid"
   				fields_to_search << "users.login"
   				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND (entity_type_id = 2 OR entity_type_id = 5)"
   			elsif word[4..word.length+1] == ':credito' or word[4..word.length+1] == ':wholesale_clients'
   				fields_to_search << "entities.name"
   				fields_to_search << "client_group.name"
   				fields_to_search << "entities.id"
+  				fields_to_search << "entities.oldid"
   				fields_to_search << "users.login"
   				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 5"
   			elsif word[4..word.length+1] == ':consumidor' or word[4..word.length+1] == ':end_users'
   				fields_to_search << "entities.name"
   				fields_to_search << "client_group.name"
   				fields_to_search << "entities.id"
+  				fields_to_search << "entities.oldid"
   				fields_to_search << "users.login"
   				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 2"
   			elsif word[4..word.length+1] == ':proveedor' or word[4..word.length+1] == ':vendors' or word[4..word.length+1] == ':proveedores'
   				fields_to_search << "entities.name"
   				fields_to_search << "entities.id"
+  				fields_to_search << "entities.oldid"
   				fields_to_search << "users.login"
   				condition += " AND entity_type_id = 1"
   			elsif word[4..word.length+1] == ':sitio' or word[4..word.length+1] == ':site'
