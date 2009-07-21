@@ -63,10 +63,6 @@
 			<%= f.collection_select(:user_id, get_users, :id, :login) %>
 		</p>
 		<p>
-			<b>Sitio</b><br />
-			<%= f.collection_select(:site_id, get_locations, :id, :name) %>
-		</p>
-		<p>
 			<b>Dia de Procesar Subscripciones</b><br />
 			(Dejar en blanco para no procesarlas o si el cliente no tiene subscripciones.)<br />
 			<%= f.text_field :subscription_day, :class => 'field' %>
