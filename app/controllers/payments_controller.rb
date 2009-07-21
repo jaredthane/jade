@@ -19,6 +19,8 @@ class PaymentsController < ApplicationController
   # GET /payments
   # GET /payments.xml
   def index
+    params[:from]=untranslate_month(params[:from])
+    params[:till]=untranslate_month(params[:till])
   	@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
 		@payments = Payment.search(params[:search], params[:page],@from, @till)
@@ -54,6 +56,8 @@ class PaymentsController < ApplicationController
     end
   end
   def report
+    params[:from]=untranslate_month(params[:from])
+    params[:till]=untranslate_month(params[:till])
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
 		@payments = Payment.search(params[:search], params[:page],@from, @till)

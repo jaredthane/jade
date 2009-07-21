@@ -40,6 +40,9 @@ class ReceiptsController < ApplicationController
     return true  
 	end
 	def list_to_print
+		
+    params[:from]=untranslate_month(params[:from])
+    params[:till]=untranslate_month(params[:till])
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
 		@receipts = Receipt.search_wo_pages(params[:search],@from, @till)
@@ -75,8 +78,12 @@ class ReceiptsController < ApplicationController
 		end
 	end
 	def report
+		params[:from]=untranslate_month(params[:from])
+    params[:till]=untranslate_month(params[:till])
+		
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
+  	
 		@receipts = Receipt.search_wo_pages(params[:search],@from, @till)
 		if @receipts.length==0
 			flash[:error] = 'No hay Facturas para las fechas specificadas'
@@ -127,6 +134,8 @@ class ReceiptsController < ApplicationController
     end
 	end
 	def create_nul_number
+		
+		params[:created_at]=untranslate_month(params[:created_at])
 		o=Order.create(:vendor_id=>User.current_user.location_id, :client_id => 3, :user=> User.current_user, :order_type_id=>1, :receipt_printed=>params[:created_at].to_date, :created_at=>params[:created_at].to_date)
 		r=Receipt.create(:order_id=>o.id, :number =>params[:number].to_i, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{params[:id].to_i}.pdf", :user=> User.current_user, :created_at=>params[:created_at].to_date, :deleted=>params[:created_at].to_date)
 		consumidor_final(r)
@@ -357,6 +366,7 @@ class ReceiptsController < ApplicationController
     return false
   end
 	def process_subscriptions
+	params[:next_order_date]=untranslate_month(params[:next_order_date])
 		if params[:search]
   	  subs=Subscription.to_process(params[:search])
   	elsif params[:client_id]
