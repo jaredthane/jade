@@ -60,7 +60,7 @@ class PaymentsController < ApplicationController
     params[:till]=untranslate_month(params[:till])
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
-		@payments = Payment.search(params[:search], params[:page],@from, @till)
+		@payments = Payment.search_wo_pagination(params[:search],@from, @till)
 		if @payments.length==0
 			flash[:error] = 'No hay Pagos para las fechas specificadas'
 			redirect_back_or_default(payments_url)
