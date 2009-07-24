@@ -6,7 +6,7 @@
 	<dt><%= link_to 'Reporte', payments_report_path(:till=>@till, :from=>@from) %></dt>
 	<dt> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </dt>
 <% end %>
-<% content_for :title do %>Lista de Pagos<% end %>
+<% content_for :title do %>Lista de Facturas para <%= current_user.location.name %><% end %>
 <% form_tag payments_path, :method =>'get', :id => 'date_form' do %>
 	<div class="column2-unit-left">
 		<p>
