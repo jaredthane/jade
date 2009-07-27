@@ -23,11 +23,23 @@ class PaymentsController < ApplicationController
     params[:till]=untranslate_month(params[:till]) if params[:till]
   	@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
-		@payments = Payment.search(params[:search], params[:page],@from, @till)
-		order_id=params[:order_id]
+  	@sites=(params[:sites] ||[current_user.location_id])
+  	order_id=params[:order_id]
+  	if params[:index]=='1'
+			@payments = Payment.search_wo_pagination(params[:search],@from, @till, @sites)
+			if @payments.length==0
+				flash[:error] = 'No hay Pagos para las fechas specificadas'
+				redirect_back_or_default(payments_url)
+				return false
+			end
+			produce_report
+		else
+			@payments = Payment.search(params[:search], params[:page],@from, @till, @sites)
+		end
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @payments }
+      format.pdf { render :template=>'payments/report', :layout => false }
     end
   end
 
@@ -55,19 +67,8 @@ class PaymentsController < ApplicationController
       format.xml  { render :xml => @payment }
     end
   end
-  def report
-    params[:from]=untranslate_month(params[:from])
-    params[:till]=untranslate_month(params[:till])
-		@from=(params[:from] ||Date.today)
-  	@till=(params[:till] ||Date.today)
-		@payments = Payment.search_wo_pagination(params[:search],@from, @till)
-		if @payments.length==0
-			flash[:error] = 'No hay Pagos para las fechas specificadas'
-			redirect_back_or_default(payments_url)
-			return false
-		end
-		order_id=params[:order_id]
-		@data=[]
+  def produce_report
+    @data=[]
 		@site=User.current_user.location
 		total=0
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
@@ -89,9 +90,6 @@ class PaymentsController < ApplicationController
 		@data << ["", "", "Total", x.number_to_currency(total)]
 		prawnto :prawn => { :page_size => 'LETTER'}
 		params[:format] = 'pdf'
-		respond_to do |format|
-		  format.pdf { render :layout => false }
-		end
 	end
 ############################################################################################
 # DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #

@@ -223,15 +223,14 @@ class Receipt < ActiveRecord::Base
 #		         :order => 'receipts.created_at',
 #		         :joins => 'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id = orders.client_id'
 #	end
-	def self.search_credito_fiscal(search, page, from=Date.today, till=Date.today)
-		case User.current_user.location_id
-		when 5,8
-			sites='AND (clients.site_id=5 OR clients.site_id=8 )'
-		when 7,10,11
-			sites='AND (clients.site_id=7 OR clients.site_id=10 OR clients.site_id=11 )'
+	def self.search_credito_fiscal(search, page, from=Date.today, till=Date.today, sites=[User.current_user.location_id])
+		site_string=''
+		for site in sites
+			site_string+= ' OR 'if site_string !=''
+			site_string+=' clients.site_id=' + site.to_s
 		end
   	paginate :per_page => 20, :page => page,
-		         :conditions => ['clients.entity_type_id=5 AND ((date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till) OR (date(receipts.deleted) >=:from AND date(receipts.deleted) <= :till)) AND (orders.id like :search or vendors.name like :search or clients.name like :search)'+sites, {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'),:search => "%#{search}%"}],
+		         :conditions => ['clients.entity_type_id=5 AND ((date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till) OR (date(receipts.deleted) >=:from AND date(receipts.deleted) <= :till)) AND (orders.id like :search or vendors.name like :search or clients.name like :search) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'),:search => "%#{search}%"}],
 		         :order => 'receipts.number',
 		         :joins => 'inner join orders on receipts.order_id = orders.id left join users on users.id=orders.user_id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
 #  	paginate :per_page => 20, :page => page,
@@ -239,15 +238,14 @@ class Receipt < ActiveRecord::Base
 #		         :order => 'receipts.id',
 #		         :joins => 'inner join orders on receipts.order_id = orders.id left join users on users.id=orders.user_id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
 	end
-	def self.search_consumidor_final(search, page, from=Date.today, till=Date.today)
-		case User.current_user.location_id
-		when 5,8
-			sites='AND (clients.site_id=5 OR clients.site_id=8 )'
-		when 7,10,11
-			sites='AND (clients.site_id=7 OR clients.site_id=10 OR clients.site_id=11 )'
+	def self.search_consumidor_final(search, page, from=Date.today, till=Date.today, sites=[User.current_user.location_id])
+		site_string=''
+		for site in sites
+			site_string+= ' OR 'if site_string !=''
+			site_string+=' clients.site_id=' + site.to_s
 		end
   	paginate :per_page => 20, :page => page,
-		         :conditions => ['clients.entity_type_id=2 AND ((date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till) OR (date(receipts.deleted) >=:from AND date(receipts.deleted) <= :till)) AND (orders.id like :search or vendors.name like :search or clients.name like :search)'+sites, {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'),:search => "%#{search}%"}],
+		         :conditions => ['clients.entity_type_id=2 AND ((date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till) OR (date(receipts.deleted) >=:from AND date(receipts.deleted) <= :till)) AND (orders.id like :search or vendors.name like :search or clients.name like :search) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'),:search => "%#{search}%"}],
 		         :order => 'receipts.number',
 		         :joins => 'inner join orders on receipts.order_id = orders.id left join users on users.id=orders.user_id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
 #  	paginate :per_page => 20, :page => page,
@@ -267,15 +265,14 @@ class Receipt < ActiveRecord::Base
 		         :order => 'receipts.number',
 		         :joins => 'inner join orders on receipts.order_id = orders.id left join users on users.id=orders.user_id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
 	end
-	def self.search_wo_pages(search, from=Date.today, till=Date.today)
-		case User.current_user.location_id
-		when 5,8
-			sites='AND (clients.site_id=5 OR clients.site_id=8 )'
-		when 7,10,11
-			sites='AND (clients.site_id=7 OR clients.site_id=10 OR clients.site_id=11 )'
+	def self.search_wo_pages(search, from=Date.today, till=Date.today, sites=[User.current_user.location_id])
+		site_string=''
+		for site in sites
+			site_string+= ' OR 'if site_string !=''
+			site_string+=' clients.site_id=' + site.to_s
 		end
   	find :all,
-		         :conditions => ['((date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till) OR (date(receipts.deleted) >=:from AND date(receipts.deleted) <= :till)) AND (orders.id like :search or vendors.name like :search or clients.name like :search)'+sites, {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'),:search => "%#{search}%"}],
+		         :conditions => ['((date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till) OR (date(receipts.deleted) >=:from AND date(receipts.deleted) <= :till)) AND (orders.id like :search or vendors.name like :search or clients.name like :search) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'),:search => "%#{search}%"}],
 		         :order => 'receipts.number',
 		         :joins => 'inner join orders on receipts.order_id = orders.id left join users on users.id=orders.user_id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
 #  	find :all,

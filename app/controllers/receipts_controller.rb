@@ -45,7 +45,9 @@ class ReceiptsController < ApplicationController
     params[:till]=untranslate_month(params[:till])
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
-		@receipts = Receipt.search_wo_pages(params[:search],@from, @till)
+  	@sites=(params[:sites] ||[current_user.location_id])
+  	logger.debug "POOP POOP POOP POOP POOP POOP POOP POOP"
+		@receipts = Receipt.search_wo_pages(params[:search],@from, @till, @sites)
 		if @receipts.length==0
 			flash[:error] = 'No hay Facturas para las fechas specificadas'
 			redirect_back_or_default(receipts_url)
@@ -77,19 +79,8 @@ class ReceiptsController < ApplicationController
 		  format.pdf { render :layout => false }
 		end
 	end
-	def report
-		params[:from]=untranslate_month(params[:from])
-    params[:till]=untranslate_month(params[:till])
+	def produce_report
 		
-		@from=(params[:from] ||Date.today)
-  	@till=(params[:till] ||Date.today)
-  	
-		@receipts = Receipt.search_wo_pages(params[:search],@from, @till)
-		if @receipts.length==0
-			flash[:error] = 'No hay Facturas para las fechas specificadas'
-			redirect_back_or_default(receipts_url)
-			return false
-		end
 		@data=[]
 		@site=User.current_user.location
 		total=0
@@ -112,15 +103,11 @@ class ReceiptsController < ApplicationController
 		  	total+=receipt.order.grand_total
 		  end
 		  @data << ["%05d" % receipt.number, receipt.created_at.to_date.to_s(:rfc822), receipt.order.client.name, value, username]
-		  
 		end
 		@data << ["---", "---", "---", "---"]
 		@data << ["", "", "Total", x.number_to_currency(total)]
 		prawnto :prawn => { :page_size => 'LETTER'}
 		params[:format] = 'pdf'
-		respond_to do |format|
-		  format.pdf { render :layout => false }
-		end
 	end
 	def new_nul_number
 	  if User.current_user.location
@@ -297,14 +284,25 @@ class ReceiptsController < ApplicationController
 #    end
 #  end
   def index
-  	@from=(params[:from] ||Date.today)
-  	@till=(params[:till] ||Date.today)
-		@credito_fiscal_today = Receipt.search_credito_fiscal(params[:search],params[:page],@from, @till)
-		@consumidor_final_today = Receipt.search_consumidor_final(params[:search],params[:page],@from, @till)
-	
+		@from=untranslate_month((params[:from] ||Date.today.to_s(:long)))
+    @till=untranslate_month((params[:till] ||Date.today.to_s(:long)))
+  	@sites=(params[:sites] ||[current_user.location_id])
+		if params[:index]=='1'
+			@receipts = Receipt.search_wo_pages(params[:search],@from, @till, @sites)
+			if @receipts.length==0
+				flash[:error] = 'No hay Facturas para las fechas specificadas'
+				redirect_back_or_default(receipts_url)
+				return false
+			end
+			produce_report
+		else
+			@credito_fiscal_today = Receipt.search_credito_fiscal(params[:search],params[:page],@from, @till, @sites)
+			@consumidor_final_today = Receipt.search_consumidor_final(params[:search],params[:page],@from, @till, @sites)
+		end
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @roles }
+      format.pdf { render :template=>'receipts/report', :layout => false }
     end
   end
   def new
