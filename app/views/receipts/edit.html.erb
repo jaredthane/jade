@@ -41,6 +41,10 @@
 			<b>Fecha</b><br />
 			<%= calendar_date_select "receipt", :created_at, :time => false, :year_range => 100.years.ago..0.years.ago, :size=>20, :class => 'field' %>
 		</p>
+		<p>
+			<b>Anulado</b><br />
+			<%= calendar_date_select "receipt", :deleted, :time => false, :year_range => 100.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+		</p>
 	</div>
 	<hr class="clear-contentunit" />
 	

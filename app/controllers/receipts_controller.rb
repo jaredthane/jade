@@ -458,7 +458,7 @@ class ReceiptsController < ApplicationController
     @receipt = Receipt.find(params[:id])
 	  if  @receipt.update_attributes(params[:receipt])
 			flash[:notice] = 'Factura ha sido actualizado exitosamente.'
-			redirect_back_or_default(receipts_url)
+			redirect_to(show_receipts_url(@receipt.order))
 			return false 
 		else
 			render :action => "edit"
