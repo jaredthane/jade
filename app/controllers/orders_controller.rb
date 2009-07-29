@@ -345,6 +345,7 @@ class OrdersController < ApplicationController
     end
     for receipt in @order.receipts
         receipt.deleted=User.current_user.today
+        receipt.save
     end
     sucess = @order.save()
 
@@ -352,11 +353,11 @@ class OrdersController < ApplicationController
     respond_to do |format|
         if sucess
           flash[:notice] = 'Pedido ha sido marcado como borrado exitosamente.'
-          format.html { redirect_to(orders_url) }
+          format.html { redirect_to(@order) }
           format.xml  { head :ok }
         else
-            redirect_back_or_default('/orders')
-		    flash[:error] = "No se pudo anular el pedido"
+            redirect_to(@order)
+		    	flash[:error] = "No se pudo anular el pedido"
 		    return false
         end
     end
