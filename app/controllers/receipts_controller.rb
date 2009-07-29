@@ -493,7 +493,7 @@ class ReceiptsController < ApplicationController
   end
   def destroy
     @receipt = Receipt.find(params[:id])
-    @receipt.deleted=Date.today
+    @receipt.deleted=User.current_user.today
     @receipt.save
 		flash[:info] = "La factura han sido anulado"
     respond_to do |format|
