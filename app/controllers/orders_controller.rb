@@ -362,4 +362,15 @@ class OrdersController < ApplicationController
         end
     end
   end
+  
+  def erase
+    @order = Order.find(params[:id])
+    if @order.destroy
+			flash[:info] = "El pedido ha sido borrado existosamente" 
+			redirect_to(orders_url)
+		else
+			flash[:info] = "No se pudo borrar la pedido" 
+			redirect_to(@order)
+		end
+  end
 end

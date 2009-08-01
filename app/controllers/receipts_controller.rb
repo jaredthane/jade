@@ -495,7 +495,7 @@ class ReceiptsController < ApplicationController
     @receipt = Receipt.find(params[:id])
     @order=@receipt.order
     if @receipt.destroy
-			flash[:info] = "factura ha sido borrado existosamente" 
+			flash[:info] = "Factura ha sido borrado existosamente" 
 		else
 			flash[:info] = "No se pudo borrar la factura" 
 		end
