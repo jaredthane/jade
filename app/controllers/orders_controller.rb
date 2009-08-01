@@ -365,12 +365,19 @@ class OrdersController < ApplicationController
   
   def erase
     @order = Order.find(params[:id])
-    if @order.destroy
-			flash[:info] = "El pedido ha sido borrado existosamente" 
-			redirect_to(orders_url)
-		else
+    errors=false
+    for receipt in @order.receipts
+    	errors=true if !receipt.destroy
+    end
+    if !errors
+    	errors=true if !@order.destroy
+    end
+    if errors
 			flash[:info] = "No se pudo borrar la pedido" 
 			redirect_to(@order)
+		else
+			flash[:info] = "El pedido ha sido borrado existosamente" 
+			redirect_to(orders_url)
 		end
   end
 end
