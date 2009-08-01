@@ -6,6 +6,7 @@
 
 <% content_for :actions do %>
   <dt><%= link_to 'Cancelar', @receipt.order %></dt>
+  <dt><%= link_to 'Borrar', erase_receipt_url(@receipt) %></dt>
   <dt><%= link_to 'Remover', @receipt, :confirm => 'Esta seguro?', :method => :delete %></dt>
   <dt><%= link_to 'Lista', receipts_path %></dt>
   <dt><%= link_to_function 'Guardar', 'submit("receipt_form")' %></dt>

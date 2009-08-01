@@ -42,6 +42,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :subscriptions
 	map.resources :discounts
 	map.resources :combos
+	map.erase_receipt 'receipts/:id/erase', :controller => 'receipts', :action => 'erase'
 	map.post_physical_counts 'physical_counts/:id/post', :controller => 'physical_counts', :action => 'post'
 	map.resources :physical_counts, :order_type_id => 5
 	map.new_user_role 'user/new_role', :controller => 'users', :action => 'new_role', :format =>'js'

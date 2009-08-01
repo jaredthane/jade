@@ -491,6 +491,19 @@ class ReceiptsController < ApplicationController
       return false
     end
   end
+  def erase
+    @receipt = Receipt.find(params[:id])
+    @order=@receipt.order
+    if @receipt.destroy
+			flash[:info] = "factura ha sido borrado existosamente" 
+		else
+			flash[:info] = "No se pudo borrar la factura" 
+		end
+    respond_to do |format|
+      format.html { redirect_to(@order) }
+      format.xml  { head :ok }
+    end
+  end
   def destroy
     @receipt = Receipt.find(params[:id])
     @receipt.deleted=User.current_user.today
