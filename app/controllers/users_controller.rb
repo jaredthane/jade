@@ -135,7 +135,8 @@ class UsersController < ApplicationController
 			redirect_back_or_default('/users')
 			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
 		end
-		params[:today]=untranslate_month(params[:user][:today])
+		params[:user][:today]=untranslate_month(params[:user][:today])
+		logger.debug "Month has been translated to:" + params[:user][:today]
 		to_delete=[]
 		#Update existing reqs
     for l in @user.roles_users

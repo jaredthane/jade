@@ -64,7 +64,9 @@ class Post < ActiveRecord::Base
 		end
 		# *************** THIS SHOULD BE CHANGED TO A MYSQL UPDATE QUERY *******************************
 		for post in Post.find(:all, :conditions=> "account_id= " + self.account_id.to_s + " AND created_at>'" + self.trans.created_at.to_s(:short) + "'")
+			logger.debug 'POST WAS=' +post.value.to_s + ' * POST_TYPE=' + post.post_type_id.to_s + ' * MODIFIER='+post.account.modifier.to_s + '(BALANCE=' + post.balance + ')'
 			post.balance=post.balance + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0) * mod
+			logger.debug 'New POST=' + post.value.to_s + ' * POST_TYPE=' + post.post_type_id.to_s + ' * MODIFIER='+post.account.modifier.to_s + '(BALANCE=' + post.balance + ')'
 			post.save
 		end
 	end
