@@ -51,7 +51,7 @@ module ApplicationHelper
     @states = State.find(:all, :order => "name")
   end
   def get_accounts
-    @accounts = Account.find(:all, :order => "name")
+    @accounts = Account.find(:all, :order => "number")
   end
   def get_users
     @users = User.find(:all, :order => "login")
