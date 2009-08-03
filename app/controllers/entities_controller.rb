@@ -346,7 +346,7 @@ end
           logger.debug " made the price groups"
           for pg in @entity.price_groups
           	for p in Product.all
-          		Price.create(:price_group=pg, :product=>p, :fixed=>0, :relative=>0, :available=> false)
+          		Price.create(:price_group=>pg, :product=>p, :fixed=>0, :relative=>0, :available=> false)
           	end
           end
 		    end    	
