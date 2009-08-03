@@ -386,7 +386,10 @@ end
   def destroy
     @entity = Entity.find(params[:id])
     @entity.destroy
-
+		#Need to destroy prices and price_groups when deleting a site
+		#should delete all of a clients orders also maybe with a warning
+		#delete all of a vendors products?
+		
     respond_to do |format|
       format.html { redirect_to(entities_url) }
       format.xml  { head :ok }

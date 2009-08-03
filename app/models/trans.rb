@@ -23,12 +23,12 @@ class Trans < ActiveRecord::Base
 	belongs_to :order
 	belongs_to :user
 	after_save :save_posts
-#	def add_posts(posts)
-#		for post in posts
-#			p=Post.new(post)
-#			self.posts << p
-#		end
-#	end
+	def add_posts(posts)
+		for post in posts
+			p=Post.new(post)
+			self.posts << p
+		end
+	end
 	def save_posts
 		#need to make sure they are balanced
 		# and that no account is repeated
