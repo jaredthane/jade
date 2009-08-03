@@ -18,7 +18,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class Price < ActiveRecord::Base
-	belongs_to :price_groups
+	belongs_to :price_group
 	belongs_to :product
 	def available_str
 		logger.debug "self.available=#{self.available.to_s}"
