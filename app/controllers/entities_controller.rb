@@ -365,7 +365,7 @@ end
   # PUT /entities/1.xml
   def update
     @entity = Entity.find(params[:id])
-    params[:entity][:birth]=untranslate_month(params[:entity][:birth])
+    params[:entity][:birth]=untranslate_month(params[:entity][:birth]) if params[:entity][:birth]
     respond_to do |format|
       if @entity.update_attributes(params[:entity])
         logger.debug "entity_type="+ @entity.entity_type_id.to_s
