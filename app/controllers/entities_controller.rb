@@ -328,7 +328,7 @@ end
   # POST /entities
   # POST /entities.xml
   def create
-    params[:entity][:birth]=untranslate_month(params[:entity][:birth])
+    params[:entity][:birth]=untranslate_month(params[:entity][:birth]) if params[:entity][:birth]
     @entity = Entity.new(params[:entity])
     respond_to do |format|
       if @entity.save
