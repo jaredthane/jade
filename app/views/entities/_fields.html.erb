@@ -18,11 +18,11 @@
 	<% if @entity.entity_type_id == 3 %>
 	  <p>
 		  <b>Cuenta de Efectivo</b><br />
-			<%= f.collection_select(:cash_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+			<%= f.collection_select(:cash_account_id, get_accounts, :id, :number, {:include_blank => true}) %>
 		</p>
 		<p>
 		  <b>Cuenta de Inventario</b><br />
-			<%= f.collection_select(:inventory_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+			<%= f.collection_select(:inventory_account_id, get_accounts, :id, :number, {:include_blank => true}) %>
 		</p>
 		<p>
 			<b>Proximo Numero de Factura</b><br />
@@ -85,15 +85,15 @@
 	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
 		  <p>
 		    <b>Cuenta de Ingresos</b><br />
-			  <%= f.collection_select(:revenue_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+			  <%= f.collection_select(:revenue_account_id, get_accounts, :id, :number, {:include_blank => true}) %>
 		  </p>
 		  <p>
 		    <b>Cuenta de Gastos</b><br />
-			  <%= f.collection_select(:expense_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+			  <%= f.collection_select(:expense_account_id, get_accounts, :id, :number, {:include_blank => true}) %>
 		  </p>
 		  <p>
 		    <b>Cuenta de Impuestos</b><br />
-			  <%= f.collection_select(:tax_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+			  <%= f.collection_select(:tax_account_id, get_accounts, :id, :number, {:include_blank => true}) %>
 		  </p>
 		<% end %>
   <% end %>
@@ -105,11 +105,11 @@
         <% else %>
         	<b>Cuenta del Proveedor</b><br />
         <% end %>
-	      <%= f.collection_select(:cash_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+	      <%= f.collection_select(:cash_account_id, get_accounts, :id, :number, {:include_blank => true}) %>
       </p>
 	    <p>
         <b>Cuenta para Recibir Pagos</b><br />
-	      <%= f.collection_select(:revenue_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+	      <%= f.collection_select(:revenue_account_id, get_accounts, :id, :number, {:include_blank => true}) %>
       </p>
     <% end %>
 	<p>
