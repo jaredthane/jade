@@ -340,10 +340,15 @@ end
 		    		i=Inventory.create(:entity=>@entity, :product=>p, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
 		    	end  
 		    	logger.debug "made the inventories"
-            	for pgn in PriceGroupName.all
-                    pg=PriceGroup.create(:price_group_name=>pgn, :entity=>@entity)
-                end  
-                logger.debug " made the price groups"
+        	for pgn in PriceGroupName.all
+            pg=PriceGroup.create(:price_group_name=>pgn, :entity=>@entity)
+          end  
+          logger.debug " made the price groups"
+          for pg in @entity.price_groups
+          	for p in Product.all
+          		Price.create(:price_group=pg, :product=>p, :fixed=>0, :relative=>0, :available=> false)
+          	end
+          end
 		    end    	
         flash[:notice] = 'Entidad ha sido creado exitosamente.'
         format.html { redirect_to(@entity) }
