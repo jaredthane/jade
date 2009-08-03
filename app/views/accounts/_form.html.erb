@@ -39,7 +39,7 @@
 		</p>
 		<p>
 		  <b>Entidad</b><br />
-			<%= f.collection_select(:entity_id, get_entities, :id, :name, {:include_blank => true}) %>
+			<%= f.collection_select(:entity_id, get_entities, :id, :number, {:include_blank => true}) %>
 		</p>
     <p>
 			<%= f.check_box :postable, :class => 'field' %><b> Se puede postar transacciones directamente a esta cuenta?</b>

@@ -12,7 +12,7 @@
     <div class="table_cell_20">Numero</div>
     <div class="table_cell_20">Nombre</div>
     <div class="table_cell_20">Rama</div>
-    <div class="table_cell_20">Entidad</div>
+    <div class="table_cell_20">Tipo</div>
     <div class="table_cell">Balance</div>
   </div>
 
@@ -26,8 +26,10 @@
       <% end %>
     </div>
   	<div class="table_cell_20">
-  		<% if account.entity %>
-      	<%= link_to account.entity.name, account.entity %>
+  		<% if account.modifier=1 %>
+  			<%= h 'Debito' %>
+  		<% else %>
+  			<%= h 'Credito' %>
       <% end %>
   	</div>
   	<div class="table_cell"><%= number_to_currency(account.balance) %></div>
