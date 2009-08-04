@@ -42,7 +42,8 @@ class UsersController < ApplicationController
     # request forgery protection.
     # uncomment at your own risk
     # reset_session
-    params[:today]=untranslate_month(params[:today])
+    params[:today]=untranslate_month(params[:today]) if params[:today]
+    
     @user = User.new(params[:user])
     @user.location= current_user.location
     @user.default_received = false

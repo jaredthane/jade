@@ -17,8 +17,8 @@
 
 class SalesRepresentativesController < ApplicationController
 	def index
-		params[:from]=untranslate_month(params[:from])
-		params[:till]=untranslate_month(params[:till])
+		params[:from]=untranslate_month(params[:from]) if params[:from]
+		params[:till]=untranslate_month(params[:till]) if params[:till]
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
   	@site=User.current_user.location
@@ -30,6 +30,8 @@ class SalesRepresentativesController < ApplicationController
   end
 
 	def report
+		params[:from]=untranslate_month(params[:from]) if params[:from]
+		params[:till]=untranslate_month(params[:till]) if params[:till]
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
   	@site=User.current_user.location
