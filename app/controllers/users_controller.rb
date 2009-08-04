@@ -42,7 +42,7 @@ class UsersController < ApplicationController
     # request forgery protection.
     # uncomment at your own risk
     # reset_session
-    params[:today]=untranslate_month(params[:today]) if params[:today]
+    params[:user][:today]=untranslate_month(params[:user][:today]) if params[:user][:today]
     
     @user = User.new(params[:user])
     @user.location= current_user.location
@@ -136,7 +136,7 @@ class UsersController < ApplicationController
 			redirect_back_or_default('/users')
 			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
 		end
-		params[:user][:today]=untranslate_month(params[:user][:today])
+		params[:user][:today]=untranslate_month(params[:user][:today]) if params[:user][:today]
 		logger.debug "Month has been translated to:" + params[:user][:today]
 		to_delete=[]
 		#Update existing reqs
