@@ -41,7 +41,6 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :receipts
   map.process_subscription 'subscriptions/:sub_id/process', :controller => 'receipts', :action => 'process_subscriptions'
   map.resources :subscriptions
->>>>>>> unstable:config/routes.rb
 	map.resources :discounts
 	map.resources :combos
 	map.erase_order 'orders/:id/erase', :controller => 'orders', :action => 'erase'
