@@ -1,0 +1,26 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :title do %>Nueva Factura para <%= @order.order_type.name %> #<%= @order.id %><% end %>
+<% content_for :actions do %>
+  <dt><%= link_to 'Cancelar', @order %></dt>
+  <dt><%= link_to_function 'Generar', 'submit("receipt_form")' %></dt>
+<% end %>
+ 
+<%= error_messages_for :receipt %>
+ 
+<% form_tag create_receipt_path, :method =>'post', :id => 'receipt_form' do %>
+<br />
+  <div class="column2-unit-left">
+    <p>
+      <b>Cual será el primer numero de factura?</b><br />
+    	<%= text_field_tag :number, @next, :class => 'field'%>
+    </p>
+  </div>
+  <div class="column2-unit-right">
+    <p>
+      <b>Fecha:</b><br />
+    	<%= calendar_date_select_tag "created_at", User.current_user.today, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+    </p>
+  </div>
+<% end %>

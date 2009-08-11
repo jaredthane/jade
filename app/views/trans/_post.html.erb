@@ -1,0 +1,15 @@
+<div class="post">
+	<% @post= post %>
+	<%= error_messages_for :post, :class => "postErrorExplanation",:id => "postErrorExplanation", :object_name => "", :header_message => "", :message => "" %>
+	<% prefix = post.new_record? ? 'new_posts' : 'existing_posts' %>
+  <% fields_for "#{prefix}[]", post do |post_form| %>
+		<div class="table_row">
+				<div class="table_cell_25"><%= post_form.collection_select(:account_id, get_accounts, :id, :number) %></div>
+				
+				<div class="table_cell_25"><%= post_form.select( :post_type_id, { "Debito" => "1", "Credito" => "-1"}) %></div>
+
+				<div class="table_cell_25"><%= post_form.text_field number_to_currency(:value), :class => 'field' %></div>
+				<div class="table_cell"><%= link_to_function "Remover", "$(this).up().up().remove()" %></div>
+		</div>
+  <% end %>
+</div>

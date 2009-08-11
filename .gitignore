@@ -3,3 +3,7 @@ tmp/**/*
 config/database.yml
 *~
 **/*~
+*.pdf
+consumidor_final.pdf.prawn
+credito_fiscal.pdf.prawn
+formats.rb

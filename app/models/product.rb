@@ -32,6 +32,8 @@ class Product < ActiveRecord::Base
   has_many :warranties
   has_many :inventories
 	has_many :lines
+	belongs_to :revenue_account, :class_name => "Account", :foreign_key => 'revenue_account_id'
+
 	belongs_to :product_category
 	has_many :movements
 	has_many :serialized_products
@@ -114,42 +116,47 @@ class Product < ActiveRecord::Base
 		logger.debug "self.quantity(location_id)=" + self.quantity(location_id).to_s
 		# puts moves.inspect
 		stock = self.quantity(location_id)
-		# puts "stock" + stock.to_s
-		# puts "moves.length" + moves.length.to_s
+		logger.debug "stock" + stock.to_s
+		logger.debug "moves.length=" + moves.length.to_s
 		if (stock == 0) or (moves.length == 0)
 		    return self.default_cost
 		end
-		items_counted = 0
-		movement_counter = 0
+		items_to_count = stock
 		totalcost=0
-		taken=0
-		while	(moves[movement_counter]) do
-			# puts moves[movement_counter].id
-			# puts "stock" + stock.inspect
-			# puts "items_counted" + items_counted.inspect
-			## puts "moves[movement_counter].quantity" + moves[movement_counter].quantity
-			# puts "moves[movement_counter][quantity]" + moves[movement_counter]["quantity"].to_s
-			# puts "stock-items_counted" + (stock-items_counted).inspect
-			# puts "[stock-items_counted, moves[movement_counter].quantity].min=" + [stock-items_counted, moves[movement_counter]["quantity"].to_i].min.inspect
-            # puts "id:"+moves[movement_counter]["id"].to_s
-			# puts moves[movement_counter]["quantity"].to_i
-			# puts stock
-			# puts items_counted
-			take = [stock-items_counted, moves[movement_counter]["quantity"].to_i].min
-			l=Line.find_by_id(moves[movement_counter]["line_id"].to_i)
-			if l
-#				logger.debug "take=#{take.to_s}"
-#				logger.debug "l.price=#{l.price.to_s}"
-				totalcost += (l.price||0)*(take||0)
-#				logger.debug items_counted.inspect
-				items_counted = items_counted + take
-			end
-			movement_counter = movement_counter + 1
+		for m in moves
+		  take = [items_to_count, m["quantity"].to_i].min
+		  totalcost += (m["value"].to_i || 0) /(m["quantity"].to_i || 0) * (take || 0)
+		  items_to_count -= take
+		  break if items_to_count < 1
 		end
-		if items_counted > 0
-			# puts "totalcost=#{totalcost.to_s}"
-			# puts "items_counted=#{items_counted.to_s}"
-			return totalcost/items_counted
+#		while	(moves[movement_counter]) do
+#			logger.debug moves[movement_counter].inspect
+#			logger.debug "stock" + stock.inspect
+#			logger.debug "items_counted" + items_counted.inspect
+#			## puts "moves[movement_counter].quantity" + moves[movement_counter].quantity
+#			logger.debug "moves[movement_counter][quantity]" + moves[movement_counter]["quantity"].to_s
+#			logger.debug "stock-items_counted" + (stock-items_counted).inspect
+#			logger.debug "[stock-items_counted, moves[movement_counter].quantity].min=" + [stock-items_counted, moves[movement_counter]["quantity"].to_i].min.inspect
+#      logger.debug "id:"+moves[movement_counter]["id"].to_s
+#			logger.debug moves[movement_counter]["quantity"].to_i
+#			logger.debug stock
+#			logger.debug items_counted
+#			take = [stock-items_counted, moves[movement_counter]["quantity"].to_i].min
+#			l=Line.find(moves[movement_counter]["line_id"].to_i)
+#			logger.debug "take" + take.to_s
+#			logger.debug "couldnt find line#" +  moves[movement_counter]["line_id"].to_i.to_s if !l
+#			logger.debug "take=#{take.to_s}"
+#			logger.debug "m.value=#{m.value.to_s}"
+#			totalcost += (l.price||0)*(take||0)
+#			logger.debug items_counted.inspect
+#			items_counted = items_counted + take
+#			end
+#			movement_counter = movement_counter + 1
+#		end
+		if stock > 0
+			logger.debug "totalcost=#{totalcost.to_s}"
+			logger.debug "stock=#{stock.to_s}"
+			return totalcost/stock
 		else
 			return 0
 		end
@@ -249,7 +256,7 @@ class Product < ActiveRecord::Base
 				logger.debug "checking a req"
 				sum += req.price(price_group)
 			end
-			logger.debug "sum=#{sum.to_s}"
+			logger.debug "sum=#{self.id.to_s}"
 			if self.product_type_id == 2
 				price = (sum * relative_price) - static_price
 			else
@@ -259,7 +266,9 @@ class Product < ActiveRecord::Base
 		elsif (self.product_type_id == 3 and !final)
 			return (static_price||0)
 		else
+			logger.debug "getting price for "
 			priceobj = price_group.prices.find_by_product_id(self.id)
+			priceobj = PriceGroup.find(User.current_user.location.price_group_id).prices.find_by_product_id(self.id) if !priceobj
 			relative_price = priceobj.relative
 			static_price = priceobj.fixed
 			price = (cost(price_group.entity)||0) * (relative_price||0) + (static_price||0)

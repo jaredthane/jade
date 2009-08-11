@@ -18,8 +18,8 @@
 # Likewise, all the methods added will be available for all controllers.
 # Methods added to this helper will be available to all templates in the application.
 module ApplicationHelper
-	def get_locations
-    @locations = Location.find(:all, :order => "name")
+	def get_sites
+    @clients = Entity.find(:all, :order => "name", :conditions =>"entity_type_id=3")
   end
   def get_entity_types
     @entity_types = EntityType.find(:all, :order => "name")
@@ -49,6 +49,9 @@ module ApplicationHelper
   end
   def get_states
     @states = State.find(:all, :order => "name")
+  end
+  def get_accounts
+    @accounts = Account.find(:all, :order => "number")
   end
   def get_users
     @users = User.find(:all, :order => "login")
@@ -89,7 +92,7 @@ module ApplicationHelper
     @discounts = product_type.products.find(:all, :order => "name")
   end
   def get_entities
-	  @entity_types = Entity.find(:all, :order => "name")
+	  @entity = Entity.find(:all, :order => "name")
   end
   def get_clients
     @clients = entity_type.entities.find(:all, :order => "name", :conditions =>"entity_type_id=2 OR entity_type_id=5")

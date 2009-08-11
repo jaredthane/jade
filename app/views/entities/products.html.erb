@@ -1,4 +1,9 @@
 
+<% if current_user.has_rights(['Suscripciones']) %>
+	<% content_for :more_search do %>
+		<%= text_field_tag :sub_day, params[:sub_day], :class => 'dayfield'%>
+	<% end %>
+<% end %>
 
 
 <div class="column2-unit-left">

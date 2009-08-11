@@ -21,6 +21,26 @@ class Warranty < ActiveRecord::Base
 	has_many :lines
 	belongs_to :product
 	
+	###################################################################################
+	# Returns the upc of the product requested
+	###################################################################################
+	def product_name
+ 	 product.name if product
+	end
+	
+	###################################################################################
+	# Sets the product requested by the upc provided
+	###################################################################################
+	def product_name=(name)
+		if !name.blank?		
+			prod = Product.find_by_name(name)
+			if prod != nil
+				self.product_id = prod.id
+			end
+		end
+	end
+	
+	
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['(products.name like :search or products.upc like :search)', {:search => "%#{search}%"}],

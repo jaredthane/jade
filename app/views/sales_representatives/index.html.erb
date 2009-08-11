@@ -1,0 +1,47 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :title do %>Lista de Asesores en <%= current_user.location.name %><% end %>
+<% content_for :actions do %>
+	<dt><%= link_to_function 'Actualizar', 'submit("date_form")', :class => 'action' %></dt>
+	<dt><%= link_to 'Reporte', sales_representatives_report_path(:till=>@till, :from=>@from) %></dt>
+	<dt> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </dt>
+<% end %>
+<% form_tag sales_representatives_path, :method =>'get', :id => 'date_form' do %>
+	<div class="column2-unit-left">
+	  <p>
+	  	<b>Desde</b><br />
+			<%= calendar_date_select_tag "from", @from, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+	  </p>
+	</div>
+	<div class="column2-unit-right">
+		<p>
+			<b>Hasta</b><br />
+			<%= calendar_date_select_tag "till", @till, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+		</p>
+	</div>
+<% end %>
+<hr class="clear-contentunit" />
+<div>
+  <div class="table_header_row">
+	  <div class="table_cell_20">Nombre</div>
+    <div class="table_cell_15">Saldo Anterior</div>
+    <div class="table_cell_10">Facturas</div>
+    <div class="table_cell_15">Saldo Provisionado</div>
+    <div class="table_cell_10">Pagos</div>
+    <div class="table_cell_15">Saldo Cobrado</div>
+    <div class="table_cell">Saldo Final</div>
+  </div>
+  <% for rep in @reps %>
+    <div class="table_row">
+      <div class="table_cell_20"><%= link_to rep[:user].name, rep[:user] %></div>
+      <div class="table_cell_15"><%= h number_to_currency(rep[:previous_balance]) %></div>
+      <div class="table_cell_10"><%= h rep[:num_receipts] %></div>
+      <div class="table_cell_15"><%= h number_to_currency(rep[:revenue]) %></div>
+      <div class="table_cell_10"><%= h rep[:num_payments] %></div>
+      <div class="table_cell_15"><%= h number_to_currency(rep[:cash_received]) %></div>
+      <div class="table_cell"><%= h number_to_currency(rep[:final_balance]) %></div>
+    </div>
+  <% end %>
+</div>
+

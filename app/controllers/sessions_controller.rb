@@ -28,13 +28,16 @@ class SessionsController < ApplicationController
     self.current_user = User.authenticate(params[:login], params[:password])
     if logged_in?
       if params[:remember_me] == "1"
-        current_user.remember_me unless current_user.remember_token?
+        self.current_user.remember_me unless current_user.remember_token?
         cookies[:auth_token] = { :value => self.current_user.remember_token , :expires => self.current_user.remember_token_expires_at }
       end
       redirect_back_or_default('/products')
       flash[:notice] = "Se ha engresado exitosamente"
+      
+      self.current_user.date=Date.today
+      self.current_user.save
     else
-	    flash.now[:error] = "Authenticacion Fallo"
+	    flash.now[:error] = "No se pudo engresar con esos datos. Favor de revisar su nombre de usuario y la clave."
       render :action => 'new'
     end
   end

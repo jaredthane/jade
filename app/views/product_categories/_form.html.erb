@@ -1,0 +1,37 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :title do %><%= heading %><% end %>
+<% content_for :actions do %>
+<% if mode == 'edit' %>
+		<dt><%= link_to 'Ver', @category, :class => 'action' %></dt>
+		<dt><%= link_to 'Remover', @category, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+	<% end %>
+	<dt><%= link_to 'Lista', product_categories_path, :class => 'action' %></dt>
+	<dt><%= link_to_function 'Guardar', 'submit("category_form")', :class => 'action' %></dt>
+<% end %>
+
+<%= error_messages_for :category %>
+
+<% form_for(@category, :html => {:id => 'category_form' }) do |f| %>
+
+	<div class="column2-unit-left">
+		<p>
+			<b>Nombre</b>
+			<%= f.text_field :name, :class => 'field' %>
+		</p>
+	</div>
+	<div class="column2-unit-right">
+	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+			<p>
+				<b>Cuenta de Ingresos</b><br />
+				Si desea, puede especificar una cuenta en que poner los ingresos de productos en esta categoria.<br />
+				<%= f.collection_select(:revenue_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+			</p>
+		<% end %>
+
+	</div>
+	<hr class="clear-contentunit" />
+	
+<% end %>
+

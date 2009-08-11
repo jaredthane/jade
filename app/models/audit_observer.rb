@@ -18,10 +18,18 @@ class AuditObserver < ActiveRecord::Observer
   observe :product, :order, :line, :entity, :inventory, :payment, :price, :price_group, :price_group_name, :product_category, :product_type, :requirement, :role, :serialized_product, :unit, :user, :warranty, :entity_type, :movement, :movement_type, :payment_method
   
   def after_update(record)
-    Audit.info(User.current_user.login + " modifico: " + record.inspect)
+  	if User.current_user
+    	Audit.info(User.current_user.login + " modifico: " + record.inspect)
+    else
+    	Audit.info("Usuario desconocido modifico: " + record.inspect)
+    end
   end
   def after_create(record)
-    Audit.info(User.current_user.login + " creo: " + record.inspect)
+  	if User.current_user
+    	Audit.info(User.current_user.login + " creo: " + record.inspect)
+    else
+    	Audit.info("Usuario desconocido creo: " + record.inspect)
+    end
   end
   def before_destroy(record)
     Audit.info(User.current_user.login + " destruyo: " + record.inspect)

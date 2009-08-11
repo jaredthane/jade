@@ -4,10 +4,14 @@
 	:use_full_path => true, 
 	:locals => {
 		:page_title => 'Facturas',
-		:search_path => receipts_path
+		:search_path => unpaid_receipts_path
 	}
 ) %>
 
+
+<% if flash[:error] %>
+	<p class="error_message"><%= flash[:error] %></p>
+<% end %>
 
 <p style="color: green"><%= flash[:notice] %></p>
 <h1 class="block"><%= yield :title %></h1>

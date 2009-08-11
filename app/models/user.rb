@@ -27,23 +27,39 @@ class User < ActiveRecord::Base
   attr_accessor :password
 	has_many :movements
 	has_many :orders
+	belongs_to :cash_account, :class_name => "Account", :foreign_key => 'cash_account_id'
+	belongs_to :revenue_account, :class_name => "Account", :foreign_key => 'revenue_account_id'
+	belongs_to :personal_account, :class_name => "Account", :foreign_key => 'personal_account_id'
+	has_many :receipts
 	has_many :roles_users
 	has_many :roles, :through => :roles_users
 	has_and_belongs_to_many :roles
-  validates_presence_of     :login, :email
+  validates_presence_of     :login
   validates_presence_of     :password,                   :if => :password_required?
   validates_presence_of     :password_confirmation,      :if => :password_required?
   validates_length_of       :password, :within => 4..40, :if => :password_required?
   validates_confirmation_of :password,                   :if => :password_required?
   validates_length_of       :login,    :within => 3..40
-  validates_length_of       :email,    :within => 3..100
-  validates_uniqueness_of   :login, :email, :case_sensitive => false
+  #validates_length_of       :email,    :within => 3..100
+  validates_uniqueness_of   :login, :case_sensitive => false
   before_save :encrypt_password
   
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
-  attr_accessible :login, :email, :password, :password_confirmation
-	
+  attr_accessible :login, :email, :password, :password_confirmation, :do_accounting, :name, :date, :today, :roles, :roles_users, :personal_account_id, :cash_account_id, :revenue_account_id, :default_received
+	def clients
+		return Entity.find_all_by_user_id(self.id)
+	end
+	def today
+		if self.date
+			return Time.now.change(:year=>self.date.year, :month=>self.date.month, :day=>self.date.day)
+		else
+			return Date.today
+		end
+	end
+	def today=(value)
+		self.date=value.to_date
+	end
 	def current_price_group
 #		logger.debug "location_id=#{location_id.to_s}"
 #		logger.debug "price_group_name=#{price_group_name.to_s}"
@@ -74,6 +90,49 @@ class User < ActiveRecord::Base
 		         :joins => "left outer join roles_users on roles_users.user_id=users.id left outer join roles on roles.id = roles_users.role_id", 
 		         :group => "users.id"
 	end
+	def self.sales_reps_data(from, till, site)
+		reps=[]
+		for r in User.find_all_by_location_id(site)
+			if r.clients.length>0
+				rep={:user=>r, :previous_balance=>0, :num_receipts=>0, :revenue=>0, :num_payments=>0, :cash_received=>0, :final_balance=>0}
+				rep[:num_receipts] = Receipt.count(:all, 
+										:conditions => ['clients.user_id=:rep_id AND date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
+										:joins=>'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id=orders.client_id')
+				revenue_posts = Post.find(:all, 
+						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],
+						:joins=>'inner join trans on trans.id=posts.trans_id')
+				rep[:revenue]=revenue_posts.inject(0) { |result, element| result + element.value*element.post_type_id*-1}.to_s
+				rep[:num_payments] = Payment.count(:all, 
+										:conditions=> ['clients.user_id=:rep_id AND date(payments.created_at) >=:from AND date(payments.created_at) <= :till', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
+										:joins=>'inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id')
+				rep[:cash_received] = Post.find(:all, 
+						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],
+						:joins=>'inner join trans on trans.id=posts.trans_id'
+					).collect(&:value).sum
+				new_cash_balance, new_rev_balance, old_cash_balance, old_rev_balance=nil, nil, nil, nil
+				if r.cash_account
+					new_cash_balance=r.cash_account.balance
+					last_cash_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id')
+					old_cash_balance=last_cash_post.balance if last_cash_post
+				end
+				if r.revenue_account
+					new_rev_balance=r.revenue_account.balance
+					last_rev_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id')
+					old_rev_balance=last_rev_post.balance if last_rev_post
+				end
+				rep[:final_balance]=(new_rev_balance||0)-(new_cash_balance||0)
+				rep[:previous_balance]=(old_rev_balance||0)-(old_cash_balance||0)
+				puts "new rev" + new_rev_balance.to_s
+				puts "new cash" + new_cash_balance.to_s
+				puts "old rev" + old_rev_balance.to_s
+				puts "old cash" + old_cash_balance.to_s
+				reps << rep
+			end
+		end
+		return reps
+	end
+	
+	
 	def rights
 		rights=[]
 		for r in roles

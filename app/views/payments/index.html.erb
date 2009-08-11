@@ -1,4 +1,34 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :actions do %>
+	<dt><%= link_to_function 'Actualizar', 'submit_index("date_form")', :class => 'action' %></dt>
+	<dt><%= link_to_function 'Reporte', 'submit_report("date_form")', :class => 'action' %></dt>
+	<dt> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </dt>
+<% end %>
 <% content_for :title do %>Lista de Pagos<% end %>
+<% form_tag payments_path, :method =>'get', :id => 'date_form' do %>
+	<div class="column2-unit-left">
+		<p>
+			<b>Desde</b><br />
+		  <%= calendar_date_select_tag "from", @from, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+		</p>
+   </div>
+   <div class="column2-unit-right">
+    <p>
+    	<b>Hasta</b><br />
+  		<%= calendar_date_select_tag "till", @till, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+    </p>
+   </div>
+   <div class="checkbox-list">
+		<% get_sites.each do |site| -%>
+			<%= check_box_tag "sites[]", site.id, @sites.include?(site.id.to_s) -%> <%= site.name -%>
+		<% end -%>
+	</div>
+	<%= hidden_field_tag 'index',true %>
+<% end %>
+<hr class="clear-contentunit" />
+<%= will_paginate @payments, :class => 'pagination' %>
 <div>
     <div id="lines" class="table_header_row">
         <div class="table_cell_20">Pedido</div>
@@ -11,10 +41,15 @@
 	    <div class="table_row">
 		    <div class="table_cell_20"><%= link_to payment.order.id, payment.order %></div>
             <div class="table_cell_20"><%= link_to number_to_currency(payment.amount), payment %></div>
-            <div class="table_cell_20"><%=h payment.created_at.to_date %></div>
+            <div class="table_cell_20">
+		          <% if payment.created_at %>
+		          	<%=h payment.created_at.to_date %>
+		          <% end %>
+            </div>
             <div class="table_cell_20"><%=h payment.payment_method.name %></div>
             <div class="table_cell"><%= link_to payment.user.login, payment.user %></div>
 	    </div>
 	<% end %>
 </div>
+<%= will_paginate @payments, :class => 'pagination' %>
 

@@ -17,7 +17,7 @@
 
 class ServicesController < ApplicationController
 	before_filter :login_required
-	access_control [:new, :create, :update, :edit, :bulk_edit, :destroy] => '(gerente | admin | compras)' 
+	access_control [:new, :create, :update, :edit, :bulk_edit, :destroy] => '(Gerente | Admin | Compras)' 
 
   def index
     @services = Product.search_for_services(params[:search], params[:page])

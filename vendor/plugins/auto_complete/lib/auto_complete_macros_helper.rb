@@ -110,7 +110,6 @@ module AutoCompleteMacrosHelper
     content_tag("div", "", :id => "#{object}_#{method}_auto_complete", :class => "auto_complete") +
     auto_complete_field("#{object}_#{method}", { :url => { :action => "auto_complete_for_#{object}_#{method}" } }.update(completion_options))
   end
-
   private
     def auto_complete_stylesheet
       content_tag('style', <<-EOT, :type => Mime::CSS)

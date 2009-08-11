@@ -1,14 +1,25 @@
-
-<% content_for :title do %>Lista de Productos<% end %>
+<% content_for :title do %>Categoria <%= @product_category.name %><% end %>
 <% content_for :actions do %>
 	<% if current_user.has_rights(['admin','compras','gerente']) %>
-		<dt><%= link_to 'Nuevo producto', new_product_path, :class => 'action' %></dt>
-		<dt><%= link_to 'Reaprovisionar', '/inventories?search=' + @search, :class => 'action' %></dt>
-		<dt><%= link_to 'Lista de Precios', '/products/price_list?search=' + @search, :class => 'action' %></dt>
-		<dt><%= link_to "Cambiar Precios", '/prices?search=' + @search, :class => 'action' %></dt>
+		<dt><%= link_to 'Nuevo producto', new_product_path %></dt>
+    <dt><%= link_to 'Nueva Categoria', new_product_category_path %></dt>
+    <dt><%= link_to 'Cambiar', edit_product_category_path(@product_category) %></dt>
+    <dt><%= link_to "Borrar esta Categoría", @product_category, :confirm => 'Esta seguro?', :method => :delete %></dt>
+    <dt><%= link_to 'Reaprovisionar', '/products/bulk_edit?search=' + @search.to_s %></dt>
+    <dt><%= link_to "Cambiar Precios", '/products/edit_prices?search=' + @search.to_s %></dt>
 	<% end %>
-	<dt><%= link_to 'Movimientos', movements_url, :class => 'action' %></dt>
+  <dt><%= link_to 'Lista', product_categories_path %></dt>
 <% end %>
+<% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+  <p>
+	  <b>Cuenta de Ingresos</b><br />
+	  <% if @product_category.revenue_account %>
+		  <%=link_to @product_category.revenue_account.name, @product_category.revenue_account %>
+	  <% end %>
+  </p>
+<% end %>
+<p>
+	<b>Productos en esta Categoria</b>
 <div>
   <div class="table_header_row">
     <div class="table_cell_20">Nombre</div>
@@ -45,17 +56,8 @@
 	<% end %>
 <% end %>
 <br />
-<% if current_user.has_rights(['admin','compras','gerente']) %>
-	<%= link_to 'Nuevo producto | ', new_product_path, :class => 'action' %>
-	<%= link_to 'Reaprovisionar | ', '/products/bulk_edit?search=' + @search, :class => 'action' %>
-	<%= link_to "Cambiar Precios | ", '/products/edit_prices?search=' + @search, :class => 'action' %>
-	<%= link_to "Borrar esta Categoría | ", @product_category, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %>
-<% end %>
-
-<%= link_to 'Movimientos', movements_url, :class => 'action' %>
-
-
 </div>
+</p>
 
 
 

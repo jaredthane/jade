@@ -1,9 +1,9 @@
-<% content_for :title do %><%=h @user.login %><% end %>
+<% content_for :title do %><%=h @user.name %><% end %>
 <% content_for :actions do %>
-	<% if @user==current_user or current_user.has_rights(['admin','gerente']) %>
+	<% if @user==current_user or current_user.has_rights(['Admin','Gerente']) %>
 		<dt><%= link_to 'Cambiar', edit_user_path(@user) %></dt>
 	<% end %>
-	<% if current_user.has_rights(['admin','gerente']) %>
+	<% if current_user.has_rights(['Admin','Gerente']) %>
 		<dt><%= link_to 'Lista', users_path %></dt>
 	<% end %>
 <% end %>
@@ -14,6 +14,10 @@
 	  <%= h @user.login %>
 	</p>
 	<p>
+	  <b>Nombre Completo</b><br />
+	  <%= h @user.name %>
+	</p>
+	<p>
 	  <b>Sitio Actual:</b><br />
 	  <% if @user.location %>
 	  	<%= h @user.location.name %>
@@ -22,10 +26,28 @@
 	  <br />
 	  (Para cambiar simplemente escoja otro sitio de la lista de sitios)
 	</p>
-	
+	<p>
+		<b>Marcar pedidos como Recibido como defecto?</b><br />
+		<% if @user.default_received %>
+			<%= h 'Si' %>
+		<% else %>
+			<%= h 'No' %>
+		<% end %>
+	</p>
+	<p>
+		<b>Hacer contabilidad?</b><br />
+		<% if @user.do_accounting %>
+			<%= h 'Si' %>
+		<% else %>
+			<%= h 'No' %>
+		<% end %>
+	</p>
 </div>
 <div class="column2-unit-right">
-
+	<p>
+		<b>Dia de Trabajo actual</b>
+		<%= h @user.today %>
+	</p>
 	<p>
 	  <b>Correo Electronico</b><br />
 	  <%= h @user.email %>
@@ -39,8 +61,22 @@
 	  (Para cambiar simplemente escoja un cliente de otro grupo de precios de la lista de clientes)
 	</p>
 	<p>
-		<b> Marcar pedidos como Recibido como defecto?</b><br />
-		<%= h @user.default_received %>
+	  <b>Cuenta para Fondos Recibido por la Compañía</b><br />
+	  <% if @user.cash_account %>
+	    <%= link_to @user.cash_account.name, @user.cash_account %>
+	  <% end %>
+	</p>
+	<p>
+	  <b>Cuenta para Ingresos por Ventas Hechas</b><br />
+	  <% if @user.revenue_account %>
+	    <%= link_to @user.revenue_account.name, @user.revenue_account %>
+	  <% end %>
+	</p>
+	<p>
+	  <b>Cuenta para Fondos Personales</b><br />
+	  <% if @user.personal_account %>
+	    <%= link_to @user.personal_account.name, @user.personal_account %>
+	  <% end %>
 	</p>
 	
 </div>

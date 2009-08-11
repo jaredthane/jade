@@ -73,7 +73,6 @@ class WarrantiesController < ApplicationController
   # PUT /warranties/1.xml
   def update
     @warranty = Warranty.find(params[:id])
-
     respond_to do |format|
       if @warranty.update_attributes(params[:warranty])
         flash[:notice] = 'Garantía ha sido actualizado exitosamente.'

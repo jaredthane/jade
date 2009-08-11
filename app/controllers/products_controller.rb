@@ -20,9 +20,9 @@ class ProductsController < ApplicationController
   # GET /products.xml
 	before_filter :login_required
 	#before_filter {privilege_required('sales')}
-	access_control [:new, :create, :update, :edit, :bulk_edit, :bulk_update, :clear_quantities, :recommend_quantities] => '(gerente | admin | compras)' 
-	access_control [:update_prices, :edit_prices, :update_product] => '(gerente | admin)' 
-	access_control [:destroy] => '(admin)'
+	access_control [:new, :create, :update, :edit, :bulk_edit, :bulk_update, :clear_quantities, :recommend_quantities] => '(Gerente | Admin | Compras)' 
+	access_control [:update_prices, :edit_prices, :update_product] => '(Gerente | Admin)' 
+	access_control [:destroy] => '(Admin)'
   def index
     #@products = Product.find(:all)
     @search=params[:search] || ""
@@ -36,46 +36,47 @@ class ProductsController < ApplicationController
 		  else
 				@products = Product.search(params[:search], params[:page])
 		end
-		puts @products.length
-		if @products.length == 1
-			@product=@products[0]
-			render :action => 'show'
-			return false
+		
 				#redirect_to('/products/' + @products[0].to_s)
-		end
+		
     respond_to do |format|
-      format.html # index.html.erb
+      format.html {
+        if @products.length == 1
+			    @product=@products[0]
+			    render :action => 'show'
+			    return false
+			  end
+      }
       format.xml
       format.js
     end
   end
-def price_list
-  @products = Product.search_all_wo_pagination(params[:search], params[:page])
-  @data=[]
-  total=0
-	for p in @products
-		x = Object.new.extend(ActionView::Helpers::NumberHelper)
-		if p.name and p.description
-			if p.name!='' and p.description!=''
-				d=(p.name||'') + ' - ' + (p.description||'')
+	def price_list
+		@products = Product.search_all_wo_pagination(params[:search], params[:page])
+		@data=[]
+		total=0
+		for p in @products
+			x = Object.new.extend(ActionView::Helpers::NumberHelper)
+			if p.name and p.description
+				if p.name!='' and p.description!=''
+					d=(p.name||'') + ' - ' + (p.description||'')
+				else
+					d=(p.name||'') + (p.description||'')
+				end
 			else
 				d=(p.name||'') + (p.description||'')
 			end
-		else
-			d=(p.name||'') + (p.description||'')
+			if d.length > 203
+			 	d=d[0..200] + "..."
+			end
+			@data << [d, x.number_to_currency(p.price)]
 		end
-		if d.length > 203
-		 	d=d[0..200] + "..."
-		end
-		@data << [d, x.number_to_currency(p.price)]
+		prawnto :prawn => { :page_size => 'LETTER'}
+		params[:format] = 'pdf'
+		respond_to do |format|
+			format.pdf { render :layout => false }
+		end  
 	end
-	prawnto :prawn => { :page_size => 'LETTER'}
-	params[:format] = 'pdf'
-	respond_to do |format|
-		format.pdf { render :layout => false }
-	end
-  
-  end
   # GET /products/1
   # GET /products/1.xml
   def show

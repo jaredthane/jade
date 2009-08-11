@@ -5,7 +5,7 @@
 
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
-	<% if current_user.has_rights(['admin','gerente']) %>
+	<% if current_user.has_rights(['Admin','Gerente']) %>
 		<dt><%= link_to_function 'Guardar', 'submit("product_form")', :class => 'action' %></dt>
 		<% if mode == 'edit' %>
 			<dt> <%=link_to 'Lista', products_path, :class => 'action' %></dt>
@@ -72,6 +72,14 @@
 		  <b>Ubicacion</b><br />
 		  <%= f.text_field :location, :class => 'field' %>
 		</p>
+		
+	  <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
+			<p>
+				<b>Cuenta de Ingresos</b><br />
+				Si desea, puede especificar una cuenta en que poner los ingresos para este producto.<br />
+				<%= f.collection_select(:revenue_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+			</p>
+		<% end %>
 	</div>
 	<hr class="clear-contentunit" />
 	<div class="column3-unit-left">

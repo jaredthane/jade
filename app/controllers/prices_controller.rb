@@ -16,8 +16,8 @@
 	
 class PricesController < ApplicationController
 	before_filter :login_required
-	access_control [:new, :show, :index, :create, :update, :edit] => '(gerente | admin)' 
-	access_control [:destroy] => '(admin)'
+	access_control [:new, :show, :index, :create, :update, :edit] => '(Gerente | Admin)' 
+	access_control [:destroy] => '(Admin)'
   # GET /prices
   # GET /prices.xml
   def index
@@ -61,7 +61,7 @@ class PricesController < ApplicationController
 		else
 		    flash[:notice] = 'Alugnos precios no se puedieron guardar.'
 		end
-		if params[:prices].count == 1
+		if params[:prices].length == 1
 		    logger.debug params[:prices].keys[0]
 		    @price = Price.find(params[:prices].keys[0].to_i)
 		    redirect_to(@price.product)

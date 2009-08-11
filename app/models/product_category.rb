@@ -19,6 +19,7 @@
 
 class ProductCategory < ActiveRecord::Base
 	has_many :products
+	belongs_to :revenue_account, :class_name => "Account", :foreign_key => 'revenue_account_id'
 	def self.search(search, page)
 		paginate :per_page => 20, :page => page,
 	         :conditions => ['name like :search', {:search => "%#{search}%"}],

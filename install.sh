@@ -11,6 +11,7 @@ else
     #Install Ruby
     echo "Installing Ruby"
     sudo aptitude install ruby1.8-dev ruby1.8 ri1.8 rdoc1.8 irb1.8 libreadline-ruby1.8 libruby1.8 libopenssl-ruby sqlite3 libsqlite3-ruby1.8
+    sudo ln /usr/bin/ruby1.8 /usr/bin/ruby
 
     # Install Ruby Gems
     echo "Installing Ruby Gems"
@@ -19,11 +20,15 @@ else
     cd rubygems-1.3.1
     sudo ruby setup.rb
     cd ..
+    sudo ln /usr/bin/gem1.8 /usr/bin/gem
     
     # Install MySQL
     echo "Installing MySQL"
-    sudo aptitude install mysql libmysqlclient-dev
+    sudo aptitude install mysql-server mysql-client libmysqlclient-dev build-essential
 
+		# Install Apache2
+		sudo apt-get install apache2 apache2-mpm-prefork apache2-prefork-dev
+		sudo a2enmod rewrite
     # Install Rails
     echo "Installing Rails"
     sudo gem install rails
@@ -33,12 +38,21 @@ else
     sudo gem install will_paginate
     echo "Installing MySQL Gem"
     sudo gem install mysql
+    echo "Installing Passenger"
+    sudo gem install passenger
+    sudo passenger-install-apache2-module
+    sudo echo "LoadModule passenger_module /usr/lib/ruby/gems/1.8/gems/passenger-2.2.2/ext/apache2/mod_passenger.so
+   PassengerRoot /usr/lib/ruby/gems/1.8/gems/passenger-2.2.2
+   PassengerRuby /usr/bin/ruby1.8" >> /etc/apache2/apache2.conf
+    echo "Installing Calander Date Picker"
+    sudo gem install calendar_date_select
+    sudo cp public/javascripts/calendar_date_select/locale/es.js /usr/lib/ruby/gems/1.8/gems/calendar_date_select-1.15/public/javascripts/calendar_date_select/locale/
     echo "Installing Jade database"
     sudo mysql -p$2 -e "create database Jade"
     sudo mysql -p$2 Jade < clean.sql
-    sudo mysql -p$2 Jade -e "update entities set name = $1 where id=5"
+    sudo mysql -p$2 Jade -e "update entities set name = '$1' where id=5"
     echo "Configuring Jade"
-    cp database.yml.sample config/database.yml
-    sed -i 's/pa$$word/$2/g' config/database.yml
-    chmod 400 config/database.yml
+    sudo cp database.yml.sample config/database.yml
+    sudo sed -i 's/pa$$word/'$2'/g' config/database.yml
+    sudo chmod 400 config/database.yml
 fi

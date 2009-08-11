@@ -1,5 +1,5 @@
 # Jade Inventory Control System
-#Copyright (C) 2009  Jared T. Martin
+# Copyright (C) 2009  Jared T. Martin
 
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU General Public License as published by
@@ -27,6 +27,21 @@ module EntitiesHelper
 		link_to_function name do |page| 
 		  page.insert_html :bottom, "movements", :partial => 'movement', :object => Movement.new 
 		end 
+	end
+	def awaiting(order)
+		if order.last_received == nil
+			if order.order_type_id==5
+				return "En Proceso"
+			else
+				return "Esperando Entrega"
+			end
+		else
+			if order.amount_paid == order.grand_total or order.order_type_id==5
+				return "Terminado"
+			else
+				return "Esperando Pago" 
+			end
+		end
 	end
 	def allowed(entity_type)
 		case entity_type

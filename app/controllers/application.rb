@@ -36,5 +36,35 @@ class ApplicationController < ActionController::Base
   logfile = File.open('log/audit.log', 'a')   
   logfile.sync = true  #remove this for production 
 	audit = AuditLogger.new(logfile) 
+	def untranslate_month(date)
+		parts=date.split
+		case parts[0]
+		when 'Enero'
+			parts[0]='January'
+		when 'Febrero'
+			parts[0]='February'
+		when 'Marzo'
+			parts[0]='March'
+		when 'Abril'
+			parts[0]='April'
+		when 'Mayo'
+			parts[0]='May'
+		when 'Junio'
+			parts[0]='June'
+		when 'Julio'
+			parts[0]='July'
+		when 'Agosto'
+			parts[0]='August'
+		when 'Septiembre'
+			parts[0]='September'
+		when 'Octubre'
+			parts[0]='October'
+		when 'Noviembre'
+			parts[0]='November'
+		when 'Deciembre'
+			parts[0]='December'
+		end
+		return parts.join(' ')
+	end
 	
 end

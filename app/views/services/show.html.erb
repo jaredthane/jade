@@ -1,6 +1,12 @@
 
-<% content_for :title do %><%=h @service.name %> - <%=h @service.upc %><% end %>
-
+<% content_for :title do %>Servicio <%=h @service.name %> - <%=h @service.upc %><% end %>
+<% content_for :actions do %>
+    <% if current_user.has_rights(['admin','inventario', 'gerente']) %>
+        <dt><%= link_to 'Nuevo', new_service_path %></dt>
+        <dt><%= link_to 'Cambiar', edit_service_path(@service) %></dt>
+    <% end %>
+    <dt><%= link_to 'Lista', services_path %></dt>
+<% end %>
 <div class="column3-unit-left">
 <p>
     <b>Categoría</b><br />
@@ -62,7 +68,3 @@
 		<% end %>
 	</div>
 </p>
-<% if current_user.has_rights(['admin','compras','gerente']) %>
-	<%= link_to 'Cambiar | ', edit_service_path(@service), :class =>'action' %> 	
-<% end %>
-<%= link_to 'Lista', services_path, :class =>'action' %>

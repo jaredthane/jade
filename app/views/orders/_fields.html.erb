@@ -23,10 +23,6 @@
 									{:class => 'field', :size=>20 }, 
 									{:url => '/vendors.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 			</p>
-			<p>
-				<b>Numero de Factura</b><br />
-				<%= f.text_field :receipt_number, :class => 'field' %>
-			</p>
 			<%= f.hidden_field :client_id, :value => current_user.location.id %>
 		</div>
 	<% when 1 %>
@@ -37,11 +33,13 @@
 									{:class => 'field', :size=>20, :onblur=>'set_client_name(value)' }, 
 									{:url => '/clients.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 			</p>
-			<p>
-				<b>Numero de Factura</b><br />
-				<%= f.text_field :receipt_number, :class => 'field' %>
-			</p>
 			<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
+		</div>
+		<div class="column3-unit-middle">
+			<p>
+				<b>Fecha Recibido</b>
+			<%= calendar_date_select "order", :markreceived, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+			</p>
 		</div>
 	<% when 3 %>
 		<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
@@ -54,10 +52,6 @@
 									{:class => 'field', :size=>20 }, 
 									{:url => '/vendors.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 			</p>
-			<p>
-				<b>Numero de Factura</b><br />
-				<%= f.text_field :receipt_number, :class => 'field' %>
-			</p>
 		</div>
 		<div class="column3-unit-middle">
 			<p>
@@ -66,13 +60,13 @@
 									{:class => 'field', :size=>20 }, 
 									{:url => '/clients.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
 			</p>
-		</div>
+		</div>16
 <% end %>
 	
 <div class="column3-unit-right">
 	<p>
 		<b>Fecha de Pedido</b><br />
-		<%= f.date_select :ordered %>
+		<%= calendar_date_select "order", :created_at, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'field' %>
 	</p>
 	<%= f.hidden_field :user_id, :value => current_user.id %>
 </div>

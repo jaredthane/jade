@@ -18,6 +18,11 @@
 <% if @entity.entity_type_id == 3 %>
 <% end %>
 
+<% if current_user.has_rights(['Suscripciones']) %>
+	<% content_for :more_search do %>
+		<%= text_field_tag :sub_day, params[:sub_day], :class => 'dayfield'%>
+	<% end %>
+<% end %>
 <% case @entity.entity_type_id 
 	when 1 %>
 		<%= link_to 'Cambiar Nombre |', edit_entity_path(@entity), :class => 'action' %>
