@@ -52,16 +52,16 @@ class LoanersController < ApplicationController
     end
   end
 
-  # GET /loaners/new
-  # GET /loaners/new.xml
-  def new_without_serial
-    @loaner = SerializedProduct.new(:product_id=params[:product_id])
-		@loaner.product.add_to_pool
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @loaner }
-    end
-  end
+#  # GET /loaners/new
+#  # GET /loaners/new.xml
+#  def new_without_serial
+#    @loaner = SerializedProduct.new(:product_id=params[:product_id])
+#		@loaner.product.add_to_pool
+#    respond_to do |format|
+#      format.html # new.html.erb
+#      format.xml  { render :xml => @loaner }
+#    end
+#  end
   def new_from_serial
     @loaner = SerializedProduct.new
 
