@@ -55,3 +55,11 @@ set all money and quantity fields from order and line to default to 0
 
 alter table posts add column created_at datetime;
 alter table users add column date date;
+alter table entities add column `next_receipt_number` int(11) default NULL;
+alter table posts add column `account_id` int(11) default NULL;
+alter table orders add column `amount_paid` decimal(8,2) default '0.00';
+alter table entities add column `subscription_day` int(11) default NULL;
+alter table users add column `do_accounting` tinyint(1) default '1';
+Set
+BASE accounts:
+insert into accounts (id, name, parent_id, number, modifier) VALUES (1, 'Activos',NULL,'1', 1),(2, 'Pasivos',NULL,'2', -1),(3, 'Patrimonio',NULL,'3', 1),(4, 'Ingresos',NULL,'4', -1),(5, 'Gastos',NULL,'5', 1),(6, 'Efectivo',1,'6', 1),(7, 'Inventario',1,'7', 1),(8,'Cuenta Bancaria',1,'8', 1),(9,'Cuentas a Cobrar',1,'9', 1),(10,'Cuentas por Pagar',2,'10', 1),(11,'Impuesto',2,'11', 1);
