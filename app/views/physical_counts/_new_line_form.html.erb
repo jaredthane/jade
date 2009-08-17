@@ -1,4 +1,0 @@
-
-<% form_for Line.new, :html => {:id=>'bar_code_form'}, :url => { :action => "new", :controller=>"lines" } do |line_form| %>
-	<%= render :partial => 'lines/fields', :locals => { :order_type_id => 5, :line_form => line_form, :order_id => @count.id, :order => @count} %>
-<% end %>

@@ -1,3 +1,0 @@
-page.replace_html 'posts_errors', ""
-page.insert_html :bottom, :posts, :partial => 'trans/post', :object => @post
-
