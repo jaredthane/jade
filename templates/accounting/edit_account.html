@@ -1,0 +1,44 @@
+{% extends "menus.html" %}
+{% load i18n %}
+{% load tags %}
+{% block heading %}{% trans "Change Account" %}{% endblock %}
+{% block actions %}
+	{% submit_link 'account_form' _('Save') %}
+	{% url index_account as index_url %}
+	{% action index_url _('List of Accounts') %}
+	{% url show_account account.pk as show_url %}
+	{% action show_url _('Cancel') %}
+{% endblock %}
+{% block content %}
+	{% if account %}
+		<form name="account_form" method="post" action="{% url edit_account account.pk %}">
+	{% else %}
+		<form name="account_form" method="post" action="{% url new_account %}">
+	{% endif %}
+	<div class="column2-unit-left">
+			{{ form.name.errors }}
+		<p>
+			<b>{% trans "Name" %}</b>
+			{{ form.name }}
+		</p>
+				{{ form.number.errors }}
+		<p>
+			<b>{% trans "Number" %}</b>
+			{{ form.number }}
+		</p>
+	</div>
+	<div class="column2-unit-right">
+				{{ form.parent.errors }}
+		<p>
+			<b>{% trans "Branch" %}</b>
+			{{ form.parent }}
+		</p>
+				{{ form.modifier.errors }}
+		<p>
+			<b>{% trans "Account Type" %}</b>
+			{{ form.modifier }}
+		</p>
+	</div>
+
+	</form>
+{% endblock %}

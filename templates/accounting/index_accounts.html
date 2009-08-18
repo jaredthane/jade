@@ -3,6 +3,10 @@
 {% load tags %}
 
 {% block heading %}{% trans "List of Accounts" %}{% endblock %}
+{% block actions %}
+	{% url new_account as new_url %}
+	{% action new_url _('New Account') %}
+{% endblock %}
 {% block content %}	
 	{% if account_list %}
 	  <div class="table_header_row">
@@ -12,8 +16,9 @@
 	  </div>
 	  {% for account in account_list %}
 	  	<div class="table_row">
-      	{% table_cell account.number 20 %}
-      	{% table_cell account.name 20 %}
+				{% url accounting.views.show account.pk as show_url %}
+      	{% table_cell_link show_url account.number 20 %}
+      	{% table_cell_link show_url account.name 20 %}
       	{% if account.parent %}
       		{% table_cell account.parent 20 %}
       	{% else %}

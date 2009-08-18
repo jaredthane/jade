@@ -2,6 +2,20 @@
 {% load i18n %}
 {% load tags %}
 {% block heading %}{% trans "Account Details" %}{% endblock %}
+{% block actions %}
+	{% url accounting.views.index as index_url %}
+	{% action index_url _('List of Accounts') %}
+	{% url accounting.views.edit account.pk as edit_url %}
+	{% action edit_url _('Edit this Account') %}
+{% endblock %}
 {% block content %}
-	
+	<div class="column2-unit-left">
+		{% detail_item _('Name') account.name %}
+		{% detail_item _('Account Number') account.number %}
+		{% detail_item _('Balance') account.balance %}
+	</div>
+	<div class="column2-unit-right">
+		{% detail_item _('Branch') account.parent %}
+		{% detail_item _('Type') account.get_modifier_display %}
+	</div>
 {% endblock %}

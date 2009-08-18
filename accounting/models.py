@@ -45,7 +45,7 @@ class DirtyMixin(object):
 		
 class Account(Model):
 	name = CharField(max_length=50, default='')
-	number = CharField(max_length=50, default='')
+	number = CharField(max_length=50, default='', unique=True)
 	modifier = IntegerField(choices=MODIFIER_CHOICES)
 	parent = ForeignKey('Account', blank=True, default=None, null=True)
 	def all_parent_accounts(self):
