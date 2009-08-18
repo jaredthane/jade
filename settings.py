@@ -66,11 +66,12 @@ MIDDLEWARE_CLASSES = (
 ROOT_URLCONF = 'jade.urls'
 
 TEMPLATE_DIRS = (
+	"/home/jared/django/jade/templates"
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
-
+STATIC_DOC_ROOT = "/home/jared/django/jade/static"
 INSTALLED_APPS = (
     'django.contrib.auth',
     'django.contrib.contenttypes',
