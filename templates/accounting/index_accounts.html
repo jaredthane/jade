@@ -1,0 +1,31 @@
+{% extends "menus.html" %}
+{% load i18n %}
+{% load tags %}
+
+{% block heading %}{% trans "List of Accounts" %}{% endblock %}
+{% block content %}	
+	{% if account_list %}
+	  <div class="table_header_row">
+	  	{% for label, width in headers %}
+	  		{% table_cell label width%}
+	  	{% endfor %}
+	  </div>
+	  {% for account in account_list %}
+	  	<div class="table_row">
+      	{% table_cell account.number 20 %}
+      	{% table_cell account.name 20 %}
+      	{% if account.parent %}
+      		{% table_cell account.parent 20 %}
+      	{% else %}
+      		{% table_cell "" 20 %}
+      	{% endif %}
+      	{% table_cell account.get_modifier_display 20 %}
+      	{% table_cell account.balance %}
+      </div>
+	  {% endfor %}
+	  </ul>
+	{% else %}
+	  <p>{% trans "No accounts are available" %}.</p>
+	{% endif %}
+{% endblock %}
+

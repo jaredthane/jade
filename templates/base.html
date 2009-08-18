@@ -1,0 +1,134 @@
+{% load i18n %}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+
+<!--  Version: Multiflex-3 Update-7 / Layout-4             -->
+<!--  Date:    January 15, 2007                            -->
+<!--  Author:  Wolfgang                                    -->
+<!--  License: Fully open source without restrictions.     -->
+<!--           Please keep footer credits with a link to   -->
+<!--           Wolfgang (www.1-2-3-4.info). Thank you!     -->
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="cache-control" content="no-cache" />
+  <meta http-equiv="expires" content="3600" />
+  <meta name="revisit-after" content="2 days" />
+  <meta name="robots" content="index,follow" />
+  <meta name="publisher" content="Thane Media" />
+  <meta name="copyright" content="    
+    Jade Inventory Control System
+    Copyright (C) 2009 Thane Media
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 2.01
+    (at your option) any later version 2.01
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses.
+    " />
+  <meta name="author" content="Design: Wolfgang (www.1-2-3-4.info) / Application: Jared Martin" />
+  <meta name="distribution" content="global" />
+  <meta name="description" content="Your page description here ..." />
+  <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
+  <link type="text/css" rel="stylesheet" media="screen" href="/static/css/layout4_text.css">
+  <link type="text/css" rel="stylesheet" media="screen" href="/static/css/layout4_setup.css">
+  {% block includes %}{% endblock %}
+  <link rel="icon" type="image/x-icon" href="/images/img/favicon.ico" />
+  <title>{% trans "Jade Inventory Control and Accounting System" %} | {% block page_title %}{% endblock %}
+</title>
+  
+</head>
+<!-- Global IE fix to avoid layout crash when single word size wider than column width -->
+<!--[if IE]><style type="text/css"> body {word-wrap: break-word;}</style><![endif]-->
+
+<body>
+  <div class="page-container">
+    <div class="header">
+      <div class="header-middle">    
+        <a class="sitelogo" href="#" title="{% trans "Home Page" %}"></a>
+        <div class="sitename">
+          <h1><a href="/products" title="{% trans "Home Page" %}">Jade<span style="font-weight:normal;font-size:50%;">&nbsp;{% trans "Version:" %} 2.00</span></a></h1>
+          <h2>{% trans "Jade Inventory Control and Accounting System" %}</h2>
+        </div>
+        <div class="nav0">        	{% block nav0 %}{% endblock %}
+        </div>			
+        <div class="nav1">
+            {% block nav1 %}{% endblock %}
+					<div class="searchform">
+						{% block search %}{% endblock %}
+					</div>
+        </div>              
+      </div>
+      <div class="header-bottom">
+        <div class="nav2">
+        	<ul>
+						{% block nav2 %}{% endblock %}
+					</ul>
+        </div>
+	  </div>
+      <div class="header-breadcrumbs">
+        {% block bread %}{% endblock %}
+      </div>
+    </div>
+    <div class="main">
+      <div class="main-navigation">
+        <div class="round-border-topright"></div>
+					<h1 class="first">Acciones</h1>
+						<dl class="nav3-bullet">
+							 {% block actions %}				 
+							 {% endblock %}
+						</dl>      
+					<h1>{% trans "Links" %}</h1>
+					<dl class="nav3-grid">
+						<dt><a href="/products">Productos</a></dt>
+							<dd><a href="/products">Productos</a></dd>
+							<dd><a href="/services">Servicios</a></dd>
+							<dd><a href="/combos">Combos</a></dd>
+							<dd><a href="/serialized_products">Numeros de Serie</a></dd>
+							<dd><a href="/discounts">Descuentos</a></dd>
+							<dd><a href="/warranties">Garantías</a></dd>
+								<dd><a href="/prices">Cambiar Precios</a></dd>
+								<dd><a href="/inventories">Reaprovisionar</a></dd>
+							<dd><a href="/units">Unidades</a></dd>
+						<dt><a href="/orders">Pedidos</a></dt>
+							<dd><a href="/purchases">Compras</a></dd>
+							<dd><a href="/orders/show_batch">Últimas Compras</a></dd>
+							<dd><a href="/sales">Ventas</a></dd>
+							<dd><a href="/subscriptions">Ver Suscripciones</a></dd>
+							<dd><a href="/internal">Consumo Interno</a></dd>
+						<dt><a href="/products">Inventario</a></dt>
+						<dt><a href="/entities">Entidades</a></dt>
+							<dd><a href="/clients/">Clientes</a></dd>		
+							<dd><a href="/entities/my_clients">Mis Clientes</a></dd>		
+							<dd><a href="/vendors/">Proveedores</a></dd>		
+							<dd><a href="/sites/">Sitios</a></dd>		
+						<dt><a href="/product_categories">Categorías</a></dt>
+							<dd><a href="/product_categories/<%= category.id %>"><%= category.name %></a></dd>	
+						<dt><a href="/payments">Pagos</a></dt>
+						<dt><a href="/users">Usuarios</a></dt>
+						<dt><a href="/me">Mi Cuenta</a></dt>
+						<dt><a href="/accounts">Contabilidad</a></dt>
+						<dt><a href="/logout">Salir</a></dt>
+					</dl>        
+          {% block nav3 %}{% endblock %}
+				</div>
+      <div class="main-content">
+      <h1 class="block">{% block heading %}{% endblock %}</h1>
+      {% block content %}{% endblock %}
+      </div>
+		  </div>
+		  <div class="footer">
+		    <p>Copyright &copy; 2009 Thane Media | {% trans "All Rights Reserved" %}</p>
+		    <p class="credits">{% trans "Design by:" %} <a href="http://www.1-2-3-4.info/" >Wolfgang</a>  | {% trans "Application by:" %} <a href="#">Jared Martin</a> | {% trans "Powered by:" %} <a href="www.djangoproject.com">Django</a> | <a href="http://validator.w3.org/check?uri=referer" title="Validate XHTML code">XHTML 1.0</a> | <a href="http://jigsaw.w3.org/css-validator/" title="Validate CSS code">CSS 2.0</a></p>
+		  </div>      
+		</div> 
+	</body>
+</html>
+

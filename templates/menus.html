@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% block nav2 %}
+	<li><a title="Nuevo">Nuevo</a>
+		<ul>
+			<li><a href="/sales/new" title="Venta">Venta</a></li>
+			<li><a href="/clients/new" title="Cliente">Cliente</a></li>
+			<li><a href="/purchases/new" title="Compra">Compra</a></li>
+			<li><a href="/products/new" title="Producto">Producto</a></li>
+			<li><a href="/discounts/new" title="Descuento">Descuento</a></li>
+			<li><a href="/combos/new" title="Combo">Combo</a></li>
+			<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
+			<li><a href="/subscription/new" title="Suscripción">Suscripción</a></li>
+	 		<li><a href="/physical_counts/new" title="Cuenta Fisica">Cuenta Fisica</a></li>
+	 		<li><a href="/internal/new" title="Consumo Interno">Consumo Interno</a></li>
+			<li><a href="/sites/new" title="Sitio">Sitio</a></li>
+		</ul>
+	</li>
+	<li><a href="/products" title="Productos">Productos</a>
+		<ul>
+			<li><a href="/products" title="Productos">Productos</a></li>
+			<li><a href="/services" title="Servicios">Servicios</a></li>
+			<li><a href="/combos" title="Combos">Combos</a></li>
+			<li><a href="/serialized_products" title="Numeros de Serie">Numeros de Serie</a></li>
+			<li><a href="/warranties" title="Garantías">Garantías</a></li>
+			<li><a href="/discounts" title="Descuentos">Descuentos</a></li>
+			<li><a href="/movements" title="Movimientos">Movimientos</a></li>
+			<li><a href="/prices" title="Cambiar Precios">Cambiar Precios</a></li>
+			<li><a href="/units" title="Unidades">Unidades</a></li>
+		</ul>
+	</li>
+	<li><a href="/purchases" title="Compras">Compras</a>
+		<ul>
+			<li><a href="/purchases" title="Compras">Compras</a></li>
+			<li><a href="/inventories" title="Reaprovisionar">Reaprovisionar</a></li>
+		</ul>
+	</li>
+	<li><a href="/sales" title="Ventas">Ventas</a>		
+		<ul>
+			<li><a href="/sales" title="Ventas">Ventas</a></li>
+			<li><a href=<%= receipts_path %> title="Facturas">Facturas</a></li>
+			<li><a href="/subscriptions" title="Suscripciones">Suscripciones</a></li>
+			<li><a href="/internal" title="Consumo Interno">Consumos Internos</a></li>
+		</ul>				
+	</li>
+	<li><a href="/entities" title="Entidades">Entidades</a>
+		<ul>
+			<li><a href="/vendors" title="Proveedores">Proveedores</a></li>
+			<li><a href="/clients" title="Clientes">Clientes</a></li>
+			<li><a href="/entities/my_clients" title="Mis Clientes">Mis Clientes</a></li>
+			<li><a href="/entities/my_end_users" title="Mis Clientes Consumidor Final">Mis Consumidor Final</a></li>
+			<li><a href="/entities/my_credito_fiscal" title="Mis Clientes Credito Fiscal">Mis Credito Fiscal</a></li>
+			<li><a href="/entities/my_clients?search=publico" title="Mis Clientes de Precio Publico">Mis Publico</a></li>
+			<li><a href="/entities/my_clients?search=mayoreo" title="Mis Clientes de Precio Mayoreo">Mis Mayoreo</a></li>
+			<li><a href="/sites" title="Sitios">Sitios</a></li>
+			<li><a href="/birthdays" title="Cumpleanos">Cumpleanos</a></li>
+		</ul>
+	</li>
+	<li><a href="/sites" title="Sitios">Sitios</a>
+		<ul>
+			<li><a href="/entities/<%= location.id %>" title=<%= location.name %>><%= location.name %></a></li>
+			<li><a href="/physical_counts" title="Cuentas Fisicas">Cuentas Fisicas</a></li>
+		</ul>
+	</li>
+	<li><a href="/payments" title="Pagos">Pagos</a>
+		<ul>
+			<li><a href="/payments" title=Pagos>Pagos</a></li>
+			<li><a href="/payments" title=Facturas No Canceladas>Facturas No Canceladas</a></li>
+		</ul>
+	</li>
+	<li><a href="/users" title="Usuarios">Usuarios</a></li>
+	<li><a href="/accounts" title="Contabilidad">Contabilidad</a></li>
+	<li><a title="Reportes">Reportes</a><ul>
+	<li><a href="/receipts" title="Facturas">Facturas</a></li>
+	<li><a href="/payments" title="Pagos">Pagos</a></li>
+	<li><a href="/sales_representatives" title="Corte de Caja">Corte de Caja</a></li>	  
+{% endblock %}
