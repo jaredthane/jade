@@ -1,6 +1,7 @@
-{% extends "menus.html" %}
+{% extends "accounting/base.html" %}
 {% load i18n %}
 {% load tags %}
+{% block breadcrumb %}{{ block.super }} &raquo; <a href="{% url edit_account account.pk %}">{% trans "Show Account" %}</a>{% endblock %}
 {% block heading %}{% trans "Account Details" %}{% endblock %}
 {% block actions %}
 	{% url accounting.views.index as index_url %}

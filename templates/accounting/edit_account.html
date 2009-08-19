@@ -1,10 +1,24 @@
-{% extends "menus.html" %}
+{% extends "accounting/base.html" %}
 {% load i18n %}
 {% load tags %}
-{% block heading %}{% trans "Change Account" %}{% endblock %}
+
+{% block breadcrumb %}{{ block.super }} &raquo;
+	{% if account %}
+		 <a href="{% url edit_account account.pk %}">{% trans "Edit Account" %}</a>
+	{% else %}
+		<a href="{% url new_account %}">{% trans "New Account" %}</a>
+	{% endif %}
+{% endblock %}
+{% block heading %}
+	{% if account %}
+		{% trans "Change Account" %}
+	{% else %}
+		{% trans "New Account" %}
+	{% endif %}
+{% endblock %}
 {% block actions %}
 	{% submit_link 'account_form' _('Save') %}
-	{% url index_account as index_url %}
+	{% url index_accounts as index_url %}
 	{% action index_url _('List of Accounts') %}
 	{% url show_account account.pk as show_url %}
 	{% action show_url _('Cancel') %}
@@ -19,7 +33,7 @@
 			{{ form.name.errors }}
 		<p>
 			<b>{% trans "Name" %}</b>
-			{{ form.name }}
+			{% trans_field form 'name' current_lang %}
 		</p>
 				{{ form.number.errors }}
 		<p>

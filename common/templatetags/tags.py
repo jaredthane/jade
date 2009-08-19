@@ -72,7 +72,13 @@ def submit_link(form_id, label):
 @register.simple_tag
 def nav1_link(form_id, label):
 	return u'<li><a href="%s" title="%s">Links</a></li>' % (url, label)
-	
+
+@register.simple_tag
+def trans_field(form, field, lang):
+	try:
+		return unicode(form[field+'_'+lang])
+	except:
+		return form[field+'_es']
 
 	
 

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load tags %}
+{% block heading %}
+	{% trans "Login" %}
+{% endblock %}
+{% block content %}
+{% if error_message %}
+	<p>
+		{{ error_message }}
+	</p>
+{% endif %}
+{% if info_message %}
+	<p>
+		{{ info_message }}
+	</p>
+{% endif %}
+<form method="post" action="{% url login %}">
+	<p>
+		<b>{% trans "Username" %}</b>
+		<input type="text" value="" name="username"/>
+	</p>
+	<p>
+		<b>{% trans "Password" %}</b>
+		<input type="password" value="" name="password"/>
+	</p>
+
+<input type="submit" value="login" />
+<input type="hidden" name="next" value="{{ next }}" />
+</form>
+
+{% endblock %}
+

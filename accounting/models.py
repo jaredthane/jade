@@ -1,7 +1,8 @@
 from django.db.models import *
 from datetime import datetime
 from decimal import Decimal
-from multilingual import Translation
+import multilingual
+from transmeta import TransMeta
 from django.utils.translation import ugettext_lazy as _
 MODIFIER_CHOICES = ((1, _('Debit')),(-1, _('Credit')),)
 
@@ -45,11 +46,14 @@ class DirtyMixin(object):
 		return result
 		
 class Account(Model):
-	class Translation(Translation):
-		name = CharField(max_length=50, default='')
+	__metaclass__ = TransMeta
+#	class Translation(multilingual.Translation):
+	name = CharField(max_length=50, default='')
 	number = CharField(max_length=50, default='', unique=True)
 	modifier = IntegerField(choices=MODIFIER_CHOICES)
 	parent = ForeignKey('Account', blank=True, default=None, null=True)
+	class Meta:
+		translate = ('name', )
 	def all_parent_accounts(self):
 		try:
 			return [parent] + parent.all_parent_accounts()

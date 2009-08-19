@@ -61,7 +61,7 @@
 .main-navigation ol li {list-style-position:outside; margin:0 0 0.4em 0; font-size:110%;}
 
 /* MAIN CONTENT */
-.main-content h1.pagetitle {margin:0 0 0.4em 0; padding:0 0 2px 0; border-bottom:solid 7px rgb(225,225,225); font-family:"trebuchet ms",arial,sans-serif; color:rgb(100,100,100); font-weight:bold; font-size:220%;}
+.main-content h1.pagetitle {margin:0 0 0.4em 0; padding:0 0 2px 0; border-bottom:solid 7px #008597; font-family:"trebuchet ms",arial,sans-serif; color:rgb(100,100,100); font-weight:bold; font-size:220%;}
 .main-content h1.block {clear:both; margin:1.0em 0 0em 0; padding:2px 0 2px 2px; background:#008597; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:220%;}
 .main-content h1 {clear:both; margin:1.0em 0 0.5em 0; font-family:"trebuchet ms",arial,sans-serif; color:rgb(80,80,80); font-weight:normal; font-size:210%;}
 .main-content h2 {clear:both; margin:1.0em 0 0.5em 0; font-family:"trebuchet ms",arial,sans-serif; color:rgb(80,80,80); font-weight:normal; font-size:170%;}
@@ -84,6 +84,33 @@
 .main-content table th {height:3.0em; padding:2px 20px 2px 7px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(225,225,225); text-align:left; color:rgb(80,80,80); font-weight:bold; font-size:110%;}
 .main-content table td {height:3.0em; padding:2px 7px 2px 7px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(225,225,225); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:110%;}
 p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,80,80); font-size:110%;}
+
+/*#e1e1e1       */
+.main-content .table_row {height:2.5em; background: #e1e1e1; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
+.main-content .table_row_green {height:2.5em; background: #96c09c; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
+.main-content .table_row_red {height:2.5em; background: #ff6666; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
+.main-content .table_header_row {height:2.5em; background: #7cb4a9; border-top:solid 2px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:bold; color: #FFFFFF; font-size:120%;}
+.main-content .table_cell_20 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 20%; vertical-align: bottom;}
+.main-content .table_cell {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em;}
+.main-content .table_cell_5 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 5%; vertical-align: bottom;}
+.main-content .table_cell_15 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 15%; vertical-align: bottom;}
+.main-content .table_cell_10 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 10%; vertical-align: bottom;}
+.main-content .table_cell_50 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 50%; vertical-align: bottom;}
+.main-content .table_cell_80 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 80%; vertical-align: bottom;}
+.main-content .table_cell_25 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 25%; vertical-align: bottom;}
+.main-content .table_cell_30 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 30%; vertical-align: bottom;}
+.main-content .table_cell_35 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 35%; vertical-align: bottom;}
+.main-content .table_cell_40 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 40%; vertical-align: bottom;}
+.main-content .table_row select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;background: #e1e1e1;}
+.main-content .table_row_red select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-content .table_row_green select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+
+/* These are set specificly for the bulk_edit product view */
+.main-content .table_row_red input.field {width:7%;background: #ff6666;}
+.main-content .table_row_green input.field {width:7%;background: #96c09c;}
+.main-content .table_row input.field {width:90%;background: #e1e1e1;}
+.main-content .table_row input.serial {width:90%;background: #e1e1e1;}
+/* End for the bulk_edit product view */
 
 .main-content ul {list-style:none; margin:0.5em 0 1.0em 0;}
 .main-content ul li {margin:0 0 0.2em 2px; padding:0 0 0 12px; background:url(../img/bg_bullet_full_1.gif) no-repeat 0 0.5em; line-height:1.4em; font-size:120%;}

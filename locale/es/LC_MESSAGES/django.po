@@ -1,0 +1,306 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2009-08-19 10:33-0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: accounting/models.py:6
+msgid "Debit"
+msgstr "Debito"
+
+#: accounting/models.py:6
+msgid "Credit"
+msgstr "Credito"
+
+#: accounting/views.py:14 templates/accounting/edit_account.html:41
+msgid "Number"
+msgstr "Numero"
+
+#: accounting/views.py:14 templates/accounting/edit_account.html:35
+#: templates/accounting/show_account.html:14
+msgid "Name"
+msgstr "Nombre"
+
+#: accounting/views.py:14 templates/accounting/edit_account.html:48
+#: templates/accounting/show_account.html:19
+msgid "Branch"
+msgstr "Rama"
+
+#: accounting/views.py:14 templates/accounting/show_account.html:20
+msgid "Type"
+msgstr "Tipo"
+
+#: accounting/views.py:14 templates/accounting/show_account.html:16
+msgid "Balance"
+msgstr "Saldo"
+
+#: auth/views.py:17
+msgid ""
+"This account has been disabled, please contact your system administrator"
+msgstr "Esta cuenta ha sido deshabilitada. Favor de comunicarse con el administrador de sistemas."
+
+#: auth/views.py:20
+msgid ""
+"The username and password combination you entered is not correct. Please try "
+"again"
+msgstr "La combinacion de nombre de usuario y contraseña no es correcta. Favor de Tratarlo otra vez."
+
+#: auth/views.py:26
+msgid "You have been logged out sucessfully."
+msgstr "Se ha engresado exitosamente."
+
+#: multilingual/multilingual/flatpages/admin.py:9
+msgid "Advanced options"
+msgstr "Opciones Avanzadas"
+
+#: multilingual/multilingual/flatpages/models.py:9
+msgid "URL"
+msgstr "URL"
+
+#: multilingual/multilingual/flatpages/models.py:10
+msgid ""
+"Example: '/about/contact/'. Make sure to have leading and trailing slashes."
+msgstr ""
+
+#: multilingual/multilingual/flatpages/models.py:11
+msgid "enable comments"
+msgstr "habilitar comentarios"
+
+#: multilingual/multilingual/flatpages/models.py:12
+msgid "template name"
+msgstr "nombre de plantilla"
+
+#: multilingual/multilingual/flatpages/models.py:13
+msgid ""
+"Example: 'flatpages/contact_page.html'. If this isn't provided, the system "
+"will use 'flatpages/default.html'."
+msgstr "Ejemplo: 'flatpages/contact_page.html'. Si no se provee, la sistema usará 'flatpages/default.html'."
+
+#: multilingual/multilingual/flatpages/models.py:14
+msgid "registration required"
+msgstr "se exige la registración"
+
+#: multilingual/multilingual/flatpages/models.py:14
+msgid "If this is checked, only logged-in users will be able to view the page."
+msgstr "Si se selecciona esto, solo usuarios registrados podrán ver la página."
+
+#: multilingual/multilingual/flatpages/models.py:31
+msgid "title"
+msgstr "titulo"
+
+#: multilingual/multilingual/flatpages/models.py:32
+msgid "content"
+msgstr "contenido"
+
+#: multilingual/multilingual/flatpages/models.py:36
+msgid "multilingual flat page"
+msgstr "página plana multiligue"
+
+#: multilingual/multilingual/flatpages/models.py:37
+msgid "multilingual flat pages"
+msgstr "páginas planas multiligues"
+
+#: multilingual/testproject/articles/models.py:267
+#: multilingual/testproject/articles/models.py:325
+msgid "Created by"
+msgstr "Creado por"
+
+#: multilingual/testproject/articles/models.py:269
+#: multilingual/testproject/articles/models.py:327
+msgid "Created at"
+msgstr "Creado"
+
+#: multilingual/testproject/articles/models.py:271
+#: multilingual/testproject/articles/models.py:329
+#: multilingual/testproject/issue_16/models/category.py:11
+#: multilingual/testproject/issue_16/models/page.py:12
+msgid "Parent category"
+msgstr "Categoría Superior"
+
+#: multilingual/testproject/articles/models.py:289
+#: multilingual/testproject/issue_16/models/category.py:15
+msgid "The name"
+msgstr "El Nombre"
+
+#: multilingual/testproject/articles/models.py:291
+msgid "The description"
+msgstr "La descripción"
+
+#: multilingual/testproject/articles/models.py:336
+#: multilingual/testproject/issue_16/models/page.py:16
+msgid "The title"
+msgstr "El título"
+
+#: multilingual/testproject/articles/models.py:338
+#: multilingual/testproject/issue_16/models/page.py:18
+msgid "The contents"
+msgstr "Los contenidos"
+
+#: multilingual/testproject/issue_15/models.py:36
+#: multilingual/testproject/issue_29/models.py:36
+msgid "Parent gallery"
+msgstr ""
+
+#: multilingual/testproject/issue_15/models.py:37
+#: multilingual/testproject/issue_29/models.py:38
+msgid "Modified"
+msgstr ""
+
+#: multilingual/testproject/issue_15/models.py:40
+#: multilingual/testproject/issue_29/models.py:41
+#: multilingual/testproject/issue_37/models.py:34
+msgid "Title"
+msgstr ""
+
+#: multilingual/testproject/issue_15/models.py:41
+#: multilingual/testproject/issue_29/models.py:42
+msgid "Description"
+msgstr ""
+
+#: templates/base.html:45 templates/base.html.py:60
+msgid "Jade Inventory Control and Accounting System"
+msgstr "Sistema de Control de Inventario y Contabilidad Jade"
+
+#: templates/base.html:57 templates/base.html.py:59
+msgid "Home Page"
+msgstr "Página Inicio"
+
+#: templates/base.html:90
+msgid "Home"
+msgstr "Inicio"
+
+#: templates/base.html:96
+msgid "Search"
+msgstr "Buscar"
+
+#: templates/base.html:97
+msgid "GO"
+msgstr "Ya"
+
+#: templates/base.html:111
+msgid "Links"
+msgstr "Enlaces"
+
+#: templates/base.html:140 templates/accounting/base.html:4
+msgid "Accounting"
+msgstr "Contabilidad"
+
+#: templates/base.html:141
+msgid "Logout"
+msgstr "Salir"
+
+#: templates/base.html:151
+msgid "All Rights Reserved"
+msgstr "Todos los Derechos Reservados"
+
+#: templates/base.html:152
+msgid "Design by:"
+msgstr "Diseño por:"
+
+#: templates/base.html:152
+msgid "Application by:"
+msgstr "Applicación por:"
+
+#: templates/base.html:152
+msgid "Powered by:"
+msgstr "Hecho con:"
+
+#: templates/menus.html:4
+msgid "New"
+msgstr "Nuevo"
+
+#: templates/menus.html:5
+msgid "Sale"
+msgstr "Venta"
+
+#: templates/menus.html:6
+msgid "Client"
+msgstr "Cliente"
+
+#: templates/menus.html:7
+msgid "Purchase"
+msgstr "Compra"
+
+#: templates/menus.html:9 templates/menus.html.py:10
+msgid "Products"
+msgstr "Productos"
+
+#: templates/menus.html:11
+msgid "Services"
+msgstr "Servicios"
+
+#: templates/accounting/edit_account.html:7
+msgid "Edit Account"
+msgstr "Cambiar Cuenta"
+
+#: templates/accounting/edit_account.html:9
+#: templates/accounting/edit_account.html:16
+#: templates/accounting/index_accounts.html:9
+msgid "New Account"
+msgstr "Añadir Cuenta"
+
+#: templates/accounting/edit_account.html:14
+msgid "Change Account"
+msgstr "Cambiar Cuenta"
+
+#: templates/accounting/edit_account.html:20
+msgid "Save"
+msgstr "Guardar"
+
+#: templates/accounting/edit_account.html:22
+#: templates/accounting/index_accounts.html:6
+#: templates/accounting/show_account.html:8
+msgid "List of Accounts"
+msgstr "Lista de Cuentas"
+
+#: templates/accounting/edit_account.html:24
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/accounting/edit_account.html:53
+msgid "Account Type"
+msgstr "Tipo de Cuenta"
+
+#: templates/accounting/index_accounts.html:34
+msgid "No accounts are available"
+msgstr "Ningunas cuentas disponibles"
+
+#: templates/accounting/show_account.html:4
+msgid "Show Account"
+msgstr "Mostrar Cuenta"
+
+#: templates/accounting/show_account.html:5
+msgid "Account Details"
+msgstr "Detalles de Cuenta"
+
+#: templates/accounting/show_account.html:10
+msgid "Edit this Account"
+msgstr "Cambiar esta cuenta"
+
+#: templates/accounting/show_account.html:15
+msgid "Account Number"
+msgstr "Numero de Cuenta"
+
+#: templates/auth/login.html:5
+msgid "Login"
+msgstr "Engresar"
+
+#: templates/auth/login.html:20
+msgid "Username"
+msgstr "Nombre de Usuario"
+
+#: templates/auth/login.html:24
+msgid "Password"
+msgstr "Contraseña"

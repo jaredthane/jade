@@ -1,0 +1,17 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/5/trunk/transmeta/management/commands
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/2/trunk/transmeta/management/commands/__init__.py
+END
+sync_transmeta_db.py
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/5/trunk/transmeta/management/commands/sync_transmeta_db.py
+END

@@ -1,6 +1,6 @@
 {% load i18n %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="{{ current_lang }}">
 
 <!--  Version: Multiflex-4.2 / Layout-2                     -->
 <!--  Date:    January 20, 2008                             -->
@@ -63,10 +63,10 @@
         <!-- Navigation Level 0 -->
         <div class="nav0">
           <ul>
-            <li><a href="#" title="English"><img src="/static/img/flag_greatbritain.png" alt="English" /></a></li>
-            <li><a href="#" title="Espanol"><img src="/static/img/flag_spain.png" alt="Espanol" /></a></li>
-            <li><a href="#" title="Deutsch"><img src="/static/img/flag_germany.png" alt="Deutsch" /></a></li>
-            <li><a href="#" title="Svenska"><img src="/static/img/flag_sweden.png" alt="Svenska" /></a></li>
+            <li><a href="{% url set_language %}?lang=en&back={{ current_url }}" title="English"><img src="/static/img/flag_greatbritain.png" alt="English" /></a></li>
+            <li><a href="{% url set_language %}?lang=es&back={{ current_url }}" title="Espanol"><img src="/static/img/flag_spain.png" alt="Espanol" /></a></li>
+            <li><a href="{% url set_language %}?lang=de&back={{ current_url }}" title="Deutsch"><img src="/static/img/flag_germany.png" alt="Deutsch" /></a></li>
+            <li><a href="{% url set_language %}?lang=sv&back={{ current_url }}" title="Svenska"><img src="/static/img/flag_sweden.png" alt="Svenska" /></a></li>
           </ul>
         </div>			
 
@@ -87,6 +87,7 @@
 			<div class="header-breadcrumbs">
         <ul>
           {% block breadcrumbs %}
+          	{% block breadcrumb %}<a href="/">{% trans "Home" %}</a>{% endblock %}
           {% endblock %}    
         </ul>
         <div class="searchform">
@@ -136,13 +137,13 @@
 						<dt><a href="/payments">Pagos</a></dt>
 						<dt><a href="/users">Usuarios</a></dt>
 						<dt><a href="/me">Mi Cuenta</a></dt>
-						<dt><a href="/accounts">Contabilidad</a></dt>
-						<dt><a href="/logout">Salir</a></dt>
+						<dt><a href="{% url index_accounts %}">{% trans "Accounting" %}</a></dt>
+						<dt><a href="{% url logout %}">{% trans "Logout" %}</a></dt>
 					</dl>        
           {% block nav3 %}{% endblock %}
 				</div>
       <div class="main-content">
-      <h1 class="block">{% block heading %}{% endblock %}</h1>
+      <h1 class="pagetitle">{% block heading %}{% endblock %}</h1>
       {% block content %}{% endblock %}
       </div>
 		  </div>

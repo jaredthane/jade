@@ -28,11 +28,13 @@ TIME_ZONE = 'America/Chicago'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-us'
+
+LANGUAGE_CODE = 'es'
+
 LANGUAGES = (
+    ('es', 'Espanol'),
     ('en', 'English'),
-    ('es', 'Spanish'),
-)
+    )
 DEFAULT_LANGUAGE = 1
 SITE_ID = 1
 
@@ -66,13 +68,15 @@ TEMPLATE_LOADERS = (
 
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
-    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.contrib.sessions.middleware.SessionMiddleware',   
+    'django.middleware.locale.LocaleMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.auth',
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
+    'django.core.context_processors.request',
     'multilingual.context_processors.multilingual',
 )
 ROOT_URLCONF = 'jade.urls'
@@ -83,6 +87,9 @@ TEMPLATE_DIRS = (
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
 )
+LOGIN_REDIRECT_URL="/accounting/"
+LOGIN_URL = "/auth/login/"
+LOGOUT_URL = "/auth/logout/"
 STATIC_DOC_ROOT = "/home/jared/django/jade/static"
 INSTALLED_APPS = (
     'django.contrib.auth',
