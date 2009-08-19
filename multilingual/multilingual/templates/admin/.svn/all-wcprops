@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 52
+/svn/!svn/ver/160/trunk/multilingual/templates/admin
+END
+fieldset.html
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/160/trunk/multilingual/templates/admin/fieldset.html
+END
+edit_inline_translations.html
+K 25
+svn:wc:ra_dav:version-url
+V 82
+/svn/!svn/ver/143/trunk/multilingual/templates/admin/edit_inline_translations.html
+END
+edit_inline_translations_newforms.html
+K 25
+svn:wc:ra_dav:version-url
+V 91
+/svn/!svn/ver/160/trunk/multilingual/templates/admin/edit_inline_translations_newforms.html
+END

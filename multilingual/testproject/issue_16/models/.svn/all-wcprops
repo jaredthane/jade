@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 51
+/svn/!svn/ver/143/trunk/testproject/issue_16/models
+END
+page.py
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/143/trunk/testproject/issue_16/models/page.py
+END
+category.py
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/143/trunk/testproject/issue_16/models/category.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 63
+/svn/!svn/ver/143/trunk/testproject/issue_16/models/__init__.py
+END

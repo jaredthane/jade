@@ -1,0 +1,23 @@
+K 25
+svn:wc:ra_dav:version-url
+V 44
+/svn/!svn/ver/175/trunk/testproject/articles
+END
+admin.py
+K 25
+svn:wc:ra_dav:version-url
+V 53
+/svn/!svn/ver/149/trunk/testproject/articles/admin.py
+END
+__init__.py
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/143/trunk/testproject/articles/__init__.py
+END
+models.py
+K 25
+svn:wc:ra_dav:version-url
+V 54
+/svn/!svn/ver/175/trunk/testproject/articles/models.py
+END
