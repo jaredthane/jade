@@ -2,12 +2,12 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en">
 
-<!--  Version: Multiflex-3 Update-7 / Layout-4             -->
-<!--  Date:    January 15, 2007                            -->
-<!--  Author:  Wolfgang                                    -->
-<!--  License: Fully open source without restrictions.     -->
-<!--           Please keep footer credits with a link to   -->
-<!--           Wolfgang (www.1-2-3-4.info). Thank you!     -->
+<!--  Version: Multiflex-4.2 / Layout-2                     -->
+<!--  Date:    January 20, 2008                             -->
+<!--  Design:  www.1234.info                                -->
+<!--  License: Fully open source without restrictions.      -->
+<!--           Please keep footer credits with the words    -->
+<!--           "Design by 1234.info" Thank you!             -->
 
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -16,7 +16,7 @@
   <meta name="revisit-after" content="2 days" />
   <meta name="robots" content="index,follow" />
   <meta name="publisher" content="Thane Media" />
-  <meta name="copyright" content="    
+  <meta name="copyright" content="   
     Jade Inventory Control System
     Copyright (C) 2009 Thane Media
 
@@ -33,12 +33,13 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses.
     " />
-  <meta name="author" content="Design: Wolfgang (www.1-2-3-4.info) / Application: Jared Martin" />
+  <meta name="author" content="Design: Wolfgang (www.1-2-3-4.info) | Application: Jared Martin" />
   <meta name="distribution" content="global" />
   <meta name="description" content="Your page description here ..." />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
-  <link type="text/css" rel="stylesheet" media="screen" href="/static/css/layout4_text.css">
-  <link type="text/css" rel="stylesheet" media="screen" href="/static/css/layout4_setup.css">
+  
+  <link type="text/css" rel="stylesheet" media="screen" href="/static/css/text.css">
+  <link type="text/css" rel="stylesheet" media="screen" href="/static/css/setup.css">
   {% block includes %}{% endblock %}
   <link rel="icon" type="image/x-icon" href="/images/img/favicon.ico" />
   <title>{% trans "Jade Inventory Control and Accounting System" %} | {% block page_title %}{% endblock %}
@@ -50,31 +51,52 @@
 
 <body>
   <div class="page-container">
-    <div class="header">
-      <div class="header-middle">    
+  	<div class="header">
+      <div class="header-top">
+        <div class="round-border-topleft"></div><div class="round-border-topright"></div>      
         <a class="sitelogo" href="#" title="{% trans "Home Page" %}"></a>
         <div class="sitename">
-          <h1><a href="/products" title="{% trans "Home Page" %}">Jade<span style="font-weight:normal;font-size:50%;">&nbsp;{% trans "Version:" %} 2.00</span></a></h1>
+          <h1><a href="/products" title="{% trans "Home Page" %}">Jade&nbsp;&bull;&nbsp;2.01</a></h1> 
           <h2>{% trans "Jade Inventory Control and Accounting System" %}</h2>
         </div>
-        <div class="nav0">        	{% block nav0 %}{% endblock %}
+    
+        <!-- Navigation Level 0 -->
+        <div class="nav0">
+          <ul>
+            <li><a href="#" title="English"><img src="/static/img/flag_greatbritain.png" alt="English" /></a></li>
+            <li><a href="#" title="Espanol"><img src="/static/img/flag_spain.png" alt="Espanol" /></a></li>
+            <li><a href="#" title="Deutsch"><img src="/static/img/flag_germany.png" alt="Deutsch" /></a></li>
+            <li><a href="#" title="Svenska"><img src="/static/img/flag_sweden.png" alt="Svenska" /></a></li>
+          </ul>
         </div>			
+
+        <!-- Navigation Level 1 -->
         <div class="nav1">
-            {% block nav1 %}{% endblock %}
-					<div class="searchform">
-						{% block search %}{% endblock %}
-					</div>
+          <ul>
+          	{% block nav1 %}      	
+          	{% endblock %}						            
+          </ul>
         </div>              
       </div>
       <div class="header-bottom">
-        <div class="nav2">
-        	<ul>
-						{% block nav2 %}{% endblock %}
-					</ul>
+      	<div class="nav2">
+					{% block menus %}					
+					{% endblock %}         
         </div>
-	  </div>
-      <div class="header-breadcrumbs">
-        {% block bread %}{% endblock %}
+	  	</div>
+			<div class="header-breadcrumbs">
+        <ul>
+          {% block breadcrumbs %}
+          {% endblock %}    
+        </ul>
+        <div class="searchform">
+          <form action="{{ search_url }}" method="get">
+            <fieldset>
+              <input name="field" class="field"  value=" {% trans "Search" %}..." />
+              <input type="submit" name="button" class="button" value="{% trans "GO" %}!" />
+            </fieldset>
+          </form>
+        </div>
       </div>
     </div>
     <div class="main">

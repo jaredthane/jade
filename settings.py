@@ -1,5 +1,8 @@
 # Django settings for jade project.
 
+import sys
+sys.path.append('/home/jared/django/jade/multilingual/')
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -26,7 +29,11 @@ TIME_ZONE = 'America/Chicago'
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
 LANGUAGE_CODE = 'en-us'
-
+LANGUAGES = (
+    ('en', 'English'),
+    ('es', 'Spanish'),
+)
+DEFAULT_LANGUAGE = 1
 SITE_ID = 1
 
 # If you set this to False, Django will make some optimizations so as not
@@ -62,7 +69,12 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
 )
-
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.auth',
+    'django.core.context_processors.debug',
+    'django.core.context_processors.i18n',
+    'multilingual.context_processors.multilingual',
+)
 ROOT_URLCONF = 'jade.urls'
 
 TEMPLATE_DIRS = (
@@ -78,6 +90,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
+    'multilingual',
+    'django_extensions',
     'jade.accounting',
+    'jade.orders',
+    'jade.inventory',
+    'jade.entities',
     'jade.common',
 )
