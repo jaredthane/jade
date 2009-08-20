@@ -409,7 +409,7 @@ class ReceiptsController < ApplicationController
   	subs=Subscription.to_process(params[:search])
   	orders = Subscription.process(subs)
   	@next = generate_receipts(orders, params[:number].to_i)
-  	User.current_user=nil if User.current_user.id=1
+  	User.current_user=nil if User.current_user.id==1
     if @next 
     	flash[:info] = "Las facturas han sido generadas existosamente"
     	if User.current_user

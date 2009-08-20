@@ -54,7 +54,7 @@ class SubscriptionsController < ApplicationController
   	User.current_user=User.find(1) if !User.current_user
   	list=Subscription.to_process(params[:search])
   	Subscription.process(list)
-  	User.current_user=nil if User.current_user.id=1
+  	User.current_user=nil if User.current_user.id==1
     respond_to do |format|
       format.html { redirect_to(new_batch_receipts_path) }
       format.xml  { render :xml => @subscription }
@@ -80,7 +80,7 @@ class SubscriptionsController < ApplicationController
   	User.current_user=User.find(1) if !User.current_user
   	list=Subscription.to_process
   	Subscription.fast_process(list)
-  	User.current_user=nil if User.current_user.id=1
+  	User.current_user=nil if User.current_user.id==1
     respond_to do |format|
       format.html { redirect_to(todays_sales_path) }
       format.xml  { render :xml => @subscription }

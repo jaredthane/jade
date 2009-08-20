@@ -25,7 +25,7 @@ class Requirement < ActiveRecord::Base
 	end
 	def bar_code=(upc)
 		unless upc.blank?
-			if product=Product.find_by_upc(upc)
+			if product==Product.find_by_upc(upc)
 				self.required_id = Product.find_by_upc(upc).id
 			end
 		end

@@ -223,7 +223,8 @@ class Line < ActiveRecord::Base
 	def serial_number=(serial)
 		#logger.debug "serial=" + serial.to_s
 #		#logger.debug "order.order_type_id=#{order.order_type_id.to_s}"
-		if (!(serial == "" or serial == "\n") and ((order.order_type_id==2) or (order.order_type_id==5)))
+	puts self.order_type_id
+		if (!(serial == "" or serial == "\n") and ((self.order_type_id==2) or (self.order_type_id==5)))
 			#logger.debug "Taking create path"
 			s=SerializedProduct.find_or_create_by_serial_number(serial)
 			if s.product_id==nil
@@ -235,7 +236,7 @@ class Line < ActiveRecord::Base
 			#logger.debug  "taking find path"
 			s=SerializedProduct.find_by_serial_number(serial)
 		end
-		if self.order.order_type_id == 5
+		if self.order_type_id == 5
 			self.serialized_product=s
 			#logger.debug "Skipping creating movements cause this is a count"
 		else

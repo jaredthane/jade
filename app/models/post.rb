@@ -75,7 +75,7 @@ class Post < ActiveRecord::Base
 	#################################################################################################	
 	def calculate_balance
 		# Now calculate the balance
-		logger.debug 'OLD BALANCE=' + self.account.simple_balance.to_s + '+ VALUE=' +self.value.to_s + ' * POST_TYPE=' + self.post_type_id.to_s + ' * MODIFIER='+self.account.modifier.to_s
+#		logger.debug 'OLD BALANCE=' + self.account.simple_balance.to_s + '+ VALUE=' +self.value.to_s + ' * POST_TYPE=' + self.post_type_id.to_s + ' * MODIFIER='+self.account.modifier.to_s
 		self.balance=(self.account.simple_balance || 0 ) + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
 	end
 end

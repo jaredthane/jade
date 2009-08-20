@@ -40,7 +40,7 @@ class Trans < ActiveRecord::Base
 	end
 	def post_by_account_id(id)
 		for post in posts
-			return post if post.account_id=id
+			return post if post.account_id==id
 		end
 	end
 end

@@ -532,13 +532,14 @@ class Order < ActiveRecord::Base
 	def create_all_lines(lines)
 	  lines=[] if !lines
   	for l in lines
-  		new_line = Line.new(:order_id=>self.id,:created_at=>User.current_user.today)
+  		new_line = Line.new(:order_type_id=>self.order_type_id, :order_id=>self.id,:created_at=>User.current_user.today)
   		#new_line.product_name = l[:product_name]  		
   		new_line.product_id = l[:product_id]  	
 			new_line.quantity = l[:quantity]  
 			#new_line.set_serial_number_with_product(l[:serial_number], l[:product_name])
   		#logger.debug "product id:   ->" + l[:product_name]
   		logger.debug "new_line.warranty.to_s before=" + new_line.warranty.to_s.to_s
+  		puts "new line type " + new_line.order_type_id.inspect
   		new_line.attributes = l
   		logger.debug "new_line.warranty.to_s= after" + new_line.warranty.to_s.to_s
   		self.lines << new_line

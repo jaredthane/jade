@@ -271,6 +271,7 @@ class OrdersController < ApplicationController
   # POST /orders.xml
   def create
     @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
+    puts "heres the order we just created: " + @order.inspect
     @order.attributes = params["order"]
     return false if !allowed(@order.order_type_id, 'edit')
     @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
