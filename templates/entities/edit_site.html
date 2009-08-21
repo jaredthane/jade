@@ -1,0 +1,52 @@
+{% extends "entities/base.html" %}
+{% load i18n %}
+{% load tags %}
+
+{% block breadcrumb %}{{ block.super }} &raquo;
+	{% if obj %}
+		 <a href="{% url edit_site obj.pk %}">{% trans "Edit Site" %}</a>
+	{% else %}
+		<a href="{% url new_site %}">{% trans "New Site" %}</a>
+	{% endif %}
+{% endblock %}
+{% block heading %}
+	{% if obj %}
+		{% trans "Change Site" %}
+	{% else %}
+		{% trans "New Site" %}
+	{% endif %}
+{% endblock %}
+{% block actions %}
+	{% submit_link 'obj_form' _('Save') %}
+	{% url index_sites as index_url %}
+	{% action index_url _('List of Sites') %}
+	{% url show_site obj.pk as show_url %}
+	{% action show_url _('Cancel') %}
+{% endblock %}
+{% block content %}
+	{{ error_message }}
+	{% if obj %}
+		<form name="obj_form" method="post" action="{% url edit_site obj.pk %}">
+	{% else %}
+		<form name="obj_form" method="post" action="{% url new_site %}">
+	{% endif %}
+		<div class="column2-unit-left">
+			{% form_field form.name _("Name") %}
+			{% form_field form.state _("State") %}
+			{% form_field form.revenue_account _("Revenue Account") %}
+			{% form_field form.cash_account _("Cash Account") %}
+			{% form_field form.returns_account _("Returns Account") %}
+			{% form_field form.payables_account _("Payables Account") %}
+			{% form_field form.phone_format _("Phone Number Format") %}
+		</div>
+		<div class="column2-unit-right">
+			{% form_field form.tax_id _("Tax ID") %}
+			{% form_field form.active _("Active") %}
+			{% form_field form.inventory_account _("Inventory Account") %}
+			{% form_field form.expense_account _("Expense Account") %}
+			{% form_field form.tax_account _("Tax Account") %}
+			{% form_field form.default_receipt_group _("Default Receipt Group") %}
+			{% form_field form.notes _("Notes") %}
+		</div>
+	</form>
+{% endblock %}

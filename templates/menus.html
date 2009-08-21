@@ -10,4 +10,9 @@
 		{% menu_item "/products" _('Products') %}
 		{% menu_item "/services" _('Services') %}
 	{% menu_end %}
+	{% menu_start _('Sites') %}
+		{% for site in sites %}
+			{% menu_item "/products" _('Products') %}
+		{% endfor %}
+	{% menu_end %}
 {% endblock %}

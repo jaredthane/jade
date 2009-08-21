@@ -1,0 +1,22 @@
+	Fix accounting so entries are made for each parent account
+	make entities create necisarry accounts automaticly if they are not selected
+	Account names made automaticly by creating entities have to be translated somehow
+	Figure out what type of account modifier Returns should have
+	see about creating generic templates index, show, edit even if just one or two
+	add get_absolute_url functions to all models and use them in the show templates especially show_site
+	make breadcrumbs bigger
+	separate optional fields in new_site
+	plan a menu layout
+	get javascript working with order forms
+		add line
+		remove line
+		update line
+	figure out how to test views and templates
+	figure out how to get popups for related items and line details (see saved pages in howtos)
+	figure out how to get an audit trail (see saved pages in howtos)
+	figure out how to add pics :)
+	get pagination working again
+	make pdfs
+	inventory models need unicodes
+	learn about metaclasses
+	HAVE to figure out how to set account names using account.name="Cash" and not name_es

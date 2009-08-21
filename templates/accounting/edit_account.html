@@ -3,56 +3,36 @@
 {% load tags %}
 
 {% block breadcrumb %}{{ block.super }} &raquo;
-	{% if account %}
-		 <a href="{% url edit_account account.pk %}">{% trans "Edit Account" %}</a>
+	{% if obj %}
+		 <a href="{% url edit_account obj.pk %}">{% trans "Edit Account" %}</a>
 	{% else %}
 		<a href="{% url new_account %}">{% trans "New Account" %}</a>
 	{% endif %}
 {% endblock %}
 {% block heading %}
-	{% if account %}
+	{% if obj %}
 		{% trans "Change Account" %}
 	{% else %}
 		{% trans "New Account" %}
 	{% endif %}
 {% endblock %}
 {% block actions %}
-	{% submit_link 'account_form' _('Save') %}
-	{% url index_accounts as index_url %}
-	{% action index_url _('List of Accounts') %}
-	{% url show_account account.pk as show_url %}
-	{% action show_url _('Cancel') %}
+	{% edit_actions 'account' _('Save Account') _('Cancel') _('List Accounts') obj %}
 {% endblock %}
 {% block content %}
-	{% if account %}
-		<form name="account_form" method="post" action="{% url edit_account account.pk %}">
+	{{ error_message }}
+	{% if obj %}
+		<form name="account_form" method="post" action="{% url edit_account obj.pk %}">
 	{% else %}
 		<form name="account_form" method="post" action="{% url new_account %}">
 	{% endif %}
-	<div class="column2-unit-left">
-			{{ form.name.errors }}
-		<p>
-			<b>{% trans "Name" %}</b>
-			{% trans_field form 'name' current_lang %}
-		</p>
-				{{ form.number.errors }}
-		<p>
-			<b>{% trans "Number" %}</b>
-			{{ form.number }}
-		</p>
-	</div>
-	<div class="column2-unit-right">
-				{{ form.parent.errors }}
-		<p>
-			<b>{% trans "Branch" %}</b>
-			{{ form.parent }}
-		</p>
-				{{ form.modifier.errors }}
-		<p>
-			<b>{% trans "Account Type" %}</b>
-			{{ form.modifier }}
-		</p>
-	</div>
-
+		<div class="column2-unit-left">
+			{% trans_field form 'name' current_lang _("Name") %}
+			{% form_field form.number _("Number") %}
+		</div>
+		<div class="column2-unit-right">
+			{% form_field form.parent _("Branch") %}
+			{% form_field form.modifier _("Account Type") %}
+		</div>
 	</form>
 {% endblock %}

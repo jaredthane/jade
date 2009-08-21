@@ -1,0 +1,47 @@
+{% extends "orders/base.html" %}
+{% load i18n %}
+{% load tags %}
+
+{% block breadcrumb %}{{ block.super }} &raquo;
+	{% if order %}
+		 <a href="{% url edit_purchase order.pk %}">{% trans "Edit Purchase" %}</a>
+	{% else %}
+		<a href="{% url new_purchase %}">{% trans "New Purchase" %}</a>
+	{% endif %}
+{% endblock %}
+{% block heading %}
+	{% if order %}
+		{% trans "Change Purchase" %}
+	{% else %}
+		{% trans "New Purchase" %}
+	{% endif %}
+{% endblock %}
+{% block actions %}
+	{% submit_link 'order_form' _('Save') %}
+	{% url index_purchases as index_url %}
+	{% action index_url _('List of Purchases') %}
+	{% url show_purchase order.pk as show_url %}
+	{% action show_url _('Cancel') %}
+{% endblock %}
+{% block content %}
+	{{ error_message }}
+	{% if order %}
+		<form name="order_form" method="post" action="{% url edit_purchase order.pk %}">
+	{% else %}
+		<form name="order_form" method="post" action="{% url new_purchase %}">
+	{% endif %}
+		<div class="column2-unit-left">
+			{% form_field form.number _("Number") %}
+			{% form_field form.received _("Date Recieved") %}
+			{% form_field form.total _("Total Price") %}
+			{% form_field form.created_by _("Created by") %}
+			{% form_field form.notes _("Notes") %}
+			
+		</div>
+		<div class="column2-unit-right">
+			{% form_field form.vendor _("Vendor") %}
+			{% form_field form.created_at _("Date Requested") %}
+			{% form_field form.paid _("Amount Paid") %}
+		</div>
+	</form>
+{% endblock %}

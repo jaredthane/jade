@@ -1,27 +1,28 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 {% load tags %}
-{% load multilingual_tags %}
 
 {% block heading %}{% trans "List of Accounts" %}{% endblock %}
 {% block actions %}
-	{% url new_account as new_url %}
-	{% action new_url _('New Account') %}
+	{% index_actions 'account' _('New Account') %}
 {% endblock %}
 {% block content %}	
-	{% if account_list %}
+	{% if object_list %}
 	  <div class="table_header_row">
-	  	{% for label, width in headers %}
-	  		{% table_cell label width%}
-	  	{% endfor %}
+  		{% table_cell _('Number') 20 %}
+  		{% table_cell _('Name') 20 %}
+  		{% table_cell _('Branch') 20 %}
+  		{% table_cell _('Type') 20 %}
+  		{% table_cell _('Balance') %}
 	  </div>
-	  {% for account in account_list %}
+	  {% for account in object_list %}
 	  	<div class="table_row">
 				{% url accounting.views.show account.pk as show_url %}
       	{% table_cell_link show_url account.number 20 %}
       	{% table_cell_link show_url account.name 20 %}
       	{% if account.parent %}
-      		{% table_cell account.parent 20 %}
+      		{% url accounting.views.show account.parent.pk as parent_url %}
+      		{% table_cell_link parent_url account.parent 20 %}
       	{% else %}
       		{% table_cell "" 20 %}
       	{% endif %}

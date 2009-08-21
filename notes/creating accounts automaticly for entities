@@ -1,0 +1,18 @@
+Goals:
+user allowed to set accounts if they want
+	could be set later if we want, 
+	but then you'ld have to delete unneeded accounts
+if left to default, system should create accounts automaticly
+account names should be like: "Turin - Expenses"
+and should somehow be translated
+
+Or I could just hard-link the Site to an account and let user rename the account
+what if I allow null and do custom validation?
+
+
+Decision:
+Set null=True for now.
+Try the following:
+1. Add custom validation on the form and leave null=True on the db
+2. Create a dummy account and a custom manager to hide it.
+3. Hard link it.

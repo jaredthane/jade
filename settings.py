@@ -77,7 +77,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     'django.core.context_processors.debug',
     'django.core.context_processors.i18n',
     'django.core.context_processors.request',
-    'multilingual.context_processors.multilingual',
 )
 ROOT_URLCONF = 'jade.urls'
 
@@ -97,7 +96,6 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.admin',
-    'multilingual',
     'django_extensions',
     'jade.accounting',
     'jade.orders',

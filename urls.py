@@ -19,7 +19,8 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     (r'^admin/(.*)', admin.site.root),
     (r'^accounting/', include('jade.accounting.urls')),
+    (r'^orders/', include('jade.orders.urls')),
+    (r'^entities/', include('jade.entities.urls')),
     (r'^auth/', include('jade.auth.urls')),
-    (r'', views.index),
 
 )

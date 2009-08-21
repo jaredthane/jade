@@ -1,0 +1,28 @@
+{% extends "entities/base.html" %}
+{% load i18n %}
+{% load tags %}
+{% block breadcrumb %}{{ block.super }} &raquo; <a href="{% url edit_site obj.pk %}">{% trans "Show Site" %}</a>{% endblock %}
+{% block heading %}{% trans "Site Details" %}{% endblock %}
+{% block actions %}
+	{% show_actions 'site' _('New Site') _('Edit Site') _('List Sites') obj %}
+{% endblock %}
+{% block content %}
+	<div class="column2-unit-left">
+		{% detail_item _('Name') obj.name %}
+		{% detail_item _('State') obj.state %}
+		{% detail_item _('Revenue Account') obj.revenue_account %}
+		{% detail_item _('Cash Account') obj.cash_account %}
+		{% detail_item _('Returns Account') obj.returns_account %}
+		{% detail_item _('Payables Account') obj.payables_account %}
+		{% detail_item _('Phone Number Format') obj.phone_format %}
+	</div>
+	<div class="column2-unit-right">
+		{% detail_item _('Tax ID') obj.tax_id  %}
+		{% detail_item _('Active') obj.active %}
+		{% detail_item _('Inventory Account') obj.inventory_account %}
+		{% detail_item _('Expense Account') obj.expense_account %}
+		{% detail_item _('Tax Account') obj.tax_account %}
+		{% detail_item _('Default Receipt Group') obj.default_receipt_group %}
+		{% detail_item _('Notes') obj.notes %}
+	</div>
+{% endblock %}

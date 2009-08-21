@@ -1,0 +1,39 @@
+{% extends "orders/base.html" %}
+{% load i18n %}
+{% load tags %}
+
+{% block heading %}{% trans "List of Purchases" %}{% endblock %}
+{% block actions %}
+	{% url new_purchase as new_url %}
+	{% action new_url _('New Purchase') %}
+{% endblock %}
+{% block content %}	
+	{% if account_list %}
+	  <div class="table_header_row">
+	  		{% table_cell _('Number') 20 %}
+	  		{% table_cell _('Vendor') 20 %}
+	  		{% table_cell _('Status') 20 %}
+	  		{% table_cell _('Total') 20 %}
+	  		{% table_cell _('Paid') %}
+	  </div>
+	  {% for account in account_list %}
+	  	<div class="table_row">
+				{% url order.views.show order.pk as show_url %}
+      	{% table_cell_link show_url order.number 20 %}
+      	{% if order.vendor %}
+      		{% url order.views.show order.vendor.pk as vendor_url %}
+      		{% table_cell_link vendor_url order.vendor 20 %}
+      	{% else %}
+      		{% table_cell "" 20 %}
+      	{% endif %}
+      	{% table_cell "Pending..." 20 %}
+      	{% table_cell order.total 20 %}
+      	{% table_cell order.paid %}
+      </div>
+	  {% endfor %}
+	  </ul>
+	{% else %}
+	  <p>{% trans "No purchases were found." %}</p>
+	{% endif %}
+{% endblock %}
+

@@ -86,9 +86,9 @@
 	  	</div>
 			<div class="header-breadcrumbs">
         <ul>
-          {% block breadcrumbs %}
-          	{% block breadcrumb %}<a href="/">{% trans "Home" %}</a>{% endblock %}
-          {% endblock %}    
+          {% block breadcrumb %}
+          	<a href="/">{% trans "Home" %}</a>
+          {% endblock %}          
         </ul>
         <div class="searchform">
           <form action="{{ search_url }}" method="get">

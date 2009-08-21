@@ -2,18 +2,19 @@ from django.db.models import *
 from jade.entities.models import Client, Site, Vendor
 #from jade.accounting.models import *
 from jade.inventory.models import Warranty, ProductBase
-from multilingual import Translation
+from datetime import datetime
 
 class Order(Model):
-	created_at = DateTimeField()
-	received = DateTimeField()
-	created_by = DateTimeField()
+	created_at = DateTimeField(default=datetime.now(), null=True, blank=True)
+	received = DateTimeField(null=True, blank=True)
+	created_by = DateTimeField(null=True, blank=True)
 	receipt_filename = CharField(max_length=50, default='')
-	class Translation(Translation):
-		notes = TextField(null=True, blank=True)
+	notes = TextField(null=True, blank=True)
 	active = BooleanField(default=True)
 	total = DecimalField(max_digits=5, decimal_places=2, default='0.00')
 	paid = DecimalField(max_digits=5, decimal_places=2, default='0.00')
+	number = CharField(max_length=50, default='')
+	
 	
 class Sale(Order):
 	client = ForeignKey(Client)

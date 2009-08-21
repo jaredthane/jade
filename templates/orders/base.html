@@ -1,0 +1,5 @@
+{% extends "menus.html" %}
+
+{% load i18n %}
+{% block breadcrumb %}{{ block.super }} &raquo; <a href="{% url index_sales %}">{% trans "Orders" %}</a>{% endblock %}
+
