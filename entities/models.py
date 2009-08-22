@@ -38,18 +38,18 @@ class Site(Entity):
 	default_receipt_group = ForeignKey(ReceiptGroup, default=ReceiptGroup.objects.latest)
 	def save(self, *args, **kwargs):
 		print "Hello World"
-		if self.inventory_account == -1:
-			self.inventory_account = Account.objects.create(name=self.name + ' Inventory', modifier=1)
-		if not self.cash_account:     #### These account names have to be translated somehow
-			self.cash_account = Account.objects.create(name=self.name + ' '+'Cash', modifier=1)
-		if not self.expense_account:
-			self.expense_account = Account.objects.create(name=self.name + ' '+'Expense', modifier=1)
-		if not self.returns_account:  #### What type of account should this be??
-			self.returns_account = Account.objects.create(name=self.name + ' '+'Returns', modifier=1)
-		if not self.tax_account:
-			self.tax_account = Account.objects.create(name=self.name + ' '+'Tax', modifier=-1)
-		if not self.payables_account:
-			self.payables_account = Account.objects.create(name=self.name + ' '+'Accounts Payable', modifier=-1)
+#		if self.inventory_account == -1:
+#			self.inventory_account = Account.objects.create(name=self.name + ' Inventory', modifier=1)
+#		if not self.cash_account:     #### These account names have to be translated somehow
+#			self.cash_account = Account.objects.create(name=self.name + ' '+'Cash', modifier=1)
+#		if not self.expense_account:
+#			self.expense_account = Account.objects.create(name=self.name + ' '+'Expense', modifier=1)
+#		if not self.returns_account:  #### What type of account should this be??
+#			self.returns_account = Account.objects.create(name=self.name + ' '+'Returns', modifier=1)
+#		if not self.tax_account:
+#			self.tax_account = Account.objects.create(name=self.name + ' '+'Tax', modifier=-1)
+#		if not self.payables_account:
+#			self.payables_account = Account.objects.create(name=self.name + ' '+'Accounts Payable', modifier=-1)
 		super(Site, self).save()
 		from jade.inventory.models import Product, Inventory
 		for product in Product.objects.all():

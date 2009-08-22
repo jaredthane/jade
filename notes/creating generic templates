@@ -2,8 +2,26 @@ What if we dont use the show unless they don't have rights?
 
 
 index
-
+	headers
+	list
+		row
+			cell
+				label
+				url
+	object_list = (
+									((Dog.name, doglink), (Dog.upc, catlink), ())
+									((Cat, catlink), 
+									((Bird, birdlink)
+								)
+								
+			for obj in Object.objects.filter(ugly=True):
+				object_list.append((obj.name, obj.)    )
+			I want people to have full access to modify	
+			
 show
 
 
 edit
+
+list of variable needed:
+Accounts

@@ -1,38 +1,32 @@
-{% extends "accounting/base.html" %}
+{% extends "index.html" %}
 {% load i18n %}
 {% load tags %}
-
-{% block heading %}{% trans "List of Accounts" %}{% endblock %}
-{% block actions %}
-	{% index_actions 'account' _('New Account') %}
+{% "Accounts" as model_plural %}
+{% block breadcrumb %}{{ block.super }} &raquo; <a href="{% url index_accounts %}">{% trans "Accounting" %}</a>{% endblock %}
+{% block table_header %}
+  <div class="table_header_row">
+		{% table_cell _('Number') 20 %}
+		{% table_cell _('Name') 20 %}
+		{% table_cell _('Branch') 20 %}
+		{% table_cell _('Type') 20 %}
+		{% table_cell _('Balance') %}
+  </div>
 {% endblock %}
-{% block content %}	
-	{% if object_list %}
-	  <div class="table_header_row">
-  		{% table_cell _('Number') 20 %}
-  		{% table_cell _('Name') 20 %}
-  		{% table_cell _('Branch') 20 %}
-  		{% table_cell _('Type') 20 %}
-  		{% table_cell _('Balance') %}
-	  </div>
-	  {% for account in object_list %}
-	  	<div class="table_row">
-				{% url accounting.views.show account.pk as show_url %}
-      	{% table_cell_link show_url account.number 20 %}
-      	{% table_cell_link show_url account.name 20 %}
-      	{% if account.parent %}
-      		{% url accounting.views.show account.parent.pk as parent_url %}
-      		{% table_cell_link parent_url account.parent 20 %}
-      	{% else %}
-      		{% table_cell "" 20 %}
-      	{% endif %}
-      	{% table_cell account.get_modifier_display 20 %}
-      	{% table_cell account.balance %}
-      </div>
-	  {% endfor %}
-	  </ul>
-	{% else %}
-	  <p>{% trans "No accounts are available" %}.</p>
-	{% endif %}
+{% block table_rows %}
+	{% for account in object_list %}
+		<div class="table_row">
+			{% url accounting.views.show account.pk as show_url %}
+			{% table_cell_link show_url account.number 20 %}
+			{% table_cell_link show_url account.name 20 %}
+			{% if account.parent %}
+				{% url accounting.views.show account.parent.pk as parent_url %}
+				{% table_cell_link parent_url account.parent 20 %}
+			{% else %}
+				{% table_cell "" 20 %}
+			{% endif %}
+			{% table_cell account.get_modifier_display 20 %}
+			{% table_cell account.balance %}
+		</div>
+	{% endfor %}
 {% endblock %}
 
