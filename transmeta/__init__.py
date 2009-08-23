@@ -26,7 +26,7 @@ def canonical_fieldname(db_field):
     return getattr(db_field, 'original_fieldname', db_field.name) # original_fieldname is set by transmeta
 
 
-def default_value(field):
+def get_default_value(field):
     '''
     When accessing to the name of the field itself, the value
     in the current language will be returned. Unless it's set,
@@ -48,6 +48,29 @@ def default_value(field):
             )
             result = getattr(self, default_transmeta_attr, None)
         return result
+
+    return default_value_func
+def set_default_value(field):
+    '''
+    When accessing to the name of the field itself, the value
+    in the current language will be returned. Unless it's set,
+    the value in the default language will be returned.
+    '''
+
+    def default_value_func(self, value):
+        attname = lambda x: get_real_fieldname(field, x)
+
+        if getattr(self, attname(get_language()), None):
+            setattr(self, attname(get_language()), value)
+        elif getattr(self, attname(get_language()[:2]), None):
+            setattr(self, attname(get_language()[:2]), value)
+        elif getattr(self, attname(settings.LANGUAGE_CODE), None):
+            setattr(self, attname(settings.LANGUAGE_CODE), value)
+        else:
+            default_transmeta_attr = attname(
+                getattr(settings, 'TRANSMETA_DEFAULT_LANGUAGE', 'en')
+            )
+            setattr(self, default_transmeta_attr, value)
 
     return default_value_func
 
@@ -117,7 +140,7 @@ class TransMeta(models.base.ModelBase):
                     lang_attr.verbose_name = u'%s %s' % (lang_attr.verbose_name, lang_code)
                 attrs[lang_attr_name] = lang_attr
             del attrs[field]
-            attrs[field] = property(default_value(field))
+            attrs[field] = property(get_default_value(field),set_default_value(field))
 
         new_class = super(TransMeta, cls).__new__(cls, name, bases, attrs)
         if hasattr(new_class, '_meta'):

@@ -51,6 +51,8 @@ class Account(Model):
 	modifier = IntegerField(choices=MODIFIER_CHOICES)
 	parent = ForeignKey('Account', blank=True, default=None, null=True)
 	class Meta:
+		verbose_name_plural = _('Accounts')
+		verbose_name = _('Account')
 		translate = ('name', )
 	def all_parent_accounts(self):
 		try:
@@ -69,6 +71,9 @@ class Account(Model):
 			p.save()
 	def __unicode__(self):
 		return str(self.number) + " - " + self.name + " (" + self.get_modifier_display() + ")"
+	@permalink
+	def get_absolute_url(self):
+		return ('accounting.show_account', None, { 'object_id': self.id })
 		
 class Transaction(DirtyMixin, Model):
 	"""
@@ -380,9 +385,15 @@ class Transaction(DirtyMixin, Model):
 	class Meta:
 		get_latest_by = 'date'
 		ordering = ('date',)		
+		verbose_name_plural = _('Transactions')
+		verbose_name = _('Transaction')
 	def __unicode__(self):
 		return str(self.id)+ " - " + str(self.date)
 	date = DateTimeField(default=datetime.now(), blank=True)
+#	@permalink
+#	def get_absolute_url(self):
+#		return ('jade.accounting.show_transaction', None, { 'object_id': self.id })
+
 	
 class	Entry(DirtyMixin, Model):	
 	date = DateTimeField(default=datetime.now(), blank=True)
@@ -512,6 +523,8 @@ class	Entry(DirtyMixin, Model):
 				self.balance+=last.latest().balance
 	
 	class Meta:
+		verbose_name_plural = _('Entries')
+		verbose_name = _('Entry')
 		get_latest_by = 'date'
 		ordering = ('date',)		
 	def __unicode__(self):
@@ -520,6 +533,9 @@ class Balance(Model):
 	value = DecimalField(max_digits=5, decimal_places=2, default=None, null=True)
 	entry = ForeignKey(Entry)
 	account = ForeignKey(Account)
+	class Meta:
+		verbose_name_plural = _('Balances')
+		verbose_name = _('Balance')
 class SimpleTransaction(Transaction):
 	"""	
 	>>> a = Account.objects.create(name="First Account", number='1011', modifier=1)

@@ -1,6 +1,7 @@
 from jade.common.forms import DynamicForm
 from jade.entities.models import *
 from django.utils.translation import ugettext_lazy as _
+from settings import *
 
 class ContactForm(DynamicForm):
 	## For handling clients and vendors
@@ -15,6 +16,14 @@ class SiteForm(DynamicForm):
 	def __init__(self, lang, *args, **kwargs):
 		super(SiteForm, self).__init__(*args, **kwargs)
 		self.make_fields_dynamic(lang, ('notes',))
+		
+#	LANGUAGE_CODE = 'es'
+#	CASH_ACCOUNT_DEFAULT_NAME = ' Cash'
+#INVENTORY_ACCOUNT_DEFAULT_NAME = ' Inventory'
+#EXPENSE_ACCOUNT_DEFAULT_NAME = ' Expense'
+#RETURNS_ACCOUNT_DEFAULT_NAME = ' Returns'
+#TAX_ACCOUNT_DEFAULT_NAME = ' Tax'
+#PAYABLES_ACCOUNT_DEFAULT_NAME = ' Payables'
 	def clean_inventory_account(self):
 		return self.cleaned_data['inventory_account'] or Account.objects.create(name=_('inventory'), modifier=1)
 	def clean_cash_account(self):

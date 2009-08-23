@@ -1,10 +1,14 @@
 from django.db.models import *
+from django.utils.translation import ugettext_lazy as _
 from jade.entities.models import *
 from jade.accounting.models import Account
 #from jade.orders.models import *
 
 class UnitOfMeasure(Model):
 	name = CharField(max_length=50, default='')
+	class Meta:
+		verbose_name_plural = _('Units Of Measure')
+		verbose_name = _('Unit Of Measure')
 
 class PriceBase(object):
 	fixed_price = DecimalField(max_digits=5, decimal_places=2, default="0.00")
@@ -12,6 +16,9 @@ class PriceBase(object):
 
 class ProductCategory(Model):
 	name = CharField(max_length=50, default='')
+	class Meta:
+		verbose_name_plural = _('Categories')
+		verbose_name = _('Category')
 	
 class ProductBase(Model):
 	name = CharField(max_length=50, default='')
@@ -31,10 +38,16 @@ class Product(ProductBase):
 			Inventory.objects.create(product=self, site=site)
 		for price_group in PriceGroup.objects.all():
 			Price.objects.create(product=self, price_group=price_group)
+	class Meta:
+		verbose_name_plural = _('Products')
+		verbose_name = _('Product')
 
 class Service(ProductBase):
 	start = DateTimeField()
 	end = DateTimeField()
+	class Meta:
+		verbose_name_plural = _('Services')
+		verbose_name = _('Service')
 
 class WarrantyPolicy(Model):
 	price = DecimalField(max_digits=5, decimal_places=2, default="0.00")
@@ -46,6 +59,9 @@ class Warranty(Model):
 	price = DecimalField(max_digits=5, decimal_places=2, default="0.00")
 	months = IntegerField()
 	notes = TextField()
+	class Meta:
+		verbose_name_plural = _('Warranties')
+		verbose_name = _('Warranty')
 
 class Inventory(Model):
 	product = ForeignKey(Product)
@@ -61,6 +77,9 @@ class Inventory(Model):
 		
 class PriceGroupName(Model):
 	name = CharField(max_length=50, default='')
+	class Meta:
+		verbose_name_plural = _('Price Groups')
+		verbose_name = _('Price Group')
 	## Need to add price_groups for each site, right?
 	
 class PriceGroup(Model):
@@ -75,4 +94,7 @@ class Price(Model, PriceBase):
 	product = ForeignKey(ProductBase)
 	price_group = ForeignKey(PriceGroup)
 	available = BooleanField()
+	class Meta:
+		verbose_name_plural = _('Prices')
+		verbose_name = _('Price')
 

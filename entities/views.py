@@ -5,13 +5,16 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def index_sites(request):
-	return generic_index(request, Site, 'site', 'entities')
+	object_list =	Site.objects.all()
+	return generic_index(request, Site, object_list)
+	
 @login_required
 def show_site(request, object_id):
-	return generic_show(request, object_id, Site, 'site', 'entities')
+	return generic_show(request, object_id, Site)
+	
 @login_required
 def edit_site(request, object_id=None):
-	return generic_edit(request, Site, SiteForm, 'site', 'entities', object_id)
+	return generic_edit(request, Site, SiteForm, object_id)
 
 
 def index_clients(request):

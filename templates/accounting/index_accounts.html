@@ -1,32 +1,35 @@
-{% extends "index.html" %}
+{% extends "accounting/base.html" %}
 {% load i18n %}
 {% load tags %}
-{% "Accounts" as model_plural %}
-{% block breadcrumb %}{{ block.super }} &raquo; <a href="{% url index_accounts %}">{% trans "Accounting" %}</a>{% endblock %}
-{% block table_header %}
-  <div class="table_header_row">
-		{% table_cell _('Number') 20 %}
-		{% table_cell _('Name') 20 %}
-		{% table_cell _('Branch') 20 %}
-		{% table_cell _('Type') 20 %}
-		{% table_cell _('Balance') %}
-  </div>
+{% block heading %}{% trans "List of Accounts" %}{% endblock %}
+{% block actions %}
+	{% index_actions 'Account' _('New Account') %}
 {% endblock %}
-{% block table_rows %}
-	{% for account in object_list %}
-		<div class="table_row">
-			{% url accounting.views.show account.pk as show_url %}
-			{% table_cell_link show_url account.number 20 %}
-			{% table_cell_link show_url account.name 20 %}
-			{% if account.parent %}
-				{% url accounting.views.show account.parent.pk as parent_url %}
-				{% table_cell_link parent_url account.parent 20 %}
-			{% else %}
-				{% table_cell "" 20 %}
-			{% endif %}
-			{% table_cell account.get_modifier_display 20 %}
-			{% table_cell account.balance %}
+{% block content %}	
+	{% if object_list %}
+	  <div class="table_header_row">
+  		{% table_cell _('Number') 20 %}
+			{% table_cell _('Name') 20 %}
+			{% table_cell _('Branch') 20 %}
+			{% table_cell _('Type') 20 %}
+			{% table_cell _('Balance') %}
 		</div>
-	{% endfor %}
+ 		{% for account in object_list %}
+			<div class="table_row">
+				{% url accounting.views.show account.pk as show_url %}
+				{% table_cell_link show_url account.number 20 %}
+				{% table_cell_link show_url account.name 20 %}
+				{% if account.parent %}
+					{% url accounting.views.show account.parent.pk as parent_url %}
+					{% table_cell_link parent_url account.parent 20 %}
+				{% else %}
+					{% table_cell "" 20 %}
+				{% endif %}
+				{% table_cell account.get_modifier_display 20 %}
+				{% table_cell account.balance %}
+			</div>
+		{% endfor %}
+	{% else %}
+		<p>{% trans "The search returned no Accounts" %}</p>
+	{% endif %}
 {% endblock %}
-

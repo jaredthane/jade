@@ -2,6 +2,7 @@ from django import template
 
 from django.core.urlresolvers import reverse
 
+from django.utils.translation import ugettext_lazy as _
 register = template.Library()
 
 # Order of things:
@@ -118,5 +119,5 @@ def edit_actions(model_name, save_label, cancel_label, index_label, obj=None):
 		
 @register.simple_tag
 def index_actions(model_name, new_label):
-	new_url=reverse('new_'+model_name.lower() )
+	new_url=reverse('new_'+model_name.lower())
 	return u'%s' % (action(new_url, new_label))

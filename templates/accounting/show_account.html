@@ -1,7 +1,7 @@
 {% extends "accounting/base.html" %}
 {% load i18n %}
 {% load tags %}
-{% block breadcrumb %}{{ block.super }} &raquo; <a href="{% url edit_account obj.pk %}">{% trans "Show Account" %}</a>{% endblock %}
+{% block breadcrumb %}{{ block.super }} &raquo; <a href="{{ obj.get_absolute_url }}">{% trans "Show Account" %}</a>{% endblock %}
 {% block heading %}{% trans "Account Details" %}{% endblock %}
 {% block actions %}
 	{% show_actions 'account' _('New Account') _('Edit Account') _('List Accounts') obj %}

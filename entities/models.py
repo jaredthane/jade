@@ -16,6 +16,9 @@ class Entity(Model):
 	active = BooleanField(default=True)
 	def __unicode__(self):
 		return self.name
+	class Meta:
+		verbose_name_plural = _('Entities')
+		verbose_name = _('Entity')
 
 class ReceiptGroup(Model):
 	name = CharField(max_length=50)
@@ -26,6 +29,8 @@ class ReceiptGroup(Model):
 	class Meta:
 		get_latest_by = 'pk'
 		ordering = ('name',)		
+		verbose_name_plural = _('Receipt Groups')
+		verbose_name = _('Receipt Group')
 
 class Site(Entity):
 	phone_format = CharField(max_length=15, default='', blank=True)
@@ -37,23 +42,13 @@ class Site(Entity):
 	payables_account = ForeignKey(Account, related_name='payables_account_id', null=True, blank=True)
 	default_receipt_group = ForeignKey(ReceiptGroup, default=ReceiptGroup.objects.latest)
 	def save(self, *args, **kwargs):
-		print "Hello World"
-#		if self.inventory_account == -1:
-#			self.inventory_account = Account.objects.create(name=self.name + ' Inventory', modifier=1)
-#		if not self.cash_account:     #### These account names have to be translated somehow
-#			self.cash_account = Account.objects.create(name=self.name + ' '+'Cash', modifier=1)
-#		if not self.expense_account:
-#			self.expense_account = Account.objects.create(name=self.name + ' '+'Expense', modifier=1)
-#		if not self.returns_account:  #### What type of account should this be??
-#			self.returns_account = Account.objects.create(name=self.name + ' '+'Returns', modifier=1)
-#		if not self.tax_account:
-#			self.tax_account = Account.objects.create(name=self.name + ' '+'Tax', modifier=-1)
-#		if not self.payables_account:
-#			self.payables_account = Account.objects.create(name=self.name + ' '+'Accounts Payable', modifier=-1)
 		super(Site, self).save()
 		from jade.inventory.models import Product, Inventory
 		for product in Product.objects.all():
 			Inventory.objects.create(product=product, site=self)
+	class Meta:
+		verbose_name_plural = _('Sites')
+		verbose_name = _('Site')
 		
 class Contact(Entity):
 	home_phone = CharField(max_length=15, default='', blank=True)
@@ -67,13 +62,20 @@ class Contact(Entity):
 	def save(self):
 		account = Account.objects.create(name=self.name, modifier=-1)
 		super(Contact, self).save()
+	class Meta:
+		verbose_name_plural = _('Contacts')
+		verbose_name = _('Contact')
 		
 class Client(Contact):
-	pass
+	class Meta:
+		verbose_name_plural = _('Clients')
+		verbose_name = _('Client')
 	#	sales_rep = ForeignKey(User)
 
 
 class Vendor(Contact):
-	pass
+	class Meta:
+		verbose_name_plural = _('Vendors')
+		verbose_name = _('Vendor')
 
 

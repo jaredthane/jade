@@ -8,13 +8,14 @@ from django.contrib.auth.decorators import login_required
 
 @login_required
 def index(request):
-	return generic_index(request, Account, 'account', 'accounting')
+	object_list =	Account.objects.all()
+	return generic_index(request, Account, object_list)
 		
 @login_required
 def show(request, object_id):
-	return generic_show(request, object_id, Account, 'account', 'accounting')
+	return generic_show(request, object_id, Account)
 	
 @login_required
 def edit(request, object_id=None):
-	return generic_edit(request, Account, AccountForm, 'account', 'accounting', object_id)
+	return generic_edit(request, Account, AccountForm, object_id)
 
