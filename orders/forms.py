@@ -1,6 +1,7 @@
 from jade.common.forms import DynamicForm
 from jade.orders.models import *
 from django.forms import *
+from django.forms.formsets import formset_factory
 
 class SaleForm(ModelForm):
 #	def __init__(self, lang, *args, **kwargs):
@@ -27,4 +28,4 @@ class LineForm(ModelForm):
 	class Meta:
 		model = Line
 		exclude = ('notes','order')
-
+LineFormSet = formset_factory(LineForm)
