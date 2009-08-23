@@ -3,60 +3,39 @@ from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from jade.orders.models import *
 from jade.orders.forms import *
+from jade.common.views import *
 from django.contrib.auth.decorators import login_required
 
+from django.forms.formsets import formset_factory
+
 def index_sales(request):
-	order_list = Sale.objects.all()
-	current_url=request.get_full_path()
-	current_lang=request.session['django_language']
-	return render_to_response('orders/index_purchases.html', {'order_type':'Sale', 'order_list': order_list, 'current_url':current_url, 'current_lang':current_lang})
-
+	object_list =	Sale.objects.all()
+	return generic_index(request, Sale, object_list)
+	
 def index_purchases(request):
-	order_list = Purchase.objects.all()
-	current_url=request.get_full_path()
-	current_lang=request.session['django_language']
-	return render_to_response('orders/index_sales.html', {'order_type':'Purchase', 'order_list': order_list, 'current_url':current_url, 'current_lang':current_lang})
-		
-def show_sale(request):
-	pass
-def show_purchase(request):
-	pass
-def edit_sale(request):
-	pass
-def edit_purchase(request, order_id = None):
-	current_lang=request.session['django_language']
-	if request.method == 'POST': #POST
-		print "POSTING"
-		print "request.POST=" + str(request.POST)
-		if order_id: #UPDATE
-			print "UPDATEING"
-			o = get_object_or_404(Purchase, pk=account_id)
-			form = PurchaseForm(current_lang, request.POST, instance=a)
-		else: #CREATE
-			print "CREATE"
-			form = PurchaseForm(current_lang, request.POST)
-		try:
-			print "here1"
-			o=None
-			o=form.save()
-			print "here2"
-			current_url=reverse('show_purchase', kwargs={'order_id':o.pk} )
-			return render_to_response('orders/show_purchase.html', {'order': o, 'current_url':current_url, 'current_lang':current_lang})
-		except ValueError:
-			print "here3"
-			current_url=request.get_full_path()
-			return render_to_response('orders/edit_purchase.html', {'order': (o or None), 'form':form, 'current_url':current_url, 'current_lang':current_lang})
-	else: # GET
-		print "GETTING"
-		current_url=request.get_full_path()
-		if order_id: #EDIT
-			print "EDITING"
-			o = get_object_or_404(Purchase, pk=order_id)
-			form = PurchaseForm(current_lang, instance=o)
-		else: #NEW
-			print "NEW"
-			o=None
-			form=PurchaseForm(current_lang)
-	return render_to_response('orders/edit_purchase.html', {'order': o, 'form':form, 'current_url':current_url, 'current_lang':current_lang})
-
-
+	order_list = Purchase.objects.all()	
+	return generic_index(request, Purchase, object_list)	
+	
+def show_sale(request, object_id):
+	return generic_show(request, object_id, Sale)
+def show_purchase(request, object_id):
+	return generic_show(request, object_id, Purchase)
+def edit_sale(request, object_id = None):
+	if request.method == "POST":
+		  oform = SaleForm(request.POST, instance=Sale())
+		  lforms = [LineForm(request.POST, prefix=str(x), instance=Line()) for x in range(0,3)]
+		  if oform.is_valid() and all([lf.is_valid() for lf in lforms]):
+		      new_sale = oform.save()
+		      for lf in lforms:
+		          new_line = lf.save(commit=False)
+		          new_line.order = new_order
+		          new_line.save()
+		      return HttpResponseRedirect('/sales/new/')
+	else:
+		  oform = SaleForm(instance=Sale())
+		  lforms = [LineForm(prefix=str(x), instance=Line()) for x in range(0,3)]
+	return render_to_response('orders/edit_sale.html', {'sale_form': oform, 'line_forms': lforms})
+def edit_purchase(request, object_id = None):
+	return generic_edit(request, Purchase, PurchaseForm, object_id)
+def edit_line(request, object_id = None):
+	return generic_edit(request, Line, LineForm, object_id)

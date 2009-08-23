@@ -1,18 +1,22 @@
 from django.shortcuts import get_object_or_404, render_to_response
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def generic_index(request, Model, object_list):
 	current_url=request.get_full_path()
 	current_lang=request.session['django_language']
 	return render_to_response(Model._meta.app_label+'/index_'+Model._meta.verbose_name_plural.lower()+'.html', {'object_list': object_list, 'current_url':current_url, 'current_lang':current_lang, 'model_name':Model._meta.verbose_name, 'model_name_plural':Model._meta.verbose_name_plural})
 
+@login_required
 def generic_show(request, object_id, Model):
 	obj = get_object_or_404(Model, pk=object_id)
 	current_url=request.get_full_path()
 	current_lang=request.session['django_language']
 	return render_to_response(Model._meta.app_label+'/show_'+Model._meta.verbose_name.lower()+'.html', {'obj': obj, 'current_url':current_url, 'current_lang':current_lang})
 
+@login_required
 def generic_edit(request, Model, Form, object_id = None):
 	current_lang=request.session['django_language']
 	if request.method == 'POST': #POST

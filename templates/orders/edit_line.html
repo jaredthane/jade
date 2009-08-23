@@ -1,0 +1,23 @@
+{% extends "orders/base.html" %}
+{% load i18n %}
+{% load tags %}
+
+
+{% block content %}
+	{{ error_message }}
+	{% if object %}
+		<form name="line_form" method="post" action="{% url edit_line object.pk %}">
+	{% else %}
+		<form name="line_form" method="post" action="{% url new_line %}">
+	{% endif %}
+		<div class="column2-unit-left">
+			{% form_field form.order _("Order") %}
+			{% form_field form.quantity _("quantity") %}
+			{% form_field form.price _("price") %}
+			{% form_field form.received _("received") %}
+			{% form_field form.warranty _("warranty") %}
+			
+		</div>
+	</form>
+{% endblock %}
+

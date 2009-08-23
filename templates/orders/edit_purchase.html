@@ -17,11 +17,7 @@
 	{% endif %}
 {% endblock %}
 {% block actions %}
-	{% submit_link 'order_form' _('Save') %}
-	{% url index_purchases as index_url %}
-	{% action index_url _('List of Purchases') %}
-	{% url show_purchase order.pk as show_url %}
-	{% action show_url _('Cancel') %}
+	{% edit_actions 'purchase' _('Save Purchase') _('Cancel') _('List Purchases') obj %}
 {% endblock %}
 {% block content %}
 	{{ error_message }}

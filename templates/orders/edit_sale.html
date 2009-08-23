@@ -1,0 +1,19 @@
+{% extends 'orders/base.html' %}
+{% load i18n %}
+{% load tags %}
+{% block heading %}
+	{% if order %}
+		{% trans "Change Sale" %}
+	{% else %}
+		{% trans "New Sale" %}
+	{% endif %}
+{% endblock %}
+{% block content %}
+
+{{ sale_form }}
+
+{% for f in line_forms %}
+	{{ f.inline }}
+
+{% endfor %}
+{% endblock %}
