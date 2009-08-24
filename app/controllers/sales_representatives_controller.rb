@@ -38,7 +38,7 @@ class SalesRepresentativesController < ApplicationController
 		@reps=User.sales_reps_data(@from,@till,@site)
 		
 		@data=[]
-		total={:previous_balance=>0, :num_receipts=>0, :revenue=>0, :num_payments=>0, :cash_received=>0, :final_balance=>0}
+		total={:previous_balance=>0, :num_receipts=>0, :revenue=>0, :num_payments=>0, :cash_received=>0, :final_balance=>0, :facturas_pendientes=>0}
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for rep in @reps
 		  @data << [rep[:user].login, x.number_to_currency(rep[:previous_balance]), rep[:num_receipts], x.number_to_currency(rep[:revenue]), rep[:num_payments], x.number_to_currency(rep[:cash_received]), rep[:facturas_pendientes], x.number_to_currency(rep[:final_balance])]
