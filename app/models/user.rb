@@ -107,10 +107,14 @@ class User < ActiveRecord::Base
 				rep[:num_payments] = Payment.count(:all, 
 										:conditions=> ['clients.user_id=:rep_id AND date(payments.created_at) >=:from AND date(payments.created_at) <= :till', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
 										:joins=>'inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id')
-				rep[:cash_received] = Post.find(:all, 
+				payment_posts=Post.find(:all, 
 						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],
-						:joins=>'inner join trans on trans.id=posts.trans_id'
-					).collect(&:value).sum
+						:joins=>'inner join trans on trans.id=posts.trans_id')
+				if payment_posts
+					rep[:cash_received]=payment_posts.collect(&:value).sum 
+				else
+					rep[:cash_received]=0
+				end
 				
 				payments_made=Payment.count(:all,
 					:conditions=> ['clients.user_id=:rep_id AND date(payments.created_at) <= :till', {:till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
