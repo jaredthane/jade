@@ -47,7 +47,7 @@ class SalesRepresentativesController < ApplicationController
 		  total[:revenue]+=rep[:revenue].to_i
 		  total[:num_payments]+=rep[:num_payments]
 		  total[:cash_received]+=rep[:cash_received]
-		  total[:cash_received]+=rep[:facturas_pendientes]
+		  total[:facturas_pendientes]+=rep[:facturas_pendientes]
 		  total[:final_balance]+=rep[:final_balance]
 		end
 		@data << ["---", "---", "---", "---", "---", "---", "---"]
