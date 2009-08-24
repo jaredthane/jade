@@ -231,7 +231,7 @@ class Line < ActiveRecord::Base
 				#logger.debug "self.product_id=#{self.product_id.to_s}"
 				s.product_id=(self.product_id )
 				s.save
-			end
+			end   
 		else
 			#logger.debug  "taking find path"
 			s=SerializedProduct.find_by_serial_number(serial)
