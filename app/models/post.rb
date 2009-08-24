@@ -70,12 +70,19 @@ class Post < ActiveRecord::Base
 			post.save
 		end
 	end
+
 	##################################################################################################
 	# Calculates balance based on accounts current balance + this posts value
 	#################################################################################################	
 	def calculate_balance
 		# Now calculate the balance
+		mydate=(self.created_at||Time.now)
 #		logger.debug 'OLD BALANCE=' + self.account.simple_balance.to_s + '+ VALUE=' +self.value.to_s + ' * POST_TYPE=' + self.post_type_id.to_s + ' * MODIFIER='+self.account.modifier.to_s
-		self.balance=(self.account.simple_balance || 0 ) + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
+		last_post=Post.last(:conditions=> ['date(trans.created_at) < :mydate AND posts.account_id=:account', {:mydate=>mydate.to_date.to_s('%Y-%m-%d'), :account=>self.account_id}],:joins=>'inner join trans on trans.id=posts.trans_id')
+		if last_post
+			self.balance=(last_post.balance || 0 ) + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
+		else
+			self.balance=(self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
+		end
 	end
 end

@@ -52,6 +52,8 @@ class User < ActiveRecord::Base
 	end
 	def today
 		if self.date
+			logger.debug "self.date=#{self.date.to_s}"
+			logger.debug "Time.now.change(:year=>self.date.year, :month=>self.date.month, :day=>self.date.day)=#{Time.now.change(:year=>self.date.year, :month=>self.date.month, :day=>self.date.day).to_s}"
 			return Time.now.change(:year=>self.date.year, :month=>self.date.month, :day=>self.date.day)
 		else
 			return Date.today
@@ -111,14 +113,23 @@ class User < ActiveRecord::Base
 					).collect(&:value).sum
 				new_cash_balance, new_rev_balance, old_cash_balance, old_rev_balance=nil, nil, nil, nil
 				if r.cash_account
-					new_cash_balance=r.cash_account.balance
-					last_cash_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id')
-					old_cash_balance=last_cash_post.balance if last_cash_post
+#					new_cash_balance=r.cash_account.balance
+					logger.debug "geting first_cash_post "
+					first_cash_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id',:order=>'created_at')
+					old_cash_balance=first_cash_post.balance  if first_cash_post
+					
+					logger.debug "geting last_cash_post "
+					last_cash_post=Post.last(:conditions=> ['date(trans.created_at) < :till AND posts.account_id=:account', {:till=>(till.to_date+1).to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id',:order=>'created_at')
+					new_cash_balance=last_cash_post.balance  if last_cash_post
 				end
 				if r.revenue_account
-					new_rev_balance=r.revenue_account.balance
-					last_rev_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id')
-					old_rev_balance=last_rev_post.balance if last_rev_post
+#					new_rev_balance=r.revenue_account.balance
+					logger.debug "geting first_rev_post "
+					first_rev_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id',:order=>'created_at')
+					old_rev_balance=first_rev_post.balance if first_rev_post
+					logger.debug "geting last_rev_post "
+					last_rev_post=Post.last(:conditions=> ['date(trans.created_at) < :till AND posts.account_id=:account', {:till=>(till.to_date+1).to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id',:order=>'created_at')
+					new_rev_balance=last_rev_post.balance if last_rev_post
 				end
 				rep[:final_balance]=(new_rev_balance||0)-(new_cash_balance||0)
 				rep[:previous_balance]=(old_rev_balance||0)-(old_cash_balance||0)

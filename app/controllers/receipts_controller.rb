@@ -135,6 +135,8 @@ class ReceiptsController < ApplicationController
     return false
 	end
 	def generate_receipts(list, start_id=1, created_at=User.current_user.today, nul=false)
+		logger.debug "created_at="+created_at.to_s
+		logger.debug "User.current_user.date=#{User.current_user.date.to_s}"
 		receipts_made=[]
 		logger.debug "start_id is" + start_id.to_s
 		for order in list
@@ -147,10 +149,18 @@ class ReceiptsController < ApplicationController
 		  for line in order.lines
 		    if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt == 0) 
 		      # Create a new receipt
-		      r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{start_id}.pdf", :user=> User.current_user, :created_at=>created_at)
+		      
+					logger.debug "created_at="+created_at.to_s
+					logger.debug "User.current_user.date=#{User.current_user.date.to_s}"
+					logger.debug "User.current_user.today=#{User.current_user.today.to_s}"
+		      r=Receipt.new(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{start_id}.pdf", :user=> User.current_user, :created_at=>created_at)
+		      r.created_at=created_at
+		      logger.debug "new receipt=#{r.inspect}"
+		      r.save()
+		      logger.debug "new receipt=#{r.inspect}"
 		      receipts_made << r
 		      o=Order.find(order.id)
-		      o.receipt_printed=Date.today
+		      o.receipt_printed=created_at
 		      o.save
 		      lines_on_receipt = 0
 		      start_id += 1
@@ -323,6 +333,7 @@ class ReceiptsController < ApplicationController
   def create
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
+    params[:created_at]=untranslate_month(params[:created_at]) if params[:created_at]
     @next = generate_receipts([@order], params[:number].to_i, params[:created_at])
     if @next 
     	flash[:info] = "La factura ha sido generada existosamente"
@@ -457,6 +468,7 @@ class ReceiptsController < ApplicationController
 			flash[:error] = "No tiene los derechos suficientes para cambiar facturas"
 			return false 
   	end
+  	params[:receipt][:created_at]=untranslate_month(params[:receipt][:created_at]) if params[:receipt][:created_at]
     @receipt = Receipt.find(params[:id])
 	  if  @receipt.update_attributes(params[:receipt])
 			flash[:notice] = 'Factura ha sido actualizado exitosamente.'

@@ -5,6 +5,7 @@
 		<dt><%= link_to 'Cambiar', edit_account_path(@account) %> </dt>
 		<dt><%= link_to 'Nueva Transaccion', new_transaction_path  %></dt>
 		<dt><%= link_to 'Transferir Saldo', new_balance_transfer_path  %></dt>
+		<dt><%= link_to 'Contar Saldos', recount_balances_path  %></dt>
 		<dt><%= link_to 'Remover', @account, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
 	<% end %>
   <dt><%= link_to 'Lista', accounts_path, :class =>'action' %></dt>

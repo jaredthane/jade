@@ -67,6 +67,12 @@ class AccountsController < ApplicationController
     redirect_to account
     return false
 	end
+	def recount	
+		account = Account.find(params[:id])
+		account.recount_balances
+		redirect_to account
+		return false
+	end
   # GET /accounts/new
   # GET /accounts/new.xml
   def new

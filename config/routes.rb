@@ -7,6 +7,7 @@ ActionController::Routing::Routes.draw do |map|
   map.new_nul_receipt_number 'receipts/new_nul_number', :controller => 'receipts', :action => 'new_nul_number'
   map.process_subscriptions 'receipts/process_subscriptions', :controller => 'receipts', :action => 'process_subscriptions'
   map.new_balance_transfer 'accounts/:id/new_balance_transfer', :controller => 'accounts', :action => 'new_balance_transfer'
+  map.recount_balances 'accounts/:id/recount', :controller => 'accounts', :action => 'recount'
   map.create_balance_transfer 'accounts/:id/create_balance_transfer', :controller => 'accounts', :action => 'create_balance_transfer'
   map.preview_process 'subscriptions/preview_process', :controller => 'subscriptions', :action => 'preview_process'
   map.attachment 'orders/attachment', :controller => 'orders', :action => 'attachment'
