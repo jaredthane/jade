@@ -111,11 +111,15 @@ class User < ActiveRecord::Base
 						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],
 						:joins=>'inner join trans on trans.id=posts.trans_id'
 					).collect(&:value).sum
-				rep[:facturas_pendientes]=rep[:num_receipts]-rep[:num_payments]
-				Order.count(:all,
-					:conditions=>'amount_paid<grand_total'
 				
+				payments_made=Payment.count(:all,
+					:conditions=> ['clients.user_id=:rep_id AND date(payments.created_at) <= :till', {:till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
+					:joins=>'inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id')
+				orders_made=Order.count(:all,
+					:conditions=> ['clients.user_id=:rep_id AND date(orders.created_at) <= :till', {:till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
+					:joins=>'inner join entities as clients on clients.id=orders.client_id'
 				)
+				rep[:facturas_pendientes]=orders_made-payments_made
 				new_cash_balance, new_rev_balance, old_cash_balance, old_rev_balance=nil, nil, nil, nil
 				if r.cash_account
 #					new_cash_balance=r.cash_account.balance
