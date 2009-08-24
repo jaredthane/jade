@@ -24,22 +24,24 @@
 <hr class="clear-contentunit" />
 <div>
   <div class="table_header_row">
-	  <div class="table_cell_20">Nombre</div>
+	  <div class="table_cell_15">Nombre</div>
     <div class="table_cell_15">Saldo Anterior</div>
     <div class="table_cell_10">Facturas</div>
     <div class="table_cell_15">Saldo Provisionado</div>
     <div class="table_cell_10">Pagos</div>
-    <div class="table_cell_15">Saldo Cobrado</div>
+    <div class="table_cell_10">Saldo Cobrado</div>
+    <div class="table_cell_10">Facturas Pendientes</div>
     <div class="table_cell">Saldo Final</div>
   </div>
   <% for rep in @reps %>
     <div class="table_row">
-      <div class="table_cell_20"><%= link_to rep[:user].name, rep[:user] %></div>
+      <div class="table_cell_15"><%= link_to rep[:user].name, rep[:user] %></div>
       <div class="table_cell_15"><%= h number_to_currency(rep[:previous_balance]) %></div>
       <div class="table_cell_10"><%= h rep[:num_receipts] %></div>
       <div class="table_cell_15"><%= h number_to_currency(rep[:revenue]) %></div>
       <div class="table_cell_10"><%= h rep[:num_payments] %></div>
-      <div class="table_cell_15"><%= h number_to_currency(rep[:cash_received]) %></div>
+      <div class="table_cell_10"><%= h number_to_currency(rep[:cash_received]) %></div>
+      <div class="table_cell_10"><%= h rep[:facturas_pendientes] %></div>
       <div class="table_cell"><%= h number_to_currency(rep[:final_balance]) %></div>
     </div>
   <% end %>

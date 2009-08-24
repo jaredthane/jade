@@ -111,6 +111,11 @@ class User < ActiveRecord::Base
 						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],
 						:joins=>'inner join trans on trans.id=posts.trans_id'
 					).collect(&:value).sum
+				rep[:facturas_pendientes]=rep[:num_receipts]-rep[:num_payments]
+				Order.count(:all,
+					:conditions=>'amount_paid<grand_total'
+				
+				)
 				new_cash_balance, new_rev_balance, old_cash_balance, old_rev_balance=nil, nil, nil, nil
 				if r.cash_account
 #					new_cash_balance=r.cash_account.balance
