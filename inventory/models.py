@@ -27,7 +27,12 @@ class ProductBase(Model):
 	unit = ForeignKey(UnitOfMeasure)
 	revenue_account = ForeignKey(Account)
 	categories = ManyToManyField(ProductCategory)
-		
+	def __unicode__(self):
+		return self.name
+	@permalink
+	def get_absolute_url(self):
+		return ('accounting.show_account', None, { 'object_id': self.id })
+	
 class Product(ProductBase):
 	vendor = ForeignKey(Vendor)
 	location = CharField(max_length=50, default='')
@@ -41,7 +46,18 @@ class Product(ProductBase):
 	class Meta:
 		verbose_name_plural = _('Products')
 		verbose_name = _('Product')
+		
+class SerialNumber(Model):
+	number = CharField(max_length=50, default='')
+	product = ForeignKey(Product)
+	def __unicode__(self):
+		return self.name
+	class Meta:
+		verbose_name_plural = _('Serial Numbers')
+		verbose_name = _('Serial Number')
+		unique_together = ("product", "number")
 
+		
 class Service(ProductBase):
 	start = DateTimeField()
 	end = DateTimeField()

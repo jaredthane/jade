@@ -69,6 +69,10 @@
 .main-content h1.side {clear:none;}
 .main-content h2.side {clear:none;}
 .main-content h3.side {clear:none;}
+.main-content input[type=text] { padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-content line input { padding:2px; background: #e1e1e1;border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-content .table_row input[type=text] {background: #e1e1e1;}
+.main-content select {padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 
 .main-content h4 {margin:1.5em 0 1.0em 0; color:rgb(80,80,80); font-family:"trebuchet ms",arial,sans-serif; font-weight:normal; font-size:170%;}
 .main-content h5 {margin:1.5em 0 1.0em 0; color:rgb(80,80,80); font-family:"trebuchet ms",arial,sans-serif; font-size:140%;}

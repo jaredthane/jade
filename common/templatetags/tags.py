@@ -111,11 +111,12 @@ def show_actions(model_name, new_label, edit_label, index_label, obj):
 def edit_actions(model_name, save_label, cancel_label, index_label, obj=None):
 	index_url=reverse('index_'+model_name.lower()+'s')
 	save_action=submit_link(model_name+'_form', save_label)
+	print "obj=" + str(obj)
 	if obj:
-		show_url=reverse('show_'+model_name.lower(), kwargs={'object_id':obj.pk} )
-		return u'%s%s%s' % (save_action, action(index_url, index_label), action(show_url, cancel_label))
-	else:
-		return u'%s%s' % (save_action, action(index_url, cancel_label))
+		if obj.pk:
+			show_url=reverse('show_'+model_name.lower(), kwargs={'object_id':obj.pk} )
+			return u'%s%s%s' % (save_action, action(index_url, index_label), action(show_url, cancel_label))
+	return u'%s%s' % (save_action, action(index_url, cancel_label))
 		
 @register.simple_tag
 def index_actions(model_name, new_label):

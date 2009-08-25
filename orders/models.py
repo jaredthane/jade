@@ -1,7 +1,7 @@
 from django.db.models import *
 from jade.entities.models import Client, Site, Vendor
 #from jade.accounting.models import *
-from jade.inventory.models import Warranty, ProductBase
+from jade.inventory.models import Warranty, ProductBase, SerialNumber
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 
@@ -35,15 +35,17 @@ class Purchase(Order):
 	
 class Line(Model):
 	order = ForeignKey(Order)
-	quantity = IntegerField()
+	product = ForeignKey(ProductBase)
+	quantity = IntegerField(default=1)
 	price = DecimalField(max_digits=5, decimal_places=2, default='0.00')
-	notes = TextField()
-	received = DateTimeField()
+	notes = TextField(blank=True, default='')
+	serial_numbers = ManyToManyField(SerialNumber, blank=True)
+	received = DateTimeField(blank=True, null=True)
 	warranty = OneToOneField(Warranty, blank=True, null=True)
 
-class NonInventoryLine(Line):
-	description = TextField()
+#class NonInventoryLine(Line):
+#	description = TextField()
 	
-class InventoryLine(Line):
-	product = ForeignKey(ProductBase)
+#class InventoryLine(Line):
+#	product = ForeignKey(ProductBase)
 

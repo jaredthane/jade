@@ -10,7 +10,7 @@ class SaleForm(ModelForm):
 
 	class Meta:
 		model = Sale
-		exclude = ('notes',)
+		fields = ('client','site','number','created_at')
 		
 class PurchaseForm(DynamicForm):
 	def __init__(self, lang, *args, **kwargs):
@@ -27,5 +27,5 @@ class LineForm(ModelForm):
 #		self.make_fields_dynamic(lang, ('notes',))
 	class Meta:
 		model = Line
-		exclude = ('notes','order')
-LineFormSet = formset_factory(LineForm)
+		fields=('order','product', 'quantity','price')
+#LineFormSet = formset_factory(LineForm)

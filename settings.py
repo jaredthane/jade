@@ -1,5 +1,5 @@
 # Django settings for jade project.
-
+from django.utils.translation import ugettext_lazy as _
 import sys
 sys.path.append('/home/jared/django/jade/multilingual/')
 
@@ -32,8 +32,8 @@ TIME_ZONE = 'America/Chicago'
 LANGUAGE_CODE = 'es'
 
 LANGUAGES = (
-    ('es', 'Espanol'),
-    ('en', 'English'),
+    ('es', _('Spanish')),
+    ('en', _('English')),
     )
 DEFAULT_LANGUAGE = 1
 SITE_ID = 1

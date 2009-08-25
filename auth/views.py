@@ -27,7 +27,6 @@ def logout_view(request):
   return render_to_response('auth/login.html', {'info_message': info_message, 'current_url':request['HTTP_REFERER']})
 
 def set_language(request):
-	request.GET.get('lang', '')
 	print "request.GET.get('lang', 'en')=" + str(request.GET.get('lang', 'en'))
 	print "request.session['django_language']=" + str(request.session['django_language'])
 	request.session['django_language'] = request.GET.get('lang', 'en')

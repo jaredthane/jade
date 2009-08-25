@@ -1,17 +1,53 @@
 {% extends 'orders/base.html' %}
 {% load i18n %}
 {% load tags %}
+{% block actions %}
+	{% edit_actions 'sale' _('Save Sale') _('Cancel') _('List Sales') obj %}
+{% endblock %}
+{% block includes %}
+	<script type="text/javascript" src="/static/js/edit_order.js"></script> 
+{% endblock %}
 {% block heading %}
-	{% if order %}
+	{% if obj.pk %}
 		{% trans "Change Sale" %}
 	{% else %}
 		{% trans "New Sale" %}
 	{% endif %}
 {% endblock %}
 {% block content %}
+	{% if obj.pk %}
+		<form name="sale_form" method="post" action="{% url edit_sale obj.pk %}">
+	{% else %}
+		<form name="sale_form" method="post" action="{% url new_sale %}">
+	{% endif %}
+	
+	<div class="column2-unit-left">
+		{% form_field sale_form.client _("Client") %}
+		{% form_field sale_form.number _("Reciept Number") %}
+	</div>
+	<div class="column2-unit-right">
+		{% form_field sale_form.site _("Site") %}
+		{% form_field sale_form.created_at _("Date Created") %}
+	</div>
+	<hr class="clear-contentunit"/>
+	<div class="table_header_row">
+		<div class="table_cell_30">{% trans "Product" %}</div>
+		<div class="table_cell_25">{% trans "Quantity" %}</div>
+		<div class="table_cell_25">{% trans "Price / Unit" %}</div>
+		<div class="table_cell">{% trans "Actions" %}</div>
+	</div>
+	<div class="lines">
+		{% for form in formset.forms %}
+			{% include 'orders/new_line.html' %}
+		{% endfor %}
+	</div>
 
-{{ sale_form }}
-
-{{ formset }}
-
+	</form>
+	<br/>
+	<form name="new_line_form" method="post" action="{% url new_line %}">
+		<p>
+			<input name="upc" type="text" id="upc"> <a href="#" id="get_ajax" >Add a Line</a> 
+		</p>
+	</form>
+	
 {% endblock %}

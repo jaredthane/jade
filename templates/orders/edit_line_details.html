@@ -1,0 +1,22 @@
+{% form_field sale_form.product _("Product or Service") %}
+{% form_field sale_form.quantity _("Quantity") %}
+{% form_field sale_form.price _("Price") %}
+{% form_field sale_form.notes _("Notes") %}
+{% form_field sale_form.received _("Received") %}
+{% form_field sale_form.warranty _("Warranty") %}
+
+	order = ForeignKey(Order)
+	product = ForeignKey(ProductBase)
+	quantity = IntegerField(default=1)
+	price = DecimalField(max_digits=5, decimal_places=2, default='0.00')
+	notes = TextField()
+	serial_numbers = ManyToManyField(SerialNumber)
+	received = DateTimeField()
+	warranty = OneToOneField(Warranty, blank=True, null=True)
+
+		<div class="table_cell_30">{{form.product}}</div>
+		<div class="table_cell_25">{{form.quantity}}</div>
+		<div class="table_cell_25">{{form.price}}</div>
+		<div class="table_cell"><a href="#" id="delete" class="delete" >{% trans "Delete" %}</a><br/<a href="#" id="details" >{% trans "Details" %}</a></div>
+	</div>
+</div>

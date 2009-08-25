@@ -4,5 +4,6 @@ from django.contrib import admin
 admin.site.register(Sale)
 admin.site.register(Purchase)
 admin.site.register(Order)
+admin.site.register(Line)
 
 
