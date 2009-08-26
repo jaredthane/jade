@@ -18,7 +18,9 @@ def edit_site(request, object_id=None):
 
 
 def index_clients(request):
-	pass
+	object_list=Client.objects.filter(active=True)
+	return generic_index(request, Client, object_list)
+	
 def show_client(request, object_id):
 	pass
 def edit_client(request, object_id=None):

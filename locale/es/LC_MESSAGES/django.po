@@ -8,13 +8,21 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-08-19 10:33-0600\n"
+"POT-Creation-Date: 2009-08-25 18:36-0600\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: settings.py:35
+msgid "Spanish"
+msgstr "Español"
+
+#: settings.py:36
+msgid "English"
+msgstr "Ingles"
 
 #: accounting/models.py:6
 msgid "Debit"
@@ -24,196 +32,268 @@ msgstr "Debito"
 msgid "Credit"
 msgstr "Credito"
 
-#: accounting/views.py:14 templates/accounting/edit_account.html:41
-msgid "Number"
-msgstr "Numero"
+#: accounting/models.py:54
+#, fuzzy
+msgid "Accounts"
+msgstr "Cuentas"
 
-#: accounting/views.py:14 templates/accounting/edit_account.html:35
-#: templates/accounting/show_account.html:14
-msgid "Name"
-msgstr "Nombre"
+#: accounting/models.py:55
+#, fuzzy
+msgid "Account"
+msgstr "Cuenta"
 
-#: accounting/views.py:14 templates/accounting/edit_account.html:48
-#: templates/accounting/show_account.html:19
-msgid "Branch"
-msgstr "Rama"
+#: accounting/models.py:388
+msgid "Transactions"
+msgstr "Transacciones"
 
-#: accounting/views.py:14 templates/accounting/show_account.html:20
-msgid "Type"
-msgstr "Tipo"
+#: accounting/models.py:389
+msgid "Transaction"
+msgstr "Transaccion"
 
-#: accounting/views.py:14 templates/accounting/show_account.html:16
+#: accounting/models.py:526
+msgid "Entries"
+msgstr "anotaciónes"
+
+#: accounting/models.py:527
+msgid "Entry"
+msgstr "anotación"
+
+#: accounting/models.py:537
+#, fuzzy
+msgid "Balances"
+msgstr "Saldos"
+
+#: accounting/models.py:538 templates/accounting/index_accounts.html:15
+#: templates/accounting/show_account.html:13
 msgid "Balance"
 msgstr "Saldo"
 
 #: auth/views.py:17
 msgid ""
 "This account has been disabled, please contact your system administrator"
-msgstr "Esta cuenta ha sido deshabilitada. Favor de comunicarse con el administrador de sistemas."
+msgstr ""
+"Esta cuenta ha sido deshabilitada. Favor de comunicarse con el administrador "
+"de sistemas."
 
 #: auth/views.py:20
 msgid ""
 "The username and password combination you entered is not correct. Please try "
 "again"
-msgstr "La combinacion de nombre de usuario y contraseña no es correcta. Favor de Tratarlo otra vez."
+msgstr ""
+"La combinacion de nombre de usuario y contraseña no es correcta. Favor de "
+"Tratarlo otra vez."
 
 #: auth/views.py:26
 msgid "You have been logged out sucessfully."
 msgstr "Se ha engresado exitosamente."
 
-#: multilingual/multilingual/flatpages/admin.py:9
-msgid "Advanced options"
-msgstr "Opciones Avanzadas"
+#: entities/forms.py:28
+msgid "inventory"
+msgstr "inventario"
 
-#: multilingual/multilingual/flatpages/models.py:9
-msgid "URL"
-msgstr "URL"
+#: entities/forms.py:30
+msgid "Cash"
+msgstr "Efectivo"
 
-#: multilingual/multilingual/flatpages/models.py:10
-msgid ""
-"Example: '/about/contact/'. Make sure to have leading and trailing slashes."
+#: entities/forms.py:32
+msgid "expense"
+msgstr "gasto"
+
+#: entities/forms.py:34
+msgid "returns"
+msgstr "devolución"
+
+#: entities/forms.py:36
+msgid "tax"
+msgstr "impuesto"
+
+#: entities/forms.py:38
+msgid "payables"
+msgstr "cuentas por pagar"
+
+#: entities/models.py:20 templates/entities/base.html:4
+#, fuzzy
+msgid "Entities"
+msgstr "Entidades"
+
+#: entities/models.py:21
+msgid "Entity"
+msgstr "Entidad"
+
+#: entities/models.py:32
+msgid "Receipt Groups"
+msgstr "Grupos de Facturas"
+
+#: entities/models.py:33
+msgid "Receipt Group"
+msgstr "Grupo de Facturas"
+
+#: entities/models.py:50 templates/menus.html:13
+#, fuzzy
+msgid "Sites"
+msgstr "Sitios"
+
+#: entities/models.py:51 templates/orders/edit_sale.html:30
+#: templates/orders/show_sale.html:17
+#, fuzzy
+msgid "Site"
+msgstr "Sitio"
+
+#: entities/models.py:66
+msgid "Contacts"
 msgstr ""
 
-#: multilingual/multilingual/flatpages/models.py:11
-msgid "enable comments"
-msgstr "habilitar comentarios"
-
-#: multilingual/multilingual/flatpages/models.py:12
-msgid "template name"
-msgstr "nombre de plantilla"
-
-#: multilingual/multilingual/flatpages/models.py:13
-msgid ""
-"Example: 'flatpages/contact_page.html'. If this isn't provided, the system "
-"will use 'flatpages/default.html'."
-msgstr "Ejemplo: 'flatpages/contact_page.html'. Si no se provee, la sistema usará 'flatpages/default.html'."
-
-#: multilingual/multilingual/flatpages/models.py:14
-msgid "registration required"
-msgstr "se exige la registración"
-
-#: multilingual/multilingual/flatpages/models.py:14
-msgid "If this is checked, only logged-in users will be able to view the page."
-msgstr "Si se selecciona esto, solo usuarios registrados podrán ver la página."
-
-#: multilingual/multilingual/flatpages/models.py:31
-msgid "title"
-msgstr "titulo"
-
-#: multilingual/multilingual/flatpages/models.py:32
-msgid "content"
-msgstr "contenido"
-
-#: multilingual/multilingual/flatpages/models.py:36
-msgid "multilingual flat page"
-msgstr "página plana multiligue"
-
-#: multilingual/multilingual/flatpages/models.py:37
-msgid "multilingual flat pages"
-msgstr "páginas planas multiligues"
-
-#: multilingual/testproject/articles/models.py:267
-#: multilingual/testproject/articles/models.py:325
-msgid "Created by"
-msgstr "Creado por"
-
-#: multilingual/testproject/articles/models.py:269
-#: multilingual/testproject/articles/models.py:327
-msgid "Created at"
-msgstr "Creado"
-
-#: multilingual/testproject/articles/models.py:271
-#: multilingual/testproject/articles/models.py:329
-#: multilingual/testproject/issue_16/models/category.py:11
-#: multilingual/testproject/issue_16/models/page.py:12
-msgid "Parent category"
-msgstr "Categoría Superior"
-
-#: multilingual/testproject/articles/models.py:289
-#: multilingual/testproject/issue_16/models/category.py:15
-msgid "The name"
-msgstr "El Nombre"
-
-#: multilingual/testproject/articles/models.py:291
-msgid "The description"
-msgstr "La descripción"
-
-#: multilingual/testproject/articles/models.py:336
-#: multilingual/testproject/issue_16/models/page.py:16
-msgid "The title"
-msgstr "El título"
-
-#: multilingual/testproject/articles/models.py:338
-#: multilingual/testproject/issue_16/models/page.py:18
-msgid "The contents"
-msgstr "Los contenidos"
-
-#: multilingual/testproject/issue_15/models.py:36
-#: multilingual/testproject/issue_29/models.py:36
-msgid "Parent gallery"
+#: entities/models.py:67
+msgid "Contact"
 msgstr ""
 
-#: multilingual/testproject/issue_15/models.py:37
-#: multilingual/testproject/issue_29/models.py:38
-msgid "Modified"
-msgstr ""
+#: entities/models.py:71
+#, fuzzy
+msgid "Clients"
+msgstr "Cliente"
 
-#: multilingual/testproject/issue_15/models.py:40
-#: multilingual/testproject/issue_29/models.py:41
-#: multilingual/testproject/issue_37/models.py:34
-msgid "Title"
-msgstr ""
+#: entities/models.py:72 templates/menus.html:6
+#: templates/orders/edit_sale.html:26 templates/orders/show_sale.html:11
+msgid "Client"
+msgstr "Cliente"
 
-#: multilingual/testproject/issue_15/models.py:41
-#: multilingual/testproject/issue_29/models.py:42
-msgid "Description"
-msgstr ""
+#: entities/models.py:78
+msgid "Vendors"
+msgstr "Proveedores"
 
-#: templates/base.html:45 templates/base.html.py:60
+#: entities/models.py:79 templates/orders/edit_purchase.html:38
+#: templates/orders/index_purchases.html:15
+#: templates/orders/index_sales.html:15
+msgid "Vendor"
+msgstr "Proveedor"
+
+#: inventory/models.py:10
+msgid "Units Of Measure"
+msgstr "Unidades de Medida"
+
+#: inventory/models.py:11
+msgid "Unit Of Measure"
+msgstr "Unidad de medida"
+
+#: inventory/models.py:20
+msgid "Categories"
+msgstr "Categorías"
+
+#: inventory/models.py:21
+#, fuzzy
+msgid "Category"
+msgstr "Categoría"
+
+#: inventory/models.py:47 templates/menus.html:9 templates/menus.html.py:10
+#: templates/menus.html:15
+msgid "Products"
+msgstr "Productos"
+
+#: inventory/models.py:48 templates/orders/edit_sale.html:35
+#: templates/orders/show_sale.html:27
+#, fuzzy
+msgid "Product"
+msgstr "Productos"
+
+#: inventory/models.py:60
+#, fuzzy
+msgid "Serial Numbers"
+msgstr "Numeros de Serie"
+
+#: inventory/models.py:61
+#, fuzzy
+msgid "Serial Number"
+msgstr "Numero de Serie"
+
+#: inventory/models.py:69 templates/menus.html:11
+msgid "Services"
+msgstr "Servicios"
+
+#: inventory/models.py:70
+#, fuzzy
+msgid "Service"
+msgstr "Servicio"
+
+#: inventory/models.py:83
+msgid "Warranties"
+msgstr "Garantías"
+
+#: inventory/models.py:84 templates/orders/edit_line_details.html:6
+msgid "Warranty"
+msgstr "Garantía"
+
+#: inventory/models.py:101
+msgid "Price Groups"
+msgstr "Grupo de Precios"
+
+#: inventory/models.py:102
+msgid "Price Group"
+msgstr "Grupo de Precio"
+
+#: inventory/models.py:118
+#, fuzzy
+msgid "Prices"
+msgstr "Precios"
+
+#: inventory/models.py:119 templates/orders/edit_line_details.html:3
+#: templates/orders/show_sale.html:29
+#, fuzzy
+msgid "Price"
+msgstr "Precio"
+
+#: orders/models.py:20 templates/orders/base.html:4
+msgid "Orders"
+msgstr "Pedidos"
+
+#: orders/models.py:21
+msgid "Order"
+msgstr "Pedido"
+
+#: templates/base.html:47 templates/base.html.py:62
 msgid "Jade Inventory Control and Accounting System"
 msgstr "Sistema de Control de Inventario y Contabilidad Jade"
 
-#: templates/base.html:57 templates/base.html.py:59
+#: templates/base.html:59 templates/base.html.py:61
 msgid "Home Page"
 msgstr "Página Inicio"
 
-#: templates/base.html:90
+#: templates/base.html:92
 msgid "Home"
 msgstr "Inicio"
 
-#: templates/base.html:96
+#: templates/base.html:98
 msgid "Search"
 msgstr "Buscar"
 
-#: templates/base.html:97
+#: templates/base.html:99
 msgid "GO"
 msgstr "Ya"
 
-#: templates/base.html:111
+#: templates/base.html:113
 msgid "Links"
 msgstr "Enlaces"
 
-#: templates/base.html:140 templates/accounting/base.html:4
+#: templates/base.html:142 templates/accounting/base.html:3
 msgid "Accounting"
 msgstr "Contabilidad"
 
-#: templates/base.html:141
+#: templates/base.html:143
 msgid "Logout"
 msgstr "Salir"
 
-#: templates/base.html:151
+#: templates/base.html:153
 msgid "All Rights Reserved"
 msgstr "Todos los Derechos Reservados"
 
-#: templates/base.html:152
+#: templates/base.html:154
 msgid "Design by:"
 msgstr "Diseño por:"
 
-#: templates/base.html:152
+#: templates/base.html:154
 msgid "Application by:"
 msgstr "Applicación por:"
 
-#: templates/base.html:152
+#: templates/base.html:154
 msgid "Powered by:"
 msgstr "Hecho con:"
 
@@ -225,29 +305,19 @@ msgstr "Nuevo"
 msgid "Sale"
 msgstr "Venta"
 
-#: templates/menus.html:6
-msgid "Client"
-msgstr "Cliente"
-
 #: templates/menus.html:7
 msgid "Purchase"
 msgstr "Compra"
 
-#: templates/menus.html:9 templates/menus.html.py:10
-msgid "Products"
-msgstr "Productos"
-
-#: templates/menus.html:11
-msgid "Services"
-msgstr "Servicios"
-
 #: templates/accounting/edit_account.html:7
+#: templates/accounting/show_account.html:7
 msgid "Edit Account"
 msgstr "Cambiar Cuenta"
 
 #: templates/accounting/edit_account.html:9
 #: templates/accounting/edit_account.html:16
-#: templates/accounting/index_accounts.html:9
+#: templates/accounting/index_accounts.html:6
+#: templates/accounting/show_account.html:7
 msgid "New Account"
 msgstr "Añadir Cuenta"
 
@@ -256,26 +326,61 @@ msgid "Change Account"
 msgstr "Cambiar Cuenta"
 
 #: templates/accounting/edit_account.html:20
-msgid "Save"
-msgstr "Guardar"
+#, fuzzy
+msgid "Save Account"
+msgstr "Añadir Cuenta"
 
-#: templates/accounting/edit_account.html:22
-#: templates/accounting/index_accounts.html:6
-#: templates/accounting/show_account.html:8
-msgid "List of Accounts"
-msgstr "Lista de Cuentas"
-
-#: templates/accounting/edit_account.html:24
+#: templates/accounting/edit_account.html:20
+#: templates/entities/edit_site.html:24 templates/orders/edit_purchase.html:20
+#: templates/orders/edit_sale.html:5
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/accounting/edit_account.html:53
+#: templates/accounting/edit_account.html:20
+#: templates/accounting/show_account.html:7
+#, fuzzy
+msgid "List Accounts"
+msgstr "Lista de Cuentas"
+
+#: templates/accounting/edit_account.html:30
+#: templates/accounting/index_accounts.html:12
+#: templates/accounting/show_account.html:11
+#: templates/entities/edit_site.html:34 templates/entities/index_sites.html:14
+#: templates/entities/show_site.html:11
+msgid "Name"
+msgstr "Nombre"
+
+#: templates/accounting/edit_account.html:31
+#: templates/accounting/index_accounts.html:11
+#: templates/entities/index_sites.html:13
+#: templates/orders/edit_purchase.html:30
+#: templates/orders/index_purchases.html:14
+#: templates/orders/index_sales.html:14
+msgid "Number"
+msgstr "Numero"
+
+#: templates/accounting/edit_account.html:34
+#: templates/accounting/index_accounts.html:13
+#: templates/accounting/show_account.html:16
+msgid "Branch"
+msgstr "Rama"
+
+#: templates/accounting/edit_account.html:35
 msgid "Account Type"
 msgstr "Tipo de Cuenta"
 
-#: templates/accounting/index_accounts.html:34
-msgid "No accounts are available"
-msgstr "Ningunas cuentas disponibles"
+#: templates/accounting/index_accounts.html:4
+msgid "List of Accounts"
+msgstr "Lista de Cuentas"
+
+#: templates/accounting/index_accounts.html:14
+#: templates/accounting/show_account.html:17
+msgid "Type"
+msgstr "Tipo"
+
+#: templates/accounting/index_accounts.html:33
+msgid "The search returned no Accounts"
+msgstr "La búsqueda no devolvio ningunas cuentas"
 
 #: templates/accounting/show_account.html:4
 msgid "Show Account"
@@ -285,11 +390,7 @@ msgstr "Mostrar Cuenta"
 msgid "Account Details"
 msgstr "Detalles de Cuenta"
 
-#: templates/accounting/show_account.html:10
-msgid "Edit this Account"
-msgstr "Cambiar esta cuenta"
-
-#: templates/accounting/show_account.html:15
+#: templates/accounting/show_account.html:12
 msgid "Account Number"
 msgstr "Numero de Cuenta"
 
@@ -304,3 +405,341 @@ msgstr "Nombre de Usuario"
 #: templates/auth/login.html:24
 msgid "Password"
 msgstr "Contraseña"
+
+#: templates/entities/edit_site.html:7 templates/entities/show_site.html:7
+msgid "Edit Site"
+msgstr "Cambiar Sitio"
+
+#: templates/entities/edit_site.html:9 templates/entities/edit_site.html:16
+#: templates/entities/index_sites.html:8 templates/entities/show_site.html:7
+msgid "New Site"
+msgstr "Nuevo Sitio"
+
+#: templates/entities/edit_site.html:14
+#, fuzzy
+msgid "Change Site"
+msgstr "Cambiar Cuenta"
+
+#: templates/entities/edit_site.html:20
+msgid "Save"
+msgstr "Guardar"
+
+#: templates/entities/edit_site.html:22 templates/entities/index_sites.html:5
+#, fuzzy
+msgid "List of Sites"
+msgstr "Lista de Cuentas"
+
+#: templates/entities/edit_site.html:35 templates/entities/show_site.html:12
+#, fuzzy
+msgid "State"
+msgstr "Venta"
+
+#: templates/entities/edit_site.html:36 templates/entities/show_site.html:13
+#, fuzzy
+msgid "Revenue Account"
+msgstr "Añadir Cuenta"
+
+#: templates/entities/edit_site.html:37 templates/entities/show_site.html:14
+#, fuzzy
+msgid "Cash Account"
+msgstr "Cambiar Cuenta"
+
+#: templates/entities/edit_site.html:38 templates/entities/show_site.html:15
+#, fuzzy
+msgid "Returns Account"
+msgstr "Añadir Cuenta"
+
+#: templates/entities/edit_site.html:39 templates/entities/show_site.html:16
+#, fuzzy
+msgid "Payables Account"
+msgstr "Añadir Cuenta"
+
+#: templates/entities/edit_site.html:40 templates/entities/show_site.html:17
+msgid "Phone Number Format"
+msgstr "Formato de Número de Teléfono"
+
+#: templates/entities/edit_site.html:43 templates/entities/show_site.html:20
+msgid "Tax ID"
+msgstr "ID de Impuestos"
+
+#: templates/entities/edit_site.html:44 templates/entities/show_site.html:21
+msgid "Active"
+msgstr "Activo"
+
+#: templates/entities/edit_site.html:45 templates/entities/show_site.html:22
+#, fuzzy
+msgid "Inventory Account"
+msgstr "Cambiar Cuenta"
+
+#: templates/entities/edit_site.html:46 templates/entities/show_site.html:23
+#, fuzzy
+msgid "Expense Account"
+msgstr "Añadir Cuenta"
+
+#: templates/entities/edit_site.html:47 templates/entities/show_site.html:24
+#, fuzzy
+msgid "Tax Account"
+msgstr "Añadir Cuenta"
+
+#: templates/entities/edit_site.html:48 templates/entities/show_site.html:25
+msgid "Default Receipt Group"
+msgstr "Grupo de Facturas por Defecto"
+
+#: templates/entities/edit_site.html:49 templates/entities/show_site.html:26
+#: templates/orders/edit_line_details.html:4
+#: templates/orders/edit_purchase.html:34 templates/orders/show_sale.html:23
+msgid "Notes"
+msgstr "Notas"
+
+#: templates/entities/index_sites.html:25
+msgid "No sites found."
+msgstr "No se halló ningunos sitios"
+
+#: templates/entities/show_site.html:4
+msgid "Show Site"
+msgstr "Mostrar Sitio"
+
+#: templates/entities/show_site.html:5
+#, fuzzy
+msgid "Site Details"
+msgstr "Detalles de Cuenta"
+
+#: templates/entities/show_site.html:7
+msgid "List Sites"
+msgstr "Alistar Sitios"
+
+#: templates/orders/edit_line.html:9
+#: templates/orders/edit_line_details.html:20 templates/orders/new_line.html:9
+msgid "Delete"
+msgstr "Borrar"
+
+#: templates/orders/edit_line.html:9
+#: templates/orders/edit_line_details.html:20 templates/orders/new_line.html:9
+#, fuzzy
+msgid "Details"
+msgstr "Detalles de Cuenta"
+
+#: templates/orders/edit_line_details.html:1
+msgid "Product or Service"
+msgstr "Producto o Servicio"
+
+#: templates/orders/edit_line_details.html:2
+#: templates/orders/edit_sale.html:36 templates/orders/show_sale.html:28
+msgid "Quantity"
+msgstr "Cantidad"
+
+#: templates/orders/edit_line_details.html:5
+msgid "Received"
+msgstr "Recibido"
+
+#: templates/orders/edit_purchase.html:7
+#, fuzzy
+msgid "Edit Purchase"
+msgstr "Cambiar Compra"
+
+#: templates/orders/edit_purchase.html:9
+#: templates/orders/edit_purchase.html:16
+#: templates/orders/index_purchases.html:9
+#, fuzzy
+msgid "New Purchase"
+msgstr "Nueva Compra"
+
+#: templates/orders/edit_purchase.html:14
+#, fuzzy
+msgid "Change Purchase"
+msgstr "Cambiar Compra"
+
+#: templates/orders/edit_purchase.html:20
+#, fuzzy
+msgid "Save Purchase"
+msgstr "Guardar Compra"
+
+#: templates/orders/edit_purchase.html:20
+#, fuzzy
+msgid "List Purchases"
+msgstr "Alistar Compras"
+
+#: templates/orders/edit_purchase.html:31
+msgid "Date Recieved"
+msgstr "Fecha Recibido"
+
+#: templates/orders/edit_purchase.html:32
+msgid "Total Price"
+msgstr "Precio Total"
+
+#: templates/orders/edit_purchase.html:33
+msgid "Created by"
+msgstr "Creado por"
+
+#: templates/orders/edit_purchase.html:39
+msgid "Date Requested"
+msgstr "Fecha Solicitado"
+
+#: templates/orders/edit_purchase.html:40 templates/orders/show_sale.html:18
+#: templates/orders/show_sale.html.py:19
+#, fuzzy
+msgid "Amount Paid"
+msgstr "Cantidad Cancelado"
+
+#: templates/orders/edit_sale.html:5
+#, fuzzy
+msgid "Save Sale"
+msgstr "Guardar Venta"
+
+#: templates/orders/edit_sale.html:5 templates/orders/show_sale.html:7
+msgid "List Sales"
+msgstr "Alistar Ventas"
+
+#: templates/orders/edit_sale.html:12
+msgid "Change Sale"
+msgstr "Cambiar Venta"
+
+#: templates/orders/edit_sale.html:14 templates/orders/index_sales.html:9
+#: templates/orders/show_sale.html:7
+#, fuzzy
+msgid "New Sale"
+msgstr "Nueva Venta"
+
+#: templates/orders/edit_sale.html:27
+#, fuzzy
+msgid "Reciept Number"
+msgstr "Numero de Factura"
+
+#: templates/orders/edit_sale.html:31
+#, fuzzy
+msgid "Date Created"
+msgstr "Fecha Creado"
+
+#: templates/orders/edit_sale.html:37
+msgid "Price / Unit"
+msgstr "Precio por Unidad"
+
+#: templates/orders/edit_sale.html:38 templates/orders/show_sale.html:20
+#: templates/orders/show_sale.html.py:30
+msgid "Delivered"
+msgstr "Entregado"
+
+#: templates/orders/edit_sale.html:39
+#, fuzzy
+msgid "Actions"
+msgstr "Acciones"
+
+#: templates/orders/index_purchases.html:5
+#, fuzzy
+msgid "Purchases"
+msgstr "Compras"
+
+#: templates/orders/index_purchases.html:6
+#, fuzzy
+msgid "List of Purchases"
+msgstr "Lista de Compras"
+
+#: templates/orders/index_purchases.html:16
+#: templates/orders/index_sales.html:16
+msgid "Status"
+msgstr "Estatus"
+
+#: templates/orders/index_purchases.html:17
+#: templates/orders/index_sales.html:17 templates/orders/show_sale.html:12
+msgid "Total"
+msgstr "Total"
+
+#: templates/orders/index_purchases.html:18
+#: templates/orders/index_sales.html:18
+msgid "Paid"
+msgstr "Cancelado"
+
+#: templates/orders/index_purchases.html:37
+msgid "No purchases were found."
+msgstr "Ningunas compras se hallaron."
+
+#: templates/orders/index_sales.html:5
+#, fuzzy
+msgid "Sales"
+msgstr "Ventas"
+
+#: templates/orders/index_sales.html:6
+#, fuzzy
+msgid "List of Sales"
+msgstr "Lista de Cuentas"
+
+#: templates/orders/index_sales.html:37
+msgid "No sales were found."
+msgstr "Ningunas ventas se hallaron."
+
+#: templates/orders/show_sale.html:4
+#, fuzzy
+msgid "Show Sale"
+msgstr "Mostrar Venta"
+
+#: templates/orders/show_sale.html:5
+msgid "Sale Details"
+msgstr "Detalles de Venta"
+
+#: templates/orders/show_sale.html:7
+#, fuzzy
+msgid "Edit Sale"
+msgstr "Cambiar Venta"
+
+#: templates/orders/show_sale.html:13
+#, fuzzy
+msgid "Created"
+msgstr "Creado"
+
+#: templates/orders/show_sale.html:14
+msgid "Receipt"
+msgstr "Factura"
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid "enable comments"
+#~ msgstr "habilitar comentarios"
+
+#~ msgid "template name"
+#~ msgstr "nombre de plantilla"
+
+#~ msgid ""
+#~ "Example: 'flatpages/contact_page.html'. If this isn't provided, the "
+#~ "system will use 'flatpages/default.html'."
+#~ msgstr ""
+#~ "Ejemplo: 'flatpages/contact_page.html'. Si no se provee, la sistema usará "
+#~ "'flatpages/default.html'."
+
+#~ msgid "registration required"
+#~ msgstr "se exige la registración"
+
+#~ msgid ""
+#~ "If this is checked, only logged-in users will be able to view the page."
+#~ msgstr ""
+#~ "Si se selecciona esto, solo usuarios registrados podrán ver la página."
+
+#~ msgid "content"
+#~ msgstr "contenido"
+
+#~ msgid "multilingual flat page"
+#~ msgstr "página plana multiligue"
+
+#~ msgid "multilingual flat pages"
+#~ msgstr "páginas planas multiligues"
+
+#~ msgid "Created at"
+#~ msgstr "Creado"
+
+#~ msgid "The name"
+#~ msgstr "El Nombre"
+
+#~ msgid "The description"
+#~ msgstr "La descripción"
+
+#~ msgid "The title"
+#~ msgstr "El título"
+
+#~ msgid "The contents"
+#~ msgstr "Los contenidos"
+
+#~ msgid "No accounts are available"
+#~ msgstr "Ningunas cuentas disponibles"
+
+#~ msgid "Edit this Account"
+#~ msgstr "Cambiar esta cuenta"

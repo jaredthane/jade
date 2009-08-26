@@ -21,17 +21,19 @@ class Order(Model):
 		verbose_name = _('Order')
 	def __unicode__(self):
 		return 'Order Number:' + str(self.number)
-	@permalink
-	def get_absolute_url(self):
-		return ('orders.show_order', None, { 'object_id': self.id })
+
 	
 class Sale(Order):
 	client = ForeignKey(Client)
 	site = ForeignKey(Site)
+	def get_absolute_url(self):
+		return u'/orders/sale/%s' % self.id
 
 class Purchase(Order):
 	site = ForeignKey(Site)
 	vendor = ForeignKey(Vendor)
+	def get_absolute_url(self):
+		return u'/orders/purchase/%s' % self.id
 	
 class Line(Model):
 	order = ForeignKey(Order)
@@ -42,6 +44,11 @@ class Line(Model):
 	serial_numbers = ManyToManyField(SerialNumber, blank=True)
 	received = DateTimeField(blank=True, null=True)
 	warranty = OneToOneField(Warranty, blank=True, null=True)
+#	def get_is_received():
+#		return bool(self.received)
+#	def set_is_received(value):
+#		if value:
+			
 
 #class NonInventoryLine(Line):
 #	description = TextField()

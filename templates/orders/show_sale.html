@@ -1,0 +1,43 @@
+{% extends "orders/base.html" %}
+{% load i18n %}
+{% load tags %}
+{% block breadcrumb %}{{ block.super }} &raquo; <a href="{{ obj.get_absolute_url }}">{% trans "Show Sale" %}</a>{% endblock %}
+{% block heading %}{% trans "Sale Details" %}{% endblock %}
+{% block actions %}
+	{% show_actions 'sale' _('New Sale') _('Edit Sale') _('List Sales') obj %}
+{% endblock %}
+{% block content %}
+	<div class="column2-unit-left">
+		{% detail_item _('Client') obj.client.name %}
+		{% detail_item _('Total') obj.total %}
+		{% detail_item _('Created') obj.created_at %}
+		{% detail_item _('Receipt') obj.number %}
+	</div>
+	<div class="column2-unit-right">
+		{% detail_item _('Site') obj.site.name %}
+		{% detail_item _('Amount Paid') obj.paid %}
+		{% detail_item _('Amount Paid') obj.paid %}
+		{% detail_item _('Delivered') obj.received %}
+	</div>
+	<hr class="clear-contentunit"/>
+	{% detail_item _('Notes') obj.notes %}
+	
+	<div class="table">
+		<div class="table_header_row">
+					{% table_cell _('Product') 25 %}
+					{% table_cell _('Quantity') 25 %}
+					{% table_cell _('Price') 25 %}
+					{% table_cell _('Delivered') %}
+			</div>
+		{% for line in obj.line_set.all %}
+			<div class="table_row">
+				{% table_cell_link line.product.get_absolute_url line.product 25 %}
+				{% table_cell line.quantity 25 %}
+				{% table_cell line.price 25 %}
+				{% table_cell line.received %}
+			</div>
+			{% include 'orders/show_line.html' %}
+		{% endfor %}
+	</div>
+{% endblock %}
+

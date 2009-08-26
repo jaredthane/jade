@@ -1,23 +1,20 @@
-{% extends "orders/base.html" %}
 {% load i18n %}
 {% load tags %}
-
-
-{% block content %}
-	{{ error_message }}
-	{% if object %}
-		<form name="line_form" method="post" action="{% url edit_line object.pk %}">
-	{% else %}
-		<form name="line_form" method="post" action="{% url new_line %}">
-	{% endif %}
-		<div class="column2-unit-left">
-			{% form_field form.order _("Order") %}
-			{% form_field form.quantity _("quantity") %}
-			{% form_field form.price _("price") %}
-			{% form_field form.received _("received") %}
-			{% form_field form.warranty _("warranty") %}
-			
+<div class="line">
+	<div class="table_row">
+		{{form.notes}}{{form.warranty}}
+		<div class="table_cell_25">
+			{% if form.product.initial %}
+				{{form.product.initial}} {{form.product}}
+			{% else %}
+				{% link form.instance.product.get_absolute_url form.instance.product.name %}{{form.product}}
+			{% endif %}
 		</div>
-	</form>
-{% endblock %}
-
+		<div class="table_cell_25">{{form.quantity}}</div>
+		<div class="table_cell_25">{{form.price}}</div>
+		<div class="table_cell_10"><input class="is_delivered" type="checkbox">{{form.received}}<input type="hidden" class="initial_received" value="{{form.received.initial}}"></div>
+		<div class="table_cell">
+			{{form.DELETE}}
+			<a href="#" id="delete" class="delete" >{% trans "Delete" %}</a><br/<a href="#" id="details" >{% trans "Details" %}</a></div>
+	</div>
+</div>

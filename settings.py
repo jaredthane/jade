@@ -91,12 +91,12 @@ LOGIN_REDIRECT_URL="/accounting/"
 # The following values will be appended to the name of the accounts created automaticly when creating sites.
 # For example, if CASH_ACCOUNT_DEFAULT_NAME = 'Cash'  then an account named 'New York Cash' will be created 
 # automaticly for a new site named 'New York' 
-CASH_ACCOUNT_DEFAULT_NAME = ' Cash'
-INVENTORY_ACCOUNT_DEFAULT_NAME = ' Inventory'
-EXPENSE_ACCOUNT_DEFAULT_NAME = ' Expense'
-RETURNS_ACCOUNT_DEFAULT_NAME = ' Returns'
-TAX_ACCOUNT_DEFAULT_NAME = ' Tax'
-PAYABLES_ACCOUNT_DEFAULT_NAME = ' Payables'
+#CASH_ACCOUNT_DEFAULT_NAME = ' Cash'
+#INVENTORY_ACCOUNT_DEFAULT_NAME = ' Inventory'
+#EXPENSE_ACCOUNT_DEFAULT_NAME = ' Expense'
+#RETURNS_ACCOUNT_DEFAULT_NAME = ' Returns'
+#TAX_ACCOUNT_DEFAULT_NAME = ' Tax'
+#PAYABLES_ACCOUNT_DEFAULT_NAME = ' Payables'
 LOGIN_URL = "/auth/login/"
 LOGOUT_URL = "/auth/logout/"
 STATIC_DOC_ROOT = "/home/jared/django/jade/static"

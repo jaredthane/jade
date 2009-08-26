@@ -6,6 +6,8 @@ from jade.accounting.models import Account
 
 class UnitOfMeasure(Model):
 	name = CharField(max_length=50, default='')
+	def __unicode__(self):
+		return self.name
 	class Meta:
 		verbose_name_plural = _('Units Of Measure')
 		verbose_name = _('Unit Of Measure')
@@ -16,10 +18,12 @@ class PriceBase(object):
 
 class ProductCategory(Model):
 	name = CharField(max_length=50, default='')
+	def __unicode__(self):
+		return self.name
 	class Meta:
 		verbose_name_plural = _('Categories')
 		verbose_name = _('Category')
-	
+		
 class ProductBase(Model):
 	name = CharField(max_length=50, default='')
 	description = TextField()
@@ -29,9 +33,8 @@ class ProductBase(Model):
 	categories = ManyToManyField(ProductCategory)
 	def __unicode__(self):
 		return self.name
-	@permalink
 	def get_absolute_url(self):
-		return ('accounting.show_account', None, { 'object_id': self.id })
+		return u'/inventory/product/%s' % self.id
 	
 class Product(ProductBase):
 	vendor = ForeignKey(Vendor)
@@ -46,7 +49,10 @@ class Product(ProductBase):
 	class Meta:
 		verbose_name_plural = _('Products')
 		verbose_name = _('Product')
-		
+	def get_absolute_url(self):
+		return u'/inventory/product/%s' % self.id
+
+	
 class SerialNumber(Model):
 	number = CharField(max_length=50, default='')
 	product = ForeignKey(Product)
@@ -61,6 +67,8 @@ class SerialNumber(Model):
 class Service(ProductBase):
 	start = DateTimeField()
 	end = DateTimeField()
+	def get_absolute_url(self):
+		return u'/inventory/service/%s' % self.id
 	class Meta:
 		verbose_name_plural = _('Services')
 		verbose_name = _('Service')
@@ -74,6 +82,7 @@ class Warranty(Model):
 	started = DateTimeField()
 	price = DecimalField(max_digits=5, decimal_places=2, default="0.00")
 	months = IntegerField()
+	product = ForeignKey(ProductBase)
 	notes = TextField()
 	class Meta:
 		verbose_name_plural = _('Warranties')

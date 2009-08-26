@@ -6,6 +6,7 @@ from jade.orders.forms import *
 from jade.common.views import *
 from django.contrib.auth.decorators import login_required
 from django.forms.models import inlineformset_factory
+import sys
 
 def index_sales(request):
 	object_list =	Sale.objects.all()
@@ -39,27 +40,23 @@ def edit_purchase(request, object_id = None):
 	return generic_edit(request, Purchase, PurchaseForm, object_id)
 def edit_line(request, object_id = None):
 	upc = request.POST.get('upc', '')
+	num = int(request.POST.get('num', '0'))
 	try:
 		print "upc=" + str(upc)
+		print "num=" + str(num)
 		
 		p=ProductBase.objects.get(bar_code=upc)
-		line=Line(product=p, quantity=1)
-		form=LineForm(instance=line)
-		return render_to_response('orders/new_line.html', {'form': form})
-	except ValueError:
-		return "Unable to find a product with that upc"
-def new_line(request):
-	upc = request.GET.get('upc', '')
-	try:
-		p=ProductBase.objects.get(upc=upc)
-		line=Line(product=p, quantity=1)
-		form=LineForm(instance=line)
-		return render_to_response('orders/new_line.html', {'form': form})
+#		LineFormSet = inlineformset_factory(Sale, Line, extra=num+1, form=SimpleLineForm)
+#		formset=LineFormSet(initial=[{'product':p},])
+		form=SimpleLineFormSet()._construct_form(num)
+		form.instance.product=p
+#		form.fields['product'].initial=p.pk
+		return render_to_response('orders/edit_line.html', {'form': form})
 	except ValueError:
 		return "Unable to find a product with that upc"
 	
 def edit_sale(request, object_id = None):
-	LineFormSet = inlineformset_factory(Sale, Line, extra=1, fields=('order','product', 'quantity','price'))
+	LineFormSet = inlineformset_factory(Sale, Line, extra=0, form=SimpleLineForm)
 	current_lang=request.session['django_language']
 	if request.method == 'GET': #GET
 		print "GETTING"
@@ -72,6 +69,7 @@ def edit_sale(request, object_id = None):
 			sale=Sale()
 		sale_form = SaleForm(instance=sale)
 		line_formset = LineFormSet(instance=sale)
+#		print "line_formset.forms[0].fields['product'].initial=" + str(line_formset.forms[0].fields['product'].initial)
 	else: #POST
 		print "POSTING"
 		if object_id: #UPDATE
@@ -85,19 +83,30 @@ def edit_sale(request, object_id = None):
 		line_formset=None
 		all_ok=True
 		try:
+			print "request.POST"+str(request.POST)
 			sale_form = SaleForm(request.POST, instance=sale)
+			print "checkpoint1"
 			all_ok=sale_form.is_valid()
+			print "checkpoint2"
 			if all_ok:
 				sale=sale_form.save()
+			print "checkpoint3"
 			line_formset = LineFormSet(request.POST, instance=sale)
+			print "checkpoint4"
 			all_ok += line_formset.is_valid()
+			print "checkpoint5"
 			if all_ok:
 				line_formset.save()
+			print "checkpoint6"
 			if all_ok==2:
 				current_url=reverse('show_sale', kwargs={'object_id':sale.pk} )
 				return render_to_response('orders/show_sale.html', {'obj': sale, 'current_url':current_url, 'current_lang':current_lang})
 		except:
-			print 
+			print "Unexpected error:", sys.exc_info()[0]
+			if sale_form:
+				print "sale_form.__dict__=" + str(sale_form.__dict__)
+			if line_formset:
+				print "line_formset.__dict__=" + str(line_formset.__dict__)
 	current_url=request.get_full_path()
 	return render_to_response('orders/edit_sale.html', {'obj': sale, 'sale_form':sale_form, 'formset':line_formset, 'current_url':current_url, 'current_lang':current_lang})
 

@@ -34,7 +34,9 @@ def menu_item(url, label):
 @register.simple_tag
 def breadcrumb(url, label):
 	return u'<li><a href="%s">%s</a></li>' % (url, label)
-	
+@register.simple_tag
+def link(url, label):
+	return u'<a href="%s">%s</a>' % (url, label)
 
 @register.simple_tag
 def table_cell(label, width=None):
@@ -122,3 +124,4 @@ def edit_actions(model_name, save_label, cancel_label, index_label, obj=None):
 def index_actions(model_name, new_label):
 	new_url=reverse('new_'+model_name.lower())
 	return u'%s' % (action(new_url, new_label))
+	

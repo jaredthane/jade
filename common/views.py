@@ -2,6 +2,8 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from datetime import datetime
+from django.http import HttpResponse
 
 @login_required
 def generic_index(request, Model, object_list):
@@ -15,6 +17,10 @@ def generic_show(request, object_id, Model):
 	current_url=request.get_full_path()
 	current_lang=request.session['django_language']
 	return render_to_response(Model._meta.app_label+'/show_'+Model._meta.verbose_name.lower()+'.html', {'obj': obj, 'current_url':current_url, 'current_lang':current_lang})
+	
+@login_required
+def get_time(request):
+  return HttpResponse(datetime.now())
 
 @login_required
 def generic_edit(request, Model, Form, object_id = None):

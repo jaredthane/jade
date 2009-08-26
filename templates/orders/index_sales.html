@@ -19,8 +19,7 @@
 	  </div>
 	  {% for object in object_list %}
 	  	<div class="table_row">
-				{% url orders.views.show object.pk as show_url %}
-      	{% table_cell_link show_url object.number 20 %}
+      	{% table_cell_link object.get_absolute_url object.number 20 %}
       	{% if object.vendor %}
       		{% url orders.views.show object.vendor.pk as vendor_url %}
       		{% table_cell_link vendor_url object.vendor 20 %}
