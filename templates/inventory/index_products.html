@@ -1,0 +1,27 @@
+{% extends "inventory/base.html" %}
+{% load i18n %}
+{% load tags %}
+{% block heading %}{% trans "List of Products" %}{% endblock %}
+{% block actions %}
+	{% index_actions 'Product' _('New Product') %}
+{% endblock %}
+{% block content %}	
+	{% if object_list %}
+	  <div class="table_header_row">
+			{% table_cell _('Name') 20 %}
+			{% table_cell _('Inventory') 20 %}
+			{% table_cell _('Unit of Measure') 20 %}
+			{% table_cell _('Other') %}
+		</div>
+ 		{% for product in object_list %}
+			<div class="table_row">
+				{% table_cell_link product.get_absolute_url product.name 20 %}
+				{% table_cell '--' 20 %}
+				{% table_cell product.unit 20 %}
+				{% table_cell '--' %}
+			</div>
+		{% endfor %}
+	{% else %}
+		<p>{% trans "The search returned no Products" %}</p>
+	{% endif %}
+{% endblock %}
