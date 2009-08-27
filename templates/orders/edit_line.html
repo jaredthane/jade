@@ -7,10 +7,10 @@
 			{% if form.product.initial %}
 				{{form.product.initial}} {{form.product}}
 			{% else %}
-				{% link form.instance.product.get_absolute_url form.instance.product.name %}{{form.product}}
+				{{form.product}}
 			{% endif %}
 		</div>
-		<div class="table_cell_20">{{form.quantity}}</div>
+		<div class="table_cell_20">{{form.quantity}}{{form.id}}</div>
 		<div class="table_cell_20">{{form.price}}</div>
 		<div class="table_cell_10"><input class="is_delivered" type="checkbox">{{form.received}}<input type="hidden" class="initial_received" value="{{form.received.initial}}"></div>
 		<div class="table_cell_10"><a href="#" id="details" >{% trans "Details" %}</a></div>

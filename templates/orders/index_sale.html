@@ -5,7 +5,7 @@
 {% block breadcrumb %}{{ block.super }} &raquo; <a href="{% url index_sales %}">{% trans "Sales" %}</a>{% endblock %}
 {% block heading %}{% trans "List of Sales" %}{% endblock %}
 {% block actions %}
-	{% url new_purchase as new_url %}
+	{% url new_sale as new_url %}
 	{% action new_url _('New Sale') %}
 {% endblock %}
 {% block content %}	

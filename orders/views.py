@@ -92,6 +92,8 @@ def edit_sale(request, object_id = None):
 				sale=sale_form.save()
 			print "checkpoint3"
 			line_formset = LineFormSet(request.POST, instance=sale)
+			for form in line_formset.forms:
+				print "form.__dict__=" + str(form.__dict__)
 			print "checkpoint4"
 			all_ok += line_formset.is_valid()
 			print "checkpoint5"
@@ -99,14 +101,25 @@ def edit_sale(request, object_id = None):
 				line_formset.save()
 			print "checkpoint6"
 			if all_ok==2:
+				print "checkpoint7a"
 				current_url=reverse('show_sale', kwargs={'object_id':sale.pk} )
+				print "checkpoint7b"
+				for form in line_formset.forms:
+					print "form.cleaned_data=" + str(form.cleaned_data)
 				return render_to_response('orders/show_sale.html', {'obj': sale, 'current_url':current_url, 'current_lang':current_lang})
-		except:
+		except ValueError:
 			print "Unexpected error:", sys.exc_info()[0]
+			print "Unexpected error details:", sys.exc_info()[0].__dict__
+#			for field in form.fields:
+#				print "field.__dict__=" + str(field.__dict__)
 			if sale_form:
 				print "sale_form.__dict__=" + str(sale_form.__dict__)
 			if line_formset:
 				print "line_formset.__dict__=" + str(line_formset.__dict__)
+				print "$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"
+				for x in xrange(len(line_formset._errors)):
+					print "----------------------form #%s--------------------------------" % x
+					print "line_formset._errors[x]=" + str(line_formset._errors[x])
 	current_url=request.get_full_path()
 	return render_to_response('orders/edit_sale.html', {'obj': sale, 'sale_form':sale_form, 'formset':line_formset, 'current_url':current_url, 'current_lang':current_lang})
 
