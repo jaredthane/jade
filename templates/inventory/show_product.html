@@ -1,0 +1,20 @@
+{% extends "inventory/base.html" %}
+{% load i18n %}
+{% load tags %}
+{% block breadcrumb %}{{ block.super }} &raquo; <a href="{{ obj.get_absolute_url }}">{% trans "Show Product" %}</a>{% endblock %}
+{% block heading %}{% trans "Product Details" %}{% endblock %}
+{% block actions %}
+	{% show_actions 'product' _('New Product') _('Edit Product') _('List Products') obj %}
+{% endblock %}
+{% block content %}
+	<div class="column2-unit-left">
+		{% detail_item _('Name') obj.name %}
+		{% detail_item _('Description') obj.description %}
+		{% detail_item _('Categories') obj.categories %}
+	</div>
+	<div class="column2-unit-right">
+		{% detail_item _('Bar_Code') obj.bar_code %}
+		{% detail_item _('Unit of Measure') obj.unit %}
+		{% detail_item _('Revenue Account') obj.revenue_account %}
+	</div>
+{% endblock %}

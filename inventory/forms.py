@@ -5,7 +5,7 @@ from jade.common.forms import DynamicForm
 class ProductForm(DynamicForm):
 	def __init__(self, lang, *args, **kwargs):
 		super(ProductForm, self).__init__(*args, **kwargs)
-		self.make_fields_dynamic(lang, ('name',))
+		self.make_fields_dynamic(lang, ('name','description'))
 
 	class Meta:
 		model = Product

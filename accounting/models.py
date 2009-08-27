@@ -384,16 +384,12 @@ class Transaction(DirtyMixin, Model):
 		return False
 	class Meta:
 		get_latest_by = 'date'
-		ordering = ('date',)		
+		ordering = ('date',)
 		verbose_name_plural = _('Transactions')
 		verbose_name = _('Transaction')
 	def __unicode__(self):
 		return str(self.id)+ " - " + str(self.date)
 	date = DateTimeField(default=datetime.now(), blank=True)
-#	@permalink
-#	def get_absolute_url(self):
-#		return ('jade.accounting.show_transaction', None, { 'object_id': self.id })
-
 	
 class	Entry(DirtyMixin, Model):	
 	date = DateTimeField(default=datetime.now(), blank=True)

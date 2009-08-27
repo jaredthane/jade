@@ -2,6 +2,7 @@ from django.db.models import *
 from django.utils.translation import ugettext_lazy as _
 from jade.entities.models import *
 from jade.accounting.models import Account
+from transmeta import TransMeta
 #from jade.orders.models import *
 
 class UnitOfMeasure(Model):
@@ -25,12 +26,15 @@ class ProductCategory(Model):
 		verbose_name = _('Category')
 		
 class ProductBase(Model):
+	__metaclass__ = TransMeta
 	name = CharField(max_length=50, default='')
 	description = TextField()
 	bar_code = CharField(max_length=50, default='')
 	unit = ForeignKey(UnitOfMeasure)
 	revenue_account = ForeignKey(Account)
 	categories = ManyToManyField(ProductCategory)
+	class Meta:
+		translate = ('name', 'description')
 	def __unicode__(self):
 		return self.name
 	def get_absolute_url(self):

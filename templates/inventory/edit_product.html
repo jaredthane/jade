@@ -1,0 +1,41 @@
+{% extends "inventory/base.html" %}
+{% load i18n %}
+{% load tags %}
+
+{% block breadcrumb %}{{ block.super }} &raquo;
+	{% if obj %}
+		 <a href="{% url edit_product obj.pk %}">{% trans "Edit Product" %}</a>
+	{% else %}
+		<a href="{% url new_product %}">{% trans "New Product" %}</a>
+	{% endif %}
+{% endblock %}
+{% block heading %}
+	{% if obj %}
+		{% trans "Change Product" %}
+	{% else %}
+		{% trans "New Product" %}
+	{% endif %}
+{% endblock %}
+{% block actions %}
+	{% edit_actions 'Product' _('Save Product') _('Cancel') _('List Products') obj %}
+{% endblock %}
+{% block content %}
+	{{ error_message }}
+	{% if obj %}
+		<form name="product_form" method="post" action="{% url edit_product obj.pk %}">
+	{% else %}
+		<form name="product_form" method="post" action="{% url new_product %}">
+	{% endif %}
+		<div class="column2-unit-left">
+			{% trans_field form 'name' current_lang _("Name") %}
+			{% trans_field form 'description' current_lang _("Description") %}
+			{% form_field form.categories _("Categories") %}
+		</div>
+		<div class="column2-unit-right">
+			{% form_field form.bar_code _("Bar_Code") %}
+			{% form_field form.unit _("Unit") %}
+			{% form_field form.revenue_account _("Revenue_Account") %}
+		</div>
+	</form>
+{% endblock %}
+
