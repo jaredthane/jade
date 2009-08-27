@@ -77,237 +77,237 @@ class Account(Model):
 		
 class Transaction(DirtyMixin, Model):
 	"""
-	# Create an account and a transaction
-	>>> a=Account.objects.get(number="1011")
-	>>> a2=Account.objects.get(number="2011")
-	>>> a3=Account.objects.get(number="3011")
-	>>> t=Transaction(date=datetime(2009,5,12))
-	>>> t.add_entry(a, 1)
-	<Entry: Debit 1011: First Account $1 balance-> None>
-	>>> t.add_entry(a3, -1)
-	<Entry: Debit 3011: Third Account $-1 balance-> None>
-	
-	# Test the DirtyMixin
-	>>> t.entries[0].is_dirty()
-	True
-	>>> t.entries[0].changed_columns()
-	{'_account_cache': {'new': <Account: 1011 - First Account (Debit)>, 'old': None}, 'value': {'new': 1, 'old': None}, 'account_id': {'new': 1, 'old': None}, 'date': {'new': datetime.datetime(2009, 5, 12, 0, 0), 'old': None}, 'modifier': {'new': 1, 'old': None}}
-	
-	# Make sure the transaction is balanced
-	>>> t.out_of_balance()
-	False
-	
-	# Try saving this balanced transaction
-	>>> t.save()
-	True
-	>>> a.entry_set.all()
-	[<Entry: Debit 1011: First Account $1 balance-> 1>, <Entry: Credit 1011: First Account $4.54 balance-> -3.54>]
-	>>> a3.entry_set.all()
-	[<Entry: Credit 3011: Third Account $1 balance-> 1>]
-	>>> t.entries
-	[<Entry: Debit 1011: First Account $1 balance-> 1>, <Entry: Credit 3011: Third Account $1 balance-> 1>]
-	
-	
-#	# Now lets shuffle things around a bit and make sure it gets saved right
-#	>>> t.add_entry(account=a, value=3)
-#	<Entry: Debit 1011: First Account $3 balance-> None>
-#	>>> t.add_entry(account=a3, value=-2)
-#	<Entry: Debit 3011: Third Account $-2 balance-> None>
-#	>>> p=t.entries[0]
-#	>>> t.remove_entry(p)
-#	>>> t.entries
-#	[<Entry: Credit 3011: Third Account $1 balance-> 1>, <Entry: Debit 1011: First Account $3 balance-> None>, <Entry: Debit 3011: Third Account $-2 balance-> None>]
-#	>>> t._remove_duplicate_entries()
-#	>>> t.entries
-#	[<Entry: Debit 1011: First Account $3 balance-> None>, <Entry: Credit 3011: Third Account $3 balance-> None>]
-#	>>> t._balance()
-#	0
+#	# Create an account and a transaction
+#	>>> a=Account.objects.get(number="1011")
+#	>>> a2=Account.objects.get(number="2011")
+#	>>> a3=Account.objects.get(number="3011")
+#	>>> t=Transaction(date=datetime(2009,5,12))
+#	>>> t.add_entry(a, 1)
+#	<Entry: Debit 1011: First Account $1 balance-> None>
+#	>>> t.add_entry(a3, -1)
+#	<Entry: Debit 3011: Third Account $-1 balance-> None>
+#	
+#	# Test the DirtyMixin
+#	>>> t.entries[0].is_dirty()
+#	True
+#	>>> t.entries[0].changed_columns()
+#	{'_account_cache': {'new': <Account: 1011 - First Account (Debit)>, 'old': None}, 'value': {'new': 1, 'old': None}, 'account_id': {'new': 1, 'old': None}, 'date': {'new': datetime.datetime(2009, 5, 12, 0, 0), 'old': None}, 'modifier': {'new': 1, 'old': None}}
+#	
+#	# Make sure the transaction is balanced
 #	>>> t.out_of_balance()
 #	False
-#	>>> t.validate_entries()
+#	
+#	# Try saving this balanced transaction
+#	>>> t.save()
 #	True
-#	>>> len(t.entries)
-#	2
-#	>>> t.entries
-#	[<Entry: Debit 1011: First Account $3 balance-> None>, <Entry: Credit 3011: Third Account $3 balance-> None>]
+#	>>> a.entry_set.all()
+#	[<Entry: Debit 1011: First Account $1 balance-> 1>, <Entry: Credit 1011: First Account $4.54 balance-> -3.54>]
 #	>>> a3.entry_set.all()
 #	[<Entry: Credit 3011: Third Account $1 balance-> 1>]
-#	>>> t.save()
-#	True
 #	>>> t.entries
-#	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $3 balance-> 3>]
-#	>>> a3.entry_set.all()
-#	[<Entry: Credit 3011: Third Account $3 balance-> 3>]
-#	>>> t.entries
-#	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $3 balance-> 3>]
-#	>>> Entry.objects.all()
-#	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Credit 1011: First Account $4.54 balance-> -1.54>, <Entry: Debit 2011: Second Account $4.54 balance-> 4.54>]
+#	[<Entry: Debit 1011: First Account $1 balance-> 1>, <Entry: Credit 3011: Third Account $1 balance-> 1>]
 #	
-#	# Good. Now lets try making the transaction unbalanced and see if it gets saved...
-#	>>> p=t.entries[0]
-#	>>> t.entries
-#	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $3 balance-> 3>]
-#	>>> t.remove_entry(p)
-#	>>> t.entries
-#	[<Entry: Credit 3011: Third Account $3 balance-> 3>]
-#	>>> t.save()
-#	False
 #	
-#	# Notice that the transaction still has unbalanced entries...
-#	>>> t.entries
-#	[<Entry: Credit 3011: Third Account $3 balance-> 3>]
-#	>>> t.out_of_balance()
-#	True
-#	
-#	# But the copy in the db is still the latest balanced version...
-#	# Let's try resetting it back to the valid version...
-#	>>> t.reset()
-#	>>> t.entries
-#	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Debit 1011: First Account $3 balance-> 3>]
-#	
-#	# Lets play with the dates a little bit...
-#	# notice it matches the date we put
-#	>>> t.entries[0].date
-#	datetime.datetime(2009, 5, 12, 0, 0)
-#	>>> Transaction.objects.all()
-#	[<Transaction: 2 - 2009-05-12 00:00:00>, <Transaction: 1 - 2009-06-16 00:00:00>]
-#	>>> t=Transaction(date=datetime(2009,5,14))
-#	>>> p1=t.add_entry(a,3)
-#	>>> p1.changed_columns()
-#	{'_account_cache': {'new': <Account: 1011 - First Account (Debit)>, 'old': None}, 'value': {'new': 3, 'old': None}, 'account_id': {'new': 1, 'old': None}, 'date': {'new': datetime.datetime(2009, 5, 14, 0, 0), 'old': None}, 'modifier': {'new': 1, 'old': None}}
-#	>>> p2=t.add_entry(a2, -3)
-#	>>> p2.changed_columns()
-#	{'_account_cache': {'new': <Account: 2011 - Second Account (Debit)>, 'old': None}, 'value': {'new': -3, 'old': None}, 'account_id': {'new': 2, 'old': None}, 'date': {'new': datetime.datetime(2009, 5, 14, 0, 0), 'old': None}, 'modifier': {'new': 1, 'old': None}}
-#	>>> t.validate_entries()
-#	True
-#	>>> t.save()
-#	True
-#	>>> t.entries
-#	[<Entry: Debit 1011: First Account $3 balance-> 6>, <Entry: Credit 2011: Second Account $3 balance-> -3>]
-#	>>> p1.changed_columns()
-#	{'id': {'new': 6, 'old': None}}
-#	>>> p2.changed_columns()
-#	{'id': {'new': 7, 'old': None}}
-#	
-#	# Lets make another one for the 16th
-#	>>> t=Transaction(date=datetime(2009,5,16))
-#	>>> t.add_entry(a2, 4)
-#	<Entry: Debit 2011: Second Account $4 balance-> None>
-#	>>> t.add_entry(a3, -4)
-#	<Entry: Debit 3011: Third Account $-4 balance-> None>
-#	>>> t.save()
-#	True
-#	
-#	# Heres one that has duplicate accounts and cancels out to zero.
-#	# wont save
-#	>>> t2=Transaction(date=datetime(2009,5,17))
-#	>>> t2.add_entry(a, 1)
-#	<Entry: Debit 1011: First Account $1 balance-> None>
-#	>>> t2.add_entry(a, -1)
-#	<Entry: Debit 1011: First Account $-1 balance-> None>
-#	>>> t2.save()
-#	False
-#	>>> a.entry_set.all()
-#	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Debit 1011: First Account $3 balance-> 6>, <Entry: Credit 1011: First Account $4.54 balance-> 1.46>]
-#	>>> a2.entry_set.all()
-#	[<Entry: Credit 2011: Second Account $3 balance-> -3>, <Entry: Debit 2011: Second Account $4 balance-> 1>, <Entry: Debit 2011: Second Account $4.54 balance-> 5.54>]
-#	>>> a3.entry_set.all()
-#	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $4 balance-> 7>]
-#	
-#	# Now we'll make it valid and save it with on the 17th
-#	>>> t2.add_entry(a2, 5)
-#	<Entry: Debit 2011: Second Account $5 balance-> None>
-#	>>> t2.add_entry(a3, -5)
-#	<Entry: Debit 3011: Third Account $-5 balance-> None>
-#	>>> t2.save()
-#	True
-#	
-#	# lets make one more for the 18th to see a clear view
-#	# this one will have 3 fields but will be balanced
-#	>>> t=Transaction(date=datetime(2009,5,18))
-#	>>> t.add_entry(a, 7)
-#	<Entry: Debit 1011: First Account $7 balance-> None>
-#	>>> t.add_entry(a2, -4)
-#	<Entry: Debit 2011: Second Account $-4 balance-> None>
-#	>>> t.add_entry(a3, -3)
-#	<Entry: Debit 3011: Third Account $-3 balance-> None>
-#	>>> t.save()
-#	True
-#	
-#	# Check to see what the books look like:
-#	>>> a.entry_set.all()
-#	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Debit 1011: First Account $3 balance-> 6>, <Entry: Debit 1011: First Account $7 balance-> 13>, <Entry: Credit 1011: First Account $4.54 balance-> 8.46>]
-#	>>> a2.entry_set.all()
-#	[<Entry: Credit 2011: Second Account $3 balance-> -3>, <Entry: Debit 2011: Second Account $4 balance-> 1>, <Entry: Debit 2011: Second Account $5 balance-> 6>, <Entry: Credit 2011: Second Account $4 balance-> 2>, <Entry: Debit 2011: Second Account $4.54 balance-> 6.54>]
-#	>>> a3.entry_set.all()
-#	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $4 balance-> 7>, <Entry: Credit 3011: Third Account $5 balance-> 12>, <Entry: Credit 3011: Third Account $3 balance-> 15>]
-#	
-#	# Now lets try moving the transaction from the 17th to the 15th
-#	>>> t2.date=datetime(2009,5,15)
-#	>>> t2.save()
-#	True
-#	
-#	# Now what do we have?
-#	>>> Account.objects.get(pk=1).entry_set.all()
-#	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Debit 1011: First Account $3 balance-> 6>, <Entry: Debit 1011: First Account $7 balance-> 13>, <Entry: Credit 1011: First Account $4.54 balance-> 8.46>]
-#	>>> Account.objects.get(pk=2).entry_set.all()
-#	[<Entry: Credit 2011: Second Account $3 balance-> -3>, <Entry: Debit 2011: Second Account $5 balance-> 2>, <Entry: Debit 2011: Second Account $4 balance-> 6>, <Entry: Credit 2011: Second Account $4 balance-> 2>, <Entry: Debit 2011: Second Account $4.54 balance-> 6.54>]
-#	>>> Account.objects.get(pk=3).entry_set.all()
-#	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $5 balance-> 8>, <Entry: Credit 3011: Third Account $4 balance-> 12>, <Entry: Credit 3011: Third Account $3 balance-> 15>]
-#	
-#	# Try changing a modifier
-#	>>> t=Transaction.objects.get(pk=3)
-#	>>> p1=t.entries[0]
-#	>>> p2=t.entries[1]
-#	>>> p1.modifier, p2.modifier = -1, 1
-#	>>> t.save()
-#	True
-#	>>> Account.objects.get(pk=1).entry_set.all()
-#	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Credit 1011: First Account $3 balance-> 0>, <Entry: Debit 1011: First Account $7 balance-> 7>, <Entry: Credit 1011: First Account $4.54 balance-> 2.46>]
-#	>>> Account.objects.get(pk=2).entry_set.all()
-#	[<Entry: Debit 2011: Second Account $3 balance-> 3>, <Entry: Debit 2011: Second Account $5 balance-> 8>, <Entry: Debit 2011: Second Account $4 balance-> 12>, <Entry: Credit 2011: Second Account $4 balance-> 8>, <Entry: Debit 2011: Second Account $4.54 balance-> 12.54>]
+##	# Now lets shuffle things around a bit and make sure it gets saved right
+##	>>> t.add_entry(account=a, value=3)
+##	<Entry: Debit 1011: First Account $3 balance-> None>
+##	>>> t.add_entry(account=a3, value=-2)
+##	<Entry: Debit 3011: Third Account $-2 balance-> None>
+##	>>> p=t.entries[0]
+##	>>> t.remove_entry(p)
+##	>>> t.entries
+##	[<Entry: Credit 3011: Third Account $1 balance-> 1>, <Entry: Debit 1011: First Account $3 balance-> None>, <Entry: Debit 3011: Third Account $-2 balance-> None>]
+##	>>> t._remove_duplicate_entries()
+##	>>> t.entries
+##	[<Entry: Debit 1011: First Account $3 balance-> None>, <Entry: Credit 3011: Third Account $3 balance-> None>]
+##	>>> t._balance()
+##	0
+##	>>> t.out_of_balance()
+##	False
+##	>>> t.validate_entries()
+##	True
+##	>>> len(t.entries)
+##	2
+##	>>> t.entries
+##	[<Entry: Debit 1011: First Account $3 balance-> None>, <Entry: Credit 3011: Third Account $3 balance-> None>]
+##	>>> a3.entry_set.all()
+##	[<Entry: Credit 3011: Third Account $1 balance-> 1>]
+##	>>> t.save()
+##	True
+##	>>> t.entries
+##	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $3 balance-> 3>]
+##	>>> a3.entry_set.all()
+##	[<Entry: Credit 3011: Third Account $3 balance-> 3>]
+##	>>> t.entries
+##	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $3 balance-> 3>]
+##	>>> Entry.objects.all()
+##	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Credit 1011: First Account $4.54 balance-> -1.54>, <Entry: Debit 2011: Second Account $4.54 balance-> 4.54>]
+##	
+##	# Good. Now lets try making the transaction unbalanced and see if it gets saved...
+##	>>> p=t.entries[0]
+##	>>> t.entries
+##	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $3 balance-> 3>]
+##	>>> t.remove_entry(p)
+##	>>> t.entries
+##	[<Entry: Credit 3011: Third Account $3 balance-> 3>]
+##	>>> t.save()
+##	False
+##	
+##	# Notice that the transaction still has unbalanced entries...
+##	>>> t.entries
+##	[<Entry: Credit 3011: Third Account $3 balance-> 3>]
+##	>>> t.out_of_balance()
+##	True
+##	
+##	# But the copy in the db is still the latest balanced version...
+##	# Let's try resetting it back to the valid version...
+##	>>> t.reset()
+##	>>> t.entries
+##	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Debit 1011: First Account $3 balance-> 3>]
+##	
+##	# Lets play with the dates a little bit...
+##	# notice it matches the date we put
+##	>>> t.entries[0].date
+##	datetime.datetime(2009, 5, 12, 0, 0)
+##	>>> Transaction.objects.all()
+##	[<Transaction: 2 - 2009-05-12 00:00:00>, <Transaction: 1 - 2009-06-16 00:00:00>]
+##	>>> t=Transaction(date=datetime(2009,5,14))
+##	>>> p1=t.add_entry(a,3)
+##	>>> p1.changed_columns()
+##	{'_account_cache': {'new': <Account: 1011 - First Account (Debit)>, 'old': None}, 'value': {'new': 3, 'old': None}, 'account_id': {'new': 1, 'old': None}, 'date': {'new': datetime.datetime(2009, 5, 14, 0, 0), 'old': None}, 'modifier': {'new': 1, 'old': None}}
+##	>>> p2=t.add_entry(a2, -3)
+##	>>> p2.changed_columns()
+##	{'_account_cache': {'new': <Account: 2011 - Second Account (Debit)>, 'old': None}, 'value': {'new': -3, 'old': None}, 'account_id': {'new': 2, 'old': None}, 'date': {'new': datetime.datetime(2009, 5, 14, 0, 0), 'old': None}, 'modifier': {'new': 1, 'old': None}}
+##	>>> t.validate_entries()
+##	True
+##	>>> t.save()
+##	True
+##	>>> t.entries
+##	[<Entry: Debit 1011: First Account $3 balance-> 6>, <Entry: Credit 2011: Second Account $3 balance-> -3>]
+##	>>> p1.changed_columns()
+##	{'id': {'new': 6, 'old': None}}
+##	>>> p2.changed_columns()
+##	{'id': {'new': 7, 'old': None}}
+##	
+##	# Lets make another one for the 16th
+##	>>> t=Transaction(date=datetime(2009,5,16))
+##	>>> t.add_entry(a2, 4)
+##	<Entry: Debit 2011: Second Account $4 balance-> None>
+##	>>> t.add_entry(a3, -4)
+##	<Entry: Debit 3011: Third Account $-4 balance-> None>
+##	>>> t.save()
+##	True
+##	
+##	# Heres one that has duplicate accounts and cancels out to zero.
+##	# wont save
+##	>>> t2=Transaction(date=datetime(2009,5,17))
+##	>>> t2.add_entry(a, 1)
+##	<Entry: Debit 1011: First Account $1 balance-> None>
+##	>>> t2.add_entry(a, -1)
+##	<Entry: Debit 1011: First Account $-1 balance-> None>
+##	>>> t2.save()
+##	False
+##	>>> a.entry_set.all()
+##	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Debit 1011: First Account $3 balance-> 6>, <Entry: Credit 1011: First Account $4.54 balance-> 1.46>]
+##	>>> a2.entry_set.all()
+##	[<Entry: Credit 2011: Second Account $3 balance-> -3>, <Entry: Debit 2011: Second Account $4 balance-> 1>, <Entry: Debit 2011: Second Account $4.54 balance-> 5.54>]
+##	>>> a3.entry_set.all()
+##	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $4 balance-> 7>]
+##	
+##	# Now we'll make it valid and save it with on the 17th
+##	>>> t2.add_entry(a2, 5)
+##	<Entry: Debit 2011: Second Account $5 balance-> None>
+##	>>> t2.add_entry(a3, -5)
+##	<Entry: Debit 3011: Third Account $-5 balance-> None>
+##	>>> t2.save()
+##	True
+##	
+##	# lets make one more for the 18th to see a clear view
+##	# this one will have 3 fields but will be balanced
+##	>>> t=Transaction(date=datetime(2009,5,18))
+##	>>> t.add_entry(a, 7)
+##	<Entry: Debit 1011: First Account $7 balance-> None>
+##	>>> t.add_entry(a2, -4)
+##	<Entry: Debit 2011: Second Account $-4 balance-> None>
+##	>>> t.add_entry(a3, -3)
+##	<Entry: Debit 3011: Third Account $-3 balance-> None>
+##	>>> t.save()
+##	True
+##	
+##	# Check to see what the books look like:
+##	>>> a.entry_set.all()
+##	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Debit 1011: First Account $3 balance-> 6>, <Entry: Debit 1011: First Account $7 balance-> 13>, <Entry: Credit 1011: First Account $4.54 balance-> 8.46>]
+##	>>> a2.entry_set.all()
+##	[<Entry: Credit 2011: Second Account $3 balance-> -3>, <Entry: Debit 2011: Second Account $4 balance-> 1>, <Entry: Debit 2011: Second Account $5 balance-> 6>, <Entry: Credit 2011: Second Account $4 balance-> 2>, <Entry: Debit 2011: Second Account $4.54 balance-> 6.54>]
+##	>>> a3.entry_set.all()
+##	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $4 balance-> 7>, <Entry: Credit 3011: Third Account $5 balance-> 12>, <Entry: Credit 3011: Third Account $3 balance-> 15>]
+##	
+##	# Now lets try moving the transaction from the 17th to the 15th
+##	>>> t2.date=datetime(2009,5,15)
+##	>>> t2.save()
+##	True
+##	
+##	# Now what do we have?
+##	>>> Account.objects.get(pk=1).entry_set.all()
+##	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Debit 1011: First Account $3 balance-> 6>, <Entry: Debit 1011: First Account $7 balance-> 13>, <Entry: Credit 1011: First Account $4.54 balance-> 8.46>]
+##	>>> Account.objects.get(pk=2).entry_set.all()
+##	[<Entry: Credit 2011: Second Account $3 balance-> -3>, <Entry: Debit 2011: Second Account $5 balance-> 2>, <Entry: Debit 2011: Second Account $4 balance-> 6>, <Entry: Credit 2011: Second Account $4 balance-> 2>, <Entry: Debit 2011: Second Account $4.54 balance-> 6.54>]
+##	>>> Account.objects.get(pk=3).entry_set.all()
+##	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $5 balance-> 8>, <Entry: Credit 3011: Third Account $4 balance-> 12>, <Entry: Credit 3011: Third Account $3 balance-> 15>]
+##	
+##	# Try changing a modifier
+##	>>> t=Transaction.objects.get(pk=3)
+##	>>> p1=t.entries[0]
+##	>>> p2=t.entries[1]
+##	>>> p1.modifier, p2.modifier = -1, 1
+##	>>> t.save()
+##	True
+##	>>> Account.objects.get(pk=1).entry_set.all()
+##	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Credit 1011: First Account $3 balance-> 0>, <Entry: Debit 1011: First Account $7 balance-> 7>, <Entry: Credit 1011: First Account $4.54 balance-> 2.46>]
+##	>>> Account.objects.get(pk=2).entry_set.all()
+##	[<Entry: Debit 2011: Second Account $3 balance-> 3>, <Entry: Debit 2011: Second Account $5 balance-> 8>, <Entry: Debit 2011: Second Account $4 balance-> 12>, <Entry: Credit 2011: Second Account $4 balance-> 8>, <Entry: Debit 2011: Second Account $4.54 balance-> 12.54>]
 
-#	# Try changing a value
-#	>>> p1.value, p2.value=7,7
-#	>>> t.save()
-#	True
-#	>>> Account.objects.get(pk=1).entry_set.all()
-#	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Credit 1011: First Account $7 balance-> -4>, <Entry: Debit 1011: First Account $7 balance-> 3>, <Entry: Credit 1011: First Account $4.54 balance-> -1.54>]
-#	>>> Account.objects.get(pk=2).entry_set.all()
-#	[<Entry: Debit 2011: Second Account $7 balance-> 7>, <Entry: Debit 2011: Second Account $5 balance-> 12>, <Entry: Debit 2011: Second Account $4 balance-> 16>, <Entry: Credit 2011: Second Account $4 balance-> 12>, <Entry: Debit 2011: Second Account $4.54 balance-> 16.54>]
+##	# Try changing a value
+##	>>> p1.value, p2.value=7,7
+##	>>> t.save()
+##	True
+##	>>> Account.objects.get(pk=1).entry_set.all()
+##	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Credit 1011: First Account $7 balance-> -4>, <Entry: Debit 1011: First Account $7 balance-> 3>, <Entry: Credit 1011: First Account $4.54 balance-> -1.54>]
+##	>>> Account.objects.get(pk=2).entry_set.all()
+##	[<Entry: Debit 2011: Second Account $7 balance-> 7>, <Entry: Debit 2011: Second Account $5 balance-> 12>, <Entry: Debit 2011: Second Account $4 balance-> 16>, <Entry: Credit 2011: Second Account $4 balance-> 12>, <Entry: Debit 2011: Second Account $4.54 balance-> 16.54>]
 
-#	# Try changing an account number
-#	>>> p1.account=a3
-#	>>> t.entries
-#	[<Entry: Credit 3011: Third Account $7 balance-> -4>, <Entry: Debit 2011: Second Account $7 balance-> 7>]
-#	>>> t.save()
-#	True
-#	>>> Account.objects.get(pk=1).entry_set.all()
-#	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Debit 1011: First Account $7 balance-> 10>, <Entry: Credit 1011: First Account $4.54 balance-> 5.46>]
-#	>>> Account.objects.get(pk=2).entry_set.all()
-#	[<Entry: Debit 2011: Second Account $7 balance-> 7>, <Entry: Debit 2011: Second Account $5 balance-> 12>, <Entry: Debit 2011: Second Account $4 balance-> 16>, <Entry: Credit 2011: Second Account $4 balance-> 12>, <Entry: Debit 2011: Second Account $4.54 balance-> 16.54>]
-#	>>> Account.objects.get(pk=3).entry_set.all()
-#	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $7 balance-> 10>, <Entry: Credit 3011: Third Account $5 balance-> 15>, <Entry: Credit 3011: Third Account $4 balance-> 19>, <Entry: Credit 3011: Third Account $3 balance-> 22>]
-#	
-#	# Try a mean mix
-#	>>> t.entries
-#	[<Entry: Debit 2011: Second Account $7 balance-> 7>, <Entry: Credit 3011: Third Account $7 balance-> 10>]
-#	>>> p1.account=a
-#	>>> p1.value, p2.value=9,9	
-#	>>> p1.modifier, p2.modifier = 1, -1
-#	>>> t.date = datetime(2009,6,30)
-#	>>> t.entries
-#	[<Entry: Credit 2011: Second Account $9 balance-> 7>, <Entry: Debit 1011: First Account $9 balance-> 10>]
-#	>>> t.save()
-#	True
-#	>>> Account.objects.get(pk=1).entry_set.all()
-#	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Debit 1011: First Account $7 balance-> 10>, <Entry: Credit 1011: First Account $4.54 balance-> 5.46>, <Entry: Debit 1011: First Account $9 balance-> 14.46>]
-#	>>> Account.objects.get(pk=2).entry_set.all()
-#	[<Entry: Debit 2011: Second Account $5 balance-> 5>, <Entry: Debit 2011: Second Account $4 balance-> 9>, <Entry: Credit 2011: Second Account $4 balance-> 5>, <Entry: Debit 2011: Second Account $4.54 balance-> 9.54>, <Entry: Credit 2011: Second Account $9 balance-> 0.54>]
-#	>>> Account.objects.get(pk=3).entry_set.all()
-#	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $5 balance-> 8>, <Entry: Credit 3011: Third Account $4 balance-> 12>, <Entry: Credit 3011: Third Account $3 balance-> 15>]
-#	
-#	# NEED to make sure its impossible to have two transactions with the exact same time
+##	# Try changing an account number
+##	>>> p1.account=a3
+##	>>> t.entries
+##	[<Entry: Credit 3011: Third Account $7 balance-> -4>, <Entry: Debit 2011: Second Account $7 balance-> 7>]
+##	>>> t.save()
+##	True
+##	>>> Account.objects.get(pk=1).entry_set.all()
+##	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Debit 1011: First Account $7 balance-> 10>, <Entry: Credit 1011: First Account $4.54 balance-> 5.46>]
+##	>>> Account.objects.get(pk=2).entry_set.all()
+##	[<Entry: Debit 2011: Second Account $7 balance-> 7>, <Entry: Debit 2011: Second Account $5 balance-> 12>, <Entry: Debit 2011: Second Account $4 balance-> 16>, <Entry: Credit 2011: Second Account $4 balance-> 12>, <Entry: Debit 2011: Second Account $4.54 balance-> 16.54>]
+##	>>> Account.objects.get(pk=3).entry_set.all()
+##	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $7 balance-> 10>, <Entry: Credit 3011: Third Account $5 balance-> 15>, <Entry: Credit 3011: Third Account $4 balance-> 19>, <Entry: Credit 3011: Third Account $3 balance-> 22>]
+##	
+##	# Try a mean mix
+##	>>> t.entries
+##	[<Entry: Debit 2011: Second Account $7 balance-> 7>, <Entry: Credit 3011: Third Account $7 balance-> 10>]
+##	>>> p1.account=a
+##	>>> p1.value, p2.value=9,9	
+##	>>> p1.modifier, p2.modifier = 1, -1
+##	>>> t.date = datetime(2009,6,30)
+##	>>> t.entries
+##	[<Entry: Credit 2011: Second Account $9 balance-> 7>, <Entry: Debit 1011: First Account $9 balance-> 10>]
+##	>>> t.save()
+##	True
+##	>>> Account.objects.get(pk=1).entry_set.all()
+##	[<Entry: Debit 1011: First Account $3 balance-> 3>, <Entry: Debit 1011: First Account $7 balance-> 10>, <Entry: Credit 1011: First Account $4.54 balance-> 5.46>, <Entry: Debit 1011: First Account $9 balance-> 14.46>]
+##	>>> Account.objects.get(pk=2).entry_set.all()
+##	[<Entry: Debit 2011: Second Account $5 balance-> 5>, <Entry: Debit 2011: Second Account $4 balance-> 9>, <Entry: Credit 2011: Second Account $4 balance-> 5>, <Entry: Debit 2011: Second Account $4.54 balance-> 9.54>, <Entry: Credit 2011: Second Account $9 balance-> 0.54>]
+##	>>> Account.objects.get(pk=3).entry_set.all()
+##	[<Entry: Credit 3011: Third Account $3 balance-> 3>, <Entry: Credit 3011: Third Account $5 balance-> 8>, <Entry: Credit 3011: Third Account $4 balance-> 12>, <Entry: Credit 3011: Third Account $3 balance-> 15>]
+##	
+##	# NEED to make sure its impossible to have two transactions with the exact same time
 	"""
 	def add_entry(self, account, value, modifier=1):
 		p=Entry(account=account, value=value, date=self.date)

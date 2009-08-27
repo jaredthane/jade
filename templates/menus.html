@@ -10,6 +10,11 @@
 		{% menu_item "/products" _('Products') %}
 		{% menu_item "/services" _('Services') %}
 	{% menu_end %}
+	{% menu_start _('Orders') %}
+		{% menu_item "/orders/sales" _('Sales') %}
+		{% menu_item "/orders/purchases" _('Purchases') %}
+	{% menu_end %}
+	{% menu_button "/accounting/" _('Accounting') %}
 	{% menu_start _('Sites') %}
 		{% for site in sites %}
 			{% menu_item "/products" _('Products') %}

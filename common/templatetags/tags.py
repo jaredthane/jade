@@ -24,7 +24,7 @@ def menu_end():
 	return u'</ul><!--[if lte IE 6]></td></tr></table></a><![endif]--></li></ul>'
 	
 @register.simple_tag
-def menu_button(label):
+def menu_button(url, label):
 	return u'<ul><li><a href="%s">%s</a></li></ul>' % (url, label)
 		
 @register.simple_tag
