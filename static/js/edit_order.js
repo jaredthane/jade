@@ -3,7 +3,7 @@ function DoAjaxRequest(){
 			type: 'POST',
   		url: "/orders/new_line/",
   		data:{ upc: $("#upc").val(), num:$("#id_line_set-TOTAL_FORMS").val() },
-  		success: function(data){ $('.lines').append(data); $('.line:last').hide().slideDown('slow');AddEventsToLastLine();IncrementFormCount();},
+  		success: function(data){ $('.lines').append(data); $('.line:last').hide().slideDown('slow');AddEventsToLastLine();IncrementFormCount();$("#upc").select()},
   		error: function(){alert("An error has occurred. Please try again.");},
 		});
 }
