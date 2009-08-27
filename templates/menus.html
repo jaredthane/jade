@@ -2,13 +2,13 @@
 {% load tags %}
 {% block menus %}
 	{% menu_start _('New') %}
-		{% menu_item "/sales/new" _('Sale') %}
-		{% menu_item "/clients/new" _('Client') %}
-		{% menu_item "/purchases/new" _('Purchase') %}
+		{% menu_item "/orders/new_sale" _('Sale') %}
+		{% menu_item "/orders/new_client" _('Client') %}
+		{% menu_item "/orders/new_purchase" _('Purchase') %}
 	{% menu_end %}
 	{% menu_start _('Products') %}
-		{% menu_item "/products" _('Products') %}
-		{% menu_item "/services" _('Services') %}
+		{% menu_item "/inventory/products" _('Products') %}
+		{% menu_item "/inventory/services" _('Services') %}
 	{% menu_end %}
 	{% menu_start _('Orders') %}
 		{% menu_item "/orders/sales" _('Sales') %}
@@ -17,7 +17,7 @@
 	{% menu_button "/accounting/" _('Accounting') %}
 	{% menu_start _('Sites') %}
 		{% for site in sites %}
-			{% menu_item "/products" _('Products') %}
+			{% menu_item "/inventory/products" _('Products') %}
 		{% endfor %}
 	{% menu_end %}
 {% endblock %}
