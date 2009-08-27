@@ -6,12 +6,11 @@ pdf.text @from.to_date.to_s(:long) + " - " + @till.to_date.to_s(:long), :align =
 pdf.font_size = 12
 pdf.table(@data,
    :font_size => 12,
-   :headers => ['Asesor', 'Saldo Anterior', 'Facturas','Saldo Provisionado','Pagos','Saldo Cobrado','Facturas Pendientes','Saldo Final'],
    :horizontal_padding => 1,
    :vertical_padding => 1,
-   :border_width => 0,
-   :border_style => :underline_header,
+   :border_width => 1,
+   :border_style => :grid,
    :column_widths => { 0 => 80, 1 => 70, 2 => 70, 3 => 70, 4 => 70, 5 => 70, 6 => 70, 7 => 70 },
-   :align => { 0 => :left,1 => :left, 2 => :left,3 => :left,4 => :left,5 => :left,6 => :left,7 => :left })
+   :align => { 0 => :center,1 => :center, 2 => :center,3 => :center,4 => :center,5 => :center,6 => :center,7 => :center })
    
  
