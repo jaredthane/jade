@@ -61,7 +61,14 @@ class SalesRepresentativesController < ApplicationController
 		  total[:final_balance]+=rep[:final_balance]
 		end
 #		@data << ["---", "---", "---", "---", "---", "---", "---"]
-		@data << ["Totales", x.number_to_currency(total[:previous_balance]), total[:num_receipts], x.number_to_currency(total[:revenue]), total[:num_payments], x.number_to_currency(total[:cash_received]), rep[:facturas_pendientes], x.number_to_currency(total[:final_balance])]
+		@data << ["Totales", 
+			total[:num_receipts], 
+			total[:num_payments], 
+			rep[:facturas_pendientes], 
+			x.number_to_currency(total[:previous_balance]), 
+			x.number_to_currency(total[:revenue]), 
+			x.number_to_currency(total[:cash_received]), 
+			x.number_to_currency(total[:final_balance])]
 		prawnto :prawn => { :page_size => 'LETTER'}
 		params[:format] = 'pdf'
 		respond_to do |format|
