@@ -7,7 +7,7 @@
 			{% if form.product.initial %}
 				{{form.product.initial}} {{form.product}}
 			{% else %}
-				{{form.product}}
+				{% link form.instance.product.get_absolute_url form.instance.product.name %}{{form.product}}
 			{% endif %}
 		</div>
 		<div class="table_cell_20">{{form.quantity}}{{form.id}}</div>

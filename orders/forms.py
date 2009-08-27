@@ -23,6 +23,9 @@ class SimpleLineForm(ModelForm):
 	warranty = ModelChoiceField(Warranty, widget=HiddenInput(),required=False)
 	received = DateTimeField(widget=HiddenInput(),required=False)
 #	product = ModelChoiceField(ProductBase.objects, widget=HiddenInput(),required=False)
+	product = ModelChoiceField(ProductBase.objects, empty_label=None,required=False)
+
+
 	DELETE = BooleanField(widget=HiddenInput(),required=False)
 	class Meta:
 		model = Line

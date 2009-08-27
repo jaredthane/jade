@@ -50,7 +50,7 @@ def edit_line(request, object_id = None):
 #		formset=LineFormSet(initial=[{'product':p},])
 		form=SimpleLineFormSet()._construct_form(num)
 		form.instance.product=p
-#		form.fields['product'].initial=p.pk
+		form.fields['product'].initial=p.pk
 		return render_to_response('orders/edit_line.html', {'form': form})
 	except ValueError:
 		return "Unable to find a product with that upc"
