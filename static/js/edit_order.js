@@ -3,7 +3,16 @@ function DoAjaxRequest(){
 			type: 'POST',
   		url: "/orders/new_line/",
   		data:{ upc: $("#upc").val(), num:$("#id_line_set-TOTAL_FORMS").val() },
-  		success: function(data){ $('.lines').append(data); $('.line:last').hide().slideDown('slow');AddEventsToLastLine();IncrementFormCount();$("#upc").select();$('select[id$=-product]').hide();},
+  		success: function(data){ 
+  			$('.lines').append(data);
+				f=$(".details_form:last").dialog({ autoOpen: false });
+  			$('.table_row:last').slideDown('slow');
+  			AddEventsToLastLine();
+  			IncrementFormCount();
+  			$("#upc").select();
+  			$('select[id$=-product]').hide();
+				AddDetails($('.details:last'), f);
+			},
   		error: function(){alert("An error has occurred. Please try again.");},
 		});
 }
@@ -37,9 +46,18 @@ function AddEventsToLastLine(){
 	AddDelete($('.table_cell > *'));
 	AddMarkDelivered($('.is_delivered:last'));
 }
+function AddDetails(element, form){
+	element.click(function(event){
+    form.dialog('open');
+		event.preventDefault();
+	});
+}
 $(document).ready(function(){
 	$('select[id$=-product]').hide();
+	$("#id_created_at").datepicker();
 	AddDelete($('.table_cell > *'));
+	AddDetails($('.details'));
+//	$(".details_form").dialog({ autoOpen: false, show: 'fade' });
 	AddMarkDelivered($('.is_delivered'));
 	$("#upc").keydown(function(e){
 		if (e.keyCode == 13) {
@@ -50,11 +68,3 @@ $(document).ready(function(){
 	});
 	$("#get_ajax").click(DoAjaxRequest);
 });
-
-
-
-
-
-
-
-

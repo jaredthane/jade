@@ -46,6 +46,7 @@ def edit_line(request, object_id = None):
 		print "num=" + str(num)
 		
 		p=ProductBase.objects.get(bar_code=upc)
+		tax=p.tax
 #		LineFormSet = inlineformset_factory(Sale, Line, extra=num+1, form=SimpleLineForm)
 #		formset=LineFormSet(initial=[{'product':p},])
 		form=SimpleLineFormSet()._construct_form(num)

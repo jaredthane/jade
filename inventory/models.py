@@ -6,10 +6,12 @@ from transmeta import TransMeta
 #from jade.orders.models import *
 
 class UnitOfMeasure(Model):
+	__metaclass__ = TransMeta
 	name = CharField(max_length=50, default='')
 	def __unicode__(self):
 		return self.name
 	class Meta:
+		translate = ('name', )
 		verbose_name_plural = _('Units Of Measure')
 		verbose_name = _('Unit Of Measure')
 
@@ -28,11 +30,12 @@ class ProductCategory(Model):
 class ProductBase(Model):
 	__metaclass__ = TransMeta
 	name = CharField(max_length=50, default='')
-	description = TextField()
+	description = TextField(default='', blank=True)
 	bar_code = CharField(max_length=50, default='')
 	unit = ForeignKey(UnitOfMeasure)
-	revenue_account = ForeignKey(Account)
-	categories = ManyToManyField(ProductCategory)
+	revenue_account = ForeignKey(Account, null=True, blank=True)
+	categories = ManyToManyField(ProductCategory, blank=True)
+	tax = DecimalField(max_digits=5, decimal_places=2, default='0.00')
 	class Meta:
 		translate = ('name', 'description')
 	def __unicode__(self):
@@ -42,8 +45,8 @@ class ProductBase(Model):
 	
 class Product(ProductBase):
 	vendor = ForeignKey(Vendor)
-	location = CharField(max_length=50, default='')
-	model = CharField(max_length=50, default='')
+	location = CharField(max_length=50, default='', blank=True)
+	model = CharField(max_length=50, default='', blank=True)
 	def save(self, *args, **kwargs):
 		super(Product, self).save()
 		for site in Site.objects.all():

@@ -1,8 +1,14 @@
 {% load i18n %}
 {% load tags %}
 <div class="line">
+	<div class="details_form">
+		{{form.warranty}}
+		{{form.tax}}
+		{{form.notes}}
+		{{form.received}}
+	</div>
 	<div class="table_row">
-		{{form.notes}}{{form.warranty}}
+		{{form.id}}
 		<div class="table_cell_25">
 			{% if form.product.initial %}
 				{{form.product.initial}} {{form.product}}
@@ -10,10 +16,10 @@
 				{% link form.instance.product.get_absolute_url form.instance.product.name %}{{form.product}}
 			{% endif %}
 		</div>
-		<div class="table_cell_20">{{form.quantity}}{{form.id}}</div>
+		<div class="table_cell_20">{{form.quantity}}</div>
 		<div class="table_cell_20">{{form.price}}</div>
-		<div class="table_cell_10"><input class="is_delivered" type="checkbox">{{form.received}}<input type="hidden" class="initial_received" value="{{form.received.initial}}"></div>
-		<div class="table_cell_10"><a href="#" id="details" >{% trans "Details" %}</a></div>
+		<div class="table_cell_10"><input class="is_delivered" type="checkbox"></div>
+		<div class="table_cell_10"><a href="#" class="details" >{% trans "Details" %}</a></div>
 		<div class="table_cell">{{form.DELETE}}</div>
 	</div>
 </div>

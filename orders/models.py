@@ -15,6 +15,7 @@ class Order(Model):
 	total = DecimalField(max_digits=5, decimal_places=2, default='0.00')
 	paid = DecimalField(max_digits=5, decimal_places=2, default='0.00')
 	number = CharField(max_length=50, default='')
+	tax = DecimalField(max_digits=5, decimal_places=2, default='0.00')
 	
 	class Meta:
 		verbose_name_plural = _('Orders')
@@ -44,6 +45,11 @@ class Line(Model):
 	serial_numbers = ManyToManyField(SerialNumber, blank=True)
 	received = DateTimeField(blank=True, null=True)
 	warranty = OneToOneField(Warranty, blank=True, null=True)
+	tax = DecimalField(max_digits=5, decimal_places=2, default='0.00', blank=True)
+	def save(self, *args, **kwargs):
+		super(Line, self).save()
+		if not self.tax:
+			self.tax=self.price*self.product.tax
 #	def get_is_received():
 #		return bool(self.received)
 #	def set_is_received(value):

@@ -19,14 +19,14 @@ class PurchaseForm(DynamicForm):
 #		ModelChoiceField.__init__(self, **kw)
 		
 class SimpleLineForm(ModelForm):
-	notes = CharField(widget=HiddenInput(),required=False)
-	warranty = ModelChoiceField(Warranty, widget=HiddenInput(),required=False)
-	received = DateTimeField(widget=HiddenInput(),required=False)
-#	product = ModelChoiceField(ProductBase.objects, widget=HiddenInput(),required=False)
+#	notes = CharField(widget=HiddenInput(),required=False)
+#	warranty = ModelChoiceField(Warranty, widget=HiddenInput(),required=False)
+#	received = DateTimeField(widget=HiddenInput(),required=False)
+#	tax = DecimalField(widget=HiddenInput(),required=False)
 	product = ModelChoiceField(ProductBase.objects, empty_label=None,required=False)
 
 
-	DELETE = BooleanField(widget=HiddenInput(),required=False)
+#	DELETE = BooleanField(widget=HiddenInput(),required=False)
 	class Meta:
 		model = Line
 		exclude=('serial_numbers')

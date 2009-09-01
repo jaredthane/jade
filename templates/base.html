@@ -40,7 +40,9 @@
   
   <link type="text/css" rel="stylesheet" media="screen" href="/static/css/text.css">
   <link type="text/css" rel="stylesheet" media="screen" href="/static/css/setup.css">
+  <link rel="stylesheet" href="/static/css/jquery-ui-custom-theme/jquery-ui-1.7.2.custom.css" type="text/css">
   <script type="text/javascript" src="/static/js/jquery.js"></script> 
+  <script type="text/javascript" src="/static/js/jquery-ui.js"></script> 
   <script type="text/javascript" src="/static/js/jade.js"></script> 
   {% block includes %}{% endblock %}
   <link rel="icon" type="image/x-icon" href="/images/img/favicon.ico" />
@@ -59,10 +61,8 @@
         <a class="sitelogo" href="#" title="{% trans "Home Page" %}"></a>
         <div class="sitename">
           <h1><a href="/products" title="{% trans "Home Page" %}">Jade&nbsp;&bull;&nbsp;2.01</a></h1> 
-          <h2>{% trans "Jade Inventory Control and Accounting System" %}</h2>
-        </div>
-    
-        <!-- Navigation Level 0 -->
+          <h2>{% trans "Jade Inventory Control and Accounting System" %}<br/>{% trans "Solid. Simple. Elegant." %}</h2>
+        </div>
         <div class="nav0">
           <ul>
             <li><a href="{% url set_language %}?lang=en&back={{ current_url }}" title="English"><img src="/static/img/flag_greatbritain.png" alt="English" /></a></li>
