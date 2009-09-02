@@ -1,40 +1,7 @@
-{% load i18n %}
-{% load tags %}
-<div class="line">
-	<div id="{{form.prefix}}-details_form" style="display:none" title="{% trans "Order Details" %}">
-		<p>
-			<b>{% trans "Warranty" %}:</b>
-			{{form.warranty}}
-		</p>
-		<p>
-			<b>{% trans "Tax" %}:</b>
-			{{form.tax}}
-		</p>
-		<p>
-			<b>{% trans "Received" %}:</b>
-			<div class="received">
-				{{form.received}}
-			</div>
-		</p>
-		<p>
-			<b>{% trans "Notes" %}:</b><br/>
-			{{form.notes}}
-		</p>
-	</div>
-	<div class="table_row">
-		{{form.id}}
-		<div class="table_cell_25">
-			{% if form.instance %}
-				{% link form.instance.product.get_absolute_url form.instance.product.name %}
-			{% else %}
-				{% link form.data.product.get_absolute_url form.data.product.name %}
-			{% endif %}
-			{{form.product}}
-		</div>
-		<div class="table_cell_20">{{form.quantity}}</div>
-		<div class="table_cell_20">{{form.price}}</div>
-		<div class="table_cell_10"><input class="is_delivered" type="checkbox"></div>
-		<div class="table_cell_10"><a href="#TB_inline?height=325&width=325&inlineId={{form.prefix}}-details_form" class="thickbox">Details</a></div>
-		<div class="table_cell">{{form.DELETE}}</div>
-	</div>
+<div id="simple">
+	{% include 'orders/edit_line_simple.html' %}
+</div>
+
+<div id="details">
+	{% include 'orders/edit_line_details.html' %}
 </div>

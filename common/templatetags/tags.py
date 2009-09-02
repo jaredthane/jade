@@ -5,10 +5,6 @@ from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
 register = template.Library()
 
-
-
-
-
 # Order of things:
 # url, label, value, width
 @register.filter
@@ -45,7 +41,7 @@ def link(url, label):
 @register.simple_tag
 def table_cell(label, width=None):
 	if width:
-		return u'<div class="table_cell_%s">%s</div>' % (width, label)
+		return u'<div class="table_cell style="width=%s%">%s</div>' % (width, label)
 	else:
 		return u'<div class="table_cell">%s</div>' % label
 
@@ -53,12 +49,12 @@ def table_cell(label, width=None):
 def table_cell_date(label, width=None):
 	if label:
 		if width:
-			return u'<div class="table_cell_%s">%s</div>' % (width, label.strftime("%m/%d/%Y"))
+			return u'<div class="table_cell style="width=%s%">%s</div>' % (width, label.strftime("%m/%d/%Y"))
 		else:
 			return u'<div class="table_cell">%s</div>' % label.strftime("%m/%d/%Y")
 	else:
 		if width:
-			return u'<div class="table_cell_%s"></div>' % width
+			return u'<div class="table_cell style="width=%s%"></div>' % width
 		else:
 			return u'<div class="table_cell"></div>'
 		
@@ -73,7 +69,7 @@ def date_format(value, format):
 @register.simple_tag
 def table_cell_link(url, label, width=None):
 	if width:
-		return u'<div class="table_cell_%s"><a href="%s">%s</a></div>' % (width, url, label)
+		return u'<div class="table_cell style="width=%s%"><a href="%s">%s</a></div>' % (width, url, label)
 	else:
 		return u'<div class="table_cell"><a href="%s">%s</a></div>' % (url, label)
 

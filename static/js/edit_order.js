@@ -4,7 +4,10 @@ function DoAjaxRequest(){
   		url: "/orders/new_line/",
   		data:{ upc: $("#upc").val(), num:$("#id_line_set-TOTAL_FORMS").val() },
   		success: function(data){ 
-  			$('.lines').append(data);
+  			var d = $('<div/>').append(data)
+  			$('#simple', d).appendTo('.lines')
+  			$('#details', d).appendTo('.lines-details')			
+//  			$('.lines').append(data);
   			$('.table_row:last').slideDown('slow');
   			AddEventsToLine($('.line:last'));
   			IncrementFormCount();
@@ -72,13 +75,10 @@ function AddEventsToLine(line){
 $(document).ready(function(){
 	$('select[id$=-product]').hide();
 	$("#id_created_at").datepicker();
+	$("#tabs").tabs();
 	$('.line').each(function () {
 		AddEventsToLine($(this));
 	});
-//	AddDelete($('.table_cell > *'));
-//	AddDetails($('.details'));
-//	$(".details_form").dialog({ autoOpen: false, show: 'fade' });
-//	AddMarkDelivered($('.is_delivered'));
 	$("#upc").keydown(function(e){
 		if (e.keyCode == 13) {
 			DoAjaxRequest();
