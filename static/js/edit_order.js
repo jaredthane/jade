@@ -5,13 +5,11 @@ function DoAjaxRequest(){
   		data:{ upc: $("#upc").val(), num:$("#id_line_set-TOTAL_FORMS").val() },
   		success: function(data){ 
   			$('.lines').append(data);
-				f=$(".details_form:last").dialog({ autoOpen: false });
   			$('.table_row:last').slideDown('slow');
-  			AddEventsToLastLine();
+  			AddEventsToLine($('.line:last'));
   			IncrementFormCount();
   			$("#upc").select();
   			$('select[id$=-product]').hide();
-				AddDetails($('.details:last'), f);
 			},
   		error: function(){alert("An error has occurred. Please try again.");},
 		});
@@ -36,29 +34,46 @@ function AddDelete(e){
 function AddMarkDelivered(e){
 	e.click( function(){
 		if ($(this).is(':checked')) {
-			SetTimeOnReceived($(this).next())
+			SetTimeOnReceived($(this).closest('.line').find('.received').children(':first'))
+//			$(this).closest('.line').find('.received').children(':first').attr('value', '7')
 		} else {
-			$(this).next().attr('value', '')
+			$(this).closest('.line').find('.received').children(':first').attr('value', '')
 		}
 	});
 }
-function AddEventsToLastLine(){
-	AddDelete($('.table_cell > *'));
-	AddMarkDelivered($('.is_delivered:last'));
+function AddEventsToLine(line){
+	AddDelete(line.find('.table_cell'));
+	AddMarkDelivered(line.find('.is_delivered'));
+	AddDetails(line.find('.details'), line.find('.details_form'));
+	if (line.find('.received').children(':first').attr('value')!=''){
+		line.find('.is_delivered').attr('checked',true);
+	}
 }
 function AddDetails(element, form){
-	element.click(function(event){
-    form.dialog('open');
+	form.hide();
+	element.click(function(event,form){
+		last_details=$(this).parent().parent().prev()
+		dialog=last_details.clone().dialog({
+   		close: function(event, ui) {
+   			last_details.html($(this).children().clone());
+   			$(this).dialog('destroy');
+   		}
+		});
+		
+		dialog.find('.received').children(':first').datepicker();
 		event.preventDefault();
 	});
 }
 $(document).ready(function(){
 	$('select[id$=-product]').hide();
 	$("#id_created_at").datepicker();
-	AddDelete($('.table_cell > *'));
-	AddDetails($('.details'));
+	$('.line').each(function () {
+		AddEventsToLine($(this));
+	});
+//	AddDelete($('.table_cell > *'));
+//	AddDetails($('.details'));
 //	$(".details_form").dialog({ autoOpen: false, show: 'fade' });
-	AddMarkDelivered($('.is_delivered'));
+//	AddMarkDelivered($('.is_delivered'));
 	$("#upc").keydown(function(e){
 		if (e.keyCode == 13) {
 			DoAjaxRequest();

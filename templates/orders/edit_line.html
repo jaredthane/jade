@@ -2,19 +2,34 @@
 {% load tags %}
 <div class="line">
 	<div class="details_form">
-		{{form.warranty}}
-		{{form.tax}}
-		{{form.notes}}
-		{{form.received}}
+		<p>
+			<b>{% trans "Warranty" %}:</b>
+			{{form.warranty}}
+		</p>
+		<p>
+			<b>{% trans "Tax" %}:</b>
+			{{form.tax}}
+		</p>
+		<p>
+			<b>{% trans "Received" %}:</b>
+			<div class="received">
+				{{form.received}}
+			</div>
+		</p>
+		<p>
+			<b>{% trans "Notes" %}:</b><br/>
+			{{form.notes}}
+		</p>
 	</div>
 	<div class="table_row">
 		{{form.id}}
 		<div class="table_cell_25">
-			{% if form.product.initial %}
-				{{form.product.initial}} {{form.product}}
+			{% if form.instance %}
+				{% link form.instance.product.get_absolute_url form.instance.product.name %}
 			{% else %}
-				{% link form.instance.product.get_absolute_url form.instance.product.name %}{{form.product}}
+				{% link form.data.product.get_absolute_url form.data.product.name %}
 			{% endif %}
+			{{form.product}}
 		</div>
 		<div class="table_cell_20">{{form.quantity}}</div>
 		<div class="table_cell_20">{{form.price}}</div>

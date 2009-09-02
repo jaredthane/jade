@@ -46,6 +46,27 @@ def table_cell(label, width=None):
 		return u'<div class="table_cell">%s</div>' % label
 
 @register.simple_tag
+def table_cell_date(label, width=None):
+	if label:
+		if width:
+			return u'<div class="table_cell_%s">%s</div>' % (width, label.strftime("%m/%d/%Y"))
+		else:
+			return u'<div class="table_cell">%s</div>' % label.strftime("%m/%d/%Y")
+	else:
+		if width:
+			return u'<div class="table_cell_%s"></div>' % width
+		else:
+			return u'<div class="table_cell"></div>'
+		
+
+@register.simple_tag
+def date_format(value, format):
+	if value:
+		return u'%s' % value.strftime(format)
+	else:
+		return u''
+
+@register.simple_tag
 def table_cell_link(url, label, width=None):
 	if width:
 		return u'<div class="table_cell_%s"><a href="%s">%s</a></div>' % (width, url, label)
@@ -58,6 +79,20 @@ def detail_item(label, value, url=None):
 		return u'<p><b>%s: </b><a href="%s">%s</a></p>' % (label, url, (value or ""))
 	else:
 		return u'<p><b>%s: </b>%s</p>' % (label, (value or ""))
+		
+@register.simple_tag
+def detail_item_date(label, value, url=None):
+	if value:
+		if url:
+			return u'<p><b>%s: </b><a href="%s">%s</a></p>' % (label, url, value.strftime("%m/%d/%Y"))
+		else:
+			return u'<p><b>%s: </b>%s</p>' % (label, value.strftime("%m/%d/%Y"))
+	else:
+		if url:
+			return u'<p><b>%s: </b><a href="%s"></a></p>' % (label, url)
+		else:
+			return u'<p><b>%s: </b></p>' % label
+		
 		
 @register.simple_tag
 def action(url, label):

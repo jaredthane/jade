@@ -10,14 +10,14 @@
 	<div class="column2-unit-left">
 		{% detail_item _('Client') obj.client.name %}
 		{% detail_item _('Total') obj.total %}
-		{% detail_item _('Created') obj.created_at %}
+		{% detail_item_date _('Created') obj.created_at %}
 		{% detail_item _('Receipt') obj.number %}
 	</div>
 	<div class="column2-unit-right">
 		{% detail_item _('Site') obj.site.name %}
 		{% detail_item _('Amount Paid') obj.paid %}
 		{% detail_item _('Amount Paid') obj.paid %}
-		{% detail_item _('Delivered') obj.received %}
+		{% detail_item_date _('Delivered') obj.received %}
 	</div>
 	<hr class="clear-contentunit"/>
 	{% detail_item _('Notes') obj.notes %}
@@ -34,7 +34,7 @@
 				{% table_cell_link line.product.get_absolute_url line.product 25 %}
 				{% table_cell line.quantity 25 %}
 				{% table_cell line.price 25 %}
-				{% table_cell line.received %}
+				{% table_cell_date line.received %}
 			</div>
 			{% include 'orders/show_line.html' %}
 		{% endfor %}

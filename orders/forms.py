@@ -23,7 +23,8 @@ class SimpleLineForm(ModelForm):
 #	warranty = ModelChoiceField(Warranty, widget=HiddenInput(),required=False)
 #	received = DateTimeField(widget=HiddenInput(),required=False)
 #	tax = DecimalField(widget=HiddenInput(),required=False)
-	product = ModelChoiceField(ProductBase.objects, empty_label=None,required=False)
+	product = ModelChoiceField(ProductBase.objects, empty_label=None, required=False)
+#	product_name = CharField(widget=HiddenInput(),required=False)
 
 
 #	DELETE = BooleanField(widget=HiddenInput(),required=False)

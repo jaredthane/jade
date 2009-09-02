@@ -20,7 +20,7 @@ def generic_show(request, object_id, Model):
 	
 @login_required
 def get_time(request):
-  return HttpResponse(datetime.now())
+  return HttpResponse(datetime.now().strftime("%Y-%m-%d"))
 
 @login_required
 def generic_edit(request, Model, Form, object_id = None):

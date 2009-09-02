@@ -51,6 +51,7 @@ def edit_line(request, object_id = None):
 #		formset=LineFormSet(initial=[{'product':p},])
 		form=SimpleLineFormSet()._construct_form(num)
 		form.instance.product=p
+		form.product_name=p.name
 		form.fields['product'].initial=p.pk
 		return render_to_response('orders/edit_line.html', {'form': form})
 	except ValueError:
@@ -93,8 +94,12 @@ def edit_sale(request, object_id = None):
 				sale=sale_form.save()
 			print "checkpoint3"
 			line_formset = LineFormSet(request.POST, instance=sale)
-			for form in line_formset.forms:
-				print "form.__dict__=" + str(form.__dict__)
+#			for form in line_formset.forms:
+#				if form.product:
+#					form.product_name=form.product.name
+#				else:
+#					del(line_formset.forms, form)
+#				print "form.__dict__=" + str(form.__dict__)
 			print "checkpoint4"
 			all_ok += line_formset.is_valid()
 			print "checkpoint5"
