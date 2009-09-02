@@ -1,0 +1,16 @@
+{% load i18n %}
+{% load tags %}
+<div class="line-details">
+	<div class="table_row">
+		<div class="table_cell" style="width: 25%;">
+			{% if form.instance %}
+				{% link form.instance.product.get_absolute_url form.instance.product.name %}
+			{% else %}
+				{% link form.data.product.get_absolute_url form.data.product.name %}
+			{% endif %}
+		</div>
+		<div class="table_cell" style="width: 25%;">{{form.tax}}</div>
+		<div class="table_cell" style="width: 25%;">{{form.warranty}}</div>
+		<div class="table_cell">{{form.received}}</div>
+	</div>
+</div>

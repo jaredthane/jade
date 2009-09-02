@@ -1,0 +1,19 @@
+{% load i18n %}
+{% load tags %}
+<div class="line">
+	<div class="table_row">
+		{{form.id}}
+		<div class="table_cell" style="width: 25%;">
+			{% if form.instance %}
+				{% link form.instance.product.get_absolute_url form.instance.product.name %}
+			{% else %}
+				{% link form.data.product.get_absolute_url form.data.product.name %}
+			{% endif %}
+			{{form.product}}
+		</div>
+		<div class="table_cell" style="width: 20%;">{{form.quantity}}</div>
+		<div class="table_cell" style="width: 20%;">{{form.price}}</div>
+		<div class="table_cell" style="width: 15%;"><input class="is_delivered" type="checkbox"></div>
+		<div class="table_cell">{{form.DELETE}}</div>
+	</div>
+</div>
