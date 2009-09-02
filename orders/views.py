@@ -111,7 +111,10 @@ def edit_sale(request, object_id = None):
 				current_url=reverse('show_sale', kwargs={'object_id':sale.pk} )
 				print "checkpoint7b"
 				for form in line_formset.forms:
-					print "form.cleaned_data=" + str(form.cleaned_data)
+					if form.cleaned_data:
+						print "form.cleaned_data=" + str(form.cleaned_data)
+					if form.instance:
+						print "###form.instance=" + str(form.instance)
 				return render_to_response('orders/show_sale.html', {'obj': sale, 'current_url':current_url, 'current_lang':current_lang})
 		except ValueError:
 			print "Unexpected error:", sys.exc_info()[0]

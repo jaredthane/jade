@@ -1,7 +1,7 @@
 from django.db.models import *
 from jade.entities.models import Client, Site, Vendor
 #from jade.accounting.models import *
-from jade.inventory.models import Warranty, ProductBase, SerialNumber
+from jade.inventory.models import WarrantyPolicy, ProductBase, SerialNumber
 from django.utils.translation import ugettext_lazy as _
 from datetime import datetime
 
@@ -44,7 +44,7 @@ class Line(Model):
 	notes = TextField(blank=True, default='')
 	serial_numbers = ManyToManyField(SerialNumber, blank=True)
 	received = DateTimeField(blank=True, null=True)
-	warranty = OneToOneField(Warranty, blank=True, null=True)
+	warranty = OneToOneField(WarrantyPolicy, blank=True, null=True)
 	tax = DecimalField(max_digits=5, decimal_places=2, default='0.00', blank=True)
 	def save(self, *args, **kwargs):
 		super(Line, self).save()

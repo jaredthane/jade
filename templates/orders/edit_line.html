@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load tags %}
 <div class="line">
-	<div class="details_form">
+	<div id="{{form.prefix}}-details_form" style="display:none" title="{% trans "Order Details" %}">
 		<p>
 			<b>{% trans "Warranty" %}:</b>
 			{{form.warranty}}
@@ -34,7 +34,7 @@
 		<div class="table_cell_20">{{form.quantity}}</div>
 		<div class="table_cell_20">{{form.price}}</div>
 		<div class="table_cell_10"><input class="is_delivered" type="checkbox"></div>
-		<div class="table_cell_10"><a href="#" class="details" >{% trans "Details" %}</a></div>
+		<div class="table_cell_10"><a href="#TB_inline?height=325&width=325&inlineId={{form.prefix}}-details_form" class="thickbox">Details</a></div>
 		<div class="table_cell">{{form.DELETE}}</div>
 	</div>
 </div>

@@ -44,26 +44,31 @@ function AddMarkDelivered(e){
 function AddEventsToLine(line){
 	AddDelete(line.find('.table_cell'));
 	AddMarkDelivered(line.find('.is_delivered'));
-	AddDetails(line.find('.details'), line.find('.details_form'));
 	if (line.find('.received').children(':first').attr('value')!=''){
 		line.find('.is_delivered').attr('checked',true);
 	}
+	line.find('.received').children(':first').datepicker();
+	tb_init('a.thickbox, area.thickbox, input.thickbox');
 }
-function AddDetails(element, form){
-	form.hide();
-	element.click(function(event,form){
-		last_details=$(this).parent().parent().prev()
-		dialog=last_details.clone().dialog({
-   		close: function(event, ui) {
-   			last_details.html($(this).children().clone());
-   			$(this).dialog('destroy');
-   		}
-		});
-		
-		dialog.find('.received').children(':first').datepicker();
-		event.preventDefault();
-	});
-}
+// Replaced by thickbox
+//////////////////////////////////////////////////////////////////////
+//function AddDetails(element, form){
+//	form.hide();
+//	element.click(function(event,form){
+//		last_details=$(this).parent().parent().prev()
+//		dialog=last_details.clone().dialog({
+//			
+//   		close: function(event, ui) {
+//   			last_details.html($(this).children().clone());
+//   			$(this).dialog('destroy');
+//   		}
+//		});
+//		
+//		$("#id_created_at").removeClass('hasDatepicker');
+//		dialog.find('.received').children(':first').datepicker();
+//		event.preventDefault();
+//	});
+//}
 $(document).ready(function(){
 	$('select[id$=-product]').hide();
 	$("#id_created_at").datepicker();

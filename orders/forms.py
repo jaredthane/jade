@@ -4,8 +4,10 @@ from django.forms import *
 from django.forms.formsets import formset_factory
 from jade.orders.widgets import StaticText
 from django.forms.models import inlineformset_factory
-
+from jade.common.widgets import *
 class SaleForm(ModelForm):
+	site = ModelChoiceField(Site.objects, widget=SelectWithPop)
+	client = ModelChoiceField(Client.objects, widget=SelectWithPop)
 	class Meta:
 		model = Sale
 		fields = ('client','site','number','created_at')
@@ -23,6 +25,8 @@ class SimpleLineForm(ModelForm):
 #	warranty = ModelChoiceField(Warranty, widget=HiddenInput(),required=False)
 #	received = DateTimeField(widget=HiddenInput(),required=False)
 #	tax = DecimalField(widget=HiddenInput(),required=False)
+	warranty = ModelChoiceField(WarrantyPolicy.objects, widget=SelectWithPop, required=False)
+
 	product = ModelChoiceField(ProductBase.objects, empty_label=None, required=False)
 #	product_name = CharField(widget=HiddenInput(),required=False)
 

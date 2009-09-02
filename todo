@@ -11,3 +11,21 @@ http://www.hoboes.com/Mimsy/hacks/replicating-djangos-admin/
 	inventory models need unicodes
 	learn about metaclasses
 	HAVE to figure out how to set account names using account.name="Cash" and not name_es
+	
+	To test order form:
+	delete
+	add line
+	new sale
+	update line
+	set price
+	set warranty
+	set tax
+	set quantity
+	set serials
+	change site
+	change date
+	check accounting
+	check inventory
+	auto create orders for excess lines
+	request receipt numbers for extra orders
+	
