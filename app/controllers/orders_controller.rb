@@ -304,6 +304,8 @@ class OrdersController < ApplicationController
   # PUT /orders/1.xml
   def update
     @order = Order.find(params[:id])
+    params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
+    params[:order][:received]=untranslate_month(params[:order][:received]) if params[:order][:received]
     return false if !allowed(@order.order_type_id, 'edit')
     errors = false
     if @order.deleted
