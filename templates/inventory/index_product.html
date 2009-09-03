@@ -8,17 +8,15 @@
 {% block content %}	
 	{% if object_list %}
 	  <div class="table_header_row">
-			{% table_cell _('Name') 20 %}
-			{% table_cell _('Inventory') 20 %}
-			{% table_cell _('Unit of Measure') 20 %}
-			{% table_cell _('Other') %}
+			{% cell _('Name') 20 %}
+			{% cell _('Inventory') 20 %}
+			{% cell _('Unit of Measure') 20 %}
 		</div>
  		{% for product in object_list %}
 			<div class="table_row">
-				{% table_cell_link product.get_absolute_url product.name 20 %}
-				{% table_cell '--' 20 %}
-				{% table_cell product.unit 20 %}
-				{% table_cell '--' %}
+				{% cell_link product.get_absolute_url product.name 20 %}
+				{% cell '--' 20 %}
+				{% cell product.unit 20 %}
 			</div>
 		{% endfor %}
 	{% else %}

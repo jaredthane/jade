@@ -49,10 +49,10 @@ function AddMarkDelivered(e){
 function AddEventsToLine(simple, detailed){
 	AddDelete(simple.find('.delete_cell'));
 	AddMarkDelivered(simple.find('.is_delivered'));
-//	if (simple.find('.received').children(':first').attr('value')!=''){
-//		simple.find('.is_delivered').attr('checked',true);
-//	}
-//	simple.find('.received').children(':first').datepicker();
+	if (detailed.find('.received-cell').children(':first').attr('value')!=''){
+		simple.find('.is_delivered').attr('checked',true);
+	}
+	detailed.find('.received-cell').children(':first').datepicker();
 }
 // Replaced by thickbox
 //////////////////////////////////////////////////////////////////////
