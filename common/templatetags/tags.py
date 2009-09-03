@@ -37,16 +37,31 @@ def breadcrumb(url, label):
 @register.simple_tag
 def link(url, label):
 	return u'<a href="%s">%s</a>' % (url, label)
+##############   Table formats #####################################
+@register.simple_tag
+def cell_link(url, label, width):
+		return u'<div style="float:left;width:%s%%;"><div class="table_cell"><a href="%s">%s</a></div></div>' % (width, url, label)
+@register.simple_tag
+def cell(label, width):
+		return u'<div style="float:left;width:%s%%;"><div class="table_cell">%s</div></div>' % (width, label)
+@register.simple_tag
+def cell_date(label, width):
+	if label:
+		return u'<div style="float:left;width:%s%%;"><div class="table_cell">%s</div></div>' % (width, label.strftime("%m/%d/%Y"))
+	else:
+		return u'<div style="float:left;width:%s%%;"><div class="table_cell"></div></div>' % width
+
+
 
 @register.simple_tag
-def cell(label, width=None):
+def tcell(label, width=None):
 	if width:
 		return u'<div class="table_cell" style="width:%s%%;">%s</div>' % (width, label)
 	else:
 		return u'<div class="table_cell" style="float:none;">%s</div>' % label
 
 @register.simple_tag
-def cell_date(label, width=None):
+def tcell_date(label, width=None):
 	if label:
 		if width:
 			return u'<div class="table_cell" style="width:%s%%;">%s</div>' % (width, label.strftime("%m/%d/%Y"))
@@ -67,11 +82,12 @@ def date_format(value, format):
 		return u''
 
 @register.simple_tag
-def cell_link(url, label, width=None):
+def tcell_link(url, label, width=None):
 	if width:
 		return u'<div zoom="asd" class="table_cell" style="width:%s%%;"><a href="%s">%s</a></div>' % (width, url, label)
 	else:
 		return u'<div class="table_cell" style="float:none;"><a href="%s">%s</a></div>' % (url, label)
+
 
 @register.simple_tag
 def detail_item(label, value, url=None):

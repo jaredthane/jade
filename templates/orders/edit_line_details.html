@@ -2,15 +2,15 @@
 {% load tags %}
 <div class="detailed-line" id="detailed-{{form.prefix}}" prefix="{{form.prefix}}">
 	<div class="table_row">
-		<div class="table_cell" style="width: 25%;">
+		<div class="cell" style="width: 25%;"><div class="table_cell">
 			{% if form.instance %}
 				{% link form.instance.product.get_absolute_url form.instance.product.name %}
 			{% else %}
 				{% link form.data.product.get_absolute_url form.data.product.name %}
 			{% endif %}
-		</div>
-		<div class="table_cell" style="width: 25%;">{{form.tax}}</div>
-		<div class="table_cell" style="width: 25%;">{{form.warranty}}</div>
-		<div class="table_cell_last received-cell"><div style="width:100px;float:right;">{{form.received}}</div></div>
+		</div></div>
+		<div class="cell" style="width: 25%;"><div class="table_cell">{{form.tax}}</div></div>
+		<div class="cell" style="width: 25%;"><div class="table_cell">{{form.warranty}}</div></div>
+		<div class="cell" style="width: 25%;"><div class="table_cell received-cell">{{form.received}}</div></div>
 	</div>
 </div>

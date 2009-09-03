@@ -15,7 +15,7 @@
 	  		{% cell _('Vendor') 20 %}
 	  		{% cell _('Status') 20 %}
 	  		{% cell _('Total') 20 %}
-	  		{% cell _('Paid') %}
+	  		{% cell _('Paid') 20 %}
 	  </div>
 	  {% for object in object_list %}
 	  	<div class="table_row">
@@ -28,7 +28,7 @@
       	{% endif %}
       	{% cell "Pending..." 20 %}
       	{% cell object.total 20 %}
-      	{% cell object.paid %}
+      	{% cell object.paid 20 %}
       </div>
 	  {% endfor %}
 	  </ul>

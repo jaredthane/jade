@@ -71,7 +71,6 @@
 .main-content h3.side {clear:none;}
 .main-content input[type=text] { padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .main-content line input {text-align:center; padding:2px; background: #e1e1e1;border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
-.main-content .table_row input[type=text] {background: #e1e1e1;text-align:center;color:#2a5a8a;width:90%}
 .main-content select {padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 
 .main-content h4 {margin:1.5em 0 1.0em 0; color:rgb(80,80,80); font-family:"trebuchet ms",arial,sans-serif; font-weight:normal; font-size:170%;}
@@ -83,41 +82,21 @@
 .main-content p.details {clear:both; margin:-0.25em 0 1.0em 0; line-height:1.0em; font-size:110%;}
 .main-content blockquote {clear:both; margin:0 30px 0.6em 30px; font-size:90%;}
 
-.main-content table {clear:both; width:600px; margin:2.0em 0 0.2em 20px; table-layout: fixed; border-collapse:collapse; empty-cells:show; background-color:rgb(233,232,244);}
-.main-content table th.top {height:3.5em; padding:0 7px 0 7px; empty-cells:show; background-color:rgb(175,175,175); text-align:left; color:rgb(255,255,255); font-weight:bold; font-size:110%;}
-.main-content table th {height:3.0em; padding:2px 20px 2px 7px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(225,225,225); text-align:left; color:rgb(80,80,80); font-weight:bold; font-size:110%;}
-.main-content table td {height:3.0em; padding:2px 7px 2px 7px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(225,225,225); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:110%;}
 p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,80,80); font-size:110%;}
 
 /*#e1e1e1       */
+.main-content .table_row input {background: #e1e1e1;text-align:center;color:#2a5a8a;width:90%}
 .main-content .table_row {overflow:hidden;height:2em; background: #e1e1e1; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
-.main-content .table_row_green {height:2em; background: #96c09c; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
-.main-content .table_row_red {height:2em; background: #ff6666; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
 .main-content .table_header_row {height:2em; background: #7cb4a9; border-top:solid 2px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:bold; color: #FFFFFF; font-size:120%;}
 /*.main-content .table_cell_20 {border-right:solid 2px rgb(255,255,255); float: left; width: 20%;}*/
-.main-content .table_cell    {border-right:solid 2px rgb(255,255,255);height:2em; float: left;}
-.main-content .table_cell_last    {border-right:solid 2px rgb(255,255,255);height:2em;}
-/*.main-content .table_cell_5  {border-right:solid 2px rgb(255,255,255);  float: left; width: 5%;}*/
-/*.main-content .table_cell_15 {border-right:solid 2px rgb(255,255,255);  float: left; width: 15%;}*/
-/*.main-content .table_cell_10 {border-right:solid 2px rgb(255,255,255);  float: left; width: 10%;}*/
-/*.main-content .table_cell_50 {border-right:solid 2px rgb(255,255,255);  float: left; width: 50%;}*/
-/*.main-content .table_cell_80 {border-right:solid 2px rgb(255,255,255);  float: left; width: 80%;}*/
-/*.main-content .table_cell_25 {border-right:solid 2px rgb(255,255,255);  float: left; width: 25%;}*/
-/*.main-content .table_cell_30 {border-right:solid 2px rgb(255,255,255);  float: left; width: 30%;}*/
-/*.main-content .table_cell_35 {border-right:solid 2px rgb(255,255,255);  float: left; width: 35%;}*/
-/*.main-content .table_cell_40 {border-right:solid 2px rgb(255,255,255);  float: left; width: 40%;}*/
-.main-content .table_row select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;background: #e1e1e1;}
-.main-content .table_row_red select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
-.main-content .table_row_green select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-content .table_cell    {width:100%;border-right:solid 2px rgb(255,255,255);height:2em; }
+.main-content .cell    {float: left;}
 
-/* These are set specificly for the bulk_edit product view */
-.main-content .table_row_red input.field {width:7%;background: #ff6666;}
-.main-content .table_row_green input.field {width:7%;background: #96c09c;}
-.main-content .table_row input.field {width:90%;background: #e1e1e1;}
-.main-content .table_row input.serial {width:90%;background: #e1e1e1;}
+
+
 /* End for the bulk_edit product view */
 
-.main-content ul {list-style:none; margin:0.5em 0 1.0em 0;}
+/*.main-content ul {list-style:none; margin:0.5em 0 1.0em 0;}*/
 .main-content ul li {margin:0 0 0.2em 2px; padding:0 0 0 12px; background:url(../img/bg_bullet_full_1.gif) no-repeat 0 0.5em; line-height:1.4em; font-size:120%;}
 .main-content ol {margin:0.5em 0 1.0em 20px !important /*Non-IE6*/; margin:0.5em 0 1.0em 25px /*IE6*/;}
 .main-content ol li {list-style-position:outside; margin:0 0 0.2em 0; line-height:1.4em; font-size:120%;}

@@ -38,11 +38,11 @@
 		  </ul>
 			<div id="simple-lines-table">
 				<div class="table_header_row">
-					<div class="table_cell" style="width: 25%;">{% trans "Product" %}</div>
-					<div class="table_cell" style="width: 20%;">{% trans "Quantity" %}</div>
-					<div class="table_cell" style="width: 20%;">{% trans "Price / Unit" %}</div>
-					<div class="table_cell" style="width: 15%;">{% trans "Delivered" %}</div>
-					<div class="table_cell_last">{% trans "Delete" %}</div>
+					<div class="cell" style="width: 20%;"><div class="table_cell">{% trans "Product" %}</div></div>
+					<div class="cell" style="width: 20%;"><div class="table_cell">{% trans "Quantity" %}</div></div>
+					<div class="cell" style="width: 20%;"><div class="table_cell">{% trans "Price / Unit" %}</div></div>
+					<div class="cell" style="width: 20%;"><div class="table_cell">{% trans "Delivered" %}</div></div>
+					<div class="cell" style="width: 20%;"><div class="table_cell">{% trans "Delete" %}</div></div>
 				</div>
 				<div id="simple-lines">
 					{{formset.management_form}}
@@ -54,10 +54,10 @@
 			</div>
 			<div id="detailed-lines-table">
 				<div class="table_header_row">
-					<div class="table_cell" style="width: 25%;">{% trans "Product" %}</div>
-					<div class="table_cell" style="width: 25%;">{% trans "Tax" %}</div>
-					<div class="table_cell" style="width: 25%;">{% trans "Warranty / Unit" %}</div>
-					<div class="table_cell_last">{% trans "Received" %}</div>
+					<div class="cell" style="width: 25%;"><div class="table_cell">{% trans "Product" %}</div></div>
+					<div class="cell" style="width: 25%;"><div class="table_cell">{% trans "Tax" %}</div></div>
+					<div class="cell" style="width: 25%;"><div class="table_cell">{% trans "Warranty / Unit" %}</div></div>
+					<div class="cell" style="width: 25%;"><div class="table_cell">{% trans "Received" %}</div></div>
 				</div>
 				<div id="detailed-lines">
 					{% for form in formset.forms %}

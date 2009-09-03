@@ -27,14 +27,14 @@
 					{% cell _('Product') 25 %}
 					{% cell _('Quantity') 25 %}
 					{% cell _('Price') 25 %}
-					{% cell _('Delivered') %}
+					{% cell _('Delivered') 25 %}
 			</div>
 		{% for line in obj.line_set.all %}
 			<div class="table_row">
 				{% cell_link line.product.get_absolute_url line.product 25 %}
 				{% cell line.quantity 25 %}
 				{% cell line.price 25 %}
-				{% cell_date line.received %}
+				{% cell_date line.received 25 %}
 			</div>
 			{% include 'orders/show_line.html' %}
 		{% endfor %}
