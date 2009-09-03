@@ -24,17 +24,17 @@
 	
 	<div class="table">
 		<div class="table_header_row">
-					{% table_cell _('Product') 25 %}
-					{% table_cell _('Quantity') 25 %}
-					{% table_cell _('Price') 25 %}
-					{% table_cell _('Delivered') %}
+					{% cell _('Product') 25 %}
+					{% cell _('Quantity') 25 %}
+					{% cell _('Price') 25 %}
+					{% cell _('Delivered') %}
 			</div>
 		{% for line in obj.line_set.all %}
 			<div class="table_row">
-				{% table_cell_link line.product.get_absolute_url line.product 25 %}
-				{% table_cell line.quantity 25 %}
-				{% table_cell line.price 25 %}
-				{% table_cell_date line.received %}
+				{% cell_link line.product.get_absolute_url line.product 25 %}
+				{% cell line.quantity 25 %}
+				{% cell line.price 25 %}
+				{% cell_date line.received %}
 			</div>
 			{% include 'orders/show_line.html' %}
 		{% endfor %}

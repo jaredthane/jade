@@ -11,24 +11,24 @@
 {% block content %}	
 	{% if object_list %}
 	  <div class="table_header_row">
-	  		{% table_cell _('Number') 20 %}
-	  		{% table_cell _('Vendor') 20 %}
-	  		{% table_cell _('Status') 20 %}
-	  		{% table_cell _('Total') 20 %}
-	  		{% table_cell _('Paid') %}
+	  		{% cell _('Number') 20 %}
+	  		{% cell _('Vendor') 20 %}
+	  		{% cell _('Status') 20 %}
+	  		{% cell _('Total') 20 %}
+	  		{% cell _('Paid') %}
 	  </div>
 	  {% for object in object_list %}
 	  	<div class="table_row">
-      	{% table_cell_link object.get_absolute_url object.number 20 %}
+      	{% cell_link object.get_absolute_url object.number 20 %}
       	{% if object.vendor %}
       		{% url orders.views.show object.vendor.pk as vendor_url %}
-      		{% table_cell_link vendor_url object.vendor 20 %}
+      		{% cell_link vendor_url object.vendor 20 %}
       	{% else %}
-      		{% table_cell "" 20 %}
+      		{% cell "" 20 %}
       	{% endif %}
-      	{% table_cell "Pending..." 20 %}
-      	{% table_cell object.total 20 %}
-      	{% table_cell object.paid %}
+      	{% cell "Pending..." 20 %}
+      	{% cell object.total 20 %}
+      	{% cell object.paid %}
       </div>
 	  {% endfor %}
 	  </ul>
