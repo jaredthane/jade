@@ -1,0 +1,28 @@
+{% extends "entities/base.html" %}
+{% load i18n %}
+{% load tags %}
+
+{% block heading %}{% trans "List of Sites" %}{% endblock %}
+{% block actions %}
+	{% url new_site as new_url %}
+	{% action new_url _('New Site') %}
+{% endblock %}
+{% block content %}	
+	{% if object_list %}
+	  <div class="table_header_row">
+	  		{% cell _('Number') 30 %}
+	  		{% cell _('Name') 70 %}
+	  </div>
+	  {% for obj in object_list %}
+	  	<div class="table_row">
+				{% url entities.views.show_site obj.pk as show_url %}
+      	{% cell_link show_url obj.pk 30 %}
+      	{% cell_link show_url obj.name  70 %}
+      </div>
+	  {% endfor %}
+	  </ul>
+	{% else %}
+	  <p>{% trans "No sites found." %}</p>
+	{% endif %}
+{% endblock %}
+
