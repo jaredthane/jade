@@ -36,14 +36,19 @@ class SalesRepresentativesController < ApplicationController
   	@till=(params[:till] ||Date.today)
   	@site=User.current_user.location
 		@reps=User.sales_reps_data(@from,@till,@site)
-		
+		@box=[]
+		@box << ['Asesor', 'Saldo']
+		for rep in @reps
+			@box<<[rep[:user].name, '']
+		end
+		@box<<['Total', '']
 		@data=[]
 		@data << ['',{:text => 'Facturacion', :colspan => 3}, {:text => 'Valores', :colspan => 4}]
 		@data << ['Asesor', 'Saldo Anterior', 'Facturas','Saldo Provisionado','Pagos','Saldo Cobrado','Facturas Pendientes','Saldo Final']
 		total={:previous_balance=>0, :num_receipts=>0, :revenue=>0, :num_payments=>0, :cash_received=>0, :final_balance=>0, :facturas_pendientes=>0}
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for rep in @reps
-		  @data << [rep[:user].login, 
+		  @data << [rep[:user].name, 
 		  	rep[:num_receipts], 
 		  	rep[:num_payments], 
 		  	rep[:facturas_pendientes], 
