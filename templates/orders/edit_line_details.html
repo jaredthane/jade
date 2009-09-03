@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load tags %}
-<div class="line-details">
+<div class="detailed-line" id="detailed-{{form.prefix}}" prefix="{{form.prefix}}">
 	<div class="table_row">
 		<div class="table_cell" style="width: 25%;">
 			{% if form.instance %}
@@ -11,6 +11,6 @@
 		</div>
 		<div class="table_cell" style="width: 25%;">{{form.tax}}</div>
 		<div class="table_cell" style="width: 25%;">{{form.warranty}}</div>
-		<div class="table_cell">{{form.received}}</div>
+		<div class="table_cell_last received-cell"><div style="width:100px;float:right;">{{form.received}}</div></div>
 	</div>
 </div>

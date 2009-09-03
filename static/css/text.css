@@ -95,7 +95,8 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .main-content .table_row_red {height:2em; background: #ff6666; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
 .main-content .table_header_row {height:2em; background: #7cb4a9; border-top:solid 2px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:bold; color: #FFFFFF; font-size:120%;}
 /*.main-content .table_cell_20 {border-right:solid 2px rgb(255,255,255); float: left; width: 20%;}*/
-.main-content .table_cell    {border-right:solid 2px rgb(255,255,255);height:2em; float: left;"}
+.main-content .table_cell    {border-right:solid 2px rgb(255,255,255);height:2em; float: left;}
+.main-content .table_cell_last    {border-right:solid 2px rgb(255,255,255);height:2em;}
 /*.main-content .table_cell_5  {border-right:solid 2px rgb(255,255,255);  float: left; width: 5%;}*/
 /*.main-content .table_cell_15 {border-right:solid 2px rgb(255,255,255);  float: left; width: 15%;}*/
 /*.main-content .table_cell_10 {border-right:solid 2px rgb(255,255,255);  float: left; width: 10%;}*/
@@ -134,7 +135,7 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 /********************/
 /*  COMMON CLASSES  */
 /********************/
-.main img {clear:both; float:left; margin:3px 10px 7px 0; padding:1px; border:1px solid rgb(150,150,150);}
+.main img {margin:3px 10px 7px 0; padding:1px;}
 .main img.center {clear:both; float:none; display:block; margin:0 auto; padding:1px; border:1px solid rgb(150,150,150);}
 .main img.right {clear:both; float:right; margin:3px 0 7px 10px; padding:1px; border:1px solid rgb(150,150,150);}
 
@@ -143,5 +144,5 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .main a:hover {color:rgb(42,90,138); text-decoration:underline;}
 .main a:visited {color:rgb(42,90,138);}
 
-.main a img {border:solid 1px rgb(150,150,150);}
-.main a:hover img {border:solid 1px rgb(220,220,220);}
+.main a img {border:none;}
+.main a:hover img {border:none;}

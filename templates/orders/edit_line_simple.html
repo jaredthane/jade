@@ -1,6 +1,6 @@
 {% load i18n %}
 {% load tags %}
-<div class="line">
+<div class="simple-line" id="simple-{{form.prefix}}" fff="{{form.prefix}}">
 	<div class="table_row">
 		{{form.id}}
 		<div class="table_cell" style="width: 25%;">
@@ -14,6 +14,6 @@
 		<div class="table_cell" style="width: 20%;">{{form.quantity}}</div>
 		<div class="table_cell" style="width: 20%;">{{form.price}}</div>
 		<div class="table_cell" style="width: 15%;"><input class="is_delivered" type="checkbox"></div>
-		<div class="table_cell">{{form.DELETE}}</div>
+		<div class="table_cell_last delete_cell">{{form.DELETE}}</div>
 	</div>
 </div>

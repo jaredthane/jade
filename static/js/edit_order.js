@@ -5,11 +5,11 @@ function DoAjaxRequest(){
   		data:{ upc: $("#upc").val(), num:$("#id_line_set-TOTAL_FORMS").val() },
   		success: function(data){ 
   			var d = $('<div/>').append(data)
-  			$('#simple', d).appendTo('.lines')
-  			$('#details', d).appendTo('.lines-details')			
+  			$('.simple-line', d).appendTo('#simple-lines').hide().slideDown('slow');
+  			$('.detailed-line', d).appendTo('#detailed-lines').hide().slideDown('slow');
 //  			$('.lines').append(data);
-  			$('.table_row:last').slideDown('slow');
-  			AddEventsToLine($('.line:last'));
+//  			$('.table_row:last')
+  			AddEventsToLine($('.simple-line'),$('.detailed-line'));
   			IncrementFormCount();
   			$("#upc").select();
   			$('select[id$=-product]').hide();
@@ -31,27 +31,28 @@ function IncrementFormCount(){
 }
 function AddDelete(e){
 	e.click( function(e){
-		$(this).closest(".line").slideUp("slow");
+		$(this).closest(".simple-line").slideUp("slow");
+		$('#tabs').find('#detailed-'+$(this).closest(".simple-line").attr('fff')).hide();
 	});
 }
 function AddMarkDelivered(e){
 	e.click( function(){
+		var other = $('#id_'+$(this).closest(".simple-line").attr('fff')+'-received')
 		if ($(this).is(':checked')) {
-			SetTimeOnReceived($(this).closest('.line').find('.received').children(':first'))
+			SetTimeOnReceived(other)
 //			$(this).closest('.line').find('.received').children(':first').attr('value', '7')
 		} else {
-			$(this).closest('.line').find('.received').children(':first').attr('value', '')
+			other.attr('value', '')
 		}
 	});
 }
-function AddEventsToLine(line){
-	AddDelete(line.find('.table_cell'));
-	AddMarkDelivered(line.find('.is_delivered'));
-	if (line.find('.received').children(':first').attr('value')!=''){
-		line.find('.is_delivered').attr('checked',true);
-	}
-	line.find('.received').children(':first').datepicker();
-	tb_init('a.thickbox, area.thickbox, input.thickbox');
+function AddEventsToLine(simple, detailed){
+	AddDelete(simple.find('.delete_cell'));
+	AddMarkDelivered(simple.find('.is_delivered'));
+//	if (simple.find('.received').children(':first').attr('value')!=''){
+//		simple.find('.is_delivered').attr('checked',true);
+//	}
+//	simple.find('.received').children(':first').datepicker();
 }
 // Replaced by thickbox
 //////////////////////////////////////////////////////////////////////
@@ -74,7 +75,7 @@ function AddEventsToLine(line){
 //}
 $(document).ready(function(){
 	$('select[id$=-product]').hide();
-	$("#id_created_at").datepicker();
+//	$("#id_created_at").datepicker();
 	$("#tabs").tabs();
 	$('.line').each(function () {
 		AddEventsToLine($(this));

@@ -33,18 +33,18 @@
 		<hr class="clear-contentunit"/>
 		<div id="tabs">
 			<ul>
-		      <li><a href="#simple"><span>{% trans "Simple" %}</span></a></li>
-		      <li><a href="#details"><span>{% trans "Details" %}</span></a></li>
+		      <li><a href="#simple-lines-table"><span>{% trans "Simple" %}</span></a></li>
+		      <li><a href="#detailed-lines-table"><span>{% trans "Details" %}</span></a></li>
 		  </ul>
-			<div id="simple">
+			<div id="simple-lines-table">
 				<div class="table_header_row">
 					<div class="table_cell" style="width: 25%;">{% trans "Product" %}</div>
 					<div class="table_cell" style="width: 20%;">{% trans "Quantity" %}</div>
 					<div class="table_cell" style="width: 20%;">{% trans "Price / Unit" %}</div>
 					<div class="table_cell" style="width: 15%;">{% trans "Delivered" %}</div>
-					<div class="table_cell">{% trans "Delete" %}</div>
+					<div class="table_cell_last">{% trans "Delete" %}</div>
 				</div>
-				<div class="lines">
+				<div id="simple-lines">
 					{{formset.management_form}}
 					{% for form in formset.forms %}
 						{{form.errors}}
@@ -52,14 +52,14 @@
 					{% endfor %}
 				</div>
 			</div>
-			<div id="details">
+			<div id="detailed-lines-table">
 				<div class="table_header_row">
 					<div class="table_cell" style="width: 25%;">{% trans "Product" %}</div>
 					<div class="table_cell" style="width: 25%;">{% trans "Tax" %}</div>
 					<div class="table_cell" style="width: 25%;">{% trans "Warranty / Unit" %}</div>
-					<div class="table_cell">{% trans "Received" %}</div>
+					<div class="table_cell_last">{% trans "Received" %}</div>
 				</div>
-				<div class="lines-details">
+				<div id="detailed-lines">
 					{% for form in formset.forms %}
 						{% include 'orders/edit_line_details.html' %}
 					{% endfor %}
