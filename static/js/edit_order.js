@@ -9,7 +9,7 @@ function DoAjaxRequest(){
   			$('.detailed-line', d).appendTo('#detailed-lines').hide().slideDown('slow');
 //  			$('.lines').append(data);
 //  			$('.table_row:last')
-  			AddEventsToLine($('.simple-line'),$('.detailed-line'));
+  			AddEventsToLine($('.simple-line'), $('.detailed-line'));
   			IncrementFormCount();
   			$("#upc").select();
   			$('select[id$=-product]').hide();
@@ -32,7 +32,7 @@ function IncrementFormCount(){
 function AddDelete(e){
 	e.click( function(e){
 		$(this).closest(".simple-line").slideUp("slow");
-		$('#tabs').find('#detailed-'+$(this).closest(".simple-line").attr('fff')).hide();
+		$('#detailed-'+$(this).closest(".simple-line").attr('fff')).hide();
 	});
 }
 function AddMarkDelivered(e){
@@ -75,10 +75,10 @@ function AddEventsToLine(simple, detailed){
 //}
 $(document).ready(function(){
 	$('select[id$=-product]').hide();
-//	$("#id_created_at").datepicker();
+	$("#id_created_at").datepicker();
 	$("#tabs").tabs();
-	$('.line').each(function () {
-		AddEventsToLine($(this));
+	$('.simple-line').each(function () {
+		AddEventsToLine($(this), $('#detailed-'+$(this).closest(".simple-line").attr('fff')));
 	});
 	$("#upc").keydown(function(e){
 		if (e.keyCode == 13) {
