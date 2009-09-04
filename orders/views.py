@@ -6,11 +6,15 @@ from jade.orders.forms import *
 from jade.common.views import *
 from django.contrib.auth.decorators import login_required
 from django.forms.models import inlineformset_factory
+from django.core.paginator import Paginator
+
 import sys
 
 def index_sales(request):
 	object_list =	Sale.objects.all()
-	return generic_index(request, Sale, object_list)
+	p = Paginator(object_list, 2)
+	
+	return generic_index(request, Sale, p)
 	
 def index_purchases(request):
 	order_list = Purchase.objects.all()	

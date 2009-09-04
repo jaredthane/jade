@@ -6,10 +6,19 @@ from datetime import datetime
 from django.http import HttpResponse
 
 @login_required
-def generic_index(request, Model, object_list):
+def generic_index(request, Model, paginator):
 	current_url=request.get_full_path()
 	current_lang=request.session['django_language']
-	return render_to_response(Model._meta.app_label+'/index_'+Model._meta.object_name.lower()+'.html', {'object_list': object_list, 'current_url':current_url, 'current_lang':current_lang, 'model_name':Model._meta.verbose_name, 'model_name_plural':Model._meta.verbose_name_plural})
+	try:
+		page_num = int(request.GET.get('page', '1'))
+	except ValueError:
+		page_num = 1
+	try:
+		page = paginator.page(page_num)
+	except (EmptyPage, InvalidPage):
+		page = paginator.page(paginator.num_pages)
+
+	return render_to_response(Model._meta.app_label+'/index_'+Model._meta.object_name.lower()+'.html', {'page':page, 'current_url':current_url, 'current_lang':current_lang, 'model_name':Model._meta.verbose_name, 'model_name_plural':Model._meta.verbose_name_plural})
 
 @login_required
 def generic_show(request, object_id, Model):

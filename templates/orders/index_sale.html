@@ -9,7 +9,8 @@
 	{% action new_url _('New Sale') %}
 {% endblock %}
 {% block content %}	
-	{% if object_list %}
+	{% pages page %}
+	{% if page.object_list %}
 	  <div class="table_header_row">
 	  		{% cell _('Number') 20 %}
 	  		{% cell _('Vendor') 20 %}
@@ -17,7 +18,7 @@
 	  		{% cell _('Total') 20 %}
 	  		{% cell _('Paid') 20 %}
 	  </div>
-	  {% for object in object_list %}
+	  {% for object in page.object_list %}
 	  	<div class="table_row">
       	{% cell_link object.get_absolute_url object.number 20 %}
       	{% if object.vendor %}

@@ -41,9 +41,12 @@ def link(url, label):
 @register.simple_tag
 def cell_link(url, label, width):
 		return u'<div style="float:left;width:%s%%;"><div class="table_cell"><a href="%s">%s</a></div></div>' % (width, url, label)
+		
 @register.simple_tag
 def cell(label, width):
 		return u'<div style="float:left;width:%s%%;"><div class="table_cell">%s</div></div>' % (width, label)
+		
+		
 @register.simple_tag
 def cell_date(label, width):
 	if label:
@@ -175,4 +178,20 @@ def edit_actions(model_name, save_label, cancel_label, index_label, obj=None):
 def index_actions(model_name, new_label):
 	new_url=reverse('new_'+model_name.lower())
 	return u'%s' % (action(new_url, new_label))
-	
+
+
+@register.simple_tag
+def pages(page):
+	page_num=page.number
+	p=page.paginator
+	links=""
+	if page_num>3:
+		links += u'<a href="?page=1">%s</a>|...|' % _('First')
+	start=max(page_num-2,1)
+	end=min(page_num+2,p.num_pages)
+	for x in range(start,end+1):
+		links += u'<a href="?page=%i">%i</a>|' % (x, x)
+	if page_num < p.num_pages-2:
+		links += u'<a href="?page=%i">%s</a>|...|' % (p.num_pages,_('Last'))
+	return links
+		
