@@ -15,10 +15,10 @@ class SaleForm(ModelForm):
 class PurchaseForm(DynamicForm):
 	class Meta:
 		model = Purchase
-
-#class ProductField(ModelChoiceField):
-#	def __init__(self, **kw):
-#		ModelChoiceField.__init__(self, **kw)
+		
+class SerialOnLineForm(ModelForm):
+	class Meta:
+		model = SerialOnLine
 		
 class SimpleLineForm(ModelForm):
 #	notes = CharField(widget=HiddenInput(),required=False)
@@ -36,7 +36,8 @@ class SimpleLineForm(ModelForm):
 		model = Line
 		exclude=('serial_numbers')
 		
-SimpleLineFormSet = inlineformset_factory(Sale, Line, extra=0, form=SimpleLineForm)
+SimpleLineFormSet =  inlineformset_factory(Sale, Line, extra=0, form=SimpleLineForm)
+SerialOnLineFormSet = inlineformset_factory(Line, SerialOnLine, extra=0, form=SerialOnLineForm)
 #class LineFormSet(SimpleLineFormSet):
 #	def add_blank_form(self):
 #		self.extra+=1

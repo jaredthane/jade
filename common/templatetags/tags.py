@@ -45,7 +45,9 @@ def cell_link(url, label, width):
 @register.simple_tag
 def cell(label, width):
 		return u'<div style="float:left;width:%s%%;"><div class="table_cell">%s</div></div>' % (width, label)
-		
+@register.simple_tag
+def space(width):
+		return u'<div style="float:left;width:%s%%;"><div class="blank_cell"></div></div>' % (width)
 		
 @register.simple_tag
 def cell_date(label, width):
@@ -53,15 +55,14 @@ def cell_date(label, width):
 		return u'<div style="float:left;width:%s%%;"><div class="table_cell">%s</div></div>' % (width, label.strftime("%m/%d/%Y"))
 	else:
 		return u'<div style="float:left;width:%s%%;"><div class="table_cell"></div></div>' % width
-
-
-
+		
 @register.simple_tag
 def tcell(label, width=None):
 	if width:
 		return u'<div class="table_cell" style="width:%s%%;">%s</div>' % (width, label)
 	else:
 		return u'<div class="table_cell" style="float:none;">%s</div>' % label
+
 
 @register.simple_tag
 def tcell_date(label, width=None):

@@ -17,6 +17,26 @@ function DoAjaxRequest(){
   		error: function(){alert("An error has occurred. Please try again.");},
 		});
 }
+function RequestSerial(){
+	$.ajax({
+			type: 'POST',
+  		url: "/orders/new_serial/",
+  		// TODO - make this specific to the line
+  		data:{num:$("#id_serialonline_set-TOTAL_FORMS").val() },
+  		success: function(data){ 
+  			var d = $('<div/>').append(data)
+  			$('.simple-line', d).appendTo('#simple-lines').hide().slideDown('slow');
+  			$('.detailed-line', d).appendTo('#detailed-lines').hide().slideDown('slow');
+//  			$('.lines').append(data);
+//  			$('.table_row:last')
+  			AddEventsToLine($('.simple-line'), $('.detailed-line'));
+  			IncrementFormCount();
+  			$("#upc").select();
+  			$('select[id$=-product]').hide();
+			},
+  		error: function(){alert("An error has occurred. Please try again.");},
+		});
+}
 function  SetTimeOnReceived(received){
 	$.ajax({
 		url : "/get_time/",
@@ -53,6 +73,7 @@ function AddEventsToLine(simple, detailed){
 		simple.find('.is_delivered').attr('checked',true);
 	}
 	detailed.find('.received-cell').children(':first').datepicker();
+	
 }
 // Replaced by thickbox
 //////////////////////////////////////////////////////////////////////

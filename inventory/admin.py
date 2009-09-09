@@ -11,4 +11,5 @@ admin.site.register(Inventory)
 admin.site.register(Price)
 admin.site.register(PriceGroup)
 admin.site.register(PriceGroupName)
+admin.site.register(SerialNumber)
 

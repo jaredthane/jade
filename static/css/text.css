@@ -90,9 +90,9 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .main-content .table_row {overflow:hidden;height:2em; background: #e1e1e1; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
 .main-content .table_header_row {height:2em; background: #7cb4a9; border-top:solid 2px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:bold; color: #FFFFFF; font-size:120%;}
 /*.main-content .table_cell_20 {border-right:solid 2px rgb(255,255,255); float: left; width: 20%;}*/
-.main-content .table_cell    {width:100%;border-right:solid 2px rgb(255,255,255);height:2em; }
-.main-content .cell    {float: left;}
-
+.main-content .table_cell {width:100%;border-right:solid 2px white;height:2em; }
+.main-content .blank_cell {width:100%;border-right:solid 2px white;height:2em; background:white}
+.cell {float:left;}
 
 
 /* End for the bulk_edit product view */

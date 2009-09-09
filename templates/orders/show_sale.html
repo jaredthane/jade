@@ -3,6 +3,10 @@
 {% load tags %}
 {% block breadcrumb %}{{ block.super }} &raquo; <a href="{{ obj.get_absolute_url }}">{% trans "Show Sale" %}</a>{% endblock %}
 {% block heading %}{% trans "Sale Details" %}{% endblock %}
+
+{% block includes %}
+	<script type="text/javascript" src="/static/js/show_order.js"></script> 
+{% endblock %}
 {% block actions %}
 	{% show_actions 'sale' _('New Sale') _('Edit Sale') _('List Sales') obj %}
 {% endblock %}
@@ -23,21 +27,15 @@
 	{% detail_item _('Notes') obj.notes %}
 	
 	<div class="table">
-		<div class="table_header_row">
-					{% cell _('Product') 25 %}
-					{% cell _('Quantity') 25 %}
-					{% cell _('Price') 25 %}
-					{% cell _('Delivered') 25 %}
+			<div class="table_header_row">
+				{% cell _('Product') 25 %}
+				{% cell _('Quantity') 25 %}
+				{% cell _('Price') 25 %}
+				{% cell _('Status') 25 %}
 			</div>
-		{% for line in obj.line_set.all %}
-			<div class="table_row">
-				{% cell_link line.product.get_absolute_url line.product 25 %}
-				{% cell line.quantity 25 %}
-				{% cell line.price 25 %}
-				{% cell_date line.received 25 %}
-			</div>
-			{% include 'orders/show_line.html' %}
-		{% endfor %}
+			{% for line in obj.line_set.all %}
+				{% include 'orders/show_line.html' %}
+			{% endfor %}
 	</div>
 {% endblock %}
 

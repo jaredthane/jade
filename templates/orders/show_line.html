@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load tags %}
+<div class="simple-line">
+	<div class="table_row">
+		{% cell_link line.product.get_absolute_url line.product 25 %}
+		{% cell line.quantity 25 %}
+		{% cell line.price 25 %}
+		{% if line.product.is_serialized %}
+			{% if line.serial_numbers.all %}
+				<div style="float: left; width: 25%;">
+					<div class="table_cell">
+						<a href="#" class="show_hide_serials serial_numbers">{% trans "Show Serial Numbers" %}</a>
+						<a href="#" style="display:none;" class="show_hide_serials serial_numbers">{% trans "Hide Serial Numbers" %}</a>
+					</div>
+				</div>
+			{% endif %}
+		{% else %}
+			{% cell_date line.received 25 %}
+		{% endif %}
+	</div>
+	<div class="serial_numbers" style="display:none;">
+		{% for serial in line.serial_numbers.all %}
+			<div class="table_row">
+				{% space 75 %}
+				{% cell serial.number 25 %}
+			</div>
+		{% endfor %}
+	</div>
+</div>

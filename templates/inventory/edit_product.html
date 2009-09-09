@@ -30,6 +30,7 @@
 			{% trans_field form 'name' current_lang _("Name") %}
 			{% trans_field form 'description' current_lang _("Description") %}
 			{% form_field form.categories _("Categories") %}
+			{% form_field form.is_serialized _("Uses Serial Numbers") %}
 		</div>
 		<div class="column2-unit-right">
 			{% form_field form.bar_code _("Bar_Code") %}

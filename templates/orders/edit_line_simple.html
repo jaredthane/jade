@@ -13,7 +13,30 @@
 		</div></div>
 		<div class="cell" style="width: 20%;"><div class="table_cell">{{form.quantity}}</div></div>
 		<div class="cell" style="width: 20%;"><div class="table_cell">{{form.price}}</div></div>
-		<div class="cell" style="width: 20%;"><div class="table_cell"><input class="is_delivered" type="checkbox"></div></div>
+		<div class="cell" style="width: 20%;">
+			<div class="table_cell">
+				{% if form.instance.product.is_serialized %}
+					<a href="#" class="show_hide_serials serial_numbers">{% trans "Show Serial Numbers" %}</a>
+					<a href="#" style="display:none;" class="show_hide_serials serial_numbers">{% trans "Hide Serial Numbers" %}</a>	
+				{% else %}
+					<input class="is_delivered" type="checkbox">
+				{% endif %}
+			</div>
+		</div>
+		
 		<div class="cell" style="width: 20%;"><div class="table_cell delete_cell">{{form.DELETE}}</div></div>
+	</div>
+	<div class="serial_numbers"  style="display:none;">
+		{{form.serial_formset.management_form}}
+		{% for serial_form in form.serial_formset.forms %}
+			{% include 'orders/edit_serial.html' %}
+		{% endfor %}
+		<div class="table_row">
+			{% space 60 %}
+			<div class="cell" style="width: 20%;"><div class="blank_cell">
+				<a href="#" class="add_serial">{% trans "Add Serial Number" %}</a>
+			</div></div>
+			{% space 20 %}
+		</div>
 	</div>
 </div>

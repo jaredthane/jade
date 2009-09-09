@@ -36,6 +36,7 @@ class ProductBase(Model):
 	revenue_account = ForeignKey(Account, null=True, blank=True)
 	categories = ManyToManyField(ProductCategory, blank=True)
 	tax = DecimalField(max_digits=5, decimal_places=2, default='0.00')
+	is_serialized= BooleanField(default=False, blank=True)
 	class Meta:
 		translate = ('name', 'description')
 	def __unicode__(self):
@@ -47,6 +48,8 @@ class Product(ProductBase):
 	vendor = ForeignKey(Vendor)
 	location = CharField(max_length=50, default='', blank=True)
 	model = CharField(max_length=50, default='', blank=True)
+	
+	
 	def save(self, *args, **kwargs):
 		super(Product, self).save()
 		for site in Site.objects.all():
@@ -58,13 +61,12 @@ class Product(ProductBase):
 		verbose_name = _('Product')
 	def get_absolute_url(self):
 		return u'/inventory/product/%s' % self.id
-
 	
 class SerialNumber(Model):
 	number = CharField(max_length=50, default='')
 	product = ForeignKey(Product)
 	def __unicode__(self):
-		return self.name
+		return self.number
 	class Meta:
 		verbose_name_plural = _('Serial Numbers')
 		verbose_name = _('Serial Number')

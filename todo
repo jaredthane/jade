@@ -29,3 +29,20 @@ http://www.hoboes.com/Mimsy/hacks/replicating-djangos-admin/
 	auto create orders for excess lines
 	request receipt numbers for extra orders
 	
+	
+	Serial Numbers:
+		would be nice if it glowed for a second when it appears
+		many to many so a line could have a many to many relationship to serial numbers
+		when a new line is created a cooresponding serial number line should be created since qty = 1
+		when user increases 
+	
+	Transactions and Movements same thing:
+		Types of Movements:
+			Sale
+			Purchase
+			Delivery
+			Receive
+			Payment
+			Count
+			
+			

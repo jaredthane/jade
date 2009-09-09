@@ -19,6 +19,12 @@ def index_sales(request):
 def index_purchases(request):
 	order_list = Purchase.objects.all()	
 	return generic_index(request, Purchase, object_list)	
+
+def show_serials(request, object_id):
+	obj = get_object_or_404(Line, pk=object_id)
+	current_url=request.get_full_path()
+	current_lang=request.session['django_language']
+	return render_to_response('orders/show_serials.html', {'obj': obj, 'current_url':current_url, 'current_lang':current_lang})
 	
 def show_sale(request, object_id):
 	return generic_show(request, object_id, Sale)
@@ -42,6 +48,10 @@ def show_purchase(request, object_id):
 #	return render_to_response('orders/edit_sale.html', {'sale_form': oform, 'line_forms': lforms})
 def edit_purchase(request, object_id = None):
 	return generic_edit(request, Purchase, PurchaseForm, object_id)
+def edit_serial(request, object_id = None):
+	num = int(request.POST.get('num', '0'))
+	form=SimpleLineFormSet()._construct_form(num)
+	return render_to_response('orders/edit_serial.html', {'serial_form': form})
 def edit_line(request, object_id = None):
 	upc = request.POST.get('upc', '')
 	num = int(request.POST.get('num', '0'))
@@ -62,7 +72,6 @@ def edit_line(request, object_id = None):
 		return "Unable to find a product with that upc"
 	
 def edit_sale(request, object_id = None):
-	LineFormSet = inlineformset_factory(Sale, Line, extra=0, form=SimpleLineForm)
 	current_lang=request.session['django_language']
 	if request.method == 'GET': #GET
 		print "GETTING"
@@ -74,8 +83,12 @@ def edit_sale(request, object_id = None):
 			print "NEW"
 			sale=Sale()
 		sale_form = SaleForm(instance=sale)
-		line_formset = LineFormSet(instance=sale)
-#		print "line_formset.forms[0].fields['product'].initial=" + str(line_formset.forms[0].fields['product'].initial)
+		line_formset = SimpleLineFormSet(instance=sale)
+#		serial_formsets=[]
+		for form in line_formset.forms:
+			form.serial_formset=SerialOnLineFormSet(instance=form.instance)
+#		for line in sale.line_set.all():
+#			serial_formsets.append()
 	else: #POST
 		print "POSTING"
 		if object_id: #UPDATE
