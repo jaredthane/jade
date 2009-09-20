@@ -50,8 +50,8 @@ def edit_purchase(request, object_id = None):
 	return generic_edit(request, Purchase, PurchaseForm, object_id)
 def edit_serial(request, object_id = None):
 	num = int(request.POST.get('num', '0'))
-	form=SimpleLineFormSet()._construct_form(num)
-	return render_to_response('orders/edit_serial.html', {'serial_form': form})
+	serial_form = SerialOnLineFormSet()._construct_form(num)
+	return render_to_response('orders/edit_serial.html', {'serial_form': serial_form})
 def edit_line(request, object_id = None):
 	upc = request.POST.get('upc', '')
 	num = int(request.POST.get('num', '0'))
@@ -83,12 +83,6 @@ def edit_sale(request, object_id = None):
 			print "NEW"
 			sale=Sale()
 		sale_form = SaleForm(instance=sale)
-		line_formset = SimpleLineFormSet(instance=sale)
-#		serial_formsets=[]
-		for form in line_formset.forms:
-			form.serial_formset=SerialOnLineFormSet(instance=form.instance)
-#		for line in sale.line_set.all():
-#			serial_formsets.append()
 	else: #POST
 		print "POSTING"
 		if object_id: #UPDATE
@@ -104,26 +98,56 @@ def edit_sale(request, object_id = None):
 		try:
 			print "request.POST"+str(request.POST)
 			sale_form = SaleForm(request.POST, instance=sale)
+			print "sale_form.errors=" + str(sale_form.errors)
 			print "checkpoint1"
-			all_ok=sale_form.is_valid()
+			print "allok:"+str(all_ok)
+			all_ok = all_ok and sale_form.is_valid()
 			print "checkpoint2"
 			if all_ok:
 				sale=sale_form.save()
+			print "allok:"+str(all_ok)
 			print "checkpoint3"
-			line_formset = LineFormSet(request.POST, instance=sale)
+			line_formset = SimpleLineFormSet(request.POST, instance=sale)
+			for form in line_formset.forms:
+					print "form.errors=" + str(form.errors)
+					form.serial_formset=SerialOnLineFormSet(instance=form.instance, prefix=form.prefix+"-serial_set")
+					for form in form.serial_formset.forms:
+						print "form.errors=" + str(form.errors)
 #			for form in line_formset.forms:
 #				if form.product:
 #					form.product_name=form.product.name
 #				else:
 #					del(line_formset.forms, form)
 #				print "form.__dict__=" + str(form.__dict__)
-			print "checkpoint4"
-			all_ok += line_formset.is_valid()
-			print "checkpoint5"
+			print "checkpoint4a"
+			print "allok:"+str(all_ok)
+			all_ok = all_ok and line_formset.is_valid()
+			print "checkpoint4b"
+			print "allok:"+str(all_ok)
+			for form in line_formset.forms:
+				all_ok = all_ok and form.serial_formset.is_valid()
+				for sform in form.serial_formset.forms:
+					print sform.data
+					print "sform.errors!!=" + unicode(sform.errors)
+			print "checkpoint4c"
+			print "allok:"+str(all_ok)
+			#======== Testing Code ==============
+			for form in line_formset.forms:
+				print "form.errors=" + str(form.errors)
+				for sform in form.serial_formset.forms:
+					print "form.errors=" + str(sform.errors)
+			#======== End of Testing Code ==============
+			print "checkpoint5a"
+			print "allok:"+str(all_ok)
 			if all_ok:
 				line_formset.save()
+				for form in line_formset.forms:
+					form.serial_formset.save()
+				print "checkpoint5b"
+				
 			print "checkpoint6"
-			if all_ok==2:
+			print "allok:"+str(all_ok)
+			if all_ok:
 				print "checkpoint7a"
 				current_url=reverse('show_sale', kwargs={'object_id':sale.pk} )
 				print "checkpoint7b"

@@ -9,30 +9,32 @@ function DoAjaxRequest(){
   			$('.detailed-line', d).appendTo('#detailed-lines').hide().slideDown('slow');
 //  			$('.lines').append(data);
 //  			$('.table_row:last')
-  			AddEventsToLine($('.simple-line'), $('.detailed-line'));
-  			IncrementFormCount();
+  			AddEventsToLine($('.simple-line:last'), $('.detailed-line:last'));
+  			IncrementFormCount($("#id_line_set-TOTAL_FORMS"));
   			$("#upc").select();
   			$('select[id$=-product]').hide();
 			},
   		error: function(){alert("An error has occurred. Please try again.");},
 		});
 }
-function RequestSerial(){
+function RequestSerial(e){
+	e.preventDefault();
+	var $el = $(e.target);
 	$.ajax({
 			type: 'POST',
   		url: "/orders/new_serial/",
   		// TODO - make this specific to the line
-  		data:{num:$("#id_serialonline_set-TOTAL_FORMS").val() },
-  		success: function(data){ 
+  		data:{num:$("#id_serialonline_set-TOTAL_FORMS").val()},
+  		success: function(data){
   			var d = $('<div/>').append(data)
-  			$('.simple-line', d).appendTo('#simple-lines').hide().slideDown('slow');
-  			$('.detailed-line', d).appendTo('#detailed-lines').hide().slideDown('slow');
+  			$('.table_row', d).appendTo($el.closest('.serial_list_with_link').find('.serial_numbers')).hide().slideDown('slow');
 //  			$('.lines').append(data);
 //  			$('.table_row:last')
-  			AddEventsToLine($('.simple-line'), $('.detailed-line'));
-  			IncrementFormCount();
+//  		TODO add handler for deleting serial
+//			AddEventsToLine($('.simple-line'), $('.detailed-line'));
+  			IncrementFormCount($("#id_serialonline_set-TOTAL_FORMS"));
+  			// TODO Leave the new serial number field selected
   			$("#upc").select();
-  			$('select[id$=-product]').hide();
 			},
   		error: function(){alert("An error has occurred. Please try again.");},
 		});
@@ -45,14 +47,18 @@ function  SetTimeOnReceived(received){
 		}
 	});
 }
-function IncrementFormCount(){
-		count=$("#id_line_set-TOTAL_FORMS");
-		count.attr('value', parseInt(count.attr('value'))+1);
+function IncrementFormCount(obj){
+		obj.attr('value', parseInt(obj.attr('value'))+1);
 }
-function AddDelete(e){
+function AddDeleteLine(e){
 	e.click( function(e){
 		$(this).closest(".simple-line").slideUp("slow");
 		$('#detailed-'+$(this).closest(".simple-line").attr('fff')).hide();
+	});
+}
+function AddDeleteSerial(e){
+	e.click( function(e){
+		$(this).closest(".table_row").slideUp("slow");
 	});
 }
 function AddMarkDelivered(e){
@@ -67,13 +73,23 @@ function AddMarkDelivered(e){
 	});
 }
 function AddEventsToLine(simple, detailed){
-	AddDelete(simple.find('.delete_cell'));
+	AddDeleteLine(simple.find('.delete_line_cell'));
+	AddDeleteSerial(simple.find('.delete_serial_cell'));
 	AddMarkDelivered(simple.find('.is_delivered'));
 	if (detailed.find('.received-cell').children(':first').attr('value')!=''){
 		simple.find('.is_delivered').attr('checked',true);
 	}
 	detailed.find('.received-cell').children(':first').datepicker();
-	
+	MakeShowHide(simple);
+	simple.find("#add_serial").click(RequestSerial);
+}
+function MakeShowHide(div){
+
+	div.find(".show_hide_serials").click(function(e){
+		$(this).closest(".simple-line").find('.serial_list_with_link').slideToggle('slow');
+		e.preventDefault();
+		return false;
+	});
 }
 // Replaced by thickbox
 //////////////////////////////////////////////////////////////////////
@@ -101,6 +117,7 @@ $(document).ready(function(){
 	$('.simple-line').each(function () {
 		AddEventsToLine($(this), $('#detailed-'+$(this).closest(".simple-line").attr('fff')));
 	});
+	
 	$("#upc").keydown(function(e){
 		if (e.keyCode == 13) {
 			DoAjaxRequest();

@@ -6,7 +6,6 @@
 {% endblock %}
 {% block includes %}
 	<script type="text/javascript" src="/static/js/edit_order.js"></script> 
-	<script type="text/javascript" src="/static/js/show_order.js"></script> 
 {% endblock %}
 {% block heading %}
 	{% if obj.pk %}
@@ -48,7 +47,6 @@
 				<div id="simple-lines">
 					{{formset.management_form}}
 					{% for form in formset.forms %}
-						{{form.errors}}
 						{% include 'orders/edit_line_simple.html' %}
 					{% endfor %}
 				</div>
