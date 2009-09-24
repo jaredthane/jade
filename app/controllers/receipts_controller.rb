@@ -40,13 +40,11 @@ class ReceiptsController < ApplicationController
     return true  
 	end
 	def list_to_print
-		
     params[:from]=untranslate_month(params[:from])
     params[:till]=untranslate_month(params[:till])
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
   	@sites=(params[:sites] ||[current_user.location_id])
-  	logger.debug "POOP POOP POOP POOP POOP POOP POOP POOP"
 		@receipts = Receipt.search_wo_pages(params[:search],@from, @till, @sites)
 		if @receipts.length==0
 			flash[:error] = 'No hay Facturas para las fechas specificadas'
@@ -126,7 +124,7 @@ class ReceiptsController < ApplicationController
 		
 		params[:created_at]=untranslate_month(params[:created_at])
 		o=Order.create(:vendor_id=>User.current_user.location_id, :client_id => 3, :user=> User.current_user, :order_type_id=>1, :receipt_printed=>params[:created_at].to_date, :created_at=>params[:created_at].to_date)
-		r=Receipt.create(:order_id=>o.id, :number =>params[:number].to_i, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{params[:id].to_i}.pdf", :user=> User.current_user, :created_at=>params[:created_at].to_date, :deleted=>params[:created_at].to_date)
+		r=Receipt.create(:order_id=>o.id, :site_id=>User.current_user.location_id, :number =>params[:number].to_i, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{params[:id].to_i}.pdf", :user=> User.current_user, :created_at=>params[:created_at].to_date, :deleted=>params[:created_at].to_date)
 		consumidor_final(r)
   	flash[:info] = "La factura ha sido anulado existosamente"
   	User.current_user.location.next_receipt_number=params[:number].to_i+1
@@ -153,7 +151,7 @@ class ReceiptsController < ApplicationController
 					logger.debug "created_at="+created_at.to_s
 					logger.debug "User.current_user.date=#{User.current_user.date.to_s}"
 					logger.debug "User.current_user.today=#{User.current_user.today.to_s}"
-		      r=Receipt.new(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{start_id}.pdf", :user=> User.current_user, :created_at=>created_at)
+		      r=Receipt.new(:site_id=>order.client.site_id, :order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{start_id}.pdf", :user=> User.current_user, :created_at=>created_at)
 		      r.created_at=created_at
 		      logger.debug "new receipt=#{r.inspect}"
 		      r.save()

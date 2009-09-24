@@ -242,7 +242,7 @@ class Receipt < ActiveRecord::Base
 		site_string=''
 		for site in sites
 			site_string+= ' OR 'if site_string !=''
-			site_string+=' clients.site_id=' + site.to_s
+			site_string+=' receipts.site_id=' + site.to_s
 		end
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['clients.entity_type_id=2 AND ((date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till) OR (date(receipts.deleted) >=:from AND date(receipts.deleted) <= :till)) AND (orders.id like :search or vendors.name like :search or clients.name like :search) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'),:search => "%#{search}%"}],
@@ -269,7 +269,7 @@ class Receipt < ActiveRecord::Base
 		site_string=''
 		for site in sites
 			site_string+= ' OR 'if site_string !=''
-			site_string+=' clients.site_id=' + site.to_s
+			site_string+=' receipts.site_id=' + site.to_s
 		end
   	find :all,
 		         :conditions => ['((date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till) OR (date(receipts.deleted) >=:from AND date(receipts.deleted) <= :till)) AND (orders.id like :search or vendors.name like :search or clients.name like :search) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'),:search => "%#{search}%"}],
