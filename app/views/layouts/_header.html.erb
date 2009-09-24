@@ -160,7 +160,7 @@
 			</li>
 	  <% end %>
 	  <% if current_user.has_rights(['Admin','Ventas','Gerente','Compras']) %>
-	  <li><a href="/entities" title="Entidades">Entidades</a>
+	  <li><a href="/clients" title="Entidades">Entidades</a>
 	  	<ul>
 	  		<% if current_user.has_rights(['Admin','Gerente','Compras']) %>
 	  			<li><a href="/vendors" title="Proveedores">Proveedores</a></li>
