@@ -28,15 +28,11 @@
 			<b>Numero de Factura</b>
 			<%= f.text_field :number, :class => 'field' %>
 		</p>
-		<p>
-			<b>Sitio</b>
-			<%= f.collection_select(:site_id, get_sites, :id, :name, {:include_blank => true}) %>
-		</p>
 	</div>
 	<div class="column2-unit-right">
 		<p>
 			<b>Sitio</b>
-			<%= link_to @receipt.order.vendor.name, @receipt.order.vendor %>
+			<%= f.collection_select(:site_id, get_sites, :id, :name, {:include_blank => true}) %>
 		</p>
 		<p>
 			<b>Total</b>
