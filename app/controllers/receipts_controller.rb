@@ -123,7 +123,7 @@ class ReceiptsController < ApplicationController
 	def create_nul_number
 		
 		params[:created_at]=untranslate_month(params[:created_at])
-		o=Order.create(:vendor_id=>User.current_user.location_id, :client_id => 3, :user=> User.current_user, :order_type_id=>1, :receipt_printed=>params[:created_at].to_date, :created_at=>params[:created_at].to_date)
+		o=Order.create(:vendor_id=>User.current_user.location_id, :client_id => 9, :user=> User.current_user, :order_type_id=>1, :receipt_printed=>params[:created_at].to_date, :created_at=>params[:created_at].to_date)
 		r=Receipt.create(:order_id=>o.id, :site_id=>User.current_user.location_id, :number =>params[:number].to_i, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{params[:id].to_i}.pdf", :user=> User.current_user, :created_at=>params[:created_at].to_date, :deleted=>params[:created_at].to_date)
 		consumidor_final(r)
   	flash[:info] = "La factura ha sido anulado existosamente"
