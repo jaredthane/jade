@@ -30,3 +30,5 @@ INSERT INTO `preferences` VALUES (1,'Producto',1,'revenue'),(2,'Categoria',2,'re
 UNLOCK TABLES;
 
 -- TODO: Create accounts for each existing client and make the client point to them.
+insert into accounts (name, parent_id) VALUES(select name,3 from entities where entity_type_id=2)
+

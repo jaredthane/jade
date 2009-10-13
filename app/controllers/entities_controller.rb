@@ -362,6 +362,11 @@ end
 		  		parent_id=Preference.find(:first, :conditions=>"pref_group='new_site_inventory_account_parent_id'").value
 		  		@entity.inventory_account = Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'')
     		end
+    		if params[:add_account_groups] == 'yes'
+    			account_name =	(Preference.find(:first, :conditions=>"pref_group='vendor_accounts_group_prefix'").name ||'')     		+ params[:entity][:name]+ (Preference.find(:first, :conditions=>"pref_group='new_site_inventory_account_suffix'").name || '')
+		  		parent_id=Preference.find(:first, :conditions=>"pref_group='new_site_inventory_account_parent_id'").value
+		  		
+    		end
     		@subs=Subscription.find(:all, 
           :conditions => ['client_id=:clientid AND (end_times>0 or end_times is null) and (end_date>now() or end_date is null)', {:clientid => @entity.id.to_s}],
           :limit => 10, 

@@ -71,12 +71,20 @@ class Entity < ActiveRecord::Base
 	has_many :receipts, :through => :orders, :foreign_key => "client_id"
 
 	
+	
 	has_many :movements, :dependent => :destroy, :order => 'created_at'
 	belongs_to :cash_account, :class_name => "Account", :foreign_key => "cash_account_id"
 	belongs_to :inventory_account, :class_name => "Account", :foreign_key => "inventory_account_id"
 	belongs_to :revenue_account, :class_name => "Account", :foreign_key => "revenue_account_id"
 	belongs_to :tax_account, :class_name => "Account", :foreign_key => "tax_account_id"
 	belongs_to :expense_account, :class_name => "Account", :foreign_key => "expense_account_id"
+	
+	belongs_to :new_individual_client_accounts_parent, :class_name => "Account", :foreign_key => "new_individual_client_accounts_parent_id"
+	belongs_to :new_corporate_client_accounts_parent, :class_name => "Account", :foreign_key => "new_corporate_client_accounts_parent_id"
+	belongs_to :new_vendor_accounts_parent, :class_name => "Account", :foreign_key => "new_vendor_accounts_parent_id"
+	belongs_to :new_employee_accounts_parent, :class_name => "Account", :foreign_key => "new_employee_accounts_parent_id"
+	
+	
 	validates_associated :movements
 	after_update :save_movements
   after_create :save_movements

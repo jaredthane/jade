@@ -63,7 +63,14 @@
   			  <%=link_to @entity.inventory_account.name, @entity.inventory_account %>
 			  <% end %>
 		  </p>
-	    
+	    <p>
+		  <b>Rama para cuentas de nuevos clientes consumidor final</b><br />
+		  <%=link_to @entity.new_individual_client_accounts_parent.name, @entity.new_individual_client_accounts_parent %>
+		</p>
+		<p>
+		  <b>Rama para cuentas de nuevos clientes credito fiscal</b><br />
+		  <%=link_to @entity.new_corporate_client_accounts_parent.name, @entity.new_corporate_client_accounts_parent %>
+		</p>
 		<% end %>
 	<% end %>
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
