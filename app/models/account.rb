@@ -14,9 +14,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
-
 class Account < ActiveRecord::Base
 	belongs_to :parent, :class_name => "Account", :foreign_key => "parent_id"
 	belongs_to :entity

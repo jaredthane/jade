@@ -1,6 +1,12 @@
-should be able to anular, restar, y borrar orders and receipts easily
-good errors if accounts are not set.
-
+make orders have only one receipt
+make orders divide if over max items limit
+make account list order by parents
+make so you can zoom into branches of accounts
+make so you can print any list
+redo accounting code to make it complete and bullet-proof
+create page to edit preferences
+use new layout
+use jquery
 
 ------------------------ Contract     -------------------------------
 reports

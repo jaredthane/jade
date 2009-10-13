@@ -43,6 +43,10 @@ class Entity < ActiveRecord::Base
   # For use with Sites
   has_many :price_groups
   
+  # These are the default branches that entities made in this site should be under
+  # For use with Sites
+  has_many :default_branches
+  
   # This is the default price Group Name to use for this client
   # For use with Clients
   belongs_to :price_group_name

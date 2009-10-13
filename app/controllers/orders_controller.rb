@@ -62,7 +62,6 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.xml
   def index
-    #@orders = Order.find(:all)
 		@order_type_id = params[:order_type_id] || 0
 		case @order_type_id
 		when 0
