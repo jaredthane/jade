@@ -21,7 +21,9 @@ class Account < ActiveRecord::Base
 	has_many :trans, :through => :posts
 	CREDIT = -1
 	DEBIT = 1
-	
+	def number_and_name
+		return (self.number||'') + " - " + (self.name||'')
+	end
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['(accounts.name like :search)', {:search => "%#{search}%"}],
