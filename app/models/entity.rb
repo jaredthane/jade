@@ -361,6 +361,23 @@ class Entity < ActiveRecord::Base
   	logger.debug "condition10="+condition
   	return condition
   end
+  def update_related_accounts_with_id()
+  	if self.entity_type_id==3
+			self.cash_account.entity=self
+			self.cash_account.save()
+			self.expense_account.entity=self
+			self.expense_account.save()
+			self.revenue_account.entity=self
+			self.revenue_account.save()
+			self.tax_account.entity=self
+			self.tax_account.save()
+			self.inventory_account.entity=self
+			self.inventory_account.save()
+		else
+			self.cash_account.entity=self
+			self.cash_account.save()
+  	end
+  end 
   def self.search(search, page)
   	search = search || ""
   	logger.debug "search="+ search

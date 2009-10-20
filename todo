@@ -1,3 +1,5 @@
+figure out how to do ploymorphism
+accounts should automaticly get their modifier from their parent
 make orders have only one receipt
 make orders divide if over max items limit
 make account list order by parents
@@ -5,6 +7,8 @@ make so you can zoom into branches of accounts
 make so you can print any list
 redo accounting code to make it complete and bullet-proof
 create page to edit preferences
+move all action out of the controllers and into the models
+implement thorough testing
 use new layout
 use jquery
 

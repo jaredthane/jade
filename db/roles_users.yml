@@ -1,0 +1,89 @@
+--- 
+roles_users_017: 
+  role_id: "10"
+  id: "29"
+  user_id: 
+roles_users_006: 
+  role_id: "1"
+  id: "18"
+  user_id: "7"
+roles_users_018: 
+  role_id: "10"
+  id: "30"
+  user_id: 
+roles_users_007: 
+  role_id: "8"
+  id: "19"
+  user_id: "7"
+roles_users_019: 
+  role_id: "7"
+  id: "31"
+  user_id: "9"
+roles_users_008: 
+  role_id: "10"
+  id: "20"
+  user_id: 
+roles_users_020: 
+  role_id: "7"
+  id: "32"
+  user_id: "5"
+roles_users_021: 
+  role_id: "10"
+  id: "33"
+  user_id: "16"
+roles_users_010: 
+  role_id: "10"
+  id: "22"
+  user_id: "6"
+roles_users_009: 
+  role_id: "10"
+  id: "21"
+  user_id: "5"
+roles_users_022: 
+  role_id: "7"
+  id: "34"
+  user_id: "16"
+roles_users_011: 
+  role_id: "10"
+  id: "23"
+  user_id: "7"
+roles_users_012: 
+  role_id: "10"
+  id: "24"
+  user_id: "9"
+roles_users_001: 
+  role_id: "7"
+  id: "13"
+  user_id: "6"
+roles_users_013: 
+  role_id: "10"
+  id: "25"
+  user_id: "10"
+roles_users_002: 
+  role_id: "4"
+  id: "14"
+  user_id: "6"
+roles_users_014: 
+  role_id: "10"
+  id: "26"
+  user_id: "11"
+roles_users_003: 
+  role_id: "8"
+  id: "15"
+  user_id: "6"
+roles_users_015: 
+  role_id: "10"
+  id: "27"
+  user_id: 
+roles_users_004: 
+  role_id: "7"
+  id: "16"
+  user_id: "7"
+roles_users_016: 
+  role_id: "10"
+  id: "28"
+  user_id: 
+roles_users_005: 
+  role_id: "2"
+  id: "17"
+  user_id: "7"

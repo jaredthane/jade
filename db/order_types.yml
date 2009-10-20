@@ -1,0 +1,28 @@
+--- 
+order_types_006: 
+  name: Abono a cuenta
+  id: "6"
+order_types_007: 
+  name: Transferencia de Fondos
+  id: "7"
+order_types_008: 
+  name: Abono a cuenta
+  id: "8"
+order_types_009: 
+  name: Transferencia de Fondos
+  id: "9"
+order_types_001: 
+  name: Venta
+  id: "1"
+order_types_002: 
+  name: Compra
+  id: "2"
+order_types_003: 
+  name: Consumo Interno
+  id: "3"
+order_types_004: 
+  name: Transferencia
+  id: "4"
+order_types_005: 
+  name: Cuenta Fisica
+  id: "5"

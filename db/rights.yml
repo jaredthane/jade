@@ -1,0 +1,247 @@
+--- 
+rights_074: 
+  name: Crear_Numeros de Serie
+  id: "74"
+rights_011: 
+  name: Ver Ventas
+  id: "11"
+rights_032: 
+  name: Borrar Suscripciones
+  id: "32"
+rights_053: 
+  name: Borrar_Cuentas
+  id: "53"
+rights_075: 
+  name: Cambiar_Numeros de Serie
+  id: "75"
+rights_012: 
+  name: Borrar Ventas
+  id: "12"
+rights_033: 
+  name: Crear Papeles
+  id: "33"
+rights_054: 
+  name: Crear_Servicios
+  id: "54"
+rights_076: 
+  name: Ver_Numeros de Serie
+  id: "76"
+rights_013: 
+  name: Crear Compras
+  id: "13"
+rights_034: 
+  name: Cambiar Papeles
+  id: "34"
+rights_055: 
+  name: Cambiar_Servicios
+  id: "55"
+rights_077: 
+  name: Borrar_Numeros de Serie
+  id: "77"
+rights_035: 
+  name: Ver Papeles
+  id: "35"
+rights_056: 
+  name: Ver_Servicios
+  id: "56"
+rights_014: 
+  name: Cambiar Compras
+  id: "14"
+rights_078: 
+  name: Cambiar_Prices
+  id: "78"
+rights_057: 
+  name: Borrar_Servicios
+  id: "57"
+rights_015: 
+  name: Ver Compras
+  id: "15"
+rights_036: 
+  name: Borrar Papeles
+  id: "36"
+rights_080: 
+  name: Cambiar_Proveedores
+  id: "80"
+rights_079: 
+  name: Crear_Proveedores
+  id: "79"
+rights_016: 
+  name: Borrar Compras
+  id: "16"
+rights_037: 
+  name: Crear Usuarios
+  id: "37"
+rights_058: 
+  name: Crear_Combos
+  id: "58"
+rights_081: 
+  name: Ver_Proveedores
+  id: "81"
+rights_017: 
+  name: Crear Consumidor Final
+  id: "17"
+rights_038: 
+  name: Cambiar Usuarios
+  id: "38"
+rights_060: 
+  name: Ver_Combos
+  id: "60"
+rights_059: 
+  name: Cambiar_Combos
+  id: "59"
+rights_082: 
+  name: Borrar_Proveedores
+  id: "82"
+rights_018: 
+  name: Cambiar Consumidor Final
+  id: "18"
+rights_040: 
+  name: Borrar Usuarios
+  id: "40"
+rights_039: 
+  name: Ver Usuarios
+  id: "39"
+rights_061: 
+  name: Borrar_Combos
+  id: "61"
+rights_020: 
+  name: Borrar Consumidor Final
+  id: "20"
+rights_019: 
+  name: Ver Consumidor Final
+  id: "19"
+rights_041: 
+  name: Crear Sitios
+  id: "41"
+rights_062: 
+  name: Crear_Descuentos
+  id: "62"
+rights_021: 
+  name: Crear Credito Fiscal
+  id: "21"
+rights_042: 
+  name: Cambiar Sitios
+  id: "42"
+rights_063: 
+  name: Cambiar_Descuentos
+  id: "63"
+rights_001: 
+  name: Crear Pagos para Ventas
+  id: "1"
+rights_022: 
+  name: Cambiar Credito Fiscal
+  id: "22"
+rights_043: 
+  name: Ver Sitios
+  id: "43"
+rights_064: 
+  name: Ver_Descuentos
+  id: "64"
+rights_002: 
+  name: Cambiar Pagos para Ventas
+  id: "2"
+rights_023: 
+  name: Ver Credito Fiscal
+  id: "23"
+rights_044: 
+  name: Borrar Sitios
+  id: "44"
+rights_065: 
+  name: Borrar_Descuentos
+  id: "65"
+rights_024: 
+  name: Borrar Credito Fiscal
+  id: "24"
+rights_045: 
+  name: Crear Cuentas Fisicas
+  id: "45"
+rights_066: 
+  name: Crear_Garantias
+  id: "66"
+rights_003: 
+  name: Ver Pagos para Ventas
+  id: "3"
+rights_067: 
+  name: Cambiar_Garantias
+  id: "67"
+rights_046: 
+  name: Cambiar Cuentas Fisicas
+  id: "46"
+rights_004: 
+  name: Borrar Pagos para Ventas
+  id: "4"
+rights_025: 
+  name: Crear Productos
+  id: "25"
+rights_068: 
+  name: Ver_Garantias
+  id: "68"
+rights_005: 
+  name: Crear Pagos para Compras
+  id: "5"
+rights_026: 
+  name: Cambiar Productos
+  id: "26"
+rights_047: 
+  name: Ver Cuentas Fisicas
+  id: "47"
+rights_070: 
+  name: Crear_Consumos Internos
+  id: "70"
+rights_069: 
+  name: Borrar_Garantias
+  id: "69"
+rights_006: 
+  name: Cambiar Pagos para Compras
+  id: "6"
+rights_027: 
+  name: Ver Productos
+  id: "27"
+rights_048: 
+  name: Borrar Cuentas Fisicas
+  id: "48"
+rights_071: 
+  name: Cambiar_Consumos Internos
+  id: "71"
+rights_007: 
+  name: Ver Pagos para Compras
+  id: "7"
+rights_028: 
+  name: Borrar Productos
+  id: "28"
+rights_050: 
+  name: Crear_Cuentas
+  id: "50"
+rights_049: 
+  name: Ver_COSTS
+  id: "49"
+rights_072: 
+  name: Ver_Consumos Internos
+  id: "72"
+rights_008: 
+  name: Borrar Pagos para Compras
+  id: "8"
+rights_030: 
+  name: Cambiar Suscripciones
+  id: "30"
+rights_029: 
+  name: Crear Suscripciones
+  id: "29"
+rights_051: 
+  name: Cambiar_Cuentas
+  id: "51"
+rights_073: 
+  name: Borrar_Consumos Internos
+  id: "73"
+rights_010: 
+  name: Cambiar Ventas
+  id: "10"
+rights_009: 
+  name: Crear Ventas
+  id: "9"
+rights_031: 
+  name: Ver Suscripciones
+  id: "31"
+rights_052: 
+  name: Ver_Cuentas
+  id: "52"

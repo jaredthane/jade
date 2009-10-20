@@ -335,7 +335,7 @@ end
     		if params[:entity][:cash_account_id] == ''
 		  		# Create cash_account
 		  		account_name =	(Preference.find(:first, :conditions=>"pref_group='new_site_cash_account_prefix'").name ||'')     		+ params[:entity][:name]+ (Preference.find(:first, :conditions=>"pref_group='new_site_cash_account_suffix'").name || '')
-		  		parent_id=Preference.find(:first, :conditions=>"pref_group='new_site_cash_account_parent_id'").value
+		  		parent_id = Preference.find(:first, :conditions=>"pref_group='new_site_cash_account_parent_id'").value
 		  		@entity.cash_account = Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'')
     		end
     		if params[:entity][:expense_account_id] == ''
@@ -371,37 +371,38 @@ end
           :conditions => ['client_id=:clientid AND (end_times>0 or end_times is null) and (end_date>now() or end_date is null)', {:clientid => @entity.id.to_s}],
           :limit => 10, 
           :order => 'created_at DESC')
-        when '2' # Individual Clients
-        	if params[:entity][:cash_account_id] == ''
-		      	# TODO: Create cash account
-		  			account_name = (Preference.find(:first, :conditions=>"pref_group='new_individual_client_account_prefix'").name ||'')    		+ params[:entity][:name]+ (Preference.find(:first, :conditions=>"pref_group='new_individual_client_account_suffix'").name || '')
-		  			parent_id = @entity.site.new_individual_client_accounts_parent_id
-			  		@entity.cash_account = Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'')
-			  	end
-        when '5'# Corporate Clients
-        	if params[:entity][:cash_account_id] == ''
-		      	# TODO: Create cash account
-		  			account_name = (Preference.find(:first, :conditions=>"pref_group='new_corporate_client_account_prefix'").name ||'')    		+ params[:entity][:name]+ (Preference.find(:first, :conditions=>"pref_group='new_corporate_client_account_suffix'").name || '')
-		  			parent_id = @entity.site.new_corporate_client_accounts_parent_id
-			  		@entity.cash_account = Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'')
-			  	end
-        when '6'# Employees
-        	if params[:entity][:cash_account_id] == ''
-		      	# TODO: Create cash account
-		  			account_name = (Preference.find(:first, :conditions=>"pref_group='new_employee_account_prefix'").name ||'')    		+ params[:entity][:name]+ (Preference.find(:first, :conditions=>"pref_group='new_employee_account_suffix'").name || '')
-		  			parent_id = @entity.site.new_employee_accounts_parent_id
-			  		@entity.cash_account = Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'')
-			  	end
-        when '1'# Vendors
-        	if params[:entity][:cash_account_id] == ''
-		      	# TODO: Create cash account
-		  			account_name = (Preference.find(:first, :conditions=>"pref_group='new_vendor_account_prefix'").name ||'')    		+ params[:entity][:name]+ (Preference.find(:first, :conditions=>"pref_group='new_vendor_account_suffix'").name || '')
-		  			parent_id = @entity.site.new_vendor_accounts_parent_id
-			  		@entity.cash_account = Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'')
-			  	end
+      when '2' # Individual Clients
+      	if params[:entity][:cash_account_id] == ''
+	      	# TODO: Create cash account
+	  			account_name = (Preference.find(:first, :conditions=>"pref_group='new_individual_client_account_prefix'").name ||'')    		+ params[:entity][:name]+ (Preference.find(:first, :conditions=>"pref_group='new_individual_client_account_suffix'").name || '')
+	  			parent_id = @entity.site.new_individual_client_accounts_parent_id
+		  		@entity.cash_account = Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'')
+		  	end
+      when '5'# Corporate Clients
+      	if params[:entity][:cash_account_id] == ''
+	      	# TODO: Create cash account
+	  			account_name = (Preference.find(:first, :conditions=>"pref_group='new_corporate_client_account_prefix'").name ||'')    		+ params[:entity][:name]+ (Preference.find(:first, :conditions=>"pref_group='new_corporate_client_account_suffix'").name || '')
+	  			parent_id = @entity.site.new_corporate_client_accounts_parent_id
+		  		@entity.cash_account = Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'')
+		  	end
+      when '6'# Employees
+      	if params[:entity][:cash_account_id] == ''
+	      	# TODO: Create cash account
+	  			account_name = (Preference.find(:first, :conditions=>"pref_group='new_employee_account_prefix'").name ||'')    		+ params[:entity][:name]+ (Preference.find(:first, :conditions=>"pref_group='new_employee_account_suffix'").name || '')
+	  			parent_id = @entity.site.new_employee_accounts_parent_id
+		  		@entity.cash_account = Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'')
+		  	end
+      when '1'# Vendors
+      	if params[:entity][:cash_account_id] == ''
+	      	# TODO: Create cash account
+	  			account_name = (Preference.find(:first, :conditions=>"pref_group='new_vendor_account_prefix'").name ||'')    		+ params[:entity][:name]+ (Preference.find(:first, :conditions=>"pref_group='new_vendor_account_suffix'").name || '')
+	  			parent_id = @entity.site.new_vendor_accounts_parent_id
+		  		@entity.cash_account = Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'')
+		  	end
     end
     respond_to do |format|
       if @entity.save
+      	@entity.update_related_accounts_with_id()
       	logger.debug "creating entity workd"
       	logger.debug "|" + params[:entity][:entity_type_id].to_s + "|"
       	if params[:entity][:entity_type_id] == '3'

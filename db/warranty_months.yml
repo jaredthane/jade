@@ -1,0 +1,16 @@
+--- 
+warranty_months_004: 
+  id: "4"
+  months: "24"
+warranty_months_005: 
+  id: "5"
+  months: "3"
+warranty_months_001: 
+  id: "1"
+  months: "0"
+warranty_months_002: 
+  id: "2"
+  months: "6"
+warranty_months_003: 
+  id: "3"
+  months: "12"

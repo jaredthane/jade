@@ -1,15 +1,2 @@
-# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+--- {}
 
-one:
-  order: 
-  amount: 1
-  date: 2008-11-06
-  payment_method: 
-  user: 
-
-two:
-  order: 
-  amount: 1
-  date: 2008-11-06
-  payment_method: 
-  user: 
