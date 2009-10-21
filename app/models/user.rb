@@ -33,7 +33,7 @@ class User < ActiveRecord::Base
 	has_many :receipts
 	has_many :roles_users
 	has_many :roles, :through => :roles_users
-	has_and_belongs_to_many :roles
+#	has_and_belongs_to_many :roles
   validates_presence_of     :login
   validates_presence_of     :password,                   :if => :password_required?
   validates_presence_of     :password_confirmation,      :if => :password_required?
@@ -156,13 +156,15 @@ class User < ActiveRecord::Base
 		return reps
 	end
 	
-	
 	def rights
-		rights=[]
+		dict={}
 		for r in roles
-			rights << r.title
+			dict[r.title]=r
+			for t in r.rights
+				dict[t.id]=t
+			end
 		end
-		return rights
+		return dict
 	end
 	def has_rights(needed)
 		r = rights
