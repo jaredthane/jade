@@ -21,12 +21,12 @@ class Post < ActiveRecord::Base
   belongs_to :post_type
   belongs_to :trans
 	belongs_to :account
-	before_create :prepare_for_create
 	before_destroy :prepare_for_destroy
 	
 	CREDIT = -1
 	DEBIT = 1
 	
+	before_create :prepare_for_create
 	def prepare_for_create
 		# Make value positive if its negative
 		logger.debug "making sure value is positive"
@@ -62,12 +62,14 @@ class Post < ActiveRecord::Base
 		else
 			mod=1
 		end
-		# *************** THIS SHOULD BE CHANGED TO A MYSQL UPDATE QUERY *******************************
-		for post in Post.find(:all, :conditions=> "account_id= " + self.account_id.to_s + " AND created_at>'" + self.trans.created_at.to_s(:db) + "'")
-			logger.debug 'POST WAS=' +post.value.to_s + ' * POST_TYPE=' + post.post_type_id.to_s + ' * MODIFIER='+post.account.modifier.to_s + '(BALANCE=' + post.balance.to_s + ')'
-			post.balance=post.balance + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0) * mod
-			logger.debug 'New POST=' + post.value.to_s + ' * POST_TYPE=' + post.post_type_id.to_s + ' * MODIFIER='+post.account.modifier.to_s + '(BALANCE=' + post.balance.to_s + ')'
-			post.save
+		if self.account
+			# *************** THIS SHOULD BE CHANGED TO A MYSQL UPDATE QUERY *******************************
+			for post in Post.find(:all, :conditions=> "account_id= " + self.account_id.to_s + " AND created_at>'" + self.trans.created_at.to_s(:db) + "'")
+				logger.debug 'POST WAS=' +post.value.to_s + ' * POST_TYPE=' + post.post_type_id.to_s + ' * MODIFIER='+post.account.modifier.to_s + '(BALANCE=' + post.balance.to_s + ')'
+				post.balance=post.balance + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0) * mod
+				logger.debug 'New POST=' + post.value.to_s + ' * POST_TYPE=' + post.post_type_id.to_s + ' * MODIFIER='+post.account.modifier.to_s + '(BALANCE=' + post.balance.to_s + ')'
+				post.save
+			end
 		end
 	end
 
@@ -79,10 +81,12 @@ class Post < ActiveRecord::Base
 		mydate=(self.created_at||Time.now)
 #		logger.debug 'OLD BALANCE=' + self.account.simple_balance.to_s + '+ VALUE=' +self.value.to_s + ' * POST_TYPE=' + self.post_type_id.to_s + ' * MODIFIER='+self.account.modifier.to_s
 		last_post=Post.last(:conditions=> ['date(trans.created_at) < :mydate AND posts.account_id=:account', {:mydate=>mydate.to_date.to_s('%Y-%m-%d'), :account=>self.account_id}],:joins=>'inner join trans on trans.id=posts.trans_id')
-		if last_post
-			self.balance=(last_post.balance || 0 ) + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
-		else
-			self.balance=(self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
+		if self.account
+			if last_post
+				self.balance=(last_post.balance || 0 ) + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
+			else
+				self.balance=(self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
+			end
 		end
 	end
 end

@@ -22,7 +22,7 @@ class Trans < ActiveRecord::Base
   has_many :entities , :through => :posts
 	belongs_to :order
 	belongs_to :user
-	after_save :save_posts
+#	after_save :save_posts
 	def add_posts(posts)
 		for post in posts
 			p=Post.new(post)
@@ -33,9 +33,11 @@ class Trans < ActiveRecord::Base
 		#need to make sure they are balanced
 		# and that no account is repeated
 		for p in self.posts
-			p.trans_id=self.id
-			p.save
-			p.errors.each {|e| puts "POst ERROR" + e.to_s}
+			if p.account
+				p.trans_id=self.id
+				p.save
+				p.errors.each {|e| puts "POst ERROR" + e.to_s}
+			end
 		end
 	end
 	def post_by_account_id(id)
