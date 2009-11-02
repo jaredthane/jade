@@ -43,7 +43,7 @@ module Formats
 				  @data << [l.quantity.to_s, l.product.name + " " + (l.received).to_date.to_s(:long) + " - " + (l.received.advance(:months => 1)).to_date.to_s(:long), x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
 				  @data <<['','','']
 				else
-				  @data << [l.quantity.to_s, l.product.name + " (" + (l.received).month + ")", x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
+				  @data << [l.quantity.to_s, l.product.name + " (" + (l.received).month.to_s + ")", x.number_to_currency(l.price), "", x.number_to_currency(l.total_price)]
 				end
 		  end
 		  total += l.total_price
