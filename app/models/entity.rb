@@ -217,6 +217,42 @@ class Entity < ActiveRecord::Base
       end
     end
   end
+  before_create :create_accounts
+	def create_accounts()
+		case self.entity_type_id
+		when 3 #Site
+			self.cash_account = create_account(NEW_SITE_CASH_ACCOUNT_PREFIX, 				NEW_SITE_CASH_ACCOUNT_SUFFIX, 			NEW_SITE_CASH_ACCOUNT_PARENT_ID) if !self.cash_account
+			self.expense_account = create_account(NEW_SITE_EXPENSE_ACCOUNT_PREFIX, 		NEW_SITE_EXPENSE_ACCOUNT_SUFFIX, 		NEW_SITE_EXPENSE_ACCOUNT_PARENT_ID) if !self.expense_account
+			self.revenue_account = create_account(NEW_SITE_REVENUE_ACCOUNT_PREFIX, 		NEW_SITE_REVENUE_ACCOUNT_SUFFIX, 		NEW_SITE_REVENUE_ACCOUNT_PARENT_ID) if !self.revenue_account
+			self.tax_account = create_account(NEW_SITE_TAX_ACCOUNT_PREFIX, 				NEW_SITE_TAX_ACCOUNT_SUFFIX, 				NEW_SITE_TAX_ACCOUNT_PARENT_ID) if !self.tax_account
+			self.inventory_account = create_account(NEW_SITE_INVENTORY_ACCOUNT_PREFIX, 	NEW_SITE_INVENTORY_ACCOUNT_SUFFIX, 	NEW_SITE_INVENTORY_ACCOUNT_PARENT_ID) if !self.inventory_account
+			self.vendor_accounts_group = create_account(VENDOR_ACCOUNTS_GROUP_PREFIX, 				VENDOR_ACCOUNTS_GROUP_SUFFIX, 			VENDOR_ACCOUNTS_GROUP_PARENT_ID) if !self.vendor_accounts_group
+			self.employee_accounts_group = create_account(EMPLOYEE_ACCOUNTS_GROUP_PREFIX, 			EMPLOYEE_ACCOUNTS_GROUP_SUFFIX, 		EMPLOYEE_ACCOUNTS_GROUP_PARENT_ID) if !self.employee_accounts_group
+			self.client_accounts_group = create_account(CLIENT_ACCOUNTS_GROUP_PREFIX, 				CLIENT_ACCOUNTS_GROUP_SUFFIX, 			CLIENT_ACCOUNTS_GROUP_PARENT_ID) if !self.client_accounts_group
+		when (2 or 5) # Client
+			self.cash_account = create_account(NEW_CLIENT_ACCOUNT_PREFIX, NEW_CLIENT_ACCOUNT_SUFFIX, self.site.client_accounts_group_id) if !self.cash_account_id			
+		when 1 # Vendor
+			self.cash_account = create_account(NEW_VENDOR_ACCOUNT_PREFIX, NEW_VENDOR_ACCOUNT_SUFFIX, self.site.vendor_accounts_group_id) if !self.cash_account_id			
+		end
+	end
+	after_create :update_accounts_with_my_id
+  def update_related_accounts_with_id()
+  	if self.entity_type_id==3
+			self.cash_account.entity=self
+			self.cash_account.save()
+			self.expense_account.entity=self
+			self.expense_account.save()
+			self.revenue_account.entity=self
+			self.revenue_account.save()
+			self.tax_account.entity=self
+			self.tax_account.save()
+			self.inventory_account.entity=self
+			self.inventory_account.save()
+		else
+			self.cash_account.entity=self
+			self.cash_account.save()
+  	end
+  end 
   def products_to_order
   	products_to_order = 0
   	condition='vendor_id=' + id.to_s
