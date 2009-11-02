@@ -12,3 +12,6 @@ delete from movements;
 delete from serialized_products;
 delete from warranties;
 delete from product_categories;
+
+
+INSERT INTO `accounts`(id, name, parent_id, entity_id, number, transparent_journal, modifier) VALUES (2,'Activos',NULL,NULL,'1',NULL,1),(3,'Pasivos',NULL,NULL,'2',NULL,-1),(4,'Patrimonio',NULL,NULL,'3',NULL,-1),(5,'Ingresos',NULL,NULL,'4',NULL,-1),(6,'Gastos',NULL,NULL,'5',NULL,1),(7,'Efectivo',2,NULL,'11',NULL,1),(8,'Inventario',2,NULL,'12',NULL,1),(9,'Cuenta Bancaria',2,NULL,'13',NULL,1),(10,'Cuentas a Cobrar',2,NULL,'14',NULL,-1),(11,'Cuentas por Pagar',3,NULL,'21',NULL,-1),(12,'Impuesto',3,NULL,'22',NULL,-1),(13,'Empleados',11,NULL,'211',NULL,-1),(14,'Proveedores',11,NULL,'212',NULL,-1),(15,'Clientes',10,NULL,'141',NULL,1);
