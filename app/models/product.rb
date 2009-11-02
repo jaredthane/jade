@@ -73,7 +73,14 @@ class Product < ActiveRecord::Base
 		i=self.inventories.find_by_entity_id(location_id)
 		if self.product_type_id==1
 			logger.debug "getting simple sum"
-			i.quantity=self.movements.sum(:quantity)
+#			i.quantity=self.movements.sum(:quantity)
+			
+			i.quantity=self.movements.find_all_by_entity_id(site_id).sum(:quantity)
+			moves=self.movements.find_all_by_entity_id(site_id)
+			i.quantity=0
+			for move in moves
+				i.quantity+=move.quantity
+			end
 		elsif self.product_type_id==3
 			logger.debug "this is a combo"
 			newquantity=nil
