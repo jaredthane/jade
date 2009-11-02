@@ -83,7 +83,9 @@ class Entity < ActiveRecord::Base
 	belongs_to :new_corporate_client_accounts_parent, :class_name => "Account", :foreign_key => "new_corporate_client_accounts_parent_id"
 	belongs_to :new_vendor_accounts_parent, :class_name => "Account", :foreign_key => "new_vendor_accounts_parent_id"
 	belongs_to :new_employee_accounts_parent, :class_name => "Account", :foreign_key => "new_employee_accounts_parent_id"
-	
+	belongs_to :client_accounts_group, :class_name => "Account", :foreign_key => "client_accounts_group_id"
+	belongs_to :vendor_accounts_group, :class_name => "Account", :foreign_key => "vendor_accounts_group_id"
+	belongs_to :employee_accounts_group, :class_name => "Account", :foreign_key => "employee_accounts_group_id"
 	
 	validates_associated :movements
 	after_update :save_movements
@@ -105,99 +107,7 @@ class Entity < ActiveRecord::Base
   							 :conditions=> 'deleted=false AND (amount_paid < grand_total OR amount_paid is null) AND (client_id=' + self.id.to_s + ')',
   							 :joins => 'inner join orders on orders.id=receipts.order_id')
   end
-############################################################################################
-# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
-############################################################################################
-#	def process_subscriptions
-#		#################################################################################################
-#		# If the client has subscriptions to be processed, will create an order with a line for each.
-#		#################################################################################################
-#		# figure out the cutoff date
-#		###puts "creating order for " + self.name
-#  	cutoff_date=Date.today+1
-#  	cutoff_date=cutoff_date+1 if Date.today.wday==6
-#    # this hash will have a list of subs for each vendor
-#	  subscriptions = {}
-#		###puts "making a list of vendors involved"
-#		###puts "1"
-#		list=Subscription.find(:all, :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.client_id=' + self.id.to_s + ')' )
-#		###puts "list.length " + list.length.to_s
-#		###puts "2"
-#		for sub in list
-#	  	###puts "Here"
-#		###puts "3"
-#	  	# check if this sub needs to be processed
-#	    if sub.last_line
-#        if sub.last_line.received.to_date >> sub.frequency <= cutoff_date
-#		###puts "4"
-#        	###puts sub.name+" will be added - last received:" + sub.last_line.received.to_date.to_s(:long) + " cuttoff:" + cutoff_date.to_s(:long)
-#        	# add the vendor if its not already in the list
-#          subscriptions[sub.vendor_id] = [] if !subscriptions[sub.vendor_id]
-#          # add the sub to the list
-#          subscriptions[sub.vendor_id] << sub
-#        else
-#        	###puts (sub.name||"") + " will not be added - last received:" + (sub.last_line.received.to_date.to_s(:long)||"") + " cuttoff:" + (cutoff_date.to_s(:long)||"")
-#					###puts "5"
-#					###puts "sub.last_line="+sub.last_line.received.to_s
-#					###puts cutoff_date.to_s
-#        end
-#      else  # this sub has never been processed, lets do it now
-##      	###puts sub.name+" will be added cause its never been done"
-##				###puts "6"
-#        subscriptions[sub.vendor_id] = [] if !subscriptions[sub.vendor_id]
-#        subscriptions[sub.vendor_id] << sub
-#      end
-# 	  	# Now we got a nice list grouped by vendor, lets make the subs
-#  	  for vendor_id, list in subscriptions
-##  	  	###puts "making an order for vendor: "+list[0].vendor.name
-#			  o=Order.create(:vendor => list[0].vendor, :client => list[0].client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
-#			  received=nil
-#			  total=0
-#			  for sub in list
-##  	  		###puts "adding a line for: "+sub.name
-#			  	new_line = sub.process(o)
-#			  	received=new_line.received if !received
-#			  	received=new_line.received if new_line.received > received
-#			  	total += new_line.total_price_with_tax
-#			  	##puts "new_line.total_price_with_tax"+new_line.total_price_with_tax.to_s
-#			  	##puts "new_line.price*new_line.quantity="+(new_line.price*new_line.quantity).to_s
-#		    end
-#		    ##puts "total=" + total.to_s
-#		    o=Order.find(o.id)
-#		    o.received=received
-#		    o.grand_total=total
-#		    ##puts "o.grand_total=" + o.grand_total.to_s
-#		    o.save
-#		    o=Order.find(o.id)
-#		    ##puts "o.grand_total=" + o.grand_total.to_s
-#		    # now for the accounting
-##		    o=Order.find(o.id)
-#				sale = Trans.create(:order => o, :comments => o.comments)
-##				###puts "VENDOR:" + o.total_price.to_s
-#				vendor = Post.create(:trans=>sale, :account => o.vendor.revenue_account, :value=>o.total_price, :post_type_id =>Post::CREDIT)
-##				###puts "CLIENT:" + o.total_price_with_tax.to_s
-#				client = Post.create(:trans=>sale, :account => o.client.cash_account, :value=>o.total_price_with_tax, :post_type_id =>Post::DEBIT)
-##				###puts "TAX:" + o.total_tax.to_s
-#				tax    = Post.create(:trans=>sale, :account => o.vendor.tax_account, :value=>o.total_tax, :post_type_id =>Post::CREDIT)
-#				inventory_cost = o.inventory_value
-#				# if the sub included inventory items, we have to make that transaction also...
-#				if inventory_cost > 0 
-#					itrans = Trans.create(:order => o, :comments => o.comments)
-#					inventory = Post.create(:trans=>itrans, :account => o.vendor.inventory_account, :value=>o.inventory_cost, :post_type_id =>2, :balance => (o.vendor.inventory_account.balance||0) - (o.inventory_cost||0))
-#					expense = Post.create(:trans=>itrans, :account => o.vendor.expense_account, :value=>o.inventory_cost, :post_type_id =>1, :balance => (o.vendor.expense_account.balance||0) + (o.inventory_cost||0))
-#				end
-#		  end
-#  	end
-#	end
 
-#  def price_group(location_id = User.current_user.location_id)
-#  	location = Entity.find(location_id)
-#  	pg = location.price_groups.find_by_name_id(self.default_price_group_id)
-#  	if !pg
-#  		pg = location.price_groups.find_by_name_id(self.price_group_name_id)
-#  	end
-#  	return pg
-#  end
   def strip(s, c)
    clean=''
    s.each_char do |l|
@@ -217,6 +127,13 @@ class Entity < ActiveRecord::Base
       end
     end
   end
+  def create_account(prefix, suffix, parent_id)
+		account_name = (prefix||'') + self.name + (suffix||'')
+		puts "account_name=#{account_name.to_s}"
+		account=Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'')
+		puts "account=#{account.to_s}"
+		return account
+	end
   before_create :create_accounts
 	def create_accounts()
 		case self.entity_type_id
@@ -236,7 +153,7 @@ class Entity < ActiveRecord::Base
 		end
 	end
 	after_create :update_accounts_with_my_id
-  def update_related_accounts_with_id()
+  def update_accounts_with_my_id()
   	if self.entity_type_id==3
 			self.cash_account.entity=self
 			self.cash_account.save()

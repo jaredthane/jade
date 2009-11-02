@@ -1,0 +1,76 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+
+<% if current_user.has_right('View Subscriptions') %>
+	<% content_for :more_search do %>
+		<%= text_field_tag :sub_day, params[:sub_day], :class => 'dayfield'%>
+	<% end %>
+<% end %>
+<% content_for :actions do %>
+	<dt><%= link_to_function 'Guardar', 'submit("site_form")', :class => 'action' %></dt>
+<% end %>
+<div class="column2-unit-left">
+	<p>
+		<b>Nombre</b><br />
+		<%= f.text_field :name, :class => 'field' %>
+	</p>
+  <p>
+	  <b>Cuenta de Efectivo</b><br />
+		<%= f.collection_select(:cash_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+	</p>
+	<p>
+	  <b>Cuenta de Inventario</b><br />
+		<%= f.collection_select(:inventory_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+	</p>
+	<p>
+		<b>Proximo Numero de Factura</b><br />
+		<%= f.text_field :next_receipt_number, :class => 'field' %>
+	</p>
+	<p>
+	  <b>Rama para cuentas de nuevos clientes</b><br />
+		<%= f.collection_select(:client_accounts_group_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+	</p>
+	<p>
+		<b>Notas:</b><br />
+		<%= f.text_area :notes, :style => "height:80px; width: 300px;" %>
+	</p>
+	<p>
+		<b>Grupo de Precios por Defecto</b><br />
+		<%= f.collection_select(:price_group_id, get_price_groups, :id, :name) %>
+	</p>
+</div>
+<div class="column2-unit-right">
+  <% if current_user.has_right('View Accounts') %>
+	  <p>
+	    <b>Cuenta de Ingresos</b><br />
+		  <%= f.collection_select(:revenue_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+	  </p>
+	  <p>
+	    <b>Cuenta de Gastos</b><br />
+		  <%= f.collection_select(:expense_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+	  </p>
+	  <p>
+	    <b>Cuenta de Impuestos</b><br />
+		  <%= f.collection_select(:tax_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+	  </p>
+	 	<p>
+			<b>Rama para cuentas de nuevos proveedores</b><br />
+			<%= f.collection_select(:vendor_accounts_group_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+		</p>
+		<% if mode == 'new' %>
+			<p>
+				<b>Hacer nuevas cuentas para grupos de Empleados, Clientes, y Proveedores?</b><br />
+				<input type="checkbox" id="add_account_groups" name="add_account_groups" value="yes" />
+			</p>
+		<% end %>
+  <% end %>
+	<p>
+		<b>Activo</b><br />
+		<%= f.check_box :active %>
+	</p>
+</div>
+<hr class="clear-contentunit" />
+
+
+

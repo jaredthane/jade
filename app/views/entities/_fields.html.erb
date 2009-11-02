@@ -29,12 +29,8 @@
 			<%= f.text_field :next_receipt_number, :class => 'field' %>
 		</p>
 		<p>
-		  <b>Rama para cuentas de nuevos clientes consumidor final</b><br />
-			<%= f.collection_select(:new_individual_client_accounts_parent_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
-		</p>
-		<p>
-		  <b>Rama para cuentas de nuevos clientes credito fiscal</b><br />
-			<%= f.collection_select(:new_corporate_client_accounts_parent_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+		  <b>Rama para cuentas de nuevos clientes</b><br />
+			<%= f.collection_select(:client_accounts_group_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
 		</p>
 	<% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
@@ -102,13 +98,9 @@
 		    <b>Cuenta de Impuestos</b><br />
 			  <%= f.collection_select(:tax_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
 		  </p>
-		  <p>
-				<b>Rama para cuentas de nuevos empleados</b><br />
-				<%= f.collection_select(:new_employee_accounts_parent_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
-			</p>
 			<p>
 				<b>Rama para cuentas de nuevos proveedores</b><br />
-				<%= f.collection_select(:new_vendor_accounts_parent_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+				<%= f.collection_select(:vendor_accounts_group_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
 			</p>
 			<% if mode == 'new' %>
 				<p>

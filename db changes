@@ -1,34 +1,3 @@
-alter table entities add column new_individual_client_accounts_parent_id int(11);
-alter table entities add column new_corporate_client_accounts_parent_id int(11);
-alter table entities add column new_vendor_accounts_parent_id int(11);
-alter table entities add column new_employee_accounts_parent_id int(11);
-
---
--- Table structure for table `preferences`
---
-
-DROP TABLE IF EXISTS `preferences`;
-SET @saved_cs_client     = @@character_set_client;
-SET character_set_client = utf8;
-CREATE TABLE `preferences` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` varchar(255) default NULL,
-  `value` int(11) default NULL,
-  `pref_group` varchar(255) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
-SET character_set_client = @saved_cs_client;
-
---
--- Dumping data for table `preferences`
---
-
-LOCK TABLES `preferences` WRITE;
-/*!40000 ALTER TABLE `preferences` DISABLE KEYS */;
-INSERT INTO `preferences` VALUES (1,'Producto',1,'revenue'),(2,'Categoria',2,'revenue'),(3,'Proveedor',3,'revenue'),(4,'Sitio',4,'revenue'),(5,'Asesor',5,'revenue'),(6,'Usuario',6,'revenue'),(7,'Sitio',1,'cash'),(8,'Asesor',2,'cash'),(9,'Usuario',3,'cash');
-/*!40000 ALTER TABLE `preferences` ENABLE KEYS */;
-UNLOCK TABLES;
-
--- TODO: Create accounts for each existing client and make the client point to them.
-insert into accounts (name, parent_id) VALUES(select name,3 from entities where entity_type_id=2)
-
+alter table receipts add column date datetime;
+alter table entities add column client_accounts_group_id int(11);
+alter table entities add column vendor_accounts_group_id int(11);
