@@ -39,8 +39,7 @@ class Payment < ActiveRecord::Base
 	def create_transactions
 		puts "running here.."
   	if self.order
-  		
-		puts "running here too.."
+			puts "running here too.."
   		order.amount_paid+=self.amount
   		order.save
 	    trans = Trans.create(:created_at=>User.current_user.today,:user=>User.current_user, :order => self.order, :comments => self.order.comments)
@@ -54,6 +53,23 @@ class Payment < ActiveRecord::Base
 		when 2 # Purchase
 			debit = Post.create(:trans=>trans, :account => self.order.vendor.cash_account, :value=>@amt, :post_type_id =>Post::DEBIT)
 			credit = Post.create(:trans=>trans, :account => self.order.client.cash_account, :value=>@amt, :post_type_id =>Post::CREDIT)
+		end
+	end
+	def cancel
+		if self.order
+  		order.amount_paid-=self.amount
+  		order.save
+	    trans = Trans.create(:created_at=>User.current_user.today,:user=>User.current_user, :order => self.order, :comments => self.order.comments)
+	  else
+	    trans = Trans.create(:created_at=>User.current_user.today,:user=>User.current_user)
+	  end
+		case order.order_type_id
+		when 1 # Sale
+			debit = Post.create(:trans=>trans, :account => self.order.cash_account, :value=>self.amount, :post_type_id =>Post::CREDIT)
+			credit = Post.create(:trans=>trans, :account => self.order.client.cash_account, :value=>self.amount, :post_type_id =>Post::DEBIT)
+		when 2 # Purchase
+			debit = Post.create(:trans=>trans, :account => self.order.vendor.cash_account, :value=>self.amount, :post_type_id =>Post::CREDIT)
+			credit = Post.create(:trans=>trans, :account => self.order.client.cash_account, :value=>self.amount, :post_type_id =>Post::DEBIT)
 		end
 	end
 	def amount

@@ -3,6 +3,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :roles
   map.resources :serialized_products
   map.resource :session
+  map.resources :payments
+  map.destroy_payment 'payments/:id/destroy', :controller => 'payments', :action => 'destroy'
   map.create_nul_receipt_number 'receipts/create_nul_number', :controller => 'receipts', :action => 'create_nul_number'
   map.new_nul_receipt_number 'receipts/new_nul_number', :controller => 'receipts', :action => 'new_nul_number'
   map.process_subscriptions 'receipts/process_subscriptions', :controller => 'receipts', :action => 'process_subscriptions'
@@ -92,7 +94,6 @@ ActionController::Routing::Routes.draw do |map|
   
   map.resources :units
     
-  map.resources :payments
   map.movements_for_product 'movements/:site/:id', :controller => 'movements', :action => 'for_product'
   map.resources :movements
   map.resources :warranties

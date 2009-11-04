@@ -137,18 +137,15 @@ class PaymentsController < ApplicationController
 #      end
 #    end
 #  end
-############################################################################################
-# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
-############################################################################################
-#  # DELETE /payments/1
-#  # DELETE /payments/1.xml
-#  def destroy
-#    @payment = Payment.find(params[:id])
-#    @payment.destroy
 
-#    respond_to do |format|
-#      format.html { redirect_to(payments_url) }
-#      format.xml  { head :ok }
-#    end
-#  end
+
+  def destroy
+    @payment = Payment.find(params[:id])
+    @payment.cancel
+
+    respond_to do |format|
+      format.html { redirect_to(payments_url) }
+      format.xml  { head :ok }
+    end
+  end
 end

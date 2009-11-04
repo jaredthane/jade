@@ -3,7 +3,7 @@
 
 <% content_for :actions do %>
 	<% if current_user.has_rights(['admin','compras','ventas','gerente']) %>
-		<dt><%= link_to 'Cambiar', edit_payment_path(@payment) %></dt>
+		<dt><%= link_to 'Anular', destroy_payment_path(@payment) %></dt>
 	<% end %>
 	<dt><%= link_to 'Facturar', order_receipts_path(@payment.order) %> </dt>		
 	<dt><%= link_to 'Lista de Pagos', payments_path %></dt>
