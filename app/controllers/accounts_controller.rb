@@ -34,7 +34,7 @@ class AccountsController < ApplicationController
   # GET /accounts/1.xml
   def show
     @account = Account.find(params[:id])
-		@myposts = @account.recent_posts(20)
+		@myposts = @account.recent_entries(20)
 
     respond_to do |format|
       format.html # show.html.erb

@@ -147,6 +147,43 @@ class Order < ActiveRecord::Base
 			end
 		end
 	end
+	#################################################################################################
+	# Returns a revision of a transaction with the Credit and Debit Posts Reversed
+	#################################################################################################
+	def reverse_transaction(t)
+		for p in t.posts
+			if p.post_type_id==Post::DEBIT
+				p.post_type_id=Post::CREDIT
+			else
+				p.post_type_id=Post::DEBIT
+			end
+		end
+		return t
+	end
+	##################################################################################################
+	# Marks order as null and does appropriate transactions in accounting.
+	#################################################################################################
+	def anull
+	  #you can't null an order if we received money for it.
+		return false if self.amount_paid != 0 
+		main=main_transaction
+		main.order=self
+		reverse_transaction(main).save()
+		i=inventory_transaction
+		if i
+			i.order=self
+			reverse_transaction(inventory_transaction).save()
+		end
+		self.deleted=1
+		for line in self.lines
+        line.isreceived_str = "No"
+    end
+    for receipt in self.receipts
+        receipt.deleted=User.current_user.today
+        receipt.save
+    end
+		return self.save()
+	end
 	##################################################################################################
 	# This function is to complement markreceived so we can set the received date on an order and its 
 	# lines but have the widget stay null by default
@@ -277,93 +314,6 @@ class Order < ActiveRecord::Base
 		@movements_to_create = [] if !@movements_to_create 
 		@movements_to_create.push(m)
 	end
-	
-  ###################################################################################
-  # Returns a collection of transactions that represent the initial transaction for the lines given
-  # The info returned from this function will be used to create the transactions if we are creating the order now
-  # If we are updating an order, a diff will be made between the output given based on before and after line collections
-  ##################################################################################
-#	def transactions_for_lines(lines)
-#	case order_type_id
-#    when 1 # Venta
-#      ##puts "self.total_price"+ self.total_price.inspect
-#      sale=Trans.new()
-#      results=[sale]
-#      sale.posts << Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)
-#      if self.total_tax != 0
-#      	sale.posts << Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>Post::CREDIT)
-#      end
-#      revenue_accts={}
-#      for line in self.lines
-#      	r=line.revenue_account(self).id
-#      	if revenue_accts[r]
-#      		revenue_accts[r] += line.total_price
-#      	else
-#      		revenue_accts[r] = line.total_price
-#      	end
-#      end
-#      revenue_accts.each { |key, value| 
-#      	acct= Account.find(key)
-#				sale.posts << Post.new(:account => acct, :value=>value, :post_type_id =>Post::CREDIT)
-#			}       
-#      inventory_cost = self.inventory_value
-#      if inventory_cost > 0
-#      	inventory = Trans.new()
-#		    inventory.posts << Post.new(:account => self.vendor.inventory_account, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
-#		    inventory.posts << Post.new(:account => self.vendor.expense_account, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
-#		    results << inventory
-#		  end
-#	  when 2 # Compra
-#	    ##puts self.vendor.cash_account.to_s
-#	    ##puts self.total_price_with_tax.to_s
-#	    purchase = Trans.new()
-#	    purchase.posts << Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
-#      purchase.posts << Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
-#      results = [purchase]
-#	  end
-#	  return results
-#	end
-#  ###################################################################################
-#  # creates posts for transactions but DOES NOT SAVE THEM
-#  ##################################################################################
-#	def prepare_transaction
-#	  case order_type_id
-#    when 1 # Venta
-#      ##puts "self.total_price"+ self.total_price.inspect
-#      @transactions_to_create=[]
-#      @transactions_to_create << [ Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)]
-#      if self.total_tax != 0
-#      	@transactions_to_create[0] << Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>Post::CREDIT)
-#      end
-#      
-#      revenue_accts={}
-#      for line in self.lines
-#      	r=line.revenue_account(self).id
-#      	if revenue_accts[r]
-#      		revenue_accts[r] += line.total_price
-#      	else
-#      		revenue_accts[r] = line.total_price
-#      	end
-#      end
-#      revenue_accts.each { |key, value| 
-#      	acct= Account.find(key)
-#				p = Post.new(:account => acct, :value=>value, :post_type_id =>Post::CREDIT, :balance => (acct.balance||0) + (value||0))
-#				@transactions_to_create[0] << p
-#			}       
-#      inventory_cost = self.inventory_value
-#      if inventory_cost > 0
-#		    inventory = Post.new(:account => self.vendor.inventory_account, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
-#		    expense = Post.new(:account => self.vendor.expense_account, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
-#		    @transactions_to_create<<[inventory,expense]
-#		  end
-#	  when 2 # Compra
-#	    ##puts self.vendor.cash_account.to_s
-#	    ##puts self.total_price_with_tax.to_s
-#	    vendor = Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
-#      client = Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
-#      @transactions_to_create = [[vendor, client]]	    
-#	  end
-#	end
 	def main_transaction
 		puts "Creating main transaction"
 		case order_type_id

@@ -335,26 +335,10 @@ class OrdersController < ApplicationController
   def destroy
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
-    #you can't null an order if we received money for it.
-    if @order.amount_paid != 0 
-        redirect_back_or_default('/orders')
-			flash[:error] = "No se puede anular un pedido hasta que el total de los pagos es cero"
-			return false
-    end
-    @order.deleted = 1
-    for line in @order.lines
-        line.isreceived_str = "No"
-    end
-    for receipt in @order.receipts
-        receipt.deleted=User.current_user.today
-        receipt.save
-    end
-    sucess = @order.save()
-
-
+    sucess=@order.anull
     respond_to do |format|
         if sucess
-          flash[:notice] = 'Pedido ha sido marcado como borrado exitosamente.'
+          flash[:notice] = 'Pedido ha sido anulado exitosamente.'
           format.html { redirect_to(@order) }
           format.xml  { head :ok }
         else

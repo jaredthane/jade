@@ -59,11 +59,11 @@
   </div>
   <% for p in @myposts %>
     <div class="table_row">
-      <div class="table_cell_10"><%= h p.trans.created_at.to_date %></div>
-    	<div class="table_cell_10"><%= h p.trans.id %></div>
+      <div class="table_cell_10"><%= h p.post.trans.created_at.to_date %></div>
+    	<div class="table_cell_10"><%= h p.post.trans.id %></div>
     	<div class="table_cell_10">
-    	  <% if p.trans.order %>
-    	    <%= link_to p.trans.order.id, p.trans.order %>
+    	  <% if p.post.trans.order %>
+    	    <%= link_to p.post.trans.order.id, p.post.trans.order %>
     	  <% end %>
     	</div>  
     	<div class="table_cell_25">
@@ -71,12 +71,12 @@
     	    <%= link_to p.account.name, p.account %>
     	  <% end %>
     	</div>
-    	<% if p.post_type_id==1 %>
-    	  <div class="table_cell_15"><%= h number_to_currency((p.value||0)) %></div>
+    	<% if p.post.post_type_id==1 %>
+    	  <div class="table_cell_15"><%= h number_to_currency((p.post.value||0)) %></div>
     	  <div class="table_cell_15"></div>
     	<% else %>
     	  <div class="table_cell_15"></div>
-    	  <div class="table_cell_15"><%= h number_to_currency((p.value||0)) %></div>
+    	  <div class="table_cell_15"><%= h number_to_currency((p.post.value||0)) %></div>
     	<% end %>
     	<div class="table_cell"><%= h number_to_currency((p.balance||0)) %></div>
     </div>

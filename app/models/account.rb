@@ -18,6 +18,7 @@ class Account < ActiveRecord::Base
 	belongs_to :parent, :class_name => "Account", :foreign_key => "parent_id"
 	belongs_to :entity
 	has_many :posts
+	has_many :entries, :order => "created_at DESC"
 	has_many :trans, :through => :posts
 	CREDIT = -1
 	DEBIT = 1
@@ -39,21 +40,11 @@ class Account < ActiveRecord::Base
 	  end
 	  return list
 	end
-	def all_posts
-	  c = 'account_id=' + self.id.to_s
-    for child in all_children
-    	c += ' OR account_id=' + child.id.to_s
-    end
-    list=Post.find(:all, :conditions=>c, :order=>'id DESC')
-	  return list
+	def all_entries
+	  return self.entries
 	end
-	def recent_posts(limit)
-	  c = 'account_id=' + self.id.to_s
-    for child in all_children
-    	c += ' OR account_id=' + child.id.to_s
-    end
-    list=Post.find(:all, :conditions=>c, :order=>'id DESC',:limit=>limit)
-	  return list
+	def recent_entries(limit)
+	  return self.entries.find(:all, :order=>'id DESC',:limit=>limit)
 	end
 	
 #	def all_posts
@@ -64,24 +55,13 @@ class Account < ActiveRecord::Base
 #	  return list
 #	end
 	def balance
-	  total=0
-  	total += simple_balance
-  	for child in children
-  	  total += child.balance
-  	end
-  	return total
-	end
-	def simple_balance
-		last=posts.find(:last, :order=>'created_at')
-	  if last
-	  	return last.balance
-	  else
-	  	return 0
-  	end
+		last=entries.find(:last, :order=>'created_at')
+		return last.balance if last 
+	  return 0
 	end
 	def transfer_balance_to(account)
 		trans = Trans.create(:created_at=>User.current_user.today)
-		amt=posts.last.balance
+		amt=self.balance
 		puts "amt="+amt.to_s
 		if account.modifier==1 and self.modifier==1
 			act1 = Post.create(:trans=>trans, :account => self, :value=>amt, :post_type_id =>Post::CREDIT)
@@ -94,10 +74,10 @@ class Account < ActiveRecord::Base
 	def recount_balances()
 #		balance=Post.last(:conditions=> ['date(trans.created_at) < :start AND posts.account_id=:account', {:start=>start.to_date.to_s('%Y-%m-%d'), :account=>self.id}],:joins=>'inner join trans on trans.id=posts.trans_id').balance
 		balance=0
-		for post in Post.find(:all, :conditions=>'account_id='+self.id.to_s, :order=>'created_at')
-			post.balance=balance+(post.value || 0)* (post.post_type_id || 0) * (post.account.modifier || 0)
-			balance=post.balance
-			post.save
+		for entry in self.entries
+			entry.balance=balance+(entry.post.value || 0)* (entry.post.post_type_id || 0) * (entry.account.modifier || 0)
+			balance=entry.balance
+			entry.save
 		end
 	end
 end

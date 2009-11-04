@@ -21,7 +21,7 @@ class Post < ActiveRecord::Base
   belongs_to :post_type
   belongs_to :trans
 	belongs_to :account
-	before_destroy :prepare_for_destroy
+	has_many :entries, :order => "created_at DESC", :dependent => :destroy
 	
 	CREDIT = -1
 	DEBIT = 1
@@ -31,62 +31,20 @@ class Post < ActiveRecord::Base
 		# Make value positive if its negative
 		logger.debug "making sure value is positive"
 		self.value = (self.value || 0 ) * -1 if (self.value || 0 ) < 0
-		# Calculate Balance
-		logger.debug "Calculate Balance"
-		calculate_balance
 		#Set created_at to match the Trans
 		logger.debug "Set created_at to match the Trans"
 		self.created_at=trans.created_at if trans
-		# If we're adding this post in the middle of the pile,
-		# We need to update the balance of all posts that happened after this new one.
-		logger.debug "checking for old posts"
-		if self.created_at
-			logger.debug "this is a new post and created at is pre-set"
-			recalculate_later_balances
-		end
 	end
-	def prepare_for_destroy
-		recalculate_later_balances(delete=true)
+	after_create :create_entries
+	def create_entries
+		next_account = self.account
+		while next_account
+			Entry.create(:post=>self, :account=>next_account,:created_at=>self.created_at)
+			next_account = next_account.parent
+		end
 	end
 	def opposite_type
 		return -1 if post_type==1
 		return 1
-	end
-	##################################################################################################
-	# Recalculates balances of all older posts
-	# Default is to prepare for a create
-	#################################################################################################	
-	def recalculate_later_balances(delete=false)
-		if delete 
-			mod=-1 
-		else
-			mod=1
-		end
-		if self.account
-			# *************** THIS SHOULD BE CHANGED TO A MYSQL UPDATE QUERY *******************************
-			for post in Post.find(:all, :conditions=> "account_id= " + self.account_id.to_s + " AND created_at>'" + self.trans.created_at.to_s(:db) + "'")
-				logger.debug 'POST WAS=' +post.value.to_s + ' * POST_TYPE=' + post.post_type_id.to_s + ' * MODIFIER='+post.account.modifier.to_s + '(BALANCE=' + post.balance.to_s + ')'
-				post.balance=post.balance + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0) * mod
-				logger.debug 'New POST=' + post.value.to_s + ' * POST_TYPE=' + post.post_type_id.to_s + ' * MODIFIER='+post.account.modifier.to_s + '(BALANCE=' + post.balance.to_s + ')'
-				post.save
-			end
-		end
-	end
-
-	##################################################################################################
-	# Calculates balance based on accounts current balance + this posts value
-	#################################################################################################	
-	def calculate_balance
-		# Now calculate the balance
-		mydate=(self.created_at||Time.now)
-#		logger.debug 'OLD BALANCE=' + self.account.simple_balance.to_s + '+ VALUE=' +self.value.to_s + ' * POST_TYPE=' + self.post_type_id.to_s + ' * MODIFIER='+self.account.modifier.to_s
-		last_post=Post.last(:conditions=> ['date(trans.created_at) < :mydate AND posts.account_id=:account', {:mydate=>mydate.to_date.to_s('%Y-%m-%d'), :account=>self.account_id}],:joins=>'inner join trans on trans.id=posts.trans_id')
-		if self.account
-			if last_post
-				self.balance=(last_post.balance || 0 ) + (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
-			else
-				self.balance=(self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
-			end
-		end
 	end
 end
