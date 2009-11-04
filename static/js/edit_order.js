@@ -20,11 +20,12 @@ function DoAjaxRequest(){
 function RequestSerial(e){
 	e.preventDefault();
 	var $el = $(e.target);
+	var $management = $el.closest('.serial_list_with_link').find('.serial_numbers').children("[name$='TOTAL_FORMS']")
 	$.ajax({
 			type: 'POST',
   		url: "/orders/new_serial/",
   		// TODO - make this specific to the line
-  		data:{num:$("#id_serialonline_set-TOTAL_FORMS").val()},
+  		data:{num: $management.val() },
   		success: function(data){
   			var d = $('<div/>').append(data)
   			$('.table_row', d).appendTo($el.closest('.serial_list_with_link').find('.serial_numbers')).hide().slideDown('slow');
@@ -32,7 +33,7 @@ function RequestSerial(e){
 //  			$('.table_row:last')
 //  		TODO add handler for deleting serial
 //			AddEventsToLine($('.simple-line'), $('.detailed-line'));
-  			IncrementFormCount($("#id_serialonline_set-TOTAL_FORMS"));
+  			IncrementFormCount($management);
   			// TODO Leave the new serial number field selected
   			$("#upc").select();
 			},

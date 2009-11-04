@@ -29,8 +29,8 @@
 	</div>
 	<div class="serial_list_with_link" style="display:none;">
 		<div class="serial_numbers" >
-			{{form.serial_formset.management_form}}
-			{% for serial_form in form.serial_formset.forms %}
+			{{form.serials_formset.management_form}}
+			{% for form in form.serials_formset.forms %}
 				{% include 'orders/edit_serial.html' %}
 			{% endfor %}
 		</div>

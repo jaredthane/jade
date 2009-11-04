@@ -112,4 +112,5 @@ INSTALLED_APPS = (
     'jade.inventory',
     'jade.entities',
     'jade.common',
+    'jade.tester',
 )

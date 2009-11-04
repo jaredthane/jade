@@ -5,7 +5,7 @@
 	{% edit_actions 'sale' _('Save Sale') _('Cancel') _('List Sales') obj %}
 {% endblock %}
 {% block includes %}
-	<script type="text/javascript" src="/static/js/edit_order.js"></script> 
+	<script type="text/javascript" src="/static/js/edit_order.js"></script>
 {% endblock %}
 {% block heading %}
 	{% if obj.pk %}
@@ -15,7 +15,7 @@
 	{% endif %}
 {% endblock %}
 {% block content %}
-	{{sale_form.errors}}
+	{{form.errors}}
 	{% if obj.pk %}
 		<input type="hidden" name="sale_id" value="{{obj.pk}}">
 		<form name="sale_form" method="post" action="{% url edit_sale obj.pk %}">
@@ -23,12 +23,12 @@
 		<form name="sale_form" method="post" action="{% url new_sale %}">
 	{% endif %}
 		<div class="column2-unit-left">
-			{% form_field sale_form.client _("Client") %}
-			{% form_field sale_form.number _("Reciept Number") %}
+			{% form_field form.client _("Client") %}
+			{% form_field form.number _("Reciept Number") %}
 		</div>
 		<div class="column2-unit-right">
-			{% form_field sale_form.site _("Site") %}
-			{% form_field sale_form.created_at _("Date Created") %}
+			{% form_field form.site _("Site") %}
+			{% form_field form.created_at _("Date Created") %}
 		</div>
 		<hr class="clear-contentunit"/>
 		<div id="tabs">
@@ -45,8 +45,8 @@
 					<div class="cell" style="width: 20%;"><div class="table_cell">{% trans "Delete" %}</div></div>
 				</div>
 				<div id="simple-lines">
-					{{formset.management_form}}
-					{% for form in formset.forms %}
+					{{form.lines_formset.management_form}}
+					{% for form in form.lines_formset.forms %}
 						{% include 'orders/edit_line_simple.html' %}
 					{% endfor %}
 				</div>
@@ -59,7 +59,7 @@
 					<div class="cell" style="width: 25%;"><div class="table_cell">{% trans "Received" %}</div></div>
 				</div>
 				<div id="detailed-lines">
-					{% for form in formset.forms %}
+					{% for form in form.lines_formset.forms %}
 						{% include 'orders/edit_line_details.html' %}
 					{% endfor %}
 				</div>
