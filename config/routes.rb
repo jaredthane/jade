@@ -23,8 +23,7 @@ ActionController::Routing::Routes.draw do |map|
   map.new_history 'entities/:id/new_history', :controller => 'entities', :action => 'new_history', :filter => ' tipo:cliente'
   map.create_history 'entities/:id/create_history', :controller => 'entities', :action => 'create_history', :filter => ' tipo:cliente'
   map.new_post 'posts/new', :controller => 'posts', :action => 'new', :format =>'js'
-  map.new_transaction 'transactions/new', :controller => 'trans', :action => 'new'
-  map.create_transaction 'transactions/create', :controller => 'trans', :action => 'create'
+  map.resources :trans
   map.consumidor_final_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>2, :format =>'pdf'
   map.credito_fiscal_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>5, :format =>'pdf'
   map.pay_off 'orders/:id/pay_off', :controller => 'orders', :action => 'pay_off'

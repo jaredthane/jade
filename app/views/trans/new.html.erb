@@ -7,12 +7,12 @@
 <% end %>
 
 <%= error_messages_for :trans %>
-<% form_tag create_transaction_url, :id => 'trans_form' do %>
+<% form_for(@trans, :url => { :action => 'create'}, :html => {:id => 'trans_form' }) do |f| %>
 <br />
 	<div class="column2-unit-left">
 		<p>
 			<b>Descripción</b>
-			<%= text_field_tag :comments, '', :class => 'field' %>
+			<%= f.text_field :comments, :class => 'field' %>
 		</p>
 	</div>
 	<div class="column2-unit-right">
@@ -25,7 +25,7 @@
 		  <div class="table_cell_25">Cuenta</div>
 		  <div class="table_cell_25">Tipo</div>
 		  <div class="table_cell_25">Valor</div>
-		  <div class="table_cell">Valor</div>
+		  <div class="table_cell">Acciones</div>
 	  </div>
 	<div id="posts">
 		<%= render :partial => 'post', :collection => @trans.posts %>

@@ -52,6 +52,24 @@ class TransController < ApplicationController
       format.xml  { render :xml => @trans }
     end
   end
+  
+  def edit
+    @trans = Trans.find(params[:id])
+  end
+  def update
+    @trans = Trans.find(params[:id])
+
+    respond_to do |format|
+      if @trans.update_attributes(params[:trans])
+        flash[:notice] = 'Transaccion ha sido actualizado exitosamente.'
+        format.html { redirect_to(tran_path(@trans)) }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @trans.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
   # GET /posts/new
   # GET /posts/new.xml
   def new_post

@@ -23,7 +23,11 @@ class Account < ActiveRecord::Base
 	CREDIT = -1
 	DEBIT = 1
 	def number_and_name
-		return (self.number||'') + " - " + (self.name||'')
+		if self.number!=''
+			return (self.number||'') + " - " + (self.name||'')
+		else
+			return (self.name||'')
+		end
 	end
 	def self.search(search, page)
   	paginate :per_page => 20, :page => page,

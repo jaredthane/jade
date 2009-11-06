@@ -1,21 +1,30 @@
-
+<% content_for :title do %>Transaccion #<%=h @trans.id %><% end %>
+<% content_for :actions do %>
+	<% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
+		<dt><%= link_to 'Nueva Transaccion', new_tran_path  %></dt>
+		<dt><%= link_to 'Cambiar Transaccion', edit_tran_path  %></dt>
+	<% end %>
+<% end %>
 <div class="column2-unit-left">
 	<p>
-		<b>Producto:</b>
-		<%=link_to @warranty.product.name, @warranty.product %>
-	</p>
-	<p>
-		<b>Duración en Meses:</b>
-		<%=h @warranty.months %>
+		<b>Descripción:</b>
+		<%=h @trans.comments %>
 	</p>
 </div>
 <div class="column2-unit-right">
-	<p>
-		<b>Precio:</b>
-		<%=h @warranty.price %>
-	</p>
+
 </div>
 <hr class="clear-contentunit" />
+<div class="table_header_row">
+  <div class="table_cell_40">Cuenta</div>
+  <div class="table_cell_30">Tipo</div>
+  <div class="table_cell">Valor</div>
+</div>
+<% for post in @trans.posts %>
+	<div class="table_row">
+		<div class="table_cell_40"><%= link_to post.account.number_and_name, post.account %></div>
+		<div class="table_cell_30"><%= h post.post_type.name %></div>
+		<div class="table_cell"><%= h number_to_currency((post.value||0)) %></div>
+	</div>
+<% end %>
 
-<%= link_to 'Cambiar', edit_warranty_path(@warranty), :class => 'action' %> |
-<%= link_to 'Lista', warranties_path, :class => 'action' %>
