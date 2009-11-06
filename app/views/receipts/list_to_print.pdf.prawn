@@ -1,5 +1,5 @@
 pdf.font_size = 20
-pdf.text "Lista de Facturas Hechas Hoy", :align => :center, :style => :bold
+pdf.text "Detalles de Facturas Hechas Hoy", :align => :center, :style => :bold
 pdf.font_size = 12
 pdf.table(@data,
    :font_size => 12,

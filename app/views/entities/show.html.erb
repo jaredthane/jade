@@ -13,16 +13,18 @@
 <% end %>
 <% content_for :actions do %>
 	<% if @entity.entity_type.id == 3 %>
-	    <dt><%= link_to 'Nuevo', new_site_path, :class => 'action' %></dt>
-	    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
+    <dt><%= link_to 'Nuevo', new_site_path, :class => 'action' %></dt>
+    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
 		<dt><%= link_to 'Compras Aqui', purchases_path, :class => 'action' %>  </dt>
 		<dt><%= link_to 'Ventas Aqui', sales_path, :class => 'action' %>  </dt>
-	    <dt><%= link_to 'Lista', sites_path, :class => 'action' %></dt>
+    <dt><%= link_to 'Lista', sites_path, :class => 'action' %></dt>
+    <dt><%= link_to 'Imprimir', entity_path(@entity, :format=>'pdf'), :class => 'action' %></dt>
 	<% end %>
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
 	    <dt><%= link_to 'Nuevo', new_client_path, :class => 'action' %></dt>
 	    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
 	    <dt><%= link_to 'Lista', clients_path, :class => 'action' %></dt>
+  	  <dt><%= link_to 'Imprimir', entity_path(@entity, :format=>'pdf'), :class => 'action' %></dt>
 	    <% if current_user.has_rights(['Ver Suscripciones']) %>
 	    	<dt><%= link_to 'Anadir Suscripcion', new_subscription_path(:client_id=>@entity.id), :class => 'action' %></dt>
 	    <% end %>
@@ -35,6 +37,7 @@
 	    <dt><%= link_to 'Nuevo', new_vendor_path, :class => 'action' %></dt>
 	    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
 	    <dt><%= link_to 'Lista', vendors_path, :class => 'action' %></dt>
+ 		  <dt><%= link_to 'Imprimir', entity_path(@entity, :format=>'pdf'), :class => 'action' %></dt>
 	<% end %>
 <% end %>
 
@@ -165,12 +168,6 @@
 		    <b>Cuenta para Cobrar</b><br />
 		    <% if @entity.cash_account %>
   		    <%=link_to @entity.cash_account.name, @entity.cash_account%>
-		    <% end %>
-		  </p>
-	    <p>
-		    <b>Cuenta para Recibir Pagos</b><br />
-		    <% if @entity.revenue_account %>
-  		    <%=link_to @entity.revenue_account.name, @entity.revenue_account%>
 		    <% end %>
 		  </p>
 	   <% end %>

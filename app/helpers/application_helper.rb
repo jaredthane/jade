@@ -103,4 +103,12 @@ module ApplicationHelper
   def get_serials_here(product_id, site_id = current_user.location.id)
     return Product.find(product_id).get_serials_here(site_id)
   end
+  def printline(text, value, x, y, height, pdf)
+		pdf.bounding_box [x,y], :width => 250 do
+			pdf.stroke_line([pdf.bounds.left,pdf.bounds.top-10,pdf.bounds.right,pdf.bounds.top-10])
+			pdf.text text, :style => :bold
+			pdf.text (value||'')
+		end
+	return y-height
+end
 end

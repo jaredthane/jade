@@ -63,7 +63,7 @@ class EntitiesController < ApplicationController
     @search += ' tipo:clientes asesor:'+ User.current_user.id.to_s
 #    puts "entity type = " + @entity_type
     @entities = Entity.search(@search, params[:page])
-    if @entities.length == 1
+    if @entities.length == 1    
 			@entity=@entities[0]
 			render :action => 'show'
 			return false
@@ -74,26 +74,7 @@ class EntitiesController < ApplicationController
       format.js
     end
 	end
-############################################################################################
-# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
-############################################################################################
-#	##################################################################################################
-#	# Processes subscriptions for all clients in current view and redirects to todays orders
-#	#################################################################################################
-#	def process_subscriptions
-#    return false if !allowed('clients')
-#    search = (params[:search]||'') + " activo:si tipo:clientes"
-#    logger.debug "my search->"+ search
-#  	@clients = Entity.search_without_pagination(search)
-#  	logger.debug @clients.inspect
-#  	for client in @clients
-#  		client.process_subscriptions()
-#  	end
-#    respond_to do |format|
-#      format.html { redirect_to(todays_sales_path) }
-#      format.xml  { render :xml => @subscription }
-#    end
-#  end
+
   ##################################################################################################
   # Displays end users assigned to user
   #################################################################################################
@@ -116,29 +97,6 @@ class EntitiesController < ApplicationController
       format.js
     end
 	end
-############################################################################################
-# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
-############################################################################################
-#	def process_subscriptions
-#		return false if !allowed('clients')
-#    search = (params[:search]||'') + "activo:si tipo:clientes"
-#    @entities = Entity.search_without_pagination(search)
-#    for entity in @entities
-#    	entity.process_subscriptions
-#    end
-#    respond_to do |format|
-#      format.html {
-#		    if @entities.length == 1
-#					@entity=@entities[0]
-#					redirect_to(entity_url(@entity.id))
-#					return false
-#				end
-#       }
-#      format.xml  { render :xml => @entities }
-#      format.js {logger.debug "Should be here" }
-#    end
-#	
-#	end
 def new_history
   @entity = Entity.find(params[:id])
   return false if !allowed('clients')
@@ -263,9 +221,25 @@ end
 			current_user.save
 			logger.debug "current_user.price_group_name_id=#{current_user.price_group_name_id.to_s}"
 		end
+		@entries=@entity.cash_account.recent_entries(20)
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @entity }
+      format.pdf { 
+      	@subs_table=[]
+      	for sub in @subs
+      		@subs_table<< [sub.product.name, sub.quantity, sub.price]
+      	end
+      	@entries_table=[]
+      	x = Object.new.extend(ActionView::Helpers::NumberHelper)
+      	for entry in @entries
+      		if entry.post.post_type_id==1
+      			@entries_table<< [entry.post.trans.created_at.to_date, entry.post.trans_id, entry.post.trans.order.id, x.number_to_currency((entry.post.value||0)),'',x.number_to_currency((entry.balance||0))]
+      		else
+      			@entries_table<< [entry.post.trans.created_at.to_date, entry.post.trans_id, entry.post.trans.order.id,'', x.number_to_currency((entry.post.value||0)),x.number_to_currency((entry.balance||0))]
+      		end
+      	end
+      }
     end
   end
   # GET /entities/1/movements
