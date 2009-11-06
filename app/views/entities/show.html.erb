@@ -300,7 +300,7 @@
   <% for entry in @entries %>
     <div class="table_row">
       <div class="table_cell_15"><%= h entry.post.trans.created_at.to_date %></div>
-    	<div class="table_cell_15"><%= link_to p.post.trans.id, show_transaction_path(entry.post.trans) %></div>
+    	<div class="table_cell_15"><%= link_to entry.post.trans.id, tran_path(entry.post.trans) %></div>
     	<div class="table_cell_15">
     	  <% if entry.post.trans.order %>
     	    <%= link_to entry.post.trans.order.id, entry.post.trans.order %>

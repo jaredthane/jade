@@ -1,6 +1,4 @@
-make show entity list recent account activity
-fix trans show
-change account name when entity name changes
+
 
 
 make so you can print any list
@@ -364,3 +362,6 @@ pay aheads
 logs with security
 accounts should automaticly get their modifier from their parent
 create page to edit preferences -- Replaced by envir.rb
+make show entity list recent account activity
+fix trans show
+change account name when entity name changes

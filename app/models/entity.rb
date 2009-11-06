@@ -93,6 +93,17 @@ class Entity < ActiveRecord::Base
 	validates_associated :movements
 	after_update :save_movements
   after_create :save_movements
+  
+  
+  before_update :update_account_name
+	def update_account_name
+		if self.entity_type_id!=3 and self.cash_account
+			if self.name!= self.cash_account.name
+				self.cash_account.name = self.name
+				self.cash_account.save
+			end
+		end
+	end
 	
 	belongs_to :entity_type
 	validates_presence_of(:entity_type, :message => "Debe seleccionar el tipo de entidad.")
