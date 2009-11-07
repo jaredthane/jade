@@ -306,7 +306,7 @@ end
     @entity = Entity.new(params[:entity])
     respond_to do |format|
       if @entity.save
-      	@entity.update_related_accounts_with_id()
+#      	@entity.update_related_accounts_with_id()
       	logger.debug "creating entity workd"
       	logger.debug "|" + params[:entity][:entity_type_id].to_s + "|"
       	if params[:entity][:entity_type_id] == '3'

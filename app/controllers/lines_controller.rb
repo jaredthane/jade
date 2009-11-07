@@ -14,6 +14,8 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class LinesController < ApplicationController
+	skip_before_filter :verify_authenticity_token
+
 	before_filter :login_required
 	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin | Ventas | Compras)' 
 
@@ -65,31 +67,25 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.xml
   def new
- 		puts 'creating new line'
-  	puts params[:line].inspect
-  	puts params[:line][:order_type_id]
-  	puts "---------"
-  	puts params[:line][:client_name]
-  	@order_type_id = params[:line][:order_type_id] || 0
+  	
+  	@order_type_id = params[:order_type_id] || 0
     if @order_type_id == 1
-    	@client=Entity.find_by_name(params[:line][:client_name])
+    	@client=Entity.find_by_name(params[:client_name])
     	if @client
 	    	current_user.price_group_name_id = @client.price_group_name_id
 	    end
     end
-	@lines=[]
-	add_product_or_combo(@lines, params[:line][:bar_code], 1, @order_type_id)
-	if @lines.length > 0
-		logger.debug "default received =" + current_user.default_received.to_s
-		respond_to do |wants|
-		  wants.html do
-		    redirect_to '/orders/' + @line.order_id.to_s + '/edit'
+		@lines=[]
+		add_product_or_combo(@lines, params[:bar_code], 1, @order_type_id)
+		puts "params[:format]=#{params[:format].to_s}"
+		if @lines.length == 0
+			puts "Rendering Error"
+		 	render :action => 'error'
+		else
+			respond_to do |wants|
+		    wants.js
 		  end
-		  wants.js
 		end
-	else
-	 	render :action => 'error'
-	end
   end
 
 	def make_shadow

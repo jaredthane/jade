@@ -2,6 +2,7 @@
 
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "discount_edit" %>
+  <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
@@ -10,6 +11,7 @@
 			<dt> <%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
 		<% end %>
   <% end %>
+  <dt><%= link_to_function 'Guardar', 'submit("discount_form")', :class => 'action' %></dt>
   <% if mode == 'edit' %>
       <dt> <%= link_to 'Cancelar', edit_discount_path(@discount), :class => 'action' %> </dt>
       <dt><%= link_to 'Lista de Descuentos', discounts_path, :class => 'action' %></dt>
@@ -41,10 +43,10 @@
 	</div>
 	<div class="column2-unit-right">
 		
-	<p>
-	  <b>Codigo UPC</b><br />
-	  <%= f.text_field :upc, :class => 'field' %>
-	</p>
+		<p>
+			<b>Codigo UPC</b><br />
+			<%= f.text_field :upc, :class => 'field' %>
+		</p>
 
 		 <p>
 		  <b>Precio Relativo</b><br />

@@ -1,3 +1,5 @@
+<%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
+
 
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "order_edit" %>
@@ -13,15 +15,13 @@
 
 <%= error_messages_for :order, :header_message => "Surgieron los siguentes dificultades guardando los cambios al pedido:", :message => "" %>
 
-<%= f.hidden_field :order_type_id, :value => @order_type_id %>
+<%= f.hidden_field :order_type_id, :value => @order_type_id, :id=>'order_type_id' %>
 <% case order_type_id
 	when 2 %>
 		<div class="column3-unit-left">
 			<p>
 				<b>Proveedor</b><br />
-				<%= text_field_with_auto_complete :order, :vendor_name, 
-									{:class => 'field', :size=>20 }, 
-									{:url => '/vendors.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+				<%= f.text_field :client_name, :class=> 'lookup field', :id => 'vendor_lookup',:style=>'width:168px;' %>
 			</p>
 			<%= f.hidden_field :client_id, :value => current_user.location.id %>
 		</div>
@@ -29,16 +29,15 @@
 		<div class="column3-unit-left">
 			<p>
 				<b>Cliente</b><br />
-				<%= text_field_with_auto_complete :order, :client_name, 
-									{:class => 'field', :size=>20, :onblur=>'set_client_name(value)' }, 
-									{:url => '/clients.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+				<%= f.text_field :client_name, :class=> 'lookup field', :id => 'client_lookup',:style=>'width:168px;' %>
 			</p>
 			<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 		</div>
 		<div class="column3-unit-middle">
 			<p>
 				<b>Fecha Recibido</b>
-			<%= calendar_date_select "order", :markreceived, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+				<%= f.text_field :client_name, :class=> 'field', :id => 'datepicker',:style=>'width:168px;' %>
+
 			</p>
 		</div>
 	<% when 3 %>
@@ -48,17 +47,14 @@
 		<div class="column3-unit-left">
 			<p>
 				<b>Proveedor</b><br />
-				<%= text_field_with_auto_complete :order, :vendor_name, 
-									{:class => 'field', :size=>20 }, 
-									{:url => '/vendors.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+				<%= f.text_field :client_name, :class=> 'lookup field', :id => 'vendor_lookup',:style=>'width:168px;' %>
+
 			</p>
 		</div>
 		<div class="column3-unit-middle">
 			<p>
 				<b>Cliente</b><br />
-				<%= text_field_with_auto_complete :order, :client_name, 
-									{:class => 'field', :size=>20 }, 
-									{:url => '/clients.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+				<%= f.text_field :client_name, :class=> 'lookup field', :id => 'client_lookup',:style=>'width:168px;' %>
 			</p>
 		</div>16
 <% end %>
@@ -66,7 +62,7 @@
 <div class="column3-unit-right">
 	<p>
 		<b>Fecha de Pedido</b><br />
-		<%= calendar_date_select "order", :created_at, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+		<%= f.text_field :client_name, :class=> 'field', :id => 'datepicker',:style=>'width:168px;' %>
 	</p>
 	<%= f.hidden_field :user_id, :value => current_user.id %>
 </div>

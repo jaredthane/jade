@@ -1,1 +1,3 @@
-<%= auto_complete_result @entities, :name %>
+<% for entity in @entities %>
+	<%= entity.name %>
+<% end %>

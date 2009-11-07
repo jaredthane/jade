@@ -26,7 +26,7 @@
 				<% end %>
 					<div class="table_cell_15"><%= line_form.collection_select(:warranty_months, line.product.warranties, :id, :months) %></div>
 				
-				<div class="table_cell"><%= link_to_function "Remover", "$(this).up().up().remove()" %></div>
+				<div class="table_cell"><%= link_to_function "Remover", '$(this).closest(".line").slideUp("slow",DeleteHiddenLines);' %></div>
 		</div>
   <% end %>
 </div>

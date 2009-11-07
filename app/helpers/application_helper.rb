@@ -111,4 +111,10 @@ module ApplicationHelper
 		end
 		return y-height
 	end
+	def js_list(entries, field, phrase = nil)
+    return unless entries
+    items = entries.map { |entry| phrase ? highlight(entry[field], phrase) : h(entry[field])+"|" }
+    return items.to_s.chop
+  end
+
 end

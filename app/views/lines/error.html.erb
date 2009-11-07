@@ -1,4 +1,4 @@
-
+<%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 <div class="line">
 	<%= error_messages_for :line %>
 	<div class="table_row">

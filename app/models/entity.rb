@@ -165,9 +165,9 @@ class Entity < ActiveRecord::Base
 			self.employee_accounts_group = create_account(EMPLOYEE_ACCOUNTS_GROUP_PREFIX, 			EMPLOYEE_ACCOUNTS_GROUP_SUFFIX, 		EMPLOYEE_ACCOUNTS_GROUP_PARENT_ID) if !self.employee_accounts_group
 			self.client_accounts_group = create_account(CLIENT_ACCOUNTS_GROUP_PREFIX, 				CLIENT_ACCOUNTS_GROUP_SUFFIX, 			CLIENT_ACCOUNTS_GROUP_PARENT_ID) if !self.client_accounts_group
 		when (2 or 5) # Client
-			self.cash_account = create_account(NEW_CLIENT_ACCOUNT_PREFIX, NEW_CLIENT_ACCOUNT_SUFFIX, self.site.client_accounts_group_id) if !self.cash_account_id			
+			self.cash_account = create_account(NEW_CLIENT_ACCOUNT_PREFIX, NEW_CLIENT_ACCOUNT_SUFFIX, User.current_user.location.client_accounts_group_id) if !self.cash_account_id			
 		when 1 # Vendor
-			self.cash_account = create_account(NEW_VENDOR_ACCOUNT_PREFIX, NEW_VENDOR_ACCOUNT_SUFFIX, self.site.vendor_accounts_group_id) if !self.cash_account_id			
+			self.cash_account = create_account(NEW_VENDOR_ACCOUNT_PREFIX, NEW_VENDOR_ACCOUNT_SUFFIX, User.current_user.location.vendor_accounts_group_id) if !self.cash_account_id			
 		end
 	end
 	after_create :update_accounts_with_my_id
@@ -184,8 +184,10 @@ class Entity < ActiveRecord::Base
 			self.inventory_account.entity=self
 			self.inventory_account.save()
 		else
-			self.cash_account.entity=self
-			self.cash_account.save()
+			if self.cash_account
+				self.cash_account.entity=self
+				self.cash_account.save()
+			end
   	end
   end 
   def products_to_order
@@ -332,23 +334,6 @@ class Entity < ActiveRecord::Base
   	logger.debug "condition10="+condition
   	return condition
   end
-  def update_related_accounts_with_id()
-  	if self.entity_type_id==3
-			self.cash_account.entity=self
-			self.cash_account.save()
-			self.expense_account.entity=self
-			self.expense_account.save()
-			self.revenue_account.entity=self
-			self.revenue_account.save()
-			self.tax_account.entity=self
-			self.tax_account.save()
-			self.inventory_account.entity=self
-			self.inventory_account.save()
-		else
-			self.cash_account.entity=self
-			self.cash_account.save()
-  	end
-  end 
   def self.search(search, page)
   	search = search || ""
   	logger.debug "search="+ search
