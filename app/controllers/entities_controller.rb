@@ -227,9 +227,11 @@ end
       format.xml  { render :xml => @entity }
       format.pdf { 
       	@subs_table=[]
-      	for sub in @subs
-      		@subs_table<< [sub.product.name, sub.quantity, sub.price]
-      	end
+      	if @subs
+		    	for sub in @subs
+		    		@subs_table<< [sub.product.name, sub.quantity, sub.price]
+		    	end
+		    end
       	@entries_table=[]
       	x = Object.new.extend(ActionView::Helpers::NumberHelper)
       	for entry in @entries

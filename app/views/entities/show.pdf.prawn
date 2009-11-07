@@ -1,19 +1,21 @@
 pdf.font_size = 20
 if @entity.entity_type.id == 2 or @entity.entity_type.id == 5
 	pdf.text "Detalles de " + @entity.name, :align => :center, :style => :bold
-	pdf.text "Cliente Numero" + @entity.id.to_s, :align => :center
+	pdf.text "Cliente Numero " + @entity.id.to_s, :align => :center
 elsif @entity.entity_type.id == 3
 	pdf.text "Detalles de " + @entity.name, :align => :center, :style => :bold
-	pdf.text "Sitio Numero" + @entity.id.to_s, :align => :center
+	pdf.text "Sitio Numero " + @entity.id.to_s, :align => :center
 elsif @entity.entity_type.id == 1
 	pdf.text "Detalles de " + @entity.name, :align => :center, :style => :bold
-	pdf.text "Proveedor Numero" + @entity.id.to_s, :align => :center
+	pdf.text "Proveedor Numero " + @entity.id.to_s, :align => :center
 end
 pdf.move_down 40
 current_line=675
 pdf.font_size = 12
 if @entity.entity_type.id == 2 or @entity.entity_type.id == 5
-	current_line=printline("Fecha de Nacimiento: ", @entity.birth.to_date.to_s, 0, current_line,35,pdf)
+	if @entity.birth
+		current_line=printline("Fecha de Nacimiento: ", @entity.birth.to_date.to_s, 0, current_line,35,pdf)
+	end
 end
 if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1
 	current_line=printline("Direccion: ", @entity.address, 0, current_line,65,pdf)
@@ -65,7 +67,7 @@ if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_
 	end
 end
 pdf.move_down 60
-if @subs_table
+if @subs_table.length>0
 	pdf.font_size = 14
 	pdf.text "Suscripciones", :style => :bold
 	pdf.table(@subs_table,
@@ -79,7 +81,7 @@ if @subs_table
 		 :align => { 0 => :center,1 => :center, 2 => :center})
 end
 pdf.move_down 30
-if @entries_table
+if @entries_table.length>0
 	pdf.font_size = 14
 	pdf.text "Transacciones recientes", :style => :bold
 	pdf.table(@entries_table,
