@@ -21,7 +21,7 @@
 		<div class="column3-unit-left">
 			<p>
 				<b>Proveedor</b><br />
-				<%= f.text_field :client_name, :class=> 'lookup field', :id => 'vendor_lookup',:style=>'width:168px;' %>
+				<%= f.text_field :vendor_name, :class=> 'lookup field', :id => 'vendor_lookup',:style=>'width:168px;' %>
 			</p>
 			<%= f.hidden_field :client_id, :value => current_user.location.id %>
 		</div>
@@ -36,7 +36,7 @@
 		<div class="column3-unit-middle">
 			<p>
 				<b>Fecha Recibido</b>
-				<%= f.text_field :client_name, :class=> 'field', :id => 'datepicker',:style=>'width:168px;' %>
+				<%= f.text_field :markreceived, :class=> 'field datepicker', :id => 'received_date_picker',:style=>'width:168px;' %>
 
 			</p>
 		</div>
@@ -47,7 +47,7 @@
 		<div class="column3-unit-left">
 			<p>
 				<b>Proveedor</b><br />
-				<%= f.text_field :client_name, :class=> 'lookup field', :id => 'vendor_lookup',:style=>'width:168px;' %>
+				<%= f.text_field :vendor_name, :class=> 'lookup field', :id => 'vendor_lookup',:style=>'width:168px;' %>
 
 			</p>
 		</div>
@@ -62,7 +62,7 @@
 <div class="column3-unit-right">
 	<p>
 		<b>Fecha de Pedido</b><br />
-		<%= f.text_field :client_name, :class=> 'field', :id => 'datepicker',:style=>'width:168px;' %>
+		<%= f.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>
 	</p>
 	<%= f.hidden_field :user_id, :value => current_user.id %>
 </div>
