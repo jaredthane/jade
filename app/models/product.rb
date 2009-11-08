@@ -50,7 +50,26 @@ class Product < ActiveRecord::Base
 	validates_presence_of(:name, :message => "debe ser valido.")
 	validates_uniqueness_of(:name, :message => "debe ser único.") 
 	validates_uniqueness_of(:upc, :message => "debe ser único.") 
-
+	before_save :create_barcode
+	def isnumeric?(s)
+		return s =~ /\A\d+\Z/
+	end
+	def create_barcode
+#		self.upc=self.upc.tr('^0-9a-zA-Z-_','')
+		%x[rm 'public/barcodes/#{self.upc}.png']
+		if self.upc.length==12 and isnumeric?(self.upc)
+			puts "bar code is UPC"
+			%x[barcode -b '#{self.upc}' -e upc -o 'public/barcodes/#{self.upc}.ps']
+		else
+			puts "bar code is not UPC"
+			%x[barcode -b '#{self.upc}' -o 'public/barcodes/#{self.upc}.ps']
+		end
+		%x[convert -trim 'public/barcodes/#{self.upc}.ps' 'public/barcodes/#{self.upc}.png']
+		%x[rm 'public/barcodes/#{self.upc}.ps']
+	end
+	def barcode_filename
+		return "/barcodes/" + self.upc + ".png"
+	end
 	def category_name
  		product_category.name if product_category
 	end

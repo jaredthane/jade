@@ -3,6 +3,7 @@
 	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
 		<dt><%= link_to 'Nuevo producto', new_product_path, :class => 'action' %></dt>
 		<dt><%= link_to 'Cambiar', edit_product_path(@product), :class =>'action' %> </dt>		
+		<dt><%= link_to 'Codigo de Barra', show_barcode_path(@product), :class =>'action' %> </dt>		
 		<dt><%= link_to 'Cambiar Precio', :controller => "prices",:action => "index", :search => @product.upc, :class =>'action' %> </dt>
 
   <% end %>
@@ -10,8 +11,8 @@
 <% end %>
 <h2>
 <% form_for :user, @current_user, :html => {:id => 'scope_form' }, :url => update_scope_url do |u| %>
-  Con precios del grupo: <%= u.collection_select (:price_group_name_id, get_price_group_names, :id, :name, {}, {:onchange=>'submit("scope_form")'} )%>
-  En :                   <%= u.collection_select (:location_id, get_locations, :id, :name,  {}, {:onchange=>'submit("scope_form")'})%>
+  Con precios del grupo: <%= u.collection_select(:price_group_name_id, get_price_group_names, :id, :name, {}, {:onchange=>'submit("scope_form")'} )%>
+  En :                   <%= u.collection_select(:location_id, get_locations, :id, :name,  {}, {:onchange=>'submit("scope_form")'})%>
   <%= hidden_field_tag :redirect_url, request.request_uri %>
 <% end %>
 </h2>
@@ -27,6 +28,10 @@
     <b>Minimo</b><br />
     <%=h @product.min(current_user.location_id) %>
   </p>
+	<p>
+	  <b>Costo Actual</b><br />
+	    <%=h number_to_currency(@product.cost) %>
+	</p>
 	<p>
     <b>Se Usa numero de Serie</b><br />
     <% if @product.serialized %>
@@ -49,7 +54,10 @@
     <b>Maximo</b><br />
     <%=h @product.max(current_user.location_id) %>
   </p>
-
+	<p>
+	  <b>Costo por Defualt</b><br />
+	  <%= h number_to_currency(@product.default_cost) %>
+	</p>
 	<p>
     <b>Categoría</b><br />
     <% if @product.product_category %>
@@ -66,18 +74,10 @@
 	<% end %>
 </div>
 <div class="column3-unit-right">
-	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
 	
+	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>	
+		<%= link_to( image_tag(@product.barcode_filename, :style=>'border:none;'), show_barcode_url(@product) ) %>
 
-		<p>
-		  <b>Costo Actual</b><br />
-		    <%=h number_to_currency(@product.cost) %>
-		</p>
-		<p>
-		  <b>Costo por Defualt</b><br />
-		  <%= h number_to_currency(@product.default_cost) %>
-		</p>
-		
 	<% end %>
 	<p>
     <b>Unidad</b><br />

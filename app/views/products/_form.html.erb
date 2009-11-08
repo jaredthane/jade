@@ -47,9 +47,7 @@
 	</div>
 	<div class="column2-unit-right">
 		<p><b>Proveedor</b><br />
-			<%= text_field_with_auto_complete :product, :vendor_name, 
-					{:class => 'field', :size=>30 }, 
-					{:url => '/vendors.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+			<%= f.text_field :vendor_name, :class=> 'lookup field', :id => 'vendor_lookup',:style=>'width:168px;' %>
 		</p>
 		 <p>
 		  <b>Precio Relativo (x)</b><br />
@@ -85,22 +83,20 @@
 	<div class="column3-unit-left">
 	<p>
 		  <b>Minimo</b><br />
-		  <%= f.text_field :min, :class => 'field', :size=>10 %>
+		  <%= f.text_field :min, :class => 'field',:style=>'width:100px;' %>
 		</p>
 	</div>
 	<div class="column3-unit-middle">
 		<p>
 		  <b>Maximo</b><br />
-		  <%= f.text_field :max, :class => 'field', :size=>10 %>
+		  <%= f.text_field :max, :class => 'field',:style=>'width:100px;' %>
 		</p>
 	</div>
 	<% if mode == 'new' %>
 	<div class="column3-unit-right">
 	<p>
 	  <b>Unidad</b><br />
-	  <%= text_field_with_auto_complete :product, :unit_name, 
-	  				{:class => 'field', :size=>10 }, 
-	  				{:url => formatted_units_path(:js), :skip_style=>1, :method => :get, :param_name => 'search' } %>
+		<%= f.text_field :unit_name, :class=> 'lookup field', :id => 'unit_lookup',:style=>'width:100px;' %>
 	</p>
 
 	</div>

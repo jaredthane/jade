@@ -1,0 +1,46 @@
+Create a new site
+	make sure accounts are created correctly
+Vendors
+	Create a vendor
+	Edit the vendor
+	list vendors
+Clients
+	Create a consumidor final client
+	Create a credito fiscal client
+	list clients
+	search for consumidor finals
+	search for credito fiscals	
+Products
+	Create a product
+	Change price on product
+	create a serialized product
+	set the min/max on both to 5,5
+Purchases
+	Purchase a 5 of each product with a price
+	Check cost on each product
+	Edit  and save the purchase
+Discounts
+	Setup a discount on one of the products like 2 for 1
+Combos
+	Setup a combo that includes both products
+Warranty
+	Setup a warranty for the serialized product
+Sales
+	Sell both products to both clients 
+	and qualify for the discount 
+	and include the combo
+	Edit the sale and add a warranty
+	check the totals
+	make sure you can open up the receipt
+Reordering
+	Go to redordering and let the system recommend values
+Subscriptions
+	Create a subscription for a client
+	create an order for the subscription from the clients page
+	check the receipt
+Payments
+	manually make a payment for one order
+	go to the other client and under unpaid orders click mark as paid
+Reports
+	get account statement for both clients
+

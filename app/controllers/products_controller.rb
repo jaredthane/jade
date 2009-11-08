@@ -51,6 +51,10 @@ class ProductsController < ApplicationController
       format.js
     end
   end
+  def show_barcode
+  	@product = Product.find(params[:id])
+  	render :layout => false
+  end
 	def price_list
 		@products = Product.search_all_wo_pagination(params[:search], params[:page])
 		@data=[]
