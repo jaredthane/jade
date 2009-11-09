@@ -107,8 +107,8 @@
 					<li><a href="/purchases/new" title="Compra">Compra</a></li>
 					<li><a href="/products/new" title="Producto">Producto</a></li>
 					<li><a href="/discounts/new" title="Descuento">Descuento</a></li>
-					<li><a href="/combos/new" title="Combo">Combo</a></li>
-					<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
+					<li><a href="<%= new_combo_url %>" title="Combo">Combo</a></li>
+					<li><a href="<%= new_vendor_url %>" title="Proveedor">Proveedor</a></li>
 					<% if current_user.has_rights(['Ver Suscripciones']) %>
 						<li><a href=<%= new_subscription_url %> title="Suscripción">Suscripción</a></li>
 					<% end %>

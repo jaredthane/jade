@@ -10,10 +10,14 @@
 		<dt><%= link_to_function 'Guardar', 'submit("combo_form")', :class => 'action' %></dt>
 		<% if mode == 'edit' %>
 			<dt> <%= link_to 'Remover', :class => 'action', :controller => "combos", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
+			<dt> <%= link_to 'Cancelar', combo_url(@combo), :class => 'action' %> </dt>
+			<dt><%= link_to 'Lista', combos_path, :class => 'action' %></dt> 
+		<% else %>
+			<dt> <%= link_to 'Cancelar', combos_path, :class => 'action' %> </dt>
 		<% end %>
   <% end %>
-  <dt><%= link_to 'Lista', combos_path, :class => 'action' %></dt>  
-  <dt> <%= link_to 'Cancelar', combo_path(@combo), :class => 'action' %> </dt>
+   
+  
 <% end %>
 <%= error_messages_for :combo %>
 		
