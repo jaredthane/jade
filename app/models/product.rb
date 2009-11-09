@@ -60,7 +60,8 @@ class Product < ActiveRecord::Base
 		require "open3"
 		system("rm 'public/barcodes/#{self.upc}.png'")
 		stdin, stdout, stderr = Open3.popen3("barcode -b '#{self.upc}' -e upc -o 'public/barcodes/#{self.upc}.ps'")
-		if stderr.gets.include?("can't encode")
+		err=(stderr.gets||'')
+		if err.include?("can't encode")
 			system("barcode -b '#{self.upc}' -o 'public/barcodes/#{self.upc}.ps'")
 		end
 		system("convert -trim 'public/barcodes/#{self.upc}.ps' 'public/barcodes/#{self.upc}.png'")
