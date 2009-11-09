@@ -49,7 +49,12 @@ class PricesController < ApplicationController
 			@price.fixed = attributes[1][:fixed]
 			@price.relative = attributes[1][:relative]
 			logger.debug "About to set available <============================================="
-			@price.available_str = attributes[1][:available_str]
+#			@price.available_str = attributes[1][:available_str]
+			if !attributes[1][:available]
+				@price.available=false
+			else
+				@price.available=true
+			end
 			logger.debug "@price.available_str=#{@price.available_str.to_s}"
 			success=false if !@price.save
 			@price = Price.find(attributes[0])

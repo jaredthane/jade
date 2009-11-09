@@ -9,8 +9,11 @@
 				<div class="table_cell_10"><%= h number_to_currency((line.fixed||0) + (line.relative||0) * (line.product.cost||0)) %></div>
 				<div class="table_cell_10"><%= line_form.text_field :fixed, :class => 'field' %></div>
 				<div class="table_cell_10"><%= line_form.text_field :relative, :class => 'field' %></div>
-				<div class="table_cell"><%= line_form.text_field :available_str, :class => 'field' %></div>
-
+				<% if line.available %>
+					<div class="table_cell"><input id="available" type="checkbox" name="prices[<%= line.id %>][available]" checked="true"/></div>
+				<% else %>
+					<div class="table_cell"><input id="available" type="checkbox" name="prices[<%= line.id %>][available]"/></div>
+				<% end %>
 		<%= line_form.hidden_field :id %>
 		</div>
   <% end %>
