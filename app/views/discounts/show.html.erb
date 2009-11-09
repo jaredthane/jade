@@ -64,12 +64,23 @@
 	<div>
 		<div class="table_header_row">
 			<div class="table_cell_80">Locacion</div>
-			<div class="table_cell">Cantidad </div>
+			<div class="table_cell">Disponible </div>
 		</div>
 		<% for location in get_locations %>
 			<div class="table_row">
 				<div class="table_cell_80"><%=link_to location.name, :controller => "movements", :search => @discount.upc %></div>
-				<div class="table_cell"><%=h location.inventory(@discount) %></div>
+				<div class="table_cell">
+					<%= puts location.price_groups.inspect %>
+					<% if location.price_groups.find_by_price_group_name_id(User.current_user.price_group_name.id) %>
+						<% if @discount.available(location.price_groups.find_by_price_group_name_id(User.current_user.price_group_name.id))%>
+							Si
+						<% else %>
+							No
+						<% end %>
+					<% else %>
+							No
+					<% end %>
+				</div>
 			</div>
 		<% end %>
 	</div>

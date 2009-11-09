@@ -593,22 +593,22 @@ class Order < ActiveRecord::Base
 	# Returns the number of times an order qualifies for a discount or 0 if it does not
 	###################################################################################
   def discount_qualifies(discount)
-  	@qualify=10000
+  	qualify=9999999
 	  #Check if we have enough of each product
 	  for req in discount.requirements do        
-		  @wehave = get_sum(req.required)
-		  @weneed = req.quantity
-		  # ##puts "@wehave ->" + @wehave.to_s + "<-"
-		  # ##puts "@weneed ->" + @weneed.to_s + "<-"
-		  @temp = @wehave / @weneed
+		  wehave = get_sum(req.required)
+		  weneed = req.quantity
+		   puts "wehave ->" + wehave.to_s + "<-"
+		   puts "weneed ->" + weneed.to_s + "<-"
+		  temp = wehave / weneed
 		
-		  # ##puts "@temp ->" + @temp.to_s + "<-"
-		  # ##puts "@qualify ->" + @qualify.to_s + "<-"
-		  @qualify= [@qualify, @temp].min
-		  # ##puts "@qualify ->" + @qualify.to_s + "<-"
+		   puts "temp ->" + temp.to_s + "<-"
+		   puts "qualify ->" + qualify.to_s + "<-"
+		  qualify= [qualify, temp].min
+		  # ##puts "qualify ->" + qualify.to_s + "<-"
 	  end #req in discount.requirements
-	  return nil if @qualify == 10000
-    return @qualify
+	  return 0 if qualify == 9999999
+    return qualify
   end
 	
   ###################################################################################
@@ -645,7 +645,8 @@ class Order < ActiveRecord::Base
 					# make sure the discount is available in this site
 					if discount.available
 						puts discount.name + "available" 
-						@qualify = self.discount_qualifies(discount)
+						puts "discount_qualifies(discount)=#{discount_qualifies(discount).to_s}"
+						@qualify = discount_qualifies(discount)
 						#If the order qualifies, add it.
 						if @qualify >= 1			                     		
 							puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
