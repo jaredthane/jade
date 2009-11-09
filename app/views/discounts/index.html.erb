@@ -15,14 +15,13 @@
     <div class="table_cell_30">Discuento</div>
     <div class="table_cell">Upc</div>
   </div>
-
-<% for discount in @discounts %>
-  <div class="table_row">
-    <div class="table_cell_30"><%= link_to discount.name[0..25], discount_path(discount) %></div>
-    <div class="table_cell_30"><%=h number_to_currency(discount.price) %></div>
-    <div class="table_cell"><%=h discount.show_upc %></div>
-   </div>
-<% end %>
+	<% for discount in @discounts %>
+		<div class="table_row">
+		  <div class="table_cell_30"><%= link_to discount.name[0..25], discount_path(discount) %></div>
+		  <div class="table_cell_30"><%=h number_to_currency(discount.price) %></div>
+		  <div class="table_cell"><%=h discount.show_upc %></div>
+		</div>
+	<% end %>
 </div>
 
 <br />

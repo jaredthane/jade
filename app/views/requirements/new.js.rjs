@@ -1,3 +1,0 @@
-page.replace_html 'requirements_errors', ""
-page.insert_html :bottom, :requirements, :partial => 'discounts/requirement', :object => @requirement
-page.select(".serial").last.focus()

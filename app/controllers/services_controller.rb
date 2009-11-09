@@ -70,10 +70,6 @@ class ServicesController < ApplicationController
   # POST /services.xml
   def create
     @service = Product.new(params[:service])
-    for e in Entity.find_all_by_entity_type_id(3)
-    	i=Inventory.new(:entity=>e, :service=>@service, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
-    	i.save
-    end
     respond_to do |format|
       if @service.save
       	@service.update_attributes(params[:service])

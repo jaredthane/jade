@@ -56,7 +56,7 @@ class WarrantiesController < ApplicationController
   # POST /warranties.xml
   def create
     @warranty = Warranty.new(params[:warranty])
-
+    @warranty.create_inventories(params[:product][:default_cost])
     respond_to do |format|
       if @warranty.save
         flash[:notice] = 'Garantía ha sido creado exitosamente.'

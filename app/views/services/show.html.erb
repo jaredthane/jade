@@ -26,16 +26,16 @@
       <%=h number_to_currency(@service.price) %>
   </p>
 
-	
-</div>
-<div class="column3-unit-right">
 	<% if current_user.has_rights(['admin','compras','gerente']) %>
 		<p>
 		  <b>Costo</b><br />
 		    <%=h number_to_currency(@service.cost) %>
 		</p>
 	<% end %>
-
+	
+</div>
+<div class="column3-unit-right">
+	<%= link_to( image_tag(@service.barcode_filename, :style=>'border:none;'), show_barcode_url(@service) ) %>
 </div>
 <hr class="clear-contentunit" />
 <p>

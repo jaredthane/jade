@@ -11,6 +11,19 @@
 <% end %>
 <%= error_messages_for :service %>
 
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#upc").keydown(function(e){
+			if (e.keyCode == 13) {
+				e.preventDefault();
+				return false;
+			}
+		});
+		$("#category_lookup").autocomplete("/categories.js"); 
+		$("#unit_lookup").autocomplete("/units.js"); 
+	});
+</script>
+
 <% form_for(@service, :html => {:id => 'service_form' }) do |f| %>
 	<%= f.hidden_field :vendor_id, :value => 4 %>
 	<div class="column2-unit-left">
@@ -26,9 +39,7 @@
 	</div>
 	<div class="column2-unit-right">
 		<p><b>Categoría</b><br />
-			<%= text_field_with_auto_complete :product, :category_name, 
-					{:class => 'field', :size=>30 }, 
-					{:url => '/product_categories.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+	  <%= f.text_field :category_name, :class=> 'lookup field', :id => 'category_lookup',:style=>'width:247px;' %>
 		</p>
 		<p>
 			<b>Codigo UPC</b><br />
@@ -37,9 +48,7 @@
 			<% if mode == 'new' %>
 	<p>
 	  <b>Unidad</b><br />
-	  <%= text_field_with_auto_complete :product, :unit_name, 
-	  				{:class => 'field', :size=>10 }, 
-	  				{:url => formatted_units_path(:js), :skip_style=>1, :method => :get, :param_name => 'search' } %>
+	  <%= f.text_field :unit_name, :class=> 'lookup field', :id => 'unit_lookup',:style=>'width:100px;' %>
 	</p>
 	<% end %>
 

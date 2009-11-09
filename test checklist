@@ -15,6 +15,8 @@ Products
 	Change price on product
 	create a serialized product
 	set the min/max on both to 5,5
+Services
+	Create a service
 Purchases
 	Purchase a 5 of each product with a price
 	Check cost on each product
@@ -32,6 +34,7 @@ Sales
 	Edit the sale and add a warranty
 	check the totals
 	make sure you can open up the receipt
+	edit the sale again and make it so it doesnt qualify for the discount
 Reordering
 	Go to redordering and let the system recommend values
 Subscriptions

@@ -1,8 +1,6 @@
-
-
-
 <% content_for :title do %><%=h @discount.name %> - <%=h @discount.upc %><% end %>
 <% content_for :actions do %>
+	<dt> <%= link_to 'Nuevo Descuento', new_discount_path, :class => 'action' %> </dt>
 	<dt> <%= link_to 'Cambiar', edit_discount_path(@discount), :class =>'action' %>  </dt>
 	<dt> <%= link_to 'Lista', discounts_path, :class =>'action' %> </dt>
 <% end %>
@@ -13,11 +11,11 @@
 <div class="column2-unit-left">
 	<p>
 	  <b>Discuento Fijo</b><br />
-	    <%=h number_to_currency(@discount.static_price) %>
+	  <%=h number_to_currency(@discount.static_price) %>
 	</p>
 	<p>
 	  <b>Discuento Relativo</b><br />
-	    <%=h number_to_currency(@discount.relative_price) %>
+	  <%=h number_to_currency(@discount.relative_price) %>
 	</p>
 	<p>
     <b>Catagoría</b><br />
@@ -27,9 +25,10 @@
   </p>
 </div>
 <div class="column2-unit-right">
+	<%= link_to(image_tag(@discount.barcode_filename, :style=>'border:none;'), show_barcode_url(@discount)) %>
 	<p>
 	  <b>Discuento Total Actual</b><br />
-	    <%=h number_to_currency(@discount.price) %>
+	  <%=h number_to_currency(@discount.price) %>
 	</p>
 </div>
 <hr class="clear-contentunit" />
@@ -69,8 +68,7 @@
 		</div>
 		<% for location in get_locations %>
 			<div class="table_row">
-				<div class="table_cell_80"><%=link_to location.name, :controller => "movements", :search => @discount.upc
- %></div>
+				<div class="table_cell_80"><%=link_to location.name, :controller => "movements", :search => @discount.upc %></div>
 				<div class="table_cell"><%=h location.inventory(@discount) %></div>
 			</div>
 		<% end %>

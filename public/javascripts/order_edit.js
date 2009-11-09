@@ -11,7 +11,12 @@ function DoAjaxRequest(){
   		success: function(data){ 
   			var d = $('<div/>').append(data);
   			error=$('.error', d);
-  			$('.error_line').slideUp('slow').replaceWith(error, d).slideDown('slow');
+  			if (error.length>0){
+  				$('#lines_errors:visible').slideUp('slow', function(){$(this).slideDown('slow')});
+  				$('#lines_errors:hidden').append(error).slideDown('slow');
+  			} else {
+  				$('#lines_errors:visible').slideUp('slow',delete_errors);
+  			}
   			$('.line', d).appendTo('#lines').hide().slideDown('slow',select_serial);
 				$(".serial:last").keydown(function(e){
 					if (e.keyCode == 13) {
@@ -22,6 +27,9 @@ function DoAjaxRequest(){
 			},
 		});
 }
+function delete_errors(){
+	$('.error').remove();
+}
 function select_serial() {
   $(".serial:last").select(); 
 }
@@ -31,6 +39,7 @@ function DeleteHiddenLines(){
 $(document).ready(function(){
 	$('#add_new_line').hide();
 	$('#bar_code_form').show();
+	$('#lines_errors').hide();
 	//Setup	date picker
 	$.datepicker.regional['es']
 	$(".datepicker").datepicker();
@@ -44,5 +53,4 @@ $(document).ready(function(){
 			return false;
 		}
 	});
-	$("#get_ajax").click(DoAjaxRequest);
 });

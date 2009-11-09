@@ -72,14 +72,7 @@ class CombosController < ApplicationController
   def create
     @combo = Product.new(params[:product])
     @combo.vendor_id=2
-		for e in Entity.find_all_by_entity_type_id(3)
-    	i=Inventory.new(:entity=>e, :product=>@combo, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
-    	i.save
-    	@combo.calculate_quantity(e.id)
-    end
-    Warranty.create(:product=>@product, :price => 0, :months =>0)
-    for g in PriceGroup.all; Price.create(:product_id=>@combo.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price]); end
-    
+    @combo.create_inventories(params[:product][:default_cost])
     respond_to do |format|
       if @combo.save
       	list= params['new_reqs'] || []

@@ -50,25 +50,55 @@ class Product < ActiveRecord::Base
 	validates_presence_of(:name, :message => "debe ser valido.")
 	validates_uniqueness_of(:name, :message => "debe ser único.") 
 	validates_uniqueness_of(:upc, :message => "debe ser único.") 
-	before_save :create_barcode
 	def isnumeric?(s)
 		return s =~ /\A\d+\Z/
 	end
+	before_create :create_barcode
+	before_update :create_barcode
 	def create_barcode
 #		self.upc=self.upc.tr('^0-9a-zA-Z-_','')
-		%x[rm 'public/barcodes/#{self.upc}.png']
-		if self.upc.length==12 and isnumeric?(self.upc)
-			puts "bar code is UPC"
-			%x[barcode -b '#{self.upc}' -e upc -o 'public/barcodes/#{self.upc}.ps']
-		else
-			puts "bar code is not UPC"
-			%x[barcode -b '#{self.upc}' -o 'public/barcodes/#{self.upc}.ps']
+		require "open3"
+		system("rm 'public/barcodes/#{self.upc}.png'")
+		stdin, stdout, stderr = Open3.popen3("barcode -b '#{self.upc}' -e upc -o 'public/barcodes/#{self.upc}.ps'")
+		if stderr.gets.include?("can't encode")
+			system("barcode -b '#{self.upc}' -o 'public/barcodes/#{self.upc}.ps'")
 		end
-		%x[convert -trim 'public/barcodes/#{self.upc}.ps' 'public/barcodes/#{self.upc}.png']
-		%x[rm 'public/barcodes/#{self.upc}.ps']
+		system("convert -trim 'public/barcodes/#{self.upc}.ps' 'public/barcodes/#{self.upc}.png'")
+		system("rm 'public/barcodes/#{self.upc}.ps'")
+		
+#		%x[rm 'public/barcodes/#{self.upc}.png']
+#		result = %x[barcode -b '#{self.upc}' -e upc -o 'public/barcodes/#{self.upc}.ps']
+#		puts "$?=#{$?.to_s}"
+#		if $?.to_i != 0
+#			%x[barcode -b '#{self.upc}' -o 'public/barcodes/#{self.upc}.ps']
+#		end
+#		%x[convert -trim 'public/barcodes/#{self.upc}.ps' 'public/barcodes/#{self.upc}.png']
+#		%x[rm 'public/barcodes/#{self.upc}.ps']
 	end
 	def barcode_filename
 		return "/barcodes/" + self.upc + ".png"
+	end
+	##################################################################################################
+	# Creates Inventories, Prices, and Warranties
+	#################################################################################################
+	def create_related_values(default_cost, static_price, relative_price)
+		for e in Entity.find_all_by_entity_type_id(3)
+    	i=Inventory.new(:entity=>e, :product=>self, :quantity=>0, :min=>0, :max=>0, :to_order=>0, :cost=>default_cost, :default_cost=>default_cost)
+    	i.save
+    end
+    for g in PriceGroup.all
+    	if g.entity_id == User.current_user.location_id
+		  	Price.create(:product_id=>self.id, :price_group_id => g.id, :fixed => static_price, :relative=>relative_price, :available => 1)
+		  else
+				Price.create(:product_id=>self.id, :price_group_id => g.id, :fixed => static_price, :relative=>relative_price, :available => 0)
+			end
+	  end
+	  if product_type_id!=2 # no warranties for discounts
+    	Warranty.create(:product=>self, :price => 0, :months =>0)
+    end
+    if product_type_id==3 #for combos
+    	self.calculate_quantity(e.id)
+    end
 	end
 	def category_name
  		product_category.name if product_category

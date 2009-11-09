@@ -1,2 +1,3 @@
-
-<%= auto_complete_result @product_categories, :name %>
+<% for category in @product_categories %>
+	<%= category.name %>
+<% end %>

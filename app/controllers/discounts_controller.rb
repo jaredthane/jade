@@ -77,11 +77,7 @@ class DiscountsController < ApplicationController
   # POST /discounts.xml
   def create
     @discount = Product.new(params[:product])
-		for e in Entity.find_all_by_entity_type_id(3)
-    	i=Inventory.new(:entity=>e, :product=>@discount, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
-    	i.save
-    end
-    for g in PriceGroup.all; Price.create(:product_id=>@discount.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price]); end
+    @discount.create_related_values(params[:product][:default_cost], params[:product][:static_price], params[:product][:relative_price])
     respond_to do |format|
       if @discount.save
       	list= params['new_reqs'] || []

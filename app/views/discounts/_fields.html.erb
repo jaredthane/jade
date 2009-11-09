@@ -3,6 +3,7 @@
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "discount_edit" %>
   <%= javascript_include_tag "submit_link" %>
+  <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 <% end %>
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
@@ -11,7 +12,7 @@
 			<dt> <%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
 		<% end %>
   <% end %>
-  <dt><%= link_to_function 'Guardar', 'submit("discount_form")', :class => 'action' %></dt>
+  <dt><%= link_to_function 'Guardar', 'submit("new_product")', :class => 'action' %></dt>
   <% if mode == 'edit' %>
       <dt> <%= link_to 'Cancelar', edit_discount_path(@discount), :class => 'action' %> </dt>
       <dt><%= link_to 'Lista de Descuentos', discounts_path, :class => 'action' %></dt>
@@ -23,6 +24,7 @@
 <%= error_messages_for :discount %>
 		
 	  <%= f.hidden_field :unit_id, :value => 1 %>
+	  <%= f.hidden_field :vendor_id, :value => 1 %>
 	  <%= f.hidden_field :product_type_id, :value => 2 %>
 	  
 	<div class="column2-unit-left">
@@ -35,9 +37,7 @@
 		  <%= f.text_field :static_price, :class => 'field' %>
 		</p>
 		<p><b>Catagoría</b><br />
-			<%= text_field_with_auto_complete :product, :category_name, 
-					{:class => 'field', :size=>30 }, 
-					{:url => '/product_catagories.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+			<%= f.text_field :category_name, :class=> 'lookup field', :id => 'category_lookup',:style=>'width:247px;' %>
 		</p>
 		
 	</div>
@@ -75,7 +75,7 @@
 		</div>
 		<div id="requirements_errors"></div>
 	</div>
-	<%= f.submit button_text, :class => 'action'  %>
+	
 	
 	
   

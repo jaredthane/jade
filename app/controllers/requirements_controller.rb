@@ -40,16 +40,10 @@ class RequirementsController < ApplicationController
   
   def new
     @requirement = Requirement.new()
-    logger.debug "Were ready to save the requirement"
-    @requirement.bar_code = params[:requirement][:bar_code]
-    if !@requirement.product
-			@requirement.product_id = params[:requirement][:product_id]
+    @requirement.bar_code = params[:bar_code]
+    if @requirement.required
 			@requirement.quantity = 1
-			logger.debug "Were ready to go back to the client"
 			respond_to do |wants|
-				wants.html do
-					redirect_to '/discounts/' + @requirement.product_id.to_s + '/edit'
-				end
 				wants.js
 			end
 		else

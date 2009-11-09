@@ -1,7 +1,11 @@
-
-<% content_for(:javascript) do %>
-  <%= javascript_include_tag "requirement_edit" %>
-<% end %>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$('#non_js_fields').hide();
+		$('#js_fields').show();
+		$('#submit_new_requirement_button').hide();
+	});
+</script>
+<%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 <% if @product %>
 	<%= requirement_form.hidden_field(:product_id, :value=> @product.id) %>
 <% end %>

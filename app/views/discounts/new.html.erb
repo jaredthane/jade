@@ -1,6 +1,6 @@
 
 
-<% form_for(@discount, :url => {:controller => 'discounts', :action => 'create'}) do |f| %>
+<% form_for(@discount, :id=>'discount_form', :url => {:controller => 'discounts', :action => 'create'}) do |f| %>
 <%= render   :partial    => "fields",
             :locals     => {:f => f,
             								:button_text => "Guardar Nuevo Descuento",

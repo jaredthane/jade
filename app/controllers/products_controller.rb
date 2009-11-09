@@ -121,20 +121,7 @@ class ProductsController < ApplicationController
   # POST /products.xml
   def create
     @product = Product.new(params[:product])
-    for e in Entity.find_all_by_entity_type_id(3)
-    	i=Inventory.new(:entity=>e, :product=>@product, :quantity=>0, :min=>0, :max=>0, :to_order=>0, :cost=>params[:product][:default_cost], :default_cost=>params[:product][:default_cost])
-    	i.save
-    end
-    logger.debug "params:product:static_price= #{params[:product][:static_price].to_s}"
-    logger.debug "params[:product][:relative_price]=#{params[:product][:relative_price].to_s}"
-    for g in PriceGroup.all
-    	if g.entity_id == current_user.location_id
-		  	Price.create(:product_id=>@product.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price], :available => 1)
-		  else
-				Price.create(:product_id=>@product.id, :price_group_id => g.id, :fixed => params[:product][:static_price], :relative=>params[:product][:relative_price], :available => 0)
-			end
-	  end
-    Warranty.create(:product=>@product, :price => 0, :months =>0)
+    @product.create_related_values(params[:product][:default_cost], params[:product][:static_price], params[:product][:relative_price])
     respond_to do |format|
       if @product.save
       	@product.update_attributes(params[:product])

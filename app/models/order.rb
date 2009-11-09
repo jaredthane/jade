@@ -14,9 +14,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Filters added to this controller apply to all controllers in the application.
-# Likewise, all the methods added will be available for all controllers.
-
 class Order < ActiveRecord::Base
 	has_many :lines, :dependent => :destroy
 	has_many :products, :through => :lines
@@ -615,10 +612,10 @@ class Order < ActiveRecord::Base
   end
 	
   ###################################################################################
-	# Checks if the order qualifies for any discounts and adds lines for them ass necisary
+	# Checks if the order qualifies for any discounts and adds lines for them as necisary
 	###################################################################################
   def check_for_discounts
-  	# ##puts "checking existing discounts"
+  	puts "checking existing discounts <============================================================================="
   	# Go through each discount in the order and see if it still qualifys
   	# ##puts "self.order_type_id"+(self.order_type_id==1).to_s
   	if self.order_type_id==1
@@ -626,7 +623,7 @@ class Order < ActiveRecord::Base
 			for line in self.lines.find(:all, 
 																	:conditions => ' products.product_type_id = 2 ',
 																	:joins => ' inner join products on lines.product_id=products.id ')
-	  		# ##puts "checking " + line.product.name
+#	  		puts "checking " + line.product.name
 				@discounts_in_order << line.product
 				@qualify = discount_qualifies(line.product)
 				if @qualify > 0
@@ -640,18 +637,18 @@ class Order < ActiveRecord::Base
 				end
 			end
 			# Go through each discount and see if the order qualifies
-	  	# ##puts "checking new discounts"
+			puts "checking new discounts"
 			for discount in get_discounts do 
-				# ##puts "checking" + discount.name
+				puts "checking" + discount.name
 				#make sure we dont add a discount thats already in the order
 				if !@discounts_in_order.include?(discount)
 					# make sure the discount is available in this site
 					if discount.available
-						# ##puts discount.name + "available" 
-						@qualify = discount_qualifies(discount)
+						puts discount.name + "available" 
+						@qualify = self.discount_qualifies(discount)
 						#If the order qualifies, add it.
 						if @qualify >= 1			                     		
-							# ##puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
+							puts "It Qualifies!!!!!!!!!!!!!!!!!!!"
 							l=Line.new(:order_id => self.id, :product_id => discount.id, :quantity => @qualify, :price => discount.price, :received => 1,:created_at=>User.current_user.today)
 							l.save
 						end #if qualify==1
