@@ -1,6 +1,6 @@
 
 
-<% form_for(@combo, :url => {:controller => 'combos', :action => 'create'}) do |f| %>
+<% form_for(@combo, :html => {:id => 'combo_form' }, :url => {:controller => 'combos', :action => 'create'}) do |f| %>
 <%= render   :partial    => "fields",
             :locals     => {:f => f,
             								:button_text => "Guardar Nuevo Combo",

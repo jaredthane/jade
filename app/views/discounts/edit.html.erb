@@ -1,7 +1,7 @@
 
 
 
-<% form_for(@discount, :id=>'discount_form', :url => { :action => 'update'}) do |f| %>
+<% form_for(@discount, :html => {:id => 'discount_form' }, :url => { :action => 'update'}) do |f| %>
 <%= render   :partial    => "fields",
             :locals     => {:f => f,
             								:button_text => "Guardar Cambios",

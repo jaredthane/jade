@@ -41,6 +41,8 @@ class RequirementsController < ApplicationController
   def new
     @requirement = Requirement.new()
     @requirement.bar_code = params[:bar_code]
+    @requirement.relative_price = (params[:relative_price]||0)
+    @requirement.static_price = (params[:static_price]||0)
     if @requirement.required
 			@requirement.quantity = 1
 			respond_to do |wants|

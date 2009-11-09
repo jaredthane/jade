@@ -313,7 +313,7 @@ class Product < ActiveRecord::Base
 				logger.debug "checking a req"
 				sum += req.price(price_group)
 			end
-			logger.debug "sum=#{self.id.to_s}"
+			logger.debug "sum=#{sum.to_s}"
 			if self.product_type_id == 2
 				price = (sum * relative_price) - static_price
 			else

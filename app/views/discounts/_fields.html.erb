@@ -7,19 +7,12 @@
 <% end %>
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
-	<% if current_user.has_rights(['admin','compras','gerente']) %>
-		<% if mode == 'edit' %>
-			<dt> <%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
-		<% end %>
+	<dt><%= link_to_function 'Guardar', 'submit("discount_form");', :class => 'action' %></dt>
+  <% if @mode =='edit' %>
+ 		<dt> <%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
+    <dt><%= link_to 'Lista de Descuentos', discounts_path, :class => 'action' %></dt>
   <% end %>
-  <dt><%= link_to_function 'Guardar', 'submit("new_product")', :class => 'action' %></dt>
-  <% if mode == 'edit' %>
-      <dt> <%= link_to 'Cancelar', edit_discount_path(@discount), :class => 'action' %> </dt>
-      <dt><%= link_to 'Lista de Descuentos', discounts_path, :class => 'action' %></dt>
-  <% else %>
-      <dt><%= link_to 'Cancelar', discounts_path, :class => 'action' %></dt>
-  <% end %>
-  
+    <dt><%= link_to 'Cancelar', discount_path(@discount), :class => 'action' %></dt>
 <% end %>
 <%= error_messages_for :discount %>
 		
@@ -37,7 +30,7 @@
 		  <%= f.text_field :static_price, :class => 'field' %>
 		</p>
 		<p><b>Catagoría</b><br />
-			<%= f.text_field :category_name, :class=> 'lookup field', :id => 'category_lookup',:style=>'width:247px;' %>
+		<%= f.text_field :category_name, :class=> 'lookup field', :id => 'category_lookup',:style=>'width:247px;' %>
 		</p>
 		
 	</div>

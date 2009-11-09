@@ -72,7 +72,7 @@ class CombosController < ApplicationController
   def create
     @combo = Product.new(params[:product])
     @combo.vendor_id=2
-    @combo.create_inventories(params[:product][:default_cost])
+    @combo.create_related_values(params[:product][:default_cost], params[:product][:static_price], params[:product][:relative_price])
     respond_to do |format|
       if @combo.save
       	list= params['new_reqs'] || []

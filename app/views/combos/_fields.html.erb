@@ -2,16 +2,18 @@
 
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "combo_edit" %>
+  <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
 	<% if current_user.has_rights(['admin','compras','gerente']) %>
+		<dt><%= link_to_function 'Guardar', 'submit("combo_form")', :class => 'action' %></dt>
 		<% if mode == 'edit' %>
 			<dt> <%= link_to 'Remover', :class => 'action', :controller => "combos", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
 		<% end %>
   <% end %>
   <dt><%= link_to 'Lista', combos_path, :class => 'action' %></dt>  
-  <dt> <%= link_to 'Cancelar', edit_combo_path(@combo), :class => 'action' %> </dt>
+  <dt> <%= link_to 'Cancelar', combo_path(@combo), :class => 'action' %> </dt>
 <% end %>
 <%= error_messages_for :combo %>
 		
@@ -28,9 +30,7 @@
 		  <%= f.text_field :static_price, :class => 'field' %>
 		</p>
 		<p><b>Catagoría</b><br />
-			<%= text_field_with_auto_complete :product, :category_name, 
-					{:class => 'field', :size=>30 }, 
-					{:url => '/product_catagories.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+		<%= f.text_field :category_name, :class=> 'lookup field', :id => 'category_lookup',:style=>'width:247px;' %>
 		</p>
 		
 	</div>
@@ -66,7 +66,6 @@
 		</div>
 		<div id="requirements_errors"></div>
 	</div>
-	<%= f.submit button_text, :class => 'action'  %>
 	
 	
   

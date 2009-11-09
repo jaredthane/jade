@@ -1,7 +1,7 @@
 
 
 
-<% form_for(@combo, :url => { :action => 'update'}) do |f| %>
+<% form_for(@combo, :html => {:id => 'combo_form' }, :url => { :action => 'update'}) do |f| %>
 <%= render   :partial    => "fields",
             :locals     => {:f => f,
             								:button_text => "Guardar Cambios",

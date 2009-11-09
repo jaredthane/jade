@@ -17,7 +17,7 @@ function DoAjaxRequest(){
 	$.ajax({
 			type: 'POST',
   		url: "/requirements/new",
-  		data:{ bar_code: $("#bar_code_field").val()},
+  		data:{ bar_code: $("#bar_code_field").val(), static_price:0, relative_price:0},
   		success: function(data){ 
   			var d = $('<div/>').append(data);
   			error=$('.error', d);
@@ -44,7 +44,7 @@ function select_serial() {
   $(".serial:last").select(); 
 }
 function DeleteHiddenLines(){
-	$('.line:hidden').remove();
+	$('.requirement:hidden').remove();
 }
 $(document).ready(function(){
 	$('#add_new_requirement').hide();
