@@ -1,8 +1,18 @@
-pdf.font_size = 12
-o={:x=>0,:y=>0}
-pdf.text @receipt.order.client.name, :at=>[110+o[:x],320+o[:y]]
-pdf.text @receipt.order.client.address, :at=>[220+o[:x],320+o[:y]]
-pdf.text @receipt.order.created_at.to_date.to_s(:long), :at=>[65+o[:x],340+o[:y]]
+# 612.00x 1008.00, that leaves 612.00x336 when divided into 3 parts
+y=1008
+for copy in ['client', 'vendor', 'government'] do
+	pdf.bounding_box([0,y], :width => 612, :height => 336) do
+		pdf.font_size = 12
+		pdf.text @receipt.order.client.name, :align=>'center']
+	end
+	y-=336
+end
+
+#pdf.font_size = 12
+#o={:x=>0,:y=>0}
+#pdf.text @receipt.order.client.name, :at=>[110+o[:x],320+o[:y]]
+#pdf.text @receipt.order.client.address, :at=>[220+o[:x],320+o[:y]]
+#pdf.text @receipt.order.created_at.to_date.to_s(:long), :at=>[65+o[:x],340+o[:y]]
 #pdf.bounding_box([30+o[:x],200+o[:y]], :width => 540, :height => 60) do
 #  pdf.table(@data,
 #				:at=>[30+o[:x],200+o[:y]],

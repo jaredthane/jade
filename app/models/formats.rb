@@ -19,7 +19,7 @@ module Formats
 		  total += l.total_price
 		end  
 		logger.debug "@data ->" + @data.inspect
-    prawnto :prawn => { :page_size => 'HALF-LETTER',
+    prawnto :prawn => { :page_size => 'LEGAL',
 					              :left_margin=>0,# was 27
 										    :right_margin=>0,
 										    :top_margin=>0, #was 90
@@ -49,7 +49,7 @@ module Formats
 		  total += l.total_price
 		end  
 		logger.debug @data.inspect
-    prawnto :prawn => { :page_size => 'LETTER',
+    prawnto :prawn => { :page_size => 'LEGAL',
 					              :left_margin=>0,# was 27
 										    :right_margin=>0,
 										    :top_margin=>0, #was 90

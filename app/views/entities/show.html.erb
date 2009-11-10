@@ -78,34 +78,36 @@
 			<% end %>
 		</p>
 	<% end %>
-	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
-		<p>
-			<b>Direcion</b><br />
-			<% if @entity.address %>
-			  <%=@entity.address.gsub("\n","<br />") %>
-			<% end %>
-		</p>
-		<p>
-			<b>Departamento</b><br />		
+	<p>
+		<b>Direcion</b><br />
+		<% if @entity.address %>
+		  <%=@entity.address.gsub("\n","<br />") %>
+		<% end %>
+	</p>
+	<p>
+		<b>Departamento</b><br />		
+		<% if @entity.state %>
 			<%=h @entity.state.name %>
-		</p>
-		<p>
-			<b>Municipio</b><br />		
-			<%=h @entity.city %>
-		</p>
+		<% end %>
+	</p>
+	<p>
+		<b>Municipio</b><br />		
+		<%=h @entity.city %>
+	</p>
+	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
 		<p>
 			<b>Grupo de Precios</b><br />		
 			<% if @entity.price_group_name %>
 				<%=h @entity.price_group_name.name %>
 			<% end %>
 		</p>
-		<p>
-			<b>Notas:</b><br />
-			<% if @entity.notes %>
-			  <%= @entity.notes.gsub("\n","<br />") %>
-			<% end %>
-		</p>
 	<% end %>
+	<p>
+		<b>Notas:</b><br />
+		<% if @entity.notes %>
+			<%= @entity.notes.gsub("\n","<br />") %>
+		<% end %>
+	</p>
 	<% if @entity.entity_type.id == 3 %>
 		<p>
 			<b>Grupo de Precios por Defecto</b><br />		
@@ -164,30 +166,30 @@
   <% end %>
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
 	  <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
-	    <p>
-		    <b>Cuenta para Cobrar</b><br />
-		    <% if @entity.cash_account %>
-  		    <%=link_to @entity.cash_account.name, @entity.cash_account%>
-		    <% end %>
-		  </p>
-	   <% end %>
-	<p>
-		<b>Telefono Fijo</b><br />
-		<%=h @entity.home_phone_number %>
-	</p>
+			<p>
+				<b>Cuenta para Cobrar</b><br />
+				<% if @entity.cash_account %>
+					<%=link_to @entity.cash_account.name, @entity.cash_account%>
+				<% end %>
+			</p>
+		<% end %>
+		<p>
+			<b>Telefono Fijo</b><br />
+			<%=h @entity.home_phone_number %>
+		</p>
+		<p>
+			<b>Telefono Celular</b><br />
+			<%=h @entity.cell_phone_number %>
+		</p>
+	<% end %>
 	<p>
 		<b>Telefono Oficina</b><br />
 		<%=h @entity.office_phone_number %>
 	</p>
 	<p>
-		<b>Telefono Celular</b><br />
-		<%=h @entity.cell_phone_number %>
-	</p>
-	<p>
 		<b>Correo E</b>
 		<%=h @entity.email %>
 	</p>
-	<% end %>
 	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
 		<p>
 			<b>Registro</b>
