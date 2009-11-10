@@ -58,12 +58,7 @@
 			<b>Rama para cuentas de nuevos proveedores</b><br />
 			<%= f.collection_select(:vendor_accounts_group_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
 		</p>
-		<% if mode == 'new' %>
-			<p>
-				<b>Hacer nuevas cuentas para grupos de Empleados, Clientes, y Proveedores?</b><br />
-				<input type="checkbox" id="add_account_groups" name="add_account_groups" value="yes" />
-			</p>
-		<% end %>
+		
   <% end %>
 	<p>
 		<b>Activo</b><br />

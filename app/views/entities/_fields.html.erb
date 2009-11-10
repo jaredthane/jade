@@ -10,6 +10,13 @@
 <% content_for :actions do %>
 	<dt><%= link_to_function 'Guardar', 'submit("entity_form")', :class => 'action' %></dt>
 <% end %>
+<script language="JavaScript"> 
+	$(document).ready(function(){
+		//Setup	date picker
+		$.datepicker.regional['es']
+		$(".datepicker").datepicker();
+	});
+</script>
 <div class="column2-unit-left">
 	<p>
 		<b>Nombre</b><br />
@@ -36,7 +43,7 @@
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>
 			<b>Nacimiento</b><br />
-			<%= calendar_date_select "entity", :birth, :time => false, :year_range => 100.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+			<%= f.text_field :birth, :class=> 'field datepicker', :id => 'birth_date_picker',:style=>'width:168px;' %>
 		</p>
 	<% end %>
 	<p>

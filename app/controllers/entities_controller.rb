@@ -221,7 +221,9 @@ end
 			current_user.save
 			logger.debug "current_user.price_group_name_id=#{current_user.price_group_name_id.to_s}"
 		end
-		@entries=@entity.cash_account.recent_entries(20)
+		if @entity.cash_account
+			@entries=@entity.cash_account.recent_entries(20)
+		end
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @entity }
