@@ -70,6 +70,9 @@ Date::DAYNAMES  	=  	%w(Domingo Lunes Martes Miercoles Jueves Viernes Sabado)
 Date::ABBR_MONTHNAMES  	=  	[nil] + %w(Ene Feb Mar Abr May Jun Jul Ago Sep Oct Nov Dic)
 Date::ABBR_DAYNAMES  	=  	%w(Dom Lun Mar Mie Jue Vie Sab)
 
+COMPANY_NAME="ACME Industrias de America Central Inc."
+CREDITO_FISCAL_LINES_PER_RECEIPT = 6
+CONSUMIDOR_FINAL_LINES_PER_RECEIPT = 6
 NEW_SITE_CASH_ACCOUNT_PREFIX = 'Efectivo en '
 NEW_SITE_EXPENSE_ACCOUNT_PREFIX ='Gastos en '
 NEW_SITE_REVENUE_ACCOUNT_PREFIX = 'Ingresos en '

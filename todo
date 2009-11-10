@@ -5,6 +5,10 @@ photos?
 test warranties
 account statements
 make so you can print any list
+should be able to scan and uplaod receipts from vendors
+should be able to 'add' lines to orders that already have receipts
+should be able to create receipt by placing receipt number in the order upon making it.
+make sample receipt work with warranties and tax
 
 ------------------------ Left For Jade 2.0:     -------------------------------
 make orders have only one receipt

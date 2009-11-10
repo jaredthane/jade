@@ -1,5 +1,4 @@
 class ReceiptsController < ApplicationController
-  include Formats
   def allowed(order_type_id, action)
 		case (order_type_id)
 		  when 1
@@ -147,7 +146,6 @@ class ReceiptsController < ApplicationController
 		  for line in order.lines
 		    if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt == 0) 
 		      # Create a new receipt
-		      
 					logger.debug "created_at="+created_at.to_s
 					logger.debug "User.current_user.date=#{User.current_user.date.to_s}"
 					logger.debug "User.current_user.today=#{User.current_user.today.to_s}"
@@ -170,107 +168,42 @@ class ReceiptsController < ApplicationController
 		  end
 		  # Generate the PDF's
 		  for receipt in receipts_made #Order.find(order.id).receipts
-		    if receipt.order.client.entity_type.id == 2
-			    consumidor_final(receipt) # from the formats.rb file
-			  else
-			    credito_fiscal(receipt) # from the formats.rb file
-			  end
+		  	@receipt=receipt
+		  	prawnto :prawn => {:skip_page_creation=>true}
+			  pdf_string = render_to_string :template => 'receipts/receipt.pdf.prawn', :layout => false
+    		File.open(receipt.filename, 'w') { |f| f.write(pdf_string) }
 		  end
 		end	
 		
 		logger.debug "ending start_id is" + start_id.to_s
 		return start_id
 	end
-############################################################################################
-# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
-############################################################################################
-#  def generate_receipts(order, start_id=1, force=false)
-#  	receipts_made=[]
-#  	logger.debug "Here" + order.receipts.length.to_s
-#  	if order.receipts.length==0
-#  		
-#  	logger.debug "Here too"
-#		  if order.client.entity_type.id == 2
-#		    lines_per_receipt = CONSUMIDOR_FINAL_LINES_PER_RECEIPT
-#		  else
-#		    lines_per_receipt = CREDITO_FISCAL_LINES_PER_RECEIPT
-#		  end
-#		  lines_on_receipt = 0
-#		  for line in order.lines
-#		    logger.debug "lines_on_receipt" + lines_on_receipt.to_s
-#		    if (lines_on_receipt >= lines_per_receipt) or (lines_on_receipt == 0) 
-#		      # Create a new receipt
-#		      r=Receipt.create(:order_id=>order.id, :number =>start_id, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{start_id}.pdf", :user=> User.current_user)
-#		      receipts_made << r
-#		      o=Order.find(order.id)
-#		      o.receipt_printed=Date.today
-#		      o.save
-#		      lines_on_receipt = 0
-#		      logger.debug "reseting lines on receipt"
-#		      start_id += 1
-#		    end
-#		    # Add line to receipt
-#		    logger.debug "Setting line" + line.inspect
-#		    line.receipt = r
-#		    logger.debug "now with receipt_id" + line.inspect
-#		    line.save
-#		    logger.debug "double check it saved" + Line.find(line.id).inspect
-#		    lines_on_receipt += 1
-#		    
-#		    logger.debug "+= 1 lines on receipt"
-#		    logger.debug "lines on the receipt:" + Receipt.find(r.id).lines.inspect
-#		    logger.debug "the receipt:" + Receipt.find(r.id).inspect
-#		  end
-#		  # Generate the PDF's
-#		  for receipt in receipts_made #Order.find(order.id).receipts
-#		    if receipt.order.client.entity_type.id == 2
-#			    consumidor_final(receipt) # from the formats.rb file
-#			  else
-#			    credito_fiscal(receipt) # from the formats.rb file
-#			  end
-#		  end
-#		end
-#    return start_id
-#  end
   def price_list
-  @products = Product.search_all_wo_pagination(params[:search], params[:page])
-  @data=[]
-  total=0
-  for p in @products
-    x = Object.new.extend(ActionView::Helpers::NumberHelper)
-    if p.name and p.description
-      if p.name!='' and p.description!=''
-        d=(p.name||'') + ' - ' + (p.description||'')
-      else
-        d=(p.name||'') + (p.description||'')
-      end
-    else
-      d=(p.name||'') + (p.description||'')
-    end
-    if d.length > 203
-       d=d[0..200] + "..."
-    end
-    @data << [d, x.number_to_currency(p.price)]
+		@products = Product.search_all_wo_pagination(params[:search], params[:page])
+		@data=[]
+		total=0
+		for p in @products
+		  x = Object.new.extend(ActionView::Helpers::NumberHelper)
+		  if p.name and p.description
+		    if p.name!='' and p.description!=''
+		      d=(p.name||'') + ' - ' + (p.description||'')
+		    else
+		      d=(p.name||'') + (p.description||'')
+		    end
+		  else
+		    d=(p.name||'') + (p.description||'')
+		  end
+		  if d.length > 203
+		     d=d[0..200] + "..."
+		  end
+		  @data << [d, x.number_to_currency(p.price)]
+		end
+		prawnto :prawn => { :page_size => 'LETTER'}
+		params[:format] = 'pdf'
+		respond_to do |format|
+		  format.pdf { render :layout => false }
+		end
   end
-  prawnto :prawn => { :page_size => 'LETTER'}
-  params[:format] = 'pdf'
-  respond_to do |format|
-    format.pdf { render :layout => false }
-  end
-  
-  end
-  
-  
-  
-#  def generate_receipts_for_up_to_date_accounts(start_id=1)
-#  	list = Order.find(:all, :joins=>'inner join (select orders.id from (select * from (select * from orders where receipt_printed is null order by orders.id) as orders group by client_id) as orders inner join (select client_id as id from (select sum(amount_paid) as paid, sum(grand_total) as owed, client_id from orders group by client_id) as orders where paid>=owed) as clients on clients.id=orders.client_id) as ids on ids.id=orders.id')
-##    list = Order.find(:all, :joins=>'inner join (select sales.orderid as id from (select * from (select id as orderid, client_id from orders where receipt_printed is null order by orders.id) as orders group by client_id) as sales inner join (select entities.id as clientid from entities left join (select * from (select id, client_id, amount_paid, grand_total from orders where receipt_printed is not null order by id DESC) as orders group by client_id) as orders on orders.client_id=entities.id where amount_paid >= grand_total OR orders.id is null) as clients on clientid=client_id) as unprinted on unprinted.id=orders.id')
-#    
-##    :joins=>'inner join (select min(orders.id) as id from orders inner join (select id, name from (select clients.id,clients.name, sum(line.price*line.quantity*(1+sales_tax)) as owed, sum(payments.presented-payments.returned) as paid from entities as clients left join orders on clients.id=orders.client_id and receipt_printed is not null left join `lines` as line on line.order_id=orders.id left join payments on payments.order_id=orders.id group by clients.id) as clients where paid>= owed or owed is null) as clients on clients.id=orders.client_id where (orders.receipt_printed is null) group by clients.id) as ready on ready.id=orders.id;')
-#		for o in list
-#			start_id = generate_receipts(o, start_id)
-#		end
-#  end
   def concat_pdf
     if @entity_type_id == 2
       @receipts = Receipt.credito_fiscal_today(params[:page])
@@ -285,14 +218,6 @@ class ReceiptsController < ApplicationController
     system(command)
     send_file "#{RAILS_ROOT}/invoice_pdfs/concat.pdf", :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
   end
-#  def show_today
-#		@credito_fiscal_today = Receipt.search_credito_fiscal("",params[:page])
-#		@consumidor_final_today = Receipt.search_consumidor_final("",params[:page])
-#    respond_to do |format|
-#      format.html 
-#      format.xml  { render :xml => @receipts }
-#    end
-#  end
   def index
 		@from=untranslate_month((params[:from] ||Date.today.to_s(:long)))
     @till=untranslate_month((params[:till] ||Date.today.to_s(:long)))

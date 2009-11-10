@@ -144,6 +144,9 @@ class Order < ActiveRecord::Base
 			end
 		end
 	end
+	def receipt
+		return self.receipts(:last)
+	end
 	#################################################################################################
 	# Returns a revision of a transaction with the Credit and Debit Posts Reversed
 	#################################################################################################
