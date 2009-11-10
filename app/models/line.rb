@@ -44,22 +44,22 @@ class Line < ActiveRecord::Base
 		return self.total_price * self.sales_tax
 	end
 	def validate
-		#logger.debug  "validating line"
+		#puts  "validating line"
 		if self.product.product_type_id == 1
-			###logger.debug  "@movements_to_create.length=" + @movements_to_create.length.to_s
+			###puts  "@movements_to_create.length=" + @movements_to_create.length.to_s
 			if @movements_to_create # if we find stuff here, there is movement
-				#logger.debug  " there are movements to validate"
-#				#logger.debug  "self.last_change_type =" + self.last_change_type.to_s
+				#puts  " there are movements to validate"
+#				#puts  "self.last_change_type =" + self.last_change_type.to_s
 				case self.order_type_id	# check inventory levels
 					when 1 # Venta     
-						##logger.debug  "validating Venta"
+						##puts  "validating Venta"
 						qty=order.vendor.inventory(self.product)
 						errors.add " ","Solo hay " + qty.to_s + " " + self.product.unit.name + " del producto " + self.product.name + " en el inventario"  if self.quantity > qty
-						#logger.debug  "self.serialized_product=" + self.serialized_product.to_s if self.serialized_product
+						#puts  "self.serialized_product=" + self.serialized_product.to_s if self.serialized_product
 						if self.product.serialized
 							if self.serialized_product
-									##logger.debug  "self.serialized_product.location.id=" + self.serialized_product.location.id.to_s
-									#logger.debug  "@order.vendor.id=" + @order.vendor.id.to_s
+									##puts  "self.serialized_product.location.id=" + self.serialized_product.location.id.to_s
+									#puts  "@order.vendor.id=" + @order.vendor.id.to_s
 									errors.add "El numero de serie " + self.serialized_product.serial_number + " no esta disponible en este sitio" if self.serialized_product.location != @order.vendor
 							else
 								errors.add "El numero de serie " + self.serialized_product.serial_number + " no se encuentra en el registro"
@@ -67,30 +67,30 @@ class Line < ActiveRecord::Base
 						end
 						# Serial number should exist, and be in vendors location
 					when 2 # Compra
-						##logger.debug  "validating Compra"
+						##puts  "validating Compra"
 						# Serial number may or may not exist
 						# if it does its location should be nil
 						# if not, it should be unqiue to the product, add it
 					when 3 # Transferencia
-						##logger.debug  "validating Transferencia"
-						#logger.debug  "order.vendor.inventory(self.product)=" + order.vendor.inventory(self.product).to_s
+						##puts  "validating Transferencia"
+						#puts  "order.vendor.inventory(self.product)=" + order.vendor.inventory(self.product).to_s
 						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.vendor.inventory(self.product)	
 						errors.add "numero de serie no esta disponible en sitio señalado" if !self.serialized_product 
 						# Serial number should exist, and be in vendors location
 					when 5 # Devolucion de Venta
-						###logger.debug  "validating Devolucion de Venta"
-						###logger.debug  "self.product.id=" + self.product.id.to_s
+						###puts  "validating Devolucion de Venta"
+						###puts  "self.product.id=" + self.product.id.to_s
 						#errors.add "insufficient stock" if self.quantity > order.client.inventory(self.product)
 						# Serial number should exist
 						# its location should be nil
 						# dont need to validate serial cause it was already validated
 					when 6 # Devolucion de Compra
-						##logger.debug  "validating Devolucion de Compra"
+						##puts  "validating Devolucion de Compra"
 						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.inventory(self.product)	
 						# Serial number should exist, and be in clients location
 						# dont need to validate serial cause it was already validated
 					when 7 # Devolucion de Transferencia	
-						##logger.debug  "validating Devolucion de Transferencia"				
+						##puts  "validating Devolucion de Transferencia"				
 						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.location.inventory(self.product)
 						# Serial number should exist, and be in clients location
 						# dont need to validate serial cause it was already validated
@@ -167,13 +167,13 @@ class Line < ActiveRecord::Base
 		end
 	end
 	def isreceived_str=(str)
-		#logger.debug "str=#{str.to_s}"
+		#puts "str=#{str.to_s}"
 		if str=="" or str=="no" or str=="No" or str=="NO"
-			#logger.debug "setting to no"
+			#puts "setting to no"
 			self.isreceived = 0
 		else
 			self.isreceived = 1
-			#logger.debug "setting to yes"
+			#puts "setting to yes"
 		end
 	end
 	def isreceived
@@ -221,30 +221,33 @@ class Line < ActiveRecord::Base
 		serialized_product.serial_number if serialized_product
 	end
 	def serial_number=(serial)
-		#logger.debug "serial=" + serial.to_s
-#		#logger.debug "order.order_type_id=#{order.order_type_id.to_s}"
+		puts "##################################################################################################"
+		puts "# "
+		puts "#################################################################################################"
+		puts "serial=" + serial.to_s
+#		puts "self.order_type_id=#{order.order_type_id.to_s}"
 	puts self.order_type_id
 		if (!(serial == "" or serial == "\n") and ((self.order_type_id==2) or (self.order_type_id==5)))
-			#logger.debug "Taking create path"
+			puts "Taking create path"
 			s=SerializedProduct.find_or_create_by_serial_number(serial)
 			if s.product_id==nil
-				#logger.debug "self.product_id=#{self.product_id.to_s}"
+				puts "self.product_id=#{self.product_id.to_s}"
 				s.product_id=(self.product_id )
 				s.save
 			end   
 		else
-			#logger.debug  "taking find path"
+			puts  "taking find path"
 			s=SerializedProduct.find_by_serial_number(serial)
 		end
 		if self.order_type_id == 5
 			self.serialized_product=s
-			#logger.debug "Skipping creating movements cause this is a count"
+			puts "Skipping creating movements cause this is a count"
 		else
 			if self.serialized_product # the line was already marked as delivered
-				#logger.debug  "the line was already marked as delivered"
+				puts  "the line was already marked as delivered"
 				if !(serial == "" or serial == "\n")
 					if s != self.serialized_product # only need to work if it's been changed
-						#logger.debug  "we are changing the serial numbers delivered for the line"
+						puts  "we are changing the serial numbers delivered for the line"
 						# we are changing the serial numbers delivered for the line
 						# because it is an existing order, we can create the movements now.
 				
@@ -255,17 +258,17 @@ class Line < ActiveRecord::Base
 						self.isreceived=1
 					end
 				else # we are marking the line as not delivered after it was previously delivered
-					#logger.debug  "we are marking the line as not delivered after it was previously delivered"
+					puts  "we are marking the line as not delivered after it was previously delivered"
 			
 					# This is a Devolucion of Compra(6), Venta(5), o Transaccion(7)
-					#logger.debug  "setting isreceived=0"
+					puts  "setting isreceived=0"
 					self.isreceived=0
 					self.serialized_product = nil # s was also nil
 				end
 			else # the line was previously undelivered
-				#logger.debug  "the line was previously undelivered"
+				#puts  "the line was previously undelivered"
 				if !(serial == "" or serial == "\n")
-					#logger.debug  "delivering previously undelivered serial"
+					puts  "delivering previously undelivered serial"
 					# either this is a new order, or is simply undelivered until now.
 		
 					# This is a Compra(2), Venta(1), o Transaccion(3)
@@ -293,10 +296,10 @@ class Line < ActiveRecord::Base
 		#logger.info "have self.product_id=#{self.product_id.to_s}"
 		if !upc.blank?		
 			prod = Product.find_by_upc(upc)
-			#logger.debug "prod=#{prod.to_s}"
+			#puts "prod=#{prod.to_s}"
 			if prod != nil
-				#logger.debug "getting id of prod"
-				#logger.debug "prod.id=#{prod.id.to_s}"
+				#puts "getting id of prod"
+				#puts "prod.id=#{prod.id.to_s}"
 				self.product_id = prod.id
 			end
 			#logger.info "Product.find_by_upc(upc)=#{Product.find_by_upc(upc).inspect}"

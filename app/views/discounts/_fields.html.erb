@@ -11,8 +11,10 @@
   <% if @mode =='edit' %>
  		<dt> <%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
     <dt><%= link_to 'Lista de Descuentos', discounts_path, :class => 'action' %></dt>
+    <dt><%= link_to 'Cancelar', discount_url(@discount), :class => 'action' %></dt>
+  <% else %>
+    <dt><%= link_to 'Cancelar', discounts_path, :class => 'action' %></dt>
   <% end %>
-    <dt><%= link_to 'Cancelar', discount_path(@discount), :class => 'action' %></dt>
 <% end %>
 <%= error_messages_for :discount %>
 		

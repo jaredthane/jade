@@ -20,9 +20,9 @@ class LinesController < ApplicationController
 	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin | Ventas | Compras)' 
 
 	def add_line(upc, quantity, order_type_id, relative_price = 1)
-		@additional=Line.new(:created_at=>User.current_user.today)
+		@additional=Line.new(:created_at=>User.current_user.today, :order_type_id=>order_type_id)
 		puts "order_type_id=" + order_type_id.to_s
-		@additional.order_type_id = order_type_id
+#		@additional.order_type_id = order_type_id
 		@additional.bar_code = upc
 		puts "add price2" + @additional.price.to_s
 		@additional.price = @additional.price * relative_price

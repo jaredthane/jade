@@ -119,7 +119,12 @@
 		<%=h number_to_currency(@order.total_price_with_tax) %>
 	</p>
 <% end %>
-
+<% if @order.order_type_id==2 %>
+	<p>
+		<b>Numero de Factura:</b>
+		<%=h @order.purchase_receipt_number %>
+	</p>
+<% end %>
 </div>
 <div class="column2-unit-right">
 <p>

@@ -70,7 +70,7 @@
 		<% for movement in @serialized_product.movements.find(:all,:order => 'created_at desc') %>
 			<div class="table_row">
 				<div class="table_cell_20"><%= link_to movement.movement_type.name, movement.order %></div>
-				<div class="table_cell_20"><%= h movement.order.receipt_number %></div>
+				<div class="table_cell_20"><%= h movement.order.purchase_receipt_number %></div>
 				<div class="table_cell_20"><%= link_to movement.order.id, movement.order %></div>
 				<div class="table_cell_20"><%= link_to movement.user.login, movement.user %></div>
 				<div class="table_cell"><%=h movement.created_at.to_date.to_s %></div>
