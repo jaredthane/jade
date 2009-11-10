@@ -121,7 +121,9 @@ class Entity < ActiveRecord::Base
   							 :conditions=> 'deleted=false AND (amount_paid < grand_total OR amount_paid is null) AND (client_id=' + self.id.to_s + ')',
   							 :joins => 'inner join orders on orders.id=receipts.order_id')
   end
-
+	def recent_entries
+		return Entry.find(:all, :conditions=> "accounts.entity_id=#{self.id}",:joins=>'inner join accounts on entries.account_id=accounts.id', :order=>'created_at DESC', :limit=>20)
+	end
   def strip(s, c)
    clean=''
    s.each_char do |l|
