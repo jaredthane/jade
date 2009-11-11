@@ -62,6 +62,7 @@ require "prawn"
 require "prawn/layout"
 require "calendar_date_select"
 
+ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(:default => '%d/%m/%Y')
 logfile = File.open('log/audit.log', 'a')   
 logfile.sync = true  #remove this for production 
 Audit = AuditLogger.new(logfile)

@@ -4,8 +4,8 @@ function handleErr(msg,url,l) {
 	return true;
 }
 function post_count(){
-	$('submit_type').value = "post"
-	$('counts_form').submit();
+	$('#submit_type').val("post")
+  $('#counts_form').submit();
 }
 
 function set_client_name(value){
@@ -23,41 +23,82 @@ function calc_dif(e) {
 	//alert(x);
 	e.parentNode.nextSibling.nextSibling.nextSibling.nextSibling.childNodes[0].value = '$'+((count-qty)*cost).toFixed(2)
 }
-function disableEnterKey(e){
-     var key;
-     if(window.event)
-          key = window.event.keyCode;     //IE
-     else
-          key = e.which;     //firefox
-     if(key == 13) {
-     		
-     		//alert("caught enter");
-        return false;
-     } else {
-      	return true;
-     }
+//function disableEnterKey(e){
+//     var key;
+//     if(window.event)
+//          key = window.event.keyCode;     //IE
+//     else
+//          key = e.which;     //firefox
+//     if(key == 13) {
+//         
+//         //alert("caught enter");
+//        return false;
+//     } else {
+//        return true;
+//     }
+//}
+//function select_serial(){
+//  $$(".serial").last().select(); 
+//}
+//Event.addBehavior({
+//  'body' : function() {
+//    $('add_new_line').hide();
+//  },
+//  'form:keydown' : Event.delegate({
+//    '#serial': function(e) {
+//       if ( disableEnterKey(e) ){
+//         return true;
+//       } else {
+//          $('bar_code_field').select();
+//         return false;
+//       }
+//     }
+//  }),
+//  '#bar_code_form' : Remote.Form
+//});
+function DoAjaxRequest(){
+  $.ajax({
+      type: 'POST',
+      url: "/lines/new",
+      data:{ bar_code: $("#bar_code_field").val(), client_name: $('#clients_lookup').val(), order_type_id:5},
+      success: function(data){ 
+        var d = $('<div/>').append(data);
+        error=$('.error', d);
+        if (error.length>0){
+          $('#lines_errors:visible').slideUp('slow', function(){$(this).slideDown('slow')});
+          $('#lines_errors:hidden').append(error).slideDown('slow');
+        } else {
+          $('#lines_errors:visible').slideUp('slow',delete_errors);
+        }
+        $('.line', d).appendTo('#lines').hide().slideDown('slow',select_serial);
+        $(".serial:last").keydown(function(e){
+          if (e.keyCode == 13) {
+              $('#bar_code_field').select(); 
+             return false;
+           }
+        });
+      },
+    });
 }
-function select_serial(){
-	$$(".serial").last().select(); 
+function delete_errors(){
+  $('.error').remove();
 }
-Event.addBehavior({
-	'body' : function() {
-		$('add_new_line').hide();
-//		$('.applied').value='No';
-//		if ($('bar_code_field').select())
-//		if ($('order_type_field').value == 'sales' or $('order_type_field').value == 'internal') {
-//			$("client_name").value='_cost_'
-//		}
-  },
-  'form:keydown' : Event.delegate({
-  	'#serial': function(e) {
-       if ( disableEnterKey(e) ){
-         return true;
-       } else {
-       	 $('bar_code_field').select(); 
-	       return false;
-       }
-     }
-	}),
-	'#bar_code_form' : Remote.Form
+function select_serial() {
+  $(".serial:last").select(); 
+}
+function DeleteHiddenLines(){
+  $('.line:hidden').remove();
+}
+$(document).ready(function(){
+  $('#add_new_line').hide();
+  //Setup  date picker
+  $.datepicker.regional['es']
+  $(".datepicker").datepicker();
+  $("#bar_code_field").keydown(function(e){
+    if (e.keyCode == 13) {
+      DoAjaxRequest();
+      e.preventDefault();
+      return false;
+    }
+  });
 });

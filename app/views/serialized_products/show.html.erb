@@ -61,17 +61,19 @@
 	<b>Movimientos:</b>
 	<div>
 		<div class="table_header_row">
-			<div class="table_cell_20">Movimiento</div>
-			<div class="table_cell_20">Numero de Factura</div>
-			<div class="table_cell_20">Pedido</div>
+			<div class="table_cell_15">Movimiento</div>
+			<div class="table_cell_20">Entidad</div>
+			<div class="table_cell_15">Numero de Factura</div>
+			<div class="table_cell_15">Pedido</div>
 			<div class="table_cell_20">Usuario</div>
 			<div class="table_cell">Fecha</div>
 		</div>
 		<% for movement in @serialized_product.movements.find(:all,:order => 'created_at desc') %>
 			<div class="table_row">
-				<div class="table_cell_20"><%= link_to movement.movement_type.name, movement.order %></div>
-				<div class="table_cell_20"><%= h movement.order.purchase_receipt_number %></div>
-				<div class="table_cell_20"><%= link_to movement.order.id, movement.order %></div>
+				<div class="table_cell_15"><%= link_to movement.movement_type.name, movement.order %></div>
+				<div class="table_cell_20"><%= link_to movement.entity.name, movement.entity %></div>
+				<div class="table_cell_15"><%= h movement.order.purchase_receipt_number %></div>
+				<div class="table_cell_15"><%= link_to movement.order.id, movement.order %></div>
 				<div class="table_cell_20"><%= link_to movement.user.login, movement.user %></div>
 				<div class="table_cell"><%=h movement.created_at.to_date.to_s %></div>
 			</div>

@@ -118,7 +118,7 @@
 				<div class="table_cell_50">Sitio</div>
 				<div class="table_cell">Nombre del Producto </div>
 			</div>
-			<% for serial in get_serials_here(@product.id) %>
+			<% for serial in @product.get_serials_here(current_user.location.id) %>
 				<div class="table_row">
 					<div class="table_cell_50"><%=link_to serial.serial_number, serial %></div>
 					<div class="table_cell"><%=link_to serial.product.name, serial.product %></div>

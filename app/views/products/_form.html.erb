@@ -22,6 +22,7 @@
 		});
 		$("#vendor_lookup").autocomplete("/vendors.js"); 
 		$("#unit_lookup").autocomplete("/units.js"); 
+		$("#category_lookup").autocomplete("/categories.js");
 	});
 </script>
 <%= error_messages_for :product %>
@@ -65,9 +66,7 @@
 		  <%= f.text_field :relative_price, :class => 'field' %>
 		</p>
 		<p><b>Categoría</b><br />
-			<%= text_field_with_auto_complete :product, :category_name, 
-					{:class => 'field', :size=>30 }, 
-					{:url => '/product_categories.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+			<%= f.text_field :category_name, :class=> 'lookup field', :id => 'category_lookup',:style=>'width:168px;' %>
 		</p>
 
 		<% if mode == 'edit' %>

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081209171118) do
+ActiveRecord::Schema.define(:version => 20081209161439) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -28,11 +28,11 @@ ActiveRecord::Schema.define(:version => 20081209171118) do
   create_table "combo_lines", :force => true do |t|
     t.integer  "product_id"
     t.integer  "combo_id"
+    t.integer  "quantity"
     t.integer  "serialized_product_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "combo_line_type_id"
-    t.integer  "quantity"
   end
 
   create_table "default_branches", :id => false, :force => true do |t|
@@ -48,13 +48,13 @@ ActiveRecord::Schema.define(:version => 20081209171118) do
     t.integer  "entity_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "home_phone",                               :limit => 8,  :default => ""
-    t.string   "office_phone",                             :limit => 8,  :default => ""
+    t.string   "home_phone",               :limit => 8,  :default => ""
+    t.string   "office_phone",             :limit => 8,  :default => ""
     t.text     "address"
     t.datetime "birth"
     t.integer  "state_id"
-    t.string   "cell_phone",                               :limit => 8
-    t.string   "nit",                                      :limit => 14
+    t.string   "cell_phone",               :limit => 8
+    t.string   "nit",                      :limit => 14
     t.string   "city"
     t.string   "email"
     t.string   "register"
@@ -74,16 +74,21 @@ ActiveRecord::Schema.define(:version => 20081209171118) do
     t.text     "notes"
     t.string   "oldid"
     t.integer  "subscription_day"
-    t.boolean  "active",                                                 :default => true
+    t.boolean  "active",                                 :default => true
     t.integer  "next_receipt_number"
-    t.integer  "new_individual_client_accounts_parent_id"
-    t.integer  "new_vendor_accounts_parent_id"
-    t.integer  "new_employee_accounts_parent_id"
-    t.integer  "new_corporate_client_accounts_parent_id"
+    t.integer  "client_accounts_group_id"
+    t.integer  "vendor_accounts_group_id"
   end
 
   create_table "entity_types", :force => true do |t|
     t.string "name"
+  end
+
+  create_table "entries", :force => true do |t|
+    t.integer  "post_id"
+    t.integer  "account_id"
+    t.decimal  "balance",    :precision => 8, :scale => 2
+    t.datetime "created_at"
   end
 
   create_table "inventories", :force => true do |t|
@@ -99,6 +104,25 @@ ActiveRecord::Schema.define(:version => 20081209171118) do
     t.integer "default_warranty_purchases_id"
     t.decimal "cost",                          :precision => 8, :scale => 2
     t.decimal "default_cost",                  :precision => 8, :scale => 2
+  end
+
+  create_table "items", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "vendor_id"
+    t.decimal  "oldcost",               :precision => 8, :scale => 2
+    t.string   "upc"
+    t.integer  "unit_id"
+    t.string   "location"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "model"
+    t.boolean  "serialized"
+    t.integer  "serialized_product_id"
+    t.integer  "product_type_id"
+    t.integer  "product_category_id"
+    t.integer  "blocked_by_count",                                    :default => 0
+    t.integer  "revenue_account_id"
   end
 
   create_table "lines", :force => true do |t|
@@ -139,6 +163,7 @@ ActiveRecord::Schema.define(:version => 20081209171118) do
     t.text     "comments"
     t.decimal  "value",                 :precision => 8, :scale => 2
     t.decimal  "balance",               :precision => 5, :scale => 2
+    t.integer  "line_id"
   end
 
   create_table "order_types", :force => true do |t|
@@ -157,10 +182,11 @@ ActiveRecord::Schema.define(:version => 20081209171118) do
     t.datetime "receipt_printed"
     t.text     "comments"
     t.integer  "order_type_id"
-    t.boolean  "deleted",                                             :default => false
-    t.decimal  "grand_total",           :precision => 8, :scale => 2, :default => 0.0
-    t.decimal  "amount_paid",           :precision => 8, :scale => 2, :default => 0.0
-    t.boolean  "d",                                                   :default => false
+    t.boolean  "deleted",                                               :default => false
+    t.decimal  "grand_total",             :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "amount_paid",             :precision => 8, :scale => 2, :default => 0.0
+    t.boolean  "d",                                                     :default => false
+    t.integer  "purchase_receipt_number"
   end
 
   create_table "payment_methods", :force => true do |t|
@@ -176,6 +202,7 @@ ActiveRecord::Schema.define(:version => 20081209171118) do
     t.decimal  "returned",          :precision => 8, :scale => 2, :default => 0.0
     t.integer  "receipt_id"
     t.decimal  "presented",         :precision => 8, :scale => 2, :default => 0.0
+    t.boolean  "canceled",                                        :default => false
   end
 
   create_table "people", :force => true do |t|
@@ -276,6 +303,17 @@ ActiveRecord::Schema.define(:version => 20081209171118) do
     t.integer  "revenue_account_id"
   end
 
+  create_table "r", :force => true do |t|
+    t.string   "oldid"
+    t.integer  "num"
+    t.string   "act1"
+    t.string   "act2"
+    t.decimal  "amt",       :precision => 8, :scale => 2
+    t.datetime "fecha"
+    t.integer  "client_id"
+    t.integer  "order_id"
+  end
+
   create_table "receipts", :force => true do |t|
     t.integer  "order_id"
     t.string   "filename"
@@ -358,11 +396,24 @@ ActiveRecord::Schema.define(:version => 20081209171118) do
     t.datetime "next_order_date"
   end
 
+  create_table "test", :force => true do |t|
+    t.string "name"
+  end
+
+  create_table "test2", :id => false, :force => true do |t|
+    t.boolean "tester"
+  end
+
   create_table "trans", :force => true do |t|
     t.integer  "order_id"
     t.text     "comments"
     t.datetime "created_at"
     t.integer  "user_id"
+  end
+
+  create_table "transactions", :force => true do |t|
+    t.integer "order_id"
+    t.text    "comments"
   end
 
   create_table "units", :force => true do |t|

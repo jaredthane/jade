@@ -18,7 +18,7 @@
 <div class="column3-unit-right">
 	<p>
 		<b>Fecha de Pedido</b><br />
-		<%= f.date_select :created_at %>
+		<%= f.text_field :created_at, :class=> 'field datepicker', :id => 'created_at_date_picker',:style=>'width:168px;' %>
 	</p>
 	<input value = "save" id = "submit_type" name = "submit_type" type="hidden" >
 </div>

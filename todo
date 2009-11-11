@@ -10,8 +10,16 @@ should be able to 'add' lines to orders that already have receipts
 should be able to create receipt by placing receipt number in the order upon making it.
 make sample receipt work with warranties
 costs arn't calculated right when you're buying multiple serialized products
-need to make counts use jquery
-accounting not being done when purchase is made
+costs arent recalculated when you just change the price on an order
+cada uno should be default unit of measure
+
+serials purchased not sowing up on sites show page
+it says esperando entrega although it already has serials
+new lines created for discounts should have relative price set to 1
+check inventory before accepting order
+give error if serial were selling isn't in inventory
+mark required fields with *
+use title tag to provide tooltips
 ------------------------ Left For Jade 2.0:     -------------------------------
 make orders have only one receipt
 make orders divide if over max items limit

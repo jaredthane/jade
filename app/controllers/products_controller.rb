@@ -129,6 +129,10 @@ class ProductsController < ApplicationController
         format.html { redirect_to(@product) }
         format.xml  { render :xml => @product, :status => :created, :location => @product }
       else
+      puts " There were errors creating product:"
+        for error in @product.errors
+          puts error
+        end
         format.html { render :action => "new" }
         format.xml  { render :xml => @product.errors, :status => :unprocessable_entity }
       end

@@ -160,27 +160,21 @@
 				</ul>				
 			</li>
 	  <% end %>
-	  <% if current_user.has_rights(['Admin','Ventas','Gerente','Compras']) %>
-	  <li><a href="/clients" title="Entidades">Entidades</a>
-	  	<ul>
-	  		<% if current_user.has_rights(['Admin','Gerente','Compras']) %>
-	  			<li><a href="/vendors" title="Proveedores">Proveedores</a></li>
-	  		<% end %>
-	  		<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
-	  			<li><a href="/clients" title="Clientes">Clientes</a></li>
-	  			<li><a href="/entities/my_clients" title="Mis Clientes">Mis Clientes</a></li>
-	  			<li><a href="/entities/my_end_users" title="Mis Clientes Consumidor Final">Mis Consumidor Final</a></li>
-	  			<li><a href="/entities/my_credito_fiscal" title="Mis Clientes Credito Fiscal">Mis Credito Fiscal</a></li>
-	  			<li><a href="/entities/my_clients?search=publico" title="Mis Clientes de Precio Publico">Mis Publico</a></li>
-	  			<li><a href="/entities/my_clients?search=mayoreo" title="Mis Clientes de Precio Mayoreo">Mis Mayoreo</a></li>
-	  		<% end %>
-	  			<li><a href="/sites" title="Sitios">Sitios</a></li>
-	  		<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
-	  			<li><a href="/birthdays" title="Cumpleanos">Cumpleanos</a></li>
-	  		<% end %>
-	  	</ul>
-	  </li>
-	  <% end %>
+	      <% if current_user.has_rights(['Admin','Gerente','Compras']) %>
+      <li><a href="/vendors" title="Proveedores">Proveedores</a></li>
+    <% end %>
+    <% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
+      <li><a href="/clients" title="Clientes">Clientes</a>
+        <ul>
+          <li><a href="/entities/my_clients" title="Mis Clientes">Mis Clientes</a></li>
+          <li><a href="/entities/my_end_users" title="Mis Clientes Consumidor Final">Mis Consumidor Final</a></li>
+          <li><a href="/entities/my_credito_fiscal" title="Mis Clientes Credito Fiscal">Mis Credito Fiscal</a></li>
+          <li><a href="/entities/my_clients?search=publico" title="Mis Clientes de Precio Publico">Mis Publico</a></li>
+          <li><a href="/entities/my_clients?search=mayoreo" title="Mis Clientes de Precio Mayoreo">Mis Mayoreo</a></li>
+          <li><a href="/birthdays" title="Cumpleanos">Cumpleanos</a></li>
+        </ul>
+      </li>
+    <% end %> 
 	  <li><a href="/sites" title="Sitios">Sitios</a>
 	  	<ul>
   			<% for location in get_sites %>
@@ -189,14 +183,6 @@
   			<li><a href="/physical_counts" title="Cuentas Fisicas">Cuentas Fisicas</a></li>
   		</ul>
   	</li>
-  	<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
-	  	<li><a href="/payments" title="Pagos">Pagos</a>
-	  		<ul>
-	  			<li><a href=<%= payments_path %> title=Pagos>Pagos</a></li>
-	  			<li><a href=<%= unpaid_receipts_path %> title=Facturas No Canceladas>Facturas No Canceladas</a></li>
-	  		</ul>
-	  	</li>
-	  <% end %>
   	<% if current_user.has_rights(['Admin','Gerente']) %>
 	  	<li><a href="/users" title="Usuarios">Usuarios</a></li>
 	  <% else %>
