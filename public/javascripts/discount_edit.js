@@ -17,7 +17,7 @@ function DoAjaxRequest(){
 	$.ajax({
 			type: 'POST',
   		url: "/requirements/new",
-  		data:{ bar_code: $("#bar_code_field").val(), static_price:0, relative_price:0},
+  		data:{ bar_code: $("#bar_code_field").val(), static_price:0, relative_price:1},
   		success: function(data){ 
   			var d = $('<div/>').append(data);
   			error=$('.error', d);

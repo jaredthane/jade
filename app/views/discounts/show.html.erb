@@ -15,7 +15,7 @@
 	</p>
 	<p>
 	  <b>Discuento Relativo</b><br />
-	  <%=h number_to_currency(@discount.relative_price) %>
+	  <%=h number_to_percentage(@discount.relative_price*100, :precision => 0) %>
 	</p>
 	<p>
     <b>Catagoría</b><br />
@@ -27,13 +27,13 @@
 <div class="column2-unit-right">
 	<%= link_to(image_tag(@discount.barcode_filename, :style=>'border:none;'), show_barcode_url(@discount)) %>
 	<p>
-	  <b>Discuento Total Actual</b><br />
+	  <b>Descuento Total Actual</b><br />
 	  <%=h number_to_currency(@discount.price) %>
 	</p>
 </div>
 <hr class="clear-contentunit" />
 <p>
-  <b>Descripcion:</b>
+  <b>Descripción:</b>
   <%=h @discount.description %>
 </p>
 <p>
@@ -42,18 +42,20 @@
 		<div class="table_header_row">
 			<div class="table_cell_25">Nombre de Producto</div>
 			<div class="table_cell_15">Cantidad</div>
-			<div class="table_cell_15">Discuento Fijo</div>
-			<div class="table_cell_15">Discuento Relativo</div>
-			<div class="table_cell_15">Total de Discuento</div>
+			<div class="table_cell_10">Precio Regular</div>
+			<div class="table_cell_10">Precio Fijo</div>
+			<div class="table_cell_10">Precio Relativo</div>
+			<div class="table_cell_15">Precio Actual</div>
 			<div class="table_cell">UPC</div>
 		</div>
 		<% for requirement in @discount.requirements %>
 			<div class="table_row">
 				<div class="table_cell_25"><%=link_to requirement.required.name, edit_discount_path(requirement.required) %></div>
 				<div class="table_cell_15"><%=h requirement.quantity %></div>
-				<div class="table_cell_15"><%=h requirement.static_price %></div>
-				<div class="table_cell_15"><%=h requirement.relative_price %></div>
-				<div class="table_cell_15"><%=h requirement.price %></div>
+				<div class="table_cell_10"><%=h number_to_currency(requirement.required.price) %></div>
+				<div class="table_cell_10"><%=h number_to_currency(requirement.static_price) %></div>
+				<div class="table_cell_10"><%=h number_to_percentage(requirement.relative_price*100, :precision => 0) %></div>
+				<div class="table_cell_15"><%=h number_to_currency(requirement.price) %></div>
 				<div class="table_cell"><%=link_to requirement.required.show_upc, requirement.required %></div>
 			</div>
 		<% end %>
