@@ -20,7 +20,7 @@
 		  	<%= link_to serial.location.name, serial.location %>
 		  <% end %>
     </div>
-    <div class="table_cell"><%=h serial.product.upc %></div>
+    <div class="table_cell"><%=link_to serial.product.upc, serial.product %></div>
    </div>
 <% end %>
 <br />
