@@ -4,6 +4,7 @@
 		<dt><%= link_to 'Nueva cuenta', new_account_path  %></dt>
 		<dt><%= link_to 'Cambiar', edit_account_path(@account) %> </dt>
 		<dt><%= link_to 'Nueva Transaccion', new_tran_path  %></dt>
+		<dt><%= link_to 'Imprimir', account_path(@account, :format=>'pdf')  %></dt>
 		<dt><%= link_to 'Transferir Saldo', new_balance_transfer_path  %></dt>
 		<dt><%= link_to 'Contar Saldos', recount_balances_path  %></dt>
 		<dt><%= link_to 'Remover', @account, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
@@ -20,7 +21,7 @@
 		<%=h @account.number %>
 	</p>
 	<p>
-		<b>Balance</b>
+		<b>Saldo</b>
 		<b><%=h number_to_currency(@account.balance) %></b>
 	</p>
 </div>
@@ -49,34 +50,36 @@
 <hr class="clear-contentunit" />
 <div>
   <div class="table_header_row">
-    <div class="table_cell_10">Fecha</div>
-    <div class="table_cell_10">Transaccion</div>
-    <div class="table_cell_10">Pedido</div>
-    <div class="table_cell_25">Cuenta</div>
-    <div class="table_cell_15">Debito</div>
-    <div class="table_cell_15">Credito</div>
-    <div class="table_cell">Balance</div>
+    <div class="table_cell_15">Fecha</div>
+    <div class="table_cell_15">Transaccion</div>
+    <div class="table_cell_15">Tipo</div>
+    <div class="table_cell_20">Cuenta</div>
+    <div class="table_cell_10">Debito</div>
+    <div class="table_cell_10">Credito</div>
+    <div class="table_cell">Saldo</div>
   </div>
   <% for entry in @myposts %>
     <div class="table_row">
-      <div class="table_cell_10"><%= h entry.post.trans.created_at.to_date %></div>
-    	<div class="table_cell_10"><%= link_to entry.post.trans.id, tran_path(entry.post.trans) %></div>
-    	<div class="table_cell_10">
-    	  <% if entry.post.trans.order %>
-    	    <%= link_to entry.post.trans.order.id, entry.post.trans.order %>
+      <div class="table_cell_15"><%= h entry.post.trans.created_at.to_date %></div>
+    	<div class="table_cell_15"><%= link_to entry.post.trans.id, tran_path(entry.post.trans) %></div>
+    	<div class="table_cell_15">
+    	  <% if entry.post.trans.obj_link %>
+    	    <%= link_to entry.post.trans.description, entry.post.trans.obj_link %>
+    	  <% else %>
+    	    <%= h entry.post.trans.description %>
     	  <% end %>
-    	</div>  
-    	<div class="table_cell_25">
+    	</div>
+    	<div class="table_cell_20">
     	  <% if entry.account %>
-    	    <%= link_to entry.account.number_and_name, entry.account %>
+    	    <%= link_to entry.post.account.number_and_name, entry.account %>
     	  <% end %>
     	</div>
     	<% if entry.post.post_type_id==1 %>
-    	  <div class="table_cell_15"><%= h number_to_currency((entry.post.value||0)) %></div>
-    	  <div class="table_cell_15"></div>
+    	  <div class="table_cell_10"><%= h number_to_currency((entry.post.value||0)) %></div>
+    	  <div class="table_cell_10"></div>
     	<% else %>
-    	  <div class="table_cell_15"></div>
-    	  <div class="table_cell_15"><%= h number_to_currency((entry.post.value||0)) %></div>
+    	  <div class="table_cell_10"></div>
+    	  <div class="table_cell_10"><%= h number_to_currency((entry.post.value||0)) %></div>
     	<% end %>
     	<div class="table_cell"><%= h number_to_currency((entry.balance||0)) %></div>
     </div>

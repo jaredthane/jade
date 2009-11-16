@@ -15,6 +15,9 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class Account < ActiveRecord::Base
+  def to_param
+    "#{id}-#{name.parameterize}"
+  end
 	belongs_to :parent, :class_name => "Account", :foreign_key => "parent_id"
 	belongs_to :entity
 	has_many :posts
@@ -66,7 +69,7 @@ class Account < ActiveRecord::Base
 	def transfer_balance_to(account)
 		trans = Trans.create(:created_at=>User.current_user.today)
 		amt=self.balance
-		puts "amt="+amt.to_s
+		#puts "amt="+amt.to_s
 		if account.modifier==1 and self.modifier==1
 			act1 = Post.create(:trans=>trans, :account => self, :value=>amt, :post_type_id =>Post::CREDIT)
 			act2 = Post.create(:trans=>trans, :account => account, :value=>amt, :post_type_id =>Post::DEBIT)

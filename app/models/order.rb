@@ -68,6 +68,7 @@ class Order < ActiveRecord::Base
 	  for t in @transactions_to_create
 	  	if t
 				t.order_id=self.id
+				puts "saving trans type:" + t.tipo
 				t.save
 			end
 	  end
@@ -151,6 +152,7 @@ class Order < ActiveRecord::Base
 	# Returns a revision of a transaction with the Credit and Debit Posts Reversed
 	#################################################################################################
 	def reverse_transaction(t)
+	  t.type='Cancelacion de ' + t.tipo
 		for p in t.posts
 			if p.post_type_id==Post::DEBIT
 				p.post_type_id=Post::CREDIT
@@ -316,9 +318,12 @@ class Order < ActiveRecord::Base
 	end
 	def main_transaction
 		puts "Creating main transaction"
+	  puts "Order Type name ===================================================" + order_type.name
+	  puts "order_type.name is null!" if !order_type.name
+	  
 		case order_type_id
 		when 1 #Venta
-			sale=Trans.new(:user=>User.current_user,:created_at=>User.current_user.today)
+			sale=Trans.new(:user=>User.current_user,:created_at=>User.current_user.today, :tipo=> order_type.name, :is_payment=>false )
       sale.posts << Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)
       if self.total_tax != 0
       	##puts "=======================adding tax self.total_tax="+self.total_tax.to_s
@@ -337,31 +342,42 @@ class Order < ActiveRecord::Base
       	acct= Account.find(key)
 				sale.posts << Post.new(:account => acct, :value=>value, :post_type_id =>Post::CREDIT)
 			}    
+#			sale.tipo=order_type.name
+			puts "Order Type name ===================================================" + order_type.name
+			puts "trans Type name ===================================================" + sale.tipo
 			return sale   
 		when 2 # Compra
 	    ##puts self.vendor.cash_account.to_s
 	    ##puts self.total_price_with_tax.to_s
-	    purchase = Trans.new(:user=>User.current_user,:created_at=>User.current_user.today)
+	    puts "makin a purchase"
+	    purchase = Trans.new(:user=>User.current_user,:created_at=>User.current_user.today, :tipo=> order_type.name, :is_payment=>false)
 	    purchase.posts << Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
       purchase.posts << Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
+      
+#			purchase.tipo=order_type.name
+			puts "Order Type name ===================================================" + order_type.name
+			puts "trans Type name ===================================================" + purchase.tipo
 			return purchase
     end
 	end
 	def inventory_transaction
 		inventory_cost = self.inventory_value
     if inventory_cost > 0
-    	inventory = Trans.new(:user=>User.current_user,:created_at=>User.current_user.today)
+    	inventory = Trans.new(:user=>User.current_user,:created_at=>User.current_user.today, :tipo=> 'Inventario de ' + order_type.name, :is_payment=>false)
 	    inventory.posts << Post.new(:account => self.vendor.inventory_account, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
 	    inventory.posts << Post.new(:account => self.vendor.expense_account, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
 	  end
+#	  inventory.tipo='Inventario de ' + order_type.name
+		puts "Order Type name ===================================================" + order_type.name
+		puts "trans Type name ===================================================" + inventory.tipo
 	  return inventory
 	end
   ###################################################################################
   # compares two transactions and subtracts the second from the first
-  ##################################################################################
+  ###################################################################################
 	def transaction_diff(old, newtrans)
 		accounts_done=[]
-		diff=Trans.new(:user=>User.current_user,:created_at=>User.current_user.today)
+		diff=Trans.new(:user=>User.current_user,:created_at=>User.current_user.today, :tipo=>old.tipo, :is_payment=>false )
 		if old and !newtrans
 #			##puts "newtrans is null"
 			for oldpost in old.posts
@@ -411,6 +427,7 @@ class Order < ActiveRecord::Base
 		if User.current_user.do_accounting
 			if self.new_record?
 			  @transactions_to_create = [main_transaction, inventory_transaction]
+			  puts "checcking::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + @transactions_to_create[0].tipo
 			else
 				##puts "Checking for transactions in this update"
 				##puts "current total price: " + self.total_price.to_s

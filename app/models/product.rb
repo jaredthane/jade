@@ -69,7 +69,7 @@ class Product < ActiveRecord::Base
 		
 #		%x[rm 'public/barcodes/#{self.upc}.png']
 #		result = %x[barcode -b '#{self.upc}' -e upc -o 'public/barcodes/#{self.upc}.ps']
-#		puts "$?=#{$?.to_s}"
+#		#puts "$?=#{$?.to_s}"
 #		if $?.to_i != 0
 #			%x[barcode -b '#{self.upc}' -o 'public/barcodes/#{self.upc}.ps']
 #		end
@@ -122,7 +122,7 @@ class Product < ActiveRecord::Base
 	def calculate_quantity(location_id = User.current_user.location_id)
 		i=self.inventories.find_by_entity_id(location_id)
 		if self.product_type_id==1
-			puts "getting simple sum"
+			#puts "getting simple sum"
 #			i.quantity=self.movements.sum(:quantity)
       movements=self.movements.find_all_by_entity_id(location_id)
 			i.quantity=movements.inject(0) { |result, element| result + element.quantity }
@@ -133,24 +133,24 @@ class Product < ActiveRecord::Base
 #				i.quantity+=move.quantity
 #			end
 		elsif self.product_type_id==3
-			puts "this is a combo"
+			#puts "this is a combo"
 			newquantity=nil
 			for req in self.requirements
 				if newquantity == nil
-#					puts "quantity=req.required.id=#{req.required.id.to_s}"
-#					puts "req.required.quantity(location_id)=#{req.required.quantity(location_id).to_s}"
-#					puts "req.quantity=#{req.quantity.to_s}"
-#					puts "(req.required.quantity(location_id) / req.quantity).to_i=#{(req.required.quantity(location_id) / req.quantity).to_i.to_s}"
+#					#puts "quantity=req.required.id=#{req.required.id.to_s}"
+#					#puts "req.required.quantity(location_id)=#{req.required.quantity(location_id).to_s}"
+#					#puts "req.quantity=#{req.quantity.to_s}"
+#					#puts "(req.required.quantity(location_id) / req.quantity).to_i=#{(req.required.quantity(location_id) / req.quantity).to_i.to_s}"
 					newquantity = (req.required.quantity(location_id) / req.quantity).to_i
 				else
-#					puts "req.required.id=#{req.required.id.to_s}"
-#					puts "req.required.quantity(location_id)=#{req.required.quantity(location_id).to_s}"
-#					puts "req.quantity=#{req.quantity.to_s}"
-#					puts "[(req.required.quantity(location_id) / req.quantity).to_i, quantity].min =#{[(req.required.quantity(location_id) / req.quantity).to_i, quantity].min .to_s}"
+#					#puts "req.required.id=#{req.required.id.to_s}"
+#					#puts "req.required.quantity(location_id)=#{req.required.quantity(location_id).to_s}"
+#					#puts "req.quantity=#{req.quantity.to_s}"
+#					#puts "[(req.required.quantity(location_id) / req.quantity).to_i, quantity].min =#{[(req.required.quantity(location_id) / req.quantity).to_i, quantity].min .to_s}"
 					newquantity = [(req.required.quantity(location_id) / req.quantity).to_i, newquantity].min 
 				end
 			end
-			puts "quantity=#{quantity.to_s}"
+			#puts "quantity=#{quantity.to_s}"
 			i.quantity = newquantity
 		end
 		i.save
@@ -163,22 +163,22 @@ class Product < ActiveRecord::Base
 		return i.quantity
 	end
 	def update_cost(location_id = User.current_user.location_id)
-	    # puts "Hello There <-------------------------------------------------------------"
-	    # puts self.calculate_cost(location_id)
+	    # #puts "Hello There <-------------------------------------------------------------"
+	    # #puts self.calculate_cost(location_id)
 	    self.cost = self.calculate_cost(location_id)
 	end
 	def calculate_cost(location_id = User.current_user.location_id)
-		puts "product.id=#{self.id.to_s}"
-		puts "location_id=#{location_id.to_s}"
-		puts "hello"
+		#puts "product.id=#{self.id.to_s}"
+		#puts "location_id=#{location_id.to_s}"
+		#puts "hello"
 #		moves=connection.select_all("select movements.* from (select max(movements.id) as id from movements where product_id=#{self.id.to_s} group by order_id order by id DESC) as list left join movements on list.id=movements.id where movement_type_id=2;")
 		#moves = movements.find_all_by_entity_id(location_id, :order => 'created_at desc')
 		lines=self.lines.find(:all, :conditions => "orders.client_id=#{User.current_user.location_id} AND `lines`.received is not null", :joins => 'inner join orders on orders.id=`lines`.order_id')
-		puts "self.quantity(location_id)=" + self.quantity(location_id).to_s
-		# puts moves.inspect
+		#puts "self.quantity(location_id)=" + self.quantity(location_id).to_s
+		# #puts moves.inspect
 		stock = self.quantity(location_id)
-		puts "stock" + stock.to_s
-		puts "lines.length=" + lines.length.to_s
+		#puts "stock" + stock.to_s
+		#puts "lines.length=" + lines.length.to_s
 		if (stock == 0) or (lines.length == 0)
 		    return self.default_cost
 		end
@@ -191,32 +191,32 @@ class Product < ActiveRecord::Base
 		  break if items_to_count < 1
 		end
 #		while	(moves[movement_counter]) do
-#			puts moves[movement_counter].inspect
-#			puts "stock" + stock.inspect
-#			puts "items_counted" + items_counted.inspect
-#			## puts "moves[movement_counter].quantity" + moves[movement_counter].quantity
-#			puts "moves[movement_counter][quantity]" + moves[movement_counter]["quantity"].to_s
-#			puts "stock-items_counted" + (stock-items_counted).inspect
-#			puts "[stock-items_counted, moves[movement_counter].quantity].min=" + [stock-items_counted, moves[movement_counter]["quantity"].to_i].min.inspect
-#      puts "id:"+moves[movement_counter]["id"].to_s
-#			puts moves[movement_counter]["quantity"].to_i
-#			puts stock
-#			puts items_counted
+#			#puts moves[movement_counter].inspect
+#			#puts "stock" + stock.inspect
+#			#puts "items_counted" + items_counted.inspect
+#			## #puts "moves[movement_counter].quantity" + moves[movement_counter].quantity
+#			#puts "moves[movement_counter][quantity]" + moves[movement_counter]["quantity"].to_s
+#			#puts "stock-items_counted" + (stock-items_counted).inspect
+#			#puts "[stock-items_counted, moves[movement_counter].quantity].min=" + [stock-items_counted, moves[movement_counter]["quantity"].to_i].min.inspect
+#      #puts "id:"+moves[movement_counter]["id"].to_s
+#			#puts moves[movement_counter]["quantity"].to_i
+#			#puts stock
+#			#puts items_counted
 #			take = [stock-items_counted, moves[movement_counter]["quantity"].to_i].min
 #			l=Line.find(moves[movement_counter]["line_id"].to_i)
-#			puts "take" + take.to_s
-#			puts "couldnt find line#" +  moves[movement_counter]["line_id"].to_i.to_s if !l
-#			puts "take=#{take.to_s}"
-#			puts "m.value=#{m.value.to_s}"
+#			#puts "take" + take.to_s
+#			#puts "couldnt find line#" +  moves[movement_counter]["line_id"].to_i.to_s if !l
+#			#puts "take=#{take.to_s}"
+#			#puts "m.value=#{m.value.to_s}"
 #			totalcost += (l.price||0)*(take||0)
-#			puts items_counted.inspect
+#			#puts items_counted.inspect
 #			items_counted = items_counted + take
 #			end
 #			movement_counter = movement_counter + 1
 #		end
 		if stock > 0
-			puts "totalcost=#{totalcost.to_s}"
-			puts "stock=#{stock.to_s}"
+			#puts "totalcost=#{totalcost.to_s}"
+			#puts "stock=#{stock.to_s}"
 			return totalcost/stock
 		else
 			return 0
@@ -301,40 +301,40 @@ class Product < ActiveRecord::Base
 		# it should only be set for combos
 		# when it is true this function will return the total value of all of the components
 		if self.product_type_id == 2 or (self.product_type_id == 3 and final) # For calculating price of a discount or combo
-			puts "Getting price from requirements"
+			#puts "Getting price from requirements"
 			priceobj = price_group.prices.find_by_product_id(self.id)
 			if priceobj
-				puts "found priceobj"
+				#puts "found priceobj"
 				relative_price = (priceobj.relative||0)
 				static_price = (priceobj.fixed||0)
 			else
-				puts "unable to find priceobj"
+				#puts "unable to find priceobj"
 				relative_price =0
 				static_price =0
 			end
 			sum = 0
 			for req in self.requirements
-				puts "checking a req"
+				#puts "checking a req"
 				sum += req.price(price_group)
 			end
-			puts "sum=#{sum.to_s}"
+			#puts "sum=#{sum.to_s}"
 			if self.product_type_id == 2
 				price = (sum * relative_price) - static_price
 			else
 				price = (sum * relative_price) + static_price
 			end
-			puts "price1=#{price.to_s}"
+			#puts "price1=#{price.to_s}"
 		elsif (self.product_type_id == 3 and !final)
 			return (static_price||0)
 		else
-			puts "getting price for "
+			#puts "getting price for "
 			priceobj = price_group.prices.find_by_product_id(self.id)
 			priceobj = PriceGroup.find(User.current_user.location.price_group_id).prices.find_by_product_id(self.id) if !priceobj
 			relative_price = priceobj.relative
 			static_price = priceobj.fixed
 			price = (cost(price_group.entity)||0) * (relative_price||0) + (static_price||0)
 		end
-		puts "price2=#{price.to_s}"
+		#puts "price2=#{price.to_s}"
 		return price
 	end
 	def relative_price(price_group = User.current_user.current_price_group)

@@ -42,9 +42,11 @@ class Payment < ActiveRecord::Base
 			puts "running here too.."
   		order.amount_paid+=self.amount
   		order.save
-	    trans = Trans.create(:created_at=>User.current_user.today,:user=>User.current_user, :order => self.order, :comments => self.order.comments)
+	    trans = Trans.create(:is_payment=>true, :created_at=>User.current_user.today,:user=>User.current_user, :order_id => self.id, :comments => self.order.comments, :tipo => 'Pago de ' + self.order.order_type.name)
+#	    trans.tipo='Pago por' + self.order.order_type.name
 	  else
-	    trans = Trans.create(:created_at=>User.current_user.today,:user=>User.current_user)
+	    trans = Trans.create(:is_payment=>true, :created_at=>User.current_user.today,:user=>User.current_user, :order_id => self.id, :tipo=> 'Pago')
+#	  trans.tipo='Pago'
 	  end
 		case order.order_type_id
 		when 1 # Sale
@@ -59,9 +61,11 @@ class Payment < ActiveRecord::Base
 		if self.order
   		order.amount_paid-=self.amount
   		order.save
-	    trans = Trans.create(:created_at=>User.current_user.today,:user=>User.current_user, :order => self.order, :comments => self.order.comments)
+	    trans = Trans.create(:is_payment=>true, :created_at=>User.current_user.today,:user=>User.current_user, :order => self.id, :comments => self.order.comments + 'Cancelacion de Pago #' + self.order.id.to_s, :tipo => 'Cancelacion de Pago')
+#	    trans.tipo='Cancelacion de Pago por' + self.order.order_type.name
 	  else
-	    trans = Trans.create(:created_at=>User.current_user.today,:user=>User.current_user)
+	    trans = Trans.create(:is_payment=>true, :created_at=>User.current_user.today,:user=>User.current_user, :order => self.id, :tipo=> 'Cancelacion de Pago')
+#	    trans.tipo='Devolucion de Pago'
 	  end
 		case order.order_type_id
 		when 1 # Sale

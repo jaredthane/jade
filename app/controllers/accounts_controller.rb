@@ -38,6 +38,7 @@ class AccountsController < ApplicationController
 
     respond_to do |format|
       format.html # show.html.erb
+      format.pdf
       format.xml  { render :xml => @account }
     end
   end

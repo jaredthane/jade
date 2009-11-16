@@ -4,3 +4,5 @@ alter table entities add column vendor_accounts_group_id int(11);
 create table entries (id int(11) not null primary key auto_increment, post_id int(11), account_id int(11), balance decimal(8,2), created_at datetime);
 alter table movements add column line_id int(11);
 alter table orders add column purchase_receipt_number int(11);
+alter table trans add column type varchar(255);
+alter table trans add column is_payment tinyint(1);

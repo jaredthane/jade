@@ -29,6 +29,28 @@ class Trans < ActiveRecord::Base
 			self.posts << p
 		end
 	end
+	def description
+	  if self.tipo
+	    d=self.tipo
+	  else
+	    if self.is_payment
+	      d='Pago'
+	    else
+	      d='Pedido'
+	    end
+	  end
+	  if self.order_id
+	    d+=' #' + self.order_id.to_s
+	  end
+	  return d
+	end
+	def obj_link
+	  if self.is_payment
+	    return Payment.find_all_by_id(self.order_id)[0]
+	  else
+	    return Order.find_all_by_id(self.order_id)[0]
+	  end	  
+	end
 	def save_posts
 		#need to make sure they are balanced
 		# and that no account is repeated
