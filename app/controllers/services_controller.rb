@@ -54,6 +54,7 @@ class ServicesController < ApplicationController
   # GET /services/new.xml
   def new
     @service = Product.new
+    @service.unit_id = 1
 
     respond_to do |format|
       format.html # new.html.erb

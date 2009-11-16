@@ -105,6 +105,7 @@
 	  		<% end %>
 	  		<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
 					<li><a href="/purchases/new" title="Compra">Compra</a></li>
+					<li><a href="/services/new" title="Servicio">Servicio</a></li>
 					<li><a href="/products/new" title="Producto">Producto</a></li>
 					<li><a href="/discounts/new" title="Descuento">Descuento</a></li>
 					<li><a href="<%= new_combo_url %>" title="Combo">Combo</a></li>
