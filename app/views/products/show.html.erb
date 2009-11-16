@@ -5,7 +5,7 @@
 		<dt><%= link_to 'Cambiar', edit_product_path(@product), :class =>'action' %> </dt>		
 		<dt><%= link_to 'Codigo de Barra', show_barcode_path(@product), :class =>'action' %> </dt>		
 		<dt><%= link_to 'Cambiar Precio', :controller => "prices",:action => "index", :search => @product.upc, :class =>'action' %> </dt>
-
+    <dt><%= link_to 'Añadir Oferta de Garantia', new_warranty_path(:product_id=>@product), :class => 'action' %></dt>
   <% end %>
   <dt><%= link_to 'Lista', products_path, :class =>'action' %></dt>
 <% end %>

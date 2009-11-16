@@ -40,7 +40,7 @@ class WarrantiesController < ApplicationController
   # GET /warranties/new
   # GET /warranties/new.xml
   def new
-    @warranty = Warranty.new
+    @warranty = Warranty.new(:product_id=>params[:product_id])
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @warranty }
@@ -56,7 +56,6 @@ class WarrantiesController < ApplicationController
   # POST /warranties.xml
   def create
     @warranty = Warranty.new(params[:warranty])
-    @warranty.create_inventories(params[:product][:default_cost])
     respond_to do |format|
       if @warranty.save
         flash[:notice] = 'Garantía ha sido creado exitosamente.'
