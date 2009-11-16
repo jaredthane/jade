@@ -105,6 +105,7 @@ class ProductsController < ApplicationController
   # GET /products/new.xml
   def new
     @product = Product.new
+		@product.unit_id=1
 		@product.product_type_id=1
     respond_to do |format|
       format.html # new.html.erb
