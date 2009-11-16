@@ -13,6 +13,7 @@ costs arn't calculated right when you're buying multiple serialized products
 costs arent recalculated when you just change the price on an order
 cada uno should be default unit of measure
 
+serials.show doesnt show purchase receipt numbers
 serials purchased not sowing up on sites show page
 it says esperando entrega although it already has serials
 new lines created for discounts should have relative price set to 1
@@ -20,6 +21,8 @@ check inventory before accepting order
 give error if serial were selling isn't in inventory
 mark required fields with *
 use title tag to provide tooltips
+inventory.index should have save button in actions
+
 ------------------------ Left For Jade 2.0:     -------------------------------
 make orders have only one receipt
 make orders divide if over max items limit

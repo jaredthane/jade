@@ -146,7 +146,14 @@ class Order < ActiveRecord::Base
 		end
 	end
 	def receipt
-		return self.receipts(:last)
+  	return self.receipts(:last)
+  end
+	def receipt_number
+	  if self.order_type_id==2
+	    return self.purchase_receipt_number
+	  else
+  		return self.receipts(:last)[0].number
+  	end
 	end
 	#################################################################################################
 	# Returns a revision of a transaction with the Credit and Debit Posts Reversed
@@ -366,10 +373,10 @@ class Order < ActiveRecord::Base
     	inventory = Trans.new(:user=>User.current_user,:created_at=>User.current_user.today, :tipo=> 'Inventario de ' + order_type.name, :is_payment=>false)
 	    inventory.posts << Post.new(:account => self.vendor.inventory_account, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
 	    inventory.posts << Post.new(:account => self.vendor.expense_account, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
+	    puts "Order Type name ===================================================" + order_type.name
+		  puts "trans Type name ===================================================" + inventory.tipo
 	  end
 #	  inventory.tipo='Inventario de ' + order_type.name
-		puts "Order Type name ===================================================" + order_type.name
-		puts "trans Type name ===================================================" + inventory.tipo
 	  return inventory
 	end
   ###################################################################################
