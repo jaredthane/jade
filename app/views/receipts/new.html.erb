@@ -6,7 +6,13 @@
   <dt><%= link_to 'Cancelar', @order %></dt>
   <dt><%= link_to_function 'Generar', 'submit("receipt_form")' %></dt>
 <% end %>
- 
+<script type="text/javascript">
+  $(document).ready(function(){
+	  //Setup	date picker
+	  $.datepicker.regional['es']
+	  $(".datepicker").datepicker();
+	});
+</script> 
 <%= error_messages_for :receipt %>
  
 <% form_tag create_receipt_path, :method =>'post', :id => 'receipt_form' do %>
@@ -20,7 +26,7 @@
   <div class="column2-unit-right">
     <p>
       <b>Fecha:</b><br />
-    	<%= calendar_date_select_tag "created_at", User.current_user.today, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+    	<%= text_field_tag "created_at", User.current_user.today, :class=> 'field datepicker', :id => 'created_at_date_picker',:style=>'width:168px;' %>
     </p>
   </div>
 <% end %>

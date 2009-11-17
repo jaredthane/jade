@@ -17,7 +17,7 @@
 	</p>
 	<p>
 		<b>Precio Relativo:</b>
-		<%=h number_to_percentage(@subscription.relative_price||0) %>
+		<%=h number_to_percentage(@subscription.relative_price*100||0,:precision=>0) %>
 	</p>
 	<% if @subscription.end_date %>
 		<p>

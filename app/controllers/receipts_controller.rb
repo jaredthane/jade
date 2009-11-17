@@ -300,7 +300,8 @@ class ReceiptsController < ApplicationController
     return false
   end
 	def process_subscriptions
-	params[:next_order_date]=untranslate_month(params[:next_order_date])
+#    puts params[:next_order_date].type
+    params[:next_order_date] = Date.strptime(params[:next_order_date], '%d/%m/%Y').to_s(:db)
 		if params[:search]
   	  subs=Subscription.to_process(params[:search])
   	elsif params[:client_id]

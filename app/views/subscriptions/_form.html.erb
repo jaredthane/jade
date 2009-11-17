@@ -1,6 +1,7 @@
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "submit_link" %>
 <% end %>
+
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
     <% if mode == 'edit' %>
@@ -11,15 +12,21 @@
 	<dt><%= link_to_function 'Guardar', 'submit("subscription_form")', :class => 'action' %></dt>
 <% end %>
 <%= error_messages_for :subscription %>
-
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#client_lookup").autocomplete("/clients.js"); 
+		$("#product_lookup").autocomplete("/products.js"); 
+	  //Setup	date picker
+	  $.datepicker.regional['es']
+	  $(".datepicker").datepicker();
+	});
+</script>
 <% form_for(@subscription, :html => {:id => 'subscription_form' }) do |f| %>
     <%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 	<div class="column2-unit-left">
 		<p>
 			<b>Producto</b><br />
-			<%= text_field_with_auto_complete :subscription, :product_name, 
-					{:class => 'field', :size=>20 }, 
-					{:url => '/products.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+			<%= f.text_field :product_name, :class=> 'lookup field', :id => 'product_lookup',:style=>'width:168px;' %>
 		</p>
 		<p>
 			<b>Cantidad</b>
@@ -31,15 +38,13 @@
 		</p>
 		<p>
 			<b>Fecha de Vencimiento</b><br />
-			<%= calendar_date_select "subscription", :end_date, :month_year => "label", :size=>20 %>
+			<%= f.text_field :end_date, :class=> 'field datepicker', :id => 'end_date',:style=>'width:168px;' %>
 		</p>
 	</div>
 	<div class="column2-unit-right">
     <p>
       <b>Cliente</b><br />
-			<%= text_field_with_auto_complete :subscription, :client_name, 
-					{:class => 'field', :size=>30 }, 
-					{:url => '/clients.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+			<%= f.text_field :client_name, :class=> 'lookup field', :id => 'client_lookup',:style=>'width:168px;' %>
 		</p>
 		<p>
 			<b>Frequencia</b> (En meses)<br />
@@ -51,7 +56,8 @@
 		</p>
 		<p>
 			<b>Proxima Fecha</b>
-			<%= calendar_date_select "subscription", :next_order_date, :time => false, :year_range => 5.years.ago..0.years.ago, :size=>20 %>
+			<%= f.text_field :next_order_date, :class=> 'field datepicker', :id => 'next_order_date',:style=>'width:168px;' %>
+			
 		</p>
 		<p>
 			<b>Cantidad de Números</b><br />

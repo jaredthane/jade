@@ -40,7 +40,13 @@
  		  <dt><%= link_to 'Imprimir', entity_path(@entity, :format=>'pdf'), :class => 'action' %></dt>
 	<% end %>
 <% end %>
-
+<script type="text/javascript">
+	$(document).ready(function(){
+	  //Setup	date picker
+	  $.datepicker.regional['es']
+	  $(".datepicker").datepicker();
+	});
+</script>
   <% if @entity.entity_type_id !=3 and @entity.birthday? %>  
   	<% flash[:important] = 'Este cliente esta cumpliendo anos..' %> 
   <% end %>
@@ -270,7 +276,8 @@
 				  <div class="table_cell_10"><%=h number_to_currency((s.price||0)) %></div>
           <div class="table_cell_25">
           	<% form_tag process_subscription_url(s), :method =>'post', :id => 'sub_form' do %>
-						<%= calendar_date_select_tag "next_order_date", s.next_order_date, :time => false, :year_range => 10.years.ago..0.years.ago, :size=>20, :class => 'calendar_field' %>
+						
+						<%= text_field_tag "next_order_date", s.next_order_date, :class=> 'field datepicker', :id => 'next_order_date',:style=>'width:168px;' %>
           </div>
 		        <div class="table_cell_10">
 	            <%= text_field_tag :number, @next, :class => 'field'%>

@@ -12,15 +12,17 @@
 <% end %>
 
 <%= error_messages_for :warranty %>
-
+<script type="text/javascript">
+  $(document).ready(function(){
+	  $("#product_lookup").autocomplete("/products.js"); 
+	});
+</script> 
 <% form_for(@warranty, :html => {:id => 'warranty_form' }) do |f| %>
 
 	<div class="column2-unit-left">
 		<p>
-			<b>Producto</b>
-			<%= text_field_with_auto_complete :warranty, :product_name, 
-					{:class => 'field', :size=>30 }, 
-					{:url => '/products.js', :skip_style=>1, :method => :get, :param_name => 'search' } %>
+			<b>Producto</b><br />
+			<%= f.text_field :product_name, :class=> 'lookup field', :id => 'product_lookup',:style=>'width:278px;' %>
 		</p>
 		<p>
 		  <b>Duración en Meses</b><br />

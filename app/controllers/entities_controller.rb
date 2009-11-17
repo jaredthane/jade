@@ -306,7 +306,7 @@ end
   # POST /entities
   # POST /entities.xml
   def create
-    params[:entity][:birth]=untranslate_month(params[:entity][:birth]) if params[:entity][:birth]
+    params[:entity][:birth]=Date.strptime(params[:entity][:birth], '%d/%m/%Y')
     @entity = Entity.new(params[:entity])
     respond_to do |format|
       if @entity.save
