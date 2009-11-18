@@ -150,13 +150,22 @@ class Entity < ActiveRecord::Base
 		logger.debug "Account.find(parent_id).name=#{Account.find(parent_id).name.to_s}"
 		logger.debug "Account.find(parent_id).modifier=#{Account.find(parent_id).modifier.to_s}"
 		logger.debug "Account.find(parent_id)=#{Account.find(parent_id).to_s}"
-		account=Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'',:modifier=>Account.find(parent_id).modifier)
+		parent=Account.find(parent_id)
+	  mod=parent.modifier if parent
+		account=Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'',:modifier=>mod)
 		puts "account=#{account.to_s}"
 		return account
 	end
   before_create :create_accounts
 	def create_accounts()
 		puts "self.entity_type_id=#{self.entity_type_id.to_s}" 
+		if self.entity_type_id!=3
+		  if self.site
+    		group_id=self.site.client_accounts_group_id 
+    	else
+        group_id=User.current_user.location.client_accounts_group_id
+      end  	
+    end 
 		case self.entity_type_id
 		when 3 #Site
 			self.cash_account = create_account(NEW_SITE_CASH_ACCOUNT_PREFIX, 				NEW_SITE_CASH_ACCOUNT_SUFFIX, 			NEW_SITE_CASH_ACCOUNT_PARENT_ID) if !self.cash_account
@@ -168,26 +177,13 @@ class Entity < ActiveRecord::Base
 			self.employee_accounts_group = create_account(EMPLOYEE_ACCOUNTS_GROUP_PREFIX, 			EMPLOYEE_ACCOUNTS_GROUP_SUFFIX, 		EMPLOYEE_ACCOUNTS_GROUP_PARENT_ID) if !self.employee_accounts_group
 			self.client_accounts_group = create_account(CLIENT_ACCOUNTS_GROUP_PREFIX, 				CLIENT_ACCOUNTS_GROUP_SUFFIX, 			CLIENT_ACCOUNTS_GROUP_PARENT_ID) if !self.client_accounts_group
 		when 2 # Client
-		  if self.site
-    		client_accounts_group_id=self.site.client_accounts_group_id 
-    	else
-        client_accounts_group_id=User.current_user.location.client_accounts_group_id
-      end  	 
-			self.cash_account = create_account(NEW_CLIENT_ACCOUNT_PREFIX, NEW_CLIENT_ACCOUNT_SUFFIX, client_accounts_group_id) if !self.cash_account_id			
-			puts "CREATED A CASH ACCOUNT!!!! <+++++++++++++++++++++++++++++=="
-		when 5 # Client
-		  if self.site
-    		client_accounts_group_id=self.site.client_accounts_group_id 
-    	else
-        client_accounts_group_id=User.current_user.location.client_accounts_group_id
-      end  	 
-			self.cash_account = create_account(NEW_CLIENT_ACCOUNT_PREFIX, NEW_CLIENT_ACCOUNT_SUFFIX, client_accounts_group_id) if !self.cash_account_id			
-			puts "CREATED A CASH ACCOUNT!!!! <+++++++++++++++++++++++++++++=="
+			self.cash_account = create_account(NEW_CLIENT_ACCOUNT_PREFIX, NEW_CLIENT_ACCOUNT_SUFFIX, group_id) if !self.cash_account_id			
+		when 5 # Client 
+			self.cash_account = create_account(NEW_CLIENT_ACCOUNT_PREFIX, NEW_CLIENT_ACCOUNT_SUFFIX, group_id) if !self.cash_account_id			
 		when 1 # Vendor
-			self.cash_account = create_account(NEW_VENDOR_ACCOUNT_PREFIX, NEW_VENDOR_ACCOUNT_SUFFIX, client_accounts_group_id) if !self.cash_account_id			
-		else
-			puts "DID NOT CREATE A CASH ACCOUNT!!!! <+++++++++++++++++++++++++++++=="
+			self.cash_account = create_account(NEW_VENDOR_ACCOUNT_PREFIX, NEW_VENDOR_ACCOUNT_SUFFIX, group_id) if !self.cash_account_id			
 		end
+		puts "DID NOT CREATE A CASH ACCOUNT!!!! <+++++++++++++++++++++++++++++==" if !self.cash_account
 	end
 	after_create :update_accounts_with_my_id
   def update_accounts_with_my_id()
