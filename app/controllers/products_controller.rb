@@ -25,7 +25,7 @@ class ProductsController < ApplicationController
 	access_control [:destroy] => '(Admin)'
   def index
     #@products = Product.find(:all)
-    @search=params[:search] || ""
+    @search=(params[:search]||'') + ' ' + (params[:q]||'')
     case params[:scope] 
 		  when 'all'
 		  	@products = Product.search_all(params[:search], params[:page])

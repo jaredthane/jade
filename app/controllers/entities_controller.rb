@@ -163,8 +163,9 @@ end
     	@entity_type = 'entities'  
     end
     return false if !allowed((params[:entity_type] || 'entities'))
-    search = (params[:search]||'') + (params[:filter]||'')
+    search = (params[:search]||'') + (params[:filter]||'')+' '+(params[:q]||'')
     search += ' tipo:' + @entity_type if @entity_type != 'all'
+    puts search+'<00000000000000000000000000000000000000000000000000000000search'
     @entities = Entity.search(search, params[:page])
     respond_to do |format|
       format.html {

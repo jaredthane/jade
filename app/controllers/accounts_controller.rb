@@ -23,7 +23,8 @@ class AccountsController < ApplicationController
   # GET /accounts
   # GET /accounts.xml
   def index
-		@accounts = Account.search(params[:search], params[:page])
+    search=(params[:search]||'') + ' ' + (params[:q]||'')
+		@accounts = Account.search(search, params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @accounts }

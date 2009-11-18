@@ -17,7 +17,8 @@
 
 class ProductCategoriesController < ApplicationController
   def index
-		@product_categories = ProductCategory.search(params[:search], params[:page])
+    search=(params[:search]||'') + ' ' + (params[:q]||'')
+		@product_categories = ProductCategory.search(search, params[:page])
     respond_to do |format|
       format.html # show.html.erb
       format.js # index.html.erb

@@ -22,7 +22,8 @@ class UnitsController < ApplicationController
   # GET /units.xml
   def index
     #@units = Unit.find(:all)
-		@units = Unit.search(params[:search], params[:page])
+    search=(params[:search]||'') + ' ' + (params[:q]||'')
+		@units = Unit.search(search, params[:page])
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @units }
