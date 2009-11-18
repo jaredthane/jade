@@ -60,7 +60,7 @@
   </div>
   <% for entry in @myposts %>
     <div class="table_row">
-      <div class="table_cell_15"><%= h entry.post.trans.created_at.to_date %></div>
+      <div class="table_cell_15"><%= h entry.post.trans.created_at.to_date.to_s(:default) %></div>
     	<div class="table_cell_15"><%= link_to entry.post.trans.id, tran_path(entry.post.trans) %></div>
     	<div class="table_cell_15">
     	  <% if entry.post.trans.obj_link %>

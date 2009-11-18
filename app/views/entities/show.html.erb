@@ -297,34 +297,76 @@
   <hr class="clear-contentunit" />
 <% end %>
 <p>
-	<b>Transacciones Recientes:</b>
-  <div class="table_header_row">
-    <div class="table_cell_15">Fecha</div>
-    <div class="table_cell_15">Transaccion</div>
-    <div class="table_cell_15">Pedido</div>
-    <div class="table_cell_20">Debito</div>
-    <div class="table_cell_20">Credito</div>
-    <div class="table_cell">Saldo</div>
-  </div>
-  <% for entry in (@entity.recent_entries) %>
-    <div class="table_row">
-      <div class="table_cell_15"><%= h entry.post.trans.created_at.to_date %></div>
-    	<div class="table_cell_15"><%= link_to entry.post.trans.id, tran_path(entry.post.trans) %></div>
-    	<div class="table_cell_15">
-    	  <% if entry.post.trans.order %>
-    	    <%= link_to entry.post.trans.order.id, entry.post.trans.order %>
-    	  <% end %>
-    	</div>  
-    	<% if entry.post.post_type_id==1 %>
-    	  <div class="table_cell_20"><%= h number_to_currency((entry.post.value||0)) %></div>
-    	  <div class="table_cell_20"></div>
-    	<% else %>
-    	  <div class="table_cell_20"></div>
-    	  <div class="table_cell_20"><%= h number_to_currency((entry.post.value||0)) %></div>
-    	<% end %>
-    	<div class="table_cell"><%= h number_to_currency((entry.balance||0)) %></div>
+  <% if @entity.entity_type_id == 1 %>
+    <b>Compras Recientes de este Proveedor:</b>
+    <div>
+      <div class="table_header_row">
+      <div class="table_cell_15">Numero</div>
+      <div class="table_cell_20">Proveedor</div>
+      <div class="table_cell_15">Recibido</div>
+      <div class="table_cell_15">Total</div>
+      <div class="table_cell_15">Estado</div>
+      <div class="table_cell">Fecha</div>
     </div>
-  <% end %>
+    <% for order in Order.find_all_by_vendor_id(@entity, :limit => 10, :order => 'created_at DESC') %>
+      <div class="table_row">
+        <div class="table_cell_15"><%= link_to order.id, order %></div>
+        <div class="table_cell_20"><%= link_to order.vendor.name, order.vendor %></div>
+        <div class="table_cell_15"><%=h order.received %></div>
+        <div class="table_cell_15"><%=h number_to_currency(order.grand_total) %></div>
+        <div class="table_cell_15"><%=h awaiting(order) %></div>
+        <div class="table_cell"><%=h order.created_at.to_date.to_s %></div>
+      </div>
+    <% end %>
+  <% elsif @entity.entity_type_id == 3 %>
+    <b>Ventas Recientes en este Sitio:</b>
+    <div>
+      <div class="table_header_row">
+      <div class="table_cell_15">Numero</div>
+      <div class="table_cell_20">Cliente</div>
+      <div class="table_cell_15">Recibido</div>
+      <div class="table_cell_15">Total</div>
+      <div class="table_cell_15">Estado</div>
+      <div class="table_cell">Fecha</div>
+    </div>
+    <% for order in Order.find_all_by_vendor_id(@entity, :limit => 20, :order => 'created_at DESC') %>
+      <div class="table_row">
+        <div class="table_cell_15"><%= link_to order.id, order %></div>
+        <div class="table_cell_20"><%= link_to order.client.name, order.client %></div>
+        <div class="table_cell_15"><%=h order.received %></div>
+        <div class="table_cell_15"><%=h number_to_currency(order.grand_total) %></div>
+        <div class="table_cell_15"><%=h awaiting(order) %></div>
+        <div class="table_cell"><%=h order.created_at.to_date.to_s %></div>
+      </div>
+    <% end %>
+  <% else %>
+    <b>Ventas Recientes a este Cliente:</b>
+    <div>
+    <div class="table_header_row">
+      <div class="table_cell_15">Numero</div>
+      <div class="table_cell_20">Proveedor</div>
+      <div class="table_cell_15">Recibido</div>
+      <div class="table_cell_15">Total</div>
+      <div class="table_cell_15">Estado</div>
+      <div class="table_cell">Fecha</div>
+    </div>
+    <% for order in Order.find_all_by_client_id(@entity, :limit => 20, :order => 'created_at DESC') %>
+      <div class="table_row">
+        <div class="table_cell_15"><%= link_to order.id, order %></div>
+        <div class="table_cell_20"><%= link_to order.vendor.name, order.vendor %></div>
+        <div class="table_cell_15"><%=h order.received %></div>
+        <div class="table_cell_15"><%=h number_to_currency(order.grand_total) %></div>
+        <div class="table_cell_15"><%=h awaiting(order) %></div>
+        <div class="table_cell">
+          <% if order.created_at %>
+            <%=h order.created_at.to_date.to_s %>
+          <% end %>
+        </div>
+      </div>
+      <% end %>
+    <% end %>
+  </div>
 </p>
+
 
 

@@ -51,7 +51,7 @@ class Account < ActiveRecord::Base
 	  return self.entries
 	end
 	def recent_entries(limit)
-	  return self.entries.find(:all, :order=>'id DESC',:limit=>limit)
+	  return self.entries.find(:all, :order=>'created_at DESC',:limit=>limit)
 	end
 	
 #	def all_posts
