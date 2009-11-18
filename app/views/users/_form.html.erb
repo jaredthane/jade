@@ -12,7 +12,13 @@
 <% end %>
 
 <%= error_messages_for :unit %>
-
+<script type="text/javascript">
+	$(document).ready(function(){
+	  //Setup	date picker
+	  $.datepicker.regional['es']
+	  $(".datepicker").datepicker();
+	});
+</script>
 <% form_for @user, :html => {:id => 'user_form' }  do |f| %>
 	
 	<div class="column2-unit-left">
@@ -47,7 +53,7 @@
 	<div class="column2-unit-right">
 		<p>
 			<b>Dia de Trabajo Actual</b>
-			<%= calendar_date_select "user", :today, :time => false, :year_range => 100.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+			<%= f.text_field :today, :class=> 'field datepicker', :id => 'end_date',:style=>'width:168px;' %>
 		</p>
 		<p>
 		  <b>Correo Electronico</b><br />
