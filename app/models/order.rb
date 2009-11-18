@@ -323,18 +323,18 @@ class Order < ActiveRecord::Base
 		@movements_to_create = [] if !@movements_to_create 
 		@movements_to_create.push(m)
 	end
-	def main_transaction
+	def main_transaction(date=User.current_user.today)
 		puts "Creating main transaction"
 	  puts "Order Type name ===================================================" + order_type.name
 	  puts "order_type.name is null!" if !order_type.name
 	  
 		case order_type_id
 		when 1 #Venta
-			sale=Trans.new(:user=>User.current_user,:created_at=>User.current_user.today, :tipo=> order_type.name, :is_payment=>false )
-      sale.posts << Post.new(:account => self.client.cash_account, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)
+			sale=Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> order_type.name, :is_payment=>false )
+      sale.posts << Post.new(:account => self.client.cash_account,:created_at=>date, :value=>self.total_price_with_tax, :post_type_id =>Post::DEBIT)
       if self.total_tax != 0
       	##puts "=======================adding tax self.total_tax="+self.total_tax.to_s
-      	sale.posts << Post.new(:account => self.vendor.tax_account, :value=>self.total_tax, :post_type_id =>Post::CREDIT)
+      	sale.posts << Post.new(:account => self.vendor.tax_account,:created_at=>date, :value=>self.total_tax, :post_type_id =>Post::CREDIT)
       end
       revenue_accts={}
       for line in self.lines
@@ -347,7 +347,7 @@ class Order < ActiveRecord::Base
       end
       revenue_accts.each { |key, value| 
       	acct= Account.find(key)
-				sale.posts << Post.new(:account => acct, :value=>value, :post_type_id =>Post::CREDIT)
+				sale.posts << Post.new(:account => acct, :value=>value,:created_at=>date, :post_type_id =>Post::CREDIT)
 			}    
 #			sale.tipo=order_type.name
 			puts "Order Type name ===================================================" + order_type.name
@@ -357,9 +357,9 @@ class Order < ActiveRecord::Base
 	    ##puts self.vendor.cash_account.to_s
 	    ##puts self.total_price_with_tax.to_s
 	    puts "makin a purchase"
-	    purchase = Trans.new(:user=>User.current_user,:created_at=>User.current_user.today, :tipo=> order_type.name, :is_payment=>false)
-	    purchase.posts << Post.new(:account => self.vendor.cash_account, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
-      purchase.posts << Post.new(:account => self.client.inventory_account, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
+	    purchase = Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> order_type.name, :is_payment=>false)
+	    purchase.posts << Post.new(:account => self.vendor.cash_account,:created_at=>date, :value => self.total_price_with_tax, :post_type_id =>Post::CREDIT)
+      purchase.posts << Post.new(:account => self.client.inventory_account,:created_at=>date, :value => self.total_price_with_tax, :post_type_id =>Post::DEBIT)
       
 #			purchase.tipo=order_type.name
 			puts "Order Type name ===================================================" + order_type.name
@@ -367,12 +367,12 @@ class Order < ActiveRecord::Base
 			return purchase
     end
 	end
-	def inventory_transaction
+	def inventory_transaction(date=User.current_user.today)
 		inventory_cost = self.inventory_value
     if inventory_cost > 0
-    	inventory = Trans.new(:user=>User.current_user,:created_at=>User.current_user.today, :tipo=> 'Inventario de ' + order_type.name, :is_payment=>false)
-	    inventory.posts << Post.new(:account => self.vendor.inventory_account, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
-	    inventory.posts << Post.new(:account => self.vendor.expense_account, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
+    	inventory = Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> 'Inventario de ' + order_type.name, :is_payment=>false)
+	    inventory.posts << Post.new(:account => self.vendor.inventory_account,:created_at=>date, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
+	    inventory.posts << Post.new(:account => self.vendor.expense_account,:created_at=>date, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
 	    puts "Order Type name ===================================================" + order_type.name
 		  puts "trans Type name ===================================================" + inventory.tipo
 	  end
@@ -382,13 +382,13 @@ class Order < ActiveRecord::Base
   ###################################################################################
   # compares two transactions and subtracts the second from the first
   ###################################################################################
-	def transaction_diff(old, newtrans)
+	def transaction_diff(old, newtrans, date=User.current_user.today)
 		accounts_done=[]
-		diff=Trans.new(:user=>User.current_user,:created_at=>User.current_user.today, :tipo=>old.tipo, :is_payment=>false )
+		diff=Trans.new(:user=>User.current_user,:created_at=>date, :tipo=>old.tipo, :is_payment=>false )
 		if old and !newtrans
 #			##puts "newtrans is null"
 			for oldpost in old.posts
-				diff.posts << Post.new(:account =>oldpost.account, :value=> oldpost.value, :post_type_id=>oldpost.opposite_type)
+				diff.posts << Post.new(:account =>oldpost.account,:created_at=>date, :value=> oldpost.value, :post_type_id=>oldpost.opposite_type)
 			end
 		elsif newtrans and !old
 #			##puts "old trans is null"
@@ -408,13 +408,13 @@ class Order < ActiveRecord::Base
 				if newpost
 					if oldpost.value > newpost.value
 #						##puts "Difference in values " + oldpost.value.to_s + "-" + newtrans.value.to_s + "=" + (oldpost.value-newtrans.value).to_s
-						diff.posts << Post.new(:account =>oldpost.account, :value=> oldpost.value-newpost.value, :post_type_id=>oldpost.opposite_type)
+						diff.posts << Post.new(:account =>oldpost.account,:created_at=>date, :value=> oldpost.value-newpost.value, :post_type_id=>oldpost.opposite_type)
 					elsif oldpost.value < newpost.value
-						diff.posts << Post.new(:account =>oldpost.account, :value=> newpost.value-oldpost.value, :post_type_id=>oldpost.post_type_id)					
+						diff.posts << Post.new(:account =>oldpost.account,:created_at=>date, :value=> newpost.value-oldpost.value, :post_type_id=>oldpost.post_type_id)					
 					end
 				else
 #					##puts "missing new post for account#" + oldpost.account.id.to_s
-					diff.posts << Post.new(:account =>oldpost.account, :value=> oldpost.value, :post_type_id=>oldpost.opposite_type)
+					diff.posts << Post.new(:account =>oldpost.account,:created_at=>date, :value=> oldpost.value, :post_type_id=>oldpost.opposite_type)
 				end
 				accounts_done << oldpost.account_id
 			end
@@ -430,10 +430,10 @@ class Order < ActiveRecord::Base
   ###################################################################################
   # checks if there are any transactions to be made, if so, it calls prepare_transaction
   ##################################################################################
-	def check_for_transactions
+	def check_for_transactions(date=User.current_user.today)
 		if User.current_user.do_accounting
 			if self.new_record?
-			  @transactions_to_create = [main_transaction, inventory_transaction]
+			  @transactions_to_create = [main_transaction(date), inventory_transaction(date)]
 			  puts "checcking::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + @transactions_to_create[0].tipo
 			else
 				##puts "Checking for transactions in this update"
@@ -446,11 +446,11 @@ class Order < ActiveRecord::Base
 			  	##puts "old main transaction" + old.main_transaction.posts.inspect
 			  	##puts "new main transaction" + self.main_transaction.posts.inspect
 			  	##puts "dif main transaction" + transaction_diff(old.main_transaction, self.main_transaction).posts.inspect
-			  	@transactions_to_create = [transaction_diff(old.main_transaction, self.main_transaction)]
+			  	@transactions_to_create = [transaction_diff(old.main_transaction, self.main_transaction,date)]
 			  	##puts "old inventory transaction" + old.inventory_transaction.posts.inspect if old.inventory_transaction
 			  	##puts "new inventory transaction" + self.inventory_transaction.posts.inspect if self.inventory_transaction
 	#	    	##puts "dif inventory transaction" + transaction_diff(old.inventory_transaction, self.inventory_transaction).posts.inspect
-			  	i=transaction_diff(old.inventory_transaction, self.inventory_transaction)
+			  	i=transaction_diff(old.inventory_transaction, self.inventory_transaction, date)
 			  	@transactions_to_create << i if i
 			  end
 			end	
