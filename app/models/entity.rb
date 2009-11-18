@@ -156,12 +156,7 @@ class Entity < ActiveRecord::Base
 	end
   before_create :create_accounts
 	def create_accounts()
-		puts "self.entity_type_id=#{self.entity_type_id.to_s}"
-		if self.site
-  		client_accounts_group_id=self.site.client_accounts_group_id 
-  	else
-      client_accounts_group_id=User.current_user.location.client_accounts_group_id
-    end  	  
+		puts "self.entity_type_id=#{self.entity_type_id.to_s}" 
 		case self.entity_type_id
 		when 3 #Site
 			self.cash_account = create_account(NEW_SITE_CASH_ACCOUNT_PREFIX, 				NEW_SITE_CASH_ACCOUNT_SUFFIX, 			NEW_SITE_CASH_ACCOUNT_PARENT_ID) if !self.cash_account
@@ -173,9 +168,19 @@ class Entity < ActiveRecord::Base
 			self.employee_accounts_group = create_account(EMPLOYEE_ACCOUNTS_GROUP_PREFIX, 			EMPLOYEE_ACCOUNTS_GROUP_SUFFIX, 		EMPLOYEE_ACCOUNTS_GROUP_PARENT_ID) if !self.employee_accounts_group
 			self.client_accounts_group = create_account(CLIENT_ACCOUNTS_GROUP_PREFIX, 				CLIENT_ACCOUNTS_GROUP_SUFFIX, 			CLIENT_ACCOUNTS_GROUP_PARENT_ID) if !self.client_accounts_group
 		when 2 # Client
+		  if self.site
+    		client_accounts_group_id=self.site.client_accounts_group_id 
+    	else
+        client_accounts_group_id=User.current_user.location.client_accounts_group_id
+      end  	 
 			self.cash_account = create_account(NEW_CLIENT_ACCOUNT_PREFIX, NEW_CLIENT_ACCOUNT_SUFFIX, client_accounts_group_id) if !self.cash_account_id			
 			puts "CREATED A CASH ACCOUNT!!!! <+++++++++++++++++++++++++++++=="
 		when 5 # Client
+		  if self.site
+    		client_accounts_group_id=self.site.client_accounts_group_id 
+    	else
+        client_accounts_group_id=User.current_user.location.client_accounts_group_id
+      end  	 
 			self.cash_account = create_account(NEW_CLIENT_ACCOUNT_PREFIX, NEW_CLIENT_ACCOUNT_SUFFIX, client_accounts_group_id) if !self.cash_account_id			
 			puts "CREATED A CASH ACCOUNT!!!! <+++++++++++++++++++++++++++++=="
 		when 1 # Vendor
