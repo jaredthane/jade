@@ -14,6 +14,11 @@
 <%= error_messages_for :unit %>
 <script type="text/javascript">
 	$(document).ready(function(){
+	
+		$("#cash_account_lookup").autocomplete("/accounts.js"); 
+		$("#revenue_account_lookup").autocomplete("/accounts.js"); 
+		$("#personal_account_lookup").autocomplete("/accounts.js"); 
+		
 	  //Setup	date picker
 	  $.datepicker.regional['es']
 	  $(".datepicker").datepicker();
@@ -71,15 +76,15 @@
 		<% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
 		  <p>
 		    <b>Cuenta para Fondos Recibido por la Compañía</b><br />
-			  <%= f.collection_select(:cash_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+			  <%= f.text_field :cash_account, :class=> 'lookup field', :id => 'cash_account_lookup',:style=>'width:168px;' %>
 		  </p>
 		  <p>
 		    <b>Cuenta para Ingresos por Ventas Hechas</b><br />
-			  <%= f.collection_select(:revenue_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+			  <%= f.text_field :revenue_account, :class=> 'lookup field', :id => 'revenue_account_lookup',:style=>'width:168px;' %>
 		  </p>
 		  <p>
 		    <b>Cuenta para Fondos Personales</b><br />
-			  <%= f.collection_select(:personal_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+			  <%= f.text_field :personal_account, :class=> 'lookup field', :id => 'personal_account_lookup',:style=>'width:168px;' %>
 		  </p>
 		<% end %>
 	</div>
