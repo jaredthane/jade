@@ -146,10 +146,10 @@ class Entity < ActiveRecord::Base
   def create_account(prefix, suffix, parent_id)
 		account_name = (prefix||'') + self.name + (suffix||'')
 		puts "account_name=#{account_name.to_s}"
-		logger.debug "parent_id=#{parent_id.to_s}"
-		logger.debug "Account.find(parent_id).name=#{Account.find(parent_id).name.to_s}"
-		logger.debug "Account.find(parent_id).modifier=#{Account.find(parent_id).modifier.to_s}"
-		logger.debug "Account.find(parent_id)=#{Account.find(parent_id).to_s}"
+		puts "parent_id=#{parent_id.to_s}"
+		puts "Account.find(parent_id).name=#{Account.find(parent_id).name.to_s}"
+		puts "Account.find(parent_id).modifier=#{Account.find(parent_id).modifier.to_s}"
+		puts "Account.find(parent_id)=#{Account.find(parent_id).to_s}"
 		parent=Account.find(parent_id)
 	  mod=parent.modifier if parent
 		account=Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'',:modifier=>mod)
