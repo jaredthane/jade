@@ -19,8 +19,8 @@
 				return false;
 			}
 		});
-		$("#category_lookup").autocomplete("/categories.js"); 
-		$("#unit_lookup").autocomplete("/units.js"); 
+		$("#category_lookup").autocomplete("/categories.js",{matchSubset:0, autoFill:1}); 
+		$("#unit_lookup").autocomplete("/units.js",{matchSubset:0, autoFill:1}); 
 	});
 </script>
 

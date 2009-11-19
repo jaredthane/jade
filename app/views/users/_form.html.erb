@@ -15,9 +15,9 @@
 <script type="text/javascript">
 	$(document).ready(function(){
 	
-		$("#cash_account_lookup").autocomplete("/accounts.js"); 
-		$("#revenue_account_lookup").autocomplete("/accounts.js"); 
-		$("#personal_account_lookup").autocomplete("/accounts.js"); 
+		$("#cash_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#revenue_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#personal_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
 		
 	  //Setup	date picker
 	  $.datepicker.regional['es']

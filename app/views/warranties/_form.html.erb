@@ -14,7 +14,7 @@
 <%= error_messages_for :warranty %>
 <script type="text/javascript">
   $(document).ready(function(){
-	  $("#product_lookup").autocomplete("/products.js"); 
+	  $("#product_lookup").autocomplete("/products.js",{matchSubset:0, autoFill:1}); 
 	});
 </script> 
 <% form_for(@warranty, :html => {:id => 'warranty_form' }) do |f| %>

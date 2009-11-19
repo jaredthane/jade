@@ -14,8 +14,8 @@
 <%= error_messages_for :subscription %>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("#client_lookup").autocomplete("/clients.js"); 
-		$("#product_lookup").autocomplete("/products.js"); 
+		$("#client_lookup").autocomplete("/clients.js",{matchSubset:0, autoFill:1}); 
+		$("#product_lookup").autocomplete("/products.js",{matchSubset:0, autoFill:1}); 
 	  //Setup	date picker
 	  $.datepicker.regional['es']
 	  $(".datepicker").datepicker();
