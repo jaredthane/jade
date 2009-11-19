@@ -44,7 +44,7 @@ $(document).ready(function(){
 	$.datepicker.regional['es']
 	$(".datepicker").datepicker();
 	// Prepare lookups
-	$("#client_lookup").autocomplete("/clients.js"); 
+	$("#client_lookup").autocomplete("/clients.js",{matchSubset:0, autoFill:1}); 
 	$("#vendor_lookup").autocomplete("/vendors.js"); 
 	$("#bar_code_field").keydown(function(e){
 		if (e.keyCode == 13) {
