@@ -219,8 +219,21 @@ class ReceiptsController < ApplicationController
     send_file "#{RAILS_ROOT}/invoice_pdfs/concat.pdf", :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
   end
   def index
-		@from=untranslate_month((params[:from] ||Date.today.to_s(:long)))
-    @till=untranslate_month((params[:till] ||Date.today.to_s(:long)))
+#    puts "@from=" + @from.to_s
+    puts 'from is nil' if @from == nil
+    puts 'from is string' if @from.class==String
+    puts 'from is date' if @from.class==Date
+#    puts 'from is here' if @from
+	  @from=(untranslate_month(params[:from])||Date.today)
+    @till=(untranslate_month(params[:till])||Date.today)
+#    puts "@from=" + @from.to_s
+#    puts 'from is nil' if @from == nil
+#    puts 'from is string' if @from.class==String
+#    puts 'from is date' if @from.class==Date
+#    puts 'from is here' if @from
+#    @from=(@from||Date.today)
+#    @till=(@till||Date.today)
+    @site=User.current_user.location
   	@sites=(params[:sites] ||[current_user.location_id])
 		if params[:index]=='1'
 			@receipts = Receipt.search_wo_pages(params[:search],@from, @till, @sites)

@@ -224,6 +224,9 @@ class Receipt < ActiveRecord::Base
 #		         :joins => 'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id = orders.client_id'
 #	end
 	def self.search_credito_fiscal(search, page, from=Date.today, till=Date.today, sites=[User.current_user.location_id])
+#	  puts 'from is nil' if !from
+#	  from=Date.today if !from
+#	  till=Date.today if !till
 		site_string=''
 		for site in sites
 			site_string+= ' OR 'if site_string !=''
@@ -239,6 +242,8 @@ class Receipt < ActiveRecord::Base
 #		         :joins => 'inner join orders on receipts.order_id = orders.id left join users on users.id=orders.user_id inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id'
 	end
 	def self.search_consumidor_final(search, page, from=Date.today, till=Date.today, sites=[User.current_user.location_id])
+#	  from=Date.today if !from
+#	  till=Date.today if !till
 		site_string=''
 		for site in sites
 			site_string+= ' OR 'if site_string !=''

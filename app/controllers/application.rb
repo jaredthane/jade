@@ -67,6 +67,18 @@ class ApplicationController < ActionController::Base
 #		return parts.join(' ')
 #	end
 	def untranslate_month(date)
-		return Date.strptime(date, '%d/%m/%Y').to_s(:db)
+	  if date
+	    if date.class==String
+	      if date!=''
+      		return Date.strptime(date, '%d/%m/%Y')
+      	else 
+      	  return nil
+      	end
+      elsif date.class==Date
+        return date
+      end
+    else
+      return nil	
+    end
 	end
 end
