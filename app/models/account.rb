@@ -81,7 +81,7 @@ class Account < ActiveRecord::Base
 	def recount_balances()
 #		balance=Post.last(:conditions=> ['date(trans.created_at) < :start AND posts.account_id=:account', {:start=>start.to_date.to_s('%Y-%m-%d'), :account=>self.id}],:joins=>'inner join trans on trans.id=posts.trans_id').balance
 		balance=0
-		for entry in self.entries
+		for entry in self.entries(:order=>'created_at')
 			entry.balance=balance+(entry.post.value || 0)* (entry.post.post_type_id || 0) * (entry.account.modifier || 0)
 			balance=entry.balance
 			entry.save
