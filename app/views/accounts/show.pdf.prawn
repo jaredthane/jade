@@ -1,11 +1,15 @@
 pdf.font_size = 20
 	pdf.text "Estado de Cuentas de " + @account.name, :align => :center, :style => :bold
-	pdf.text "Cliente Numero " + @account.entity.id.to_s, :align => :center
+	if @account.entity
+  	pdf.text "Cliente Numero " + @account.entity.id.to_s, :align => :center
+  end
 pdf.move_down 50
 pdf.font_size = 12
 current_line=675
 current_line=printline("Saldo: ", @account.balance.to_s, 0, current_line,35,pdf)
-current_line=printline("Rama: ", @account.parent.name.to_s, 0, current_line,35,pdf)
+if @account.parent
+  current_line=printline("Rama: ", @account.parent.name.to_s, 0, current_line,35,pdf)
+end
 current_line=675
 if @account.modifier==1
   current_line=printline("Tipo de Cuenta: ", 'Debito', 286, current_line,35,pdf)
@@ -18,17 +22,29 @@ pdf.move_down 60
 @entries_table=[]
 x = Object.new.extend(ActionView::Helpers::NumberHelper)
 for entry in @account.entries
+  if entry.post.trans.order
+    if entry.post.trans.order.received
+      received = (entry.post.trans.order.received.to_date||'')
+     else
+      received = entry.post.trans.created_at.to_date
+     end
+    number=entry.post.trans.order.receipt_number
+  else
+    received = entry.post.trans.created_at.to_date
+    number=""
+  end
+  
 	if entry.post.post_type_id==1
-		@entries_table<< [entry.post.trans.created_at.to_date, entry.post.trans_id, entry.post.trans.description,entry.post.account.name, x.number_to_currency((entry.post.value||0)),'',x.number_to_currency((entry.balance||0))]
+		@entries_table<< [received, number, entry.post.trans.description,entry.post.account.name, x.number_to_currency((entry.post.value||0)),'',x.number_to_currency((entry.balance||0))]
 	else
-		@entries_table<< [entry.post.trans.created_at.to_date, entry.post.trans_id, entry.post.trans.description,entry.post.account.name,'', x.number_to_currency((entry.post.value||0)),x.number_to_currency((entry.balance||0))]
+		@entries_table<< [received, number, entry.post.trans.description,entry.post.account.name,'', x.number_to_currency((entry.post.value||0)),x.number_to_currency((entry.balance||0))]
 	end
 end
 pdf.font_size = 14
 	pdf.text "Transacciones recientes", :style => :bold
 	pdf.table(@entries_table,
 		 :font_size => 12,
-		 :headers => ['Fecha', 'Transaccion', 'Tipo', 'Cuenta','Debito', 'Credito', 'Saldo'],
+		 :headers => ['Fecha', 'Factura', 'Tipo', 'Cuenta','Debito', 'Credito', 'Saldo'],
 		 :horizontal_padding => 1,
 		 :vertical_padding => 1,
 		 :border_width => 1,

@@ -152,7 +152,11 @@ class Order < ActiveRecord::Base
 	  if self.order_type_id==2
 	    return self.purchase_receipt_number
 	  else
-  		return self.receipts(:last)[0].number
+	    if self.receipts(:last).length > 0
+  		  return self.receipts(:last)[0].number
+  		else
+  		  return ""
+  		end
   	end
 	end
 	#################################################################################################
