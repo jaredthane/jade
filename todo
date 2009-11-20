@@ -22,6 +22,7 @@ give error if serial were selling isn't in inventory
 mark required fields with *
 use title tag to provide tooltips
 inventory.index should have save button in actions
+new clients should have default price group by *default*
 
 ------------------------ Left For Jade 2.0:     -------------------------------
 make orders have only one receipt

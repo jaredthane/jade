@@ -307,7 +307,8 @@ end
   # POST /entities
   # POST /entities.xml
   def create
-    params[:entity][:birth]=Date.strptime(params[:entity][:birth], '%d/%m/%Y')
+#    params[:entity][:birth]=Date.strptime(params[:entity][:birth], '%d/%m/%Y')
+    params[:entity][:birth] = untranslate_month(params[:entity][:birth]) if params[:entity][:birth]
     @entity = Entity.new(params[:entity])
     respond_to do |format|
       if @entity.save
@@ -315,7 +316,7 @@ end
       	logger.debug "creating entity workd"
       	logger.debug "|" + params[:entity][:entity_type_id].to_s + "|"
       	if params[:entity][:entity_type_id] == '3'
-      	    logger.debug "its a site"
+    	    logger.debug "its a site"
 		    	for p in Product.all
 		    		i=Inventory.create(:entity=>@entity, :product=>p, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
 		    	end  
@@ -329,7 +330,7 @@ end
           		Price.create(:price_group=>pg, :product=>p, :fixed=>0, :relative=>0, :available=> false)
           	end
           end
-		    end    	
+		    end
         flash[:notice] = 'Entidad ha sido creado exitosamente.'
         format.html { redirect_to(@entity) }
         format.xml  { render :xml => @entity, :status => :created, :location => @entity }

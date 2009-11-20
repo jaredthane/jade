@@ -149,7 +149,7 @@ class UsersController < ApplicationController
 			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
 		end
 		params[:user][:today]=untranslate_month(params[:user][:today]) if params[:user][:today]
-		logger.debug "Month has been translated to:" + params[:user][:today]
+#		logger.debug "Month has been translated to:" + params[:user][:today]
 		to_delete=[]
 		#Update existing reqs
     for l in @user.roles_users

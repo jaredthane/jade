@@ -133,6 +133,12 @@ class Entity < ActiveRecord::Base
    end
    return clean; 
   end
+  def birth_string
+    return birth.to_s
+  end
+  def birth_string=(val)
+    birth=DateTime.strptime(val, '%d/%m/%Y %H:%M:%S')
+  end
   def existing_movement_attributes=(movement_attributes)
     movements.reject(&:new_record?).each do |movement|
       attributes = movement_attributes[movement.id.to_s]
