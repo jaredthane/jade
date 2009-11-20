@@ -62,7 +62,10 @@ require "prawn"
 require "prawn/layout"
 require "calendar_date_select"
 
-#ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(:default => '%d/%m/%Y',:normal => '%m/%d/%Y')
+ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(
+  :default => '%d/%m/%Y %H:%M:%S',
+  :normal => '%m/%d/%Y %H:%M:%S'
+)
 ActiveSupport::CoreExtensions::Date::Conversions::DATE_FORMATS.merge!(
   :normal => '%m/%d/%Y',
   :default => '%d/%m/%Y'

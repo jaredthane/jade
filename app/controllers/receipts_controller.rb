@@ -406,6 +406,7 @@ class ReceiptsController < ApplicationController
 			return false 
   	end
   	params[:receipt][:created_at]=untranslate_month(params[:receipt][:created_at]) if params[:receipt][:created_at]
+  	params[:receipt][:deleted]=untranslate_month(params[:receipt][:deleted]) if params[:receipt][:deleted]
     @receipt = Receipt.find(params[:id])
 	  if  @receipt.update_attributes(params[:receipt])
 			flash[:notice] = 'Factura ha sido actualizado exitosamente.'

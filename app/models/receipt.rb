@@ -124,6 +124,18 @@ class Receipt < ActiveRecord::Base
 				return ''
 		end
 	end
+	def created_at_string
+	  return created_at.to_s(:default)
+	end
+	def created_at_string=(val)
+	  created_at=DateTime.strptime(val, '%d/%m/%Y %H:%M:%S')
+	end
+	def deleted_string
+	  return deleted.to_s(:default)
+	end
+	def deleted_string=(val)
+	  deleted=DateTime.strptime(val, '%d/%m/%Y %H:%M:%S')
+	end
 	def number_to_spanish (num)
  		# depends on tens_to_spanish(num) and hundreds_to_spanish() and number_to_spanish() 
  		# to handle  numbers 0-999,999,999

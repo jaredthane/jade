@@ -13,7 +13,13 @@
 <% end %>
 
 <%= error_messages_for :receipt %>
-
+<script type="text/javascript">
+	$(document).ready(function(){
+	  //Setup	date picker
+	  $.datepicker.regional['en']
+	  $(".datepicker").datepicker({dateFormat: 'dd/mm/yy 00:00:00'});
+	});
+</script>
 <% form_for(@receipt, :action=>'update', :html => {:id => 'receipt_form' }) do |f| %>
 	<div class="column2-unit-left">
 		<p>
@@ -40,11 +46,11 @@
 		</p>
 		<p>
 			<b>Fecha</b><br />
-			<%= calendar_date_select "receipt", :created_at, :time => false, :year_range => 100.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+			<%= f.text_field :created_at_string, :class=> 'field datepicker', :id => 'created_at',:style=>'width:168px;' %>
 		</p>
 		<p>
 			<b>Anulado</b><br />
-			<%= calendar_date_select "receipt", :deleted, :time => false, :year_range => 100.years.ago..0.years.ago, :size=>20, :class => 'field' %>
+			<%= f.text_field :deleted_string, :class=> 'field datepicker', :id => 'deleted',:style=>'width:168px;' %>
 		</p>
 	</div>
 	<hr class="clear-contentunit" />

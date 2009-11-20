@@ -69,11 +69,15 @@ class ApplicationController < ActionController::Base
 	def untranslate_month(date)
 	  if date
 	    if date.class==String
-	      if date!=''
-      		return Date.strptime(date, '%d/%m/%Y')
-      	else 
-      	  return nil
-      	end
+	      if date.include? ":"
+	        return DateTime.strptime(date, '%d/%m/%Y %H:%M:%S')
+	      else
+	        if date!=''
+        		return Date.strptime(date, '%d/%m/%Y')
+        	else 
+        	  return nil
+        	end
+        end
       elsif date.class==Date
         return date
       end
