@@ -159,7 +159,7 @@ class Order < ActiveRecord::Base
 	# Returns a revision of a transaction with the Credit and Debit Posts Reversed
 	#################################################################################################
 	def reverse_transaction(t)
-	  t.type='Cancelacion de ' + t.tipo
+	  t.tipo='Cancelacion de ' + t.tipo
 		for p in t.posts
 			if p.post_type_id==Post::DEBIT
 				p.post_type_id=Post::CREDIT
