@@ -80,18 +80,18 @@ if @subs_table.length>0
 		 :column_widths => { 0 => 180, 1 => 180, 2 => 180},
 		 :align => { 0 => :center,1 => :center, 2 => :center})
 end
-pdf.move_down 30
-if @entries_table.length>0
-	pdf.font_size = 14
-	pdf.text "Transacciones recientes", :style => :bold
-	pdf.table(@entries_table,
-		 :font_size => 12,
-		 :headers => ['Fecha', 'Transaccion', 'Pedido', 'Debito', 'Credito', 'Saldo'],
-		 :horizontal_padding => 1,
-		 :vertical_padding => 1,
-		 :border_width => 1,
-		 :border_style => :underline_header,
-		 :column_widths => { 0 => 90, 1 => 90, 2 => 90, 3 => 90, 4 => 90, 5 => 90},
-		 :align => { 0 => :center,1 => :center, 2 => :center, 3 => :center, 4 => :center, 5 => :center})
-end
+#pdf.move_down 30
+#if @entries_table.length>0
+#	pdf.font_size = 14
+#	pdf.text "Transacciones recientes", :style => :bold
+#	pdf.table(@entries_table,
+#		 :font_size => 12,
+#		 :headers => ['Fecha', 'Transaccion', 'Pedido', 'Debito', 'Credito', 'Saldo'],
+#		 :horizontal_padding => 1,
+#		 :vertical_padding => 1,
+#		 :border_width => 1,
+#		 :border_style => :underline_header,
+#		 :column_widths => { 0 => 90, 1 => 90, 2 => 90, 3 => 90, 4 => 90, 5 => 90},
+#		 :align => { 0 => :center,1 => :center, 2 => :center, 3 => :center, 4 => :center, 5 => :center})
+#end
 

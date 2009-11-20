@@ -222,9 +222,6 @@ end
 			current_user.save
 			logger.debug "current_user.price_group_name_id=#{current_user.price_group_name_id.to_s}"
 		end
-		if @entity.cash_account
-			@entries=@entity.cash_account.recent_entries(20)
-		end
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @entity }
@@ -235,15 +232,6 @@ end
 		    		@subs_table<< [sub.product.name, sub.quantity, sub.price]
 		    	end
 		    end
-      	@entries_table=[]
-      	x = Object.new.extend(ActionView::Helpers::NumberHelper)
-      	for entry in @entries
-      		if entry.post.post_type_id==1
-      			@entries_table<< [entry.post.trans.created_at.to_date, entry.post.trans_id, entry.post.trans.order.id, x.number_to_currency((entry.post.value||0)),'',x.number_to_currency((entry.balance||0))]
-      		else
-      			@entries_table<< [entry.post.trans.created_at.to_date, entry.post.trans_id, entry.post.trans.order.id,'', x.number_to_currency((entry.post.value||0)),x.number_to_currency((entry.balance||0))]
-      		end
-      	end
       }
     end
   end
