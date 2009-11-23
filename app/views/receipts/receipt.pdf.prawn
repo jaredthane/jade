@@ -46,15 +46,21 @@ for copy in ['cliente', 'vendor', 'government'] do
 				pdf.font_size = 12
 				pdf.text client.name, :style=>:bold
 				pdf.font_size = 10
-				if client.full_address != ''
-					pdf.text truncate(client.full_address,50)
-				end #if client.full_address != ''
-				if client.register!=''
-					pdf.text "Registro: " + client.register
-				end #if vendor.office_phone!=''
-				if client.nit!=''
-					pdf.text "NIT: " + client.nit
-				end #if vendor.office_phone!=''
+				if client.full_address
+				  if client.full_address != ''
+					  pdf.text truncate(client.full_address,50)
+				  end #if client.full_address != ''
+				end
+				if client.register
+				  if client.register!=''
+					  pdf.text "Registro: " + client.register
+				  end #if vendor.office_phone!=''
+				end
+				if client
+				  if client.nit!=''
+					  pdf.text "NIT: " + client.nit
+				  end #if vendor.office_phone!=''
+				end
 			end # client first box
 			# Put the client information in the top-right corner
 			pdf.bounding_box([pdf.bounds.width/3*2, pdf.bounds.top-30], :width=>pdf.bounds.width/3, :height=>65) do
