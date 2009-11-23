@@ -84,7 +84,11 @@ class Entry < ActiveRecord::Base
 				  self.balance=(self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0)
 			  end
 			end
-			self.account.balance += (self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0)
+			if self.account.balance
+  			self.account.balance += (self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0)
+  		else
+  		  self.account.balance = (self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0)
+  		end
 		end
 	end
 end
