@@ -1,6 +1,6 @@
 <% content_for :title do %><%=h @subscription.product.name %> para <%=h @subscription.client.name %><% end %>
 <% content_for :actions do %>
-    <% if current_user.has_rights(['admin','ventas','gerente']) %>
+    <% if current_user.has_rights(['Admin','ventas','gerente']) %>
         <dt><%= link_to 'Nuevo', new_subscription_path %></dt>
         <dt><%= link_to 'Cambiar', edit_subscription_path(@subscription) %></dt>
     <% end %>

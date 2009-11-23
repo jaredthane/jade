@@ -353,7 +353,7 @@ class ReceiptsController < ApplicationController
 		end
   end
   def process_subscription
-#    puts params[:next_order_date].type
+    puts "arrived at process controller"
     params[:next_order_date] = Date.strptime(params[:next_order_date], '%d/%m/%Y').to_s(:db)
 		sub=Subscription.find(params[:sub_id])
   	sub.next_order_date=params[:next_order_date]

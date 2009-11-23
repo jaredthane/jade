@@ -136,14 +136,14 @@ class Subscription < ActiveRecord::Base
   #		process_list(list)
   #	end
   def process(months=1)
-	  o=Order.create(:created_at=>User.current_user.today, :vendor => self.vendor, :client => self.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
-	
-	  self.next_order_date=Date.today if !self.next_order_date
+    puts "creating order for sub"
+ 	  self.next_order_date=Date.today if !self.next_order_date
+	  o=Order.new(:created_at=>User.current_user.today, :vendor => self.vendor, :client => self.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true, :received =>self.next_order_date)
+    o.lines << Line.new(:created_at=>User.current_user.today, :product => self.product, :quantity=> self.quantity*months, :price => self.price, :received =>self.next_order_date)
+    o.save
 
-	  l=Line.create(:created_at=>User.current_user.today, :order => o, :product => self.product, :quantity=> self.quantity*months, :price => self.price, :received =>self.next_order_date)
-	  o.received=self.next_order_date
-	  o.grand_total = l.total_price_with_tax
-	  o.save
+    puts "o.grand_total(b)=" + o.grand_total.to_s
+    puts "o.lines.to_s=" + o.lines.to_s.to_s
 	  sale = o.main_transaction
     if sale
 	    sale.order_id=o.id
