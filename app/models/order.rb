@@ -388,18 +388,20 @@ class Order < ActiveRecord::Base
   ###################################################################################
 	def transaction_diff(old, newtrans, date=User.current_user.today)
 		accounts_done=[]
-		diff=Trans.new(:user=>User.current_user,:created_at=>date, :tipo=>old.tipo, :is_payment=>false )
 		if old and !newtrans
+		  diff=Trans.new(:user=>User.current_user,:created_at=>date, :tipo=>old.tipo, :is_payment=>false )
 #			###puts "newtrans is null"
 			for oldpost in old.posts
 				diff.posts << Post.new(:account =>oldpost.account,:created_at=>date, :value=> oldpost.value, :post_type_id=>oldpost.opposite_type)
 			end
 		elsif newtrans and !old
+		  diff=Trans.new(:user=>User.current_user,:created_at=>date, :tipo=>newtrans.tipo, :is_payment=>false )
 #			###puts "old trans is null"
 			for newpost in newtrans.posts
 				diff.posts << newpost
 			end
 		elsif newtrans and old
+		  diff=Trans.new(:user=>User.current_user,:created_at=>date, :tipo=>old.tipo, :is_payment=>false )  
 #			###puts "we have both trans"
 			for oldpost in old.posts
 				#find the matching post
