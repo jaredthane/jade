@@ -759,7 +759,7 @@ class Order < ActiveRecord::Base
 	#################################################################################################
 	def pay_off()
 	  if grand_total > amount_paid
-  	  Payment.create(:order=>self, :amount=>grand_total-amount_paid, :payment_method_id=>1, :user=>User.current_user, :receipt=>self.receipts.first, :presented=>grand_total-amount_paid, :created_at=>User.current_user.today)
+  	  Payment.create(:order=>self, :amount=>grand_total-amount_paid, :payment_method_id=>1, :user=>User.current_user, :receipt=>self.receipts.first, :presented=>grand_total-amount_paid)
     end
 	end
 ############################################################################################
@@ -883,14 +883,14 @@ class Order < ActiveRecord::Base
 								if old_loc.entity_type== 3 # It was in a different site
 									logger.debug "old_loc.entity_type== 3"
 									# Make a movement to take it out of the other site
-									Movement.create(:entity_id => old_loc.id, :comments => self.comments, :product_id => l.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id,:created_at=>User.current_user.today)
+									Movement.create(:entity_id => old_loc.id, :comments => self.comments, :product_id => l.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
 									i=l.product.inventories.find_by_entity_id(old_loc.id)
 									i.quantity=i.quantity-1
 									i.save
 								end
 								logger.debug "Make a movement to bring it here"
 								# Make a movement to bring it here
-								Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id,:created_at=>User.current_user.today)
+								Movement.create(:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
 								i = l.product.inventories.find_by_entity_id(self.vendor_id)
 								logger.debug "===============> old i=#{i.inspect}"
 								i.quantity=i.quantity+1

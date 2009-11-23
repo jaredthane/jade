@@ -31,9 +31,11 @@ class Entry < ActiveRecord::Base
 		# If we're adding this post in the middle of the pile,
 		# We need to update the balance of all posts that happened after this new one.
 		#logger.debug "checking for old posts"
-		if self.created_at
-			#logger.debug "this is a new post and created at is pre-set"
+		if self.created_at.to_date!=Date.today
+			logger.debug "this is a new post and created at is pre-set********************************************************"
 			recalculate_later_balances
+		else
+		  puts "We saved time!!*************************************************************"
 		end
 	end
 	##################################################################################################
