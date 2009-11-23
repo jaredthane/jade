@@ -28,7 +28,6 @@
 	    <% if current_user.has_rights(['Ver Suscripciones']) %>
 	    	<dt><%= link_to 'Anadir Suscripcion', new_subscription_path(:client_id=>@entity.id), :class => 'action' %></dt>
 	    <% end %>
-	    <dt><%= link_to 'Hacer Historia', new_history_path(@entity), :class => 'action' %></dt>
 	<% end %>
 	<% if @entity.entity_type.id == 1 %>
 	    <dt><%= link_to 'Nuevo', new_vendor_path, :class => 'action' %></dt>
