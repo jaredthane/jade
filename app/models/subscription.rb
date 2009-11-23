@@ -1,4 +1,4 @@
-# Jade Inventory Control System
+p# Jade Inventory Control System
 #Copyright (C) 2009  Jared T. Martin
 
 #    This program is free software: you can redistribute it and/or modify
@@ -129,12 +129,36 @@ class Subscription < ActiveRecord::Base
 							 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (entities.active=true) AND entities.id=' + client.id.to_s,
 							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
 	end
-#	def self.process
-#		list= find(:all, 
-#							 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (entities.active=true)',
-#							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
-#		process_list(list)
-#	end
+  #	def self.process
+  #		list= find(:all, 
+  #							 :conditions=>'(subscriptions.end_date > CURRENT_DATE OR subscriptions.end_date is null) AND (subscriptions.end_times>0 OR subscriptions.end_times is null) AND (subscriptions.next_order_date <= CURRENT_DATE) AND (entities.active=true)',
+  #							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
+  #		process_list(list)
+  #	end
+  def process(months=1)
+	  o=Order.create(:created_at=>User.current_user.today, :vendor => self.vendor, :client => self.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+	
+	  self.next_order_date=Date.today if !self.next_order_date
+
+	  l=Line.create(:created_at=>User.current_user.today, :order => o, :product => self.product, :quantity=> self.quantity*months, :price => self.price, :received =>self.next_order_date)
+	  o.received=self.next_order_date
+	  o.grand_total = l.total_price_with_tax
+	  o.save
+	  sale = o.main_transaction
+    if sale
+	    sale.order_id=o.id
+	    sale.save
+	  end
+	  inventory_trans = o.inventory_transaction
+    if inventory_trans
+	    inventory_trans.order_id=o.id
+	    inventory_trans.save
+	  end
+	
+	  self.next_order_date = self.next_order_date.to_date >> months
+	  self.save
+	  return o
+	end
 	def self.process(list, months=1)
 	  orders_made = []
 		subs={} # a hash of hashes with clients on the first and vendors on the second

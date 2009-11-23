@@ -42,7 +42,7 @@ ActionController::Routing::Routes.draw do |map|
   map.fast_process_subscriptions 'subscriptions/fast_process', :controller => 'subscriptions', :action => 'fast_process'
   map.process_client 'clients/:client_id/process', :controller => 'receipts', :action => 'process_subscriptions'
   map.resources :receipts
-  map.process_subscription 'subscriptions/:sub_id/process', :controller => 'receipts', :action => 'process_subscriptions'
+  map.process_subscription 'subscriptions/:sub_id/process', :controller => 'receipts', :action => 'process_subscription'
   map.resources :subscriptions
 	map.resources :discounts
 	map.resources :combos

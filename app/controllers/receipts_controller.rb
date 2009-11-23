@@ -352,6 +352,24 @@ class ReceiptsController < ApplicationController
 		  return false
 		end
   end
+  def process_subscription
+#    puts params[:next_order_date].type
+    params[:next_order_date] = Date.strptime(params[:next_order_date], '%d/%m/%Y').to_s(:db)
+		sub=Subscription.find(params[:sub_id])
+  	sub.next_order_date=params[:next_order_date]
+  	sub.save
+  	order = sub.process(params[:num_months].to_i)
+		flash[:info] = "Las suscripciones han sido provisionadas existosamente" if order
+  	if params[:number] != ''
+			@next = generate_receipts([order], params[:number].to_i)
+		  if @next 
+		  	flash[:info] = "Las facturas han sido generadas existosamente"
+		  	User.current_user.location.next_receipt_number=@next 
+  	    User.current_user.location.save
+		  end
+		end
+		redirect_to sub.client
+  end
   def process_subscriptions_for_client
   	User.current_user=User.find(1) if !User.current_user
   	subs=Subscription.to_process(params[:search])
