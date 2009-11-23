@@ -7,3 +7,4 @@ alter table orders add column purchase_receipt_number int(11);
 alter table trans add column tipo varchar(255);
 alter table trans add column is_payment tinyint(1);
 update post_types set id = -1 where id=2;
+alter table accounts add column balance decimal(8,2) default 0;

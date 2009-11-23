@@ -63,17 +63,28 @@ class Entry < ActiveRecord::Base
 	#################################################################################################	
 	def calculate_balance
 		# Now calculate the balance
-		mydate=(self.created_at||Time.now)
 		#logger.debug 'OLD BALANCE=' + self.account.balance.to_s + '+ VALUE=' +self.post.value.to_s + ' * POST_TYPE=' + self.post.post_type_id.to_s + ' * MODIFIER='+self.account.modifier.to_s
-		last_entry=Entry.last(:conditions=> ['date(created_at) < :mydate AND account_id=:account', {:mydate=>mydate.to_s(:db), :account=>self.account_id}])
 		if self.account
 			#logger.debug "Goot"
-			if last_entry
-			#logger.debug "Gooter"
-				self.balance=(last_entry.balance || 0 ) + (self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0)
-			else
-				self.balance=(self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0)
+			if self.created_at.to_date==Date.today
+		    self.balance=(self.account.balance || 0 ) + (self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0)
+		    puts "We saved more tiome!**************************"
+		    puts "self.id=" + self.id.to_s
+		    puts "self.created_at.to_date=" + self.created_at.to_date.to_s
+		  else
+		    puts "We didnt save more tiome :(  **************************"
+		    puts "self.id=" + self.id.to_s
+		    puts "self.created_at.to_date=" + self.created_at.to_date.to_s
+		    mydate=(self.created_at||Time.now)
+			  last_entry=Entry.last(:conditions=> ['date(created_at) < :mydate AND account_id=:account', {:mydate=>mydate.to_s(:db), :account=>self.account_id}])
+			  if last_entry
+			  #logger.debug "Gooter"
+				  self.balance=(last_entry.balance || 0 ) + (self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0)
+			  else
+				  self.balance=(self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0)
+			  end
 			end
+			self.account.balance += (self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0)
 		end
 	end
 end
