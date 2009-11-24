@@ -1,12 +1,12 @@
 function calculate_total() {
-	$("total_paid").value=(parseFloat($("presented_field").value) - parseFloat($("returned_field").value)).toFixed(2);
-	$("debt_field").value=(parseFloat($("total_price").value)     - parseFloat($("presented_field").value) + parseFloat($("returned_field").value) - parseFloat($("paid").value)).toFixed(2);       
-	if ($("debt_field").value > 0){
-		$("change_div").hide();
-		$("debt_div").show();
+	$("#total_paid").val((parseFloat($("#presented_field").val()) - parseFloat($("#returned_field").val())).toFixed(2));
+	$("#debt_field").val((parseFloat($("#total_price").val())     - parseFloat($("#presented_field").val()) + parseFloat($("returned_field").val()) - parseFloat($("paid").val())).toFixed(2));       
+	if ($("#debt_field").val() > 0){
+		$("#change_div").hide();
+		$("#debt_div").show();
 	} else {
-		$("change_div").show();
-		$("debt_div").hide();
+		$("#change_div").show();
+		$("#debt_div").hide();
 	}
-	$("recommended_change").value=(parseFloat($("presented_field").value)-parseFloat($("total_price").value) + parseFloat($("paid").value)).toFixed(2);
+	$("#recommended_change").val((parseFloat($("#presented_field").val())-parseFloat($("#total_price").val()) + parseFloat($("#paid").val())).toFixed(2));
 }

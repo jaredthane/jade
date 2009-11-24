@@ -165,7 +165,13 @@ class Entity < ActiveRecord::Base
   before_create :create_accounts
 	def create_accounts()
 		puts "self.entity_type_id=#{self.entity_type_id.to_s}" 
-		if self.entity_type_id!=3
+		if self.entity_type_id==1
+		  if self.site
+    		group_id=self.site.vendor_accounts_group_id 
+    	else
+        group_id=User.current_user.location.vendor_accounts_group_id
+      end  	
+		elsif self.entity_type_id==2 or self.entity_type_id==5
 		  if self.site
     		group_id=self.site.client_accounts_group_id 
     	else
