@@ -759,7 +759,7 @@ class Order < ActiveRecord::Base
 	#################################################################################################
 	def pay_off()
 	  if grand_total > amount_paid
-  	  Payment.create(:order=>self, :amount=>grand_total-amount_paid, :payment_method_id=>1, :user=>User.current_user, :receipt=>self.receipts.first, :presented=>grand_total-amount_paid)
+  	  Payment.create(:order=>self, :amount=>grand_total-amount_paid, :payment_method_id=>1, :user=>User.current_user, :receipt=>self.receipts.first, :presented=>grand_total-amount_paid, :created_at=>User.current_user.today)
     end
 	end
 ############################################################################################
