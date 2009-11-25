@@ -120,13 +120,10 @@ class ReceiptsController < ApplicationController
     end
 	end
 	def create_nul_number
-		
 		params[:created_at]=untranslate_month(params[:created_at])
 		o=Order.create(:vendor_id=>User.current_user.location_id, :client_id => 9, :user=> User.current_user, :order_type_id=>1, :receipt_printed=>params[:created_at].to_date, :created_at=>params[:created_at].to_date)
-		r=Receipt.create(:order_id=>o.id, :site_id=>User.current_user.location_id, :number =>params[:number].to_i, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{params[:id].to_i}.pdf", :user=> User.current_user, :created_at=>params[:created_at].to_date, :deleted=>params[:created_at].to_date)
-		consumidor_final(r)
-  	flash[:info] = "La factura ha sido anulado existosamente"
-  	User.current_user.location.next_receipt_number=params[:number].to_i+1
+		o.receipts << Receipt.create(:site_id=>User.current_user.location_id, :number =>params[:number].to_i, :filename=>"#{RAILS_ROOT}/invoice_pdfs/receipt#{params[:id].to_i}.pdf", :user=> User.current_user, :created_at=>params[:created_at].to_date, :deleted=>params[:created_at].to_date)
+		User.current_user.location.next_receipt_number=params[:number].to_i+1
   	User.current_user.location.save
     redirect_to receipts_url
     return false
@@ -244,7 +241,9 @@ class ReceiptsController < ApplicationController
 			end
 			produce_report
 		else
+		  puts "Searching credito_fiscal"
 			@credito_fiscal_today = Receipt.search_credito_fiscal(params[:search],params[:page],@from, @till, @sites)
+		  puts "Searching consumidor_final"
 			@consumidor_final_today = Receipt.search_consumidor_final(params[:search],params[:page],@from, @till, @sites)
 		end
     respond_to do |format|
