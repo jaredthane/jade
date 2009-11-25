@@ -168,7 +168,17 @@
 		  </p>
 		<% end %>
   <% end %>
-	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
+  <% if @entity.entity_type.id == 1 %>
+    <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
+      <p>
+				<b>Cuenta para Pagar</b><br />
+				<% if @entity.cash_account %>
+					<%=link_to @entity.cash_account.name, @entity.cash_account%>
+				<% end %>
+			</p>
+    <% end %>
+  <% end %>
+	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
 	  <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
 			<p>
 				<b>Cuenta para Cobrar</b><br />
