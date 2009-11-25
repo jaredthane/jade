@@ -22,7 +22,7 @@ class UsersController < ApplicationController
   
 	def index
     search=(params[:search]||'') + ' ' + (params[:q]||'')
-    @users = User.search(search, params[:page])
+    @users = User.search(search.rstrip, params[:page])
 		if !current_user.has_rights(['Admin','Gerente'])
 			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para alistar los usuarios"
