@@ -233,7 +233,7 @@ class OrdersController < ApplicationController
   # GET /orders/new
   # GET /orders/new.xml
   def new
-    @order = Order.new(:created_at=>User.current_user.today)
+    @order = Order.new(:created_at=>User.current_user.today, :receipt_number=>(User.current_user.location.next_receipt_number||''))
 		@order_type_id = params[:order_type_id] || 0
 		if @order_type_id == 1
 			@order.client_id = 1213
@@ -273,6 +273,7 @@ class OrdersController < ApplicationController
     puts "heres the order we just created: " + @order.inspect
     @order.attributes = params["order"]
     return false if !allowed(@order.order_type_id, 'edit')
+    User.current_user.location.next_receipt_number=params["order"]["receipt_number"].to_i
     @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
     logger.debug "finished updating lines"
     respond_to do |format|

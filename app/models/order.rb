@@ -178,20 +178,20 @@ class Order < ActiveRecord::Base
 			end
 		end
 	end
-	def receipt
-  	return self.receipts(:last)
-  end
-	def receipt_number
-	  if self.order_type_id==2
-	    return self.purchase_receipt_number
-	  else
-	    if self.receipts(:last).length > 0
-  		  return self.receipts(:last)[0].number
-  		else
-  		  return ""
-  		end
-  	end
-	end
+#	def receipt
+#  	return self.receipts(:last)
+#  end
+#	def receipt_number
+#	  if self.order_type_id==2
+#	    return self.purchase_receipt_number
+#	  else
+#	    if self.receipts(:last).length > 0
+#  		  return self.receipts(:last)[0].number
+#  		else
+#  		  return ""
+#  		end
+#  	end
+#	end
 	#################################################################################################
 	# Returns a revision of a transaction with the Credit and Debit Posts Reversed
 	#################################################################################################

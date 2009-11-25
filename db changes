@@ -11,3 +11,8 @@ alter table accounts add column balance decimal(8,2) default 0;
 insert into entities (id, entity_type_id, name) values (9, 2, 'Anulado');
 -- Base done to here --
 alter table orders add column next_order int(11);
+alter table orders add column receipt_number int(11);
+alter table orders add column receipt_filename varchar(255);
+update orders inner join receipts on receipts.order_id=orders.id set orders.receipt_number=receipts.number;
+update orders inner join receipts on receipts.order_id=orders.id set orders.receipt_filename=receipts.filename;
+

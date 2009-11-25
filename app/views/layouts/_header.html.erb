@@ -153,7 +153,6 @@
 					<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
 						<li><a href="/sales" title="Ventas">Ventas</a></li>
 					<% end %>
-					<li><a href=<%= receipts_path %> title="Facturas">Facturas</a></li>
 					<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
 						<li><a href="/subscriptions" title="Suscripciones">Suscripciones</a></li>
 						<li><a href="/internal" title="Consumo Interno">Consumos Internos</a></li>
@@ -193,7 +192,6 @@
 	  	<li><a href="/accounts" title="Contabilidad">Contabilidad</a></li>
 	  <% end %>
 	  <li><a title="Reportes">Reportes</a><ul>
-	  	<li><a href="/receipts" title="Facturas">Facturas</a></li>
 	  	<li><a href="/payments" title="Pagos">Pagos</a></li>
 	  	<li><a href="/sales_representatives" title="Corte de Caja">Corte de Caja</a></li>	  
 	  </ul></li>
