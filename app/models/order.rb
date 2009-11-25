@@ -21,6 +21,7 @@ class Order < ActiveRecord::Base
 	has_many :movements
 	has_many :receipts
 	belongs_to :order_type
+	belongs_to :next_order, :class_name => "Order", :foreign_key => 'next_order'
 	HUMANIZED_ATTRIBUTES = {
     :user => "Usuario",
     :ordered => "Fecha de Solicitud",
@@ -33,15 +34,11 @@ class Order < ActiveRecord::Base
   def validate
   	## ###puts "validating order"
   end
-	after_update :save_lines
-	after_create :create_lines
-	after_update :check_for_discounts
-	after_create :check_for_discounts
-	after_update :create_transactions
-	after_create :create_transactions
-	after_create :create_movements
-  after_update :create_movements
-  before_save :update_grand_total
+  
+	after_update :post_update
+	after_create :post_create
+  before_save :pre_save
+  
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
 	belongs_to :client, :class_name => "Entity", :foreign_key => 'client_id'
 	validates_presence_of(:vendor, :message => "debe ser valido")
@@ -52,6 +49,42 @@ class Order < ActiveRecord::Base
 	############################## End of Creating Movements ####################################
 	attr_accessor :movements_to_create
 	attr_accessor :transactions_to_create # list of trans to create
+	def pre_save
+	  update_grand_total
+	end
+	def post_create
+	  split_over_sized_order
+	  save_lines(true)
+	  post_create_and_update
+	end
+	def post_update
+	  split_over_sized_order
+	  save_lines(false)
+	  post_create_and_update
+	end
+	def post_create_and_update
+	  check_for_discounts
+	  create_transactions
+	  create_movements
+	end
+	##
+	def split_over_sized_order
+	  if lines.length > MAX_LINES_PER_ORDER and MAX_LINES_PER_ORDER > 0
+	    self.next_order = Order.new(self.attributes)
+      for line in self.lines[MAX_LINES_PER_ORDER..-1]
+        self.next_order.lines << Line.new(line.attributes)
+      end
+	    self.next_order.save
+#	    puts' $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+#	    for line in self.next_order.lines
+#	      puts line.inspect
+#	    
+#	    end
+#	    puts self.next_order.lines[0].order_id
+#	    puts' $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$'
+      self.lines=self.lines[0..MAX_LINES_PER_ORDER-1]	    
+	  end
+	end
 	##################################################################################################
 	# 
 	#################################################################################################
@@ -469,7 +502,7 @@ class Order < ActiveRecord::Base
 	  logger.debug "==============line.product.product_type_id=#{line.product.inspect}"
 	  if line.product.product_type_id == 1
 		  old = Line.find_by_id(line.id)
-		  ###puts old.inspect
+		  puts old.inspect if old
 		  if old
 			  dir = quantity_change_direction(line, old)
 		  else
@@ -967,33 +1000,16 @@ class Order < ActiveRecord::Base
 	###################################################################################
 	# saves all lines in the order are returns true if successful
 	###################################################################################
-	def save_lines
+	def save_lines(update = false)
 		sucessful = true
 		 ###puts "saving lines"
 		logger.debug "saving lines"
 		lines.each do |line|
+		  line.order_id = self.id  if update
 			sucessful = false if !line.save(false)
 			###puts "saving a line"
 #			logger.debug "new cost:" + p.cost().to_s
 		end
-		return sucessful
-	end
-	
-	# NOTE: Many times when a new line is created, save_lines gets run instead of create_lines
-	###################################################################################
-	# creates a new line for this order
-	###################################################################################
-	def create_lines
-		 ###puts "creating lines"
-		sucessful = true
-		# ###puts lines.inspect
-		self.lines.each do |line|
-			###puts "setting order_id to " + self.id.to_s
-			###puts "creating a line"
-			line.order_id = self.id 
-			sucessful = false if !line.save(true)
-		end		
-		# ###puts "end"
 		return sucessful
 	end
 	###################################################################################

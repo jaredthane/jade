@@ -212,7 +212,7 @@ class Line < ActiveRecord::Base
 		end
 	end
 	def warranty_months=(id)
-		self.warranty = Warranty.find(id)
+		self.warranty = Warranty.find_by_id(id)
 		if self.warranty
 			self.warranty_price = self.warranty.price
 		end 

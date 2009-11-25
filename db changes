@@ -8,5 +8,6 @@ alter table trans add column tipo varchar(255);
 alter table trans add column is_payment tinyint(1);
 update post_types set id = -1 where id=2;
 alter table accounts add column balance decimal(8,2) default 0;
--- Base done to here --
 insert into entities (id, entity_type_id, name) values (9, 2, 'Anulado');
+-- Base done to here --
+alter table orders add column next_order int(11);
