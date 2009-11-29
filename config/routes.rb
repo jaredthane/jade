@@ -6,8 +6,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :payments
   map.show_barcode 'products/:id/barcode', :controller => 'products', :action => 'show_barcode'
   map.destroy_payment 'payments/:id/destroy', :controller => 'payments', :action => 'destroy'
-#  map.create_nul_receipt_number 'receipts/create_nul_number', :controller => 'receipts', :action => 'create_nul_number'
-#  map.new_nul_receipt_number 'receipts/new_nul_number', :controller => 'receipts', :action => 'new_nul_number'
+  map.create_nul_receipt_number 'orders/create_nul_number', :controller => 'orders', :action => 'create_nul_number'
+  map.new_nul_receipt_number 'orders/new_nul_number', :controller => 'orders', :action => 'new_nul_number'
 #  map.process_subscriptions 'receipts/process_subscriptions', :controller => 'receipts', :action => 'process_subscriptions'
   map.new_balance_transfer 'accounts/:id/new_balance_transfer', :controller => 'accounts', :action => 'new_balance_transfer'
   map.recount_balances 'accounts/:id/recount', :controller => 'accounts', :action => 'recount'
@@ -79,6 +79,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :products, :collection => { :bulk_edit => :get, :bulk_update => :post }, :product_type => 'simple'
 	map.connect 'allproducts.js', :controller => 'products', :scope => 'all', :format =>'js'
 #	map.show_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
+	map.show_receipt 'orders/:id/receipt', :controller => 'orders', :action => 'show_receipt'
   map.show_batch 'orders/show_batch', :controller => 'orders', :action => 'show_batch'
   map.create_batch 'orders/create_batch', :controller => 'orders', :action => 'create_batch'
   map.delete_order 'orders/delete', :controller => 'orders', :action => 'delete'

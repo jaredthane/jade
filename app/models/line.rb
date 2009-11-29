@@ -16,43 +16,92 @@
 
 
 class Line < ActiveRecord::Base
-	
-	HUMANIZED_ATTRIBUTES = {
-    :order => "Pedido",
-    :product => "Producto"
-  }
-
-  def self.human_attribute_name(attr)
-    HUMANIZED_ATTRIBUTES[attr.to_sym] || super
-  end
-  belongs_to :receipt
-#  before_create :set_taxes
-#  before_update :set_taxes
 	belongs_to :order
 	belongs_to :warranty
 	belongs_to :product	
 	validates_presence_of(:product, :message => " debe ser valido")
-	attr_accessor :movements_to_create
 	attr_accessor :client_name
 	attr_accessor :order_type_id
 	belongs_to :serialized_product
-
-#	def set_taxes
-#		self.sales_tax = 0.13
-#	end
-	def tax	
-		return self.total_price * self.sales_tax
+	attr_accessor :delete_me
+  ##################################################################################################
+	# Returns quantity if it was marked as received, 0 otherwise
+	#################################################################################################
+  def real_qty(line)
+    qty=0
+    if line
+      if line.received
+        qty=line.quantity
+      end
+    end
+    return qty
+  end
+	###################################################################################
+  # prepares a single movement to be created but DOES NOT SAVE IT
+  ##################################################################################
+	def new_movement(entity_id, movement_type_id, quantity)
+	  value = total_price_with_tax_per_unit*quantity
+		m=Movement.new(:created_at=>User.current_user.today,:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => self.serialized_product_id, :value => value)
 	end
+  ###################################################################################
+  # prepares the movements to be created but DOES NOT SAVE THEM
+  ##################################################################################
+  before_save :prepare_movements
+  MOVEMENT_TYPES=[[4,4],[1,5],[2,6],[8,9],[3,7],[4,4]]
+	def prepare_movements
+	  if self.product.product_type_id == 1
+		  if real_qty(self) != real_qty(old)
+		    dir = (real_qty(self)-real_qty(old))/(real_qty(self)-real_qty(old)).abs
+			  case (MOVEMENT_TYPES[order_type_id.to_i][dir]+3)/2-1
+			    # These are the different movement_types
+				  when 1
+					  new_movement(self.order.vendor_id, 1, -(real_qty(self)-real_qty(old)))
+					  new_movement(self.order.client_id, 1, (real_qty(self)-real_qty(old)))
+				  when 2
+					  new_movement(self.order.client_id, 2, (real_qty(self)-real_qty(old)))
+				  when 3
+					  new_movement(self.order.client_id, 3, (real_qty(self)-real_qty(old)))
+					  new_movement(self.order.vendor_id, 3, -(real_qty(self)-real_qty(old)))
+					# when 4
+				  # We won't touch physical counts. The Physical Count model will take care of that.
+				  when 5
+					  new_movement(self.order.vendor_id, 5, -(real_qty(self)-real_qty(old)))
+				  when 6
+					  new_movement(self.order.client_id, 6, (real_qty(self)-real_qty(old)))
+				  when 7
+					  new_movement(self.order.client_id, 7, (real_qty(self)-real_qty(old)))
+					  new_movement(self.order.vendor_id, 7, -(real_qty(self)-real_qty(old)))
+				  when 8
+					  new_movement(self.order.vendor_id, 8, -(real_qty(self)-real_qty(old)))
+				  when 9
+					  new_movement(self.order.vendor_id, 9, -(real_qty(self)-real_qty(old)))
+			  end # case movement_type_id(dir)
+		  end # if dir != 0
+	  end # if self.product.product_type_id == 1
+	end # prepare_movements
+	#################################################################################################
+	# Holds a copy of the old version of this object for reference
+	# By storing it in a accessor, we'll never have to load it more than once
+	#################################################################################################
+  attr_accessor :old_version
+	def old(attribute=nil)
+	  if !old_version
+	    return nil if !self.id
+	    old_version=Line.find_by_id(self.id)
+	  end
+	  if attribute
+      return old_version.attributes[attribute] if old_version
+    end
+    return old_version
+	end
+	#################################################################################################
+	# Validates the line and adds any errors it finds
+	#################################################################################################
 	def validate
-		#puts  "validating line"
 		if self.product.product_type_id == 1
-			###puts  "@movements_to_create.length=" + @movements_to_create.length.to_s
-			if @movements_to_create # if we find stuff here, there is movement
-				#puts  " there are movements to validate"
-#				#puts  "self.last_change_type =" + self.last_change_type.to_s
+			if real_qty(self) != real_qty(old)
 				case self.order_type_id	# check inventory levels
 					when 1 # Venta     
-						##puts  "validating Venta"
 						qty=order.vendor.inventory(self.product)
 						errors.add " ","Solo hay " + qty.to_s + " " + self.product.unit.name + " del producto " + self.product.name + " en el inventario"  if self.quantity > qty
 						#puts  "self.serialized_product=" + self.serialized_product.to_s if self.serialized_product
@@ -94,19 +143,16 @@ class Line < ActiveRecord::Base
 						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.location.inventory(self.product)
 						# Serial number should exist, and be in clients location
 						# dont need to validate serial cause it was already validated
-				end
-			end		
-		end
-	end
+				end # case self.order_type_id
+			end # if real_qty(self) != real_qty(old)
+		end # if self.product.product_type_id == 1
+	end # validate
 	###################################################################################
-	# Returns the total price of the products on this line
+	# Returns the revenue account where the value of the order should appear
+	# This could be in different accounts depending on the prefrences set up in the prferences table
+	# and depending on the values set on the different objects involved
 	###################################################################################
-	def total_cost
-		total = (product.cost ||0) * quantity
-		return total
-	end
 	def revenue_account(order=self.order)
-		puts "REady to try accounts"
 		for pref in Preference.find(:all, :order=>'value', :conditions=>"pref_group='revenue'")
 			puts "Trying " + pref.name
 			case pref.id
@@ -141,9 +187,20 @@ class Line < ActiveRecord::Base
 			end
 		end
 		# If there are no other valid options, use the sites revenue account
-		
-		puts "we gave up"
 		return order.vendor.revenue_account
+	end
+	#################################################################################################
+	# Returns the amount of tax per unit
+	#################################################################################################
+	def tax	
+		return self.total_price * self.sales_tax
+	end
+	###################################################################################
+	# Returns the total price of the products on this line
+	###################################################################################
+	def total_cost
+		total = (product.cost ||0) * quantity
+		return total
 	end
   ###################################################################################
 	# Returns the total price of the products on this line
@@ -159,6 +216,15 @@ class Line < ActiveRecord::Base
 		total = (self.total_price||0) + (self.tax||0)
 		return total
 	end
+	###################################################################################
+	# Returns the total price of the products on this line plus tax
+	###################################################################################
+	def total_price_with_tax_per_unit
+		return (price ||0) + (warranty_price || 0) * (1+self.sales_tax)
+	end
+	###################################################################################
+	# Returns Si or No depending on whether the line has been marked as received
+	###################################################################################
 	def isreceived_str
 		if self.isreceived ==1
 			return "Si"
@@ -166,6 +232,9 @@ class Line < ActiveRecord::Base
 			return "No"
 		end
 	end
+	###################################################################################
+	# Sets the received date based on a simple yes or no
+	###################################################################################
 	def isreceived_str=(str)
 		#puts "str=#{str.to_s}"
 		if str=="" or str=="no" or str=="No" or str=="NO"
@@ -176,6 +245,9 @@ class Line < ActiveRecord::Base
 			#puts "setting to yes"
 		end
 	end
+	###################################################################################
+	# Returns 1 if the line was received, 0 otherwise; for setting checkboxes
+	###################################################################################
 	def isreceived
 		if self.received == nil
 			return 0
@@ -183,6 +255,9 @@ class Line < ActiveRecord::Base
 			return 1
 		end
 	end
+	###################################################################################
+	# Sets the received date if true, nil if false
+	###################################################################################
 	def isreceived=(checkbox)
 		if checkbox.to_i==1
 			if self.received == nil
@@ -194,9 +269,15 @@ class Line < ActiveRecord::Base
 			end
 		end
 	end
+	###################################################################################
+	# Returns the number of months the warranty covers
+	###################################################################################
 	def warranty_months
 		warranty.months if warranty
 	end
+	###################################################################################
+	# Returns true if the product is still under warranty, false otherwise
+	###################################################################################
 	def under_warranty?
 		if self.warranty_expires < Date.today
 			return true
@@ -204,6 +285,9 @@ class Line < ActiveRecord::Base
 			return false
 		end
 	end
+	###################################################################################
+	# Returns the date that the warranty expires
+	###################################################################################
 	def warranty_expires
 		if self.warranty and self.received
 			return self.received.to_time + self.warranty.months.months
@@ -211,15 +295,26 @@ class Line < ActiveRecord::Base
 			return nil
 		end
 	end
+	###################################################################################
+	# Sets the number of months the product will be under warranty starting from the date received
+	###################################################################################
 	def warranty_months=(id)
 		self.warranty = Warranty.find_by_id(id)
 		if self.warranty
 			self.warranty_price = self.warranty.price
 		end 
 	end
+	###################################################################################
+	# Returns the serial number of a serialized product if there is one
+	###################################################################################
 	def serial_number
 		serialized_product.serial_number if serialized_product
 	end
+	###################################################################################
+	# Sets the serial number of a serialized product if there is one
+	# Allows any serial to be entered if this is a purchase or count, 
+	# but only an existing serial if this is a sale, transfer, or otherwise
+	###################################################################################
 	def serial_number=(serial)
 		puts "##################################################################################################"
 		puts "# "
@@ -279,52 +374,46 @@ class Line < ActiveRecord::Base
 			end #already had a serial?
 		end #ordertype=5
 	end #end def
+	###################################################################################
+	# Returns the name of the product as a string
+	###################################################################################
 	def product_name
  	 product.name if product
 	end
+	###################################################################################
+	# Sets the name of the product as a string
+	###################################################################################
 	def product_name=(name)
-		#puts "Setting product name..................."
-		#puts "name=" + name.to_s
 		self.product = Product.find_by_name(name) unless name.blank?
-		
 	end
+	###################################################################################
+	# Returns the name of the bar code as a string
+	###################################################################################
 	def bar_code
  	 product.upc if product
 	end
+	###################################################################################
+	# sets the product and price by searching for a product by the given string
+	# At the time of this writing, you can search by:
+	# name, upc, model, and description
+	###################################################################################
 	def bar_code=(upc)
-		#logger.info "upc=#{upc.to_s}"	
-		#logger.info "have self.product_id=#{self.product_id.to_s}"
 		if !upc.blank?		
-			prod = Product.find_by_upc(upc)
-			#puts "prod=#{prod.to_s}"
+			prod= Product.find_single(upc)
 			if prod != nil
-				#puts "getting id of prod"
-				#puts "prod.id=#{prod.id.to_s}"
 				self.product_id = prod.id
 			end
-			#logger.info "Product.find_by_upc(upc)=#{Product.find_by_upc(upc).inspect}"
-#			#logger.info "Product.find_by_upc(upc).id=#{Product.find_by_upc(upc).id.to_s}"
 		end
-		#logger.info "found self.product_id=#{self.product_id.to_s}"
 		if self.order
-			#puts "we have an order"
 			if self.order.order_type_id == 1
-				#puts "self.order.order_type_id" + self.order.order_type_id.to_s
 				self.price = self.product.price if self.product
 			else
-				#puts "self.order.order_type_id" + self.order.order_type_id.to_s
 				self.price = self.product.cost if self.product
 			end
 		else
-			#puts "we dont have an order"
-			#puts "before again "+self.order_type_id.to_s
 			if self.order_type_id.to_i == 1
-				#puts "self.order_type_id" + self.order_type_id.to_s
-				#puts "its a sale"
 				self.price = self.product.price(User.current_user.current_price_group,1) if self.product
 			else
-				#puts "self.order_type_id" + self.order_type_id.to_s
-				#puts "its not a sale"
 				self.price = self.product.cost if self.product
 			end
 		end

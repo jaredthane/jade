@@ -260,12 +260,15 @@ class Entity < ActiveRecord::Base
 		end
   end
   def full_address
-  	address=self.address
-  	if self.city!=''
+  	address=''
+  	if self.address
+  	  address += self.address
+  	end
+  	if self.city
   	 	address+=", "+self.city
   	end
-  	if self.state!=''
-  	 	address+=", "+self.state.name
+  	if self.state and address != ''
+  	 	address += ", " + self.state.name
   	end
   	return address
   end

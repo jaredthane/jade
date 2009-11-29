@@ -447,6 +447,19 @@ class Product < ActiveRecord::Base
 		         :order => 'name',
 		         :limit => 10
 	end
+  def self.find_single(search)
+  	find :first,
+		         :conditions => ['(products.name like :search 
+		         										OR products.model like :search 
+		         										OR products.upc like :search 
+		         										OR description like :search )
+		         							AND (prices.price_group_id = :price_group_id)
+		         							AND (prices.available = True)',
+		         							{:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
+		         :order => 'name',
+		         :joins => 'inner join prices on prices.product_id=products.id',
+		         :group => 'products.id'
+	end
   def self.search(search, page)
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['(products.name like :search 
@@ -492,7 +505,7 @@ class Product < ActiveRecord::Base
 		         :joins => 'left join product_categories on product_categories.id=products.product_category_id',
 		         :group => 'products.id'
 	end
-	def self.search_all_wo_pagination(search, page)
+	def self.search_all_wo_pagination(search, page=nil)
   	find 		 :all,
 		         :conditions => ['(products.name like :search OR products.model like :search OR products.upc like :search OR description like :search OR vendors.name like :search OR product_categories.name like :search)', {:search => "%#{search}%"}],
 		         :order => 'name',

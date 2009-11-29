@@ -21,7 +21,6 @@ class Payment < ActiveRecord::Base
 	belongs_to :order
 	belongs_to :payment_method
 	belongs_to :user
-	belongs_to :receipt
 	before_save :prepare_transactions
 	after_save :create_transactions
 	attr_accessor :amt
@@ -92,8 +91,8 @@ class Payment < ActiveRecord::Base
 		end
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payments.order_id like :search OR payments.order_id like :search OR payment_methods.name like :search ) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
-		         :order => 'receipts.number',
-		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id left join (select * from (select * from receipts order by id DESC) as receipts group by receipts.order_id) as receipts on receipts.order_id=orders.id'
+		         :order => 'orders.receipt_number',
+		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id '
 
 #  	paginate :per_page => 20, :page => page,
 #		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (order_id like :search OR payments.order_id like :search OR payment_methods.name like :search ) AND users.location_id=:site_id', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id,:search => "%#{search}%"}],
@@ -108,8 +107,8 @@ class Payment < ActiveRecord::Base
 		end
   	find :all,
 		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payments.order_id like :search OR payments.order_id like :search OR payment_methods.name like :search ) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
-		         :order => 'receipts.number',
-		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id left join (select * from (select * from receipts order by id DESC) as receipts group by receipts.order_id) as receipts on receipts.order_id=orders.id'
+		         :order => 'orders.receipt_number',
+		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id'
 #  	find :all,
 #		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (order_id like :search OR payments.order_id like :search OR payment_methods.name like :search ) AND users.location_id=:site_id', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id,:search => "%#{search}%"}],
 #		         :order => 'payments.created_at',

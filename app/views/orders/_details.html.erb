@@ -106,7 +106,7 @@
 <% end %>
 	<p>
 		<b>Numero de Factura:</b>
-		<%=h @order.receipt_number %>
+		<%= link_to "%05d" % @order.receipt_number, show_receipt_url(@order) %>
 	</p>
 </div>
 <div class="column2-unit-right">
