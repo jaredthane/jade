@@ -145,6 +145,16 @@ class Order < ActiveRecord::Base
     return old_version.attributes[attribute]
 	end
 	#################################################################################################
+	# Returns a Dictionary of the lines on the order with ids as keys.
+	# Used by lines=() to save lines effeciently
+	#################################################################################################
+	def indexed_lines
+	  i={}
+	  for l in lines
+	    i[l.id]=l
+	  end
+	end
+	#################################################################################################
 	# Returns a revision of a transaction with the Credit and Debit Posts Reversed
 	#################################################################################################
 	def reverse_transaction(t)
@@ -226,25 +236,19 @@ class Order < ActiveRecord::Base
   # updates existing lines on the order, adds new ones and deletes missing ones. DOES NOT SAVE THEM
   ##################################################################################
 	def lines=(lines)
+	  i={}
+	  for l in self.lines
+	    i[l.id]=l
+	  end
     for key, l in lines
       if key=='new' and l[:delete_me]!='1'
-        logger.info "this is a new line &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
         self.lines << line=self.lines.new(l) 
         line.order=self
       elsif key!='new'
-        logger.info "this is an existing line &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
-        line = Line.find_by_id(l[:id])
-        # this is an existing line
-#        logger.info "Here are the lines values"
-#        logger.info l
+        line = i[l[:id].to_i]
         line.attributes=l
-#        logger.info "Here our line after applying the changes"
-#        logger.info line.inspect
-#        logger.info "line.delete_me=" + (line.delete_me||'nil')
-#        logger.info "l[:delete_me]=" + (l[:delete_me]||'nil')
-#        logger.info "destroying line" if l[:delete_me]=='1'
-#        logger.info "destroy me is string" if l[:delete_me]=='1'
         line.destroy if l[:delete_me]=='1' #<------------ Not sure if this will work right. It needs to stick, but cancel if theres errors
+                                           # ALSO: NEED TO DO ACCOUNTING AND INVENTORY ON THIS LINE!!!!!
       end #!line and !l[:delete_me]
     end # for l in lines
   end #lines=(lines)

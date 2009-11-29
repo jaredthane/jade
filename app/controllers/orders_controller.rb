@@ -235,7 +235,7 @@ class OrdersController < ApplicationController
     @order = Order.new(:created_at=>User.current_user.today, :receipt_number=>(User.current_user.location.next_receipt_number||''))
 		@order_type_id = params[:order_type_id] || 0
 		if @order_type_id == 1
-			@order.client_id = 1213
+			@order.client_id = 3
 		end
 		return false if !allowed(params[:order_type_id], 'edit')
     respond_to do |format|
@@ -252,7 +252,7 @@ class OrdersController < ApplicationController
     end
   end
   def new_sale
-    @order = Order.new(:created_at=>User.current_user.today)
+    @order = Order.new(:created_at=>User.current_user.today, :client_id=>3)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -320,7 +320,14 @@ class OrdersController < ApplicationController
     params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
     params[:order][:received]=untranslate_month(params[:order][:received]) if params[:order][:received]
     errors = false
-		errors = true if !@order.update_attributes(params[:order])
+    logger.info "dumping lines before"
+    logger.info @order.lines.inspect
+    @order.attributes=params[:order]
+    logger.info "dumping lines middle"
+    logger.info @order.lines.inspect
+		errors = true if !@order.save
+    logger.info "dumping lines after"
+    logger.info @order.lines.inspect
 		if params[:submit_type] == 'post' and !errors
 			errors = true if !@order.post
 		end
