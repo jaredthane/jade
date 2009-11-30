@@ -66,7 +66,7 @@
     </div>
     <%= select_tag(:select_from, options_for_select(date_selection, Date.today.to_s)) %>
     <%= select_tag(:select_till, options_for_select(date_selection, Date.today.to_s)) %>
-    <% if @sites.length > -10 %>
+    <% if @sites.length > 1 %>
       <div class="checkbox-list">
         <% get_sites.each do |site| -%>
           <%= check_box_tag "sites[]", site.id, @sites.include?(site.id.to_s) -%> <%= site.name -%>

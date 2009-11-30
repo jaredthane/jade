@@ -23,3 +23,7 @@ alter table entities change column next_receipt_number next_receipt_number char(
 ALTER TABLE orders ADD INDEX(created_at);
 ALTER TABLE orders ADD INDEX(client_id);
 ALTER TABLE orders ADD INDEX(vendor_id);
+ALTER TABLE entries ADD INDEX(created_at);
+ALTER TABLE payments ADD INDEX(order_id);
+ALTER TABLE receipts ADD INDEX(order_id);
+ALTER TABLE payments ADD INDEX(created_at);
