@@ -24,7 +24,11 @@ class Order < ActiveRecord::Base
 	has_many :transactions, :class_name => "Trans"
 	belongs_to :order_type
 	belongs_to :next_order, :class_name => "Order", :foreign_key => 'next_order'
-
+  SALE=1
+  PURCHASE=2
+  INTERNAL=3
+  TRANSFER=4
+  COUNT=5
 	##################################################################################################
 	# 
 	#################################################################################################
@@ -587,11 +591,42 @@ class Order < ActiveRecord::Base
 	###################################################################################
 	# result of a search
 	###################################################################################
-	def self.search(search, page)
-		paginate :per_page => 20, :page => page,
-						 :conditions => ['(vendors.name like :search OR clients.name like :search OR orders.id like :search OR receipt_number like :search) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
-						 :order => 'created_at desc',
-						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
+	def self.search(search, order_type=nil, from=User.current_user.today, till=User.current_user.today, page=nil)
+	  till=till + 1
+	  still=till.to_s(:db)
+	  sfrom=from.to_s(:db)
+	  logger.info "PAge:::::::::::::::::::::::::::::::" + page.to_s
+	  case order_type
+	  when SALE
+	    logger.debug "searching sales"
+	    c= ['(order_type_id = 1) AND (clients.name like :search) AND (vendor_id=:current_location OR clients.id=:current_location) AND (clients.id != 1) AND orders.created_at<:till AND orders.created_at>:from', {:search => "%#{search}%", :from => "#{sfrom}",:till => "#{still}", :current_location => "#{User.current_user.location_id}"}]
+	    j= "inner join entities as clients on clients.id = orders.client_id"
+	  when PURCHASE
+	    logger.debug "searching PURCHASE"
+	    c=['(vendors.name like :search AND order_type_id = 2 and clients.entity_type_id = 3) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}]
+	    j="inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
+	  when INTERNAL
+	    logger.debug "searching INTERNAL"
+	    c=['vendors.name like :search AND orders.client_id = 1 AND orders.vendor_id=:current_location', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}]
+	    j="inner join entities as vendors on vendors.id = orders.vendor_id"
+	  when COUNT
+	    logger.debug "searching COUNT"
+	    c=['(location.id=:current_location) AND (orders.order_type_id = 5)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}]
+	    j="inner join entities as location on location.id = orders.vendor_id"
+	  else
+	    logger.debug "searching all according to rights"
+  		search=search||''
+		  c = "vendors.name like '%" + search + "%' OR clients.name like '%" + search + "%' OR orders.id like '%" + search + "%') AND (vendors.id=" + User.current_user.location_id.to_s + " OR clients.id =" + User.current_user.location_id.to_s
+		  c += ' AND order_type_id != 2' if !User.current_user.has_rights(['admin','gerente','compras'])
+		  c += ' AND order_type_id != 1' if !User.current_user.has_rights(['admin','gerente','ventas'])
+		  c += ' AND order_type_id != 3' if !User.current_user.has_rights(['admin','gerente','compras','ventas'])
+		  j="inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
+    end
+    if page
+		  paginate :per_page => 20, :page => page, :conditions => c, :order => 'created_at desc', :joins => j
+		else
+		  find :all, :conditions =>c, :joins => j, :order=> 'created_at desc'
+		end
 	end
 	
 	def recent_payments(limit)
@@ -617,12 +652,12 @@ class Order < ActiveRecord::Base
 						 :order => 'created_at desc',
 						 :joins => "inner join entities as clients on clients.id = orders.client_id"
 	end
-	def self.search_todays_sales(search, page)
-		paginate :per_page => 20, :page => page,
-						 :conditions => ['(order_type_id = 1) AND (clients.name like :search OR purchase_receipt_number like :search) AND (vendors.id=:current_location OR clients.id=:current_location) AND (clients.id != 1) AND (date(orders.created_at)=curdate())', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
-						 :order => 'orders.created_at desc',
-						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
-	end
+#	def self.search_todays_sales(search, page)
+#		paginate :per_page => 20, :page => page,
+#						 :conditions => ['(order_type_id = 1) AND (clients.name like :search OR purchase_receipt_number like :search) AND (vendors.id=:current_location OR clients.id=:current_location) AND (clients.id != 1) AND (date(orders.created_at)=curdate())', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+#						 :order => 'orders.created_at desc',
+#						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
+#	end
 	def self.search_purchases(search, page)
 		paginate :per_page => 20, :page => page,
 						 :conditions => ['(vendors.name like :search AND order_type_id = 2 and clients.entity_type_id = 3) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],

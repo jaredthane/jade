@@ -62,28 +62,41 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.xml
   def index
-		@order_type_id = params[:order_type_id] || 0
-		case @order_type_id
-		when 0
-				@orders = Order.search_by_rights(params[:search], params[:page])
-		when 1
-			@orders = Order.search_sales(params[:search], params[:page])
-		when 2
-			@orders = Order.search_purchases(params[:search], params[:page])
-		when 3
-			@orders = Order.search_internal(params[:search], params[:page])
-		end
-		if @orders.length == 1
-			@order=@orders[0]
-			return false if !allowed(@order.order_type_id, 'view')
-			logger.debug "orderis" + @order.inspect
-			render :action => 'show_products'
-			return false
-		end
+    logger.info params
+		@order_type_id = params[:order_type_id].to_i || 0
 		return false if !allowed(@order_type_id, 'view')
+
+    @site=User.current_user.location
+  	@sites=(params[:sites] ||[current_user.location_id])
+  	params[:page]=(params[:page]||1)
+	  @from=(untranslate_month(params[:from])||Date.today)
+    @till=(untranslate_month(params[:till])||Date.today)
+    if params[:page]
+      logger.info "params[:page]=" + params[:page].to_s
+    else
+      logger.info "params[:page] is nil"
+    end
+    logger.info "(params[:page]||1)" + (params[:page]||1).to_s
+    logger.info "params[:pdf]" + params[:pdf].to_s
+    if params[:pdf]=='1'
+      logger.debug "searching without pagination"
+      @orders=Order.search(params[:search], @order_type_id, @from, @till)
+      params[:format] = 'pdf'
+    else
+      @orders=Order.search(params[:search], @order_type_id, @from, @till, params[:page])
+      logger.debug "searching with pagination"
+      if @orders.length == 1
+			  @order=@orders[0]
+			  return false if !allowed(@order.order_type_id, 'view')
+			  render :action => 'show_products'
+			  return false
+		  end
+    end
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @orders }
+      format.pdf {
+        prawnto :prawn => { :page_size => 'LETTER'}
+      }
     end
   end
   def show_todays_sales
