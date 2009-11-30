@@ -2,9 +2,9 @@
 	when 4 %>
 		<% content_for :title do %>Detalles de Transferencia #<%= @order.id %><% end %>
 	<% when 1 %>
-		<% content_for :title do %>Detalles de Venta #<%= @order.id %><% end %>
+		<% content_for :title do %>Detalles de Venta - Factura #<%= @order.receipt_number %><% end %>
 	<% when 2 %>
-		<% content_for :title do %>Detalles de Compra #<%= @order.id %><% end %>
+		<% content_for :title do %>Detalles de Compra - Factura #<%= @order.receipt_number %><% end %>
 	<% when 3 %>
 		<% content_for :title do %>Detalles de Consumo Interno #<%= @order.id %><% end %>
 	<% else %>
@@ -106,7 +106,7 @@
 <% end %>
 	<p>
 		<b>Numero de Factura:</b>
-		<%= link_to "%05d" % @order.receipt_number, show_receipt_url(@order) %>
+		<%= link_to @order.receipt_number, show_receipt_url(@order) %>
 	</p>
 </div>
 <div class="column2-unit-right">

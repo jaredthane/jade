@@ -283,7 +283,9 @@ class OrdersController < ApplicationController
     @order.attributes = params["order"]
     logger.info "params['order']['client_name']=" + params['order']['client_name'].to_s
     logger.info "heres the order we just created: " + @order.inspect
-    User.current_user.location.next_receipt_number=params["order"]["receipt_number"].to_i
+    this_receipt = params["order"]["number"]
+    next_receipt=("%0" + this_receipt.length.to_s + "d") % (this_receipt.to_i + 1)
+    User.current_user.location.next_receipt_number = next_receipt
 #    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
     logger.info "finished updating lines"
     respond_to do |format|

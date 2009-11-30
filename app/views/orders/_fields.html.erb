@@ -65,7 +65,7 @@
 <div class="column3-unit-right">
 			<p>
 				<b>Numero de Factura</b>
-				<%= f.text_field :number, :style=>'width:168px;', :class=> 'field' %>
+				<%= text_field_tag 'order[receipt_number]', @order.receipt_number %>
 			</p>
 	<p>
 		<b>Fecha de Pedido</b><br />
