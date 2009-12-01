@@ -1,0 +1,32 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :title do %>Anular Numero de Factura<% end %>
+<% content_for :actions do %>
+  <dt><%= link_to 'Cancelar', receipts_url %></dt>
+  <dt><%= link_to_function 'Generar', 'submit("receipt_form")' %></dt>
+<% end %>
+ 
+<%= error_messages_for :receipt %>
+<script type="text/javascript">
+  $(document).ready(function(){
+	  //Setup	date picker
+	  $.datepicker.regional['es']
+	  $(".datepicker").datepicker();
+	});
+</script>  
+<% form_tag create_nul_receipt_number_url, :method =>'post', :id => 'receipt_form' do %>
+<br />
+  <div class="column2-unit-left">
+    <p>
+      <b>Cual numero de factura desea anular?</b><br />
+    	<%= text_field_tag :number, @next, :class => 'field'%>
+    </p>
+  </div>
+  <div class="column2-unit-right">
+    <p>
+      <b>Fecha:</b><br />
+    	<%= text_field_tag "created_at", User.current_user.today, :class=> 'field datepicker', :id => 'created_at_date_picker',:style=>'width:168px;' %>
+    </p>
+  </div>
+<% end %>
