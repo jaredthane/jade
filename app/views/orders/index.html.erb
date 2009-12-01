@@ -37,53 +37,18 @@
 
 <% case @order_type_id when 2 %>
 		<% content_for :title do %>Lista de Compras en <%= current_user.location.name %><% end %>
+		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => purchases_path } %>
 	<% when 1%>
 		<% content_for :title do %>Lista de Ventas en <%= current_user.location.name %><% end %>
+		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => sales_path } %>
 	<% when 3%>
 		<% content_for :title do %>Lista de Consumos Internos de <%= current_user.location.name %><% end %>
+		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => internals_path } %>
 	<% when 0 %>
 		<% content_for :title do %>Lista de Pedidos en <%= current_user.location.name %><% end %>
+		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => orders_path } %>
 <% end %>
-<script type="text/javascript">
-	$(document).ready(function(){
-	  $('select#select_from, select#select_till').selectToUISlider({
-				labels: 0,
-			});
-		//Setup	date picker
-	  $.datepicker.regional['en']
-	  $(".datepicker").datepicker();
-	});
-</script>
-<% form_tag orders_path, :method =>'get', :id => 'date_range_form' do %>
-  <div class="slider_bar">
-    <div class="from_div">
-      <b>Desde</b><br />
-      <%= text_field_tag 'from', @from.to_s, :class=> 'field datepicker', :id => 'from',:style=>'width:168px;' %>
-    </div>
-    <div class="till_div">
-   		<b>Hasta</b><br />
-      <%= text_field_tag 'till', @till.to_s, :class=> 'field datepicker', :id => 'till',:style=>'width:168px;' %>
-    </div>
-    <%= select_tag(:select_from, options_for_select(date_selection, Date.today.to_s)) %>
-    <%= select_tag(:select_till, options_for_select(date_selection, Date.today.to_s)) %>
-    <% if @sites.length > 1 %>
-      <div class="checkbox-list">
-        <% get_sites.each do |site| -%>
-          <%= check_box_tag "sites[]", site.id, @sites.include?(site.id.to_s) -%> <%= site.name -%>
-        <% end -%>
-      </div>
-    <% else %>
-      <div class="checkbox-list" style="display:none;">
-        <% get_sites.each do |site| -%>
-          <%= check_box_tag "sites[]", site.id, @sites.include?(site.id.to_s) -%> <%= site.name -%>
-        <% end -%>
-      </div>
-    <% end %>
-    <%= hidden_field_tag 'pdf',true %>
-    <%= hidden_field_tag 'order_type_id',@order_type_id %>
-  </div>
-<% end %>
-<br /> <%= will_paginate @orders, :class => 'pagination' %>
+<%= will_paginate @orders, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
     <div class="table_cell_10">Numero</div>
