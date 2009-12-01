@@ -4,6 +4,8 @@
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
+  <dt><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></dt>
+  <dt><%= link_to_function 'Reporte', 'submit_report("date_range_form")', :class => 'action' %></dt>
 	<% case @order_type_id when 2 %>
 		<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
 			<dt><%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %></dt>
@@ -15,8 +17,6 @@
 	<% when 1%>
 		<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
 			<dt><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %></dt>
-			<dt><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></dt>
-	    <dt><%= link_to_function 'Reporte', 'submit_report("date_range_form")', :class => 'action' %></dt>
 			<% if current_user.has_rights(['Suscripciones','Admin']) %>
 			  <dt><%= link_to 'Lista de Suscripciones', subscriptions_url %></dt>
 			  <dt><%= link_to 'Anular No. de Factura', new_nul_receipt_number_url %></dt>
@@ -96,7 +96,7 @@
 	<% for order in @orders %>
 		<div class="table_row">
 		  <% if order.deleted %><div class="strikethrough"><% end %>
-		      <div class="table_cell_10"><%= link_to (order.receipt_number||''), order %></div>
+		      <div class="table_cell_10"><%= link_to (order.receipt_number||'Sin número'), order %></div>
 		      <div class="table_cell_20"><%= link_to order.vendor.name[0..25], order.vendor %></div>
 		      <div class="table_cell_20"><%= link_to order.client.name[0..25], order.client %></div>
 		      <div class="table_cell_15"><%= link_to awaiting(order), order_history_path(order)%></div> 

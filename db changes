@@ -17,9 +17,9 @@ update orders inner join receipts on receipts.order_id=orders.id set orders.rece
 alter table orders add column receipt_generated datetime;
 alter table orders change column id id int(11) not null;
 alter table payments drop column receipt_id;
-ALTER TABLE orders ADD INDEX(receipt_number);
 alter table orders change column receipt_number receipt_number char(8);
 alter table entities change column next_receipt_number next_receipt_number char(8);
+ALTER TABLE orders ADD INDEX(receipt_number);
 ALTER TABLE orders ADD INDEX(created_at);
 ALTER TABLE orders ADD INDEX(client_id);
 ALTER TABLE orders ADD INDEX(vendor_id);
@@ -27,3 +27,4 @@ ALTER TABLE entries ADD INDEX(created_at);
 ALTER TABLE payments ADD INDEX(order_id);
 ALTER TABLE receipts ADD INDEX(order_id);
 ALTER TABLE payments ADD INDEX(created_at);
+ALTER TABLE movements ADD INDEX(order_id);

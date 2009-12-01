@@ -221,29 +221,21 @@
 	  <b>Ventas No Pagadas:</b>
 	  <div>
 			<div class="table_header_row">
-					<div class="table_cell_15">Fecha Entregado</div>
-					<div class="table_cell_15">Venta</div>
-					<div class="table_cell_15">Factura</div>
-					<div class="table_cell_15">Total</div>
+					<div class="table_cell_20">Fecha Entregado</div>
+					<div class="table_cell_20">Venta</div>
+					<div class="table_cell_20">Total</div>
 					<div class="table_cell_15">Pagos</div>
 					<div class="table_cell">Acciones</div>
 				</div>
 		  <% for order in @unpaid %>
 			  <div class="table_row">
-					<div class="table_cell_15">
+					<div class="table_cell_20">
 						<% if order.received %>
 							<%= h order.received.to_date.to_s(:long) %>
 						<% end %>
 					</div>
-					<div class="table_cell_15"><%= link_to order.id, order %></div>
-					<div class="table_cell_15">
-						<% if order.receipts.length > 0 %>
-							<%= link_to "%05d" % order.receipts[0].number, order.receipts[0] %>
-						<% else %>
-							<%= link_to 'Facturar', new_receipt_path(order) %>
-						<% end %>
-					</div>
-					<div class="table_cell_15"><%= h number_to_currency(order.grand_total) %></div>
+					<div class="table_cell_20"><%= link_to (order.receipt_number||'Sin número'), order %></div>
+					<div class="table_cell_20"><%= h number_to_currency(order.grand_total) %></div>
 					<div class="table_cell_15"><%= h number_to_currency(order.amount_paid) %></div>
 					<div class="table_cell"><%=link_to 'Marcar Pagada', pay_off_url(order) %></div>
 				</div>

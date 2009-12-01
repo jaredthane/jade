@@ -106,7 +106,10 @@ ActionController::Routing::Routes.draw do |map|
   map.new_sale 	'sales/new', :controller => 'orders', :action => 'new', :order_type_id => 1
   map.new_internal 	'internal/new', :controller => 'orders', :action => 'new', :order_type_id => 3
   map.purchases 'purchases/', :controller => 'orders', :action => 'index', :order_type_id => 2
-  map.internal 'internal/', :controller => 'orders', :action => 'index', :order_type_id => 3
+  map.internals 'internals/', :controller => 'orders', :action => 'index', :order_type_id => 3
+  map.transfers 'transfers/', :controller => 'orders', :action => 'index', :order_type_id => 4
+  map.counts 'counts/', :controller => 'orders', :action => 'index', :order_type_id => 5
+  map.internals 'internals/', :controller => 'orders', :action => 'index', :order_type_id => 3
   map.sales 'sales/', :controller => 'orders', :action => 'index', :order_type_id => 1
 
 	map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate', :activation_code => nil

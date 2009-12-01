@@ -49,7 +49,7 @@ class Payment < ActiveRecord::Base
 	  end
 		case order.order_type_id
 		when 1 # Sale
-			debit = Post.create(:trans=>trans, :account => self.order.cash_account, :value=>@amt, :post_type_id =>Post::DEBIT)
+			debit = Post.create(:trans=>trans, :account => self.order.vendor.cash_account, :value=>@amt, :post_type_id =>Post::DEBIT)
 			credit = Post.create(:trans=>trans, :account => self.order.client.cash_account, :value=>@amt, :post_type_id =>Post::CREDIT)
 		when 2 # Purchase
 			debit = Post.create(:trans=>trans, :account => self.order.vendor.cash_account, :value=>@amt, :post_type_id =>Post::DEBIT)

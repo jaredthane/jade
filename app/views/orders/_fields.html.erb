@@ -36,10 +36,14 @@
 			<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 		</div>
 		<div class="column3-unit-middle">
+		
+	    <p>
+		    <b>Fecha de Pedido</b><br />
+		    <%= f.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>
+	    </p>
 			<p>
 				<b>Fecha Recibido</b>
 				<%= f.text_field :markreceived, :class=> 'field datepicker', :id => 'received_date_picker',:style=>'width:168px;' %>
-
 			</p>
 		</div>
 	<% when 3 %>
@@ -65,12 +69,12 @@
 <div class="column3-unit-right">
 			<p>
 				<b>Numero de Factura</b>
-				<%= text_field_tag 'order[receipt_number]', @order.receipt_number %>
+				<%= text_field_tag 'order[number]', @order.number %>
 			</p>
-	<p>
-		<b>Fecha de Pedido</b><br />
-		<%= f.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>
-	</p>
+			<p>
+				<b>Anulado</b>
+				<%= f.check_box :void, :class=> 'field'%>
+			</p>
 	<%= f.hidden_field :user_id, :value => current_user.id %>
 </div>
 

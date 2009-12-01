@@ -58,7 +58,9 @@ class OrdersController < ApplicationController
     end  
     return true  
 	end
-	
+	def search_paths(order_type)
+	  
+	end
   # GET /orders
   # GET /orders.xml
   def index
@@ -68,27 +70,20 @@ class OrdersController < ApplicationController
 
     @site=User.current_user.location
   	@sites=(params[:sites] ||[current_user.location_id])
+#  	@search_path = SEARCH_PATHS[@order_type_id]
   	params[:page]=(params[:page]||1)
 	  @from=(untranslate_month(params[:from])||Date.today)
     @till=(untranslate_month(params[:till])||Date.today)
-    if params[:page]
-      logger.info "params[:page]=" + params[:page].to_s
-    else
-      logger.info "params[:page] is nil"
-    end
-    logger.info "(params[:page]||1)" + (params[:page]||1).to_s
-    logger.info "params[:pdf]" + params[:pdf].to_s
     if params[:pdf]=='1'
-      logger.debug "searching without pagination"
       @orders=Order.search(params[:search], @order_type_id, @from, @till)
       params[:format] = 'pdf'
     else
       @orders=Order.search(params[:search], @order_type_id, @from, @till, params[:page])
-      logger.debug "searching with pagination"
       if @orders.length == 1
 			  @order=@orders[0]
+			  @payments = @order.recent_payments(10)
 			  return false if !allowed(@order.order_type_id, 'view')
-			  render :action => 'show_products'
+			  render :action => 'show'
 			  return false
 		  end
     end
@@ -218,9 +213,10 @@ class OrdersController < ApplicationController
     	redirect_to(physical_count_url(params[:id]))
     	return false
     end
+    @payments = @order.recent_payments(10)
 		return false if !allowed(@order.order_type_id, 'view')
     respond_to do |format|
-      format.html { render :template => "/orders/show_products" }
+      format.html 
       format.xml  { render :xml => @order }
     end
   end
@@ -296,7 +292,7 @@ class OrdersController < ApplicationController
     @order.attributes = params["order"]
     logger.info "params['order']['client_name']=" + params['order']['client_name'].to_s
     logger.info "heres the order we just created: " + @order.inspect
-    this_receipt = params["order"]["number"]
+    this_receipt = params["order"]["number"].to_s
     next_receipt=("%0" + this_receipt.length.to_s + "d") % (this_receipt.to_i + 1)
     User.current_user.location.next_receipt_number = next_receipt
 #    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out

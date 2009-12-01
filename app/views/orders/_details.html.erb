@@ -26,13 +26,8 @@
 		<% end %>
 		<% if view == 'products' %>
 		  <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		  <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
 		<% elsif view == 'history' %>
 		  <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		  <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		<% elsif view == 'payments' %>
-		  <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		  <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
 		<% end %>
 		<dt><%= link_to 'Lista de Ventas', sales_path %> </dt>
 	<% when 2 %>
@@ -45,13 +40,8 @@
 			<% end %>
 		  <% if view == 'products' %>
 		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
 		  <% elsif view == 'history' %>
 		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		  <% elsif view == 'payments' %>
-		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
 		  <% end %>
 			<dt><%= link_to 'Lista de Compras', purchases_path %> </dt>
 		<% end %>
@@ -64,13 +54,8 @@
 			<% end %>
 		  <% if view == 'products' %>
 		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
 		  <% elsif view == 'history' %>
 		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		  <% elsif view == 'payments' %>
-		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
 		  <% end %>
 		<% end %>
 		<dt><%= link_to 'Lista de Pedidos', orders_path %> </dt>
@@ -106,7 +91,7 @@
 <% end %>
 	<p>
 		<b>Numero de Factura:</b>
-		<%= link_to @order.receipt_number, show_receipt_url(@order) %>
+		<%= link_to (order.receipt_number||'Sin número'), show_receipt_url(@order) %>
 	</p>
 </div>
 <div class="column2-unit-right">

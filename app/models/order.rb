@@ -48,9 +48,18 @@ class Order < ActiveRecord::Base
 	# Is run immediatly after a new order is created or updated
 	#################################################################################################
   # checking for discounts should be done before saving lines
-  # Calculating total must be done after lines have been updated
+  # Calculating total must be done after lines have been updated 
+  #     (This is true but the updating of the lines is done before pre_save)
   # Creating transactions must be done after Calculating total
   ####################################################################################
+  before_save :pre_save
+  def pre_save
+    if self.deleted
+      self.grand_total = 0
+    else
+  	  self.grand_total = self.total_price_with_tax
+  	end
+  end
 	after_save :post_save
 	def post_save
 	  old('id') # just make old run so we'll have the data oto reference later'
@@ -61,7 +70,7 @@ class Order < ActiveRecord::Base
 	  save_related(lines, true)
 	  logger.info "Dumping lines after save"
 	  logger.info self.lines.inspect
-	  self.grand_total = self.total_price_with_tax
+	  
 	  save_related(movements, true)
 	  save_related(transactions, true)
 	end
@@ -587,7 +596,13 @@ class Order < ActiveRecord::Base
 		end
 		return @received
 	end
-	
+	def void=(num)
+	  
+	end
+	def void
+	  return true if deleted
+	  return false
+	end
 	###################################################################################
 	# result of a search
 	###################################################################################
@@ -599,7 +614,7 @@ class Order < ActiveRecord::Base
 	  case order_type
 	  when SALE
 	    logger.debug "searching sales"
-	    c= ['(order_type_id = 1) AND (clients.name like :search) AND (vendor_id=:current_location OR clients.id=:current_location) AND (clients.id != 1) AND orders.created_at<:till AND orders.created_at>:from', {:search => "%#{search}%", :from => "#{sfrom}",:till => "#{still}", :current_location => "#{User.current_user.location_id}"}]
+	    c= ['(order_type_id = 1) AND (clients.name like :search OR orders.receipt_number like :search) AND (vendor_id=:current_location OR clients.id=:current_location) AND (clients.id != 1) AND orders.created_at<:till AND orders.created_at>:from', {:search => "%#{search}%", :from => "#{sfrom}",:till => "#{still}", :current_location => "#{User.current_user.location_id}"}]
 	    j= "inner join entities as clients on clients.id = orders.client_id"
 	  when PURCHASE
 	    logger.debug "searching PURCHASE"
