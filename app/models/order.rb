@@ -67,6 +67,10 @@ class Order < ActiveRecord::Base
 	  check_for_discounts
 	  logger.info "Dumping lines before save"
 	  logger.info self.lines.inspect
+	  m=main_transaction
+	  i=inventory_transaction
+	  self.transactions << m if m
+	  self.transactions << i if i
 	  save_related(lines, true)
 	  logger.info "Dumping lines after save"
 	  logger.info self.lines.inspect
@@ -192,7 +196,7 @@ class Order < ActiveRecord::Base
 	    tax = self.total_tax - (old('total_tax') || 0)
 		  case order_type_id
 		  when 1 #Venta
-			  sale=Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> order_type.name, :is_payment=>false )
+			  sale=Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> order_type.name)
         sale.posts << Post.new(:account => self.client.cash_account,:created_at=>date, :value=>amount, :post_type_id =>Post::DEBIT)
         if tax != 0
         	sale.posts << Post.new(:account => self.vendor.tax_account,:created_at=>date, :value=>tax, :post_type_id =>Post::CREDIT)
@@ -213,7 +217,7 @@ class Order < ActiveRecord::Base
 			  }    
 			  return sale
 		  when 2 # Compra
-	      purchase = Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> order_type.name, :is_payment=>false)
+	      purchase = Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> order_type.name)
 	      purchase.posts << Post.new(:account => self.vendor.cash_account,:created_at=>date, :value => amount, :post_type_id =>Post::CREDIT)
         purchase.posts << Post.new(:account => self.client.inventory_account,:created_at=>date, :value => amount, :post_type_id =>Post::DEBIT)
 			  return purchase
@@ -239,7 +243,7 @@ class Order < ActiveRecord::Base
 	def inventory_transaction(date=User.current_user.today)
 		inventory_cost = self.inventory_value - (old('inventory_value')||0)
     if inventory_cost != 0
-    	inventory = Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> 'Inventario de ' + order_type.name, :is_payment=>false)
+    	inventory = Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> 'Inventario de ' + order_type.name)
 	    inventory.posts << Post.new(:account => self.vendor.inventory_account,:created_at=>date, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
 	    inventory.posts << Post.new(:account => self.vendor.expense_account,:created_at=>date, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
 	  end

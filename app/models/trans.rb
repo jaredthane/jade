@@ -21,6 +21,7 @@ class Trans < ActiveRecord::Base
   has_many :posts
   has_many :entities , :through => :posts
 	belongs_to :order
+	belongs_to :payment
 	belongs_to :user
 #	after_save :save_posts
 	def add_posts(posts)
@@ -45,10 +46,10 @@ class Trans < ActiveRecord::Base
 	  return d
 	end
 	def obj_link
-	  if self.is_payment
-	    return Payment.find_all_by_id(self.order_id)[0]
+	  if self.payment
+	    return self.payment
 	  else
-	    return Order.find_all_by_id(self.order_id)[0]
+	    return self.order
 	  end	  
 	end
 	def save_posts

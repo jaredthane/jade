@@ -6,6 +6,7 @@
 <% end %>
 
 <% content_for :actions do %>
+  <dt><%= link_to_function 'Guardar', 'submit("payment_form")' %></dt>
   <% if mode == 'edit' %>
     <dt><%= link_to 'Cancelar', @payment %></dt>
     <dt><%= link_to 'Remover', @payment, :confirm => 'Esta seguro?', :method => :delete %></dt>
@@ -13,13 +14,12 @@
   <% else %>
     <dt><%= link_to 'Cancelar', payments_path %></dt>
   <% end %>
-  <dt><%= link_to_function 'Guardar', 'submit("payment_form")' %></dt>
 <% end %>
 
 <%= error_messages_for :payment %>
 
 <% form_for(@payment, :html => {:id => 'payment_form' }) do |f| %>
-  <%= hidden_field_tag :paid, @paid %>
+  <%= hidden_field_tag :paid, @payment.amount %>
 	<div class="column2-unit-left">
 	<% if !@payment.order_id %> 
 		<p>

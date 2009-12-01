@@ -1,11 +1,5 @@
 <% case @order_type_id
-     when 0 %>
-      <%= render( 
-	      :file          => "layouts/_header.html.erb", 
-	      :use_full_path => true, 
-	      :locals => {:page_title => 'Pedidos', :search_path => orders_path, :date_range=>true}
-      ) %>
-  <% when 1 %>
+  when 1 %>
       <%= render( 
 	      :file          => "layouts/_header.html.erb", 
 	      :use_full_path => true, 
@@ -34,6 +28,13 @@
 	      :file          => "layouts/_header.html.erb", 
 	      :use_full_path => true, 
 	      :locals => {:page_title => 'Cuentas Fisicas', :search_path => counts_path, :date_range=>true}
+      ) %>
+  
+  <% else %>
+      <%= render( 
+	      :file          => "layouts/_header.html.erb", 
+	      :use_full_path => true, 
+	      :locals => {:page_title => 'Pedidos', :search_path => orders_path, :date_range=>true}
       ) %>
 <% end %>
 

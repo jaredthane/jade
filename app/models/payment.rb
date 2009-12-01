@@ -21,68 +21,68 @@ class Payment < ActiveRecord::Base
 	belongs_to :order
 	belongs_to :payment_method
 	belongs_to :user
-	before_save :prepare_transactions
-	after_save :create_transactions
-	attr_accessor :amt
-	def prepare_transactions
-		if User.current_user.do_accounting
-			self.amount=self.presented-self.returned
-			if new_record?
-				amt=self.amount
-			else
-				amt = self.amount - old.amount
-			end
-			@amt=amt
-		end
+	has_many :transactions, :class_name => "Trans"
+	
+	attr_accessor :old_version
+	def old(attribute)
+	  return nil if !self.id
+    return old_version.attributes[attribute] if old_version
+    old_version=Payment.find_by_id(self.id)
+    return old_version.attributes[attribute]
 	end
-	def create_transactions
-		puts "running here.."
-  	if self.order
-			puts "running here too.."
-  		order.amount_paid+=self.amount
-  		order.save
-	    trans = Trans.create(:is_payment=>true, :created_at=>User.current_user.today,:user=>User.current_user, :order_id => self.id, :comments => self.order.comments, :tipo => 'Pago de ' + self.order.order_type.name)
-#	    trans.tipo='Pago por' + self.order.order_type.name
+	
+	after_save :post_save
+	def post_save
+	  self.transactions << new_transaction
+	  order.amount_paid += self.amount- (old('amount') || 0)
+		order.save
+		save_related(self.transactions)
+	end 
+	def new_transaction
+	  amount = self.amount - (old('amount') || 0)
+	  if self.order
+	    t = Trans.new( :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :comments => self.order.comments, :tipo => 'Pago de ' + self.order.order_type.name)
 	  else
-	    trans = Trans.create(:is_payment=>true, :created_at=>User.current_user.today,:user=>User.current_user, :order_id => self.id, :tipo=> 'Pago')
-#	  trans.tipo='Pago'
+	    t = Trans.new( :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :tipo=> 'Pago')
 	  end
-		case order.order_type_id
+	  case order.order_type_id
 		when 1 # Sale
-			debit = Post.create(:trans=>trans, :account => self.order.vendor.cash_account, :value=>@amt, :post_type_id =>Post::DEBIT)
-			credit = Post.create(:trans=>trans, :account => self.order.client.cash_account, :value=>@amt, :post_type_id =>Post::CREDIT)
+			t.posts << Post.new(:trans=>t, :account => self.order.vendor.cash_account, :value=>amount, :post_type_id =>Post::DEBIT)
+			t.posts << Post.new(:trans=>t, :account => self.order.client.cash_account, :value=>amount, :post_type_id =>Post::CREDIT)
 		when 2 # Purchase
-			debit = Post.create(:trans=>trans, :account => self.order.vendor.cash_account, :value=>@amt, :post_type_id =>Post::DEBIT)
-			credit = Post.create(:trans=>trans, :account => self.order.client.cash_account, :value=>@amt, :post_type_id =>Post::CREDIT)
+			t.posts << Post.new(:trans=>t, :account => self.order.vendor.cash_account, :value=>amount, :post_type_id =>Post::DEBIT)
+			t.posts << Post.new(:trans=>t, :account => self.order.client.cash_account, :value=>amount, :post_type_id =>Post::CREDIT)
 		end
+		return t
 	end
-	def cancel
-		if self.order
-  		order.amount_paid-=self.amount
-  		order.save
-	    trans = Trans.create(:is_payment=>true, :created_at=>User.current_user.today,:user=>User.current_user, :order => self.id, :comments => self.order.comments + 'Cancelacion de Pago #' + self.order.id.to_s, :tipo => 'Cancelacion de Pago')
-#	    trans.tipo='Cancelacion de Pago por' + self.order.order_type.name
-	  else
-	    trans = Trans.create(:is_payment=>true, :created_at=>User.current_user.today,:user=>User.current_user, :order => self.id, :tipo=> 'Cancelacion de Pago')
-#	    trans.tipo='Devolucion de Pago'
-	  end
-		case order.order_type_id
-		when 1 # Sale
-			debit = Post.create(:trans=>trans, :account => self.order.cash_account, :value=>self.amount, :post_type_id =>Post::CREDIT)
-			credit = Post.create(:trans=>trans, :account => self.order.client.cash_account, :value=>self.amount, :post_type_id =>Post::DEBIT)
-		when 2 # Purchase
-			debit = Post.create(:trans=>trans, :account => self.order.vendor.cash_account, :value=>self.amount, :post_type_id =>Post::CREDIT)
-			credit = Post.create(:trans=>trans, :account => self.order.client.cash_account, :value=>self.amount, :post_type_id =>Post::DEBIT)
-		end
-	end
+  ##################################################################################################
+  # Receives a list of related objects and saves them
+  # Can be used for movements, transactions, lines, or other objects
+  # Set update=true if you want it to save existing objects (like for updating lines)
+  #################################################################################################
+	def save_related(list, update=false, include_errors=true)
+	  for item in list
+	  	if item
+    	  item.payment_id=self.id
+	  	  if !item.id or update
+				  if !item.save and include_errors
+				    for field, msg in item.errors
+				      self.errors.add field, msg
+				    end # for field, msg in item.errors
+				  end # if !item.save and include_errors
+				end # if !item.id or update
+			end # if item
+	  end # for item in list
+	end # def save_related
+	#################################################################################################
+	# Holds a copy of the old version of this object for reference
+	# By storing it in a accessor, we'll never have to load it more than once
+	#################################################################################################
+
 	def amount
+	  return 0 if self.void
 		return (self.presented||0)-(self.returned||0)
 	end
-#	def self.all_today()
-#  	find 		 :all,
-#		         :conditions => 'date(payments.created_at) = curdate()',
-#		         :order => 'payments.created_at'
-#	end
 	def self.search(search, page, from=Date.today, till=Date.today, sites=[User.current_user.location_id])
 		site_string=''
 		for site in sites
@@ -90,14 +90,10 @@ class Payment < ActiveRecord::Base
 			site_string+=' orders.vendor_id=' + site.to_s
 		end
   	paginate :per_page => 20, :page => page,
-		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payments.order_id like :search OR payments.order_id like :search OR payment_methods.name like :search ) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
+		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payments.order_id like :search OR orders.receipt_number like :search OR payment_methods.name like :search ) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
 		         :order => 'orders.receipt_number',
 		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id '
 
-#  	paginate :per_page => 20, :page => page,
-#		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (order_id like :search OR payments.order_id like :search OR payment_methods.name like :search ) AND users.location_id=:site_id', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id,:search => "%#{search}%"}],
-#		         :order => 'payments.created_at',
-#		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id'
 	end
 	def self.search_wo_pagination(search, from=Date.today, till=Date.today, sites=[User.current_user.location_id])
 		site_string=''
@@ -106,12 +102,8 @@ class Payment < ActiveRecord::Base
 			site_string+=' orders.vendor_id=' + site.to_s
 		end
   	find :all,
-		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payments.order_id like :search OR payments.order_id like :search OR payment_methods.name like :search ) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
+		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payments.payment_id like :search OR payments.payment_id like :search OR payment_methods.name like :search ) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
 		         :order => 'orders.receipt_number',
 		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id'
-#  	find :all,
-#		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (order_id like :search OR payments.order_id like :search OR payment_methods.name like :search ) AND users.location_id=:site_id', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :site_id=>User.current_user.location_id,:search => "%#{search}%"}],
-#		         :order => 'payments.created_at',
-#		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id'
 	end
 end
