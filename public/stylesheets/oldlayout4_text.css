@@ -1,0 +1,256 @@
+/*************************************************************/
+/*   Design:   Multiflex-3 Update-7 / Layout-4               */
+/*   File:     Text formats                                  */
+/*-----------------------------------------------------------*/
+/*   Author:   Wolfgang                                      */
+/*   Date:     January 15, 2007                              */
+/*   Homepage: wwww.1-2-3-4.info                             */
+/*-----------------------------------------------------------*/
+/*   License:  Fully open source without restrictions.       */
+/*             Please keep footer credits with a link to     */
+/*             Wolfgang (www.1-2-3-4.info). Thank you!       */
+/*************************************************************/
+
+/******************/
+/*  MAIN SECTION  */
+/******************/
+/* Colors to replace: 	
+		515147					
+		7cb4a9			
+		96c09c	
+		008597
+			
+*/
+/* MAIN NAVIGATION */
+.nav1 .searchform {width:270px; margin:0px 0px 0px -30px;}
+.nav1 .searchform p {clear:both; margin:0; padding:0;}
+.nav1 .searchform fieldset {border:none;}
+.nav1 .searchform input.field {margin:0px 10px 0px 0px;float:left; width:158px; padding:0.1em 0 0.2em 0 !important /*Non-IE6*/; padding:0.2em 0 0.3em 0 /*IE6*/; border:1px solid rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:120%;}
+.nav1 .searchform input.dayfield {margin:0px 10px 0px 0px; float:left; width:25px; padding:0.1em 0 0.2em 0 !important /*Non-IE6*/; padding:0.2em 0 0.3em 0 /*IE6*/; border:1px solid rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:120%;}
+.nav1 .searchform input.button {float:left; width:5.0em;  padding:1px; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:120%;}
+.nav1 .searchform input.button:hover {cursor:pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:#96c09c;}
+
+.nav3-grid {width:199px; border-bottom:solid 1px rgb(200,200,200);}
+.nav3-grid dt a, .nav3-grid dt a:visited {display:block; min-height:2.0em /*Non-IE6*/; height:auto !important; height:2.0em /*IE6*/; line-height:2.0em; padding:0px 10px 0px 20px;  border-top: solid 1px rgb(200,200,200); text-decoration:none; color:#369472; font-weight:bold; font-size:120%;}
+.nav3-grid dd a, .nav3-grid dd a:visited {display:block; min-height:1.7em /*Non-IE6*/; height:auto !important; height:1.7em /*IE6*/; line-height:1.7em; padding:0px 10px 0px 40px; border:none; font-weight:normal; text-decoration:none; color:#515147; font-size:120%;}
+.nav3-grid dt a:hover, .nav3-grid dd a:hover {background-color:rgb(225,225,225); color:#96c09c; text-decoration:bold;}
+/*.nav3-grid dd a.action {font-size:150%; font-weight:bold;background:none;border:0;color:#515147}*/
+
+.nav3-bullet {width:170px; margin:10px 0 0 20px;color:#515147; font-weight:bold;font-size:110%;}
+.nav3-bullet dt a, .nav3-bullet dt a:visited {line-height:2.0em; padding:0 0 0 10px; background:url(../images/img/bg_bullet_full_1.gif) no-repeat 0px 50%; text-decoration:none; color:#515147; font-weight:bold; font-size:110%;}
+.nav3-bullet dd a, .nav3-bullet dd a:visited {line-height:1.7em; margin:0 0 0 15px; padding:0 0 0 10px; background:url(../images/img/bg_bullet_half_1.gif) no-repeat 0px 50%; text-decoration:none; color:#515147; font-weight:normal; font-size:110%;}
+.nav3-bullet dt a:hover {background:url(../images/img/bg_bullet_full_2.gif) no-repeat 0px 50%; text-decoration:none; color:#96c09c;}
+.nav3-bullet dd a:hover {background:url(../images/img/bg_bullet_half_2.gif) no-repeat 0px 50%; text-decoration:none; color:#96c09c;}
+
+.nav3-nobullet {width:170px; margin:10px 0 0 20px;}
+.nav3-nobullet dt a, .nav3-nobullet dt a:visited {line-height:2.0em; text-decoration:none; color:#515147; font-weight:bold; font-size:120%;}
+.nav3-nobullet dd a, .nav3-nobullet dd a:visited {line-height:1.7em; margin:0 0 0 15px; text-decoration:none; color:#515147; font-weight:normal; font-size:120%;}
+.nav3-nobullet dt a:hover, .nav3-nobullet dd a:hover {text-decoration:underline; color:#96c09c;}
+
+.main-navigation .loginform { margin:10px 20px 0 20px;}
+.main-navigation .loginform p {clear:both; margin:0; padding:0;}
+.main-navigation .loginform fieldset {width:160px; border:none;}
+.main-navigation .loginform label{font-weight:bold;}
+.main-navigation .loginform label.top {float:left; width:125px; margin:0 0 2px 0; font-size:110%;}
+.main-navigation .loginform label.right {float:left; width:125px; margin:5px 0 0 0; padding:0 0 0 3px; /*IE6*/; font-size:110%;}
+.main-navigation .loginform input.field {width:158px; margin:0 0 5px 0; padding:0.1em 0 0.2em 0 !important /*Non-IE6*/; padding:0.2em 0 0.3em 0 /*IE6*/; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-navigation .loginform input.checkbox {float:left; margin:5px 0 0 0 !important /*Non-IE6*/; margin:2px 0 0 -3px /*IE6*/; border:none;}
+.main-navigation .loginform input.button {float:left; width:5.0em; margin:10px 0 5px 0; padding:1px; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:110%;}
+.main-navigation .loginform input.button:hover {cursor:pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:#96c09c;}
+
+.main-navigation .searchform {width:160px; margin:0 20px 0 20px;}
+.main-navigation .searchform p {clear:both; margin:0; padding:0;}
+.main-navigation .searchform fieldset {border:none;}
+.main-navigation .searchform input.field {float:left; width:158px; padding:0.1em 0 0.2em 0 !important /*Non-IE6*/; padding:0.2em 0 0.3em 0 /*IE6*/; border:1px solid rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:120%;}
+.main-navigation .searchform input.button {float:left; width:5.0em; margin-top: 0.5em; padding:1px; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:120%;}
+.main-navigation .searchform input.button:hover {cursor:pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:#96c09c;}
+
+.main-navigation h1.first {clear:both; margin:0px; padding:4px 20px 3px 20px; background-color:#7cb4a9; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:150%;}
+.main-navigation h1 {clear:both; margin:30px 0 20px 0; padding:4px 20px 3px 20px; background:#7cb4a9; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:150%;}
+.main-navigation h2 {clear:both; margin:20px 10px 10px 20px; font-family:"trebuchet ms",arial,sans-serif; color:rgb(100,100,100); font-weight:bold; font-size:150%;}
+.main-navigation h3 {clear:both; margin:10px 10px 5px 20px; color:rgb(80,80,80); font-weight:bold; font-size:110%;} /* Note: h2 not existent, to make identical to formats for main-navigation for easier exchange */
+.main-navigation p {clear:both; margin:0 10px 10px 20px; color:rgb(80,80,80); line-height:1.3em; font-size:110%;}
+.main-navigation p.center {text-align:center;}
+.main-navigation p.right {text-align:right;}
+
+.main-navigation ul {list-style:none; margin:0.5em 10px 1.0em 20px;}
+.main-navigation ul li {margin:5px 0 0.2em 2px; padding:0px 0px 0 11px; background:url(../images/img/bg_bullet_full_1.gif) no-repeat 0 0.4em; line-height:1.2em; font-size:110%;}
+.main-navigation ol {margin:0.5em 10px 1.0em 40px !important /*Non-IE6*/; margin:0.5em 10px 1.0em 45px /*IE6*/;}
+.main-navigation ol li {list-style-position:outside; margin:0 0 0.4em 0; font-size:110%;}
+
+/* Pagination */
+.pagination { font-size:140%;}
+/* MAIN CONTENT */
+.main-content h1.pagetitle {margin:0 0 0.4em 0; padding:0 0 2px 0; border-bottom:solid 7px rgb(225,225,225); font-family:"trebuchet ms",arial,sans-serif; color:rgb(100,100,100); font-weight:bold; font-size:220%;}
+.main-content h1.block {clear:both; margin:.25em 0 0em 0; padding:2px 0 2px 2px; background:#008597; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:220%;}
+.main-content h1 {clear:both; margin:1.0em 0 0.5em 0; font-family:"trebuchet ms",arial,sans-serif; color:rgb(80,80,80); font-weight:normal; font-size:210%;}
+.main-content h2 {clear:both; margin:0.0em 0 0.5em 0; font-family:"trebuchet ms",arial,sans-serif; color:rgb(80,80,80); font-weight:normal; font-size:170%;}
+.main-content h3 {clear:both; margin:-1.0em 0 0.5em 0; font-family:"trebuchet ms",arial,sans-serif; color:rgb(125,125,125); font-weight:normal; font-size:130%;}
+.main-content h1.side {clear:none;}
+.main-content h2.side {clear:none;}
+.main-content h3.side {clear:none;}
+.main-content p.notice_message {background: #7cb4a9; color: white; padding:2px;}
+.main-content p.error_message {background: #ff6666; color: white; padding:2px;width 100%;}
+.main-content p.important_message {color: #ff6666; padding:2px;}
+.main-content p.rejected {clear:both; margin:.25em 0 0em 0; padding:2px 0 2px 2px; background:#e31c1c; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:220%;}
+.checkbox-list {color: black; clear:both; margin:1px 0 1.0em 0; line-height:1.0em; font-size:120%;}
+/*.main-content dt {background:url(../images/img/bg_bullet_full_2.gif) no-repeat 0px 50%; text-decoration:none; font-size:125%;}
+*/
+.main-content dt {line-height:2.0em; padding:0 0 0 10px; background:url(../images/img/bg_bullet_full_1.gif) no-repeat 0px 50%; text-decoration:none;  font-weight:bold; font-size:120%;}
+
+.main-content h4 {margin:1.5em 0 1.0em 0; color:rgb(80,80,80); font-family:"trebuchet ms",arial,sans-serif; font-weight:normal; font-size:170%;}
+.main-content h5 {margin:1.5em 0 1.0em 0; color:rgb(80,80,80); font-family:"trebuchet ms",arial,sans-serif; font-size:140%;}
+.main-content h6 {margin:1.2em 0 0.2em 0; color:rgb(80,80,80); font-weight:bold; font-size:120%;}
+.main-content p {margin:0 0 1.0em 0; line-height:1.5em; font-size:120%;}
+.main-content p.center {text-align:center;}
+.main-content a.action {font-size:150%; font-weight:bold;background:none;border:0;color:#515147}
+.main-content input.action {font-size:150%; font-weight:bold;background:none;border:0; color:#515147;}
+.main-content input.action:hover {text-color:#96c09c;background-color:rgb(225,225,225);}
+.main-content p.right {text-align:right;}
+.main-content p.details {clear:both; margin:-0.25em 0 1.0em 0; line-height:1.0em; font-size:110%;}
+.main-content blockquote {clear:both; margin:0 30px 0.6em 30px; font-size:90%;}
+.main-content textarea {width:600px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-content textarea.comments {height:25px}
+.main-content input.field {padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-content input.calendar_field {background:none; width:80%; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-content input.serial {padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-content input.button {font-size:150%; font-weight:bold;float:left; width:9.0em; margin-right:20px; padding:1px !important /*Non-IE6*/; padding:0 /*IE6*/; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:110%;}
+.main-content input.button:hover {font-size:150%; font-weight:bold;cursor: pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:#96c09c;}
+.main-content select {padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:120%;}
+.slider_bar {margin-top:10px;}
+.slider_bar select{display:none;}
+.slider_bar .from_div{width:49%;float:left;margin-bottom:10px;}
+.slider_bar .till_div{width:49%;float:right;margin-bottom:10px;}
+.ui-slider{clear:both;}
+
+.auto_complete {font-family:verdana,arial,sans-serif; background: #fff;}
+.auto_complete ul {border:solid 1px rgb(200,200,200);margin:0;padding:0;;list-style-type:none;}
+.auto_complete ul li {padding:3px;text-align: center;}
+.auto_complete ul li.selected {background-color: #96c09c;}
+/*.ui-slider-scale {margin:0px;}*/
+
+/*#e1e1e1       */
+.main-content .table_row {height:2.5em; background: #e1e1e1; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
+.main-content .table_row_green {height:2.5em; background: #96c09c; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
+.main-content .table_row_red {height:2.5em; background: #ff6666; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
+.main-content .table_header_row {height:2.5em; background: #7cb4a9; border-top:solid 2px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:bold; color: #FFFFFF; font-size:120%;}
+.main-content .table_cell_20 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 20%; vertical-align: bottom;}
+.main-content .table_cell {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em;}
+.main-content .table_cell_5 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 5%; vertical-align: bottom;}
+.main-content .table_cell_15 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 15%; vertical-align: bottom;}
+.main-content .table_cell_10 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 10%; vertical-align: bottom;}
+.main-content .table_cell_50 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 50%; vertical-align: bottom;}
+.main-content .table_cell_80 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 80%; vertical-align: bottom;}
+.main-content .table_cell_25 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 25%; vertical-align: bottom;}
+.main-content .table_cell_30 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 30%; vertical-align: bottom;}
+.main-content .table_cell_35 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 35%; vertical-align: bottom;}
+.main-content .table_cell_40 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 40%; vertical-align: bottom;}
+.main-content .table_row select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;background: #e1e1e1;}
+.main-content .table_row_red select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-content .table_row_green select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+
+/* These are set specificly for the bulk_edit product view */
+.main-content .table_row_red input.field {width:90%;background: #ff6666;}
+.main-content .table_row_green input.field {width:90%;background: #96c09c;}
+.main-content .table_row input.field {width:90%;background: #e1e1e1;}
+.main-content .table_row input.serial {width:90%;background: #e1e1e1;}
+/* End for the bulk_edit product view */
+
+
+.main-content .table_cell_5  input.field{width:90%;}
+.main-content .table_cell_10  input.field{width:90%;}
+.main-content .table_cell_15  input.field{width:90%;}
+.main-content .table_cell_20  input.field{width:90%;}
+.main-content .table_cell_25  input.field{width:90%;}
+.main-content .table_cell_30  input.field{width:90%;}
+.main-content .table_cell_35  input.field{width:90%;}
+.main-content .table_cell_40  input.field{width:90%;}
+.main-content .table_cell_50  input.field{width:90%;}
+.main-content .table_cell_80  input.field{width:90%;}
+.main-content .table_cell_10  input.serial{width:90%;}
+.main-content .table_cell_20  input.serial{width:90%;}
+.main-content .table_cell_15  input.serial{width:90%;}
+
+
+.main-content table {clear:both; width:680px; margin:2.0em 0 0.2em 0px; table-layout: fixed; border-collapse:collapse; empty-cells:show; background-color:rgb(233,232,244);}
+.main-content table th.top {height:3.5em; padding:0 7px 0 7px; empty-cells:show; background-color:rgb(175,175,175); text-align:left; color:rgb(255,255,255); font-weight:bold; font-size:110%;}
+.main-content table th {height:3.0em; padding:2px 20px 2px 7px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(225,225,225); text-align:left; color:rgb(80,80,80); font-weight:bold; font-size:110%;}
+.main-content table td {width:5; height:3.0em; padding:2px 7px 2px 7px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(225,225,225); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:110%;}
+.main-content table td.green {height:3.0em; padding:2px 7px 2px 7px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(154,240,129); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:110%;}
+.main-content table tr.red {height:3.0em; padding:2px 7px 2px 7px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(225,225,225); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:110%;}
+.main-content table tr {height:3.0em; padding:2px 7px 2px 7px; border-left:solid 2px rgb(255,255,255); border-right:solid 2px rgb(255,255,255); border-top:solid 2px rgb(255,255,255); border-bottom:solid 2px rgb(255,255,255); background-color:rgb(0,230,117); text-align:left; font-weight:normal; color:rgb(80,80,80); font-size:110%;}
+p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,80,80); font-size:110%;}
+
+
+.main-content ul {list-style:none; margin:0.5em 0 1.0em 0;}
+.main-content ul li {margin:0 0 0.2em 2px; padding:0 0 0 12px; background:url(../images/img/bg_bullet_full_1.gif) no-repeat 0 0.5em; line-height:1.4em; font-size:120%;}
+/*.main-content ol {margin:0.5em 0 1.0em 20px !important /*Non-IE6*/; margin:0.5em 0 1.0em 25px /*IE6*/;}*/
+.main-content ol li {list-style-position:outside; margin:0 0 0.2em 0; line-height:1.4em; font-size:120%;}
+
+.contactform {width:418px; margin:2.0em 0 0 0; padding:10px 10px 0 10px; border:solid 1px rgb(200,200,200); background-color:rgb(240,240,240);}
+.contactform fieldset {padding:20px 0 0 0 !important /*Non-IE6*/; padding:0 /*IE6*/; margin:0 0 20px 0; border:solid 1px rgb(220,220,220);}
+.contactform fieldset legend {margin:0 0 0 5px !important /*Non-IE*/; margin:0 0 20px 5px /*IE6*/; padding:0 2px 0 2px; color:rgb(80,80,80); font-weight:bold; font-size:130%;}
+.contactform label.left {float:left; width:100px; margin:0 0 0 10px; padding:2px; font-size:110%;}
+.contactform select.combo {width:175px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.contactform input.field {width:275px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.contactform textarea {width:275px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.contactform input.button {float:right; width:9.0em; margin-right:20px; padding:1px !important /*Non-IE6*/; padding:0 /*IE6*/; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:110%;}
+.contactform input.button:hover {cursor: pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:#96c09c;}
+
+/* Errors */
+.fieldWithErrors {  padding: 2px;  background-color: #ff6666;  display: table;}
+#errorExplanation {  width: 600;  border: 2px solid #ff6666;  padding: 7px;  padding-bottom: 0px;   margin-bottom: 20px;  background-color: #f0f0f0;}
+#errorExplanation h2 {  text-align: left;  font-weight: bold;  padding: 5px 5px 5px 15px;  font-size: 12px;  margin: -7px;  background-color: #ff6666;  color: #fff;}
+#errorExplanation p {  color: #333;  margin-bottom: 0; padding: 5px;}
+#errorExplanation ul {  font-size: 12px;  list-style: square;  margin-left: 50px;margin-top: 20px;}
+#errorExplanation li {  font-size: 12px;  list-style: square;  }
+.main-content .lineErrorExplanation {background-color: #ff6666 ;color: white;  margin-bottom: 0; padding: 1px;}
+/* MAIN SUBCONTENT */
+.main-subcontent h1 {clear:both; margin:0 0 10px 0; padding:4px 10px 3px 10px; background-color:#7cb4a9; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
+.main-subcontent h1.green {clear:both; margin:0 0 5px 0; padding:4px 10px 3px 10px; background-color:rgb(160,214,81); font-family:"trebuchet ms",verdana,arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
+.main-subcontent h1.blue {clear:both; margin:0 0 5px 0; padding:4px 10px 3px 10px; background-color:rgb(137,170,214); font-family:"trebuchet ms",verdana,arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
+.main-subcontent h1.orange {clear:both; margin:0 0 5px 0; padding:4px 10px 3px 10px; background-color:rgb(232,177,13); font-family:"trebuchet ms",verdana,arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:140%;}
+ /* Note: h2 non-existent, to make HTML-code interchangeable between 'main-navigation' and 'main-subcontent' */
+.main-subcontent h3 {clear:both; margin:1.0em 10px 0.5em 10px; color:rgb(80,80,80); font-weight:bold; font-size:110%;}
+.main-subcontent p {clear:both; margin:0 10px 1.0em 10px; color:rgb(80,80,80); line-height:1.3em; font-size:110%;}
+.main-subcontent p.center {text-align:center;}
+.main-subcontent p.right {text-align:right;}
+
+.main-subcontent ul {list-style:none; margin:0.5em 10px 1.0em 10px;}
+.main-subcontent ul li {margin:5px 0 0.2em 2px; padding:0 0 0 11px; background:url(../images/img/bg_bullet_full_1.gif) no-repeat 0 0.4em; line-height:1.2em; font-size:110%;}
+.main-subcontent ol {margin:0.5em 10px 1.0em 30px !important /*Non-IE6*/; margin:0.5em 10px 1.0em 35px /*IE6*/;}
+.main-subcontent ol li {list-style-position:outside; margin:0 0 0.4em 0; font-size:110%;}
+
+.main-subcontent .loginform {width:160px; margin:0 10px 0 10px;}
+.main-subcontent .loginform p {clear:both; margin:0; padding:0;}
+.main-subcontent .loginform fieldset {width:160px; border:none;}
+.main-subcontent .loginform label.top {float:left; width:125px; margin:0 0 2px 0; font-size:110%;}
+.main-subcontent .loginform label.right {float:left; width:125px; margin:5px 0 0 0; padding:0 0 0 3px; /*IE6*/; font-size:110%;}
+.main-subcontent .loginform input.field {width:158px; background-color: #ff6666; margin:0 0 5px 0; padding:0.1em 0 0.2em 0 !important /*Non-IE6*/; padding:0.2em 0 0.3em 0 /*IE6*/; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-subcontent .loginform input.checkbox {float:left; margin:5px 0 0 0 !important /*Non-IE6*/; margin:2px 0 0 -3px /*IE6*/; border:none;}
+.main-subcontent .loginform input.button {float:left; width:5.0em; margin:10px 0 5px 0; padding:1px; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:110%;}
+.main-subcontent .loginform input.button:hover {cursor:pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); #96c09c;}
+
+.main-subcontent .searchform {width:160px; margin:0 10px 0 10px;}
+.main-subcontent .searchform fieldset {border:none;}
+.main-subcontent .searchform input.field {float:left; width:158px; padding:0.1em 0 0.2em 0 !important /*Non-IE6*/; padding:0.2em 0 0.3em 0 /*IE6*/; border:1px solid rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:120%;}
+.main-subcontent .searchform input.button {float:left; width:3.0em; margin-top: 0.5em; padding:1px; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:120%;}
+.main-subcontent .searchform input.button:hover {cursor:pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); #96c09c;}
+
+
+
+/********************/
+/*  COMMON CLASSES  */
+/********************/
+.main img.center {clear:both; float:none; display:block; margin:0 auto; padding:1px; border:1px solid rgb(150,150,150);}
+.main img.right {clear:both; float:right; margin:3px 0 7px 10px; padding:1px; border:1px solid rgb(150,150,150);}
+
+.strikethrough {text-decoration: line-through;}
+
+.main a {color:#515147;  text-decoration:none;}
+.main-content h1 a {color:#515147; font-weight:normal; text-decoration:none;}
+.main a:hover {color:#96c09c; }
+.main .table_row_green a:hover {color:#008597; }
+
+.main a img {border:solid 1px rgb(150,150,150);}
+.main a:hover img {border:solid 1px rgb(220,220,220);background-color:rgb(225,225,225);}

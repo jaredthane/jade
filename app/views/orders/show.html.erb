@@ -1,4 +1,25 @@
 <%= render :partial => 'details', :locals => { :order => @order, :view =>'products' } %>
+<% if @payments.length > 0 %>
+  <p>
+	  <b>Pagos:</b>
+	  <div>
+      <div id="lines" class="table_header_row">
+        <div class="table_cell_25">Cantidad</div>
+        <div class="table_cell_25">Fecha</div>
+        <div class="table_cell_25">Metodo</div>
+        <div class="table_cell">Usuario</div>
+	    </div>
+		  <% for payment in @payments %>
+        <div class="table_row">
+          <div class="table_cell_25"><%= link_to number_to_currency(payment.amount), payment %></div>
+          <div class="table_cell_25"><%= h payment.created_at.to_date %></div>
+          <div class="table_cell_25"><%= h payment.payment_method.name %></div>
+          <div class="table_cell"><%= link_to payment.user.login, payment.user %></div>
+        </div>
+      <% end %>
+	  </div>
+  </p>
+<% end %>
 <p>
 	<b>Productos:</b>
 	<div>

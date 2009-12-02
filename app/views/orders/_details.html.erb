@@ -2,9 +2,9 @@
 	when 4 %>
 		<% content_for :title do %>Detalles de Transferencia #<%= @order.id %><% end %>
 	<% when 1 %>
-		<% content_for :title do %>Detalles de Venta #<%= @order.id %><% end %>
+		<% content_for :title do %>Detalles de Venta - Factura #<%= @order.receipt_number %><% end %>
 	<% when 2 %>
-		<% content_for :title do %>Detalles de Compra #<%= @order.id %><% end %>
+		<% content_for :title do %>Detalles de Compra - Factura #<%= @order.receipt_number %><% end %>
 	<% when 3 %>
 		<% content_for :title do %>Detalles de Consumo Interno #<%= @order.id %><% end %>
 	<% else %>
@@ -26,20 +26,8 @@
 		<% end %>
 		<% if view == 'products' %>
 		  <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		  <dt><%= link_to 'Facturas', order_receipts_path(@order) %></dt>
-		  <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
 		<% elsif view == 'history' %>
 		  <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		  <dt><%= link_to 'Facturas', order_receipts_path(@order) %></dt>
-		  <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		<% elsif view == 'receipts' %>
-		  <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		  <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		  <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		<% elsif view == 'payments' %>
-		  <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		  <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		  <dt><%= link_to 'Facturas', order_receipts_path(@order) %></dt>
 		<% end %>
 		<dt><%= link_to 'Lista de Ventas', sales_path %> </dt>
 	<% when 2 %>
@@ -52,17 +40,8 @@
 			<% end %>
 		  <% if view == 'products' %>
 		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
 		  <% elsif view == 'history' %>
 		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		  <% elsif view == 'receipts' %>
-		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		  <% elsif view == 'payments' %>
-		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
 		  <% end %>
 			<dt><%= link_to 'Lista de Compras', purchases_path %> </dt>
 		<% end %>
@@ -75,17 +54,8 @@
 			<% end %>
 		  <% if view == 'products' %>
 		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
 		  <% elsif view == 'history' %>
 		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		  <% elsif view == 'receipts' %>
-		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		  <% elsif view == 'payments' %>
-		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
 		  <% end %>
 		<% end %>
 		<dt><%= link_to 'Lista de Pedidos', orders_path %> </dt>
@@ -119,12 +89,10 @@
 		<%=h number_to_currency(@order.total_price_with_tax) %>
 	</p>
 <% end %>
-<% if @order.order_type_id==2 %>
 	<p>
 		<b>Numero de Factura:</b>
-		<%=h @order.purchase_receipt_number %>
+		<%= link_to (order.receipt_number||'Sin número'), show_receipt_url(@order) %>
 	</p>
-<% end %>
 </div>
 <div class="column2-unit-right">
 <p>

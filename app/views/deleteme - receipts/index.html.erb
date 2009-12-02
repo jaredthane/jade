@@ -21,19 +21,26 @@
 		  <b>Desde</b><br />
 		  <%= text_field_tag 'from', @from.to_s(:default), :class=> 'field datepicker', :id => 'from',:style=>'width:168px;' %>
 		</p>
-   </div>
-   <div class="column2-unit-right">
+  </div>
+  <div class="column2-unit-right">
    	<p>
    		<b>Hasta</b><br />
    		
 		  <%= text_field_tag 'till', @from.to_s(:default), :class=> 'field datepicker', :id => 'till',:style=>'width:168px;' %>
    	</p>
-   </div>
-	<div class="checkbox-list">
-		<% get_sites.each do |site| -%>
-			<%= check_box_tag "sites[]", site.id, @sites.include?(site.id.to_s) -%> <%= site.name -%>
-		<% end -%>
-	</div>
+  </div>
+  <p>%<%= @sites.length %>%</p>
+  
+  <% if @sites.length>1 %>
+    <div class="checkbox-list">
+      <% get_sites.each do |site| -%>
+        <%= check_box_tag "sites[]", site.id, @sites.include?(site.id.to_s) -%> <%= site.name -%>
+      <% end -%>
+    </div>
+	<% else %>
+	  
+  <% end %>
+
 	<%= hidden_field_tag 'index',true %>
 <% end %>
 <% if @consumidor_final_today.length >0 %>

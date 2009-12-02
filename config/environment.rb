@@ -81,6 +81,7 @@ Date::ABBR_MONTHNAMES  	=  	[nil] + %w(Ene Feb Mar Abr May Jun Jul Ago Sep Oct N
 Date::ABBR_DAYNAMES  	=  	%w(Dom Lun Mar Mie Jue Vie Sab)
 
 COMPANY_NAME="ACME Industrias de America Central Inc."
+MAX_LINES_PER_ORDER = 3
 CREDITO_FISCAL_LINES_PER_RECEIPT = 6
 CONSUMIDOR_FINAL_LINES_PER_RECEIPT = 6
 NEW_SITE_CASH_ACCOUNT_PREFIX = 'Efectivo en '

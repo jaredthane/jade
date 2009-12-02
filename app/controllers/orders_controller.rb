@@ -58,32 +58,40 @@ class OrdersController < ApplicationController
     end  
     return true  
 	end
-	
+	def search_paths(order_type)
+	  
+	end
   # GET /orders
   # GET /orders.xml
   def index
-		@order_type_id = params[:order_type_id] || 0
-		case @order_type_id
-		when 0
-				@orders = Order.search_by_rights(params[:search], params[:page])
-		when 1
-			@orders = Order.search_sales(params[:search], params[:page])
-		when 2
-			@orders = Order.search_purchases(params[:search], params[:page])
-		when 3
-			@orders = Order.search_internal(params[:search], params[:page])
-		end
-		if @orders.length == 1
-			@order=@orders[0]
-			return false if !allowed(@order.order_type_id, 'view')
-			logger.debug "orderis" + @order.inspect
-			render :action => 'show_products'
-			return false
-		end
+    logger.info params
+		@order_type_id = params[:order_type_id].to_i || 0
 		return false if !allowed(@order_type_id, 'view')
+
+    @site=User.current_user.location
+  	@sites=(params[:sites] ||[current_user.location_id])
+#  	@search_path = SEARCH_PATHS[@order_type_id]
+  	params[:page]=(params[:page]||1)
+	  @from=(untranslate_month(params[:from])||Date.today)
+    @till=(untranslate_month(params[:till])||Date.today)
+    if params[:pdf]=='1'
+      @orders=Order.search(params[:search], @order_type_id, @from, @till)
+      params[:format] = 'pdf'
+    else
+      @orders=Order.search(params[:search], @order_type_id, @from, @till, params[:page])
+      if @orders.length == 1
+			  @order=@orders[0]
+			  @payments = @order.recent_payments(10)
+			  return false if !allowed(@order.order_type_id, 'view')
+			  render :action => 'show'
+			  return false
+		  end
+    end
     respond_to do |format|
       format.html # index.html.erb
-      format.xml  { render :xml => @orders }
+      format.pdf {
+        prawnto :prawn => { :page_size => 'LETTER'}
+      }
     end
   end
   def show_todays_sales
@@ -127,19 +135,18 @@ class OrdersController < ApplicationController
 		  end
 		end
   end
-  def show_receipts
+  def show_receipt
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'view')
-    if @order.receipts.length < 1
-      # receipts for this order have not been generated yet
-      redirect_to(new_receipt_url(@order))
-  		return false
-    end
-    @receipts=@order.receipts
-    respond_to do |format|
-      format.html # show_receipts.html.erb
-      format.xml  { render :xml => @orders }
-    end
+    if FileTest.exists?(@order.receipt_filename||'')
+		 	send_file @order.receipt_filename, :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
+	    #send_data @receipt.filename, :disposition => 'inline'
+	    # This is good for if the user wants to download the file
+		else
+			redirect_back_or_default(orders_url)
+			flash[:error] = "Esta factura no se encuentra entre los archivos"
+	    return false
+		end
   end
   def create_orders
   	#logger.debug "starting create orders"
@@ -206,9 +213,10 @@ class OrdersController < ApplicationController
     	redirect_to(physical_count_url(params[:id]))
     	return false
     end
+    @payments = @order.recent_payments(10)
 		return false if !allowed(@order.order_type_id, 'view')
     respond_to do |format|
-      format.html { render :template => "/orders/show_products" }
+      format.html 
       format.xml  { render :xml => @order }
     end
   end
@@ -233,10 +241,10 @@ class OrdersController < ApplicationController
   # GET /orders/new
   # GET /orders/new.xml
   def new
-    @order = Order.new(:created_at=>User.current_user.today)
+    @order = Order.new(:created_at=>User.current_user.today, :receipt_number=>(User.current_user.location.next_receipt_number||''))
 		@order_type_id = params[:order_type_id] || 0
 		if @order_type_id == 1
-			@order.client_id = 1213
+			@order.client_id = 3
 		end
 		return false if !allowed(params[:order_type_id], 'edit')
     respond_to do |format|
@@ -253,7 +261,7 @@ class OrdersController < ApplicationController
     end
   end
   def new_sale
-    @order = Order.new(:created_at=>User.current_user.today)
+    @order = Order.new(:created_at=>User.current_user.today, :client_id=>3)
 
     respond_to do |format|
       format.html # new.html.erb
@@ -265,18 +273,33 @@ class OrdersController < ApplicationController
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
   end
-
+  def new_nul_number
+  end
+  def create_null_number
+  end
+  def generate_receipt(order)
+  	prawnto :prawn => {:skip_page_creation=>true}
+	  pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false
+		File.open(order.receipt_filename, 'w') { |f| f.write(pdf_string) }
+		User.current_user.location.next_receipt_number=order.receipt_number.to_i+1
+  	User.current_user.location.save
+	end
   # POST /orders
   # POST /orders.xml
   def create
+    return false if !allowed(params["order"]["order_type_id"], 'edit')
     @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
-    puts "heres the order we just created: " + @order.inspect
     @order.attributes = params["order"]
-    return false if !allowed(@order.order_type_id, 'edit')
-    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
-    logger.debug "finished updating lines"
+    logger.info "params['order']['client_name']=" + params['order']['client_name'].to_s
+    logger.info "heres the order we just created: " + @order.inspect
+    this_receipt = params["order"]["number"].to_s
+    next_receipt=("%0" + this_receipt.length.to_s + "d") % (this_receipt.to_i + 1)
+    User.current_user.location.next_receipt_number = next_receipt
+#    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
+    logger.info "finished updating lines"
     respond_to do |format|
       if @order.save
+        generate_receipt(@order)
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { redirect_to(@order) }
         format.xml  { render :xml => @order, :status => :created, :location => @order }
@@ -302,21 +325,25 @@ class OrdersController < ApplicationController
   # PUT /orders/1
   # PUT /orders/1.xml
   def update
+    puts params.inspect
     @order = Order.find(params[:id])
+    return false if !allowed(@order.order_type_id, 'edit')
     params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
     params[:order][:received]=untranslate_month(params[:order][:received]) if params[:order][:received]
-    return false if !allowed(@order.order_type_id, 'edit')
     errors = false
-    if @order.deleted
-        redirect_back_or_default('/orders')
-		flash[:error] = "Este pedido ha sido anulado. Ya no se puede cambiar"
-		return false
-    end
-    @order.update_all_lines(params[:new_lines], params[:existing_lines])
-		errors = true if !@order.update_attributes(params[:order])
+    logger.info "dumping lines before"
+    logger.info @order.lines.inspect
+    @order.attributes=params[:order]
+    logger.info "dumping lines middle"
+    logger.info @order.lines.inspect
+		errors = true if !@order.save
+    logger.info "dumping lines after"
+    logger.info @order.lines.inspect
 		if params[:submit_type] == 'post' and !errors
 			errors = true if !@order.post
 		end
+		
+    generate_receipt(@order)
     respond_to do |format|
       if !errors
         flash[:notice] = 'Pedido ha sido actualizado exitosamente.'
