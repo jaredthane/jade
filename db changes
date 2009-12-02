@@ -15,7 +15,6 @@ alter table orders add column receipt_filename varchar(255);
 update orders inner join receipts on receipts.order_id=orders.id set orders.receipt_number=receipts.number;
 update orders inner join receipts on receipts.order_id=orders.id set orders.receipt_filename=receipts.filename;
 alter table orders add column receipt_generated datetime;
-alter table orders change column id id int(11) not null;
 alter table payments drop column receipt_id;
 alter table orders change column receipt_number receipt_number char(8);
 alter table entities change column next_receipt_number next_receipt_number char(8);
@@ -34,4 +33,4 @@ update trans set payment_id = order_id where is_payment;
 update trans set order_id=null where is_payment ;
 alter table trans drop column is_payment ;
 alter table payments drop column receipt_id;
-
+update accounts set modifier=-1 where id=10;
