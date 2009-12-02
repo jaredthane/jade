@@ -137,6 +137,7 @@ class OrdersController < ApplicationController
   end
   def show_receipt
     @order = Order.find(params[:id])
+    @order_type_id='show_batch'
     return false if !allowed(@order.order_type_id, 'view')
     if FileTest.exists?(@order.receipt_filename||'')
 		 	send_file @order.receipt_filename, :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true

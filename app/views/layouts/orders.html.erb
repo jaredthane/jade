@@ -3,43 +3,48 @@
       <%= render( 
 	      :file          => "layouts/_header.html.erb", 
 	      :use_full_path => true, 
-	      :locals => {:page_title => 'Ventas', :search_path => sales_path, :date_range=>true}
+	      :locals => {:page_title => 'Ventas', :search_path => sales_path}
       ) %>
   <% when 2 %>
       <%= render( 
 	      :file          => "layouts/_header.html.erb", 
 	      :use_full_path => true, 
-	      :locals => {:page_title => 'Compras', :search_path => purchases_path, :date_range=>true}
+	      :locals => {:page_title => 'Compras', :search_path => purchases_path}
       ) %>
   <% when 3 %>
       <%= render( 
 	      :file          => "layouts/_header.html.erb", 
 	      :use_full_path => true, 
-	      :locals => {:page_title => 'Consumos Internos', :search_path => internals_path, :date_range=>true}
+	      :locals => {:page_title => 'Consumos Internos', :search_path => internals_path}
       ) %>
   <% when 4 %>
       <%= render( 
 	      :file          => "layouts/_header.html.erb", 
 	      :use_full_path => true, 
-	      :locals => {:page_title => 'Transferencias', :search_path => transfers_path, :date_range=>true}
+	      :locals => {:page_title => 'Transferencias', :search_path => transfers_path}
       ) %>
   <% when 5 %>
       <%= render( 
 	      :file          => "layouts/_header.html.erb", 
 	      :use_full_path => true, 
-	      :locals => {:page_title => 'Cuentas Fisicas', :search_path => counts_path, :date_range=>true}
+	      :locals => {:page_title => 'Cuentas Fisicas', :search_path => counts_path}
       ) %>
-  
+    <% when 'show_batch' %>
+      <%= render( 
+	      :file          => "layouts/_header.html.erb", 
+	      :use_full_path => true, 
+	      :locals => {:page_title => 'Compras Generadas', :search_path => purchases_path}
+      ) %>
   <% else %>
       <%= render( 
 	      :file          => "layouts/_header.html.erb", 
 	      :use_full_path => true, 
-	      :locals => {:page_title => 'Pedidos', :search_path => orders_path, :date_range=>true}
+	      :locals => {:page_title => 'Pedidos', :search_path => orders_path}
       ) %>
 <% end %>
 
 
-      <% if flash[:notice] %>
+<% if flash[:notice] %>
 	<p class="notice_message"><%= flash[:notice] %></p>
 <% end %>
 <% if flash[:error] %>
