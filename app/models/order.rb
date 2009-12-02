@@ -54,15 +54,18 @@ class Order < ActiveRecord::Base
   ####################################################################################
   before_save :pre_save
   def pre_save
+		logger.debug "pre_save"
     if self.deleted
       self.grand_total = 0
     else
   	  self.grand_total = self.total_price_with_tax
   	end
+	  old('id') # just make old run so we'll have the data oto reference later'
   end
+  
 	after_save :post_save
 	def post_save
-	  old('id') # just make old run so we'll have the data oto reference later'
+		logger.debug "post_save"
 	  split_over_sized_order
 	  check_for_discounts
 	  logger.info "Dumping lines before save"
@@ -607,6 +610,38 @@ class Order < ActiveRecord::Base
 	  return true if deleted
 	  return false
 	end
+	def self.sql_update(s)
+		sql=ActiveRecord::Base.connection();
+		sql.update(s);
+	end
+	def self.batch_purchase
+		self.sql_update('UPDATE orders set last_batch=0 where last_batch=1;')
+  	orders=[]
+  	@vendors = Entity.find_all_by_entity_type_id(1)
+  	for v in @vendors
+  		order_made=false
+  		for p in Product.find_all_by_vendor_id(v.id)
+  			if p.to_order > 0
+  				if !order_made
+  					o=Order.new(:vendor=>v, :client=>User.current_user.location, :user=>User.current_user, :last_batch=>true, :order_type_id => 2, :created_at=>User.current_user.today)
+  					order_made=true
+  					orders << o
+  				end	
+  				if p.serialized
+  					for i in (1..p.to_order)
+							o.lines << o.lines.new(:product=>p, :quantity=>1,:price=>p.price)
+						end
+  				else
+						o.lines << o.lines.new(:product=>p, :quantity=>p.to_order,:price=>p.price)
+  				end
+  			end
+  		end
+  		logger.debug "Saving order"
+  		o.save if o
+  	end
+  	self.sql_update('UPDATE inventories set to_order=0 where to_order>0;')
+  	return orders
+	end
 	###################################################################################
 	# result of a search
 	###################################################################################
@@ -614,7 +649,6 @@ class Order < ActiveRecord::Base
 	  till=till + 1
 	  still=till.to_s(:db)
 	  sfrom=from.to_s(:db)
-	  logger.info "PAge:::::::::::::::::::::::::::::::" + page.to_s
 	  case order_type
 	  when SALE
 	    logger.debug "searching sales"

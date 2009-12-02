@@ -81,7 +81,7 @@ ActionController::Routing::Routes.draw do |map|
 #	map.show_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
 	map.show_receipt 'orders/:id/receipt', :controller => 'orders', :action => 'show_receipt'
   map.show_batch 'orders/show_batch', :controller => 'orders', :action => 'show_batch'
-  map.create_batch 'orders/create_batch', :controller => 'orders', :action => 'create_batch'
+  map.create_batch 'inventories/create_batch', :controller => 'inventories', :action => 'create_batch'
   map.delete_order 'orders/delete', :controller => 'orders', :action => 'delete'
 	map.order_history 'orders/:id/history', :controller => 'orders', :action => 'show_history'
 	map.order_payments 'orders/:id/payments', :controller => 'orders', :action => 'show_payments'

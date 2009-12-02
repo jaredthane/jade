@@ -275,7 +275,8 @@ class Product < ActiveRecord::Base
 	end
 	def to_order(location_id = User.current_user.location_id)
 		i=inventories.find_by_entity_id(location_id)
-		return i.to_order || 0 if i
+		return (i.to_order || 0) if i
+		return 0
 	end
 	def to_order=(value, location_id = User.current_user.location_id)
 		i=inventories.find_by_entity_id(location_id)

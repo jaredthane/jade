@@ -24,7 +24,20 @@ class InventoriesController < ApplicationController
       format.xml  { render :xml => @inventories }
     end
   end
-
+  def create_batch
+  	logger.debug "MAKING BATCH========================================="
+		if Order.batch_purchase
+			respond_to do |format|
+		    flash[:notice] = 'Pedidos han sido creados exitosamente.'
+        format.html { redirect_to('/orders/show_batch') }
+        return false
+		  end
+		else
+			respond_to do |format|
+		    format.html {redirect_to('/inventories')}
+		  end
+		end
+  end
   # PUT /inventories/1
   # PUT /inventories/1.xml
   def update
@@ -32,13 +45,15 @@ class InventoriesController < ApplicationController
   	params[:inventories].each do |attributes|
 			#puts "attribs: " + attributes.to_s
 			#puts "attribs[1]: " + attributes[1].to_s
-			@inventory = Inventory.find(attributes[0])
+			if @inventory = Inventory.find_by_id(attributes[0])
 			#puts "id:" + attributes[1][:id]
-			@inventory.to_order = attributes[1][:to_order]
-			@inventory.max = attributes[1][:max]
-			@inventory.min = attributes[1][:min]
-			@inventory.save
+				@inventory.to_order = attributes[1][:to_order]
+				@inventory.max = attributes[1][:max]
+				@inventory.min = attributes[1][:min]
+				@inventory.save
+			end
 		end
+		create_batch if params[:inventories][:generate]=='1'
 		redirect_to('/inventories?search=' + @search)
   end
   

@@ -168,7 +168,7 @@ class Line < ActiveRecord::Base
 	def save_movements()
 	  for item in self.movements
 	  	if item
-    	  item.line=self
+    	  item.line_id=self.id
     	  item.order=self.order
 	  	  if !item.id or update
 				  if !item.save

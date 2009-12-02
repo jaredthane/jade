@@ -18,7 +18,7 @@ class AuditObserver < ActiveRecord::Observer
   observe :product, :order, :line, :entity, :inventory, :payment, :price, :price_group, :price_group_name, :product_category, :product_type, :requirement, :role, :serialized_product, :unit, :user, :warranty, :entity_type, :movement, :movement_type, :payment_method
   def write_to_log(msg, record)
   	Audit.info(msg)
-  	Log.create(:severity=>'info', :msg=>msg, :object_class=>record.class.to_s, :object_id=>record.id)
+  	#Log.create(:severity=>'info', :msg=>msg, :object_class=>record.class.to_s, :object_id=>record.id)
   end
   def after_update(record)
   	if User.current_user

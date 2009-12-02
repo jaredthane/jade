@@ -30,9 +30,10 @@ class Movement < ActiveRecord::Base
 	before_create :post_create
 	def post_create
 		logger.debug "woking here"
-		e=product.inventory(entity)
-		e.quantity+=quantity
-		e.save		
+		if e=product.inventory(entity)
+			e.quantity+=quantity
+			e.save
+		end
 	end
 	def product_name
  	    product.name if product

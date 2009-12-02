@@ -7,9 +7,6 @@
 <% end %>
 <% content_for :actions do %>
 	<dt><%= link_to_function 'Guardar', 'submit("order_form")', :class => 'action' %></dt>
-	<% if mode == 'edit' %>
-	    <dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de este pedido serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularlo?', :method => :delete, :class => 'action' %></dt>
-    <% end %>
 	<dt><%= link_to 'Cancelar', orders_url, :class => 'action' %></dt>
 <% end %>
 

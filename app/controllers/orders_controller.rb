@@ -120,24 +120,8 @@ class OrdersController < ApplicationController
     redirect_back_or_default(@order.client)
     return false
   end
-	# GET /orders/create_batch
-  # GET /orders/create_batch.xml
-  def create_batch
-  	#logger.debug "starting create batch"
-		if create_orders
-			respond_to do |format|
-		    flash[:notice] = 'Pedidos han sido creados exitosamente.'
-        format.html { redirect_to('/orders/show_batch') }
-		  end
-		else
-			respond_to do |format|
-		    format.html {redirect_to('/inventories')}
-		  end
-		end
-  end
   def show_receipt
     @order = Order.find(params[:id])
-    @order_type_id='show_batch'
     return false if !allowed(@order.order_type_id, 'view')
     if FileTest.exists?(@order.receipt_filename||'')
 		 	send_file @order.receipt_filename, :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
@@ -148,53 +132,6 @@ class OrdersController < ApplicationController
 			flash[:error] = "Esta factura no se encuentra entre los archivos"
 	    return false
 		end
-  end
-  def create_orders
-  	#logger.debug "starting create orders"
-  	
-  	for o in Order.find(:all, :conditions =>'last_batch=True')
-  		o.last_batch=false
-  		o.save
-  	end
-  	
-  	#logger.debug "about to go through vendors"
-  	@vendors = Entity.find(:all, :order => "name", :conditions =>"entity_type_id=1")
-  	for v in @vendors
-  		#logger.debug "looking at " + v.name
-  		order_made=0
-  		for p in Product.find_all_by_vendor_id(v.id)
-  			to_order=p.to_order
-  			logger.debug "product:" + p.id.to_s + " "+ p.name + " to order:" + to_order.to_s
-  			if (to_order || 0) > 0
-  				logger.debug "ordering product"
-  				if order_made==0
-  					#puts"creating new order for " + v.name
-  					o=Order.new(:vendor=>v, :client=>current_user.location, :user=>current_user, :last_batch=>true, :order_type_id => 2, :created_at=>User.current_user.today)
-  					logger.debug "============> o.new=#{o.inspect}"
-  					o.save
-  					logger.debug "============> o.save=#{o.inspect}"
-  					order_made=1
-  				end	
-  				if p.serialized
-  					for i in (1..to_order)
-							l=o.lines.new(:product=>p, :quantity=>1,:price=>p.price)
-							logger.debug "l.new(s)=#{l.inspect}"
-							l.save
-							logger.debug "l.save(s)=#{l.inspect}"
-						end
-  				else
-						l=o.lines.new(:product=>p, :quantity=>to_order,:price=>p.price)
-						logger.debug "l.new=#{l.inspect}"
-						l.save
-						logger.debug "l.save=#{l.inspect}"
-  				end
-  				##logger.debug "done ordering product"
-  				p.to_order=0
-  			end
-  		end
-  		order_made=0
-  	end
-  	return Order.find_by_last_batch(true)
   end
   # GET /orders/show_batch
   # GET /orders/show_batch.xml
