@@ -31,7 +31,7 @@
 .nav3-nobullet dd a, .nav3-nobullet dd a:visited {line-height:1.7em; margin:0 0 0 15px; text-decoration:none; color:rgb(70,122,167); font-weight:normal; font-size:120%;}
 .nav3-nobullet dt a:hover, .nav3-nobullet dd a:hover {text-decoration:underline; color:rgb(42,90,138);}
 
-.main-navigation .loginform {width:160px; margin:-10px 20px 0 20px;}
+.main-navigation .loginform {width:160px; margin:10px 20px 0 20px;}
 .main-navigation .loginform p {clear:both; margin:0; padding:0;}
 .main-navigation .loginform fieldset {width:160px; border:none;}
 .main-navigation .loginform label.top {float:left; width:125px; margin:0 0 2px 0; font-size:110%;}
