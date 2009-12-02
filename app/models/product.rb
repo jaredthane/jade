@@ -79,6 +79,9 @@ class Product < ActiveRecord::Base
 	def barcode_filename
 		return "/barcodes/" + self.upc + ".png"
 	end
+	def inventory(entity)
+		return self.inventories.find_by_entity_id(entity.id)
+	end
 	##################################################################################################
 	# Creates Inventories, Prices, and Warranties
 	#################################################################################################

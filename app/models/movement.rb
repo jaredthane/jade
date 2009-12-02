@@ -22,10 +22,18 @@ class Movement < ActiveRecord::Base
 	belongs_to :product
 	belongs_to :entity
 	belongs_to :order
+	belongs_to :line
 	belongs_to :user
 	belongs_to :serialized_product
 #	belongs_to :line
 
+	before_create :post_create
+	def post_create
+		logger.debug "woking here"
+		e=product.inventory(entity)
+		e.quantity+=quantity
+		e.save		
+	end
 	def product_name
  	    product.name if product
  	    puts "++"+product.name

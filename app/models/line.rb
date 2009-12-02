@@ -23,7 +23,16 @@ class Line < ActiveRecord::Base
 	attr_accessor :client_name
 	attr_accessor :order_type_id
 	belongs_to :serialized_product
+	has_many :movements
 	attr_accessor :delete_me
+	before_save :pre_save
+	def pre_save
+		prepare_movements
+	end
+	before_save :post_save
+	def post_save
+		save_movements
+	end
   ##################################################################################################
 	# Returns quantity if it was marked as received, 0 otherwise
 	#################################################################################################
@@ -42,39 +51,45 @@ class Line < ActiveRecord::Base
 	def new_movement(entity_id, movement_type_id, quantity)
 	  value = total_price_with_tax_per_unit*quantity
 		m=Movement.new(:created_at=>User.current_user.today,:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => self.serialized_product_id, :value => value)
+		logger.debug "created movement"		
+		logger.debug "m=#{m.inspect}"
+		return m
 	end
   ###################################################################################
   # prepares the movements to be created but DOES NOT SAVE THEM
   ##################################################################################
-  before_save :prepare_movements
   MOVEMENT_TYPES=[[4,4],[1,5],[2,6],[8,9],[3,7],[4,4]]
 	def prepare_movements
+		logger.debug "self.product.product_type_id=#{self.product.product_type_id.to_s}"
 	  if self.product.product_type_id == 1
+	  	logger.debug "real_qty(self)=#{real_qty(self).to_s}"
+	  	logger.debug "real_qty(old)=#{real_qty(old).to_s}"
 		  if real_qty(self) != real_qty(old)
 		    dir = (real_qty(self)-real_qty(old))/(real_qty(self)-real_qty(old)).abs
+		    logger.debug "dir=#{dir.to_s}"
 			  case (MOVEMENT_TYPES[order_type_id.to_i][dir]+3)/2-1
 			    # These are the different movement_types
 				  when 1
-					  new_movement(self.order.vendor_id, 1, -(real_qty(self)-real_qty(old)))
-					  new_movement(self.order.client_id, 1, (real_qty(self)-real_qty(old)))
+					  self.movements << new_movement(self.order.vendor_id, 1, -(real_qty(self)-real_qty(old)))
+					  self.movements << new_movement(self.order.client_id, 1, (real_qty(self)-real_qty(old)))
 				  when 2
-					  new_movement(self.order.client_id, 2, (real_qty(self)-real_qty(old)))
+					  self.movements << new_movement(self.order.client_id, 2, (real_qty(self)-real_qty(old)))
 				  when 3
-					  new_movement(self.order.client_id, 3, (real_qty(self)-real_qty(old)))
-					  new_movement(self.order.vendor_id, 3, -(real_qty(self)-real_qty(old)))
+					  self.movements << new_movement(self.order.client_id, 3, (real_qty(self)-real_qty(old)))
+					  self.movements << new_movement(self.order.vendor_id, 3, -(real_qty(self)-real_qty(old)))
 					# when 4
 				  # We won't touch physical counts. The Physical Count model will take care of that.
 				  when 5
-					  new_movement(self.order.vendor_id, 5, -(real_qty(self)-real_qty(old)))
+					  self.movements << new_movement(self.order.vendor_id, 5, -(real_qty(self)-real_qty(old)))
 				  when 6
-					  new_movement(self.order.client_id, 6, (real_qty(self)-real_qty(old)))
+					  self.movements << new_movement(self.order.client_id, 6, (real_qty(self)-real_qty(old)))
 				  when 7
-					  new_movement(self.order.client_id, 7, (real_qty(self)-real_qty(old)))
-					  new_movement(self.order.vendor_id, 7, -(real_qty(self)-real_qty(old)))
+					  self.movements << new_movement(self.order.client_id, 7, (real_qty(self)-real_qty(old)))
+					  self.movements << new_movement(self.order.vendor_id, 7, -(real_qty(self)-real_qty(old)))
 				  when 8
-					  new_movement(self.order.vendor_id, 8, -(real_qty(self)-real_qty(old)))
+					  self.movements << new_movement(self.order.vendor_id, 8, -(real_qty(self)-real_qty(old)))
 				  when 9
-					  new_movement(self.order.vendor_id, 9, -(real_qty(self)-real_qty(old)))
+					  self.movements << new_movement(self.order.vendor_id, 9, -(real_qty(self)-real_qty(old)))
 			  end # case movement_type_id(dir)
 		  end # if dir != 0
 	  end # if self.product.product_type_id == 1
@@ -147,6 +162,24 @@ class Line < ActiveRecord::Base
 			end # if real_qty(self) != real_qty(old)
 		end # if self.product.product_type_id == 1
 	end # validate
+  ##################################################################################################
+  # Saves unsaved movements
+  #################################################################################################
+	def save_movements()
+	  for item in self.movements
+	  	if item
+    	  item.line=self
+    	  item.order=self.order
+	  	  if !item.id or update
+				  if !item.save
+				    for field, msg in item.errors
+				      self.errors.add field, msg
+				    end # for field, msg in item.errors
+				  end # if !item.save and include_errors
+				end # if !item.id or update
+			end # if item
+	  end # for item in list
+	end # def save_related
 	###################################################################################
 	# Returns the revenue account where the value of the order should appear
 	# This could be in different accounts depending on the prefrences set up in the prferences table
