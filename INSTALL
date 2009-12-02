@@ -1,0 +1,47 @@
+#! /bin/bash
+echo "This script will install Jade for Ubuntu 8.04 Server"
+echo "Installing Ruby..."
+sudo apt-get install ruby-full build-essential
+
+echo "Installing Lighttpd Server ..."
+sudo apt-get install lighttpd libfcgi-ruby1.8
+
+echo "Installing Ruby Gems..."
+wget http://rubyforge.org/frs/download.php/45905/rubygems-1.3.1.tgz
+tar xzvf rubygems-1.3.1.tgz
+cd rubygems-1.3.1
+sudo ruby setup.rb
+sudo ln -s /usr/bin/gem1.8 /usr/bin/gem
+sudo gem update --system
+
+echo "Installing Rails"
+sudo gem install rails
+
+echo "Configuring Lighttpd"
+echo "
+server.modules   += ( "mod_fastcgi", "mod_rewrite" )
+
+
+$HTTP["host"] == "localhost" {
+        server.document-root = "/srv/jade/public/"
+
+        server.dir-listing          = "disable"
+        server.error-handler-404 = "/dispatch.fcgi"
+
+        fastcgi.server      = ( ".fcgi" => ( "localhost" => (
+                "min-procs"       => 1,
+                "max-procs"       => 1,
+                "socket" => "/tmp/ruby-beholder.socket",
+                "bin-path" => "/srv/jade/public/dispatch.fcgi",
+                "bin-environment" => ( "RAILS_ENV" => "production" )
+        ) ) )
+
+}
+" | sudo tee -a /etc/lighttpd/lighttpd.conf
+sudo /etc/init.d/lighttpd restart
+echo "Installing gems needed by Jade"
+sudo gem install prawn
+sudo gem install will_paginate
+
+echo "Installing utilities to make barcodes...
+sudo apt-get install barcode imagemagick gs
