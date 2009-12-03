@@ -21,40 +21,20 @@ class OrdersController < ApplicationController
 	access_control [:destroy] => '(Admin)'
 	def allowed(order_type_id, action)
 		case (order_type_id)
-		  when 1
-		  	if action=="edit"
-					if !current_user.has_rights(['Admin','Gerente','Ventas'])
-						redirect_back_or_default('/products')
-						flash[:error] = "No tiene los derechos suficientes para cambiar las Ventas"
-						return false
-					end
-				elsif action=="view"
-					if !current_user.has_rights(['Admin','Gerente','Ventas','Compras','inventario'])
-						redirect_back_or_default('/products')
-						flash[:error] = "No tiene los derechos suficientes para ver las Ventas"
-						return false
-					end
-				end
-		  when 2
-		  	if !current_user.has_rights(['Admin','Compras','Gerente','inventario'])
-					redirect_back_or_default('/products')
-					flash[:error] = "No tiene los derechos suficientes para ver las Compras"
-						return false
-		  	end
-		  when 3
-		  	if action=="edit"
-					if !current_user.has_rights(['Admin','Gerente','Ventas','inventario'])
-						redirect_back_or_default('/products')
-						flash[:error] = "No tiene los derechos suficientes para cambiar el uso interno"
-						return false
-					end
-				elsif action=="view"
-					if !current_user.has_rights(['Admin','Gerente','Ventas','Compras','inventario'])
-						redirect_back_or_default('/products')
-						flash[:error] = "No tiene los derechos suficientes para ver el uso interno"
-						return false
-					end
-				end
+	  when 1
+	  	if action=="edit"
+				return false if !current_user.has_right(User::CHANGE_SALES,'No tiene los derechos suficientes para cambiar ventas')
+			elsif action=="view"
+				return false if !current_user.has_right(User::VIEW_SALES,'No tiene los derechos suficientes para ver ventas')
+			end
+	  when 2
+	  	return false if !current_user.has_right(User::VIEW_PURCHASES,'No tiene los derechos suficientes para ver compras')
+	  when 3
+	  	if action=="edit"
+				return false if !current_user.has_right(User::CHANGE_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para cambiar consumos  internos')
+			elsif action=="view"
+				return false if !current_user.has_right(User::VIEW_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para ver consumos internos')
+			end
     end  
     return true  
 	end

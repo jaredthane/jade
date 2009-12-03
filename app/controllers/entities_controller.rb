@@ -18,41 +18,20 @@ class EntitiesController < ApplicationController
 	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin | Ventas | Compras | Inventario)' 
 	def allowed(entity_type)
 		case (entity_type)
-		  when 'sites'
-		  	if !current_user.has_rights(['Admin','Compras','Gerente','Ventas','Inventario','invitado'])
-					redirect_back_or_default('/products')
-					flash[:error] = "No tiene los derechos suficientes para ver los sitios"
-		  	end
-		  when 'clients'
-		  	if !current_user.has_rights(['Admin','Gerente','Ventas'])
-					redirect_back_or_default('/products')
-					flash[:error] = "No tiene los derechos suficientes para ver los clientes"
-		  	end
-		  when 'vendors'
-		  	if !current_user.has_rights(['Admin','Compras','Gerente'])
-					redirect_back_or_default('/products')
-					flash[:error] = "No tiene los derechos suficientes para ver los proveedores"
-		  	end
-		  when 1
-		  	if !current_user.has_rights(['Admin','Compras','Gerente'])
-					redirect_back_or_default('/products')
-					flash[:error] = "No tiene los derechos suficientes para ver los proveedores"
-		  	end
-		  when 2
-		  	if !current_user.has_rights(['Admin','Gerente','Ventas'])
-					redirect_back_or_default('/products')
-					flash[:error] = "No tiene los derechos suficientes para ver los clientes"
-		  	end
-		  when 3
-		  	if !current_user.has_rights(['Admin','Compras','Gerente','Ventas','Inventario','invitado'])
-					redirect_back_or_default('/products')
-					flash[:error] = "No tiene los derechos suficientes para ver los sitios"
-		  	end
-		  when 5
-		  	if !current_user.has_rights(['Admin','Gerente','Ventas'])
-					redirect_back_or_default('/products')
-					flash[:error] = "No tiene los derechos suficientes para ver los clientes"
-		  	end
+	  when 'sites'
+	  	return false if !current_user.has_right(User::VIEW_SITES,'No tiene los derechos suficientes para ver los sitios')
+	  when 'clients'
+	  	return false if !current_user.has_right(User::VIEW_CLIENTS,'No tiene los derechos suficientes para ver los clientes')
+	  when 'vendors'
+	  	return false if !current_user.has_right(User::VIEW_VENDORS,'No tiene los derechos suficientes para ver los proveedores')
+	  when 1
+	  	return false if !current_user.has_right(User::VIEW_VENDORS,'No tiene los derechos suficientes para ver los proveedores')
+	  when 2
+	  	return false if !current_user.has_right(User::VIEW_CLIENTS,'No tiene los derechos suficientes para ver los clientes')
+	  when 3
+	  	return false if !current_user.has_right(User::VIEW_SITES,'No tiene los derechos suficientes para ver los sitios')
+	  when 5
+	  	return false if !current_user.has_right(User::VIEW_CLIENTS,'No tiene los derechos suficientes para ver los clientes')
     end  
     return true  
 	end
@@ -79,11 +58,11 @@ class EntitiesController < ApplicationController
   # Displays end users assigned to user
   #################################################################################################
 	def my_end_users
+    return false if !allowed('clients')
 		@user_id = User.current_user.id
 		@entity_type = 'end_users'
     @search = (params[:search]||'')
     @search += ' tipo:consumidor asesor:'+ User.current_user.id.to_s
-    return false if !allowed('clients')
 #    puts "entity type = " + @entity_type
     @entities = Entity.search(params[:search], params[:page])
     if @entities.length == 1
@@ -97,37 +76,37 @@ class EntitiesController < ApplicationController
       format.js
     end
 	end
-def new_history
-  @entity = Entity.find(params[:id])
-  return false if !allowed('clients')
-  respond_to do |format|
-    format.html # new.html.erb
-    format.xml  { render :xml => @entity }
-  end
-end
-def create_history
-  @entity = Entity.find(params[:id])
-  months=(params[:number].to_i||0)
-  logger.debug 'months='+months.to_s
-  sub=Subscription.find_by_client_id(@entity.id)
-  for i in 1..months
-  	logger.debug "doing round:"+i.to_s
-  	day=@entity.subscription_day
-  	day=30 if day > 30
-  	d=Date.new(2009, 6, day) << months-i+1
-  	o=Order.create(:grand_total => sub.fixed_price, :received => d, :created_at=>d, :vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
-	  sub.process(o, d)
-  	logger.info "created history id:"+o.id.to_s
-	end
-  respond_to do |format|
-    format.html { redirect_to(@entity) }
-    format.xml  { render :xml => @entity }
-  end
-end
+#def new_history
+#  return false if !allowed('clients')
+#  @entity = Entity.find(params[:id])
+#  respond_to do |format|
+#    format.html # new.html.erb
+#    format.xml  { render :xml => @entity }
+#  end
+#end
+#def create_history
+#  @entity = Entity.find(params[:id])
+#  months=(params[:number].to_i||0)
+#  logger.debug 'months='+months.to_s
+#  sub=Subscription.find_by_client_id(@entity.id)
+#  for i in 1..months
+#  	logger.debug "doing round:"+i.to_s
+#  	day=@entity.subscription_day
+#  	day=30 if day > 30
+#  	d=Date.new(2009, 6, day) << months-i+1
+#  	o=Order.create(:grand_total => sub.fixed_price, :received => d, :created_at=>d, :vendor => sub.vendor, :client => sub.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true)
+#	  sub.process(o, d)
+#  	logger.info "created history id:"+o.id.to_s
+#	end
+#  respond_to do |format|
+#    format.html { redirect_to(@entity) }
+#    format.xml  { render :xml => @entity }
+#  end
+#end
 	def my_credito_fiscal
+    return false if !allowed('clients')
 		@user_id = User.current_user.id
 		@entity_type = 'wholesale_clients'
-    return false if !allowed('clients')
 #    puts "entity type = " + @entity_type
     @search = (params[:search]||'')
     @search += ' tipo:credito asesor:'+ User.current_user.id.to_s
@@ -165,7 +144,6 @@ end
     return false if !allowed((params[:entity_type] || 'entities'))
     search = (params[:search]||'') + (params[:filter]||'')+' '+(params[:q]||'')
     search += ' tipo:' + @entity_type if @entity_type != 'all'
-    puts search+'<00000000000000000000000000000000000000000000000000000000search'
     @entities = Entity.search(search, params[:page])
     respond_to do |format|
       format.html {
@@ -182,6 +160,7 @@ end
   # GET /entities
   # GET /entities.xml
   def birthdays
+    return false if !allowed('clients')
     @entities = Entity.search_birthdays(params[:search])
     respond_to do |format|
       format.html { render :action => "birthdays" }
@@ -238,33 +217,33 @@ end
   end
   # GET /entities/1/movements
   # GET /entities/1/movements.xml
-  def movements
-    @entity = Entity.find(params[:id])
-		@entity_type = @entity.entity_type_id
-		if @entity_type == 3
-			current_user.location_id = params[:id]
-			current_user.save
-		end
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @entity }
-    end
-  end
-  
-  # GET /entities/1/products
-  # GET /entities/1/products.xml
-  def products
-    @entity = Entity.find(params[:id])
-		@entity_type = @entity.entity_type_id
-		if @entity_type == 3
-			current_user.location_id = params[:id]
-			current_user.save
-		end
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @entity }
-    end
-  end
+#  def movements
+#    @entity = Entity.find(params[:id])
+#		@entity_type = @entity.entity_type_id
+#		if @entity_type == 3
+#			current_user.location_id = params[:id]
+#			current_user.save
+#		end
+#    respond_to do |format|
+#      format.html # show.html.erb
+#      format.xml  { render :xml => @entity }
+#    end
+#  end
+#  
+#  # GET /entities/1/products
+#  # GET /entities/1/products.xml
+#  def products
+#    @entity = Entity.find(params[:id])
+#		@entity_type = @entity.entity_type_id
+#		if @entity_type == 3
+#			current_user.location_id = params[:id]
+#			current_user.save
+#		end
+#    respond_to do |format|
+#      format.html # show.html.erb
+#      format.xml  { render :xml => @entity }
+#    end
+#  end
 
   # GET /entities/new
   # GET /entities/new.xml
@@ -282,6 +261,8 @@ end
     end    
     @entity.user=current_user
 		@entity_type=params[:entity_type]
+		
+    return false if !allowed(@entity_type)
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @entity }
@@ -291,11 +272,15 @@ end
   # GET /entities/1/edit
   def edit
     @entity = Entity.find(params[:id])
+		@entity_type = @entity.entity_type_id
+		return if !allowed(@entity.entity_type_id || 'entities')
   end
 
   # POST /entities
   # POST /entities.xml
   def create
+		@entity_type = params[:entity][:entity_type_id]
+		return if !allowed(@entity.entity_type_id || 'entities')
 #    params[:entity][:birth]=Date.strptime(params[:entity][:birth], '%d/%m/%Y')
     params[:entity][:birth] = untranslate_month(params[:entity][:birth]) if params[:entity][:birth]
     @entity = Entity.new(params[:entity])

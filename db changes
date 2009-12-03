@@ -34,3 +34,4 @@ update trans set order_id=null where is_payment ;
 alter table trans drop column is_payment ;
 alter table payments drop column receipt_id;
 update accounts set modifier=-1 where id=10;
+insert into rights (id, name) values (83, 'Crear Transacciones'),(84,'Cambiar Transacciones'),(85,'Ver Transacciones'),(86,'Borrar Transacciones');
