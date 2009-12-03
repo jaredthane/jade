@@ -225,9 +225,16 @@ class Line < ActiveRecord::Base
 		logger.debug "# "
 		logger.debug "#################################################################################################"
 		logger.debug "serial=" + serial.to_s
-#		logger.debug "self.order_type_id=#{order.order_type_id.to_s}"
+		logger.debug "self.order_type_id=#{self.order_type_id.to_s}redone"
 		logger.debug self.order_type_id
-		if (!(serial == "" or serial == "\n") and ((self.order_type_id==2) or (self.order_type_id==5)))
+		logger.debug "serial == ''=#{(serial == '').to_s}"
+		logger.debug "(serial == '\n')=#{(serial == '\n').to_s}"
+		logger.debug "(self.order_type_id==2)=#{(self.order_type_id==2).to_s}"
+		logger.debug "(self.order_type_id==5)=#{(self.order_type_id==5).to_s}"
+		logger.debug "((self.order_type_id==2) or (self.order_type_id==5))=#{((self.order_type_id==2) or (self.order_type_id==5)).to_s}"
+		logger.debug "!(serial == '' or serial == '\n')=#{!(serial == "" or serial == '\n').to_s}"
+		logger.debug "(!(serial == '' or serial == '\n') and ((self.order_type_id==2) or (self.order_type_id==5)))=#{(!(serial == '' or serial == '\n') and ((self.order_type_id==2) or (self.order_type_id==5))).to_s}"
+		if (!(serial == "" or serial == "\n") and ((self.order_type_id=='2') or (self.order_type_id=='5')))
 			logger.debug "Taking create path"
 			s=SerializedProduct.find_or_create_by_serial_number(serial)
 			if s.product_id==nil

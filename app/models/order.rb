@@ -561,6 +561,7 @@ class Order < ActiveRecord::Base
   		new_line = Line.new(:order_id=>self.id,:created_at=>User.current_user.today)
   		new_line.product_id = l[:product_id]		
   		new_line.quantity = l[:quantity]
+  		new_line.order_type_id = l[:order_type_id]
 	  ###puts "Lines before setting attributes" + Order.find(self.id).lines.length.to_s
   		new_line.attributes=l  
 #  		logger.debug "about to push #{new_line.inspect}"  	
