@@ -209,7 +209,7 @@ class OrdersController < ApplicationController
   def create
     return false if !allowed(params["order"]["order_type_id"], 'edit')
     @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
-    @order.attributes = params["order"]
+    @order.attrs = params["order"]
     logger.info "params['order']['client_name']=" + params['order']['client_name'].to_s
     logger.info "heres the order we just created: " + @order.inspect
     this_receipt = params["order"]["number"].to_s
@@ -253,7 +253,7 @@ class OrdersController < ApplicationController
     errors = false
     logger.info "dumping lines before"
     logger.info @order.lines.inspect
-    @order.attributes=params[:order]
+    @order.attrs=params[:order]
     logger.info "dumping lines middle"
     logger.info @order.lines.inspect
 		errors = true if !@order.save

@@ -263,7 +263,8 @@ class Order < ActiveRecord::Base
     for l in (lines[:new]||[])
 	  	if l[:delete_me]!='1'
 	      line=self.lines.new()
-	      line.set_attrs(l)
+	      line.order=self
+	      line.attrs=l
 	      logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
 	      self.lines << line
 	    end
@@ -271,7 +272,7 @@ class Order < ActiveRecord::Base
     for key, l in (lines[:existing]||[])
     	if line = i[l[:id].to_i]
     		logger.debug "l[:order_type_id]=#{l[:order_type_id].to_s}"
-    		line.set_attrs(l)
+    		line.attrs=l
     		logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
       	line.destroy if l[:delete_me]=='1' #<------------ Not sure if this will work right. It needs to stick, but cancel if theres errors
                                          # ALSO: NEED TO DO ACCOUNTING AND INVENTORY ON THIS LINE!!!!!
@@ -471,7 +472,12 @@ class Order < ActiveRecord::Base
 			end
 		end
 	end
-
+	def attrs=(a)
+		logger.debug "Saving VOID"
+		self.void=a[:void]
+		logger.debug "Saving Other values"
+		self.attributes=a
+	end
 	###################################################################################
 	# Posts a physical count, saving previous qtys, creating movements, updating inventories and costs
 	###################################################################################
@@ -615,7 +621,7 @@ class Order < ActiveRecord::Base
 		return @received
 	end
 	def void=(num)
-	  
+	  self.deleted=num
 	end
 	def void
 	  return true if deleted

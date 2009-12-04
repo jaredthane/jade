@@ -32,13 +32,14 @@ class Line < ActiveRecord::Base
 	def post_save
 		save_movements
 	end
-	def set_attrs(hash)
-		self.order_type_id = hash[:order_type_id]
-		self.price = hash[:price]
-		self.warranty_months = hash[:warranty_months]
-		self.quantity = hash[:quantity]
-		self.product_id = hash[:product_id]
-		self.serial_number = hash[:serial_number]
+	def attrs=(hash)
+		self.order_type_id = hash[:order_type_id] if hash[:order_type_id]
+		self.price = hash[:price] if hash[:price]
+		self.warranty_months = hash[:warranty_months] if hash[:warranty_months]
+		self.quantity = hash[:quantity] if hash[:quantity]
+		self.product_id = hash[:product_id] if hash[:product_id]
+		self.serial_number = hash[:serial_number] if hash[:serial_number]
+		self.isreceived_str = hash[:isreceived_str] if hash[:isreceived_str]
 	end
   ##################################################################################################
 	# Returns quantity if it was marked as received, 0 otherwise
@@ -297,7 +298,9 @@ class Line < ActiveRecord::Base
 	# Sets the received date if true, nil if false
 	###################################################################################
 	def isreceived=(checkbox)
-		if checkbox.to_i==1
+		logger.debug "setting isreceived on line"
+		logger.debug "self.order.void=#{self.order.void.to_s}"
+		if checkbox.to_i==1 and !self.order.void
 			if self.received == nil
 				self.received=Time.now
 			end
@@ -377,6 +380,7 @@ class Line < ActiveRecord::Base
 			logger.debug  "taking find path"
 			s=SerializedProduct.find_by_serial_number(serial)
 		end
+		s=nil if self.order.void
 		if self.order_type_id == 5
 			self.serialized_product=s
 			logger.debug "Skipping creating movements cause this is a count"
