@@ -29,6 +29,7 @@ class Movement < ActiveRecord::Base
 
 	before_create :post_create
 	def description
+		return "Cuenta Fisica" if movement_type_id==4
 		d=movement_type.name
 		if [1,2,3,8].include?(movement_type_id)
 			if quantity>=0

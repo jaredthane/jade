@@ -363,8 +363,13 @@ class Order < ActiveRecord::Base
 			end # for discount in get_discounts
 		end # if this is a sale
 	end # check_for_discounts
-	
-
+	###################################################################################
+	# Returns the receipt number as string or 'Sin Numero' if its null
+	###################################################################################
+	def receipt
+		return receipt_number if receipt_number
+		return "Sin Numero"
+	end
 	###################################################################################
 	# Returns the total price of all of the products in the order, not including tax
 	###################################################################################
