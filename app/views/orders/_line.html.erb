@@ -2,8 +2,8 @@
 <div class="line">
 	<% @line= line %>
 	<%= error_messages_for :line, :class => "lineErrorExplanation",:id => "lineErrorExplanation", :object_name => "", :header_message => "", :message => "" %>
-	<% prefix = line.new_record? ? '[new]' : '[]' %>
-  <% fields_for "order[lines]#{prefix}", line do |line_form| %>
+	<% prefix = line.new_record? ? '[new]' : '[existing]' %>
+  <% fields_for "order[lines]#{prefix}[]", line do |line_form| %>
 		<div class="table_row">
 				<div class="table_cell_30">
 					<%= link_to line.product.name, line.product %>
@@ -28,7 +28,7 @@
 					<div class="table_cell_15"><%= line_form.collection_select(:warranty_months, line.product.warranties, :id, :months) %></div>
 				
 				<div class="table_cell">
-				<input type="checkbox" value="1" style="display: none;" name="order[lines][<%= line.new_record? ? 'new' : line.id.to_s %>][delete_me]" id="order_lines__delete_me"/>
+				<input type="checkbox" value="1" style="display: none;" name="order[lines][<%= line.new_record? ? 'new' : 'existing' %>][<%= line.id.to_s %>][delete_me]" id="order_lines__delete_me"/>
         <%= link_to_function "Remover", 'check_box($(this))' %></div>
 		</div>
   <% end %>

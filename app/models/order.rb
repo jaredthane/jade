@@ -103,7 +103,7 @@ class Order < ActiveRecord::Base
 	def save_related(list, update=false, include_errors=true)
 	  for item in list
 	  	if item
-    	  item.order=self
+    	  item.order_id=self.id
 	  	  if !item.id or update
 				  if !item.save and include_errors
 				    for field, msg in item.errors
@@ -260,16 +260,22 @@ class Order < ActiveRecord::Base
 	  for l in self.lines
 	    i[l.id]=l
 	  end
-    for key, l in lines
-      if key=='new' and l[:delete_me]!='1'
-        self.lines << line=self.lines.new(l) 
-        line.order=self
-      elsif key!='new'
-        line = i[l[:id].to_i]
-        line.attributes=l
-        line.destroy if l[:delete_me]=='1' #<------------ Not sure if this will work right. It needs to stick, but cancel if theres errors
-                                           # ALSO: NEED TO DO ACCOUNTING AND INVENTORY ON THIS LINE!!!!!
-      end #!line and !l[:delete_me]
+    for l in (lines[:new]||[])
+	  	if l[:delete_me]!='1'
+	      line=self.lines.new()
+	      line.set_attrs(l)
+	      logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
+	      self.lines << line
+	    end
+    end
+    for key, l in (lines[:existing]||[])
+    	if line = i[l[:id].to_i]
+    		logger.debug "l[:order_type_id]=#{l[:order_type_id].to_s}"
+    		line.set_attrs(l)
+    		logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
+      	line.destroy if l[:delete_me]=='1' #<------------ Not sure if this will work right. It needs to stick, but cancel if theres errors
+                                         # ALSO: NEED TO DO ACCOUNTING AND INVENTORY ON THIS LINE!!!!!
+      end # if line = i[l[:id].to_i]
     end # for l in lines
   end #lines=(lines)
 
