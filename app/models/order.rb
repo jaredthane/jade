@@ -271,6 +271,7 @@ class Order < ActiveRecord::Base
     end
     for key, l in (lines[:existing]||[])
     	if line = i[l[:id].to_i]
+	      line.order=self
     		logger.debug "l[:order_type_id]=#{l[:order_type_id].to_s}"
     		line.attrs=l
     		logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
