@@ -57,12 +57,16 @@ class Line < ActiveRecord::Base
   ##################################################################################
 	def new_movement(entity_id, movement_type_id, quantity)
 	  value = total_price_with_tax_per_unit*quantity
+	  logger.debug "self.serialized_product_id=#{self.serialized_product_id.to_s}"	  
+	  logger.debug "old.serialized_product_id=#{old.serialized_product_id.to_s}" if old
 	  if self.serialized_product_id
+	  	logger.debug "using first"
 	  	serial=self.serialized_product_id
 	  else
+	  	logger.debug "using second"
 	  	serial = old.serialized_product_id
 	 	end
-		m=Movement.new(:created_at=>User.current_user.today,:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => serial, :value => value)
+		m=Movement.new(:created_at=>User.current_user.today,:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => serial)
 		logger.debug "created movement"		
 		logger.debug "m=#{m.inspect}"
 		return m
@@ -79,30 +83,19 @@ class Line < ActiveRecord::Base
 		  if real_qty(self) != real_qty(old)
 		    dir = (real_qty(self)-real_qty(old))/(real_qty(self)-real_qty(old)).abs
 		    logger.debug "dir=#{dir.to_s}"
-			  case MOVEMENT_TYPES[order_type_id.to_i][(dir+3)/2-1]
-			    # These are the different movement_types
-				  when 1 # Venta
-					  self.movements << new_movement(self.order.vendor_id, 1, -(real_qty(self)-real_qty(old)))
-					  self.movements << new_movement(self.order.client_id, 1, (real_qty(self)-real_qty(old)))
-				  when 2 # Compra
-					  self.movements << new_movement(self.order.client_id, 2, (real_qty(self)-real_qty(old)))
-				  when 3 # Transferencia
-					  self.movements << new_movement(self.order.client_id, 3, (real_qty(self)-real_qty(old)))
-					  self.movements << new_movement(self.order.vendor_id, 3, -(real_qty(self)-real_qty(old)))
-					# when 4 # Cuenta Fisica
-				  # We won't touch physical counts. The Physical Count model will take care of that.
-				  when 5 # Devolucion de Venta
-					  self.movements << new_movement(self.order.vendor_id, 5, -(real_qty(self)-real_qty(old)))
-				  when 6 # Devolucion de Compra
-					  self.movements << new_movement(self.order.client_id, 6, (real_qty(self)-real_qty(old)))
-				  when 7 # Devolucion de Transferencia
-					  self.movements << new_movement(self.order.client_id, 7, (real_qty(self)-real_qty(old)))
-					  self.movements << new_movement(self.order.vendor_id, 7, -(real_qty(self)-real_qty(old)))
-				  when 8 # Consumo Interno
-					  self.movements << new_movement(self.order.vendor_id, 8, -(real_qty(self)-real_qty(old)))
-				  when 9 # Devolucion de Consumo Interno
-					  self.movements << new_movement(self.order.vendor_id, 9, -(real_qty(self)-real_qty(old)))
-			  end # case movement_type_id(dir)
+		    move=MOVEMENT_TYPES[order_type_id.to_i][(dir+3)/2-1]
+		    logger.debug "move=#{move.to_s}"
+		    if [1,2,3,8].include?(move)    	# These are normal movements
+		    	self.movements << Movement.new(:created_at=>User.current_user.today,:entity_id => self.order.vendor_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => -(real_qty(self)-real_qty(old)), :movement_type_id => move, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => self.serialized_product_id)
+		    	if move != 8									# Dont worry about the client for an internal consuption
+		    		self.movements << Movement.new(:created_at=>User.current_user.today,:entity_id => self.order.client_id, :comments => self.order.comments, :product_id => self.product_id, :quantity =>  (real_qty(self)-real_qty(old)), :movement_type_id => move, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => self.serialized_product_id)
+		    	end
+		    elsif [5,6,7,9].include?(move) 	# These are returns, use old serial_number
+		    	if move != 9									# Dont worry about the client for an internal consuption
+		    		self.movements << Movement.new(:created_at=>User.current_user.today,:entity_id => self.order.client_id, :comments => self.order.comments, :product_id => self.product_id, :quantity =>  (real_qty(self)-real_qty(old)), :movement_type_id => move, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => old.serialized_product_id)
+		    	end
+		    	self.movements << Movement.new(:created_at=>User.current_user.today,:entity_id => self.order.vendor_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => -(real_qty(self)-real_qty(old)), :movement_type_id => move, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => old.serialized_product_id)
+				end	    	
 		  end # if dir != 0
 	  end # if self.product.product_type_id == 1
 	end # prepare_movements

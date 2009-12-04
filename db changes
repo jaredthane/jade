@@ -36,4 +36,9 @@ alter table payments drop column receipt_id;
 update accounts set modifier=-1 where id=10;
 insert into rights (id, name) values (83, 'Crear Transacciones'),(84,'Cambiar Transacciones'),(85,'Ver Transacciones'),(86,'Borrar Transacciones');
 alter table `lines` add column order_type_id int(11);
+ALTER TABLE serialized_products ADD INDEX(product_id);
+ALTER TABLE serialized_products ADD INDEX(serial_number);
+alter table movements drop column oldline_id;
+alter table movements drop column balance;
+alter table movements drop column value;
 

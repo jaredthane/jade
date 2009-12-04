@@ -28,6 +28,22 @@ class Movement < ActiveRecord::Base
 #	belongs_to :line
 
 	before_create :post_create
+	def description
+		d=movement_type.name
+		if [1,2,3,8].include?(movement_type_id)
+			if quantity>=0
+				d+=" entregado"
+			else
+				d+=" recibido"
+			end
+		elsif [5,6,7,9].include?(movement_type_id)
+			if quantity>=0
+				d+=" recibido"
+			else
+				d+=" entregado"
+			end
+		end
+	end
 	def post_create
 		logger.debug "woking here"
 		if e=product.inventory(entity)
