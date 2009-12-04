@@ -43,3 +43,8 @@ alter table movements drop column balance;
 alter table movements drop column value;
 alter table entities add column next_bar_code varchar(32);
 alter table entities add column fax char(8);
+alter table payments drop column amount;
+update entities set cash_account_id=21 where id=4;
+
+
+

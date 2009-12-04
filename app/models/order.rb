@@ -60,11 +60,6 @@ class Order < ActiveRecord::Base
     else
   	  self.grand_total = self.total_price_with_tax
   	end
-	  old('id') # just make old run so we'll have the data oto reference later'
-  end
-  
-	after_save :post_save
-	def post_save
 		logger.debug "post_save"
 	  split_over_sized_order
 	  check_for_discounts
@@ -74,6 +69,10 @@ class Order < ActiveRecord::Base
 	  i=inventory_transaction
 	  self.transactions << m if m
 	  self.transactions << i if i
+  end
+  
+	after_save :post_save
+	def post_save
 	  save_related(lines, true)
 	  logger.info "Dumping lines after save"
 	  logger.info self.lines.inspect
@@ -157,12 +156,12 @@ class Order < ActiveRecord::Base
 	# Holds a copy of the old version of this object for reference
 	# By storing it in a accessor, we'll never have to load it more than once
 	#################################################################################################
-  attr_accessor :old_version
-	def old(attribute)
+	attr_accessor :old_version
+	def old(attribute=nil)
 	  return nil if !self.id
-    return old_version.attributes[attribute] if old_version
-    old_version=Order.find_by_id(self.id)
-    return old_version.attributes[attribute]
+    self.old_version=Order.find_by_id(self.id)if !self.old_version
+    return self.old_version.attributes[attribute] if attribute
+    return self.old_version
 	end
 	#################################################################################################
 	# Returns a Dictionary of the lines on the order with ids as keys.
@@ -194,7 +193,11 @@ class Order < ActiveRecord::Base
 	# Adds a transaction to reflect the creation of the order if necissary
 	#################################################################################################
 	def main_transaction(date=User.current_user.today)
-    amount = self.grand_total - (old('amount') || 0)
+		if old
+		  amount = self.grand_total - old.grand_total 
+		else
+			amount = self.grand_total
+		end
 	  if amount != 0
 	    tax = self.total_tax - (old('total_tax') || 0)
 		  case order_type_id

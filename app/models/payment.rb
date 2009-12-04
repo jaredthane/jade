@@ -24,22 +24,32 @@ class Payment < ActiveRecord::Base
 	has_many :transactions, :class_name => "Trans"
 	
 	attr_accessor :old_version
-	def old(attribute)
+	def old(attribute=nil)
 	  return nil if !self.id
-    return old_version.attributes[attribute] if old_version
-    old_version=Payment.find_by_id(self.id)
-    return old_version.attributes[attribute]
+    self.old_version=Payment.find_by_id(self.id)if !self.old_version
+    return self.old_version.attributes[attribute] if attribute
+    return self.old_version
 	end
-	
+	before_save :pre_save
+	def pre_save
+		self.transactions << new_transaction
+	end
 	after_save :post_save
 	def post_save
-	  self.transactions << new_transaction
-	  order.amount_paid += self.amount- (old('amount') || 0)
+	  order.amount_paid += self.amount - (old('amount') || 0)
 		order.save
 		save_related(self.transactions)
 	end 
 	def new_transaction
-	  amount = self.amount - (old('amount') || 0)
+		logger.debug "self.amount=#{self.amount.to_s}"
+		logger.debug "old('amount')=#{old('amount').to_s}"
+		logger.debug "old.amount =#{old.amount .to_s}"
+		if old
+		  amount = self.amount - old.amount 
+		else
+			amount = self.amount
+		end
+	  
 	  if self.order
 	    t = Trans.new( :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :comments => self.order.comments, :tipo => 'Pago de ' + self.order.order_type.name)
 	  else
@@ -78,7 +88,13 @@ class Payment < ActiveRecord::Base
 	# Holds a copy of the old version of this object for reference
 	# By storing it in a accessor, we'll never have to load it more than once
 	#################################################################################################
-
+	def void=(num)
+	  self.canceled=num
+	end
+	def void
+	  return true if canceled
+	  return false
+	end
 	def amount
 	  return 0 if self.void
 		return (self.presented||0)-(self.returned||0)
