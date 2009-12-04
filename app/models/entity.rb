@@ -107,7 +107,7 @@ class Entity < ActiveRecord::Base
 	
 	belongs_to :entity_type
 	validates_presence_of(:entity_type, :message => "Debe seleccionar el tipo de entidad.")
-    
+  
   def new_movement_attributes=(movement_attributes)
     movement_attributes.each do |attributes|
       movements.build(attributes)
@@ -241,6 +241,23 @@ class Entity < ActiveRecord::Base
   end
   def home_phone_number=(number)
   	self.home_phone=strip(number, ['-',' '])
+  end
+  def office_phone_number
+  	if self.office_phone
+			if self.office_phone.length == 8
+				return self.office_phone[0..3] + "-" + self.office_phone[4..7]
+			end
+		end
+  end
+  def fax_number
+  	if self.fax
+			if self.fax.length == 8
+				return self.fax[0..3] + "-" + self.fax[4..7]
+			end
+		end
+  end
+  def fax_number=(number)
+  	self.fax=strip(number, ['-',' '])
   end
   def office_phone_number
   	if self.office_phone

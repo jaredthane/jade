@@ -41,4 +41,5 @@ ALTER TABLE serialized_products ADD INDEX(serial_number);
 alter table movements drop column oldline_id;
 alter table movements drop column balance;
 alter table movements drop column value;
-
+alter table entities add column next_bar_code varchar(32);
+alter table entities add column fax char(8);

@@ -144,8 +144,16 @@
 		<%= f.text_field :office_phone_number, :class => 'field' %>
 	</p>
 	<p>
+		<b>Numero de Fax</b>
+		<%= f.text_field :fax_number, :class => 'field' %>
+	</p>
+	<p>
 		<b>Correo Electronico</b>
 		<%= f.text_field :email, :class => 'field' %>
+	</p>
+	<p>
+		<b>Proximo Codigo de Barra</b>
+		<%= f.text_field :next_bar_code, :class => 'field' %>
 	</p>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>

@@ -104,7 +104,7 @@ class ProductsController < ApplicationController
   # GET /products/new
   # GET /products/new.xml
   def new
-    @product = Product.new
+    @product = Product.new(:upc=>User.current_user.location.next_bar_code, :vendor_id=>4)
 		@product.unit_id=1
 		@product.product_type_id=1
     respond_to do |format|
@@ -123,6 +123,10 @@ class ProductsController < ApplicationController
   def create
     @product = Product.new(params[:product])
     @product.create_related_values(params[:product][:default_cost], params[:product][:static_price], params[:product][:relative_price])
+    if @product.upc==params[:product][:upc]
+  		User.current_user.location.next_bar_code=(@product.upc.to_i + 1).to_s
+  		User.current_user.location.save
+  	end
     respond_to do |format|
       if @product.save
       	@product.update_attributes(params[:product])

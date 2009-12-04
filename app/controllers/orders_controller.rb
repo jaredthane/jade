@@ -163,6 +163,8 @@ class OrdersController < ApplicationController
 		@order_type_id = params[:order_type_id] || 0
 		if @order_type_id == 1
 			@order.client_id = 3
+		elsif @order_type_id == 2
+			@order.vendor_id = 4
 		end
 		return false if !allowed(params[:order_type_id], 'edit')
     respond_to do |format|
@@ -171,7 +173,7 @@ class OrdersController < ApplicationController
     end
   end
 	def new_purchase
-    @order = Order.new(:created_at=>User.current_user.today)
+    @order = Order.new(:created_at=>User.current_user.today, :vendor_id=>4)
 
     respond_to do |format|
       format.html # new.html.erb

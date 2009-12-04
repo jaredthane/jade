@@ -200,10 +200,18 @@
 		<%=h @entity.office_phone_number %>
 	</p>
 	<p>
+		<b>Numero Fax</b><br />
+		<%=h @entity.fax_number %>
+	</p>
+	<p>
 		<b>Correo E</b>
 		<%=h @entity.email %>
 	</p>
-	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
+	<p>
+		<b>Proximo Codigo de Barra</b>
+		<%=h @entity.next_bar_code %>
+	</p>
+	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
 		<p>
 			<b>Registro</b>
 			<%=h @entity.register %>
