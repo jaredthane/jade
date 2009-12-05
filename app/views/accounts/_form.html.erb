@@ -14,7 +14,11 @@
 	<dt><%= link_to 'Nueva Transaccion', new_tran_path  %></dt>
 <% end %>
 
-<%= error_messages_for :account %>
+<% for error in @account.errors %>
+	<p class="error_message">
+		<%= error[0] %> <%= error[1] %>
+	</p>
+<% end %>
 
 <% form_for(@account, :html => {:id => 'account_form' }) do |f| %>
 

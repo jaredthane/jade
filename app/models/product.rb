@@ -45,11 +45,15 @@ class Product < ActiveRecord::Base
 	belongs_to :product_type
 	belongs_to :unit
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
-	validates_presence_of(:vendor, :message => "debe ser valido")
-	validates_presence_of(:unit, :message => "debe ser valido")
-	validates_presence_of(:name, :message => "debe ser valido.")
-	validates_uniqueness_of(:name, :message => "debe ser único.") 
-	validates_uniqueness_of(:upc, :message => "debe ser único.") 
+	##################################################################################################
+	# 
+	#################################################################################################
+  def validate
+    errors.add "Proveedor"," no es válido" if !vendor
+    errors.add "Unidad","no es válido" if !unit
+    errors.add "Nombre","no es válido" if !name or name==''
+    errors.add "Nombre y upc","deben ser únicos" if Product.find(:first,:conditions=> "name = name or upc = upc")
+  end
 	def isnumeric?(s)
 		return s =~ /\A\d+\Z/
 	end

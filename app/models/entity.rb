@@ -37,9 +37,14 @@ class Entity < ActiveRecord::Base
   def to_param
     "#{id}-#{name.parameterize}"
   end
-	validates_presence_of(:name, :message => "Debe introducir el nombre de la entidad.")
-  #validates_uniqueness_of(:name, :message => "El nombre de entidad ya existe.") 
-  
+	##################################################################################################
+	# 
+	#################################################################################################
+  def validate
+  	logger.debug "HERE in validate++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    errors.add "Nombre","no es válido" if !name or name==''
+    errors.add "Tipo de cliente","no es válido" if !entity_type
+  end  
   belongs_to :state
   
   # These are all of the price groups that are available at this site.
@@ -105,9 +110,7 @@ class Entity < ActiveRecord::Base
 		end
 	end
 	
-	belongs_to :entity_type
-	validates_presence_of(:entity_type, :message => "Debe seleccionar el tipo de entidad.")
-  
+	belongs_to :entity_type  
   def new_movement_attributes=(movement_attributes)
     movement_attributes.each do |attributes|
       movements.build(attributes)

@@ -53,9 +53,7 @@ class ServicesController < ApplicationController
   # GET /services/new
   # GET /services/new.xml
   def new
-    @service = Product.new
-    @service.unit_id = 1
-
+    @service = Product.new(:product_type_id=>4, :unit_id=>1)
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @service }
