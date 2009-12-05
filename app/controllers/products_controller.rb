@@ -123,9 +123,9 @@ class ProductsController < ApplicationController
   def create
   	User.current_user.location.next_bar_code if params[:product][:upc]==""
     @product = Product.new(params[:product])
-    @product.create_related_values(params[:product][:default_cost], params[:product][:static_price], params[:product][:relative_price])
     respond_to do |format|
       if @product.save
+      	@product.create_related_values(params[:product][:default_cost], params[:product][:static_price], params[:product][:relative_price])
       	if @product.upc==User.current_user.location.next_bar_code
 					User.current_user.location.next_bar_code=(User.current_user.location.next_bar_code.to_i + 1).to_s
 					User.current_user.location.save

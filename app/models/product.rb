@@ -52,7 +52,7 @@ class Product < ActiveRecord::Base
     errors.add "Proveedor"," no es válido" if !vendor
     errors.add "Unidad","no es válido" if !unit
     errors.add "Nombre","no es válido" if !name or name==''
-    errors.add "Nombre y upc","deben ser únicos" if Product.find(:first,:conditions=> "name = name or upc = upc")
+    errors.add "Nombre y upc","deben ser únicos" if Product.find(:first,:conditions=> "name = '#{name}' or upc = '#{upc}'")
   end
 	def isnumeric?(s)
 		return s =~ /\A\d+\Z/

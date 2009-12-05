@@ -109,7 +109,7 @@ class PhysicalCountsController < ApplicationController
     end
   end
   def create
-		@count = Order.new(:order_type_id => 3, :created_at=>User.current_user.today)
+		@count = Order.new(:order_type_id => 5, :created_at=>User.current_user.today)
 		@count.attributes = params["count"]
 		if !current_user.has_rights(['Admin','Gerente','Inventario'])
 			redirect_back_or_default('/physical_counts')

@@ -86,6 +86,10 @@ function delete_errors(){
 function select_serial() {
   $(".serial:last").select(); 
 }
+function check_box(e) {
+  e.prev(":check_box").attr( "checked", "true" );
+  e.closest(".line").slideUp("slow");
+}
 function DeleteHiddenLines(){
   $('.line:hidden').remove();
 }
