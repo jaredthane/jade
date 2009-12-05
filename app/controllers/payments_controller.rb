@@ -20,7 +20,7 @@ class PaymentsController < ApplicationController
   # GET /payments.xml
   def index
     params[:from]=untranslate_month(params[:from]) if params[:from]
-    params[:till]=untranslate_month(params[:till] + 1) if params[:till]
+    params[:till]=untranslate_month(params[:till]) if params[:till]
   	@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
   	@sites=(params[:sites] ||[current_user.location_id])

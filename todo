@@ -7,8 +7,6 @@ make sample receipt work with warranties
 costs arn't calculated right when you're buying multiple serialized products
 costs arent recalculated when you just change the price on an order
 its not easy to search for payments or receipts
-serials purchased not sowing up on sites show page
-it says esperando entrega although it already has serials
 check inventory before accepting order
 give error if serial were selling isn't in inventory
 mark required fields with *

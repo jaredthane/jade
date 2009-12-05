@@ -14,7 +14,7 @@
 <%= will_paginate @payments, :class => 'pagination' %>
 <div>
     <div id="lines" class="table_header_row">
-        <div class="table_cell_20">Pedido</div>
+        <div class="table_cell_20">Factura</div>
         <div class="table_cell_20">Cantidad</div>
         <div class="table_cell_20">Fecha</div>
         <div class="table_cell_20">Metodo</div>
@@ -22,7 +22,7 @@
 	</div>
     <% for payment in @payments %>
 	    <div class="table_row">
-		    <div class="table_cell_20"><%= link_to payment.order.id, payment.order %></div>
+		    <div class="table_cell_20"><%= link_to payment.order.receipt, payment.order %></div>
             <div class="table_cell_20"><%= link_to number_to_currency(payment.amount), payment %></div>
             <div class="table_cell_20">
 		          <% if payment.created_at %>

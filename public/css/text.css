@@ -33,6 +33,8 @@
 .main-content p.notice_message {background: #7cb4a9; color: white; padding:2px;}
 .main-content p.error_message {background: #ff6666; color: white; padding:2px;width 100%;}
 .main-content p.important_message {color: #ff6666; padding:2px;}
+.main-content .errorExplanation h2{background-color: #ff6666 ;color: white;  margin-bottom: 0; padding: 1px;}
+
 .main-content p.rejected {clear:both; margin:.25em 0 0em 0; padding:2px 0 2px 2px; background:#e31c1c; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:220%;}
 .main-navigation .loginform {width:160px; margin:10px 20px 0 20px;}
 .main-navigation .loginform p {clear:both; margin:0; padding:0;}
