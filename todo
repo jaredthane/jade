@@ -1,12 +1,8 @@
-sales history shows double entries
-add location field to serials
 cant change order that has a discount on it, cause the discount doesnt have a warranty
 accounting should put discounts in separate account at POS
 photos?
 make so you can print any list
 should be able to scan and uplaod receipts from vendors
-should be able to 'add' lines to orders that already have receipts
-should be able to create receipt by placing receipt number in the order upon making it.
 make sample receipt work with warranties
 costs arn't calculated right when you're buying multiple serialized products
 costs arent recalculated when you just change the price on an order

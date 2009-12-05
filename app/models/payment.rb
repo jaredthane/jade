@@ -42,8 +42,8 @@ class Payment < ActiveRecord::Base
 	end 
 	def new_transaction
 		logger.debug "self.amount=#{self.amount.to_s}"
-		logger.debug "old('amount')=#{old('amount').to_s}"
-		logger.debug "old.amount =#{old.amount .to_s}"
+		logger.debug "old('amount')=#{old('amount').to_s}" 
+#		logger.debug "old.amount =#{old.amount .to_s}"
 		if old
 		  amount = self.amount - old.amount 
 		else
@@ -103,7 +103,7 @@ class Payment < ActiveRecord::Base
 		site_string=''
 		for site in sites
 			site_string+= ' OR 'if site_string !=''
-			site_string+=' orders.vendor_id=' + site.to_s
+			site_string+='( orders.vendor_id=' + site.to_s + ' OR orders.client_id=' + site.to_s + ')'
 		end
   	paginate :per_page => 20, :page => page,
 		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payments.order_id like :search OR orders.receipt_number like :search OR payment_methods.name like :search ) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
