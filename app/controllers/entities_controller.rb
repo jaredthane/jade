@@ -280,10 +280,10 @@ class EntitiesController < ApplicationController
   # POST /entities.xml
   def create
 		@entity_type = params[:entity][:entity_type_id]
-		return if !allowed(@entity.entity_type_id || 'entities')
 #    params[:entity][:birth]=Date.strptime(params[:entity][:birth], '%d/%m/%Y')
     params[:entity][:birth] = untranslate_month(params[:entity][:birth]) if params[:entity][:birth]
     @entity = Entity.new(params[:entity])
+		return if !allowed(@entity.entity_type_id || 'entities')
     respond_to do |format|
       if @entity.save
 #      	@entity.update_related_accounts_with_id()

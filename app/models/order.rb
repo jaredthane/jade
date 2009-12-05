@@ -650,10 +650,10 @@ class Order < ActiveRecord::Base
   				end	
   				if p.serialized
   					for i in (1..p.to_order)
-							o.lines << o.lines.new(:product=>p, :quantity=>1,:price=>p.price)
+							o.lines << o.lines.new(:product=>p, :quantity=>1,:price=>p.price,:order_type_id=>2)
 						end
   				else
-						o.lines << o.lines.new(:product=>p, :quantity=>p.to_order,:price=>p.price)
+						o.lines << o.lines.new(:product=>p, :quantity=>p.to_order,:price=>p.price,:order_type_id=>2)
   				end
   			end
   		end
