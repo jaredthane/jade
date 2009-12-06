@@ -38,16 +38,11 @@ class OrdersController < ApplicationController
     end  
     return true  
 	end
-	def search_paths(order_type)
-	  
-	end
-  # GET /orders
-  # GET /orders.xml
   def index
-    logger.info params
-		@order_type_id = params[:order_type_id].to_i || 0
-		return false if !allowed(@order_type_id, 'view')
-
+    logger.info params.inspect
+		return false if !allowed(params[:order_type_id], 'view')
+		@order_type_id=params[:order_type_id]
+		logger.debug "@order_type_id=#{@order_type_id.to_s}"
     @site=User.current_user.location
   	@sites=(params[:sites] ||[current_user.location_id])
 #  	@search_path = SEARCH_PATHS[@order_type_id]
@@ -66,6 +61,10 @@ class OrdersController < ApplicationController
 			  render :action => 'show'
 			  return false
 		  end
+    end
+    if @order_type_id==5
+    	render :template=>'counts/index'
+    	return false
     end
     respond_to do |format|
       format.html # index.html.erb
@@ -127,12 +126,12 @@ class OrdersController < ApplicationController
   # GET /orders/1.xml
   def show
     @order = Order.find(params[:id])
-    if @order.order_type_id == 5
-    	redirect_to(physical_count_url(params[:id]))
-    	return false
-    end
     @payments = @order.recent_payments(10)
 		return false if !allowed(@order.order_type_id, 'view')
+    if @order.order_type_id == 5
+    	render :template=>'counts/show'
+    	return false
+    end
     respond_to do |format|
       format.html 
       format.xml  { render :xml => @order }
@@ -159,45 +158,54 @@ class OrdersController < ApplicationController
   # GET /orders/new
   # GET /orders/new.xml
   def new
+		return false if !allowed(params[:order_type_id], 'edit')
+		@order_type_id=params[:order_type_id]
     @order = Order.new(:created_at=>User.current_user.today, :receipt_number=>(User.current_user.location.next_receipt_number||''))
-		@order_type_id = params[:order_type_id] || 0
 		if @order_type_id == 1
 			@order.client_id = 3
 		elsif @order_type_id == 2
 			@order.vendor_id = 4
 		end
-		return false if !allowed(params[:order_type_id], 'edit')
+    if @order_type_id==5
+    	render :template=>'counts/new'
+    	return false
+    end
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @order }
     end
   end
-	def new_purchase
-    @order = Order.new(:created_at=>User.current_user.today, :vendor_id=>4)
+#	def new_purchase
+#    @order = Order.new(:created_at=>User.current_user.today, :vendor_id=>4)
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @order }
-    end
-  end
-  def new_sale
-    @order = Order.new(:created_at=>User.current_user.today, :client_id=>3)
+#    respond_to do |format|
+#      format.html # new.html.erb
+#      format.xml  { render :xml => @order }
+#    end
+#  end
+#  def new_sale
+#    @order = Order.new(:created_at=>User.current_user.today, :client_id=>3)
 
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @order }
-    end
-  end
+#    respond_to do |format|
+#      format.html # new.html.erb
+#      format.xml  { render :xml => @order }
+#    end
+#  end
   # GET /orders/1/edit
   def edit
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
+    if @order.order_type_id == 5
+    	render :template=>'counts/edit'
+    	return false
+    end
   end
   def new_nul_number
   end
   def create_null_number
   end
   def generate_receipt(order)
+  	order.receipt_filename="#{RAILS_ROOT}/invoice_pdfs/{order.id}.pdf"
   	prawnto :prawn => {:skip_page_creation=>true}
 	  pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false
 		File.open(order.receipt_filename, 'w') { |f| f.write(pdf_string) }
@@ -210,7 +218,6 @@ class OrdersController < ApplicationController
     return false if !allowed(params["order"]["order_type_id"], 'edit')
     @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
     @order.attrs = params["order"]
-    logger.info "params['order']['client_name']=" + params['order']['client_name'].to_s
     logger.info "heres the order we just created: " + @order.inspect
     this_receipt = params["order"]["number"].to_s
     next_receipt=("%0" + this_receipt.length.to_s + "d") % (this_receipt.to_i + 1)
@@ -219,7 +226,7 @@ class OrdersController < ApplicationController
     logger.info "finished updating lines"
     respond_to do |format|
       if @order.save
-        generate_receipt(@order)
+        generate_receipt(@order) if @order.order_type_id=1
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { redirect_to(@order) }
         format.xml  { render :xml => @order, :status => :created, :location => @order }

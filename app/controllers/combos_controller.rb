@@ -20,7 +20,7 @@ class CombosController < ApplicationController
 	before_filter :login_required
 	
   def index
-  	return false if !current_user.has_right(User::VIEW_COMBOS,'No tiene los derechos suficientes para ver los combos')
+  	return false if !check_user(User::VIEW_COMBOS,'No tiene los derechos suficientes para ver los combos')
     #@combos = Product.find(:all)
 		@combos = Product.search_for_combos(params[:search], params[:page])
     respond_to do |format|

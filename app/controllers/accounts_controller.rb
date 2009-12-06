@@ -21,7 +21,7 @@ class AccountsController < ApplicationController
   # GET /accounts
   # GET /accounts.xml
   def index
-  	return false if !current_user.has_right(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')
+  	return false if !check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')
   	if params[:q]
   		search=params[:q] 
   	else

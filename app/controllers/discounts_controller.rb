@@ -20,7 +20,7 @@ class DiscountsController < ApplicationController
 	before_filter :login_required
 	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin)' 
   def index
-  	return false if !current_user.has_right(User::VIEW_DISCOUNTS,'No tiene los derechos suficientes para ver los descuentos')
+  	return false if !check_user(User::VIEW_DISCOUNTS,'No tiene los derechos suficientes para ver los descuentos')
     #@discounts = Product.find(:all)
 		@discounts = Product.search_for_discounts(params[:search], params[:page])
 		if @discounts.length == 1
@@ -62,9 +62,7 @@ class DiscountsController < ApplicationController
   # GET /discounts/new.xml
   def new
   	return false if !current_user.has_right(User::CREATE_DISCOUNTS,'No tiene los derechos suficientes para crear los descuentos')
-    @discount = Product.new
-		@discount.relative_price=1
-		@discount.static_price=0
+    @discount = Product.new(:relative_price=>1,:static_price=>0)
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @discount }

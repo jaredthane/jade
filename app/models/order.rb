@@ -118,7 +118,6 @@ class Order < ActiveRecord::Base
 	#################################################################################################
   def number=(num)
     self.receipt_number=num
-    self.receipt_filename="#{RAILS_ROOT}/invoice_pdfs/receipt#{num}.pdf"
     self.receipt_generated=Time.now
   end
 	##################################################################################################

@@ -48,8 +48,6 @@ ActionController::Routing::Routes.draw do |map|
 	map.resources :combos
 	map.erase_order 'orders/:id/erase', :controller => 'orders', :action => 'erase'
 #	map.erase_receipt 'receipts/:id/erase', :controller => 'receipts', :action => 'erase'
-	map.post_physical_counts 'physical_counts/:id/post', :controller => 'physical_counts', :action => 'post'
-	map.resources :physical_counts, :order_type_id => 5
 	map.new_user_role 'user/new_role', :controller => 'users', :action => 'new_role', :format =>'js'
 	map.my_clients 'entities/my_clients', :controller => 'entities', :action => 'my_clients', :filter => ' tipo:cliente'
 	map.my_end_users 'entities/my_end_users', :controller => 'entities', :action => 'my_clients', :filter => ' tipo:consumidor'
@@ -82,9 +80,9 @@ ActionController::Routing::Routes.draw do |map|
 	map.show_receipt 'orders/:id/receipt', :controller => 'orders', :action => 'show_receipt'
   map.show_batch 'orders/show_batch', :controller => 'orders', :action => 'show_batch'
   map.create_batch 'inventories/create_batch', :controller => 'inventories', :action => 'create_batch'
-  map.delete_order 'orders/delete', :controller => 'orders', :action => 'delete'
+#  map.delete_order 'orders/delete', :controller => 'orders', :action => 'delete'
 	map.order_history 'orders/:id/history', :controller => 'orders', :action => 'show_history'
-	map.order_payments 'orders/:id/payments', :controller => 'orders', :action => 'show_payments'
+#	map.order_payments 'orders/:id/payments', :controller => 'orders', :action => 'show_payments'
 #	map.order_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
 #	map.destroy_receipt 'receipt/:id/destroy', :controller => 'receipts', :action => 'destroy'
 	map.connect 'lines/new', :controller => 'lines', :action => 'new', :format=>'js'
@@ -102,13 +100,22 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.resources :requirements
   map.resources :orders
+  
+#	map.resources :sales, :controller=>'orders', :order_type_id => 1
+#	map.resources :purchases, :controller=>'orders', :order_type_id => 2
+#	map.resources :internals, :controller=>'orders', :order_type_id => 3
+#	map.resources :transfers, :controller=>'orders', :order_type_id => 4
+#	map.resources :counts, :controller=>'orders', :order_type_id => 5
   map.new_purchase 	'purchases/new', :controller => 'orders', :action => 'new', :order_type_id => 2
   map.new_sale 	'sales/new', :controller => 'orders', :action => 'new', :order_type_id => 1
   map.new_internal 	'internal/new', :controller => 'orders', :action => 'new', :order_type_id => 3
   map.purchases 'purchases/', :controller => 'orders', :action => 'index', :order_type_id => 2
   map.internals 'internals/', :controller => 'orders', :action => 'index', :order_type_id => 3
   map.transfers 'transfers/', :controller => 'orders', :action => 'index', :order_type_id => 4
+  map.new_transfer 'transfer/new', :controller => 'orders', :action => 'new', :order_type_id => 4
   map.counts 'counts/', :controller => 'orders', :action => 'index', :order_type_id => 5
+  map.new_count 	'count/new', :controller => 'orders', :action => 'new', :order_type_id => 5
+	map.post_count 'physical_counts/:id/post', :controller => 'physical_counts', :action => 'post'
   map.internals 'internals/', :controller => 'orders', :action => 'index', :order_type_id => 3
   map.sales 'sales/', :controller => 'orders', :action => 'index', :order_type_id => 1
 

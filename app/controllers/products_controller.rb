@@ -121,7 +121,7 @@ class ProductsController < ApplicationController
   # POST /products
   # POST /products.xml
   def create
-  	User.current_user.location.next_bar_code if params[:product][:upc]==""
+  	params[:product][:upc]=User.current_user.location.next_bar_code if params[:product][:upc]==""
     @product = Product.new(params[:product])
     respond_to do |format|
       if @product.save
@@ -153,7 +153,7 @@ class ProductsController < ApplicationController
   # PUT /products/1.xml
   def update
 		puts "running products update"
-		User.current_user.location.next_bar_code if params[:product][:upc]==""
+		params[:product][:upc]=User.current_user.location.next_bar_code if params[:product][:upc]==""
   	@product = Product.find(params[:id])
  		#Audit.info "changed product #{@product.inspect}"
 		if  @product.update_attributes(params[:product])

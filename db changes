@@ -27,6 +27,8 @@ ALTER TABLE payments ADD INDEX(order_id);
 ALTER TABLE receipts ADD INDEX(order_id);
 ALTER TABLE payments ADD INDEX(created_at);
 ALTER TABLE movements ADD INDEX(order_id);
+ALTER TABLE inventories ADD INDEX(product_id);
+ALTER TABLE inventories ADD INDEX(entity_id);
 alter table payments change column canceled void datetime;
 alter table trans add column payment_id int(11);
 update trans set payment_id = order_id where is_payment;

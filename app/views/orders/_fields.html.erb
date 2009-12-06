@@ -89,7 +89,7 @@
 		<div class="table_cell">Acciones</div>
 	</div>
 	<div id="lines">
-		<%= render :partial => 'line', :collection => @order.lines %>
+		<%= render :partial => 'counts/line', :collection => @order.lines %>
 	</div>
 	<div id="lines_errors"></div>
 	<%= link_to "Añadir otro producto | ", new_line_path(:order_id => @order.id), :id => "add_new_line", :class => 'action'  %>	  

@@ -1,9 +1,53 @@
-if there are errors creating a product, invalid price entries are made
-create service requires vendor info, use other way to be sure vendors not null for products;
-================= Bugs:  =======================================
+CURRENT GOALS:
+	searching order and payments with dates
+	counts:
+		serials not in count should be removed from inventory
+		calculate values with js
+		use orders controller
+		create "post counts" right
+	finish new auth
+	make void receipt #'s
+	split orders should get receipt numbers
+	discounts and combos should get default upc if null
+	get good tab order on new_product
+	clean up line errors
+	errors should be displayed when there is insufficient inventory
+	checkout default values for discoutns: relative and static prices
+	
+FUTURE FEATURES:
+	stickers
+		bar codes
+		shelf labels
+		serial numbers
+	production
+	full accounting
+	reports
+	serials per product
+		concat serial number and product id
+	pictures
+	use MYSQL match/against for full text searches
+	treat discounts as separate account in accounting
+	print any list
+	scan and upload purchase receipts
+	write warranties on receipt
+	mark required fields with *
+	use title tag to provide tooltips
+	clean up users functionality
+	make account list order by parents
+	make so you can zoom into branches of accounts
+	implement thorough testing
+	Anticipos & 'abonar a cuenta' & aplicar saldo a pedido
+	anular productos
+
+
+#######################################################################################################
+# Old Todo
+#######################################################################################################
+
+
 Jared Make it count the number of lines for each product in js and then calculate the difference in price
 +No error is given when a serial number is not found
-MYSQL for rojo filter must treat Null values as 0 <- Dont know how to do this yet
+
 restrict only product_type 1 can be added to counts
 I created a purchase for a serial object but it didnt appear in the quantity
 shouldnt dump products from order when proveedor is invalid

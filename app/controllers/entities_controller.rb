@@ -19,19 +19,19 @@ class EntitiesController < ApplicationController
 	def allowed(entity_type)
 		case (entity_type)
 	  when 'sites'
-	  	return false if !current_user.has_right(User::VIEW_SITES,'No tiene los derechos suficientes para ver los sitios')
+	  	return false if !check_user(User::VIEW_SITES,'No tiene los derechos suficientes para ver los sitios')
 	  when 'clients'
-	  	return false if !current_user.has_right(User::VIEW_CLIENTS,'No tiene los derechos suficientes para ver los clientes')
+	  	return false if !check_user(User::VIEW_CLIENTS,'No tiene los derechos suficientes para ver los clientes')
 	  when 'vendors'
-	  	return false if !current_user.has_right(User::VIEW_VENDORS,'No tiene los derechos suficientes para ver los proveedores')
+	  	return false if !check_user(User::VIEW_VENDORS,'No tiene los derechos suficientes para ver los proveedores')
 	  when 1
-	  	return false if !current_user.has_right(User::VIEW_VENDORS,'No tiene los derechos suficientes para ver los proveedores')
+	  	return false if !check_user(User::VIEW_VENDORS,'No tiene los derechos suficientes para ver los proveedores')
 	  when 2
-	  	return false if !current_user.has_right(User::VIEW_CLIENTS,'No tiene los derechos suficientes para ver los clientes')
+	  	return false if !check_user(User::VIEW_CLIENTS,'No tiene los derechos suficientes para ver los clientes')
 	  when 3
-	  	return false if !current_user.has_right(User::VIEW_SITES,'No tiene los derechos suficientes para ver los sitios')
+	  	return false if !check_user(User::VIEW_SITES,'No tiene los derechos suficientes para ver los sitios')
 	  when 5
-	  	return false if !current_user.has_right(User::VIEW_CLIENTS,'No tiene los derechos suficientes para ver los clientes')
+	  	return false if !check_user(User::VIEW_CLIENTS,'No tiene los derechos suficientes para ver los clientes')
     end  
     return true  
 	end
