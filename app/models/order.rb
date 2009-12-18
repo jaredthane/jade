@@ -671,7 +671,7 @@ class Order < ActiveRecord::Base
 	  case order_type
 	  when SALE
 	    logger.debug "searching sales"
-	    c= ['(order_type_id = 1) AND (clients.name like :search OR orders.receipt_number like :search) AND (vendor_id=:current_location OR clients.id=:current_location) AND (clients.id != 1) AND orders.created_at<:till AND orders.created_at>:from', {:search => "%#{search}%", :from => "#{sfrom}",:till => "#{still}", :current_location => "#{User.current_user.location_id}"}]
+	    c= ['(order_type_id = 1) AND (clients.name like :search OR orders.receipt_number like :search) AND (vendor_id=:current_location OR clients.id=:current_location) AND (clients.id != 1) AND orders.created_at<:till AND orders.created_at>=:from', {:search => "%#{search}%", :from => "#{sfrom}",:till => "#{still}", :current_location => "#{User.current_user.location_id}"}]
 	    j= "inner join entities as clients on clients.id = orders.client_id"
 	  when PURCHASE
 	    logger.debug "searching PURCHASE"

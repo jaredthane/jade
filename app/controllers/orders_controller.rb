@@ -41,6 +41,7 @@ class OrdersController < ApplicationController
   def index
     logger.info params.inspect
 		return false if !allowed(params[:order_type_id], 'view')
+
 		@order_type_id=params[:order_type_id]
 		logger.debug "@order_type_id=#{@order_type_id.to_s}"
     @site=User.current_user.location
@@ -236,6 +237,9 @@ class OrdersController < ApplicationController
   # POST /orders.xml
   def create
     return false if !allowed(params["order"]["order_type_id"], 'edit')
+    params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
+    params[:order][:received]=untranslate_month(params[:order][:received]) if params[:order][:received]
+
     @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
     @order.attrs = params["order"]
     logger.debug 'params["order"]["lines"]=#{params["order"]["lines"].to_s}'
