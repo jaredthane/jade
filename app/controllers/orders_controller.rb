@@ -125,7 +125,12 @@ class OrdersController < ApplicationController
   # GET /orders/1
   # GET /orders/1.xml
   def show
-    @order = Order.find(params[:id])
+    @order = Order.find_by_id(params[:id])
+    if !@order
+    	flash[:error] = "El pedido especificado no se encuentra entre los archivos."
+    	redirect_back_or_default(orders_url)
+    	return false
+    end
     @payments = @order.recent_payments(10)
 		return false if !allowed(@order.order_type_id, 'view')
     if @order.order_type_id == 5
