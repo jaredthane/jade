@@ -1,0 +1,27 @@
+<% content_for :title do %>Lista de Cuentas Fisicas en <%= current_user.location.name %><% end %>
+<% content_for :actions do %>
+	<% if current_user.has_rights(['admin','gerente','inventario']) %>
+		<dt><%= link_to 'Nueva Cuenta Fisica', new_count_path, :class => 'action' %></dt>
+	<% end %>
+<% end %>
+<br /> <%= will_paginate @orders, :class => 'pagination' %>
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_25">Numero</div>
+    <div class="table_cell_25">Esperando</div>
+    <div class="table_cell_25">Última Acción</div>
+    <div class="table_cell">User</div>
+  </div>
+	<% for count in @orders %>
+		<div class="table_row">
+		  <div class="table_cell_25"><%= link_to count.id, count %></div>
+		  <div class="table_cell_25"><%= link_to awaiting(count), order_history_path(count)%></div> 
+		  <div class="table_cell_25"><%=h last_action(count) %></div> 
+		  <div class="table_cell"><%= link_to count.user.login, count.user %></div>
+		</div>
+	<% end %>
+</div>
+
+<br />
+<%= will_paginate @orders, :class => 'pagination' %>
+

@@ -20,6 +20,7 @@ FUTURE FEATURES:
 		shelf labels
 		serial numbers
 	production
+	transactions should have link to order, payment or job
 	full accounting
 	reports
 	serials per product

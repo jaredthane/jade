@@ -21,6 +21,7 @@ class AccountsController < ApplicationController
   # GET /accounts
   # GET /accounts.xml
   def index
+#  	logger.debug "!check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')=#{!check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas').to_s}"
   	return false if !check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')
   	if params[:q]
   		search=params[:q] 
@@ -37,7 +38,7 @@ class AccountsController < ApplicationController
   # GET /accounts/1
   # GET /accounts/1.xml
   def show
-  	return false if !current_user.has_right(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')
+  	return false if !check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')
     @account = Account.find(params[:id])
 		@myposts = @account.recent_entries(20)
 
@@ -49,7 +50,7 @@ class AccountsController < ApplicationController
   end
 
 	def new_balance_transfer
-		return false if !current_user.has_right(User::CREATE_TRANSACTIONS,'No tiene los derechos suficientes para hacer transferencias de saldo')
+		return false if !check_user(User::CREATE_TRANSACTIONS,'No tiene los derechos suficientes para hacer transferencias de saldo')
     @account = Account.find(params[:id])
     if @account.posts.last
 			@amt = @account.posts.last.balance
@@ -63,7 +64,7 @@ class AccountsController < ApplicationController
     end		
 	end
 	def create_balance_transfer
-		return false if !current_user.has_right(User::CREATE_TRANSACTIONS,'No tiene los derechos suficientes para hacer transferencias de saldo')
+		return false if !check_user(User::CREATE_TRANSACTIONS,'No tiene los derechos suficientes para hacer transferencias de saldo')
 		account = Account.find(params[:id])
 		other=Account.find(params[:number].to_i)
 		if !account.posts.last
@@ -84,7 +85,7 @@ class AccountsController < ApplicationController
   # GET /accounts/new
   # GET /accounts/new.xml
   def new
-  	return false if !current_user.has_right(User::CREATE_ACCOUNTS,'No tiene los derechos suficientes para crear cuentas')
+  	return false if !check_user(User::CREATE_ACCOUNTS,'No tiene los derechos suficientes para crear cuentas')
     @account = Account.new
     respond_to do |format|
       format.html # new.html.erb
@@ -94,14 +95,14 @@ class AccountsController < ApplicationController
 
   # GET /accounts/1/edit
   def edit
-  	return false if !current_user.has_right(User::CHANGE_ACCOUNTS,'No tiene los derechos suficientes para cambiar cuentas')
+  	return false if !check_user(User::CHANGE_ACCOUNTS,'No tiene los derechos suficientes para cambiar cuentas')
     @account = Account.find(params[:id])
   end
 
   # POST /accounts
   # POST /accounts.xml
   def create
-  	return false if !current_user.has_right(User::CREATE_ACCOUNTS,'No tiene los derechos suficientes para crear cuentas')
+  	return false if !check_user(User::CREATE_ACCOUNTS,'No tiene los derechos suficientes para crear cuentas')
     @account = Account.new(params[:account])
 
     respond_to do |format|
@@ -119,7 +120,7 @@ class AccountsController < ApplicationController
   # PUT /accounts/1
   # PUT /accounts/1.xml
   def update
-  	return false if !current_user.has_right(User::CHANGE_ACCOUNTS,'No tiene los derechos suficientes para cambiar cuentas')
+  	return false if !check_user(User::CHANGE_ACCOUNTS,'No tiene los derechos suficientes para cambiar cuentas')
     @account = Account.find(params[:id])
 
     respond_to do |format|
@@ -137,7 +138,7 @@ class AccountsController < ApplicationController
   # DELETE /accounts/1
   # DELETE /accounts/1.xml
   def destroy
-  	return false if !current_user.has_right(User::DELETE_ACCOUNTS,'No tiene los derechos suficientes para borrar cuentas')
+  	return false if !check_user(User::DELETE_ACCOUNTS,'No tiene los derechos suficientes para borrar cuentas')
     @account = Account.find(params[:id])
     @account.destroy
 

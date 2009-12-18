@@ -14,8 +14,6 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-
 class Order < ActiveRecord::Base
 	has_many :lines, :dependent => :destroy
 	has_many :products, :through => :lines
@@ -258,6 +256,7 @@ class Order < ActiveRecord::Base
   # updates existing lines on the order, adds new ones and deletes missing ones. DOES NOT SAVE THEM
   ##################################################################################
 	def lines=(lines)
+		logger.debug "Saving lines"
 	  i={}
 	  for l in self.lines
 	    i[l.id]=l

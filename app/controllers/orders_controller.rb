@@ -23,17 +23,17 @@ class OrdersController < ApplicationController
 		case (order_type_id)
 	  when 1
 	  	if action=="edit"
-				return false if !current_user.has_right(User::CHANGE_SALES,'No tiene los derechos suficientes para cambiar ventas')
+				return false if !check_user(User::CHANGE_SALES,'No tiene los derechos suficientes para cambiar ventas')
 			elsif action=="view"
-				return false if !current_user.has_right(User::VIEW_SALES,'No tiene los derechos suficientes para ver ventas')
+				return false if !check_user(User::VIEW_SALES,'No tiene los derechos suficientes para ver ventas')
 			end
 	  when 2
-	  	return false if !current_user.has_right(User::VIEW_PURCHASES,'No tiene los derechos suficientes para ver compras')
+	  	return false if !check_user(User::VIEW_PURCHASES,'No tiene los derechos suficientes para ver compras')
 	  when 3
 	  	if action=="edit"
-				return false if !current_user.has_right(User::CHANGE_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para cambiar consumos  internos')
+				return false if !check_user(User::CHANGE_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para cambiar consumos  internos')
 			elsif action=="view"
-				return false if !current_user.has_right(User::VIEW_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para ver consumos internos')
+				return false if !check_user(User::VIEW_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para ver consumos internos')
 			end
     end  
     return true  
@@ -192,6 +192,21 @@ class OrdersController < ApplicationController
 #    end
 #  end
   # GET /orders/1/edit
+  
+  def post
+		return false if !check_user(User::POST_COUNTS,'No tiene los derechos suficientes para cuentas fisicas.')
+    @order = Order.find(params[:id])
+    errors = false
+    @order.attrs=params[:order]
+    errors = true if !@order.save
+    errors = true if !@order.post
+    if !errors
+      flash[:notice] = 'Cuenta Fisica ha sido procesado exitosamente.'
+      redirect_to(physical_count_url(@order))
+    else
+      format.html { render :action => "edit" }
+    end
+  end
   def edit
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
@@ -218,12 +233,14 @@ class OrdersController < ApplicationController
     return false if !allowed(params["order"]["order_type_id"], 'edit')
     @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
     @order.attrs = params["order"]
-    logger.info "heres the order we just created: " + @order.inspect
+    logger.debug 'params["order"]["lines"]=#{params["order"]["lines"].to_s}'
+    logger.debug "@order.lines=#{@order.lines.to_s}"
+#    logger.info "heres the order we just created: " + @order.inspect
     this_receipt = params["order"]["number"].to_s
     next_receipt=("%0" + this_receipt.length.to_s + "d") % (this_receipt.to_i + 1)
     User.current_user.location.next_receipt_number = next_receipt
 #    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
-    logger.info "finished updating lines"
+#    logger.info "finished updating lines"
     respond_to do |format|
       if @order.save
         generate_receipt(@order) if @order.order_type_id=1
@@ -258,14 +275,14 @@ class OrdersController < ApplicationController
     params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
     params[:order][:received]=untranslate_month(params[:order][:received]) if params[:order][:received]
     errors = false
-    logger.info "dumping lines before"
-    logger.info @order.lines.inspect
+#    logger.info "dumping lines before"
+#    logger.info @order.lines.inspect
     @order.attrs=params[:order]
-    logger.info "dumping lines middle"
-    logger.info @order.lines.inspect
+#    logger.info "dumping lines middle"
+#    logger.info @order.lines.inspect
 		errors = true if !@order.save
-    logger.info "dumping lines after"
-    logger.info @order.lines.inspect
+#    logger.info "dumping lines after"
+#    logger.info @order.lines.inspect
 		if params[:submit_type] == 'post' and !errors
 			errors = true if !@order.post
 		end

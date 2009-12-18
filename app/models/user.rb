@@ -166,16 +166,10 @@ class User < ActiveRecord::Base
 		end
 		return dict
 	end
-	def has_right(id, msg)
-		r=Right.find(:all, 
+	def has_right(id)
+		return Right.find(:all, 
 			:conditions=>"user_id=#{self.id} AND rights.id=#{id}",
 			:joins=>"inner join rights_roles on rights_roles.right_id=rights.id inner join roles_users on roles_users.role_id=rights_roles.role_id")
-		if !r
-			redirect_back_or_default('/products')
-			flash[:error] = msg
-			return false
-		end
-		return true
 	end
 	def has_rights(needed)
 		r = rights

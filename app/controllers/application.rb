@@ -67,10 +67,14 @@ class ApplicationController < ActionController::Base
 #		return parts.join(' ')
 #	end
 	def check_user(right_id, msg)
-		if !current_user.has_right(right_id)
+		logger.debug "current_user.has_right(right_id)=#{current_user.has_right(right_id).to_s}"
+		r=current_user.has_right(right_id)
+		if !r
 			redirect_back_or_default('/products')
 			flash[:error] = msg
 			return false
+		else
+			return r
 		end
 	end
 	def untranslate_month(date)
