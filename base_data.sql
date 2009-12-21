@@ -27,12 +27,13 @@ CREATE TABLE `accounts` (
   `name` varchar(255) DEFAULT NULL,
   `parent_id` int(11) DEFAULT NULL,
   `entity_id` int(11) DEFAULT NULL,
-  `postable` tinyint(1) DEFAULT NULL,
   `number` varchar(20) DEFAULT NULL,
-  `transparent_journal` tinyint(1) DEFAULT NULL,
   `modifier` int(2) DEFAULT NULL,
   `balance` decimal(8,2) DEFAULT '0.00',
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `parent_id` (`parent_id`),
+  KEY `entity_id` (`entity_id`),
+  KEY `name` (`name`)
 ) ENGINE=MyISAM AUTO_INCREMENT=34 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -42,7 +43,7 @@ CREATE TABLE `accounts` (
 
 LOCK TABLES `accounts` WRITE;
 /*!40000 ALTER TABLE `accounts` DISABLE KEYS */;
-INSERT INTO `accounts` VALUES (2,'Activos',NULL,NULL,NULL,'1',NULL,1,'0.00'),(3,'Pasivos',NULL,NULL,NULL,'2',NULL,-1,'0.00'),(4,'Patrimonio',NULL,NULL,NULL,'3',NULL,-1,'0.00'),(5,'Ingresos',NULL,NULL,NULL,'4',NULL,-1,'0.00'),(6,'Gastos',NULL,NULL,NULL,'5',NULL,1,'0.00'),(7,'Efectivo',2,NULL,NULL,'11',NULL,1,'0.00'),(8,'Inventario',2,NULL,NULL,'12',NULL,1,'0.00'),(9,'Cuenta Bancaria',2,NULL,NULL,'13',NULL,1,'0.00'),(10,'Cuentas a Cobrar',2,NULL,NULL,'14',NULL,-1,'0.00'),(11,'Cuentas por Pagar',3,NULL,NULL,'21',NULL,-1,'0.00'),(12,'Impuesto',3,NULL,NULL,'22',NULL,-1,'0.00'),(13,'Empleados',11,NULL,NULL,'211',NULL,-1,'0.00'),(14,'Proveedores',11,NULL,NULL,'212',NULL,-1,'0.00'),(15,'Clientes',10,NULL,NULL,'141',NULL,1,'0.00'),(16,'Efectivo en Principal',7,5,NULL,'',NULL,1,'0.00'),(17,'Gastos en Principal',6,5,NULL,'',NULL,1,'0.00'),(18,'Ingresos en Principal',5,5,NULL,'',NULL,-1,'0.00'),(19,'Impuestos en Principal',12,5,NULL,'',NULL,-1,'0.00'),(20,'Inventario en Principal',8,5,NULL,'',NULL,1,'0.00'),(21,'Principal Proveedores',14,NULL,NULL,'',NULL,-1,'0.00'),(22,'Principal Empleados',13,NULL,NULL,'',NULL,-1,'0.00'),(23,'Principal Clientes',15,NULL,NULL,'',NULL,1,'0.00'),(32,'Farmacia Buena Salud',23,17,NULL,'',NULL,1,'0.00'),(33,'Fred',23,18,NULL,'',NULL,1,'0.00');
+INSERT INTO `accounts` VALUES (2,'Activos',NULL,NULL,'1',1,'0.00'),(3,'Pasivos',NULL,NULL,'2',-1,'0.00'),(4,'Patrimonio',NULL,NULL,'3',-1,'0.00'),(5,'Ingresos',NULL,NULL,'4',-1,'0.00'),(6,'Gastos',NULL,NULL,'5',1,'0.00'),(7,'Efectivo',2,NULL,'11',1,'0.00'),(8,'Inventario',2,NULL,'12',1,'0.00'),(9,'Cuenta Bancaria',2,NULL,'13',1,'0.00'),(10,'Cuentas a Cobrar',2,NULL,'14',-1,'0.00'),(11,'Cuentas por Pagar',3,NULL,'21',-1,'0.00'),(12,'Impuesto',3,NULL,'22',-1,'0.00'),(13,'Empleados',11,NULL,'211',-1,'0.00'),(14,'Proveedores',11,NULL,'212',-1,'0.00'),(15,'Clientes',10,NULL,'141',1,'0.00'),(16,'Efectivo en Principal',7,5,'',1,'0.00'),(17,'Gastos en Principal',6,5,'',1,'0.00'),(18,'Ingresos en Principal',5,5,'',-1,'0.00'),(19,'Impuestos en Principal',12,5,'',-1,'0.00'),(20,'Inventario en Principal',8,5,'',1,'0.00'),(21,'Principal Proveedores',14,NULL,'',-1,'0.00'),(22,'Principal Empleados',13,NULL,'',-1,'0.00'),(23,'Principal Clientes',15,NULL,'',1,'0.00');
 /*!40000 ALTER TABLE `accounts` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -142,7 +143,10 @@ CREATE TABLE `entities` (
   `vendor_accounts_group_id` int(11) DEFAULT NULL,
   `next_bar_code` varchar(32) DEFAULT NULL,
   `fax` char(8) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`),
+  KEY `entity_type_id` (`entity_type_id`),
+  KEY `site_id` (`site_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -152,7 +156,7 @@ CREATE TABLE `entities` (
 
 LOCK TABLES `entities` WRITE;
 /*!40000 ALTER TABLE `entities` DISABLE KEYS */;
-INSERT INTO `entities` VALUES (1,'Consumo Interno',NULL,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL),(2,'Varios',1,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL),(3,'Anonimo',2,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,NULL,5,NULL,10,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL),(4,'No Specificado',1,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,21,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL),(5,'Principal',3,'2009-11-07 16:40:45','2009-12-21 13:13:47','','','',NULL,1,NULL,NULL,'','',NULL,NULL,1,NULL,NULL,NULL,NULL,20,16,18,17,NULL,19,NULL,'',NULL,NULL,1,'1',23,21,'10007',''),(9,'Anulado',2,NULL,NULL,'','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL),(17,'Farmacia Buena Salud',5,'2009-12-18 08:39:38','2009-12-18 08:39:38','','','',NULL,1,'','','','','','',NULL,2,2,NULL,5,NULL,32,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,1,NULL,NULL,NULL,'',''),(18,'Fred',2,'2009-12-18 08:41:06','2009-12-18 08:41:06','','','',NULL,1,'','','','','','',NULL,2,2,NULL,5,NULL,33,NULL,NULL,NULL,NULL,NULL,'',NULL,NULL,1,NULL,NULL,NULL,'','');
+INSERT INTO `entities` VALUES (1,'Consumo Interno',NULL,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL),(2,'Varios',1,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,17,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL),(3,'Anonimo',2,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,1,NULL,5,NULL,10,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL),(4,'No Specificado',1,NULL,NULL,'','',NULL,NULL,12,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,21,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL),(5,'Principal',3,'2009-11-07 16:40:45','2009-12-21 13:13:47','','','',NULL,1,NULL,NULL,'','',NULL,NULL,1,NULL,NULL,NULL,NULL,20,16,18,17,NULL,19,NULL,'',NULL,NULL,1,'1',23,21,'10007',''),(9,'Anulado',2,NULL,NULL,'','',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,1,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `entities` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -194,7 +198,9 @@ CREATE TABLE `entries` (
   `balance` decimal(8,2) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `created_at` (`created_at`)
+  KEY `created_at` (`created_at`),
+  KEY `account_id` (`account_id`),
+  KEY `post_id` (`post_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=764 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -228,7 +234,9 @@ CREATE TABLE `inventories` (
   `default_warranty_purchases_id` int(11) DEFAULT NULL,
   `cost` decimal(8,2) DEFAULT NULL,
   `default_cost` decimal(8,2) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  KEY `entity_id` (`entity_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2236 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -238,7 +246,6 @@ CREATE TABLE `inventories` (
 
 LOCK TABLES `inventories` WRITE;
 /*!40000 ALTER TABLE `inventories` DISABLE KEYS */;
-INSERT INTO `inventories` VALUES (11,5,0,0,0,2234,'2009-12-18','2009-12-21',99,NULL,NULL,'25.00','10.00'),(12,5,0,0,0,2235,'2009-12-21','2009-12-21',20,NULL,NULL,'37.50','10.00');
 /*!40000 ALTER TABLE `inventories` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -269,7 +276,9 @@ CREATE TABLE `lines` (
   `note` text,
   `sales_tax` decimal(8,2) DEFAULT '0.00',
   `order_type_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`),
+  KEY `product_id` (`product_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=32954 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -355,7 +364,10 @@ CREATE TABLE `movements` (
   `comments` text,
   `line_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `order_id` (`order_id`)
+  KEY `order_id` (`order_id`),
+  KEY `order_id_2` (`order_id`),
+  KEY `product_id` (`product_id`),
+  KEY `entity_id` (`entity_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=192 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -365,7 +377,6 @@ CREATE TABLE `movements` (
 
 LOCK TABLES `movements` WRITE;
 /*!40000 ALTER TABLE `movements` DISABLE KEYS */;
-INSERT INTO `movements` VALUES (169,4,11,-100,2,2,'2009-12-04 08:29:35','2009-12-18 08:29:35',32945,NULL,'',32941),(170,5,11,100,2,2,'2009-12-04 08:29:35','2009-12-18 08:29:35',32945,NULL,'',32941),(171,5,11,-1,1,2,'2009-12-04 08:37:36','2009-12-18 08:37:37',32946,NULL,'',32942),(172,3,11,1,1,2,'2009-12-04 08:37:36','2009-12-18 08:37:37',32946,NULL,'',32942),(173,5,11,-1,1,2,'2009-12-04 08:41:31','2009-12-18 08:41:31',32947,NULL,'',32943),(174,3,11,1,1,2,'2009-12-04 08:41:31','2009-12-18 08:41:31',32947,NULL,'',32943),(175,5,11,-1,1,2,'2009-12-04 09:03:05','2009-12-18 09:03:05',32948,NULL,'',32944),(176,3,11,1,1,2,'2009-12-04 09:03:05','2009-12-18 09:03:05',32948,NULL,'',32944),(177,5,11,-1,1,2,'2009-12-04 09:42:48','2009-12-18 09:42:48',32950,NULL,'',32945),(178,3,11,1,1,2,'2009-12-04 09:42:48','2009-12-18 09:42:48',32950,NULL,'',32945),(179,5,11,-1,1,2,'2009-12-18 09:45:27','2009-12-18 09:45:27',32951,NULL,'',32946),(180,3,11,1,1,2,'2009-12-18 09:45:27','2009-12-18 09:45:27',32951,NULL,'',32946),(181,5,11,5,4,2,'2009-12-20 22:21:03','2009-12-20 22:21:03',32952,NULL,'',32947),(182,5,11,-1,1,2,'2009-12-20 23:51:22','2009-12-20 23:51:22',32953,NULL,'',32948),(183,3,11,1,1,2,'2009-12-20 23:51:22','2009-12-20 23:51:22',32953,NULL,'',32948),(184,5,11,-9,4,2,'2009-12-20 00:18:06','2009-12-21 00:18:06',32954,NULL,'',32949),(185,5,11,10,4,2,'2009-12-21 09:25:25','2009-12-21 09:25:25',32952,NULL,'',32947),(186,5,11,-10,4,2,'2009-12-21 12:52:19','2009-12-21 12:52:19',32954,NULL,'',32949),(187,5,12,10,4,2,'2009-12-21 12:55:57','2009-12-21 12:55:57',32955,NULL,'',32950),(188,5,12,-5,4,2,'2009-12-21 12:57:04','2009-12-21 12:57:04',32956,NULL,'',32951),(189,5,11,10,4,2,'2009-12-21 13:03:01','2009-12-21 13:03:01',32952,NULL,'',32947),(190,5,12,15,4,2,'2009-12-21 13:12:46','2009-12-21 13:12:46',32957,NULL,'',32952),(191,5,11,-1,4,2,'2009-12-21 13:14:12','2009-12-21 13:14:12',32958,NULL,'',32953);
 /*!40000 ALTER TABLE `movements` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -426,8 +437,7 @@ CREATE TABLE `orders` (
   KEY `created_at` (`created_at`),
   KEY `client_id` (`client_id`),
   KEY `vendor_id` (`vendor_id`),
-  KEY `receipt_number` (`receipt_number`),
-  KEY `receipt_number_2` (`receipt_number`)
+  KEY `receipt_number` (`receipt_number`)
 ) ENGINE=InnoDB AUTO_INCREMENT=32959 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -437,7 +447,6 @@ CREATE TABLE `orders` (
 
 LOCK TABLES `orders` WRITE;
 /*!40000 ALTER TABLE `orders` DISABLE KEYS */;
-INSERT INTO `orders` VALUES (32943,4,5,NULL,2,'2009-12-04 08:28:50','2009-12-18 08:28:50',NULL,NULL,NULL,'',2,0,'0.00','0.00',0,NULL,NULL,NULL,'2009-12-18 08:28:50','4169'),(32944,4,5,NULL,2,'2009-12-04 08:28:59','2009-12-18 08:29:00',NULL,NULL,NULL,'',2,0,'0.00','0.00',0,NULL,NULL,NULL,'2009-12-18 08:28:59','4170'),(32945,4,5,NULL,2,'2009-12-04 08:29:35','2009-12-18 08:29:35',NULL,NULL,NULL,'',2,0,'2500.00','0.00',0,NULL,NULL,NULL,'2009-12-18 08:29:35','4171'),(32946,5,3,NULL,2,'2009-04-12 08:37:22','2009-12-18 08:37:36',NULL,NULL,NULL,'',1,0,'30.00','0.00',0,NULL,NULL,NULL,'2009-12-18 08:37:36','4172'),(32947,5,3,NULL,2,'2009-04-12 08:41:12','2009-12-18 08:41:31',NULL,NULL,NULL,'',1,0,'30.00','0.00',0,NULL,NULL,NULL,'2009-12-18 08:41:30','4173'),(32948,5,3,NULL,2,'2009-12-04 09:01:42','2009-12-18 09:03:05',NULL,NULL,NULL,'',1,0,'30.00','0.00',0,NULL,NULL,NULL,'2009-12-18 09:03:05','4174'),(32949,5,3,NULL,2,'2009-12-18 00:00:00','2009-12-18 09:03:39',NULL,NULL,NULL,'',1,0,'0.00','0.00',0,NULL,NULL,NULL,'2009-12-18 09:03:39','4175'),(32950,5,3,NULL,2,'2009-12-04 09:42:35','2009-12-18 09:42:48',NULL,NULL,NULL,'',1,0,'30.00','0.00',0,NULL,NULL,NULL,'2009-12-18 09:42:48','4176'),(32951,5,3,NULL,2,'2009-12-18 09:45:13','2009-12-18 09:45:27',NULL,NULL,NULL,'',1,0,'30.00','0.00',0,NULL,NULL,NULL,'2009-12-18 09:45:27','4177'),(32952,5,5,NULL,2,'2009-12-20 22:19:41','2009-12-21 13:03:01',NULL,NULL,NULL,'',5,NULL,'0.00','0.00',0,NULL,NULL,NULL,NULL,NULL),(32953,5,3,NULL,2,'2009-12-20 23:51:11','2009-12-20 23:51:22',NULL,NULL,NULL,'',1,0,'10.00','0.00',0,NULL,NULL,NULL,'2009-12-20 23:51:22','1'),(32954,5,5,NULL,2,'2009-12-20 00:17:17','2009-12-21 12:52:19',NULL,NULL,NULL,'',5,NULL,'0.00','0.00',0,NULL,NULL,NULL,NULL,NULL),(32955,5,5,NULL,2,'2009-12-21 12:55:33','2009-12-21 12:55:57',NULL,NULL,NULL,'',5,NULL,'0.00','0.00',0,NULL,NULL,NULL,NULL,NULL),(32956,5,5,NULL,2,'2009-12-21 12:56:31','2009-12-21 12:57:04',NULL,NULL,NULL,'',5,NULL,'0.00','0.00',0,NULL,NULL,NULL,NULL,NULL),(32957,5,5,NULL,2,'2009-12-21 13:05:29','2009-12-21 13:05:46',NULL,NULL,NULL,'',5,NULL,'0.00','0.00',0,NULL,NULL,NULL,NULL,NULL),(32958,5,5,NULL,2,'2009-12-21 13:13:38','2009-12-21 13:13:47',NULL,NULL,NULL,'',5,NULL,'0.00','0.00',0,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `orders` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -534,9 +543,11 @@ CREATE TABLE `posts` (
   `account_id` int(11) DEFAULT NULL,
   `trans_id` int(11) DEFAULT NULL,
   `balance` decimal(8,2) DEFAULT NULL,
-  `transaction_id` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `account_id` (`account_id`),
+  KEY `trans_id` (`trans_id`),
+  KEY `created_at` (`created_at`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5429 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -638,7 +649,9 @@ CREATE TABLE `prices` (
   `fixed` decimal(8,2) DEFAULT NULL,
   `relative` decimal(8,2) DEFAULT NULL,
   `available` tinyint(1) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`),
+  KEY `price_group_id` (`price_group_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=608 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -648,7 +661,6 @@ CREATE TABLE `prices` (
 
 LOCK TABLES `prices` WRITE;
 /*!40000 ALTER TABLE `prices` DISABLE KEYS */;
-INSERT INTO `prices` VALUES (604,1,11,NULL,NULL,1),(605,2,11,NULL,NULL,1),(606,1,12,NULL,NULL,1),(607,2,12,NULL,NULL,1);
 /*!40000 ALTER TABLE `prices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -725,7 +737,12 @@ CREATE TABLE `products` (
   `product_category_id` int(11) DEFAULT NULL,
   `blocked_by_count` int(1) DEFAULT '0',
   `revenue_account_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `name` (`name`),
+  KEY `vendor_id` (`vendor_id`),
+  KEY `upc` (`upc`),
+  KEY `product_type_id` (`product_type_id`),
+  KEY `product_category_id` (`product_category_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -735,7 +752,6 @@ CREATE TABLE `products` (
 
 LOCK TABLES `products` WRITE;
 /*!40000 ALTER TABLE `products` DISABLE KEYS */;
-INSERT INTO `products` VALUES (11,'Machine','',4,NULL,'10005',1,'','2009-12-18 08:27:07','2009-12-18 08:27:07','',0,NULL,1,NULL,0,NULL),(12,'Dog','',4,NULL,'10006',1,'','2009-12-21 12:55:08','2009-12-21 12:55:08','',0,NULL,1,NULL,0,NULL);
 /*!40000 ALTER TABLE `products` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -801,7 +817,8 @@ CREATE TABLE `rights_roles` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `role_id` int(11) DEFAULT NULL,
   `right_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=688 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -850,7 +867,8 @@ CREATE TABLE `roles_users` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `user_id` int(11) DEFAULT NULL,
   `role_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -924,7 +942,8 @@ CREATE TABLE `serialized_products` (
   KEY `product_id` (`product_id`),
   KEY `serial_number` (`serial_number`),
   KEY `product_id_2` (`product_id`),
-  KEY `serial_number_2` (`serial_number`)
+  KEY `serial_number_2` (`serial_number`),
+  KEY `product_id_3` (`product_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -983,7 +1002,8 @@ CREATE TABLE `subscriptions` (
   `frequency` int(11) DEFAULT '1',
   `created_at` datetime DEFAULT NULL,
   `next_order_date` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `client_id` (`client_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=7665 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1011,7 +1031,10 @@ CREATE TABLE `trans` (
   `user_id` int(11) DEFAULT NULL,
   `tipo` varchar(255) DEFAULT NULL,
   `payment_id` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`),
+  KEY `created_at` (`created_at`),
+  KEY `user_id` (`user_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=2540 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1073,7 +1096,8 @@ CREATE TABLE `users` (
   `name` varchar(255) DEFAULT NULL,
   `default_page` varchar(255) DEFAULT NULL,
   `date` date DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `login` (`login`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1101,7 +1125,8 @@ CREATE TABLE `warranties` (
   `month_id` int(11) DEFAULT NULL,
   `order_type_id` int(11) DEFAULT NULL,
   `months` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `product_id` (`product_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=100 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -1111,7 +1136,6 @@ CREATE TABLE `warranties` (
 
 LOCK TABLES `warranties` WRITE;
 /*!40000 ALTER TABLE `warranties` DISABLE KEYS */;
-INSERT INTO `warranties` VALUES (98,11,'0.00',NULL,NULL,0),(99,12,'0.00',NULL,NULL,0);
 /*!40000 ALTER TABLE `warranties` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -1148,4 +1172,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2009-12-21 13:16:57
+-- Dump completed on 2009-12-21 13:55:35

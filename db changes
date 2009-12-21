@@ -9,7 +9,7 @@ alter table trans add column is_payment tinyint(1);
 update post_types set id = -1 where id=2;
 alter table accounts add column balance decimal(8,2) default 0;
 insert into entities (id, entity_type_id, name) values (9, 2, 'Anulado');
--- Base done to here --
+
 alter table orders add column next_order int(11);
 alter table orders add column receipt_filename varchar(255);
 update orders inner join receipts on receipts.order_id=orders.id set orders.receipt_number=receipts.number;
@@ -23,10 +23,12 @@ ALTER TABLE orders ADD INDEX(created_at);
 ALTER TABLE orders ADD INDEX(client_id);
 ALTER TABLE orders ADD INDEX(vendor_id);
 ALTER TABLE entries ADD INDEX(created_at);
+ALTER TABLE payments ADD INDEX(created_at);
 ALTER TABLE payments ADD INDEX(order_id);
-ALTER TABLE receipts ADD INDEX(order_id);
 ALTER TABLE payments ADD INDEX(created_at);
 ALTER TABLE movements ADD INDEX(order_id);
+ALTER TABLE movements ADD INDEX(product_id);
+ALTER TABLE movements ADD INDEX(entity_id);
 ALTER TABLE inventories ADD INDEX(product_id);
 ALTER TABLE inventories ADD INDEX(entity_id);
 alter table payments change column canceled void datetime;
@@ -48,3 +50,39 @@ alter table entities add column fax char(8);
 alter table payments drop column amount;
 update entities set cash_account_id=21 where id=4;
 insert into rights (id, name) values (87, 'Procesar Cuentas Fisicas');
+ALTER TABLE accounts ADD INDEX(parent_id);
+ALTER TABLE accounts ADD INDEX(entity_id);
+alter table accounts drop column postable;
+alter table accounts drop column transparent_journal;
+ALTER TABLE accounts ADD INDEX(name);
+ALTER TABLE entities ADD INDEX(name);
+ALTER TABLE entities ADD INDEX(entity_type_id);
+ALTER TABLE entities ADD INDEX(site_id);
+ALTER TABLE entries ADD INDEX(account_id);
+ALTER TABLE entries ADD INDEX(post_id);
+ALTER TABLE `lines` ADD INDEX(order_id);
+ALTER TABLE `lines` ADD INDEX(product_id);
+
+ALTER TABLE posts ADD INDEX(account_id);
+ALTER TABLE posts ADD INDEX(trans_id);
+ALTER TABLE posts ADD INDEX(created_at);
+
+ALTER TABLE prices ADD INDEX(product_id);
+ALTER TABLE prices ADD INDEX(price_group_id);
+
+ALTER TABLE products ADD INDEX(name);
+ALTER TABLE products ADD INDEX(vendor_id);
+ALTER TABLE products ADD INDEX(upc);
+ALTER TABLE products ADD INDEX(product_type_id);
+ALTER TABLE products ADD INDEX(product_category_id);
+
+ALTER TABLE rights_roles ADD INDEX(role_id);
+ALTER TABLE roles_users ADD INDEX(user_id);
+
+ALTER TABLE serialized_products ADD INDEX(product_id);
+ALTER TABLE subscriptions ADD INDEX(client_id);
+ALTER TABLE trans ADD INDEX(order_id);
+ALTER TABLE trans ADD INDEX(created_at);
+ALTER TABLE trans ADD INDEX(user_id);
+ALTER TABLE users ADD INDEX(login);
+ALTER TABLE warranties ADD INDEX(product_id);
