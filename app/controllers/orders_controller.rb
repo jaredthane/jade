@@ -200,15 +200,11 @@ class OrdersController < ApplicationController
   # GET /orders/1/edit
   
   def post
-		return false if !check_user(User::POST_COUNTS,'No tiene los derechos suficientes para cuentas fisicas.')
+		return false if !check_user(User::POST_COUNTS,'No tiene los derechos suficientes para procesar cuentas fisicas.')
     @order = Order.find(params[:id])
-    errors = false
-    @order.attrs=params[:order]
-    errors = true if !@order.save
-    errors = true if !@order.post
-    if !errors
+    if @order.post
       flash[:notice] = 'Cuenta Fisica ha sido procesado exitosamente.'
-      redirect_to(physical_count_url(@order))
+      redirect_to(@order)
     else
       format.html { render :action => "edit" }
     end

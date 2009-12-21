@@ -30,7 +30,7 @@
 			<% else %>
 				<div class="table_cell_15"></div>
 			<% end %>
-			<div id="test4" class="table_cell_15">\
+			<div id="test4" class="table_cell_15">
 				<%= line_form.text_field :price, :value => ((line.quantity||0) - (line.product.quantity||0))* (line.product.cost||0), :disabled =>'True', :class => 'field'  %>
 			</div>
 			<%= line_form.hidden_field :id %>

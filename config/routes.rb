@@ -115,7 +115,7 @@ ActionController::Routing::Routes.draw do |map|
   map.new_transfer 'transfer/new', :controller => 'orders', :action => 'new', :order_type_id => 4
   map.counts 'counts/', :controller => 'orders', :action => 'index', :order_type_id => 5
   map.new_count 	'count/new', :controller => 'orders', :action => 'new', :order_type_id => 5
-	map.post_count 'physical_counts/:id/post', :controller => 'physical_counts', :action => 'post'
+	map.post_count 'count/:id/post', :controller => 'orders', :action => 'post'
   map.internals 'internals/', :controller => 'orders', :action => 'index', :order_type_id => 3
   map.sales 'sales/', :controller => 'orders', :action => 'index', :order_type_id => 1
 

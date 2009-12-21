@@ -3,6 +3,7 @@
 	<% if current_user.has_rights(['admin','inventario','gerente']) %>
 		<% if @order.last_received == nil %>
 			<dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
+			<dt><%= link_to 'Procesar', post_count_path(@order), :class => 'action' %></dt>
 		<% end %>
 		<dt><%= link_to 'Nueva Cuenta Fisica', '/count/new', :class => 'action' %></dt>
 		<dt><%= link_to 'Lista', '/counts', :class => 'action' %></dt>

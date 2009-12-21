@@ -63,8 +63,8 @@ class Order < ActiveRecord::Base
 	  check_for_discounts
 	  logger.info "Dumping lines before save"
 	  logger.info self.lines.inspect
-	  m=main_transaction
-	  i=inventory_transaction
+	  m = main_transaction
+	  i = inventory_transaction
 	  self.transactions << m if m
 	  self.transactions << i if i
   end
@@ -244,6 +244,7 @@ class Order < ActiveRecord::Base
 	# Returns transaction for inventory movement if any is necissary
 	###################################################################################
 	def inventory_transaction(date=User.current_user.today)
+		return nil if order_type_id == COUNT
 		inventory_cost = self.inventory_value - (old('inventory_value')||0)
     if inventory_cost != 0
     	inventory = Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> 'Inventario de ' + order_type.name)
@@ -587,6 +588,7 @@ class Order < ActiveRecord::Base
 			end
 			line.received=Time.now
 		end
+		save_related(lines, true)
 	end
 #	###################################################################################
 #	# Returns a list of lines from the specified count that are for the specified product_id
