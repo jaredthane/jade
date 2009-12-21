@@ -246,8 +246,13 @@ class OrdersController < ApplicationController
     User.current_user.location.next_receipt_number = next_receipt
 #    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
 #    logger.info "finished updating lines"
+		errors = false
+		errors = true if !@order.save
+		if params[:submit_type] == 'post' and !errors
+			errors = true if !@order.post
+		end
     respond_to do |format|
-      if @order.save
+      if !errors
         generate_receipt(@order) if @order.order_type_id=1
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { redirect_to(@order) }
