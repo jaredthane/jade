@@ -135,28 +135,27 @@ class Subscription < ActiveRecord::Base
   #							 :joins => 'inner join entities on entities.id=subscriptions.client_id')
   #		process_list(list)
   #	end
-  def process(months=1)
+  def process(receipt_number, months=1)
     puts "creating order for sub"
  	  self.next_order_date=Date.today if !self.next_order_date
-	  o=Order.new(:created_at=>User.current_user.today, :vendor => self.vendor, :client => self.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true, :received =>self.next_order_date)
+	  o=Order.new(:receipt_number=>receipt_number, :created_at=>User.current_user.today, :vendor => self.vendor, :client => self.client,:user => User.current_user, :order_type_id => 1, :last_batch =>true, :received =>self.next_order_date)
     o.lines << Line.new(:created_at=>User.current_user.today, :product => self.product, :quantity=> self.quantity*months, :price => self.price, :received =>self.next_order_date)
-    o.save
-
-    puts "o.grand_total(b)=" + o.grand_total.to_s
-    puts "o.lines.to_s=" + o.lines.to_s.to_s
-	  sale = o.main_transaction
-    if sale
-	    sale.order_id=o.id
-	    sale.save
-	  end
-	  inventory_trans = o.inventory_transaction
-    if inventory_trans
-	    inventory_trans.order_id=o.id
-	    inventory_trans.save
-	  end
+#    puts "o.grand_total(b)=" + o.grand_total.to_s
+#    puts "o.lines.to_s=" + o.lines.to_s.to_s
+#	  sale = o.main_transaction
+#    if sale
+#	    sale.order_id=o.id
+#	    sale.save
+#	  end
+#	  inventory_trans = o.inventory_transaction
+#    if inventory_trans
+#	    inventory_trans.order_id=o.id
+#	    inventory_trans.save
+#	  end
 	
 	  self.next_order_date = self.next_order_date.to_date >> months
 	  self.save
+	  o.save
 	  return o
 	end
 	def self.process(list, months=1)

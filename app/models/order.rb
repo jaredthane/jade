@@ -441,7 +441,7 @@ class Order < ActiveRecord::Base
 	#################################################################################################
 	def pay_off()
 	  if grand_total > amount_paid
-  	  Payment.create(:order=>self, :amount=>grand_total-amount_paid, :payment_method_id=>1, :user=>User.current_user, :presented=>grand_total-amount_paid, :created_at=>User.current_user.today)
+  	  Payment.create(:order=>self, :payment_method_id=>1, :user=>User.current_user, :presented=>grand_total-amount_paid, :created_at=>User.current_user.today)
     end
 	end
 	###################################################################################
@@ -506,14 +506,17 @@ class Order < ActiveRecord::Base
 					logger.debug "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#{serials_here.length.to_s}"
 					old_qty = serials_here.length
 					# Get a complete list of the lines in the order for this product
+					product_lines = {}
 					product_lines = []
 					for l in self.lines
 						# Check if serial number is blank
-						product_lines << l if l.product_id == line.product_id
+						if l.serialized_product and l.product_id == line.product_id
+							product_lines[l.serialized_product.serial_number] = l
+						end
 					end
 					logger.debug "product_lines=#{product_lines.inspect}" 
 					# Add new serials
-					for l in product_lines
+					for s,l in product_lines
 						logger.debug "l=#{l.inspect}"
 						
 #						logger.debug "l.serialized_product.new_record?=#{l.serialized_product.new_record?.to_s}"
@@ -529,9 +532,6 @@ class Order < ActiveRecord::Base
 									logger.debug "old_loc.entity_type== 3"
 									# Make a movement to take it out of the other site
 									Movement.create(:created_at=>date,:entity_id => old_loc.id, :comments => self.comments, :product_id => l.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
-									i=l.product.inventories.find_by_entity_id(old_loc.id)
-									i.quantity=i.quantity-1
-									i.save
 								end
 								logger.debug "Make a movement to bring it here"
 								# Make a movement to bring it here
@@ -544,13 +544,8 @@ class Order < ActiveRecord::Base
 							end
 						else	# This serial was just created
 							logger.debug "# This serial was just created"
-								# Make a movement to put it here
-								Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
-								i = l.product.inventories.find_by_entity_id(self.vendor_id)
-								logger.debug "===============> old i=#{i.inspect}"
-								i.quantity=i.quantity+1
-								logger.debug "===============> new i=#{i.inspect}"
-								i.save
+							# Make a movement to put it here
+							Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
 						end
 					end
 					#Remove missing serials
@@ -566,9 +561,6 @@ class Order < ActiveRecord::Base
 							logger.debug "!serials.include?(s.id)"
 							# Make a movement to remove it from here
 							Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => s.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
-							i = s.product.inventories.find_by_entity_id(self.vendor_id)
-							i.quantity=i.quantity-1
-							i.save
 							# Make movement to move it to Internal Consumption
 							Movement.create(:created_at=>date,:entity_id => 1, :comments => self.comments, :product_id => s.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
 						end
@@ -579,6 +571,9 @@ class Order < ActiveRecord::Base
 	          l.previous_qty = old_qty
 	          l.price = price_per
 	        end
+					i = l.product.inventories.find_by_entity_id(old_loc.id)
+					i.quantity = product_lines.length
+					i.save
 					logger.debug "value of serial inventory adjustment"
 	        logger.debug "product_lines.length=#{product_lines.length.to_s}"
 	        logger.debug "old_qty=#{old_qty.to_s}"

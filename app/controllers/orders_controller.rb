@@ -221,14 +221,6 @@ class OrdersController < ApplicationController
   end
   def create_null_number
   end
-  def generate_receipt(order)
-  	order.receipt_filename="#{RAILS_ROOT}/invoice_pdfs/{order.id}.pdf"
-  	prawnto :prawn => {:skip_page_creation=>true}
-	  pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false
-		File.open(order.receipt_filename, 'w') { |f| f.write(pdf_string) }
-		User.current_user.location.next_receipt_number=order.receipt_number.to_i+1
-  	User.current_user.location.save
-	end
   # POST /orders
   # POST /orders.xml
   def create

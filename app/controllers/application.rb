@@ -66,6 +66,17 @@ class ApplicationController < ActionController::Base
 #		end
 #		return parts.join(' ')
 #	end
+
+
+  def generate_receipt(order)
+  	order.receipt_filename = "#{RAILS_ROOT}/invoice_pdfs/{order.id}.pdf"
+  	@order=order
+  	prawnto :prawn => {:skip_page_creation=>true}
+	  pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false
+		File.open(order.receipt_filename, 'w') { |f| f.write(pdf_string) }
+		User.current_user.location.next_receipt_number=order.receipt_number.to_i+1
+  	User.current_user.location.save
+	end
 	def check_user(right_id, msg)
 		logger.debug "current_user.has_right(right_id)=#{current_user.has_right(right_id).to_s}"
 		r=current_user.has_right(right_id)

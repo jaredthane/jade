@@ -12,7 +12,7 @@
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
-	<% if @entity.entity_type.id == 3 %>
+	<% if @entity.entity_type_id == 3 %>
     <dt><%= link_to 'Nuevo', new_site_path, :class => 'action' %></dt>
     <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
 		<dt><%= link_to 'Compras Aqui', purchases_path, :class => 'action' %>  </dt>
@@ -20,7 +20,7 @@
     <dt><%= link_to 'Lista', sites_path, :class => 'action' %></dt>
     <dt><%= link_to 'Imprimir', entity_path(@entity, :format=>'pdf'), :class => 'action' %></dt>
 	<% end %>
-	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
+	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 	    <dt><%= link_to 'Nuevo', new_client_path, :class => 'action' %></dt>
 	    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
 	    <dt><%= link_to 'Lista', clients_path, :class => 'action' %></dt>
@@ -29,7 +29,7 @@
 	    	<dt><%= link_to 'Anadir Suscripcion', new_subscription_path(:client_id=>@entity.id), :class => 'action' %></dt>
 	    <% end %>
 	<% end %>
-	<% if @entity.entity_type.id == 1 %>
+	<% if @entity.entity_type_id == 1 %>
 	    <dt><%= link_to 'Nuevo', new_vendor_path, :class => 'action' %></dt>
 	    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
 	    <dt><%= link_to 'Lista', vendors_path, :class => 'action' %></dt>
@@ -55,7 +55,7 @@
 		<b>Nombre</b><br />		
 		<%=h @entity.name %>
 	</p>
-	<% if @entity.entity_type.id == 3 %>
+	<% if @entity.entity_type_id == 3 %>
 	  <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
 	    <p>
 			  <b>Cuenta de Efectivo</b><br />
@@ -73,7 +73,7 @@
 		
 		<% end %>
 	<% end %>
-	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
+	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>
 			<b>Nacimiento</b><br />		
 			<% if @entity.birth %>
@@ -97,7 +97,7 @@
 		<b>Municipio</b><br />		
 		<%=h @entity.city %>
 	</p>
-	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
+	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>
 			<b>Grupo de Precios</b><br />		
 			<% if @entity.price_group_name %>
@@ -111,7 +111,7 @@
 			<%= @entity.notes.gsub("\n","<br />") %>
 		<% end %>
 	</p>
-	<% if @entity.entity_type.id == 3 %>
+	<% if @entity.entity_type_id == 3 %>
 		<p>
 			<b>Grupo de Precios por Defecto</b><br />		
 				<% if @entity.price_group %>
@@ -123,7 +123,7 @@
 			<%=h @entity.next_receipt_number %>
 		</p>
 	<% end %>
-	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
+	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>
 			<b>Asesor de Cliente</b><br />		
 				<% if @entity.user %>
@@ -145,7 +145,7 @@
 			<%=h @entity.entity_type.name %>
 		<% end %>
 	</p>
-  <% if @entity.entity_type.id == 3 %>
+  <% if @entity.entity_type_id == 3 %>
 	  <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
       <p>
 			  <b>Cuenta de Ingresos</b><br />
@@ -167,7 +167,7 @@
 		  </p>
 		<% end %>
   <% end %>
-  <% if @entity.entity_type.id == 1 %>
+  <% if @entity.entity_type_id == 1 %>
     <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
       <p>
 				<b>Cuenta para Pagar</b><br />
@@ -177,7 +177,7 @@
 			</p>
     <% end %>
   <% end %>
-	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 %>
+	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 	  <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
 			<p>
 				<b>Cuenta para Cobrar</b><br />
@@ -211,7 +211,7 @@
 		<b>Proximo Codigo de Barra</b>
 		<%=h @entity.next_bar_code %>
 	</p>
-	<% if @entity.entity_type.id == 2 or @entity.entity_type.id == 5 or @entity.entity_type.id == 1 %>
+	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
 		<p>
 			<b>Registro</b>
 			<%=h @entity.register %>
