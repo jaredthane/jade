@@ -453,7 +453,8 @@ class Product < ActiveRecord::Base
 	end
 	def self.search_name(search, page)
   	find 		 :all,
-  					 :conditions => ['(products.name like :search)', {:search => "%#{search}%"}],
+  					 :conditions => ['(products.name like :search) AND (prices.available = True) AND (prices.price_group_id = :price_group_id)', {:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
+  					 :joins => 'inner join prices on prices.product_id=products.id',
 		         :order => 'name',
 		         :limit => 10
 	end

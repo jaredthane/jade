@@ -25,20 +25,19 @@ class ProductsController < ApplicationController
 	access_control [:destroy] => '(Admin)'
   def index
     #@products = Product.find(:all)
-    @search=(params[:search]||'') + ' ' + (params[:q]||'')
-    case params[:scope] 
+    search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
+    logger.debug "params[:format]=#{params[:format].to_s}"
+    params[:scope]='name' if params[:format]=='js'
+    case params[:scope]
 		  when 'all'
-		  	@products = Product.search_all(params[:search], params[:page])
+		  	@products = Product.search_all(search, params[:page])
 		  when 'services'
-			  @products = Product.search_services(params[:search], params[:page])
+			  @products = Product.search_services(search, params[:page])
 		  when 'name'
-			  @products = Product.search_name(params[:search], params[:page])
+			  @products = Product.search_name(search, params[:page])
 		  else
-				@products = Product.search(params[:search], params[:page])
+				@products = Product.search(search, params[:page])
 		end
-		
-				#redirect_to('/products/' + @products[0].to_s)
-		
     respond_to do |format|
       format.html {
         if @products.length == 1
