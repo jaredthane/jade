@@ -11,7 +11,7 @@
 			<%= line_form.hidden_field :order_type_id, :value => 5 %>
 			<input type="hidden" id="cost" value= <%= line.product.cost %> >
 			<div id="test2" class="table_cell_10">
-        <input disabled=True class="field" id="qty" value= <%= line.product.quantity %> >
+        <input disabled=True class="field" id="qty" type="text" value= <%= line.product.quantity %> >
       </div>
 			<% if line.product.serialized %>
 				<%= line_form.hidden_field :quantity, :value => 1 %>
