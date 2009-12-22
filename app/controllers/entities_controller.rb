@@ -194,7 +194,7 @@ class EntitiesController < ApplicationController
 #      puts "unpaid = " + @unpaid.inspect
 #      puts "unpaid length = " +  @unpaid.length.to_s
       @unpaid=nil if @unpaid.length==0
-      @orders = Order.find_all_by_client_id(@entity, :limit=>5)
+      @orders = Order.find_all_by_client_id(@entity, :limit=>5,:order=>'created_at')
 			current_user.price_group_name_id = @entity.price_group_name_id
 			current_user.save
 			logger.debug "setting price group id"

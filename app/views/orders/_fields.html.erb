@@ -40,10 +40,6 @@
 		    <b>Fecha de Pedido</b><br />
 		    <%= f.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>
 	    </p>
-			<p>
-				<b>Fecha Recibido</b>
-				<%= f.text_field :markreceived, :class=> 'field datepicker', :id => 'received_date_picker',:style=>'width:168px;' %>
-			</p>
 		</div>
 	<% when 3 %>
 		<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
