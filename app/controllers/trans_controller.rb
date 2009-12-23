@@ -42,7 +42,7 @@ class TransController < ApplicationController
   # GET /trans/new.xml
   def new
     @accounts ={} 
-    for a in Account.find(:all, :conditions=> 'postable = True')
+    for a in Account.find(:all)
       @accounts[a.number.to_s+' '+a.name]=a.id
     end
 		@trans = Trans.new(:created_at=>User.current_user.today)
