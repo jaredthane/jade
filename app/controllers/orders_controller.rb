@@ -55,13 +55,6 @@ class OrdersController < ApplicationController
       params[:format] = 'pdf'
     else
       @orders=Order.search(params[:search], @order_type_id, @from, @till, params[:page], params[:sites])
-      if @orders.length == 1
-			  @order=@orders[0]
-			  @payments = @order.recent_payments(10)
-			  return false if !allowed(@order.order_type_id, 'view')
-			  render :action => 'show'
-			  return false
-		  end
     end
     if @order_type_id==5
     	render :template=>'counts/index'
