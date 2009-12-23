@@ -68,9 +68,11 @@
     		<% end %>
   		</div>
     	<div class="table_cell_20">
-    	  <% if entry.account %>
-    	    <%= link_to entry.post.account.number_and_name, entry.account %>
-    	  <% end %>
+    		<% if entry.post %>
+    			<% if entry.post.account %>
+    	    	<%= link_to entry.post.account.number_and_name, entry.post.account %>
+    	  	<% end %>
+    		<% end %>
     	</div>
     	<% if entry.post.post_type_id==1 %>
     	  <div class="table_cell_10"><%= h number_to_currency((entry.post.value||0)) %></div>
