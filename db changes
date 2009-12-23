@@ -9,7 +9,7 @@ alter table trans add column is_payment tinyint(1);
 update post_types set id = -1 where id=2;
 alter table accounts add column balance decimal(8,2) default 0;
 insert into entities (id, entity_type_id, name) values (9, 2, 'Anulado');
-
+alter table orders change column purchase_receipt_number receipt_number int(11);
 alter table orders add column next_order int(11);
 alter table orders add column receipt_filename varchar(255);
 update orders inner join receipts on receipts.order_id=orders.id set orders.receipt_number=receipts.number;
