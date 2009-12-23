@@ -1,5 +1,6 @@
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "submit_link" %>
+  <%= javascript_include_tag "trans_edit" %>
 <% end %>
 <% content_for :title do %>Registrar Nueva Transacción<% end %>
 <% content_for :actions do %>
@@ -31,7 +32,7 @@
 		<%= render :partial => 'post', :collection => @trans.posts %>
 	</div>
 	<div id="posts_errors"></div>
-	<%= link_to_remote "Añadir otra cuenta", :url => new_post_url, :html_options=>{:class=>'action'} %>
+	<%= link_to_function 'Añadir otra cuenta', 'DoAjaxRequest()', :class => 'action' %>
 
 <% end %>
 
