@@ -249,12 +249,12 @@ class OrdersController < ApplicationController
 				
 				@order.errors.each {|e| logger.debug "ORDER ERROR" + e.to_s}
 				@order.lines.each {|l| l.errors.each {|e| logger.debug "LINE ERROR" + e.to_s}}
-				@order.errors.each do |error|
-					logger.debug "error[0]=#{error[0].to_s}"
-					if error[0] == "lines"
-						errors.delete(error)
-					end
-				end
+#				@order.errors.each do |error|
+#					logger.debug "error[0]=#{error[0].to_s}"
+#					if error[0] == "lines"
+#						errors.delete(error)
+#					end
+#				end
         format.html { render :action => "new" }
         format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
       end

@@ -67,13 +67,13 @@ for copy in ['cliente', 'vendor', 'government'] do
 				#pdf.stroke_bounds
 				pdf.font_size = 10
 				if client.home_phone!=''
-					pdf.text "Fijo: " + client.home_phone_number
+					pdf.text "Fijo: " + (client.home_phone_number||'')
 				end #if vendor.home_phone!=''
 				if client.office_phone!=''
-					pdf.text "Oficina: " + client.office_phone_number
+					pdf.text "Oficina: " + (client.office_phone_number||'')
 				end #if vendor.office_phone!=''
 				if client.office_phone!=''
-					pdf.text "Celular: " + client.cell_phone_number
+					pdf.text "Celular: " + (client.cell_phone_number||'')
 				end #if vendor.office_phone!=''
 				if client.email!=''
 					pdf.text client.email
