@@ -26,7 +26,7 @@
 .main-content .table_row input.serial {width:90%;background: #e1e1e1;}
 /* End for the bulk_edit product view */
 
-
+.main-content textarea {width:600px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .main-content .table_cell_5  input.field{width:90%;}
 .main-content .table_cell_10  input.field{width:90%;}
 .main-content .table_cell_15  input.field{width:90%;}

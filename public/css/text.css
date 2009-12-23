@@ -105,7 +105,9 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .main-content .table_row select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;background: #e1e1e1;}
 .main-content .table_row_red select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .main-content .table_row_green select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
-.main-content textarea.comments {height:25px;width:100%;}
+.main-content textarea.comments {height:25px;width:99%;}
+.main-content textarea {width:600px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+
 .checkbox-list {color: black; clear:both; margin:1px 0 1.0em 0; line-height:1.0em; font-size:120%;}
 .slider_bar {margin-top:10px;margin-bottom:10px;}
 .slider_bar select{display:none;}
