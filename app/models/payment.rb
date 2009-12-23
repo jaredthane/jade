@@ -51,9 +51,9 @@ class Payment < ActiveRecord::Base
 		end
 	  
 	  if self.order
-	    t = Trans.new( :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :comments => self.order.comments, :tipo => 'Pago de ' + self.order.order_type.name)
+	    t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :comments => self.order.comments, :tipo => 'Pago de ' + self.order.order_type.name)
 	  else
-	    t = Trans.new( :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :tipo=> 'Pago')
+	    t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :tipo=> 'Pago')
 	  end
 	  case order.order_type_id
 		when 1 # Sale
@@ -118,7 +118,7 @@ class Payment < ActiveRecord::Base
 			site_string+=' orders.vendor_id=' + site.to_s
 		end
   	find :all,
-		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payments.payment_id like :search OR payments.payment_id like :search OR payment_methods.name like :search ) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
+		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payment_methods.name like :search) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
 		         :order => 'orders.receipt_number',
 		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id'
 	end

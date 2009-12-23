@@ -1,6 +1,6 @@
 pdf.font_size = 15
 pdf.text "Pagos de " + @site.name, :align => :center, :style => :bold
-pdf.text "Servicable, S. A. de C. V.", :align => :center, :style => :bold
+pdf.text COMPANY_NAME, :align => :center, :style => :bold
 pdf.text @from.to_date.to_s(:long) + " - " + @till.to_date.to_s(:long), :align => :center, :style => :bold
 
 pdf.font_size = 12

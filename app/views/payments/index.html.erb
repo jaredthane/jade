@@ -4,8 +4,8 @@
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
-	<dt><%= link_to_function 'Actualizar', 'submit_index("date_form")', :class => 'action' %></dt>
-	<dt><%= link_to_function 'Reporte', 'submit_report("date_form")', :class => 'action' %></dt>
+	<dt><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></dt>
+	<dt><%= link_to_function 'Reporte', 'submit_report("date_range_form")', :class => 'action' %></dt>
 	<dt> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </dt>
 <% end %>
 <% content_for :title do %>Lista de Pagos<% end %>

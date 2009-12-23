@@ -25,17 +25,27 @@ class PaymentsController < ApplicationController
   	@till=(params[:till] ||Date.today)
   	@sites=(params[:sites] ||[current_user.location_id])
   	order_id=params[:order_id]
-  	if params[:index]=='1'
-			@payments = Payment.search_wo_pagination(params[:search],@from, @till, @sites)
+  	
+  	if params[:pdf]=='1'
+      @payments = Payment.search_wo_pagination(params[:search],@from, @till, @sites)
 			if @payments.length==0
 				flash[:error] = 'No hay Pagos para las fechas specificadas'
 				redirect_back_or_default(payments_url)
 				return false
 			end
 			produce_report
-		else
-			@payments = Payment.search(params[:search], params[:page],@from, @till, @sites)
-		end
+      params[:format] = 'pdf'
+    else
+      @orders=Order.search(params[:search], @order_type_id, @from, @till, params[:page])
+      if @orders.length == 1
+			  @order=@orders[0]
+			  @payments = @order.recent_payments(10)
+			  return false if !allowed(@order.order_type_id, 'view')
+			  render :action => 'show'
+			  return false
+		  end
+    end
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @payments }
@@ -73,17 +83,12 @@ class PaymentsController < ApplicationController
 		total=0
 		x = Object.new.extend(ActionView::Helpers::NumberHelper)
 		for payment in @payments
-		  if payment.order.receipts.first
-				receipt_number=payment.order.receipts.first.number 
-			else
-				receipt_number=0
-			end
 			if payment.order.client.user
 				rep=payment.order.client.user.name
 			else
 				rep=""
 			end
-		  @data << ["%05d" % receipt_number, payment.created_at.to_date.to_s(:rfc822), payment.order.client.name, x.number_to_currency(payment.amount),rep]
+		  @data << ["%05d" % payment.order.receipt_number , payment.created_at.to_date.to_s(:rfc822), payment.order.client.name, x.number_to_currency(payment.amount),rep]
 		  total+=payment.amount
 		end
 		@data << ["---", "---", "---", "---"]
