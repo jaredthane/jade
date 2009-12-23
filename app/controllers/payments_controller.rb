@@ -36,14 +36,7 @@ class PaymentsController < ApplicationController
 			produce_report
       params[:format] = 'pdf'
     else
-      @orders=Order.search(params[:search], @order_type_id, @from, @till, params[:page])
-      if @orders.length == 1
-			  @order=@orders[0]
-			  @payments = @order.recent_payments(10)
-			  return false if !allowed(@order.order_type_id, 'view')
-			  render :action => 'show'
-			  return false
-		  end
+      @payments = Payment.search(params[:search], params[:page],@from, @till, @sites)
     end
 
     respond_to do |format|
