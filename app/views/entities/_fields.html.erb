@@ -49,7 +49,7 @@
 		</p>
 		<p>
 		  <b>Rama para cuentas de nuevos clientes</b><br />
-			<%= f.collection_select(:client_accounts_group_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+			<%= f.text_field :client_accounts_group_name, :class=> 'lookup field', :id => 'client_accounts_group_lookup',:style=>'width:281px;' %>
 		</p>
 	<% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
