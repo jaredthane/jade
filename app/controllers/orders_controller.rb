@@ -45,16 +45,16 @@ class OrdersController < ApplicationController
 		@order_type_id=params[:order_type_id]
 		logger.debug "@order_type_id=#{@order_type_id.to_s}"
     @site=User.current_user.location
-  	@sites=(params[:sites] ||[current_user.location_id])
 #  	@search_path = SEARCH_PATHS[@order_type_id]
   	params[:page]=(params[:page]||1)
 	  @from=(untranslate_month(params[:from])||Date.today)
     @till=(untranslate_month(params[:till])||Date.today)
+    logger.debug "params[:sites]=#{params[:sites].to_s}"
     if params[:pdf]=='1'
-      @orders=Order.search(params[:search], @order_type_id, @from, @till)
+      @orders=Order.search(params[:search], @order_type_id, @from, @till, nil, params[:sites])
       params[:format] = 'pdf'
     else
-      @orders=Order.search(params[:search], @order_type_id, @from, @till, params[:page])
+      @orders=Order.search(params[:search], @order_type_id, @from, @till, params[:page], params[:sites])
       if @orders.length == 1
 			  @order=@orders[0]
 			  @payments = @order.recent_payments(10)

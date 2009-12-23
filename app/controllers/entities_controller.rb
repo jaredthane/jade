@@ -180,7 +180,7 @@ class EntitiesController < ApplicationController
 		end
   	if User.current_user
   	  if User.current_user.location
-				@next="%05d" % User.current_user.location.next_receipt_number
+				@next=User.current_user.location.next_receipt_number
   	  end
   	end
 		logger.debug "@entity.entity_type_id=#{@entity.entity_type_id.to_s}"

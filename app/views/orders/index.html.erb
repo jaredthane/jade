@@ -46,22 +46,22 @@
 <% case @order_type_id 
 		 when 2 %>
 		<% content_for :title do %>Lista de Compras en <%= current_user.location.name %><% end %>
-		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => purchases_path } %>
+		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => purchases_path ,:sites=>@sites } %>
 	<% when 1%>
 		<% content_for :title do %>Lista de Ventas en <%= current_user.location.name %><% end %>
-		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => sales_path } %>
+		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => sales_path ,:sites=>@sites } %>
 	<% when 3%>
 		<% content_for :title do %>Lista de Consumos Internos de <%= current_user.location.name %><% end %>
-		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => internals_path } %>
+		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => internals_path ,:sites=>@sites } %>
 	<% when 4%>
 		<% content_for :title do %>Lista de Transferencias de <%= current_user.location.name %><% end %>
-		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => transfers_path } %>
+		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => transfers_path,:sites=>@sites } %>
 	<% when 5%>
 		<% content_for :title do %>Lista de Cuentas Fisicas de <%= current_user.location.name %><% end %>
-		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => counts_path } %>
+		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => counts_path,:sites=>@sites  } %>
 	<% else %>
 		<% content_for :title do %>Lista de Pedidos en <%= current_user.location.name %><% end %>
-		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => orders_path } %>
+		<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => orders_path,:sites=>@sites  } %>
 <% end %>
 <%= will_paginate @orders, :class => 'pagination' %>
 <div>

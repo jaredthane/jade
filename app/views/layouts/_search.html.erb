@@ -28,20 +28,19 @@
       </div>
       <%= select_tag(:select_from, options_for_select(date_selection, Date.today.to_s)) %>
       <%= select_tag(:select_till, options_for_select(date_selection, Date.today.to_s)) %>
-      <% if @sites %>
-      	<% if @sites.length > 1 %>
-		      <div class="checkbox-list">
-		        <% get_sites.each do |site| -%>
-		          <%= check_box_tag "sites[]", site.id, @sites.include?(site.id.to_s) -%> <%= site.name -%>
-		        <% end -%>
-		      </div>
-		    <% else %>
-		      <div class="checkbox-list" style="display:none;">
-		        <% get_sites.each do |site| -%>
-		          <%= check_box_tag "sites[]", site.id, @sites.include?(site.id.to_s) -%> <%= site.name -%>
-		        <% end -%>
-		      </div>
-		    <% end %>
+      <% sites=(params[:sites]||[]) %>
+    	<% if get_sites.length > 1 %>
+	      <div class="checkbox-list">
+	        <% get_sites.each do |site| -%>
+	          <%= check_box_tag "sites[]", site.id, sites.include?(site.id.to_s) -%> <%= site.name -%>
+	        <% end -%>
+	      </div>
+	    <% else %>
+	      <div class="checkbox-list" style="display:none;">
+	        <% get_sites.each do |site| -%>
+	          <%= check_box_tag "sites[]", site.id, sites.include?(site.id.to_s) -%> <%= site.name -%>
+	        <% end -%>
+	      </div>
 		  <% end %>
       <%= hidden_field_tag 'pdf',true %>
       <%= hidden_field_tag 'order_type_id',@order_type_id %>

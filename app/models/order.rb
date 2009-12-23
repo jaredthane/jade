@@ -681,34 +681,55 @@ class Order < ActiveRecord::Base
   	self.sql_update('UPDATE inventories set to_order=0 where to_order>0;')
   	return orders
 	end
+	###################################################################################################
+	# Converts an array to a string for use with mysql in clause
+	#################################################################################################
+	def self.a_to_s(a)
+		s="("
+		for x in a
+			s += x.to_s + ','
+		end
+		return s.chop + ')'
+	end
 	###################################################################################
 	# result of a search
 	###################################################################################
-	def self.search(search, order_type=nil, from=User.current_user.today, till=User.current_user.today, page=nil)
+	def self.search(search='', order_type=nil, from=User.current_user.today, till=User.current_user.today, page=nil, sites=[User.current_user.location_id])
 	  till=till + 1
 	  still=till.to_s(:db)
 	  sfrom=from.to_s(:db)
+	  sites=[User.current_user.location_id] if !sites
+	  search='' if !search
+	  logger.debug "sites=#{sites.inspect}"
+	  logger.debug "User.current_user.location_id=#{User.current_user.location_id.to_s}"
+	  ssites=a_to_s(sites)
+	  logger.debug "search=#{search.inspect}"
+	  logger.debug "ssites=#{ssites}"
 	  case order_type
 	  when SALE
 	    logger.debug "searching sales"
-	    c= ['(order_type_id = 1) AND (clients.name like :search OR orders.receipt_number like :search) AND (vendor_id=:current_location OR clients.id=:current_location) AND (clients.id != 1) AND orders.created_at<:till AND orders.created_at>=:from', {:search => "%#{search}%", :from => "#{sfrom}",:till => "#{still}", :current_location => "#{User.current_user.location_id}"}]
+	    logger.debug "sites=#{sites.inspect}"
+#	    c= ['(order_type_id = 1) AND (clients.name like :search OR orders.receipt_number like :search) AND (vendor_id in #{a_to_s(sites)}) AND (clients.id != 1) AND orders.created_at<:till AND orders.created_at>=:from', {:search => "%#{search}%", :from => "#{sfrom}",:till => "#{still}",:sites => "#{a_to_s(sites)}", :current_location => "#{User.current_user.location_id}"}]
+	    c= "(order_type_id = 1) AND (clients.name like '%" + search + "%' OR orders.receipt_number like '%" + search + "%') AND (vendor_id in " + a_to_s(sites) + ") AND (clients.id != 1) AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
 	    j= "inner join entities as clients on clients.id = orders.client_id"
 	  when PURCHASE
 	    logger.debug "searching PURCHASE"
-	    c=['((vendors.name like :search OR orders.receipt_number like :search) AND order_type_id = 2 and clients.entity_type_id = 3) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}]
-	    j="inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
+#	    c=['((vendors.name like :search OR orders.receipt_number like :search) AND order_type_id = 2 and clients.entity_type_id = 3) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}",:sites => "#{a_to_s(sites)}"}]
+	    c= "(order_type_id = 2) AND (vendors.name like '%" + search + "%' OR orders.receipt_number like '%" + search + "%') AND (client_id in " + a_to_s(sites) + ") AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
+	    j="inner join entities as vendors on vendors.id = orders.vendor_id"
 	  when INTERNAL
 	    logger.debug "searching INTERNAL"
-	    c=['(vendors.name like :search OR orders.receipt_number like :search) AND orders.client_id = 1 AND orders.vendor_id=:current_location', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}]
+#	    c=['(vendors.name like :search OR orders.receipt_number like :search) AND orders.client_id = 1 AND orders.vendor_id=:current_location', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}",:sites => "#{a_to_s(sites)}"}]
+	    c= "(order_type_id = 3) AND (orders.receipt_number like '%" + search + "%') AND (vendors_id in " + a_to_s(sites) + ") AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
 	    j="inner join entities as vendors on vendors.id = orders.vendor_id"
 	  when COUNT
 	    logger.debug "searching COUNT"
-	    c=['(location.id=:current_location) AND (orders.order_type_id = 5)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}]
-	    j="inner join entities as location on location.id = orders.vendor_id"
+#	    c=['(location.id=:current_location) AND (orders.order_type_id = 5)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}",:sites => "#{a_to_s(sites)}"}]
+	    c= "(order_type_id = 5) AND (vendor_id in " + a_to_s(sites) + ") AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
 	  else
 	    logger.debug "searching all according to rights"
   		search=search||''
-		  c = "vendors.name like '%" + search + "%' OR clients.name like '%" + search + "%' OR orders.id like '%" + search + "%') AND (vendors.id=" + User.current_user.location_id.to_s + " OR clients.id =" + User.current_user.location_id.to_s
+		  c = "vendors.name like '%" + search + "%' OR clients.name like '%" + search + "%' OR orders.id like '%" + search + "%') AND (vendors.id in " + a_to_s(sites) + " OR clients.id in " + a_to_s(sites)
 		  c += ' AND order_type_id != 2' if !User.current_user.has_rights(['admin','gerente','compras'])
 		  c += ' AND order_type_id != 1' if !User.current_user.has_rights(['admin','gerente','ventas'])
 		  c += ' AND order_type_id != 3' if !User.current_user.has_rights(['admin','gerente','compras','ventas'])
