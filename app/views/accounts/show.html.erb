@@ -63,12 +63,10 @@
       <div class="table_cell_15"><%= h entry.post.trans.created_at.to_date.to_s(:default) %></div>
     	<div class="table_cell_15"><%= link_to entry.post.trans.id, tran_path(entry.post.trans) %></div>
     	<div class="table_cell_15">
-    	  <% if entry.post.trans.obj_link %>
-    	    <%= link_to entry.post.trans.description, entry.post.trans.obj_link %>
-    	  <% else %>
-    	    <%= h entry.post.trans.description %>
-    	  <% end %>
-    	</div>
+    		<% if entry.post.trans.tipo %>
+    			<%= link_to entry.post.trans.tipo, entry.post.trans.obj_link %>
+    		<% end %>
+  		</div>
     	<div class="table_cell_20">
     	  <% if entry.account %>
     	    <%= link_to entry.post.account.number_and_name, entry.account %>
