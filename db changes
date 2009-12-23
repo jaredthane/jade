@@ -31,7 +31,7 @@ ALTER TABLE movements ADD INDEX(product_id);
 ALTER TABLE movements ADD INDEX(entity_id);
 ALTER TABLE inventories ADD INDEX(product_id);
 ALTER TABLE inventories ADD INDEX(entity_id);
-alter table payments change column canceled void datetime;
+alter table payments add column canceled datetime;
 alter table trans add column payment_id int(11);
 update trans set payment_id = order_id where is_payment;
 update trans set order_id=null where is_payment ;

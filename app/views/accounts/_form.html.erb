@@ -19,7 +19,11 @@
 		<%= error[0] %> <%= error[1] %>
 	</p>
 <% end %>
-
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#parent_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1});
+	});
+</script>
 <% form_for(@account, :html => {:id => 'account_form' }) do |f| %>
 
 	<div class="column2-unit-left">
@@ -29,7 +33,7 @@
 		</p>
 		<p>
 		  <b>Rama</b><br />
-			<%= f.collection_select(:parent_id, get_accounts, :id, :number, {:include_blank => true}) %>
+			<%= f.text_field :parent_name, :class=> 'lookup field', :id => 'parent_lookup',:style=>'width:281px;' %>
 		</p>
 		<p>
 		  <b>Tipo de cuenta</b><br />

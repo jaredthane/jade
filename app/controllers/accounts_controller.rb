@@ -23,11 +23,7 @@ class AccountsController < ApplicationController
   def index
 #  	logger.debug "!check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')=#{!check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas').to_s}"
   	return false if !check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')
-  	if params[:q]
-  		search=params[:q] 
-  	else
-    	search=(params[:search]||'')
-    end
+ 		search=((params[:search]||'') + ' ' + (params[:q]||'') ).strip
 		@accounts = Account.search(search, params[:page])
     respond_to do |format|
       format.html # index.html.erb

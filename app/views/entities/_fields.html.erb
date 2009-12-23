@@ -15,6 +15,18 @@
 		//Setup	date picker
 		$.datepicker.regional['es']
 		$(".datepicker").datepicker();
+		$("#cash_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#inventory_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#revenue_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#tax_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#expense_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#new_individual_client_accounts_parent_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#new_corporate_client_accounts_parent_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#new_vendor_accounts_parent_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#new_employee_accounts_parent_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#client_accounts_group_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#vendor_accounts_group_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#employee_accounts_group_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
 	});
 </script>
 <div class="column2-unit-left">
@@ -25,11 +37,11 @@
 	<% if @entity.entity_type_id == 3 %>
 	  <p>
 		  <b>Cuenta de Efectivo</b><br />
-			<%= f.collection_select(:cash_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+			<%= f.text_field :cash_account_name, :class=> 'lookup field', :id => 'cash_account_lookup',:style=>'width:281px;' %>
 		</p>
 		<p>
 		  <b>Cuenta de Inventario</b><br />
-			<%= f.collection_select(:inventory_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+			<%= f.text_field :inventory_account_name, :class=> 'lookup field', :id => 'inventory_account_lookup',:style=>'width:281px;' %>
 		</p>
 		<p>
 			<b>Proximo Numero de Factura</b><br />
@@ -93,19 +105,19 @@
 	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
 		  <p>
 		    <b>Cuenta de Ingresos</b><br />
-			  <%= f.collection_select(:revenue_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+			  <%= f.text_field :revenue_account_name, :class=> 'lookup field', :id => 'revenue_account_lookup',:style=>'width:281px;' %>
 		  </p>
 		  <p>
 		    <b>Cuenta de Gastos</b><br />
-			  <%= f.collection_select(:expense_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+			  <%= f.text_field :expense_account_name, :class=> 'lookup field', :id => 'expense_account_lookup',:style=>'width:281px;' %>
 		  </p>
 		  <p>
 		    <b>Cuenta de Impuestos</b><br />
-			  <%= f.collection_select(:tax_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+			  <%= f.text_field :tax_account_name, :class=> 'lookup field', :id => 'tax_account_lookup',:style=>'width:281px;' %>
 		  </p>
 			<p>
 				<b>Rama para cuentas de nuevos proveedores</b><br />
-				<%= f.collection_select(:vendor_accounts_group_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+			  <%= f.text_field :vendor_accounts_group_name, :class=> 'lookup field', :id => 'vendor_accounts_group_lookup',:style=>'width:281px;' %>
 			</p>
 			<% if mode == 'new' %>
 				<p>
@@ -131,11 +143,7 @@
         <% else %>
         	<b>Cuenta del Proveedor</b><br />
         <% end %>
-	      <%= f.collection_select(:cash_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
-      </p>
-	    <p>
-        <b>Cuenta para Recibir Pagos</b><br />
-	      <%= f.collection_select(:revenue_account_id, get_accounts, :id, :number_and_name, {:include_blank => true}) %>
+	      <%= f.text_field :cash_account_name, :class=> 'lookup field', :id => 'cash_account_lookup',:style=>'width:281px;' %>
       </p>
     <% end %>
 		<p>

@@ -43,7 +43,9 @@ class Entity < ActiveRecord::Base
   def validate
   	logger.debug "HERE in validate++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
     errors.add "Nombre","no es válido" if !name or name==''
-    errors.add "Tipo de cliente","no es válido" if !entity_type
+    if self.new_record?
+    	errors.add "Nombre ","debe ser único" if Entity.find(:first,:conditions=> "name = '#{name}'")
+    end
   end  
   belongs_to :state
   
@@ -100,6 +102,85 @@ class Entity < ActiveRecord::Base
   after_create :save_movements
   
   
+	def cash_account_name
+ 	 cash_account.name if cash_account
+	end
+	def cash_account_name=(name)
+		self.cash_account = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	def inventory_account_name
+ 	 inventory_account.name if inventory_account
+	end
+	def inventory_account_name=(name)
+		self.inventory_account = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	def cash_account_name
+ 	 cash_account.name if cash_account
+	end
+	def cash_account_name=(name)
+		self.cash_account = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	def revenue_account_name
+ 	 revenue_account.name if revenue_account
+	end
+	def revenue_account_name=(name)
+		self.revenue_account = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	def tax_account_name
+ 	 tax_account.name if tax_account
+	end
+	def tax_account_name=(name)
+		self.tax_account = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	def expense_account_name
+ 	 expense_account.name if expense_account
+	end
+	def expense_account_name=(name)
+		self.expense_account = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	def new_individual_client_accounts_parent_name
+ 	 new_individual_client_accounts_parent.name if new_individual_client_accounts_parent
+	end
+	def new_individual_client_accounts_parent_name=(name)
+		self.new_individual_client_accounts_parent = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	def new_corporate_client_accounts_parent_name
+ 	 new_corporate_client_accounts_parent.name if new_corporate_client_accounts_parent
+	end
+	def new_corporate_client_accounts_parent_name=(name)
+		self.new_corporate_client_accounts_parent = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	def new_vendor_accounts_parent_name
+ 	 new_vendor_accounts_parent.name if new_vendor_accounts_parent
+	end
+	def new_vendor_accounts_parent_name=(name)
+		self.new_vendor_accounts_parent = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	def new_employee_accounts_parent_name
+ 	 new_employee_accounts_parent.name if new_employee_accounts_parent
+	end
+	def new_employee_accounts_parent_name=(name)
+		self.new_employee_accounts_parent = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	def client_accounts_group_name
+ 	 client_accounts_group.name if client_accounts_group
+	end
+	def client_accounts_group_name=(name)
+		self.client_accounts_group = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	def vendor_accounts_group_name
+ 	 vendor_accounts_group.name if vendor_accounts_group
+	end
+	def vendor_accounts_group_name=(name)
+		self.vendor_accounts_group = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	def employee_accounts_group_name
+ 	 employee_accounts_group.name if employee_accounts_group
+	end
+	def employee_accounts_group_name=(name)
+		self.employee_accounts_group = Account.find_or_create_by_name(name) unless name.blank?
+	end
+	
   before_update :update_account_name
 	def update_account_name
 		if self.entity_type_id!=3 and self.cash_account

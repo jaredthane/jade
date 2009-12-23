@@ -66,6 +66,19 @@ class Account < ActiveRecord::Base
 		return last.balance if last 
 	  return 0
 	end
+  def validate
+  	logger.debug "HERE in validate++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    errors.add "Nombre","no es válido" if !name or name==''
+    if self.new_record?
+    	errors.add "Nombre ","debe ser único" if Account.find(:first,:conditions=> "name = '#{name}'")
+    end
+  end  
+	def parent_name
+ 		parent.name if parent
+	end
+	def parent_name=(name)
+		self.parent = Account.find_or_create_by_name(name) unless name.blank?
+	end
 	def transfer_balance_to(account)
 		trans = Trans.create(:created_at=>User.current_user.today)
 		amt=self.balance
