@@ -32,14 +32,35 @@ class Payment < ActiveRecord::Base
 	end
 	before_save :pre_save
 	def pre_save
-		self.transactions << new_transaction
+		new_trans=new_transaction
+		self.transactions << new_transaction if new_trans
+		logger.debug "old=#{old.inspect}"
 	end
 	after_save :post_save
 	def post_save
-	  order.amount_paid += self.amount - (old('amount') || 0)
+		logger.debug "order.amount_paid =#{order.amount_paid .to_s}"
+		logger.debug "self.amount=#{self.amount.to_s}"
+		logger.debug "(old('amount') || 0)=#{(old('amount') || 0).to_s}"
+		logger.debug "old=#{old.inspect}"
+		logger.debug "self.amount - (old('amount') || 0)=#{(self.amount - (old('amount') || 0)).to_s}"
+	  order.amount_paid += self.amount - old.amount
+		logger.debug "order.amount_paid =#{order.amount_paid .to_s}"
 		order.save
 		save_related(self.transactions)
 	end 
+	def attrs=(a)
+		self.void=a[:void]
+		self.attributes=a
+	end
+	###################################################################################################
+	# Simple mathematic function that returns 1 if the value is positive, -1 if its negative 0 if its zero
+	#################################################################################################
+	def pos_neg(x)
+		return x/x.abs if x!=0
+	end
+	###################################################################################################
+	# 
+	#################################################################################################
 	def new_transaction
 		logger.debug "self.amount=#{self.amount.to_s}"
 		logger.debug "old('amount')=#{old('amount').to_s}" 
@@ -49,21 +70,23 @@ class Payment < ActiveRecord::Base
 		else
 			amount = self.amount
 		end
-	  
-	  if self.order
-	    t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :comments => self.order.comments, :tipo => 'Pago de ' + self.order.order_type.name)
-	  else
-	    t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :tipo=> 'Pago')
-	  end
-	  case order.order_type_id
-		when 1 # Sale
-			t.posts << Post.new(:trans=>t, :account => self.order.vendor.cash_account, :value=>amount, :post_type_id =>Post::DEBIT)
-			t.posts << Post.new(:trans=>t, :account => self.order.client.cash_account, :value=>amount, :post_type_id =>Post::CREDIT)
-		when 2 # Purchase
-			t.posts << Post.new(:trans=>t, :account => self.order.vendor.cash_account, :value=>amount, :post_type_id =>Post::DEBIT)
-			t.posts << Post.new(:trans=>t, :account => self.order.client.cash_account, :value=>amount, :post_type_id =>Post::CREDIT)
+		if amount != 0
+			if self.order
+			  t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :comments => self.order.comments, :tipo => 'Pago de ' + self.order.order_type.name)
+			else
+			  t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :tipo=> 'Pago')
+			end
+			if order.order_type_id=Order::SALE
+				o=1
+			else
+				o=-1
+			end
+			t.posts << Post.new(:trans=>t, :account => self.order.vendor.cash_account, :value=>amount, :post_type_id =>pos_neg(amount)*o)
+			t.posts << Post.new(:trans=>t, :account => self.order.client.cash_account, :value=>amount, :post_type_id =>-pos_neg(amount)*o)
+			return t
+		else
+			return nil
 		end
-		return t
 	end
   ##################################################################################################
   # Receives a list of related objects and saves them
@@ -106,7 +129,7 @@ class Payment < ActiveRecord::Base
 			site_string+='( orders.vendor_id=' + site.to_s + ' OR orders.client_id=' + site.to_s + ')'
 		end
   	paginate :per_page => 20, :page => page,
-		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payments.order_id like :search OR orders.receipt_number like :search OR payment_methods.name like :search ) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
+		         :conditions => ['canceled is null AND date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payments.order_id like :search OR orders.receipt_number like :search OR payment_methods.name like :search ) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
 		         :order => 'orders.receipt_number',
 		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id '
 
@@ -118,7 +141,7 @@ class Payment < ActiveRecord::Base
 			site_string+=' orders.vendor_id=' + site.to_s
 		end
   	find :all,
-		         :conditions => ['date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payment_methods.name like :search) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
+		         :conditions => ['canceled is null AND date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payment_methods.name like :search) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
 		         :order => 'orders.receipt_number',
 		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id'
 	end

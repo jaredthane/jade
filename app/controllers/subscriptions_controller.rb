@@ -157,7 +157,7 @@ class SubscriptionsController < ApplicationController
   # GET /subscriptions/new
   # GET /subscriptions/new.xml
   def new
-    @subscription = Subscription.new(:client_id=>params[:client_id], :relative_price=>1)
+    @subscription = Subscription.new(:client_id=>params[:client_id], :relative_price=>0)
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @subscription }

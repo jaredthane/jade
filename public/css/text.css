@@ -140,6 +140,7 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 /********************/
 /*  COMMON CLASSES  */
 /********************/
+.strikethrough {text-decoration: line-through;}
 .main img {margin:3px 10px 7px 0; padding:1px;}
 .main img.center {clear:both; float:none; display:block; margin:0 auto; padding:1px; border:1px solid rgb(150,150,150);}
 .main img.right {clear:both; float:right; margin:3px 0 7px 10px; padding:1px; border:1px solid rgb(150,150,150);}

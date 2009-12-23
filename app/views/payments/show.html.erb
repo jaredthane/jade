@@ -2,9 +2,17 @@
 <% content_for :title do %>Detalles de Pago<% end %>
 
 <% content_for :actions do %>
-	<% if current_user.has_rights(['admin','compras','ventas','gerente']) %>
+	<% if current_user.has_right(User::CHANGE_PAYMENTS_FOR_SALES) and @payment.order.order_type_id==Order::SALE %>
 		<dt><%= link_to 'Cambiar', edit_payment_path(@payment) %></dt>
-		<dt><%= link_to 'Borrar', destroy_payment_path(@payment) %></dt>
+	<% end %>	
+	<% if current_user.has_right(User::CHANGE_PAYMENTS_FOR_PURCHASES) and @payment.order.order_type_id==Order::PURCHASE %>
+		<dt><%= link_to 'Cambiar', edit_payment_path(@payment) %></dt>
+	<% end %>	
+	<% if current_user.has_right(User::DELETE_PAYMENTS_FOR_SALES) and @payment.order.order_type_id==Order::SALE %>
+		<dt><%= link_to 'Borrar', @payment, :confirm => 'Esta seguro?', :method => :delete %></dt>
+	<% end %>	
+	<% if current_user.has_right(User::DELETE_PAYMENTS_FOR_PURCHASES) and @payment.order.order_type_id==Order::PURCHASE %>
+		<dt><%= link_to 'Borrar', @payment, :confirm => 'Esta seguro?', :method => :delete %></dt>
 	<% end %>	
 	<dt><%= link_to 'Lista de Pagos', payments_path %></dt>
 <% end %>

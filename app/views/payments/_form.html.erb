@@ -9,7 +9,7 @@
   <dt><%= link_to_function 'Guardar', 'submit("payment_form")' %></dt>
   <% if mode == 'edit' %>
     <dt><%= link_to 'Cancelar', @payment %></dt>
-    <dt><%= link_to 'Remover', @payment, :confirm => 'Esta seguro?', :method => :delete %></dt>
+    <dt><%= link_to 'Borrar', @payment, :confirm => 'Esta seguro?', :method => :delete %></dt>
     <dt><%= link_to 'Lista', payments_path %></dt>
   <% else %>
     <dt><%= link_to 'Cancelar', payments_path %></dt>
@@ -76,7 +76,10 @@
 		  <input disabled=True class="field" id="total_paid" value=<%= number_to_currency((@payment.presented || 0)-(@payment.returned || 0)) %>> 
 		  <input type="button" value="Actualizar" onclick="calculate_total()" class="field"> 
 		</p>
-
+		<p>
+			<b>Anulado</b>
+			<%= f.check_box :void, :class=> 'field'%>
+		</p>
 	</div>
 	<hr class="clear-contentunit" />
 	

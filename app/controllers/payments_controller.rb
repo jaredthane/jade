@@ -50,7 +50,13 @@ class PaymentsController < ApplicationController
   # GET /payments/1.xml
   def show
     @payment = Payment.find(params[:id])
-
+    case @payment.order
+    when Order::SALE
+    	return false if !check_user(User::VIEW_PAYMENTS_FOR_SALES,'No tiene los derechos suficientes para ver los pagos de ventas')
+    when Order::PURCHASE
+    	return false if !check_user(User::VIEW_PAYMENTS_FOR_PURCHASES,'No tiene los derechos suficientes para ver los pagos de compras')
+    end
+		flash[:error] = 'Este pago esta anulado.' if @payment.canceled
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @payment }
@@ -62,6 +68,12 @@ class PaymentsController < ApplicationController
   def new
     @payment = Payment.new(:created_at=>User.current_user.today)
     @payment.order_id = params[:order_id]
+    case @payment.order
+    when Order::SALE
+    	return false if !check_user(User::CREATE_PAYMENTS_FOR_SALES,'No tiene los derechos suficientes para crear pagos de ventas')
+    when Order::PURCHASE
+    	return false if !check_user(User::CREATE_PAYMENTS_FOR_PURCHASES,'No tiene los derechos suficientes para crear pagos de compras')
+    end
 		@payment.payment_method_id = 1
 		@paid = @payment.order.amount_paid
 		logger.debug "amount already paid = "+@paid.to_s + " or " + @payment.order.amount_paid.to_s
@@ -71,6 +83,7 @@ class PaymentsController < ApplicationController
     end
   end
   def produce_report
+  	return false if !check_user(User::VIEW_PAYMENTS_FOR_SALES,'No tiene los derechos suficientes para ver los pagos de ventas')
     @data=[]
 		@site=User.current_user.location
 		total=0
@@ -92,6 +105,12 @@ class PaymentsController < ApplicationController
 
   def edit
     @payment = Payment.find(params[:id])
+    case @payment.order
+    when Order::SALE
+    	return false if !check_user(User::CHANGE_PAYMENTS_FOR_SALES,'No tiene los derechos suficientes para cambiar pagos de ventas')
+    when Order::PURCHASE
+    	return false if !check_user(User::CHANGE_PAYMENTS_FOR_PURCHASES,'No tiene los derechos suficientes para cambiar pagos de compras')
+    end
 		@paid = @payment.order.amount_paid-@payment.amount
 		logger.debug "amount already paid = "+@paid.to_s + " or " + @payment.order.amount_paid.to_s
   end
@@ -100,6 +119,12 @@ class PaymentsController < ApplicationController
   # POST /payments.xml
   def create
     @payment = Payment.new(params[:payment])
+    case @payment.order
+    when Order::SALE
+    	return false if !check_user(User::CREATE_PAYMENTS_FOR_SALES,'No tiene los derechos suficientes para crear pagos de ventas')
+    when Order::PURCHASE
+    	return false if !check_user(User::CREATE_PAYMENTS_FOR_PURCHASES,'No tiene los derechos suficientes para crear pagos de compras')
+    end
     @payment.created_at=User.current_user.today
     respond_to do |format|
       if @payment.save
@@ -114,7 +139,13 @@ class PaymentsController < ApplicationController
   end
   def update
     @payment = Payment.find(params[:id])
-    @payment.attributes=params[:payment]
+    case @payment.order
+    when Order::SALE
+    	return false if !check_user(User::CHANGE_PAYMENTS_FOR_SALES,'No tiene los derechos suficientes para cambiar pagos de ventas')
+    when Order::PURCHASE
+    	return false if !check_user(User::CHANGE_PAYMENTS_FOR_PURCHASES,'No tiene los derechos suficientes para cambiar pagos de compras')
+    end
+    @payment.attrs=params[:payment]
     respond_to do |format|
       if @payment.save
         flash[:notice] = 'Pago ha sido actualizado exitosamente.'
@@ -126,14 +157,20 @@ class PaymentsController < ApplicationController
       end
     end
   end
-
-
   def destroy
     @payment = Payment.find(params[:id])
-    @payment.cancel
-
+    case @payment.order
+    when Order::SALE
+    	return false if !check_user(User::DELETE_PAYMENTS_FOR_SALES,'No tiene los derechos suficientes para borrar pagos de ventas')
+    when Order::PURCHASE
+    	return false if !check_user(User::DELETE_PAYMENTS_FOR_PURCHASES,'No tiene los derechos suficientes para borrar pagos de compras')
+    end
+		order=@payment.order
+		@payment.void=1
+		@payment.save
+    @payment.destroy
     respond_to do |format|
-      format.html { redirect_to(payments_url) }
+      format.html { redirect_to(order) }
       format.xml  { head :ok }
     end
   end
