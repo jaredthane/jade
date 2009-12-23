@@ -18,27 +18,9 @@ echo "Installing Rails"
 sudo gem install rails
 
 echo "Configuring Lighttpd"
-echo "
-server.modules   += ( "mod_fastcgi", "mod_rewrite" )
-
-
-$HTTP["host"] == "localhost" {
-        server.document-root = "/srv/jade/public/"
-
-        server.dir-listing          = "disable"
-        server.error-handler-404 = "/dispatch.fcgi"
-
-        fastcgi.server      = ( ".fcgi" => ( "localhost" => (
-                "min-procs"       => 1,
-                "max-procs"       => 1,
-                "socket" => "/tmp/ruby-beholder.socket",
-                "bin-path" => "/srv/jade/public/dispatch.fcgi",
-                "bin-environment" => ( "RAILS_ENV" => "production" )
-        ) ) )
-
-}
-" | sudo tee -a /etc/lighttpd/lighttpd.conf
+sudo cp lighttpd.conf /etc/lighttpd/lighttpd.conf
 sudo /etc/init.d/lighttpd restart
+
 echo "Installing gems needed by Jade"
 sudo gem install prawn
 sudo gem install will_paginate

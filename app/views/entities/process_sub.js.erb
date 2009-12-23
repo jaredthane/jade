@@ -1,0 +1,29 @@
+<% if @order.grand_total > 0 %>
+<div id="payment">
+	<div class="table_row">
+		<div class="table_cell_20">
+			<% if @order.received %>
+				<%= h @order.received.to_date.to_s(:long) %>
+			<% end %>
+		</div>
+		<div class="table_cell_20"><%= link_to (@order.receipt_number||'Sin número'), @order %></div>
+		<div class="table_cell_20"><%= h number_to_currency(@order.grand_total) %></div>
+		<div class="table_cell_15"><%= h number_to_currency(@order.amount_paid) %></div>
+		<a class="action" onclick="DoAjaxPayOff($(this).parent(),<%= @order.id %>); return false;" href="#">Marcar Pagada</a>
+	</div>
+</div>
+
+
+<div id="recent">
+	<div class="table_row">
+		<div class="table_cell_20">
+			<% if @order.received %>
+				<%= h @order.received.to_date.to_s(:long) %>
+			<% end %>
+		</div>
+		<div class="table_cell_20"><%= link_to (@order.receipt_number||'Sin número'), @order %></div>
+		<div class="table_cell_20"><%= h number_to_currency(@order.grand_total) %></div>
+		<div class="table_cell_15"><%= h number_to_currency(@order.amount_paid) %></div>
+		<div class="table_cell"><%= link_to awaiting(@order), order_history_path(@order)%></div> 
+	</div>
+</div>
