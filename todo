@@ -1,4 +1,7 @@
 CURRENT GOALS:
+	split installer up
+	make provisionar and payoff use AJAX
+	
 	searching order and payments with dates
 	counts:
 		serials not in count should be removed from inventory

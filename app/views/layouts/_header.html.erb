@@ -36,7 +36,8 @@
   <meta name="distribution" content="global" />
   <meta name="description" content="Your page description here ..." />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
-  
+  <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
+
   <link type="text/css" rel="stylesheet" media="screen" href="/css/text.css">
   <link type="text/css" rel="stylesheet" media="screen" href="/css/setup.css">
   <link rel="stylesheet" href="/css/jquery-ui-custom-theme/jquery-ui-1.7.2.custom.css" type="text/css">
@@ -48,6 +49,7 @@
 	<%= javascript_include_tag 'ui.datepicker-es' %>
   <%= javascript_include_tag 'jquery-ui' %>
 	<%= javascript_include_tag 'jquery.autocomplete' %>
+	<%= javascript_include_tag 'application.js' %>
   <style type="text/css">
     div.auto_complete {
       position:absolute;

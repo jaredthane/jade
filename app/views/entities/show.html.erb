@@ -10,6 +10,7 @@
 <% end %>
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "submit_link" %>
+  <%= javascript_include_tag "show_client" %>
 <% end %>
 <% content_for :actions do %>
 	<% if @entity.entity_type_id == 3 %>
@@ -254,7 +255,7 @@
 					<div class="table_cell_20"><%= link_to (order.receipt_number||'Sin número'), order %></div>
 					<div class="table_cell_20"><%= h number_to_currency(order.grand_total) %></div>
 					<div class="table_cell_15"><%= h number_to_currency(order.amount_paid) %></div>
-					<div class="table_cell"><%=link_to 'Marcar Pagada', pay_off_url(order) %></div>
+					<a class="action" onclick="DoAjaxPayOff($(this).parent(),<%= order.id %>); return false;" href="#">Marcar Pagada</a>
 				</div>
 		  <% end %>
 	  </div>
