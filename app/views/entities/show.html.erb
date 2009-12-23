@@ -166,6 +166,10 @@
   			  <%=link_to @entity.tax_account.name, @entity.tax_account %>
 			  <% end %>
 		  </p>
+			<p>
+				<b>Proximo Codigo de Barra</b>
+				<%=h @entity.next_bar_code %>
+			</p>
 		<% end %>
   <% end %>
   <% if @entity.entity_type_id == 1 %>
@@ -207,10 +211,6 @@
 	<p>
 		<b>Correo E</b>
 		<%=h @entity.email %>
-	</p>
-	<p>
-		<b>Proximo Codigo de Barra</b>
-		<%=h @entity.next_bar_code %>
 	</p>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
 		<p>

@@ -9,6 +9,7 @@
 <% end %>
 <% content_for :actions do %>
 	<dt><%= link_to_function 'Guardar', 'submit("entity_form")', :class => 'action' %></dt>
+  <dt><%= link_to 'Cancelar', @entity, :class => 'action' %></dt>
 <% end %>
 <script language="JavaScript"> 
 	$(document).ready(function(){
@@ -119,6 +120,10 @@
 				<b>Rama para cuentas de nuevos proveedores</b><br />
 			  <%= f.text_field :vendor_accounts_group_name, :class=> 'lookup field', :id => 'vendor_accounts_group_lookup',:style=>'width:281px;' %>
 			</p>
+			<p>
+				<b>Proximo Codigo de Barra</b>
+				<%= f.text_field :next_bar_code, :class => 'field' %>
+			</p>
 			<% if mode == 'new' %>
 				<p>
 					<b>Hacer nuevas cuentas para grupos de Empleados, Clientes, y Proveedores?</b><br />
@@ -166,10 +171,6 @@
 	<p>
 		<b>Correo Electronico</b>
 		<%= f.text_field :email, :class => 'field' %>
-	</p>
-	<p>
-		<b>Proximo Codigo de Barra</b>
-		<%= f.text_field :next_bar_code, :class => 'field' %>
 	</p>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>
