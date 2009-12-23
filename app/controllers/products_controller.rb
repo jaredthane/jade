@@ -25,20 +25,19 @@ class ProductsController < ApplicationController
 	access_control [:destroy] => '(Admin)'
   def index
     #@products = Product.find(:all)
-    @search=(params[:search]||'') + ' ' + (params[:q]||'')
-    case params[:scope] 
+    search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
+    logger.debug "params[:format]=#{params[:format].to_s}"
+    params[:scope]='name' if params[:format]=='js'
+    case params[:scope]
 		  when 'all'
-		  	@products = Product.search_all(params[:search], params[:page])
+		  	@products = Product.search_all(search, params[:page])
 		  when 'services'
-			  @products = Product.search_services(params[:search], params[:page])
+			  @products = Product.search_services(search, params[:page])
 		  when 'name'
-			  @products = Product.search_name(params[:search], params[:page])
+			  @products = Product.search_name(search, params[:page])
 		  else
-				@products = Product.search(params[:search], params[:page])
+				@products = Product.search(search, params[:page])
 		end
-		
-				#redirect_to('/products/' + @products[0].to_s)
-		
     respond_to do |format|
       format.html {
         if @products.length == 1
@@ -104,7 +103,7 @@ class ProductsController < ApplicationController
   # GET /products/new
   # GET /products/new.xml
   def new
-    @product = Product.new
+    @product = Product.new(:vendor_id=>4)
 		@product.unit_id=1
 		@product.product_type_id=1
     respond_to do |format|
@@ -121,11 +120,16 @@ class ProductsController < ApplicationController
   # POST /products
   # POST /products.xml
   def create
+  	params[:product][:upc]=User.current_user.location.next_bar_code if params[:product][:upc]==""
     @product = Product.new(params[:product])
-    @product.create_related_values(params[:product][:default_cost], params[:product][:static_price], params[:product][:relative_price])
     respond_to do |format|
       if @product.save
-      	@product.update_attributes(params[:product])
+      	@product.create_related_values(params[:product][:default_cost], params[:product][:static_price], params[:product][:relative_price])
+      	if @product.upc==User.current_user.location.next_bar_code
+					User.current_user.location.next_bar_code=(User.current_user.location.next_bar_code.to_i + 1).to_s
+					User.current_user.location.save
+				end
+#      	@product.update_attributes(params[:product])
         flash[:notice] = 'Producto ha sido creado exitosamente.'
         format.html { redirect_to(@product) }
         format.xml  { render :xml => @product, :status => :created, :location => @product }
@@ -148,10 +152,14 @@ class ProductsController < ApplicationController
   # PUT /products/1.xml
   def update
 		puts "running products update"
-		
+		params[:product][:upc]=User.current_user.location.next_bar_code if params[:product][:upc]==""
   	@product = Product.find(params[:id])
  		#Audit.info "changed product #{@product.inspect}"
 		if  @product.update_attributes(params[:product])
+    	if @product.upc==User.current_user.location.next_bar_code
+				User.current_user.location.next_bar_code=(User.current_user.location.next_bar_code.to_i + 1).to_s
+				User.current_user.location.save
+			end
 			flash[:notice] = 'Producto ha sido actualizado exitosamente.'
 			redirect_to(@product)
 		else

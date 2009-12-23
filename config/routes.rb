@@ -6,9 +6,9 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :payments
   map.show_barcode 'products/:id/barcode', :controller => 'products', :action => 'show_barcode'
   map.destroy_payment 'payments/:id/destroy', :controller => 'payments', :action => 'destroy'
-  map.create_nul_receipt_number 'receipts/create_nul_number', :controller => 'receipts', :action => 'create_nul_number'
-  map.new_nul_receipt_number 'receipts/new_nul_number', :controller => 'receipts', :action => 'new_nul_number'
-  map.process_subscriptions 'receipts/process_subscriptions', :controller => 'receipts', :action => 'process_subscriptions'
+  map.create_nul_receipt_number 'orders/create_nul_number', :controller => 'orders', :action => 'create_nul_number'
+  map.new_nul_receipt_number 'orders/new_nul_number', :controller => 'orders', :action => 'new_nul_number'
+#  map.process_subscriptions 'receipts/process_subscriptions', :controller => 'receipts', :action => 'process_subscriptions'
   map.new_balance_transfer 'accounts/:id/new_balance_transfer', :controller => 'accounts', :action => 'new_balance_transfer'
   map.recount_balances 'accounts/:id/recount', :controller => 'accounts', :action => 'recount'
   map.create_balance_transfer 'accounts/:id/create_balance_transfer', :controller => 'accounts', :action => 'create_balance_transfer'
@@ -25,31 +25,29 @@ ActionController::Routing::Routes.draw do |map|
   map.create_history 'entities/:id/create_history', :controller => 'entities', :action => 'create_history', :filter => ' tipo:cliente'
   map.new_post 'posts/new', :controller => 'posts', :action => 'new', :format =>'js'
   map.resources :trans
-  map.consumidor_final_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>2, :format =>'pdf'
-  map.credito_fiscal_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>5, :format =>'pdf'
+#  map.consumidor_final_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>2, :format =>'pdf'
+#  map.credito_fiscal_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>5, :format =>'pdf'
   map.pay_off 'orders/:id/pay_off', :controller => 'orders', :action => 'pay_off'
   map.todays_sales 'orders/todays_sales/', :controller => 'orders', :action => 'show_todays_sales'
-  map.receipts_report 'receipts/report', :controller => 'receipts', :action => 'report'
+#  map.receipts_report 'receipts/report', :controller => 'receipts', :action => 'report'
   map.payments_report 'payments/report', :controller => 'payments', :action => 'report'
   map.todays_accounting_report 'payments/todays_accounting_report', :controller => 'payments', :action => 'todays_accounting_report'
-  map.todays_receipts 'receipts/today/', :controller => 'receipts', :action => 'show_today'
-  map.receipts_list_to_print 'receipts/printable', :controller => 'receipts', :action => 'list_to_print'
-  map.unpaid_receipts 'receipts/unpaid/', :controller => 'receipts', :action => 'unpaid'
-  map.new_batch_receipts 'subscriptions/new_receipts', :controller => 'receipts', :action => 'new_batch'
-  map.create_batch_receipts 'subscriptions/create_receipts', :controller => 'receipts', :action => 'create_batch'
-  map.create_receipt 'receipts/:id/create', :controller => 'receipts', :action => 'create'
-  map.new_receipt 'receipts/:id/new', :controller => 'receipts', :action => 'new'
-  map.fast_process_subscriptions 'subscriptions/fast_process', :controller => 'subscriptions', :action => 'fast_process'
-  map.process_client 'clients/:client_id/process', :controller => 'receipts', :action => 'process_subscriptions'
-  map.resources :receipts
-  map.process_subscription 'subscriptions/:sub_id/process', :controller => 'receipts', :action => 'process_subscription'
+#  map.todays_receipts 'receipts/today/', :controller => 'receipts', :action => 'show_today'
+#  map.receipts_list_to_print 'receipts/printable', :controller => 'receipts', :action => 'list_to_print'
+#  map.unpaid_receipts 'receipts/unpaid/', :controller => 'receipts', :action => 'unpaid'
+#  map.new_batch_receipts 'subscriptions/new_receipts', :controller => 'receipts', :action => 'new_batch'
+#  map.create_batch_receipts 'subscriptions/create_receipts', :controller => 'receipts', :action => 'create_batch'
+#  map.create_receipt 'receipts/:id/create', :controller => 'receipts', :action => 'create'
+#  map.new_receipt 'receipts/:id/new', :controller => 'receipts', :action => 'new'
+#  map.fast_process_subscriptions 'subscriptions/fast_process', :controller => 'subscriptions', :action => 'fast_process'
+#  map.process_client 'clients/:client_id/process', :controller => 'receipts', :action => 'process_subscriptions'
+#  map.resources :receipts
+  map.process_subscription 'subscription/:sub_id/process', :controller => 'subscriptions', :action => 'process_me'
   map.resources :subscriptions
 	map.resources :discounts
 	map.resources :combos
 	map.erase_order 'orders/:id/erase', :controller => 'orders', :action => 'erase'
-	map.erase_receipt 'receipts/:id/erase', :controller => 'receipts', :action => 'erase'
-	map.post_physical_counts 'physical_counts/:id/post', :controller => 'physical_counts', :action => 'post'
-	map.resources :physical_counts, :order_type_id => 5
+#	map.erase_receipt 'receipts/:id/erase', :controller => 'receipts', :action => 'erase'
 	map.new_user_role 'user/new_role', :controller => 'users', :action => 'new_role', :format =>'js'
 	map.my_clients 'entities/my_clients', :controller => 'entities', :action => 'my_clients', :filter => ' tipo:cliente'
 	map.my_end_users 'entities/my_end_users', :controller => 'entities', :action => 'my_clients', :filter => ' tipo:consumidor'
@@ -78,14 +76,15 @@ ActionController::Routing::Routes.draw do |map|
   map.clear 'inventories/clear', :controller => 'inventories', :action => 'clear'
   map.resources :products, :collection => { :bulk_edit => :get, :bulk_update => :post }, :product_type => 'simple'
 	map.connect 'allproducts.js', :controller => 'products', :scope => 'all', :format =>'js'
-	map.show_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
+#	map.show_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
+	map.show_receipt 'orders/:id/receipt', :controller => 'orders', :action => 'show_receipt'
   map.show_batch 'orders/show_batch', :controller => 'orders', :action => 'show_batch'
-  map.create_batch 'orders/create_batch', :controller => 'orders', :action => 'create_batch'
-  map.delete_order 'orders/delete', :controller => 'orders', :action => 'delete'
+  map.create_batch 'inventories/create_batch', :controller => 'inventories', :action => 'create_batch'
+#  map.delete_order 'orders/delete', :controller => 'orders', :action => 'delete'
 	map.order_history 'orders/:id/history', :controller => 'orders', :action => 'show_history'
-	map.order_payments 'orders/:id/payments', :controller => 'orders', :action => 'show_payments'
-	map.order_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
-	map.destroy_receipt 'receipt/:id/destroy', :controller => 'receipts', :action => 'destroy'
+#	map.order_payments 'orders/:id/payments', :controller => 'orders', :action => 'show_payments'
+#	map.order_receipts 'orders/:id/receipts', :controller => 'orders', :action => 'show_receipts'
+#	map.destroy_receipt 'receipt/:id/destroy', :controller => 'receipts', :action => 'destroy'
 	map.connect 'lines/new', :controller => 'lines', :action => 'new', :format=>'js'
   map.resources :lines
 	map.resources :inventories
@@ -101,11 +100,23 @@ ActionController::Routing::Routes.draw do |map|
 
 	map.resources :requirements
   map.resources :orders
+  
+#	map.resources :sales, :controller=>'orders', :order_type_id => 1
+#	map.resources :purchases, :controller=>'orders', :order_type_id => 2
+#	map.resources :internals, :controller=>'orders', :order_type_id => 3
+#	map.resources :transfers, :controller=>'orders', :order_type_id => 4
+#	map.resources :counts, :controller=>'orders', :order_type_id => 5
   map.new_purchase 	'purchases/new', :controller => 'orders', :action => 'new', :order_type_id => 2
   map.new_sale 	'sales/new', :controller => 'orders', :action => 'new', :order_type_id => 1
   map.new_internal 	'internal/new', :controller => 'orders', :action => 'new', :order_type_id => 3
   map.purchases 'purchases/', :controller => 'orders', :action => 'index', :order_type_id => 2
-  map.internal 'internal/', :controller => 'orders', :action => 'index', :order_type_id => 3
+  map.internals 'internals/', :controller => 'orders', :action => 'index', :order_type_id => 3
+  map.transfers 'transfers/', :controller => 'orders', :action => 'index', :order_type_id => 4
+  map.new_transfer 'transfer/new', :controller => 'orders', :action => 'new', :order_type_id => 4
+  map.counts 'counts/', :controller => 'orders', :action => 'index', :order_type_id => 5
+  map.new_count 	'count/new', :controller => 'orders', :action => 'new', :order_type_id => 5
+	map.post_count 'count/:id/post', :controller => 'orders', :action => 'post'
+  map.internals 'internals/', :controller => 'orders', :action => 'index', :order_type_id => 3
   map.sales 'sales/', :controller => 'orders', :action => 'index', :order_type_id => 1
 
 	map.activate '/activate/:activation_code', :controller => 'users', :action => 'activate', :activation_code => nil

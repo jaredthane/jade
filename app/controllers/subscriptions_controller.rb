@@ -40,6 +40,27 @@ class SubscriptionsController < ApplicationController
       format.xml  { render :xml => @subscription }
     end
   end
+  def process_me
+  	logger.debug "here"
+  	params[:next_order_date] = Date.strptime(params[:next_order_date], '%d/%m/%Y').to_s(:db)
+  	logger.debug "params[:next_order_date]=#{params[:next_order_date].to_s}"
+		sub=Subscription.find_by_id(params[:sub_id])
+		if !sub
+			flash[:error] = "Las suscripciones han sido provisionadas existosamente"
+			redirect_back_or_default(clients_url)
+			return false
+		end
+		logger.debug "found sub"
+  	sub.next_order_date=params[:next_order_date]
+  	sub.save
+  	order = sub.process(params[:number], params[:num_months].to_i)
+  	if order
+			flash[:info] = "Las suscripciones han sido provisionadas existosamente" if order
+			logger.debug "order.inspect=#{order.inspect}"
+  		generate_receipt(order)
+  	end
+		redirect_to sub.client
+  end
 ############################################################################################
 # DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
 ############################################################################################
@@ -136,7 +157,7 @@ class SubscriptionsController < ApplicationController
   # GET /subscriptions/new
   # GET /subscriptions/new.xml
   def new
-    @subscription = Subscription.new(:client_id=>params[:client_id])
+    @subscription = Subscription.new(:client_id=>params[:client_id], :relative_price=>1)
     respond_to do |format|
       format.html # new.html.erb
       format.xml  { render :xml => @subscription }

@@ -3,6 +3,10 @@ function handleErr(msg,url,l) {
 	alert("There was an error on this page.\n\nError: " + msg + "\nURL: " + url + "\nLine: " + l + "\n\nClick OK to continue.\n\n");
 	return true;
 }
+function check_box(e) {
+  e.prev(":check_box").attr( "checked", "true" );
+  e.closest(".line").slideUp("slow");
+}
 function DoAjaxRequest(){
 	$.ajax({
 			type: 'POST',
@@ -33,9 +37,9 @@ function delete_errors(){
 function select_serial() {
   $(".serial:last").select(); 
 }
-function DeleteHiddenLines(){
-	$('.line:hidden').remove();
-}
+//function DeleteHiddenLines(){
+//	$('.line:hidden').remove();
+//}
 $(document).ready(function(){
 	$('#add_new_line').hide();
 	$('#bar_code_form').show();

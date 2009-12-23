@@ -91,16 +91,12 @@ class PaymentsController < ApplicationController
 		prawnto :prawn => { :page_size => 'LETTER'}
 		params[:format] = 'pdf'
 	end
-############################################################################################
-# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
-############################################################################################
-# We can no longer change payments once they're made
-#  # GET /payments/1/edit
-#  def edit
-#    @payment = Payment.find(params[:id])
-#		@paid = @payment.order.amount_paid-@payment.amount
-#		logger.debug "amount already paid = "+@paid.to_s + " or " + @payment.order.amount_paid.to_s
-#  end
+
+  def edit
+    @payment = Payment.find(params[:id])
+		@paid = @payment.order.amount_paid-@payment.amount
+		logger.debug "amount already paid = "+@paid.to_s + " or " + @payment.order.amount_paid.to_s
+  end
 
   # POST /payments
   # POST /payments.xml
@@ -118,25 +114,20 @@ class PaymentsController < ApplicationController
       end
     end
   end
-############################################################################################
-# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
-############################################################################################
-#  # PUT /payments/1
-#  # PUT /payments/1.xml
-#  def update
-#    @payment = Payment.find(params[:id])
-
-#    respond_to do |format|
-#      if @payment.update_attributes(params[:payment])
-#        flash[:notice] = 'Pago ha sido actualizado exitosamente.'
-#        format.html { redirect_to(@payment.order) }
-#        format.xml  { head :ok }
-#      else
-#        format.html { render :action => "edit" }
-#        format.xml  { render :xml => @payment.errors, :status => :unprocessable_entity }
-#      end
-#    end
-#  end
+  def update
+    @payment = Payment.find(params[:id])
+    @payment.attributes=params[:payment]
+    respond_to do |format|
+      if @payment.save
+        flash[:notice] = 'Pago ha sido actualizado exitosamente.'
+        format.html { redirect_to(@payment.order) }
+        format.xml  { head :ok }
+      else
+        format.html { render :action => "edit" }
+        format.xml  { render :xml => @payment.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
 
 
   def destroy

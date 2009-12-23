@@ -116,6 +116,14 @@
 		<% end %>
   <% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
+		<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
+			<p>
+				<b>Tipo</b><br />
+				<%= f.collection_select(:entity_type_id, get_client_types, :id, :name) %>
+			</p>
+		<% else %>
+			<%= f.hidden_field :entity_type_id, :value => @entity.entity_type_id %>
+		<% end %>
 	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
 	    <p>
 	    	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
@@ -144,8 +152,16 @@
 		<%= f.text_field :office_phone_number, :class => 'field' %>
 	</p>
 	<p>
+		<b>Numero de Fax</b>
+		<%= f.text_field :fax_number, :class => 'field' %>
+	</p>
+	<p>
 		<b>Correo Electronico</b>
 		<%= f.text_field :email, :class => 'field' %>
+	</p>
+	<p>
+		<b>Proximo Codigo de Barra</b>
+		<%= f.text_field :next_bar_code, :class => 'field' %>
 	</p>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
 		<p>
@@ -160,12 +176,6 @@
 			<b>Giro</b>
 			<%= f.text_field :giro, :class => 'field' %>
 		</p>
-		<p>
-			<b>Tipo</b><br />
-			<%= f.collection_select(:entity_type_id, get_client_types, :id, :name) %>
-		</p>
-	<% else %>
-	  <%= f.hidden_field :entity_type_id, :value => @entity.entity_type_id %>
 	<% end %>
 	<p>
 		<b>Activo</b><br />

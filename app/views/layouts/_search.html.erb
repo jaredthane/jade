@@ -1,0 +1,49 @@
+<script type="text/javascript">
+	$(document).ready(function(){
+	  $('select#select_from, select#select_till').selectToUISlider({
+				labels: 0,
+			});
+		//Setup	date picker
+	  $.datepicker.regional['en']
+	  $(".datepicker").datepicker();
+	});
+</script>
+<% form_tag search_path, :method =>'get', :id => 'date_range_form' do %>
+  <div class="slider_bar">
+      <div class="from_div"><b>Desde</b><br /></div>
+      <div class="till_div"><b>Hasta</b><br /></div>
+      <div style="clear:both;"></div>
+      <div class="lil_div">
+        <div class="from_div">
+          <%= text_field_tag 'from', @from.to_s, :class=> 'field datepicker', :id => 'from',:style=>'width:168px;' %>
+        </div>
+        <div class="till_div">
+          <%= text_field_tag 'till', @till.to_s, :class=> 'field datepicker', :id => 'till',:style=>'width:168px;' %>
+        </div>
+        <div class="search_div">
+          <%= text_field_tag :search, params[:search], :class => 'field'%>
+			    <%= hidden_field_tag :filter, params[:filter], :class => 'field'%>
+			    <%= link_to_function 'Buscar', 'submit_index("date_range_form")', :class => 'action' %>
+        </div>
+      </div>
+      <%= select_tag(:select_from, options_for_select(date_selection, Date.today.to_s)) %>
+      <%= select_tag(:select_till, options_for_select(date_selection, Date.today.to_s)) %>
+      <% if @sites %>
+      	<% if @sites.length > 1 %>
+		      <div class="checkbox-list">
+		        <% get_sites.each do |site| -%>
+		          <%= check_box_tag "sites[]", site.id, @sites.include?(site.id.to_s) -%> <%= site.name -%>
+		        <% end -%>
+		      </div>
+		    <% else %>
+		      <div class="checkbox-list" style="display:none;">
+		        <% get_sites.each do |site| -%>
+		          <%= check_box_tag "sites[]", site.id, @sites.include?(site.id.to_s) -%> <%= site.name -%>
+		        <% end -%>
+		      </div>
+		    <% end %>
+		  <% end %>
+      <%= hidden_field_tag 'pdf',true %>
+      <%= hidden_field_tag 'order_type_id',@order_type_id %>
+  </div>
+<% end %>

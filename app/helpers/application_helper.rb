@@ -116,5 +116,41 @@ module ApplicationHelper
     items = entries.map { |entry| phrase ? highlight(entry[field], phrase) : h(entry[field])+"|" }
     return items.to_s.chop
   end
-
+  def date_selection
+    selection=[]
+    for i in (0..3)
+      selection << [("Hace " + (5-i).to_s + " años"), (Date.today << (12*(5-i))).to_s]
+    end
+    selection << ["Hace 18 meses",(Date.today << 18).to_s]
+    selection << ["Hace un año",(Date.today << 12).to_s]
+    for i in (0..9)
+      selection << ["Hace " + (11-i).to_s + " meses",(Date.today << (11-i)).to_s]
+    end
+    selection << ["Hace un mes",(Date.today << 1).to_s] 
+    selection << ["Hace tres semanas",(Date.today - 21).to_s]
+    selection << ["Hace dos semanas",(Date.today - 14).to_s]
+    selection << ["Hace una semana",(Date.today - 7).to_s]
+    
+    for i in (0..4)
+      selection << ["Hace " + (6 - i).to_s + " días",(Date.today - (6 - i)).to_s]
+    end
+    selection << ["Ayer",(Date.today - 1).to_s] 
+    selection << ["Hoy",(Date.today).to_s] 
+    selection << ["Mañana",(Date.today + 1).to_s]
+    for i in (2..6)
+      selection << ["En " + i.to_s + " días",(Date.today + i).to_s]
+    end
+    selection << ["En una semana",(Date.today + 7).to_s]
+    selection << ["En dos semanas",(Date.today + 14).to_s]
+    selection << ["En tres semanas",(Date.today + 21).to_s]
+    selection << ["En un mes",(Date.today >> 1).to_s]
+    for i in (2..11)
+      selection << ["En " + i.to_s + " meses",(Date.today >> i).to_s]
+    end
+    selection <<  ["En un año",(Date.today >> 12).to_s]
+    for i in (2..5)
+      selection << ["En " + i.to_s + " años",(Date.today >> i*12).to_s]
+    end
+    return selection
+  end
 end

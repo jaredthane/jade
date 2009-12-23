@@ -1,7 +1,7 @@
 <%= error_messages_for :line %>
 
 <% if @order_type_id == '5'  %>
-	<%= render :partial => 'physical_counts/line', :collection => @lines %>
+	<%= render :partial => 'counts/line', :collection => @lines %>
 <% else %>
 	<%= render :partial => 'orders/line', :collection => @lines %>
 <% end %>

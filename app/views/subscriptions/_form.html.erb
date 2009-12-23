@@ -24,45 +24,46 @@
 <% form_for(@subscription, :html => {:id => 'subscription_form' }) do |f| %>
     <%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 	<div class="column2-unit-left">
+		Casillas que tienen que llenarse estan marcados con *
 		<p>
-			<b>Producto</b><br />
-			<%= f.text_field :product_name, :class=> 'lookup field', :id => 'product_lookup',:style=>'width:168px;' %>
+			<b>Producto *</b><br />
+			<%= f.text_field :product_name, :class=> 'lookup field', :title=> 'El nombre del servicio o producto que se proveerá al cliente regularmente', :id => 'product_lookup',:style=>'width:168px;' %>
 		</p>
 		<p>
 			<b>Cantidad</b>
-			<%= f.text_field :quantity, :class => 'field' %>
+			<%= f.text_field :quantity, :class => 'field', :title=> 'Cuantas unidades del servicio o producto se le darán mensualmente? (Si no está seguro, ponga 1)' %>
 		</p>
 		<p>
 			<b>Precio Fijo (+)</b>
-			<%= f.text_field :fixed_price, :class => 'field' %>
+			<%= f.text_field :fixed_price, :class => 'field', :title=> 'Precio fijo del producto o servicio por cada unidad' %>
 		</p>
 		<p>
 			<b>Fecha de Vencimiento</b><br />
-			<%= f.text_field :end_date, :class=> 'field datepicker', :id => 'end_date',:style=>'width:168px;' %>
+			<%= f.text_field :end_date, :class=> 'field datepicker', :id => 'end_date',:style=>'width:168px;', :title=> 'Cuando se vence la subscripción? Dejalo en blanco para que no se expira.' %>
 		</p>
 	</div>
 	<div class="column2-unit-right">
     <p>
       <b>Cliente</b><br />
-			<%= f.text_field :client_name, :class=> 'lookup field', :id => 'client_lookup',:style=>'width:168px;' %>
+			<%= f.text_field :client_name, :class=> 'lookup field', :id => 'client_lookup',:style=>'width:168px;', :title=> 'Cual es el nombre del cliente que recibirá el servicio o producto?' %>
 		</p>
 		<p>
 			<b>Frequencia</b> (En meses)<br />
-			<%= f.text_field :frequency, :class => 'field' %>
+			<%= f.text_field :frequency, :class => 'field', :title=> 'Cada cuantas meses recibirá el cliente la cantidad especificada del servicio o producto? Ponga 1 si no está seguro.' %>
 		</p>
 		<p>
 			<b>Precio Relativo (x)</b>
-			<%= f.text_field :relative_price, :class => 'field' %>
+			<%= f.text_field :relative_price, :class => 'field', :title=> 'Que porcentaje del costo base del producto desea cobrar el cliente? Ponga 0 si desea un precio fijo, que no cambia según el costo del producto.' %>
 		</p>
 		<p>
 			<b>Proxima Fecha</b>
-			<%= f.text_field :next_order_date, :class=> 'field datepicker', :id => 'next_order_date',:style=>'width:168px;' %>
+			<%= f.text_field :next_order_date, :class=> 'field datepicker', :id => 'next_order_date',:style=>'width:168px;', :title=> 'Que fecha se le dará a la primera factura?' %>
 			
 		</p>
 		<p>
 			<b>Cantidad de Números</b><br />
 			(Deje en blanco para no usar esta opción)
-			<%= f.text_field :end_times, :class => 'field' %>
+			<%= f.text_field :end_times, :class => 'field', :title=> 'Cuántos numeros recibirá el cliente antes que expire su subscripción? Dejalo en blanco si no desea que la subscripción expire automaticamente.' %>
 		</p>
 
 	</div>

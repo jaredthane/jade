@@ -45,11 +45,17 @@ class Product < ActiveRecord::Base
 	belongs_to :product_type
 	belongs_to :unit
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
-	validates_presence_of(:vendor, :message => "debe ser valido")
-	validates_presence_of(:unit, :message => "debe ser valido")
-	validates_presence_of(:name, :message => "debe ser valido.")
-	validates_uniqueness_of(:name, :message => "debe ser único.") 
-	validates_uniqueness_of(:upc, :message => "debe ser único.") 
+	##################################################################################################
+	# 
+	#################################################################################################
+  def validate
+    errors.add "Proveedor"," no es válido" if !vendor
+    errors.add "Unidad","no es válido" if !unit
+    errors.add "Nombre","no es válido" if !name or name==''
+    if self.new_record?
+    	errors.add "Nombre y upc","deben ser únicos" if Product.find(:first,:conditions=> "name = '#{name}' or upc = '#{upc}'")
+    end
+  end
 	def isnumeric?(s)
 		return s =~ /\A\d+\Z/
 	end
@@ -78,6 +84,9 @@ class Product < ActiveRecord::Base
 	end
 	def barcode_filename
 		return "/barcodes/" + self.upc + ".png"
+	end
+	def inventory(entity)
+		return self.inventories.find_by_entity_id(entity.id)
 	end
 	##################################################################################################
 	# Creates Inventories, Prices, and Warranties
@@ -272,7 +281,8 @@ class Product < ActiveRecord::Base
 	end
 	def to_order(location_id = User.current_user.location_id)
 		i=inventories.find_by_entity_id(location_id)
-		return i.to_order || 0 if i
+		return (i.to_order || 0) if i
+		return 0
 	end
 	def to_order=(value, location_id = User.current_user.location_id)
 		i=inventories.find_by_entity_id(location_id)
@@ -443,9 +453,23 @@ class Product < ActiveRecord::Base
 	end
 	def self.search_name(search, page)
   	find 		 :all,
-  					 :conditions => ['(products.name like :search)', {:search => "%#{search}%"}],
+  					 :conditions => ['(products.name like :search) AND (prices.available = True) AND (prices.price_group_id = :price_group_id)', {:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
+  					 :joins => 'inner join prices on prices.product_id=products.id',
 		         :order => 'name',
 		         :limit => 10
+	end
+  def self.find_single(search)
+  	find :first,
+		         :conditions => ['(products.name like :search 
+		         										OR products.model like :search 
+		         										OR products.upc like :search 
+		         										OR description like :search )
+		         							AND (prices.price_group_id = :price_group_id)
+		         							AND (prices.available = True)',
+		         							{:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
+		         :order => 'name',
+		         :joins => 'inner join prices on prices.product_id=products.id',
+		         :group => 'products.id'
 	end
   def self.search(search, page)
   	paginate :per_page => 20, :page => page,
@@ -492,7 +516,7 @@ class Product < ActiveRecord::Base
 		         :joins => 'left join product_categories on product_categories.id=products.product_category_id',
 		         :group => 'products.id'
 	end
-	def self.search_all_wo_pagination(search, page)
+	def self.search_all_wo_pagination(search, page=nil)
   	find 		 :all,
 		         :conditions => ['(products.name like :search OR products.model like :search OR products.upc like :search OR description like :search OR vendors.name like :search OR product_categories.name like :search)', {:search => "%#{search}%"}],
 		         :order => 'name',

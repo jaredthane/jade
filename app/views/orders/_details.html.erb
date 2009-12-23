@@ -2,9 +2,9 @@
 	when 4 %>
 		<% content_for :title do %>Detalles de Transferencia #<%= @order.id %><% end %>
 	<% when 1 %>
-		<% content_for :title do %>Detalles de Venta #<%= @order.id %><% end %>
+		<% content_for :title do %>Detalles de Venta - Factura #<%= @order.receipt_number %><% end %>
 	<% when 2 %>
-		<% content_for :title do %>Detalles de Compra #<%= @order.id %><% end %>
+		<% content_for :title do %>Detalles de Compra - Factura #<%= @order.receipt_number %><% end %>
 	<% when 3 %>
 		<% content_for :title do %>Detalles de Consumo Interno #<%= @order.id %><% end %>
 	<% else %>
@@ -14,85 +14,52 @@
 	<% case @order.order_type_id
 	when 1 %>
 		<% if current_user.has_rights(['Admin','Ventas','Gerente']) %>
-		    <% if !@order.deleted %>
     			<dt><%= link_to 'Nueva Venta', new_sale_path %></dt>
     			<dt><%= link_to 'Cambiar', edit_order_path(@order) %></dt>
-    			<dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de esta venta serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularla?', :method => :delete %></dt>
-					<% if current_user.has_rights(['Admin','Gerente']) %>
+    			<% if current_user.has_rights(['Admin','Gerente']) %>
 						<dt><%= link_to 'Borrar', erase_order_path(@order) %></dt>
 					<% end %>
+		    <% if !@order.deleted %>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></dt>
 			<% end %>
 		<% end %>
 		<% if view == 'products' %>
 		  <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		  <dt><%= link_to 'Facturas', order_receipts_path(@order) %></dt>
-		  <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
 		<% elsif view == 'history' %>
 		  <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		  <dt><%= link_to 'Facturas', order_receipts_path(@order) %></dt>
-		  <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		<% elsif view == 'receipts' %>
-		  <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		  <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		  <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		<% elsif view == 'payments' %>
-		  <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		  <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		  <dt><%= link_to 'Facturas', order_receipts_path(@order) %></dt>
 		<% end %>
 		<dt><%= link_to 'Lista de Ventas', sales_path %> </dt>
 	<% when 2 %>
 		<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
-		    <% if !@order.deleted %>
     			<dt><%= link_to 'Nueva Compra', new_purchase_path %></dt>
 			    <dt><%= link_to 'Cambiar', edit_order_path(@order) %></dt>
-			    <dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de esta compra serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularla?', :method => :delete %></dt>
+		    <% if !@order.deleted %>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></dt>
 			<% end %>
 		  <% if view == 'products' %>
 		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
 		  <% elsif view == 'history' %>
 		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		  <% elsif view == 'receipts' %>
-		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		  <% elsif view == 'payments' %>
-		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
 		  <% end %>
 			<dt><%= link_to 'Lista de Compras', purchases_path %> </dt>
 		<% end %>
 	<% else %>
 		<% if current_user.has_rights(['Admin','Gerente']) %>
-	        <% if !@order.deleted %>
-			    <dt><%= link_to 'Cambiar', edit_order_path(@order) %></dt>
-			    <dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de este pedido serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularlo?', :method => :delete %></dt>
-			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></dt>
+	    <dt><%= link_to 'Cambiar', edit_order_path(@order) %></dt>
+      <% if !@order.deleted %>
+		    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></dt>
 			<% end %>
 		  <% if view == 'products' %>
 		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
 		  <% elsif view == 'history' %>
 		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		  <% elsif view == 'receipts' %>
-		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
-		    <dt><%= link_to 'Pagos', order_payments_path(@order) %></dt>
-		  <% elsif view == 'payments' %>
-		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
-		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
 		  <% end %>
 		<% end %>
 		<dt><%= link_to 'Lista de Pedidos', orders_path %> </dt>
     <% end %>
 <% end %>
 
-<% if @order.deleted %><h2 class="lineErrorExplanation" >Este pedido ha sido anulado.</h2><% end %>
+<% if @order.deleted %><p class="error_message" >Este pedido ha sido anulado.</p><% end %>
 
 <div class="column2-unit-left">
 <p>
@@ -119,12 +86,10 @@
 		<%=h number_to_currency(@order.total_price_with_tax) %>
 	</p>
 <% end %>
-<% if @order.order_type_id==2 %>
 	<p>
 		<b>Numero de Factura:</b>
-		<%=h @order.purchase_receipt_number %>
+		<%= link_to (order.receipt_number||'Sin número'), show_receipt_url(@order) %>
 	</p>
-<% end %>
 </div>
 <div class="column2-unit-right">
 <p>

@@ -37,9 +37,14 @@ class Entity < ActiveRecord::Base
   def to_param
     "#{id}-#{name.parameterize}"
   end
-	validates_presence_of(:name, :message => "Debe introducir el nombre de la entidad.")
-  #validates_uniqueness_of(:name, :message => "El nombre de entidad ya existe.") 
-  
+	##################################################################################################
+	# 
+	#################################################################################################
+  def validate
+  	logger.debug "HERE in validate++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+    errors.add "Nombre","no es válido" if !name or name==''
+    errors.add "Tipo de cliente","no es válido" if !entity_type
+  end  
   belongs_to :state
   
   # These are all of the price groups that are available at this site.
@@ -105,9 +110,7 @@ class Entity < ActiveRecord::Base
 		end
 	end
 	
-	belongs_to :entity_type
-	validates_presence_of(:entity_type, :message => "Debe seleccionar el tipo de entidad.")
-    
+	belongs_to :entity_type  
   def new_movement_attributes=(movement_attributes)
     movement_attributes.each do |attributes|
       movements.build(attributes)
@@ -249,6 +252,23 @@ class Entity < ActiveRecord::Base
 			end
 		end
   end
+  def fax_number
+  	if self.fax
+			if self.fax.length == 8
+				return self.fax[0..3] + "-" + self.fax[4..7]
+			end
+		end
+  end
+  def fax_number=(number)
+  	self.fax=strip(number, ['-',' '])
+  end
+  def office_phone_number
+  	if self.office_phone
+			if self.office_phone.length == 8
+				return self.office_phone[0..3] + "-" + self.office_phone[4..7]
+			end
+		end
+  end
   def office_phone_number=(number)
   	self.office_phone=strip(number, ['-',' '])
   end
@@ -260,12 +280,15 @@ class Entity < ActiveRecord::Base
 		end
   end
   def full_address
-  	address=self.address
-  	if self.city!=''
+  	address=''
+  	if self.address
+  	  address += self.address
+  	end
+  	if self.city
   	 	address+=", "+self.city
   	end
-  	if self.state!=''
-  	 	address+=", "+self.state.name
+  	if self.state and address != ''
+  	 	address += ", " + self.state.name
   	end
   	return address
   end

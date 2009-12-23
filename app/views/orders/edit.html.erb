@@ -3,9 +3,9 @@
 	when 4 %>
 		<% content_for :title do %>Cambiar Transferencia #<%= @order.id %><% end %>
 	<% when 1 %>
-		<% content_for :title do %>Cambiar Venta #<%= @order.id %><% end %>
+		<% content_for :title do %>Cambiar Venta - Factura #<%= @order.receipt_number %><% end %>
 	<% when 2 %>
-		<% content_for :title do %>Cambiar Compra #<%= @order.id %><% end %>
+		<% content_for :title do %>Cambiar Compra - Factura #<%= @order.receipt_number %><% end %>
 	<% when 3 %>
 		<% content_for :title do %>Cambiar Consumo Interno #<%= @order.id %><% end %>
 	<% else %>

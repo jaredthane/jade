@@ -1,13 +1,12 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
 
-<!--  Version: Multiflex-3 Update-7 / Layout-4             -->
-<!--  Date:    January 15, 2007                            -->
-<!--  Author:  Wolfgang                                    -->
-<!--  License: Fully open source without restrictions.     -->
-<!--           Please keep footer credits with a link to   -->
-<!--           Wolfgang (www.1-2-3-4.info). Thank you!     -->
+<!--  Version: Multiflex-4.2 / Layout-2                     -->
+<!--  Date:    January 20, 2008                             -->
+<!--  Design:  www.1234.info                                -->
+<!--  License: Fully open source without restrictions.      -->
+<!--           Please keep footer credits with the words    -->
+<!--           "Design by 1234.info" Thank you!             -->
 
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
@@ -16,14 +15,14 @@
   <meta name="revisit-after" content="2 days" />
   <meta name="robots" content="index,follow" />
   <meta name="publisher" content="Thane Media" />
-  <meta name="copyright" content="    
+  <meta name="copyright" content="   
     Jade Inventory Control System
     Copyright (C) 2009 Thane Media
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 1.00</span></a></h1>
-    (at your option) any later version 1.00</span></a></h1>
+    the Free Software Foundation, either version 2.01
+    (at your option) any later version 2.01
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -33,21 +32,41 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses.
     " />
-  <meta name="author" content="Design: Wolfgang (www.1-2-3-4.info) / Modified: Jared Martin" />
+  <meta name="author" content="Design: Wolfgang (www.1-2-3-4.info) | Application: Jared Martin" />
   <meta name="distribution" content="global" />
   <meta name="description" content="Your page description here ..." />
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
-  <%= stylesheet_link_tag 'layout4_setup' %>
-  <%= stylesheet_link_tag 'layout4_text' %>
+  <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
+
+  <link type="text/css" rel="stylesheet" media="screen" href="/css/text.css">
+  <link type="text/css" rel="stylesheet" media="screen" href="/css/setup.css">
+  <link rel="stylesheet" href="/css/jquery-ui-custom-theme/jquery-ui-1.7.2.custom.css" type="text/css">
+  <link rel="stylesheet" href="/css/thickbox.css" type="text/css" media="screen" />
+
   <%= stylesheet_link_tag 'jquery.autocomplete' %>
   <%= stylesheet_link_tag 'jquery-ui' %>
 	<%= javascript_include_tag 'jquery' %>
 	<%= javascript_include_tag 'ui.datepicker-es' %>
   <%= javascript_include_tag 'jquery-ui' %>
 	<%= javascript_include_tag 'jquery.autocomplete' %>
+	<%= javascript_include_tag 'application.js' %>
+  <style type="text/css">
+    div.auto_complete {
+      position:absolute;
+      width:250px;
+      background-color:white;
+      border:1px solid #888;
+      margin:0px;
+      padding:0px;
+    }
+    li.selected { background-color: #ffb; }
+  </style>
+
 	<%= yield :javascript %>
+  
   <link rel="icon" type="image/x-icon" href="/images/img/favicon.ico" />
-  <title>Sistema de Control de Inventario Jade | <%= page_title %></title>
+  <title>Sistema de Control de Inventario y Contabilidad Jade | <%= page_title %>
+</title>
   
 </head>
 <!-- Global IE fix to avoid layout crash when single word size wider than column width -->
@@ -55,21 +74,26 @@
 
 <body>
   <div class="page-container">
+  	<div class="header">
+      <div class="header-top">
+        <div class="round-border-topleft"></div><div class="round-border-topright"></div>      
+        <a class="sitelogo" href="#" title="Inicio"></a>
+        <div class="sitename">
+          <h1><a href="/products" title="Inicio" %}">Jade&nbsp;&bull;&nbsp;2.01</a></h1> 
+          <h2>Sistema de Control de Inventario y Contabilidad Jade<br/>Solido. Sencillo. Elegante.</h2>
+        </div>
+        <div class="searchform">
+          <% form_tag search_path, :method =>'get', :id => 'search_form' do %>
+            <%= text_field_tag :search, params[:search], :class => 'field'%>
+		        <%= hidden_field_tag :filter, params[:filter], :class => 'field'%>
+		        <%= submit_tag "Buscar", :name => nil, :class => 'button' %>
+          <% end %>
+        </div>
+      </div>
 
-
-    <!-- A. HEADER -->      
-    <div class="header">
-      
       <!-- A.1 HEADER MIDDLE -->
       <div class="header-middle">    
    
-        <!-- Sitelogo and sitename -->
-        <a class="sitelogo" href="#" title="Pagina de Inicio"></a>
-        <div class="sitename">
-          <h1><a href="/products" title="Pagina de Inicio">Jade<span style="font-weight:normal;font-size:50%;">&nbsp;version 1.00</span></a></h1>
-          <h2>Sistema de Control de Inventario</h2>
-        </div>
-
         <!-- Navigation Level 0 -->
         <div class="nav0">        	<%= yield :nav0 %>
         	
@@ -77,15 +101,7 @@
 
         <!-- Navigation Level 1 -->
         <div class="nav1">
-            <%= yield :nav1 %>
-            <!-- Search form -->  
-					<div class="searchform">
-						<% form_tag search_path, :method =>'get' do %>
-							<%= text_field_tag :search, params[:search], :class => 'field'%>
-							<%= hidden_field_tag :filter, params[:filter], :class => 'field'%>
-							<%= submit_tag "Buscar", :name => nil, :class => 'button' %>
-						<% end %>
-					</div>
+            <%= yield :nav1 %>					
         </div>              
       </div>
       
@@ -105,17 +121,17 @@
 	  		<% end %>
 	  		<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
 					<li><a href="/purchases/new" title="Compra">Compra</a></li>
-					<li><a href="/services/new" title="Servicio">Servicio</a></li>
 					<li><a href="/products/new" title="Producto">Producto</a></li>
+					<li><a href="<%= new_service_path %>" title="Servicio">Servicio</a></li>
 					<li><a href="/discounts/new" title="Descuento">Descuento</a></li>
-					<li><a href="<%= new_combo_url %>" title="Combo">Combo</a></li>
-					<li><a href="<%= new_vendor_url %>" title="Proveedor">Proveedor</a></li>
+					<li><a href="/combos/new" title="Combo">Combo</a></li>
+					<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
 					<% if current_user.has_rights(['Ver Suscripciones']) %>
 						<li><a href=<%= new_subscription_url %> title="Suscripción">Suscripción</a></li>
 					<% end %>
 	  		<% end %>
 	  		<% if current_user.has_rights(['Admin','Inventario','Gerente']) %>
-        	<li><a href="/physical_counts/new" title="Cuenta Fisica">Cuenta Fisica</a></li>
+        	<li><a href="/count/new" title="Cuenta Fisica">Cuenta Fisica</a></li>
         <% end %>
   			<li><a href="/internal/new" title="Consumo Interno">Consumo Interno</a></li>
   			<li><a href="/sites/new" title="Sitio">Sitio</a></li>
@@ -153,7 +169,6 @@
 					<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
 						<li><a href="/sales" title="Ventas">Ventas</a></li>
 					<% end %>
-					<li><a href=<%= receipts_path %> title="Facturas">Facturas</a></li>
 					<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
 						<li><a href="/subscriptions" title="Suscripciones">Suscripciones</a></li>
 						<li><a href="/internal" title="Consumo Interno">Consumos Internos</a></li>
@@ -161,7 +176,7 @@
 				</ul>				
 			</li>
 	  <% end %>
-	      <% if current_user.has_rights(['Admin','Gerente','Compras']) %>
+	  <% if current_user.has_rights(['Admin','Gerente','Compras']) %>
       <li><a href="/vendors" title="Proveedores">Proveedores</a></li>
     <% end %>
     <% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
@@ -181,9 +196,12 @@
   			<% for location in get_sites %>
   				<li><a href="/entities/<%= location.id %>" title=<%= location.name %>><%= location.name %></a></li>
   			<% end %>
-  			<li><a href="/physical_counts" title="Cuentas Fisicas">Cuentas Fisicas</a></li>
+  			<li><a href="/counts" title="Cuentas Fisicas">Cuentas Fisicas</a></li>
   		</ul>
   	</li>
+  	<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
+	  	<li><a href="/payments" title="Pagos">Pagos</a></li>
+	  <% end %>
   	<% if current_user.has_rights(['Admin','Gerente']) %>
 	  	<li><a href="/users" title="Usuarios">Usuarios</a></li>
 	  <% else %>
@@ -191,28 +209,20 @@
 	  <% end %>
 	  <% if current_user.has_rights(['Admin','Gerente', 'Contabilidad']) %>
 	  	<li><a href="/accounts" title="Contabilidad">Contabilidad</a></li>
-	  <% end %>
-	  <li><a title="Reportes">Reportes</a><ul>
-	  	<li><a href="/receipts" title="Facturas">Facturas</a></li>
-	  	<li><a href="/payments" title="Pagos">Pagos</a></li>
-	  	<li><a href="/sales_representatives" title="Corte de Caja">Corte de Caja</a></li>	  
-	  </ul></li>
-	  
+	  <% end %>	  
 	</ul>
 	<% end %>
 					<%= yield :nav2 %>	
         </div>
 	  </div>
 
-      <!-- A.3 HEADER BREADCRUMBS -->
-
-      <!-- Breadcrumbs -->
       
     </div>
 
     <!-- B. MAIN -->
     <div class="main">
- 
+    <div class="nav-daddy">
+      <div class="main-nav-spacer"></div>
       <!-- B.1 MAIN NAVIGATION -->
       <div class="main-navigation">
 
@@ -285,10 +295,11 @@
         
 		   <%= yield :nav3 %>
 
-
+</div>
 
 </div>
  
       <!-- B.2 MAIN CONTENT -->
       <div class="main-content">
+
 

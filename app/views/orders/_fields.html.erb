@@ -1,19 +1,18 @@
 <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
-
-
 <% content_for(:javascript) do %>
   <%= javascript_include_tag "order_edit" %>
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
 	<dt><%= link_to_function 'Guardar', 'submit("order_form")', :class => 'action' %></dt>
-	<% if mode == 'edit' %>
-	    <dt><%= link_to 'Anular', @order, :confirm => 'Todas la líneas de este pedido serán marcados como no entregados y ya no se podrá cambiar. Está seguro que desea anularlo?', :method => :delete, :class => 'action' %></dt>
-    <% end %>
 	<dt><%= link_to 'Cancelar', orders_url, :class => 'action' %></dt>
 <% end %>
 
-<%= error_messages_for :order, :header_message => "Surgieron los siguentes dificultades guardando los cambios al pedido:", :message => "" %>
+<% for error in @order.errors %>
+	<p class="error_message">
+		<%= error[0] %> <%= error[1] %>
+	</p>
+<% end %>
 
 <%= f.hidden_field :order_type_id, :value => @order_type_id, :id=>'order_type_id' %>
 <% case order_type_id
@@ -25,11 +24,8 @@
 			</p>
 			<%= f.hidden_field :client_id, :value => current_user.location.id %>
 			
-			<p>
-				<b>Numero de Factura</b>
-				<%= f.text_field :purchase_receipt_number, :class=> 'field' %>
-			</p>
 		</div>
+
 	<% when 1 %>
 		<div class="column3-unit-left">
 			<p>
@@ -39,11 +35,11 @@
 			<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 		</div>
 		<div class="column3-unit-middle">
-			<p>
-				<b>Fecha Recibido</b>
-				<%= f.text_field :markreceived, :class=> 'field datepicker', :id => 'received_date_picker',:style=>'width:168px;' %>
-
-			</p>
+		
+	    <p>
+		    <b>Fecha de Pedido</b><br />
+		    <%= f.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>
+	    </p>
 		</div>
 	<% when 3 %>
 		<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
@@ -61,14 +57,19 @@
 				<b>Cliente</b><br />
 				<%= f.text_field :client_name, :class=> 'lookup field', :id => 'client_lookup',:style=>'width:168px;' %>
 			</p>
-		</div>16
+		</div>
+
 <% end %>
 	
 <div class="column3-unit-right">
-	<p>
-		<b>Fecha de Pedido</b><br />
-		<%= f.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>
-	</p>
+			<p>
+				<b>Numero de Factura</b>
+				<%= text_field_tag 'order[number]', @order.number %>
+			</p>
+			<p>
+				<b>Anulado</b>
+				<%= f.check_box :void, :class=> 'field'%>
+			</p>
 	<%= f.hidden_field :user_id, :value => current_user.id %>
 </div>
 
@@ -84,7 +85,7 @@
 		<div class="table_cell">Acciones</div>
 	</div>
 	<div id="lines">
-		<%= render :partial => 'line', :collection => @order.lines %>
+		<%= render :partial => 'orders/line', :collection => @order.lines %>
 	</div>
 	<div id="lines_errors"></div>
 	<%= link_to "Añadir otro producto | ", new_line_path(:order_id => @order.id), :id => "add_new_line", :class => 'action'  %>	  

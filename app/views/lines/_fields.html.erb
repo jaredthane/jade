@@ -1,36 +1,10 @@
-<script type="text/javascript">
-	$(document).ready(function(){
-		$('#non_js_fields').hide();
-		$('#js_fields').show();
-		$('#submit_new_line_button').hide();
-	});
-</script>
-<% @order = @count if @count %>
-<%= line_form.hidden_field(:order_id, :value=> @order_id) %>
-<div id=non_js_fields>
-<p>
-<b>Cantidad</b><br />
-<%= line_form.text_field(:quantity, :value => 1, :class => 'field') %>
-</p>
-<p>
-<b>Precio</b><br />
-<%= line_form.text_field(:price, :value => 0.00, :class => 'field') %>
-</p>
-<p>
-<b>Producto</b><br />
-<%= line_form.collection_select(:product_id, get_products, :id, :name) %>
-</p>
-</div>
-<div id=js_fields style="display: none;">
-<p>
-<b>Código UPC para producto adicional</b><br />
-<%= line_form.text_field(:bar_code, :id => 'bar_code_field', :class => 'field') %>
-<%= line_form.hidden_field(:client_name, :id=> 'client_name', :value=>'') %>
-<%= line_form.hidden_field(:order_type_id, :id=> 'order_type', :value=>@order_type_id) %>
- 
-</p>
-</div>
-<p>
-<%= line_form.submit "Añadir Producto al Pedido", :class => 'action', :id=>'submit_new_line_button' %>
-</p>
- 
+<div>
+	<% @order = @count if @count %>
+	<%= line_form.hidden_field(:order_id, :value=> @order_id) %>
+	<p>
+		<b>Código UPC para producto adicional</b><br />
+		<%= line_form.text_field(:bar_code, :id => 'bar_code_field', :class => 'field') %>
+		<%= line_form.hidden_field(:client_name, :id=> 'client_name', :value=>'') %>
+		<%= line_form.hidden_field(:order_type_id, :id=> 'order_type', :value=>@order_type_id) %> 
+	</p>
+</div> 

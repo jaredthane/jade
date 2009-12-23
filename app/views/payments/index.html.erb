@@ -1,4 +1,6 @@
 <% content_for(:javascript) do %>
+  <%= javascript_include_tag "slider.jquery" %>
+  <%= stylesheet_link_tag 'ui.slider.extras' %>
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
@@ -7,38 +9,12 @@
 	<dt> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </dt>
 <% end %>
 <% content_for :title do %>Lista de Pagos<% end %>
-<script type="text/javascript">
-	$(document).ready(function(){
-	  //Setup	date picker
-	  $.datepicker.regional['en']
-	  $(".datepicker").datepicker();
-	});
-</script>
-<% form_tag payments_path, :method =>'get', :id => 'date_form' do %>
-	<div class="column2-unit-left">
-		<p>
-			<b>Desde</b><br />
-		  <%= text_field_tag 'from', @from.to_s(:default), :class=> 'field datepicker', :id => 'from',:style=>'width:168px;' %>
-		</p>
-   </div>
-   <div class="column2-unit-right">
-    <p>
-    	<b>Hasta</b><br />
-  		<%= text_field_tag 'till', @till.to_s(:default), :class=> 'field datepicker', :id => 'till',:style=>'width:168px;' %>
-    </p>
-   </div>
-   <div class="checkbox-list">
-		<% get_sites.each do |site| -%>
-			<%= check_box_tag "sites[]", site.id, @sites.include?(site.id.to_s) -%> <%= site.name -%>
-		<% end -%>
-	</div>
-	<%= hidden_field_tag 'index',true %>
-<% end %>
-<hr class="clear-contentunit" />
+<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => payments_path } %>
+
 <%= will_paginate @payments, :class => 'pagination' %>
 <div>
     <div id="lines" class="table_header_row">
-        <div class="table_cell_20">Pedido</div>
+        <div class="table_cell_20">Factura</div>
         <div class="table_cell_20">Cantidad</div>
         <div class="table_cell_20">Fecha</div>
         <div class="table_cell_20">Metodo</div>
@@ -46,7 +22,7 @@
 	</div>
     <% for payment in @payments %>
 	    <div class="table_row">
-		    <div class="table_cell_20"><%= link_to payment.order.id, payment.order %></div>
+		    <div class="table_cell_20"><%= link_to payment.order.receipt, payment.order %></div>
             <div class="table_cell_20"><%= link_to number_to_currency(payment.amount), payment %></div>
             <div class="table_cell_20">
 		          <% if payment.created_at %>

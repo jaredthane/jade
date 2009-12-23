@@ -1,12 +1,12 @@
 
-<% content_for :title do %>Numero de Serie - <%=h @serialized_product.product.upc %><% end %>
+<% content_for :title do %>Numero de Serie - <%=h @serialized_product.serial_number %><% end %>
 
 <% content_for :actions do %>
 	<dt><%= link_to 'Lista', serialized_products_path, :class =>'action' %></dt>
 <% end %>
 <div class="column3-unit-left">
 	<p>
-		<b>Producto</b>
+		<b>Producto</b><br />
 		<% if @serialized_product.product %>
 			<%= link_to @serialized_product.product.name, @serialized_product.product%>
 		<% end %>
@@ -20,10 +20,6 @@
     <b>Minimo</b><br />
     <%=h @serialized_product.product.min(current_user.location_id) %>
   </p>
-  <p>
-    <b>Numero de Serie:</b> <br />
-    <%=h @serialized_product.serial_number %>
-  </p>
 </div>
 <div class="column3-unit-middle">
 <p>
@@ -31,14 +27,14 @@
       <%=h number_to_currency(@serialized_product.product.price) %>
   </p>
 	<p>
-    <b>Maximo</b><br />
-    <%=h @serialized_product.product.max(current_user.location_id) %>
-  </p>
-	<p>
     <b>Locacion Actual</b><br />
     <% if @serialized_product.location %>
     	<%=link_to @serialized_product.location.name, @serialized_product.location %>
     <% end %>
+  </p>
+	<p>
+    <b>Maximo</b><br />
+    <%=h @serialized_product.product.max(current_user.location_id) %>
   </p>
 </div>
 <div class="column3-unit-right">
@@ -61,19 +57,17 @@
 	<b>Movimientos:</b>
 	<div>
 		<div class="table_header_row">
-			<div class="table_cell_15">Movimiento</div>
+			<div class="table_cell_20">Movimiento</div>
 			<div class="table_cell_20">Entidad</div>
-			<div class="table_cell_15">Numero de Factura</div>
-			<div class="table_cell_15">Pedido</div>
+			<div class="table_cell_20">Factura</div>
 			<div class="table_cell_20">Usuario</div>
 			<div class="table_cell">Fecha</div>
 		</div>
-		<% for movement in @serialized_product.movements.find(:all,:order => 'created_at desc', :conditions=> 'quantity>=0') %>
+		<% for movement in @serialized_product.movements.find(:all,:order => 'created_at desc') %>
 			<div class="table_row">
-				<div class="table_cell_15"><%= link_to movement.movement_type.name, movement.order %></div>
+				<div class="table_cell_20"><%= link_to movement.description, movement.order %></div>
 				<div class="table_cell_20"><%= link_to movement.entity.name, movement.entity %></div>
-				<div class="table_cell_15"><%= h movement.order.receipt_number %></div>
-				<div class="table_cell_15"><%= link_to movement.order.id, movement.order %></div>
+				<div class="table_cell_20"><%= link_to movement.order.receipt, movement.order %></div>
 				<div class="table_cell_20"><%= link_to movement.user.login, movement.user %></div>
 				<div class="table_cell"><%=h movement.created_at.to_date.to_s %></div>
 			</div>
