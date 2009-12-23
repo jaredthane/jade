@@ -736,9 +736,9 @@ class Order < ActiveRecord::Base
 		  j="inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
     end
     if page
-		  paginate :per_page => 20, :page => page, :conditions => c, :order => 'created_at desc', :joins => j
+		  paginate :per_page => 20, :page => page, :conditions => c, :order => 'receipt_number', :joins => j
 		else
-		  find :all, :conditions =>c, :joins => j, :order=> 'created_at desc'
+		  find :all, :conditions =>c, :joins => j, :order=> 'receipt_number'
 		end
 	end
 	

@@ -27,3 +27,6 @@ sudo gem install will_paginate
 
 echo "Installing utilities to make barcodes..."
 sudo apt-get install barcode imagemagick gs
+
+echo "Copying default configuration"
+sudo cp database.yml.sample config/database.yml
