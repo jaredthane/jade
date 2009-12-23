@@ -318,9 +318,6 @@ class OrdersController < ApplicationController
   def erase
     @order = Order.find(params[:id])
     errors=false
-    for receipt in @order.receipts
-    	errors=true if !receipt.destroy
-    end
     if !errors
     	errors=true if !@order.destroy
     end
