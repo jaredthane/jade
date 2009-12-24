@@ -60,7 +60,6 @@ end
 require "will_paginate" 
 require "prawn"
 require "prawn/layout"
-require "calendar_date_select"
 
 ActiveSupport::CoreExtensions::Time::Conversions::DATE_FORMATS.merge!(
   :default => '%d/%m/%Y %H:%M:%S',

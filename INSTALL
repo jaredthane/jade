@@ -39,6 +39,9 @@ function install_passenger {
 		    RailsEnv production
 		 </VirtualHost>
 	" > /etc/apache2/sites-enabled/000-default
+	chown -R www-data /srv/jade
+	a2enmod rewrite
+	/etc/init.d/apache2 restart
 }
 function install_gems {
 	echo "          | Installing gems needed by Jade:                     |
