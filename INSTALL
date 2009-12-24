@@ -129,5 +129,8 @@ do
 		show_help;;
 	esac
 done
+echo "          |=====================================================|
+          | Finished Installing Requested Components            |
+          |=====================================================|"
 
 
