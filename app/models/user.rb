@@ -98,9 +98,9 @@ class User < ActiveRecord::Base
 		for r in User.find_all_by_location_id(site)
 			if r.clients.length>0
 				rep={:user=>r, :previous_balance=>0, :num_receipts=>0, :revenue=>0, :num_payments=>0, :cash_received=>0, :final_balance=>0}
-				rep[:num_receipts] = Receipt.count(:all, 
-										:conditions => ['clients.user_id=:rep_id AND date(receipts.created_at) >=:from AND date(receipts.created_at) <= :till', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
-										:joins=>'inner join orders on orders.id=receipts.order_id inner join entities as clients on clients.id=orders.client_id')
+				rep[:num_receipts] = Order.count(:all, 
+					:conditions => ['clients.user_id=:rep_id AND date(orders.created_at) >=:from AND date(orders.created_at) <= :till', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
+					:joins=>'inner join entities as clients on clients.id=orders.client_id')
 				revenue_posts = Post.find(:all, 
 						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],
 						:joins=>'inner join trans on trans.id=posts.trans_id')

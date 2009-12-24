@@ -52,7 +52,7 @@ class Entry < ActiveRecord::Base
 			# *************** THIS SHOULD BE CHANGED TO A MYSQL UPDATE QUERY *******************************
 			for entry in Entry.find(:all, :conditions=> "account_id= " + self.account_id.to_s + " AND created_at>'" + self.post.trans.created_at.to_s(:db) + "'")
 #				#logger.debug 'POST WAS=' +entry.value.to_s + ' * POST_TYPE=' + entry.post_type_id.to_s + ' * MODIFIER='+entry.account.modifier.to_s + '(BALANCE=' + entry.balance.to_s + ')'
-				entry.balance=entry.balance + (self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0) * mod
+				entry.balance=(entry.balance||0) + (self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0) * mod
 #				#logger.debug 'New POST=' + entry.value.to_s + ' * POST_TYPE=' + entry.post_type_id.to_s + ' * MODIFIER='+entry.account.modifier.to_s + '(BALANCE=' + entry.balance.to_s + ')'
 				entry.save
 			end
