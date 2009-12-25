@@ -68,13 +68,13 @@ class Entry < ActiveRecord::Base
 			#logger.debug "Goot"
 			if self.created_at.to_date==Date.today
 		    self.balance=(self.account.balance || 0 ) + (self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0)
-		    puts "We saved more tiome!**************************"
-		    puts "self.id=" + self.id.to_s
-		    puts "self.created_at.to_date=" + self.created_at.to_date.to_s
+#		    puts "We saved more tiome!**************************"
+#		    puts "self.id=" + self.id.to_s
+#		    puts "self.created_at.to_date=" + self.created_at.to_date.to_s
 		  else
-		    puts "We didnt save more tiome :(  **************************"
-		    puts "self.id=" + self.id.to_s
-		    puts "self.created_at.to_date=" + self.created_at.to_date.to_s
+#		    puts "We didnt save more tiome :(  **************************"
+#		    puts "self.id=" + self.id.to_s
+#		    puts "self.created_at.to_date=" + self.created_at.to_date.to_s
 		    mydate=(self.created_at||Time.now)
 			  last_entry=Entry.last(:conditions=> ['date(created_at) < :mydate AND account_id=:account', {:mydate=>mydate.to_s(:db), :account=>self.account_id}])
 			  if last_entry
