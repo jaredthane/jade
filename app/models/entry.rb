@@ -31,12 +31,12 @@ class Entry < ActiveRecord::Base
 		# If we're adding this post in the middle of the pile,
 		# We need to update the balance of all posts that happened after this new one.
 		#logger.debug "checking for old posts"
-#		if self.created_at.to_date!=Date.today
+		if self.created_at.to_date!=Date.today
 #			logger.debug "this is a new post and created at is pre-set********************************************************"
-#			recalculate_later_balances
+			recalculate_later_balances
 #		else
 #		  puts "We saved time!!*************************************************************"
-#		end
+		end
 	end
 	##################################################################################################
 	# Recalculates balances of all older posts
@@ -66,7 +66,7 @@ class Entry < ActiveRecord::Base
 		#logger.debug 'OLD BALANCE=' + self.account.balance.to_s + '+ VALUE=' +self.post.value.to_s + ' * POST_TYPE=' + self.post.post_type_id.to_s + ' * MODIFIER='+self.account.modifier.to_s
 		if self.account
 			#logger.debug "Goot"
-#			if self.created_at.to_date==Date.today
+			if self.created_at.to_date==Date.today
 		    self.balance=(self.account.balance || 0 ) + (self.post.value || 0) * (self.post.post_type_id || 0) * (self.account.modifier || 0)
 #		    puts "We saved more tiome!**************************"
 #		    puts "self.id=" + self.id.to_s

@@ -54,7 +54,7 @@ class OrdersController < ApplicationController
       @orders=Order.search(params[:search], @order_type_id, @from, @till, nil, params[:sites])
       params[:format] = 'pdf'
     else
-      @orders=Order.search(params[:search], @order_type_id, @from, @till, params[:page], params[:sites])
+      @orders=Order.search(params[:search], @order_type_id, @from, @till, (params[:page]||1), params[:sites])
     end
     if @order_type_id==5
     	render :template=>'counts/index'

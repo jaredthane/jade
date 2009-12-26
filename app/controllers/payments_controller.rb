@@ -27,7 +27,8 @@ class PaymentsController < ApplicationController
   	order_id=params[:order_id]
   	
   	if params[:pdf]=='1'
-      @payments = Payment.search_wo_pagination(params[:search],@from, @till, @sites)
+#      @payments = Payment.search(params[:search],@from, @till, @sites)
+      @payments = Payment.search(params[:search], nil,@from, @till, @sites)
 			if @payments.length==0
 				flash[:error] = 'No hay Pagos para las fechas specificadas'
 				redirect_back_or_default(payments_url)
@@ -36,7 +37,7 @@ class PaymentsController < ApplicationController
 			produce_report
       params[:format] = 'pdf'
     else
-      @payments = Payment.search(params[:search], params[:page],@from, @till, @sites)
+      @payments = Payment.search(params[:search], (params[:page]||1),@from, @till, @sites)
     end
 
     respond_to do |format|

@@ -122,17 +122,20 @@ class Payment < ActiveRecord::Base
 	  return 0 if self.void
 		return (self.presented||0)-(self.returned||0)
 	end
-	def self.search(search, page, from=Date.today, till=Date.today, sites=[User.current_user.location_id])
+	def self.search(search, page=nil, from=Date.today, till=Date.today, sites=[User.current_user.location_id])
 		site_string=''
 		for site in sites
 			site_string+= ' OR 'if site_string !=''
 			site_string+='( orders.vendor_id=' + site.to_s + ' OR orders.client_id=' + site.to_s + ')'
 		end
-  	paginate :per_page => 20, :page => page,
-		         :conditions => ['canceled is null AND date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payments.order_id like :search OR orders.receipt_number like :search OR payment_methods.name like :search ) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}],
-		         :order => 'orders.receipt_number',
-		         :joins => 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id '
-
+		c = ['canceled is null AND date(payments.created_at) >=:from AND date(payments.created_at) <= :till AND (payments.order_id like :search OR orders.receipt_number like :search OR payment_methods.name like :search ) AND ('+site_string+')', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :search => "%#{search}%"}]
+		o = 'orders.receipt_number'
+		j = 'inner join orders on orders.id = payments.order_id inner join payment_methods on payment_methods.id = payments.payment_method_id inner join users on payments.user_id=users.id '
+		if page
+	  	paginate :per_page => 20, :page => page, :conditions => c, :order => o, :joins => j
+		else
+			find :all, :conditions => c, :order => o, :joins => j
+		end
 	end
 	def self.search_wo_pagination(search, from=Date.today, till=Date.today, sites=[User.current_user.location_id])
 		site_string=''

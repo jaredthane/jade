@@ -64,9 +64,11 @@ class Order < ActiveRecord::Base
 	  logger.info "Dumping lines before save"
 	  logger.info self.lines.inspect
 	  m = main_transaction
+	  logger.debug "m=#{m.inspect}"
 	  i = inventory_transaction
 	  self.transactions << m if m
 	  self.transactions << i if i
+	  self.received=last_received
   end
   
 	after_save :post_save
@@ -100,7 +102,9 @@ class Order < ActiveRecord::Base
 	def save_related(list, update=false, include_errors=true)
 	  for item in list
 	  	if item
-    	  item.order_id=self.id
+	  		logger.debug "item=#{item.inspect}"
+    	  item.order=self
+	  		logger.debug "item=#{item.inspect}"
 	  	  if !item.id or update
 				  if !item.save and include_errors
 				    for field, msg in item.errors
