@@ -86,3 +86,4 @@ ALTER TABLE trans ADD INDEX(created_at);
 ALTER TABLE trans ADD INDEX(user_id);
 ALTER TABLE users ADD INDEX(login);
 ALTER TABLE warranties ADD INDEX(product_id);
+ALTER TABLE entities ADD INDEX(created_at);
