@@ -69,7 +69,8 @@ class ApplicationController < ActionController::Base
 
 
   def generate_receipt(order)
-  	order.receipt_filename = "#{RAILS_ROOT}/invoice_pdfs/{order.id}.pdf"
+  	logger.debug "CREATING RECIEPT"
+  	order.receipt_filename = "#{RAILS_ROOT}/invoice_pdfs/#{order.id}.pdf"
   	@order=order
   	prawnto :prawn => {:skip_page_creation=>true}
 	  pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false

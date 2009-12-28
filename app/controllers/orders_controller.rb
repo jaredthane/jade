@@ -95,8 +95,11 @@ class OrdersController < ApplicationController
   end
   def show_receipt
     @order = Order.find(params[:id])
+    	logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
     return false if !allowed(@order.order_type_id, 'view')
     if FileTest.exists?(@order.receipt_filename||'')
+    	logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
+    	logger.debug "could not find"
 		 	send_file @order.receipt_filename, :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
 	    #send_data @receipt.filename, :disposition => 'inline'
 	    # This is good for if the user wants to download the file
@@ -232,13 +235,15 @@ class OrdersController < ApplicationController
 #    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
 #    logger.info "finished updating lines"
 		errors = false
-		errors = true if !@order.save
+		errors = true if !@order.validate
 		if params[:submit_type] == 'post' and !errors
 			errors = true if !@order.post
 		end
     respond_to do |format|
       if !errors
         generate_receipt(@order) if @order.order_type_id=1
+        logger.debug "@order.receipt_number=#{@order.receipt_number.to_s}"
+        @order.save
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { redirect_to(@order) }
         format.xml  { render :xml => @order, :status => :created, :location => @order }
