@@ -32,47 +32,53 @@ for rep in @reps
 	previous_balance = rep[:previous_orders_total]-rep[:previous_payments_total]
 	orders_pending = rep[:previous_orders_count]-rep[:previous_payments_count] + rep[:current_orders_count]-rep[:current_payments_count]
 	balance_pending = rep[:previous_orders_total]-rep[:previous_payments_total] + rep[:current_orders_total]-rep[:current_payments_total]
-@data << [rep[:user].name, 
-	previous_orders, 
-	number_to_currency(previous_balance), 
-	rep[:current_orders_count], 
-	rep[:current_orders_total], 
-	rep[:current_payments_count], 
-	rep[:current_payments_total], 
-	orders_pending, 
-	x.number_to_currency(balance_pending)]
+	@data << [rep[:user].name, 
+		previous_orders, 
+		number_to_currency(previous_balance), 
+		rep[:current_orders_count], 
+		rep[:current_orders_total], 
+		rep[:current_payments_count], 
+		rep[:current_payments_total], 
+		orders_pending, 
+		x.number_to_currency(balance_pending)]
 	
-total[:previous_orders]+=rep[:previous_orders]
-total[:previous_balance]+=rep[:previous_balance]
-total[:current_orders_count]+=rep[:current_orders_count]
-total[:current_orders_total]+=rep[:current_orders_total]
-total[:current_payments_count]+=rep[:current_payments_count]
-total[:current_payments_total]+=rep[:current_payments_total]
-total[:orders_pending]+=rep[:orders_pending]
-total[:balance_pending]+=rep[:balance_pending]
+	total[:previous_orders]+=previous_orders
+	total[:previous_balance]+=previous_balance
+	total[:current_orders_count]+=rep[:current_orders_count]
+	total[:current_orders_total]+=rep[:current_orders_total]
+	total[:current_payments_count]+=rep[:current_payments_count]
+	total[:current_payments_total]+=rep[:current_payments_total]
+	total[:orders_pending]+=orders_pending
+	total[:balance_pending]+=balance_pending
 end
-#		@data << ["---", "---", "---", "---", "---", "---", "---"]
+
 @data << ["Totales", 
-total[:num_receipts], 
-total[:num_payments], 
-rep[:facturas_pendientes], 
-x.number_to_currency(total[:previous_balance]), 
-x.number_to_currency(total[:revenue]), 
-x.number_to_currency(total[:cash_received]), 
-x.number_to_currency(total[:final_balance])]
-
-
-
+		total[:previous_orders], 
+		x.number_to_currency(total[:previous_balance]), 
+		total[:current_orders_count], 
+		x.number_to_currency(total[:current_orders_total]), 
+		total[:current_payments_count], 
+		x.number_to_currency(total[:current_payments_total]), 
+		total[:orders_pending], 
+		x.number_to_currency(total[:balance_pending])]
+#@data << ["Totales", 
+#total[:num_receipts], 
+#total[:num_payments], 
+#rep[:facturas_pendientes], 
+#x.number_to_currency(total[:previous_balance]), 
+#x.number_to_currency(total[:revenue]), 
+#x.number_to_currency(total[:cash_received]), 
+#x.number_to_currency(total[:final_balance])]
 
 pdf.text "  "
 pdf.text "Cuentas por cobrar", :align => :center, :style => :bold
 pdf.table(@data,
-   :font_size => 12,
+   :font_size => 10,
    :horizontal_padding => 1,
    :vertical_padding => 1,
    :border_width => 1,
    :border_style => :grid,
-   :column_widths => { 0 => 80, 1 => 70, 2 => 70, 3 => 70, 4 => 70, 5 => 70, 6 => 70, 7 => 70 },
+   :column_widths => { 0 => 65, 1 => 60, 2 => 65, 3 => 60, 4 => 65, 5 => 60, 6 => 65, 7 => 60, 8 => 65 },
    :align => { 0 => :center,1 => :center, 2 => :center,3 => :center,4 => :center,5 => :center,6 => :center,7 => :center })
    
  

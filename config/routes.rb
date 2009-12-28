@@ -19,7 +19,7 @@ ActionController::Routing::Routes.draw do |map|
   map.price_list 'products/price_list', :controller => 'products', :action => 'price_list', :format =>'pdf'
   map.resources :prices
   map.update_scope 'users/update_scope', :controller => 'users', :action => 'update_scope'
-  map.sales_representatives_report 'sales_representatives/report', :controller => 'sales_representatives', :action => 'report'
+  map.sales_representatives_report 'sales_representatives/report', :controller => 'sales_representatives', :action => 'index', :format => 'pdf'
   map.resources :sales_representatives
   map.new_history 'entities/:id/new_history', :controller => 'entities', :action => 'new_history', :filter => ' tipo:cliente'
   map.create_history 'entities/:id/create_history', :controller => 'entities', :action => 'create_history', :filter => ' tipo:cliente'

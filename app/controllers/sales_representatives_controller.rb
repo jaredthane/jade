@@ -22,62 +22,40 @@ class SalesRepresentativesController < ApplicationController
 		@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
   	@site=User.current_user.location
-		@reps=User.sales_reps_data(@from,@till,@site)
+  	@reps=[]
+  	for r in User.find(:all,
+  											:conditions => ('users.location_id = ' + User.current_user.location.id.to_s),
+  											:group => 'users.id',
+  											:joins => 'inner join entities on entities.user_id=users.id')
+  		@reps << r.sales_data(@from, @till)
+  	end
 		respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @reps }
+      format.pdf {
+        prawnto :prawn => { :page_size => 'LETTER'}
+      }
     end
   end
 
-	def report
-		params[:from]=untranslate_month(params[:from]) if params[:from]
-		params[:till]=untranslate_month(params[:till]) if params[:till]
-		@from=(params[:from] ||Date.today)
-  	@till=(params[:till] ||Date.today)
-  	@site=User.current_user.location
-		@reps=User.sales_reps_data(@from,@till,@site)
-		@box=[]
-		@box << ['Asesor', 'Saldo']
-		for rep in @reps
-			@box<<[rep[:user].name, '']
-		end
-		@box<<['Total', '']
-		@data=[]
-		@data << ['',{:text => 'Facturacion', :colspan => 3}, {:text => 'Valores', :colspan => 4}]
-		@data << ['Asesor', 'Saldo Anterior', 'Facturas','Saldo Provisionado','Pagos','Saldo Cobrado','Facturas Pendientes','Saldo Final']
-		total={:previous_balance=>0, :num_receipts=>0, :revenue=>0, :num_payments=>0, :cash_received=>0, :final_balance=>0, :facturas_pendientes=>0}
-		x = Object.new.extend(ActionView::Helpers::NumberHelper)
-		for rep in @reps
-		  @data << [rep[:user].name, 
-		  	rep[:num_receipts], 
-		  	rep[:num_payments], 
-		  	rep[:facturas_pendientes], 
-		  	x.number_to_currency(rep[:previous_balance]), 
-		  	x.number_to_currency(rep[:revenue]), 
-		  	x.number_to_currency(rep[:cash_received]), 
-		  	x.number_to_currency(rep[:final_balance])]
-		  	
-		  total[:previous_balance]+=rep[:previous_balance]
-		  total[:num_receipts]+=rep[:num_receipts]
-		  total[:revenue]+=rep[:revenue].to_i
-		  total[:num_payments]+=rep[:num_payments]
-		  total[:cash_received]+=rep[:cash_received]
-		  total[:facturas_pendientes]+=rep[:facturas_pendientes]
-		  total[:final_balance]+=rep[:final_balance]
-		end
-#		@data << ["---", "---", "---", "---", "---", "---", "---"]
-		@data << ["Totales", 
-			total[:num_receipts], 
-			total[:num_payments], 
-			rep[:facturas_pendientes], 
-			x.number_to_currency(total[:previous_balance]), 
-			x.number_to_currency(total[:revenue]), 
-			x.number_to_currency(total[:cash_received]), 
-			x.number_to_currency(total[:final_balance])]
-		prawnto :prawn => { :page_size => 'LETTER'}
-		params[:format] = 'pdf'
-		respond_to do |format|
-		  format.pdf { render :layout => false }
-		end
-	end
+#	def report
+#		params[:from]=untranslate_month(params[:from]) if params[:from]
+#		params[:till]=untranslate_month(params[:till]) if params[:till]
+#		@from=(params[:from] ||Date.today)
+#  	@till=(params[:till] ||Date.today)
+#  	@site=User.current_user.location
+#		@reps=User.sales_reps_data(@from,@till,@site)
+#		@box=[]
+#		@box << ['Asesor', 'Saldo']
+#		for rep in @reps
+#			@box<<[rep[:user].name, '']
+#		end
+#		@box<<['Total', '']
+#		
+#		prawnto :prawn => { :page_size => 'LETTER'}
+#		params[:format] = 'pdf'
+#		respond_to do |format|
+#		  format.pdf { render :layout => false }
+#		end
+#	end
 end

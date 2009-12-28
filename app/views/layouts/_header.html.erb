@@ -208,7 +208,12 @@
 	  	<li><a href="/me" title="Mi Cuenta">Mi Cuenta</a></li>
 	  <% end %>
 	  <% if current_user.has_rights(['Admin','Gerente', 'Contabilidad']) %>
-	  	<li><a href="/accounts" title="Contabilidad">Contabilidad</a></li>
+	  	<li><a href="/accounts" title="Contabilidad">Contabilidad</a>
+	  		<ul>
+	  			<li><a href="/accounts" title="Contabilidad">Contabilidad</a></li>
+	  			<li><a href="/sales_representatives" title="Corte de Caja">Corte de Caja</a></li>
+	  		</ul>
+	  	</li>
 	  <% end %>	  
 	</ul>
 	<% end %>

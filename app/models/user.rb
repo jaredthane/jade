@@ -93,69 +93,118 @@ class User < ActiveRecord::Base
 		         :joins => "left outer join roles_users on roles_users.user_id=users.id left outer join roles on roles.id = roles_users.role_id", 
 		         :group => "users.id"
 	end
-	def self.sales_reps_data(from, till, site)
-		reps=[]
-		for r in User.find_all_by_location_id(site)
-			if r.clients.length>0
-				rep={:user=>r, :previous_balance=>0, :num_receipts=>0, :revenue=>0, :num_payments=>0, :cash_received=>0, :final_balance=>0}
-				rep[:num_receipts] = Order.count(:all, 
-					:conditions => ['clients.user_id=:rep_id AND date(orders.created_at) >=:from AND date(orders.created_at) <= :till', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
-					:joins=>'inner join entities as clients on clients.id=orders.client_id')
-				revenue_posts = Post.find(:all, 
-						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],
-						:joins=>'inner join trans on trans.id=posts.trans_id')
-				rep[:revenue]=revenue_posts.inject(0) { |result, element| result + element.value*element.post_type_id*-1}.to_s
-				rep[:num_payments] = Payment.count(:all, 
-										:conditions=> ['clients.user_id=:rep_id AND date(payments.created_at) >=:from AND date(payments.created_at) <= :till', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
-										:joins=>'inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id')
-				payment_posts=Post.find(:all, 
-						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],
-						:joins=>'inner join trans on trans.id=posts.trans_id')
-				if payment_posts
-					rep[:cash_received]=payment_posts.collect(&:value).sum 
-				else
-					rep[:cash_received]=0
-				end
-				
-				payments_made=Payment.count(:all,
-					:conditions=> ['clients.user_id=:rep_id AND date(payments.created_at) <= :till', {:till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
-					:joins=>'inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id')
-				orders_made=Order.count(:all,
-					:conditions=> ['clients.user_id=:rep_id AND date(orders.created_at) <= :till', {:till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>rep[:user].id}],
-					:joins=>'inner join entities as clients on clients.id=orders.client_id'
-				)
-				rep[:facturas_pendientes]=orders_made-payments_made
-				new_cash_balance, new_rev_balance, old_cash_balance, old_rev_balance=nil, nil, nil, nil
-				if r.cash_account
-#					new_cash_balance=r.cash_account.balance
-					logger.debug "geting first_cash_post "
-					first_cash_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id',:order=>'created_at')
-					old_cash_balance=first_cash_post.balance  if first_cash_post
-					
-					logger.debug "geting last_cash_post "
-					last_cash_post=Post.last(:conditions=> ['date(trans.created_at) < :till AND posts.account_id=:account', {:till=>(till.to_date+1).to_s('%Y-%m-%d'), :account=>rep[:user].cash_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id',:order=>'created_at')
-					new_cash_balance=last_cash_post.balance  if last_cash_post
-				end
-				if r.revenue_account
-#					new_rev_balance=r.revenue_account.balance
-					logger.debug "geting first_rev_post "
-					first_rev_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id',:order=>'created_at')
-					old_rev_balance=first_rev_post.balance if first_rev_post
-					logger.debug "geting last_rev_post "
-					last_rev_post=Post.last(:conditions=> ['date(trans.created_at) < :till AND posts.account_id=:account', {:till=>(till.to_date+1).to_s('%Y-%m-%d'), :account=>rep[:user].revenue_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id',:order=>'created_at')
-					new_rev_balance=last_rev_post.balance if last_rev_post
-				end
-				rep[:final_balance]=(new_rev_balance||0)-(new_cash_balance||0)
-				rep[:previous_balance]=(old_rev_balance||0)-(old_cash_balance||0)
-				puts "new rev" + new_rev_balance.to_s
-				puts "new cash" + new_cash_balance.to_s
-				puts "old rev" + old_rev_balance.to_s
-				puts "old cash" + old_cash_balance.to_s
-				reps << rep
-			end
-		end
-		return reps
+	def sales_data(from, till)
+		rep={}
+		rep[:user]=self
+		sql = ActiveRecord::Base.connection()
+		# Checking Previous Orders
+		query = "SELECT sum(grand_total) AS total, count(orders.id) AS count FROM `orders` inner join entities as clients on clients.id=orders.client_id WHERE (clients.user_id=" + self.id.to_s + " AND date(orders.created_at) <'" + from.to_date.to_s("%Y-%m-%d") + "')"
+		results = sql.execute(query).fetch_hash
+		rep[:previous_orders_count] = (results["count"].to_i||0)
+		rep[:previous_orders_total] = (results["total"].to_f||0)
+		# Checking Previous Payments
+		query="SELECT count(*) as count, sum(presented-returned) AS total FROM `payments` inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id WHERE (clients.user_id=" + self.id.to_s + " AND date(payments.created_at) <'" + from.to_date.to_s("%Y-%m-%d") + "');"
+		result = sql.execute(query).fetch_hash
+		rep[:previous_payments_count] = (result["count"].to_i||0)
+		rep[:previous_payments_total] = (result["total"].to_f||0)
+		# Checking Current Orders (Within range specified)
+		query = "SELECT sum(grand_total) AS total, count(orders.id) AS count FROM `orders` inner join entities as clients on clients.id=orders.client_id WHERE (clients.user_id=" + self.id.to_s + " AND date(orders.created_at) >='" + from.to_date.to_s("%Y-%m-%d") + "' AND date(orders.created_at) <= '" + till.to_date.to_s('%Y-%m-%d') + "')"
+		result = sql.execute(query).fetch_hash
+		rep[:current_orders_count] = (result["count"].to_i||0)
+		rep[:current_orders_total] = (result["total"].to_f||0)
+		# Checking Payments Orders (Within range specified)				
+		query="SELECT count(*) as count, sum(presented-returned) AS total FROM `payments` inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id WHERE (clients.user_id=" + self.id.to_s + " AND date(payments.created_at) >='" + from.to_date.to_s("%Y-%m-%d") + "' AND date(payments.created_at) <= '" + till.to_date.to_s('%Y-%m-%d') + "');"
+		result = sql.execute(query).fetch_hash
+		rep[:current_payments_count] = (result["count"].to_i||0)
+		rep[:current_payments_total] = (result["total"].to_f||0)
+		return rep
 	end
+#	def self.sales_reps_data(from, till, site)
+#		sql = ActiveRecord::Base.connection()
+#		reps=[]
+#		for r in User.find_all_by_location_id(site)
+#			if r.clients.length>0
+#				logger.debug "User:" + r.name
+#				rep={:user=>r, :num_receipts=>0, :revenue=>0, :num_payments=>0, :cash_received=>0, :final_balance=>0}
+#				# Checking Previous Orders
+#				query = "SELECT sum(grand_total) AS total, count(orders.id) AS count FROM `orders` inner join entities as clients on clients.id=orders.client_id WHERE (clients.user_id=" + self.id.to_s + " AND date(orders.created_at) <'" + from.to_date.to_s("%Y-%m-%d") + "')"
+#				results = sql.execute(query).fetch_hash
+#				previous_orders_count = results["count"].to_i
+#				previous_orders_total = results["total"].to_f
+#				# Checking Previous Payments
+#				query="SELECT count(*) as count, sum(presented-returned) AS total FROM `payments` inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id WHERE (clients.user_id=" + self.id.to_s + " AND date(payments.created_at) <'" + from.to_date.to_s("%Y-%m-%d") + "');"
+#				result = sql.execute(query).fetch_hash
+#				previous_payments_count = result["count"].to_i
+#				previous_payments_total = result["total"].to_f
+#				# Checking Current Orders (Within range specified)
+#				query = "SELECT sum(grand_total) AS total, count(orders.id) AS count FROM `orders` inner join entities as clients on clients.id=orders.client_id WHERE (clients.user_id=" + self.id.to_s + " AND date(orders.created_at) >='" + from.to_date.to_s("%Y-%m-%d") + "' AND date(orders.created_at) <= '" + till.to_date.to_s('%Y-%m-%d') + "')"
+#				result = sql.execute(query).fetch_hash
+#				current_orders_count = result["count"].to_i
+#				current_orders_total = result["total"].to_f
+#				# Checking Payments Orders (Within range specified)				
+#				query="SELECT count(*) as count, sum(presented-returned) AS total FROM `payments` inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id WHERE (clients.user_id=" + self.id.to_s + " AND date(payments.created_at) >='" + from.to_date.to_s("%Y-%m-%d") + "' AND date(payments.created_at) <= '" + till.to_date.to_s('%Y-%m-%d') + "');"
+#				result = sql.execute(query).fetch_hash
+#				current_payments_count = result["count"].to_i
+#				current_payments_total = result["total"].to_f
+#				
+#				rep[:previous_balance] = (previous_orders_total||0) - (previous_payments_total||0)
+#				rep[:num_receipts] = current_orders_count
+#				rep[:revenue] = current_orders_total
+#				rep[:num_payments] = current_payments_count
+#				rep[:cash_received] = current_payments_total
+#				rep[:facturas_pendientes] = previous_orders_count + current_orders_count - previous_payments_count - current_payments_count
+#				rep[:final_balance] = rep[:previous_balance] + current_orders_total - current_payments_total
+##				rep[:num_payments] = Payment.count(:all, 
+##										:conditions=> ['clients.user_id=:rep_id AND date(payments.created_at) >=:from AND date(payments.created_at) <= :till', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>self.id}],
+##										:joins=>'inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id')
+##				payment_posts=Post.find(:all, 
+##						:conditions=> ['date(trans.created_at) >=:from AND date(trans.created_at) <= :till AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :till=>till.to_date.to_s('%Y-%m-%d'), :account=>self.cash_account_id}],
+##						:joins=>'inner join trans on trans.id=posts.trans_id')
+##				if payment_posts
+##					rep[:cash_received]=payment_posts.collect(&:value).sum 
+##				else
+##					rep[:cash_received]=0
+##				end
+#				
+##				payments_made=Payment.count(:all,
+##					:conditions=> ['clients.user_id=:rep_id AND date(payments.created_at) <= :till', {:till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>self.id}],
+##					:joins=>'inner join orders on orders.id=payments.order_id inner join entities as clients on clients.id=orders.client_id')
+##				orders_made=Order.count(:all,
+##					:conditions=> ['clients.user_id=:rep_id AND date(orders.created_at) <= :till', {:till=>till.to_date.to_s('%Y-%m-%d'), :rep_id=>self.id}],
+##					:joins=>'inner join entities as clients on clients.id=orders.client_id'
+##				)
+##				rep[:facturas_pendientes]=orders_made-payments_made
+##				new_cash_balance, new_rev_balance, old_cash_balance, old_rev_balance=nil, nil, nil, nil
+##				if r.cash_account
+###					new_cash_balance=r.cash_account.balance
+##					logger.debug "geting first_cash_post "
+##					first_cash_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :account=>self.cash_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id',:order=>'created_at')
+##					old_cash_balance=first_cash_post.balance  if first_cash_post
+##					
+##					logger.debug "geting last_cash_post "
+##					last_cash_post=Post.last(:conditions=> ['date(trans.created_at) < :till AND posts.account_id=:account', {:till=>(till.to_date+1).to_s('%Y-%m-%d'), :account=>self.cash_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id',:order=>'created_at')
+##					new_cash_balance=last_cash_post.balance  if last_cash_post
+##				end
+##				if r.revenue_account
+###					new_rev_balance=r.revenue_account.balance
+##					logger.debug "geting first_rev_post "
+##					first_rev_post=Post.last(:conditions=> ['date(trans.created_at) < :from AND posts.account_id=:account', {:from=>from.to_date.to_s('%Y-%m-%d'), :account=>self.revenue_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id',:order=>'created_at')
+##					old_rev_balance=first_rev_post.balance if first_rev_post
+##					logger.debug "geting last_rev_post "
+##					last_rev_post=Post.last(:conditions=> ['date(trans.created_at) < :till AND posts.account_id=:account', {:till=>(till.to_date+1).to_s('%Y-%m-%d'), :account=>self.revenue_account_id}],:joins=>'inner join trans on trans.id=posts.trans_id',:order=>'created_at')
+##					new_rev_balance=last_rev_post.balance if last_rev_post
+##				end
+##				rep[:final_balance]=(new_rev_balance||0)-(new_cash_balance||0)
+##				rep[:previous_balance]=(old_rev_balance||0)-(old_cash_balance||0)
+##				puts "new rev" + new_rev_balance.to_s
+##				puts "new cash" + new_cash_balance.to_s
+##				puts "old rev" + old_rev_balance.to_s
+##				puts "old cash" + old_cash_balance.to_s
+#				reps << rep
+#			end
+#		end
+#		return reps
+#	end
 	def rights
 		dict={}
 		for r in roles

@@ -23,7 +23,7 @@ class PaymentsController < ApplicationController
     params[:till]=untranslate_month(params[:till]) if params[:till]
   	@from=(params[:from] ||Date.today)
   	@till=(params[:till] ||Date.today)
-  	@sites=(params[:sites] ||[current_user.location_id])
+  	@sites=(params[:sites] ||[User.current_user.location_id])
   	order_id=params[:order_id]
   	
   	if params[:pdf]=='1'
@@ -95,7 +95,7 @@ class PaymentsController < ApplicationController
 			else
 				rep=""
 			end
-		  @data << ["%05d" % payment.order.receipt_number , payment.created_at.to_date.to_s(:rfc822), payment.order.client.name, x.number_to_currency(payment.amount),rep]
+		  @data << [payment.order.receipt_number , payment.created_at.to_date.to_s(:rfc822), payment.order.client.name, x.number_to_currency(payment.amount),rep]
 		  total+=payment.amount
 		end
 		@data << ["---", "---", "---", "---"]
