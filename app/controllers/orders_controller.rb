@@ -235,7 +235,7 @@ class OrdersController < ApplicationController
 #    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
 #    logger.info "finished updating lines"
 		errors = false
-		errors = true if !@order.validate
+		errors = true if @order.validate
 		if params[:submit_type] == 'post' and !errors
 			errors = true if !@order.post
 		end
