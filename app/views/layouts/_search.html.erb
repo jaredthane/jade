@@ -28,6 +28,7 @@
       </div>
       <%= select_tag(:select_from, options_for_select(date_selection, Date.today.to_s)) %>
       <%= select_tag(:select_till, options_for_select(date_selection, Date.today.to_s)) %>
+      <br />
       <% sites=(params[:sites]||[]) %>
     	<% if get_sites.length > 1 %>
 	      <div class="checkbox-list">
