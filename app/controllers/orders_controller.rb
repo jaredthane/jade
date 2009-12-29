@@ -93,6 +93,38 @@ class OrdersController < ApplicationController
     redirect_back_or_default(@order.client)
     return false
   end
+  ###################################################################################################
+  # Allows user to create a count based on a product listing
+  #################################################################################################
+  def create_count_from_list
+  	search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
+		@products = Product.search(search)
+		@order=Order.create_count_from_list(@products)
+#		logger.debug "@order=#{@order.inspect}"
+		logger.debug "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++="
+		logger.debug "@order.errors=#{@order.errors.inspect}"
+		if @order.errors.length==0
+		 	flash[:notice] = 'Cuenta fisica ha sido creado exitosamente.'
+			respond_to do |format|
+		    format.html { 
+		    	@payments=[]
+		    	render :action => "show" }
+		  end
+		else
+			logger.debug "unable to save new order"
+    	logger.debug "ORDERS ERRORS" + @order.errors.inspect
+    	@order.lines.each {|l| logger.debug "LINES ERRORS" + l.errors.inspect}
+			@order.errors.each {|e| logger.debug "ORDER ERROR" + e.to_s}
+			@order.lines.each {|l| l.errors.each {|e| logger.debug "LINE ERROR" + e.to_s}}
+		 	flash[:error] = 'No se pudo crear cuenta fisica.'
+		 	for error in @order.errors
+		 		flash[:error] = error
+		 	end
+			respond_to do |format|
+		    format.html { render :action => "new" }
+		  end
+		end
+  end
   def show_receipt
     @order = Order.find(params[:id])
     	logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
@@ -229,9 +261,7 @@ class OrdersController < ApplicationController
     logger.debug 'params["order"]["lines"]=#{params["order"]["lines"].to_s}'
     logger.debug "@order.lines=#{@order.lines.to_s}"
 #    logger.info "heres the order we just created: " + @order.inspect
-    this_receipt = params["order"]["number"].to_s
-    next_receipt=("%0" + this_receipt.length.to_s + "d") % (this_receipt.to_i + 1)
-    User.current_user.location.next_receipt_number = next_receipt
+
 #    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
 #    logger.info "finished updating lines"
 		errors = false

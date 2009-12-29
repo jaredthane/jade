@@ -117,4 +117,9 @@
 <% end %>
 </div>
 <hr class="clear-contentunit" />
-
+<% if @order.next_order %>
+	<p>
+		Esta venta se continua en el siguiente numero de factura:<%=link_to @order.next_order.receipt_number, @order.next_order %>
+	</p>
+	
+<% end %>

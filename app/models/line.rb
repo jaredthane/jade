@@ -123,6 +123,7 @@ class Line < ActiveRecord::Base
 			if real_qty(self) != real_qty(old)
 				case self.order_type_id	# check inventory levels
 					when 1 # Venta     
+						logger.debug "VALIDATING LINE: self=#{self.inspect}"
 						qty=order.vendor.inventory(self.product)
 						errors.add " ","Solo hay " + qty.to_s + " " + self.product.unit.name + " del producto " + self.product.name + " en el inventario"  if self.quantity > qty
 						#logger.debug  "self.serialized_product=" + self.serialized_product.to_s if self.serialized_product

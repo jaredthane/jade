@@ -86,4 +86,7 @@ ALTER TABLE trans ADD INDEX(created_at);
 ALTER TABLE trans ADD INDEX(user_id);
 ALTER TABLE users ADD INDEX(login);
 ALTER TABLE warranties ADD INDEX(product_id);
+
+# base_data is updated up to here
 ALTER TABLE entities ADD INDEX(created_at);
+alter table orders change column next_order next_order_id int(11);

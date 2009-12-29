@@ -21,7 +21,7 @@ class Order < ActiveRecord::Base
 	has_many :movements
 	has_many :transactions, :class_name => "Trans"
 	belongs_to :order_type
-	belongs_to :next_order, :class_name => "Order", :foreign_key => 'next_order'
+	belongs_to :next_order, :class_name => "Order", :foreign_key => 'next_order_id'
   SALE=1
   PURCHASE=2
   INTERNAL=3
@@ -53,13 +53,15 @@ class Order < ActiveRecord::Base
   before_save :pre_save
   def pre_save
 		logger.debug "pre_save"
+		logger.debug "self.receipt_number=#{self.receipt_number.to_s}"
     if self.deleted
       self.grand_total = 0
     else
   	  self.grand_total = self.total_price_with_tax
   	end
-		logger.debug "post_save"
+#  	logger.debug "before splitting receipt_number:" + self.receipt_number
 	  split_over_sized_order
+#  	logger.debug "done splitting receipt_number:" + self.receipt_number
 	  check_for_discounts
 	  logger.info "Dumping lines before save"
 	  logger.info self.lines.inspect
@@ -69,28 +71,53 @@ class Order < ActiveRecord::Base
 	  self.transactions << m if m
 	  self.transactions << i if i
 	  self.received=last_received
+	  logger.debug "end of presave"
   end
   
 	after_save :post_save
 	def post_save
+		logger.debug "POST SAVE my order_id=#{self.id.to_s}"
 	  save_related(lines, true)
 	  logger.info "Dumping lines after save"
 	  logger.info self.lines.inspect
-	  
+	  if self.receipt_number
+    	next_receipt=("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1)
+    end
+    User.current_user.location.next_receipt_number = next_receipt
 	  save_related(movements, true)
 	  save_related(transactions, true)
 	end
-	
+	##################################################################################################
+	# Creates a Physical Count from a list of products
+	#################################################################################################
+	def self.create_count_from_list(list)
+		user = User.current_user
+		o=Order.new(:client_id=>user.location_id, :vendor_id=>user.location_id, :created_at=>user.today, :user_id=>user.id, :order_type_id=> 5)
+		for p in list
+			if p.product_type_id==1
+				o.lines << Line.new(:product_id=>p.id, :quantity=>p.quantity(user.location_id), :order_type_id=> 5)
+			end
+		end
+		o.save
+		return o
+	end
 	##################################################################################################
 	# Will split a large order into smaller ones; works recursively
 	#################################################################################################
 	def split_over_sized_order
 	  if lines.length > MAX_LINES_PER_ORDER and MAX_LINES_PER_ORDER > 0
+	  	logger.debug "self.attributes=#{self.attributes.to_s}"
 	    self.next_order = Order.new(self.attributes)
       for line in self.lines[MAX_LINES_PER_ORDER..-1]
-        self.next_order.lines << Line.new(line.attributes)
+      	l=Line.new(line.attributes)
+      	l.order=self.next_order
+        self.next_order.lines << l
       end
+      logger.debug "ready to save next order, receipt number=#{next_order.receipt_number.to_s}"
 	    self.next_order.save
+	    self.receipt_number = User.current_user.location.next_receipt_number
+      logger.debug "done saving next order, receipt number=#{next_order.receipt_number.to_s}"
+	    logger.debug "self.next_order.errors=#{self.next_order.errors.to_s}"
       self.lines=self.lines[0..MAX_LINES_PER_ORDER-1]	    
 	  end
 	end
@@ -260,13 +287,14 @@ class Order < ActiveRecord::Base
   ###################################################################################
   # updates existing lines on the order, adds new ones and deletes missing ones. DOES NOT SAVE THEM
   ##################################################################################
-	def lines=(lines)
+	def plines=(lines)
 		logger.debug "Saving lines"
 	  i={}
 	  for l in self.lines
 	    i[l.id]=l
 	  end
-    for l in (lines[:new]||[])
+	  logger.debug "\nlines=#{lines.inspect}\n"
+    for l in (lines[:new] || [])
 	  	if l[:delete_me]!='1'
 	      line=self.lines.new()
 	      line.order=self
