@@ -69,10 +69,13 @@ class ApplicationController < ActionController::Base
 
 
   def generate_receipt(order, sequels_too=false)
-  	logger.debug "CREATING RECIEPT for " + order.id.to_s
   	@order = order # !This line is important for the render_to_string
   	prawnto :prawn => {:skip_page_creation=>true}
-	  pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false
+  	if order.order_type_id == Order::COUNT
+  		pdf_string = render_to_string :template => 'counts/sheet.pdf.prawn', :layout => false
+  	else
+	  	pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false
+	  end
 		File.open(order.receipt_filename, 'w') { |f| f.write(pdf_string) }
 		generate_receipt(order.sequel, true) if sequels_too and order.sequel
 	end

@@ -85,14 +85,13 @@ class Order < ActiveRecord::Base
 				self.sequel.prequel = self
 				self.sequel.save 
 	 			self.sequel_id=self.sequel.id
-	  		self.send(:update_without_callbacks)
 			end
 	  end
 	  #logger.debug "Dumping lines after save"
 	  #logger.debug self.lines.inspect
+  	self.receipt_filename = "#{RAILS_ROOT}/invoice_pdfs/#{self.id}.pdf"
+  	self.send(:update_without_callbacks) # This is also serving to save the sequel_id
 	  if self.receipt_number
-	  	self.receipt_filename = "#{RAILS_ROOT}/invoice_pdfs/#{self.id}.pdf"
-	  	self.send(:update_without_callbacks)
 	  	# Set next Receipt number
     	next_receipt=("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1)
     	loc=User.current_user.location

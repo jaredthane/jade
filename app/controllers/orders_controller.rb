@@ -141,7 +141,7 @@ class OrdersController < ApplicationController
 	    # This is good for if the user wants to download the file
 		else
 			redirect_back_or_default(@order)
-			flash[:error] = "Esta factura no se encuentra entre los archivos"
+			flash[:error] = "La factura '#{@order.receipt_filename}' no se encuentra entre los archivos"
 	    return false
 		end
   end
@@ -230,7 +230,6 @@ class OrdersController < ApplicationController
 #    end
 #  end
   # GET /orders/1/edit
-  
   def post
 		return false if !check_user(User::POST_COUNTS,'No tiene los derechos suficientes para procesar cuentas fisicas.')
     @order = Order.find(params[:id])
@@ -282,7 +281,7 @@ class OrdersController < ApplicationController
       	@order.save
     		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     		logger.debug "@order.id=#{@order.id.to_s}"
-        generate_receipt(@order, true) if @order.order_type_id==1
+        generate_receipt(@order, true)
     		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
         logger.debug "@order.receipt_number=#{@order.receipt_number.to_s}"
         

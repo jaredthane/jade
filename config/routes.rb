@@ -117,6 +117,7 @@ ActionController::Routing::Routes.draw do |map|
   map.create_count_from_list 'counts/new_from_list', :controller => 'orders', :action => 'create_count_from_list'
   map.new_count 	'count/new', :controller => 'orders', :action => 'new', :order_type_id => 5
 	map.post_count 'count/:id/post', :controller => 'orders', :action => 'post'
+	map.count_sheet 'count/:id/receipt', :controller => 'orders', :action => 'show_receipt'
   map.internals 'internals/', :controller => 'orders', :action => 'index', :order_type_id => 3
   map.sales 'sales/', :controller => 'orders', :action => 'index', :order_type_id => 1
 
