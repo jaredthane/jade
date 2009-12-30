@@ -4,8 +4,6 @@
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
-  <dt><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></dt>
-  <dt><%= link_to_function 'Reporte', 'submit_report("date_range_form")', :class => 'action' %></dt>
 	<% case @order_type_id
 	when 1%>
 		<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
@@ -41,6 +39,8 @@
 			<dt><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %></dt>
 		<% end %>
 	<% end %>
+  <dt><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></dt>
+  <dt><%= link_to_function 'Reporte', 'submit_report("date_range_form")', :class => 'action' %></dt>
 <% end %>
 
 <% case @order_type_id 
