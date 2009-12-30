@@ -96,7 +96,7 @@ class OrdersController < ApplicationController
     else
 			flash[:error] = "No hay ningun pedido en el sistema con ese numero"
     end
-    redirect_back_or_default(@order.client)
+    redirect_back_or_default(@order)
     return false
   end
   ###################################################################################################
@@ -279,6 +279,7 @@ class OrdersController < ApplicationController
     respond_to do |format|
       if !errors
       	@order.save
+      	@order.pay_off if AUTO_PAY_OFF
     		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     		logger.debug "@order.id=#{@order.id.to_s}"
         generate_receipt(@order, true)

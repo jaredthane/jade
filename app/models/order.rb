@@ -483,7 +483,7 @@ class Order < ActiveRecord::Base
 	# The payment model will do the accounting
 	#################################################################################################
 	def pay_off()
-	  if grand_total > amount_paid
+	  if grand_total != amount_paid
   	  Payment.create(:order=>self, :payment_method_id=>1, :user=>User.current_user, :presented=>grand_total-amount_paid, :created_at=>User.current_user.today)
   	  self.amount_paid=grand_total
   	  self.save

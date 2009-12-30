@@ -21,6 +21,11 @@
 					<% end %>
 		    <% if !@order.deleted %>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></dt>
+			    <% if @order.amount_paid < @order.grand_total %>
+			    	<dt><%= link_to 'Marcar Pagado', pay_off_path(:order_id=>@order.id) %></dt>
+			    <% elsif @order.amount_paid > @order.grand_total %>
+			    	<dt><%= link_to 'Devolver Dinero', pay_off_path(:order_id=>@order.id) %></dt>
+			    <% end %>
 			<% end %>
 		<% end %>
 		<% if view == 'products' %>
