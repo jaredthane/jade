@@ -25,18 +25,18 @@ class ProductsController < ApplicationController
 	access_control [:destroy] => '(Admin)'
   def index
     #@products = Product.find(:all)
-    search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
+    @search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
     logger.debug "params[:format]=#{params[:format].to_s}"
     params[:scope]='name' if params[:format]=='js'
     case params[:scope]
 		  when 'all'
-		  	@products = Product.search_all(search, params[:page])
+		  	@products = Product.search_all(@search, (params[:page] || 1))
 		  when 'services'
-			  @products = Product.search_services(search, params[:page])
+			  @products = Product.search_services(@search, (params[:page] || 1))
 		  when 'name'
-			  @products = Product.search_name(search, params[:page])
+			  @products = Product.search_name(@search, (params[:page] || 1))
 		  else
-				@products = Product.search(search, params[:page])
+				@products = Product.search(@search, (params[:page] || 1))
 		end
     respond_to do |format|
       format.html {
@@ -55,7 +55,7 @@ class ProductsController < ApplicationController
   	render :layout => false
   end
 	def price_list
-		@products = Product.search_all_wo_pagination(params[:search], params[:page])
+		@products = Product.search_all_wo_pagination(params[:search], (params[:page] || 1))
 		@data=[]
 		total=0
 		for p in @products

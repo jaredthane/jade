@@ -117,4 +117,28 @@
 <% end %>
 </div>
 <hr class="clear-contentunit" />
-
+<% if @order.sequel or @order.prequel %>
+	<div class="column2-unit-left">
+		<% if @order.prequel %>
+			<p>
+				Esta venta es una continuacion de la venta:<% if @order.prequel.receipt_number %>
+				<%=link_to @order.prequel.receipt_number, @order.prequel %>
+				<% else %>
+					<%=link_to @order.prequel.id, @order.prequel %>
+				<% end %>
+			</p>
+		<% end %>
+	</div>
+	<div class="column2-unit-right">
+		<% if @order.sequel %>
+			<p>
+				Esta venta se continua en la siguiente venta:<% if @order.sequel.receipt_number %>
+				<%=link_to @order.sequel.receipt_number, @order.sequel %>
+				<% else %>
+					<%=link_to @order.sequel.id, @order.sequel %>
+				<% end %>
+			</p>
+		<% end %>
+	</div>
+	<hr class="clear-contentunit" />
+<% end %>

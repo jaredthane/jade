@@ -2,7 +2,7 @@
 	<% @line= line %>
 	<%= error_messages_for :line, :class => "lineErrorExplanation",:id => "lineErrorExplanation", :object_name => "", :header_message => "", :message => "" %>
 	<% prefix = line.new_record? ? '[new]' : '[existing]' %>
-  <% fields_for "order[lines]#{prefix}[]", line do |line_form| %>
+  <% fields_for "order[plines]#{prefix}[]", line do |line_form| %>
 		<div class="table_row">
 			<div class="table_cell_30">
 				<%= link_to line.product.name, line.product %>

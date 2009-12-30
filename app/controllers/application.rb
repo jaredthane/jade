@@ -68,18 +68,19 @@ class ApplicationController < ActionController::Base
 #	end
 
 
-  def generate_receipt(order)
-  	logger.debug "CREATING RECIEPT"
-  	order.receipt_filename = "#{RAILS_ROOT}/invoice_pdfs/#{order.id}.pdf"
-  	@order=order
+  def generate_receipt(order, sequels_too=false)
+  	@order = order # !This line is important for the render_to_string
   	prawnto :prawn => {:skip_page_creation=>true}
-	  pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false
+  	if order.order_type_id == Order::COUNT
+  		pdf_string = render_to_string :template => 'counts/sheet.pdf.prawn', :layout => false
+  	else
+	  	pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false
+	  end
 		File.open(order.receipt_filename, 'w') { |f| f.write(pdf_string) }
-		User.current_user.location.next_receipt_number=order.receipt_number.to_i+1
-  	User.current_user.location.save
+		generate_receipt(order.sequel, true) if sequels_too and order.sequel
 	end
 	def check_user(right_id, msg)
-		logger.debug "current_user.has_right(right_id)=#{current_user.has_right(right_id).to_s}"
+		#logger.debug "current_user.has_right(right_id)=#{current_user.has_right(right_id).to_s}"
 		r=current_user.has_right(right_id)
 		if !r
 			redirect_back_or_default('/products')

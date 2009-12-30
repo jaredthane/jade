@@ -6,6 +6,7 @@
 		<dt><%= link_to 'Reaprovisionar', '/inventories?search=' + (@search||''), :class => 'action' %></dt>
 		<dt><%= link_to 'Lista de Precios', '/products/price_list?search=' + (@search||''), :class => 'action' %></dt>
 		<dt><%= link_to "Cambiar Precios", '/prices?search=' + (@search||''), :class => 'action' %></dt>
+		<dt><%= link_to "Hacer Cuenta Fisica", create_count_from_list_url(:search=>@search), :class => 'action' %></dt>
 	<% end %>
 	<dt><%= link_to 'Movimientos', movements_url, :class => 'action' %></dt>
 <% end %>

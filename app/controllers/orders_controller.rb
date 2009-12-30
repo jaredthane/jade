@@ -31,19 +31,25 @@ class OrdersController < ApplicationController
 	  	return false if !check_user(User::VIEW_PURCHASES,'No tiene los derechos suficientes para ver compras')
 	  when 3
 	  	if action=="edit"
-				return false if !check_user(User::CHANGE_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para cambiar consumos  internos')
+				return false if !check_user(User::CHANGE_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para cambiar consumos internos')
 			elsif action=="view"
 				return false if !check_user(User::VIEW_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para ver consumos internos')
+			end
+		when 5
+	  	if action=="edit"
+				return false if !check_user(User::CHANGE_COUNTS,'No tiene los derechos suficientes para cambiar cuentas fisicas')
+			elsif action=="view"
+				return false if !check_user(User::VIEW_COUNTS,'No tiene los derechos suficientes para ver cuentas fisicas')
 			end
     end  
     return true  
 	end
   def index
-    logger.info params.inspect
+#    logger.info params.inspect
 		return false if !allowed(params[:order_type_id], 'view')
 
 		@order_type_id=params[:order_type_id]
-		logger.debug "@order_type_id=#{@order_type_id.to_s}"
+#		logger.debug "@order_type_id=#{@order_type_id.to_s}"
     @site=User.current_user.location
 #  	@search_path = SEARCH_PATHS[@order_type_id]
   	params[:page]=(params[:page]||1)
@@ -93,9 +99,39 @@ class OrdersController < ApplicationController
     redirect_back_or_default(@order.client)
     return false
   end
+  ###################################################################################################
+  # Allows user to create a count based on a product listing
+  #################################################################################################
+  def create_count_from_list
+  	search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
+		@products = Product.search(search)
+		@order=Order.create_count_from_list(@products)
+#		logger.debug "@order=#{@order.inspect}"
+		logger.debug "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++="
+		logger.debug "@order.errors=#{@order.errors.inspect}"
+		if @order.errors.length==0
+		 	flash[:notice] = 'Cuenta fisica ha sido creado exitosamente.'
+			respond_to do |format|
+	    	format.html { redirect_to(@order) }
+		  end
+		else
+			logger.debug "unable to save new order"
+    	logger.debug "ORDERS ERRORS" + @order.errors.inspect
+    	@order.lines.each {|l| logger.debug "LINES ERRORS" + l.errors.inspect}
+			@order.errors.each {|e| logger.debug "ORDER ERROR" + e.to_s}
+			@order.lines.each {|l| l.errors.each {|e| logger.debug "LINE ERROR" + e.to_s}}
+		 	flash[:error] = 'No se pudo crear cuenta fisica.'
+		 	for error in @order.errors
+		 		flash[:error] = error
+		 	end
+			respond_to do |format|
+		    format.html { render :action => "new" }
+		  end
+		end
+  end
   def show_receipt
     @order = Order.find(params[:id])
-    	logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
+  	logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
     return false if !allowed(@order.order_type_id, 'view')
     if FileTest.exists?(@order.receipt_filename||'')
     	logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
@@ -104,8 +140,8 @@ class OrdersController < ApplicationController
 	    #send_data @receipt.filename, :disposition => 'inline'
 	    # This is good for if the user wants to download the file
 		else
-			redirect_back_or_default(orders_url)
-			flash[:error] = "Esta factura no se encuentra entre los archivos"
+			redirect_back_or_default(@order)
+			flash[:error] = "La factura '#{@order.receipt_filename}' no se encuentra entre los archivos"
 	    return false
 		end
   end
@@ -194,7 +230,6 @@ class OrdersController < ApplicationController
 #    end
 #  end
   # GET /orders/1/edit
-  
   def post
 		return false if !check_user(User::POST_COUNTS,'No tiene los derechos suficientes para procesar cuentas fisicas.')
     @order = Order.find(params[:id])
@@ -223,27 +258,33 @@ class OrdersController < ApplicationController
     return false if !allowed(params["order"]["order_type_id"], 'edit')
     params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
     params[:order][:received]=untranslate_month(params[:order][:received]) if params[:order][:received]
-
+		logger.debug "paramorderorder_type_id=#{params["order"]["order_type_id"].to_s}"
     @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
+    logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     @order.attrs = params["order"]
+    logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     logger.debug 'params["order"]["lines"]=#{params["order"]["lines"].to_s}'
     logger.debug "@order.lines=#{@order.lines.to_s}"
 #    logger.info "heres the order we just created: " + @order.inspect
-    this_receipt = params["order"]["number"].to_s
-    next_receipt=("%0" + this_receipt.length.to_s + "d") % (this_receipt.to_i + 1)
-    User.current_user.location.next_receipt_number = next_receipt
+
 #    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
 #    logger.info "finished updating lines"
 		errors = false
-		errors = true if @order.validate
+    logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
+		errors = true if !@order.valid?
 		if params[:submit_type] == 'post' and !errors
 			errors = true if !@order.post
 		end
+    logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     respond_to do |format|
       if !errors
-        generate_receipt(@order) if @order.order_type_id=1
+      	@order.save
+    		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
+    		logger.debug "@order.id=#{@order.id.to_s}"
+        generate_receipt(@order, true)
+    		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
         logger.debug "@order.receipt_number=#{@order.receipt_number.to_s}"
-        @order.save
+        
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { redirect_to(@order) }
         format.xml  { render :xml => @order, :status => :created, :location => @order }

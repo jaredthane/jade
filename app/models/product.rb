@@ -471,36 +471,62 @@ class Product < ActiveRecord::Base
 		         :joins => 'inner join prices on prices.product_id=products.id',
 		         :group => 'products.id'
 	end
-  def self.search(search, page)
-  	paginate :per_page => 20, :page => page,
-		         :conditions => ['(products.name like :search 
-		         										OR products.model like :search 
-		         										OR products.upc like :search 
-		         										OR description like :search 
-		         										OR vendors.name like :search 
-		         										OR product_categories.name like :search)
-		         							AND (prices.price_group_id = :price_group_id)
-		         							AND (prices.available = True)',
-		         							{:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
-		         :order => 'name',
-		         :joins => 'inner join entities as vendors on vendors.id = products.vendor_id 
-		         						inner join prices on prices.product_id=products.id
-		         						left join product_categories on product_categories.id=products.product_category_id',
-		         :group => 'products.id'
+############################################################################################
+# DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED - DEPRECATED #
+############################################################################################
+#  def self.search(search, page)
+#  	paginate :per_page => 20, :page => page,
+#		         :conditions => ['(products.name like :search 
+#		         										OR products.model like :search 
+#		         										OR products.upc like :search 
+#		         										OR description like :search 
+#		         										OR vendors.name like :search 
+#		         										OR product_categories.name like :search)
+#		         							AND (prices.price_group_id = :price_group_id)
+#		         							AND (prices.available = True)',
+#		         							{:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
+#		         :order => 'name',
+#		         :joins => 'inner join entities as vendors on vendors.id = products.vendor_id 
+#		         						inner join prices on prices.product_id=products.id
+#		         						left join product_categories on product_categories.id=products.product_category_id',
+#		         :group => 'products.id'
+#	end
+	def self.search(search, page=nil)
+		conditions = "(products.name like '%#{search}%' 
+   								OR products.model like '%#{search}%'
+   								OR products.upc like '%#{search}%'
+   								OR description like '%#{search}%'
+   								OR vendors.name like '%#{search}%'
+   								OR product_categories.name like '%#{search}%') 
+   								AND (prices.price_group_id = #{User.current_user.current_price_group.id.to_s})
+   								AND (prices.available = True)"  
+		order = 'name'
+		joins = 'inner join entities as vendors on vendors.id = products.vendor_id 
+ 						inner join prices on prices.product_id=products.id
+ 						left join product_categories on product_categories.id=products.product_category_id'
+		group = 'products.id'
+		if page
+  		paginate :per_page => 20, :page => page, :conditions => conditions, :order => order, :joins => joins, :group => group
+  	else
+  		find :all, :conditions => conditions, :order => order, :joins => joins, :group => group
+  	end
 	end
-	def self.search_for_services(search, page)
-  	paginate :per_page => 20, :page => page,
-		         :conditions => ['(products.name like :search 
-		         								OR products.upc like :search 
-		         								OR description like :search 
-		         								OR product_categories.name like :search) 
-		         								AND (prices.price_group_id = :price_group_id)
+	def self.search_for_services(search, page=nil)
+		conditions = "(products.name like '%#{search}%' 
+		         								OR products.upc like '%#{search}%'
+		         								OR description like '%#{search}%'
+		         								OR product_categories.name like '%#{search}%') 
+		         								AND (prices.price_group_id = #{User.current_user.current_price_group.id.to_s})
 		         								AND (prices.available = True)
-		         								AND (products.product_type_id=4)', {:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
-		         :order => 'name',
-		         :joins => 'inner join prices on prices.product_id=products.id
-		         						left join product_categories on product_categories.id=products.product_category_id',
-		         :group => 'products.id'
+		         								AND (products.product_type_id=4)"  
+		order = 'name'
+		joins = 'inner join prices on prices.product_id=products.id	left join product_categories on product_categories.id=products.product_category_id'
+		group = 'products.id'
+		if page
+  		paginate :per_page => 20, :page => page, :conditions => conditions, :order => order, :joins => joins, :group => group
+  	else
+  		find :all, :conditions => conditions, :order => order, :joins => joins, :group => group
+  	end
 	end
 	def self.search_for_discounts(search, page)
   	paginate :per_page => 20, :page => page,
