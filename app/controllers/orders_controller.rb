@@ -31,9 +31,15 @@ class OrdersController < ApplicationController
 	  	return false if !check_user(User::VIEW_PURCHASES,'No tiene los derechos suficientes para ver compras')
 	  when 3
 	  	if action=="edit"
-				return false if !check_user(User::CHANGE_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para cambiar consumos  internos')
+				return false if !check_user(User::CHANGE_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para cambiar consumos internos')
 			elsif action=="view"
 				return false if !check_user(User::VIEW_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para ver consumos internos')
+			end
+		when 5
+	  	if action=="edit"
+				return false if !check_user(User::CHANGE_COUNTS,'No tiene los derechos suficientes para cambiar cuentas fisicas')
+			elsif action=="view"
+				return false if !check_user(User::VIEW_COUNTS,'No tiene los derechos suficientes para ver cuentas fisicas')
 			end
     end  
     return true  
@@ -108,7 +114,7 @@ class OrdersController < ApplicationController
 			respond_to do |format|
 		    format.html { 
 		    	@payments=[]
-		    	render :action => "show" }
+		    	render :action => "show", :template=> "/counts/show" }
 		  end
 		else
 			logger.debug "unable to save new order"
@@ -255,9 +261,11 @@ class OrdersController < ApplicationController
     return false if !allowed(params["order"]["order_type_id"], 'edit')
     params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
     params[:order][:received]=untranslate_month(params[:order][:received]) if params[:order][:received]
-
+		logger.debug "paramorderorder_type_id=#{params["order"]["order_type_id"].to_s}"
     @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
+    logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     @order.attrs = params["order"]
+    logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     logger.debug 'params["order"]["lines"]=#{params["order"]["lines"].to_s}'
     logger.debug "@order.lines=#{@order.lines.to_s}"
 #    logger.info "heres the order we just created: " + @order.inspect
@@ -265,13 +273,17 @@ class OrdersController < ApplicationController
 #    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
 #    logger.info "finished updating lines"
 		errors = false
+    logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
 		errors = true if @order.validate
 		if params[:submit_type] == 'post' and !errors
 			errors = true if !@order.post
 		end
+    logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     respond_to do |format|
       if !errors
-        generate_receipt(@order) if @order.order_type_id=1
+    		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
+        generate_receipt(@order) if @order.order_type_id==1
+    		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
         logger.debug "@order.receipt_number=#{@order.receipt_number.to_s}"
         @order.save
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
