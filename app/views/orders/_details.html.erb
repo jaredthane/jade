@@ -27,6 +27,7 @@
 			    	<dt><%= link_to 'Devolver Dinero', pay_off_path(:order_id=>@order.id) %></dt>
 			    <% end %>
 			<% end %>
+			<dt><%= link_to 'Imprimir', count_sheet_url, :class => 'action' %></dt>
 		<% end %>
 		<% if view == 'products' %>
 		  <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
