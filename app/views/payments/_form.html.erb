@@ -19,7 +19,7 @@
 <%= error_messages_for :payment %>
 
 <% form_for(@payment, :html => {:id => 'payment_form' }) do |f| %>
-  <%= hidden_field_tag :paid, @payment.amount %>
+  <%= hidden_field_tag :other_payments, @payment.order.amount_paid - @payment.amount %>
 	<div class="column2-unit-left">
 	<% if !@payment.order_id %> 
 		<p>
@@ -36,41 +36,18 @@
 		<p>
 			<b>Total con Impuestos (Si aplicables)</b>
 			<input disabled class="field" id="total_price" value= <%= @payment.order.total_price_with_tax %> >
-		</p>
-		<p>
-		  <b>Vuelto</b><br />
-		  <%= f.text_field :returned, :class => 'field', :id=>"returned_field", :onblur=>'calculate_total()' %>
-		</p>
-		
+		</p>		
 	</div>
 	<div class="column2-unit-right">
 	<%= f.hidden_field :user_id, :value => @current_user.id %>
 		<p>
+		  <b>Vuelto</b><br />
+		  <%= f.text_field :returned, :class => 'field', :id=>"returned_field", :onblur=>'calculate_change()' %>
+		</p>
+		<p>
 		  <b>Metodo de pago</b><br />
 		  <%= f.collection_select(:payment_method_id, get_payment_methods, :id, :name) %>
 		</p>
-		
-		<div id="change_div" 
-			<% if (@payment.order.total_price_with_tax||0) - (@payment.presented||0) + (@payment.returned||0) >= 0 %>
-				style="display: none;"
-			<% end %> >
-			
-			<p>
-				<b>Vuelto Recomendado</b><br />
-				<input disabled=True class="field" id="recommended_change" value=<%= number_to_currency((@payment.presented || 0)-(@payment.order.total_price_with_tax||0)) %>> 
-				<input type="button" value="Actualizar" onclick="calculate_total()" class="field"> 
-			</p>
-		</div>
-		<div id="debt_div" 
-			<% if (@payment.order.total_price_with_tax||0) - (@payment.presented||0) + (@payment.returned||0) < 0 %>
-				style="display: none;"
-			<% end %> >
-		<p>
-		  <b>Cantidad se debe</b><br />
-		  <input disabled=True class="field" id="debt_field" value=<%= number_to_currency(@payment.order.total_price_with_tax-(@payment.presented || 0)+(@payment.returned || 0) - (@paid||0)) %>> 
-		  <input type="button" value="Actualizar" onclick="calculate_total()" class="field"> 
-		</p>
-		</div>
 		<p>
 		  <b>Total Cancelado</b><br />
 		  <input disabled=True class="field" id="total_paid" value=<%= number_to_currency((@payment.presented || 0)-(@payment.returned || 0)) %>> 

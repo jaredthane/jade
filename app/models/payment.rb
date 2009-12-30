@@ -43,9 +43,10 @@ class Payment < ActiveRecord::Base
 		logger.debug "(old('amount') || 0)=#{(old('amount') || 0).to_s}"
 		logger.debug "old=#{old.inspect}"
 		logger.debug "self.amount - (old('amount') || 0)=#{(self.amount - (old('amount') || 0)).to_s}"
-	  order.amount_paid += self.amount - old.amount
-		logger.debug "order.amount_paid =#{order.amount_paid .to_s}"
-		order.save
+		logger.debug "self.order.amount_paid =#{self.order.amount_paid .to_s}"
+	  self.order.amount_paid += self.amount - (old('amount') || 0)
+		logger.debug "self.order.amount_paid =#{self.order.amount_paid .to_s}"
+		self.order.send(:update_without_callbacks)
 		save_related(self.transactions)
 	end 
 	def attrs=(a)
