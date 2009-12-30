@@ -82,8 +82,8 @@ class Order < ActiveRecord::Base
 	  logger.info self.lines.inspect
 	  if self.receipt_number
     	next_receipt=("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1)
+    	User.current_user.location.next_receipt_number = next_receipt
     end
-    User.current_user.location.next_receipt_number = next_receipt
 	  save_related(movements, true)
 	  save_related(transactions, true)
 	end
