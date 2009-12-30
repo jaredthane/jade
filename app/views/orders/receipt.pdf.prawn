@@ -1,5 +1,5 @@
 pdf.start_new_page(
-	:size => 'LEGAL',
+	:size => 'LETTER',
 	:left_margin=>0,
   :right_margin=>0,
   :top_margin=>0,
@@ -7,9 +7,9 @@ pdf.start_new_page(
 y=pdf.bounds.height
 client=@order.client
 vendor=@order.vendor
-for copy in ['cliente', 'vendor', 'government'] do
+for copy in ['cliente', 'vendor'] do
 		#pdf.stroke_bounds
-	pdf.bounding_box([0,y], :width=>pdf.bounds.width, :height=>(pdf.bounds.height)/3) do
+	pdf.bounding_box([0,y], :width=>pdf.bounds.width, :height=>(pdf.bounds.height)/2) do
 		pdf.padded_box(25) do
 			#pdf.stroke_bounds
 			##################################################################################################
@@ -116,5 +116,5 @@ for copy in ['cliente', 'vendor', 'government'] do
 		end # receipt box
 	end # padded box
 	pdf.move_down 25
-	y-=pdf.bounds.height/3
+	y-=pdf.bounds.height/2
 end # for each copy holder

@@ -79,8 +79,8 @@ Date::DAYNAMES  	=  	%w(Domingo Lunes Martes Miercoles Jueves Viernes Sabado)
 Date::ABBR_MONTHNAMES  	=  	[nil] + %w(Ene Feb Mar Abr May Jun Jul Ago Sep Oct Nov Dic)
 Date::ABBR_DAYNAMES  	=  	%w(Dom Lun Mar Mie Jue Vie Sab)
 
-COMPANY_NAME="ACME Industrias de America Central Inc."
-MAX_LINES_PER_ORDER = 3
+COMPANY_NAME="Ferretería Salazar Barrera"
+MAX_LINES_PER_ORDER = 9
 CREDITO_FISCAL_LINES_PER_RECEIPT = 6
 CONSUMIDOR_FINAL_LINES_PER_RECEIPT = 6
 NEW_SITE_CASH_ACCOUNT_PREFIX = 'Efectivo en '
