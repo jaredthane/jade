@@ -18,7 +18,7 @@ for copy in ['cliente', 'vendor', 'government'] do
 			pdf.bounding_box([pdf.bounds.left, pdf.bounds.top], :width=>pdf.bounds.width*2/3, :height=>20) do
 				#pdf.stroke_bounds
 				pdf.font_size = 14
-				pdf.text COMPANY_NAME, :style=>:bold
+				pdf.text COMPANY_NAME + ' ' + @order.id.to_s, :style=>:bold
 			end # company name bounding box
 			##################################################################################################
 			# 

@@ -68,11 +68,13 @@ class ApplicationController < ActionController::Base
 #	end
 
 
-  def generate_receipt(order)
-  	#logger.debug "CREATING RECIEPT"
+  def generate_receipt(order, sequels_too=false)
+  	logger.debug "CREATING RECIEPT for " + order.id.to_s
+  	@order = order # !This line is important for the render_to_string
   	prawnto :prawn => {:skip_page_creation=>true}
 	  pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false
 		File.open(order.receipt_filename, 'w') { |f| f.write(pdf_string) }
+		generate_receipt(order.sequel, true) if sequels_too and order.sequel
 	end
 	def check_user(right_id, msg)
 		#logger.debug "current_user.has_right(right_id)=#{current_user.has_right(right_id).to_s}"

@@ -112,9 +112,7 @@ class OrdersController < ApplicationController
 		if @order.errors.length==0
 		 	flash[:notice] = 'Cuenta fisica ha sido creado exitosamente.'
 			respond_to do |format|
-		    format.html { 
-		    	@payments=[]
-		    	render :action => "show", :template=> "/counts/show" }
+	    	format.html { redirect_to(@order) }
 		  end
 		else
 			logger.debug "unable to save new order"
@@ -284,7 +282,7 @@ class OrdersController < ApplicationController
       	@order.save
     		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     		logger.debug "@order.id=#{@order.id.to_s}"
-        generate_receipt(@order) if @order.order_type_id==1
+        generate_receipt(@order, true) if @order.order_type_id==1
     		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
         logger.debug "@order.receipt_number=#{@order.receipt_number.to_s}"
         

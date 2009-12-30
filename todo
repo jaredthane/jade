@@ -1,23 +1,10 @@
 CURRENT GOALS:
-	split installer up
-	make provisionar and payoff use AJAX
-	
-	searching order and payments with dates
-	counts:
-		serials not in count should be removed from inventory
-		calculate values with js
-		use orders controller
-		create "post counts" right
-	finish new auth
-	make void receipt #'s
-	split orders should get receipt numbers
-	discounts and combos should get default upc if null
-	get good tab order on new_product
-	clean up line errors
-	errors should be displayed when there is insufficient inventory
-	checkout default values for discoutns: relative and static prices
 	
 FUTURE FEATURES:
+	clean up line errors
+	get good tab order on new_product
+	counts:
+		serials not in count should be removed from inventory
 	stickers
 		bar codes
 		shelf labels
@@ -385,3 +372,25 @@ create page to edit preferences -- Replaced by envir.rb
 make show entity list recent account activity
 fix trans show
 change account name when entity name changes
+can't make order with more than limit lines
+create count is including all products
+when you edit a count it shows you the order edit
+new count doesn't show up in counts index actions
+receipt filenames not being created right
+next_order not getting saved
+use modulus to make it put the products on the orders in the order they were made
+out of stock errors are not showing up
+receipt numbers arent right for series
+how will receipts be created for other orders?
+	split installer up
+	make provisionar and payoff use AJAX
+	searching order and payments with dates
+	finish new auth
+	make void receipt #'s
+	split orders should get receipt numbers
+	discounts and combos should get default upc if null
+	errors should be displayed when there is insufficient inventory
+	checkout default values for discoutns: relative and static prices
+		calculate values with js
+		use orders controller
+		create "post counts" right

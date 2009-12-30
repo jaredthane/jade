@@ -62,10 +62,10 @@ class Order < ActiveRecord::Base
   	end
 	  check_for_discounts
 	  split_over_sized_order
-	  logger.debug "++++++++++++++++++++++++++++++++++++++++++"
-	  logger.debug "self.sequel=#{self.sequel.to_s}  a"
-	  logger.debug "self.sequel_id=#{self.sequel_id.to_s}                                                                                            ID"
-	  logger.debug "Dumping lines before save"
+#	  logger.debug "++++++++++++++++++++++++++++++++++++++++++"
+#	  logger.debug "self.sequel=#{self.sequel.to_s}  a"
+#	  logger.debug "self.sequel_id=#{self.sequel_id.to_s}                                                                                            ID"
+#	  logger.debug "Dumping lines before save"
 	  #logger.debug self.lines.inspect
 	  m = main_transaction
 	  #logger.debug "m=#{m.inspect}"
@@ -120,10 +120,10 @@ class Order < ActiveRecord::Base
 	# Will split a large order into smaller ones; works recursively
 	#################################################################################################
 	def split_over_sized_order
-	  if lines.length > MAX_LINES_PER_ORDER and MAX_LINES_PER_ORDER > 0
+	  if lines.length > MAX_LINES_PER_ORDER and MAX_LINES_PER_ORDER > 0 and order_type_id==1
 	  	#logger.debug "self.attributes=#{self.attributes.to_s}"
 	    self.sequel = Order.new(self.attributes)
-	    self.sequel.receipt_number = ("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1)
+	    self.sequel.receipt_number = ("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1) if self.receipt_number
 	    #logger.debug "-----------------------------------------"
 	  	#logger.debug "self.sequel=#{self.sequel.to_s}"
       for line in self.lines[MAX_LINES_PER_ORDER..-1]
@@ -131,8 +131,6 @@ class Order < ActiveRecord::Base
       	l.order=self.sequel
         self.sequel.lines << l
       end
-#	    self.sequel.save
-	    self.receipt_number = User.current_user.location.next_receipt_number
       self.lines=self.lines[0..MAX_LINES_PER_ORDER-1]	    
 	  end
 	end
