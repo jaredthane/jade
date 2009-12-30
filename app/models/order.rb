@@ -81,6 +81,8 @@ class Order < ActiveRecord::Base
 	  logger.info "Dumping lines after save"
 	  logger.info self.lines.inspect
 	  if self.receipt_number
+	  	self.receipt_filename = "#{RAILS_ROOT}/invoice_pdfs/#{self.id}.pdf"
+	  	self.send(:update_without_callbacks)
     	next_receipt=("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1)
     	User.current_user.location.next_receipt_number = next_receipt
     end
@@ -640,7 +642,6 @@ class Order < ActiveRecord::Base
 			end
 			line.received=Time.now
 		end
-		save_related(lines, true)
 	end
 #	###################################################################################
 #	# Returns a list of lines from the specified count that are for the specified product_id

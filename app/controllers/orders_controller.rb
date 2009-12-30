@@ -133,7 +133,7 @@ class OrdersController < ApplicationController
   end
   def show_receipt
     @order = Order.find(params[:id])
-    	logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
+  	logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
     return false if !allowed(@order.order_type_id, 'view')
     if FileTest.exists?(@order.receipt_filename||'')
     	logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
@@ -142,7 +142,7 @@ class OrdersController < ApplicationController
 	    #send_data @receipt.filename, :disposition => 'inline'
 	    # This is good for if the user wants to download the file
 		else
-			redirect_back_or_default(orders_url)
+			redirect_back_or_default(@order)
 			flash[:error] = "Esta factura no se encuentra entre los archivos"
 	    return false
 		end
@@ -274,18 +274,20 @@ class OrdersController < ApplicationController
 #    logger.info "finished updating lines"
 		errors = false
     logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
-		errors = true if @order.validate
+		errors = true if !@order.valid?
 		if params[:submit_type] == 'post' and !errors
 			errors = true if !@order.post
 		end
     logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     respond_to do |format|
       if !errors
+      	@order.save
     		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
+    		logger.debug "@order.id=#{@order.id.to_s}"
         generate_receipt(@order) if @order.order_type_id==1
     		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
         logger.debug "@order.receipt_number=#{@order.receipt_number.to_s}"
-        @order.save
+        
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { redirect_to(@order) }
         format.xml  { render :xml => @order, :status => :created, :location => @order }
