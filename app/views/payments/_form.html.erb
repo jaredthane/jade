@@ -31,7 +31,7 @@
 	<% end %>
 		<p>
 		  <b>Cantidad Presentado</b><br />
-		  <%= f.text_field :presented, :class => 'field', :id=>"presented_field", :onblur=>'calculate_total()' %>
+		  <%= f.text_field :presented, :class => 'field', :id=>"presented_field", :onblur=>'calculate_change()' %>
 		</p>
 		<p>
 			<b>Total con Impuestos (Si aplicables)</b>
@@ -42,7 +42,7 @@
 	<%= f.hidden_field :user_id, :value => @current_user.id %>
 		<p>
 		  <b>Vuelto</b><br />
-		  <%= f.text_field :returned, :class => 'field', :id=>"returned_field", :onblur=>'calculate_change()' %>
+		  <%= f.text_field :returned, :class => 'field', :id=>"returned_field", :onblur=>'calculate_total()' %>
 		</p>
 		<p>
 		  <b>Metodo de pago</b><br />
@@ -51,7 +51,7 @@
 		<p>
 		  <b>Total Cancelado</b><br />
 		  <input disabled=True class="field" id="total_paid" value=<%= number_to_currency((@payment.presented || 0)-(@payment.returned || 0)) %>> 
-		  <input type="button" value="Actualizar" onclick="calculate_total()" class="field"> 
+		  <input type="button" value="Actualizar" onclick="calculate_change()" class="field"> 
 		</p>
 		<p>
 			<b>Anulado</b>
