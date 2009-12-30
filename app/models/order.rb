@@ -96,7 +96,7 @@ class Order < ActiveRecord::Base
 	  #logger.debug self.lines.inspect
   	self.receipt_filename = "#{RAILS_ROOT}/invoice_pdfs/#{self.id}.pdf"
   	self.send(:update_without_callbacks) # This is also serving to save the sequel_id
-	  if self.receipt_number
+	  if self.receipt_number and order_type_id == SALE
 	  	# Set next Receipt number
     	next_receipt=("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1)
     	loc=User.current_user.location
