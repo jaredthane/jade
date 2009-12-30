@@ -279,7 +279,7 @@ class OrdersController < ApplicationController
     respond_to do |format|
       if !errors
       	@order.save
-      	@order.pay_off if AUTO_PAY_OFF
+      	@order.pay_off if AUTO_PAY_OFF and @order.order_type_id != Order::PURCHASE
     		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     		logger.debug "@order.id=#{@order.id.to_s}"
         generate_receipt(@order, true)
