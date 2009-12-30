@@ -55,6 +55,11 @@ class Order < ActiveRecord::Base
   def pre_save
 		#logger.debug "pre_save"
 		#logger.debug "self.receipt_number=#{self.receipt_number.to_s}"
+		if order_type_id==COUNT
+			for l in lines
+				
+			end
+		end
     if self.deleted
       self.grand_total = 0
     else

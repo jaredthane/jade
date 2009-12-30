@@ -27,6 +27,10 @@
 </div>
 <div class="column2-unit-right">
 	<p>
+		<b>Total de diferencia:</b>
+		<%=h @order.grand_total %>
+	</p>
+	<p>
 		<b>Usuario Responsable:</b>
 		<%=link_to @order.user.login, @order.user %>
 	</p>
