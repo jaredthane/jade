@@ -45,11 +45,11 @@ class OrdersController < ApplicationController
     return true  
 	end
   def index
-    logger.info params.inspect
+#    logger.info params.inspect
 		return false if !allowed(params[:order_type_id], 'view')
 
 		@order_type_id=params[:order_type_id]
-		logger.debug "@order_type_id=#{@order_type_id.to_s}"
+#		logger.debug "@order_type_id=#{@order_type_id.to_s}"
     @site=User.current_user.location
 #  	@search_path = SEARCH_PATHS[@order_type_id]
   	params[:page]=(params[:page]||1)

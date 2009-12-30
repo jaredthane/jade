@@ -69,13 +69,13 @@ class ApplicationController < ActionController::Base
 
 
   def generate_receipt(order)
-  	logger.debug "CREATING RECIEPT"
+  	#logger.debug "CREATING RECIEPT"
   	prawnto :prawn => {:skip_page_creation=>true}
 	  pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false
 		File.open(order.receipt_filename, 'w') { |f| f.write(pdf_string) }
 	end
 	def check_user(right_id, msg)
-		logger.debug "current_user.has_right(right_id)=#{current_user.has_right(right_id).to_s}"
+		#logger.debug "current_user.has_right(right_id)=#{current_user.has_right(right_id).to_s}"
 		r=current_user.has_right(right_id)
 		if !r
 			redirect_back_or_default('/products')

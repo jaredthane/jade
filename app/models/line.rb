@@ -58,18 +58,18 @@ class Line < ActiveRecord::Base
   ##################################################################################
 	def new_movement(entity_id, movement_type_id, quantity)
 	  value = total_price_with_tax_per_unit*quantity
-	  logger.debug "self.serialized_product_id=#{self.serialized_product_id.to_s}"	  
-	  logger.debug "old.serialized_product_id=#{old.serialized_product_id.to_s}" if old
+	  #logger.debug "self.serialized_product_id=#{self.serialized_product_id.to_s}"	  
+	  #logger.debug "old.serialized_product_id=#{old.serialized_product_id.to_s}" if old
 	  if self.serialized_product_id
-	  	logger.debug "using first"
+	  	#logger.debug "using first"
 	  	serial=self.serialized_product_id
 	  else
-	  	logger.debug "using second"
+	  	#logger.debug "using second"
 	  	serial = old.serialized_product_id
 	 	end
 		m=Movement.new(:created_at=>User.current_user.today,:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => serial)
-		logger.debug "created movement"		
-		logger.debug "m=#{m.inspect}"
+		#logger.debug "created movement"		
+		#logger.debug "m=#{m.inspect}"
 		return m
 	end
   ###################################################################################
@@ -77,15 +77,15 @@ class Line < ActiveRecord::Base
   ##################################################################################
   MOVEMENT_TYPES=[[4,4],[5,1],[6,2],[9,8],[7,3],[4,4]]
 	def prepare_movements
-		logger.debug "self.product.product_type_id=#{self.product.product_type_id.to_s}"
+		#logger.debug "self.product.product_type_id=#{self.product.product_type_id.to_s}"
 	  if self.product.product_type_id == 1
-	  	logger.debug "real_qty(self)=#{real_qty(self).to_s}"
-	  	logger.debug "real_qty(old)=#{real_qty(old).to_s}"
+	  	#logger.debug "real_qty(self)=#{real_qty(self).to_s}"
+	  	#logger.debug "real_qty(old)=#{real_qty(old).to_s}"
 		  if real_qty(self) != real_qty(old)
 		    dir = (real_qty(self)-real_qty(old))/(real_qty(self)-real_qty(old)).abs
-		    logger.debug "dir=#{dir.to_s}"
+		    #logger.debug "dir=#{dir.to_s}"
 		    move=MOVEMENT_TYPES[order_type_id.to_i][(dir+3)/2-1]
-		    logger.debug "move=#{move.to_s}"
+		    #logger.debug "move=#{move.to_s}"
 		    if [1,2,3,8].include?(move)    	# These are normal movements
 		    	self.movements << Movement.new(:created_at=>User.current_user.today,:entity_id => self.order.vendor_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => -(real_qty(self)-real_qty(old)), :movement_type_id => move, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => self.serialized_product_id)
 		    	if move != 8									# Dont worry about the client for an internal consuption
@@ -123,14 +123,14 @@ class Line < ActiveRecord::Base
 			if real_qty(self) != real_qty(old)
 				case self.order_type_id	# check inventory levels
 					when 1 # Venta     
-						logger.debug "VALIDATING LINE: self=#{self.inspect}"
+						#logger.debug "VALIDATING LINE: self=#{self.inspect}"
 						qty=order.vendor.inventory(self.product)
 						errors.add " ","Solo hay " + qty.to_s + " " + self.product.unit.name + " del producto " + self.product.name + " en el inventario"  if self.quantity > qty
-						#logger.debug  "self.serialized_product=" + self.serialized_product.to_s if self.serialized_product
+						##logger.debug  "self.serialized_product=" + self.serialized_product.to_s if self.serialized_product
 						if self.product.serialized
 							if self.serialized_product
-									##logger.debug  "self.serialized_product.location.id=" + self.serialized_product.location.id.to_s
-									#logger.debug  "@order.vendor.id=" + @order.vendor.id.to_s
+									###logger.debug  "self.serialized_product.location.id=" + self.serialized_product.location.id.to_s
+									##logger.debug  "@order.vendor.id=" + @order.vendor.id.to_s
 									errors.add "El numero de serie " + self.serialized_product.serial_number + " no esta disponible en este sitio" if self.serialized_product.location != @order.vendor
 							else
 								errors.add "El numero de serie " + self.serialized_product.serial_number + " no se encuentra en el registro"
@@ -138,30 +138,30 @@ class Line < ActiveRecord::Base
 						end
 						# Serial number should exist, and be in vendors location
 					when 2 # Compra
-						##logger.debug  "validating Compra"
+						###logger.debug  "validating Compra"
 						# Serial number may or may not exist
 						# if it does its location should be nil
 						# if not, it should be unqiue to the product, add it
 					when 3 # Transferencia
-						##logger.debug  "validating Transferencia"
-						#logger.debug  "order.vendor.inventory(self.product)=" + order.vendor.inventory(self.product).to_s
+						###logger.debug  "validating Transferencia"
+						##logger.debug  "order.vendor.inventory(self.product)=" + order.vendor.inventory(self.product).to_s
 						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.vendor.inventory(self.product)	
 						errors.add "numero de serie no esta disponible en sitio señalado" if !self.serialized_product 
 						# Serial number should exist, and be in vendors location
 					when 5 # Devolucion de Venta
-						###logger.debug  "validating Devolucion de Venta"
-						###logger.debug  "self.product.id=" + self.product.id.to_s
+						####logger.debug  "validating Devolucion de Venta"
+						####logger.debug  "self.product.id=" + self.product.id.to_s
 						#errors.add "insufficient stock" if self.quantity > order.client.inventory(self.product)
 						# Serial number should exist
 						# its location should be nil
 						# dont need to validate serial cause it was already validated
 					when 6 # Devolucion de Compra
-						##logger.debug  "validating Devolucion de Compra"
+						###logger.debug  "validating Devolucion de Compra"
 						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.inventory(self.product)	
 						# Serial number should exist, and be in clients location
 						# dont need to validate serial cause it was already validated
 					when 7 # Devolucion de Transferencia	
-						##logger.debug  "validating Devolucion de Transferencia"				
+						###logger.debug  "validating Devolucion de Transferencia"				
 						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.location.inventory(self.product)
 						# Serial number should exist, and be in clients location
 						# dont need to validate serial cause it was already validated
@@ -194,35 +194,35 @@ class Line < ActiveRecord::Base
 	###################################################################################
 	def revenue_account(order=self.order)
 		for pref in Preference.find(:all, :order=>'value', :conditions=>"pref_group='revenue'")
-			logger.debug "Trying " + pref.name
+			#logger.debug "Trying " + pref.name
 			case pref.id
 			when 1 #Product
-				#logger.debug " Grabbing revenue account from Product"
+				##logger.debug " Grabbing revenue account from Product"
 				return product.revenue_account if product.revenue_account
 			when 2 #Category
-				#logger.debug " Grabbing revenue account from Category"
+				##logger.debug " Grabbing revenue account from Category"
 				if product.product_category
 					return product.product_category.revenue_account if product.product_category.revenue_account
 				end
 			when 3 #Vendor
-				#logger.debug " Grabbing revenue account from Vendor"
+				##logger.debug " Grabbing revenue account from Vendor"
 				if product.vendor
 					return product.vendor.revenue_account if product.vendor.revenue_account
 				end
 			when 4 #Site
-				#logger.debug " Grabbing revenue account from Site"
+				##logger.debug " Grabbing revenue account from Site"
 				if order.vendor
 					return order.vendor.revenue_account if order.vendor.revenue_account
 				end
 			when 5 #Clients Rep
-				#logger.debug " Grabbing revenue account from Clients Rep"
+				##logger.debug " Grabbing revenue account from Clients Rep"
 				if order.client
 					if order.client.user
 						return order.client.user.revenue_account if order.client.user.revenue_account
 					end
 				end
 			when 6 #Current User
-				#logger.debug " Grabbing revenue account from Current User"
+				##logger.debug " Grabbing revenue account from Current User"
 				return User.current_user.revenue_account if User.current_user.revenue_account
 			end
 		end
@@ -276,13 +276,13 @@ class Line < ActiveRecord::Base
 	# Sets the received date based on a simple yes or no
 	###################################################################################
 	def isreceived_str=(str)
-		#logger.debug "str=#{str.to_s}"
+		##logger.debug "str=#{str.to_s}"
 		if str=="" or str=="no" or str=="No" or str=="NO"
-			#logger.debug "setting to no"
+			##logger.debug "setting to no"
 			self.isreceived = 0
 		else
 			self.isreceived = 1
-			#logger.debug "setting to yes"
+			##logger.debug "setting to yes"
 		end
 	end
 	###################################################################################
@@ -299,8 +299,8 @@ class Line < ActiveRecord::Base
 	# Sets the received date if true, nil if false
 	###################################################################################
 	def isreceived=(checkbox)
-		logger.debug "setting isreceived on line"
-		logger.debug "self.order.void=#{self.order.void.to_s}"
+		#logger.debug "setting isreceived on line"
+		#logger.debug "self.order.void=#{self.order.void.to_s}"
 		if checkbox.to_i==1 and !self.order.void
 			if self.received == nil
 				self.received=Time.now
@@ -358,38 +358,38 @@ class Line < ActiveRecord::Base
 	# but only an existing serial if this is a sale, transfer, or otherwise
 	###################################################################################
 	def serial_number=(serial)
-		logger.debug "##################################################################################################"
-		logger.debug "# "
-		logger.debug "#################################################################################################"
-		logger.debug "serial == ''=#{(serial == '').to_s}"
-		logger.debug "(serial == '\n')=#{(serial == '\n').to_s}"
-		logger.debug "(self.order_type_id==2)=#{(self.order_type_id==2).to_s}"
-		logger.debug "(self.order_type_id==5)=#{(self.order_type_id==5).to_s}"
-		logger.debug "((self.order_type_id==5) or (self.order_type_id==5))=#{((self.order_type_id==2) or (self.order_type_id==5)).to_s}"
-		logger.debug "!(serial == '' or serial == '\n')=#{!(serial == "" or serial == '\n').to_s}"
-		logger.debug "(!(serial == '' or serial == '\n') and ((self.order_type_id==2) or (self.order_type_id==5)))=#{(!(serial == '' or serial == '\n') and ((self.order_type_id==2) or (self.order_type_id==5))).to_s}"
+		#logger.debug "##################################################################################################"
+		#logger.debug "# "
+		#logger.debug "#################################################################################################"
+		#logger.debug "serial == ''=#{(serial == '').to_s}"
+		#logger.debug "(serial == '\n')=#{(serial == '\n').to_s}"
+		#logger.debug "(self.order_type_id==2)=#{(self.order_type_id==2).to_s}"
+		#logger.debug "(self.order_type_id==5)=#{(self.order_type_id==5).to_s}"
+		#logger.debug "((self.order_type_id==5) or (self.order_type_id==5))=#{((self.order_type_id==2) or (self.order_type_id==5)).to_s}"
+		#logger.debug "!(serial == '' or serial == '\n')=#{!(serial == "" or serial == '\n').to_s}"
+		#logger.debug "(!(serial == '' or serial == '\n') and ((self.order_type_id==2) or (self.order_type_id==5)))=#{(!(serial == '' or serial == '\n') and ((self.order_type_id==2) or (self.order_type_id==5))).to_s}"
 		if (!(serial == "" or serial == "\n") and ((self.order_type_id==2) or (self.order_type_id==5)))
-			logger.debug "Taking create path"
+			#logger.debug "Taking create path"
 			s=SerializedProduct.find_or_create_by_serial_number(serial)
 			if s.product_id==nil
-				logger.debug "self.product_id=#{self.product_id.to_s}"
+				#logger.debug "self.product_id=#{self.product_id.to_s}"
 				s.product_id=(self.product_id )
 				s.save
 			end   
 		else
-			logger.debug  "taking find path"
+			#logger.debug  "taking find path"
 			s=SerializedProduct.find_by_serial_number(serial)
 		end
 		s=nil if self.order.void
 		if self.order_type_id == 5
 			self.serialized_product=s
-			logger.debug "Skipping creating movements cause this is a count"
+			#logger.debug "Skipping creating movements cause this is a count"
 		else
 			if self.serialized_product # the line was already marked as delivered
-				logger.debug  "the line was already marked as delivered"
+				#logger.debug  "the line was already marked as delivered"
 				if !(serial == "" or serial == "\n")
 					if s != self.serialized_product # only need to work if it's been changed
-						logger.debug  "we are changing the serial numbers delivered for the line"
+						#logger.debug  "we are changing the serial numbers delivered for the line"
 						# we are changing the serial numbers delivered for the line
 						# because it is an existing order, we can create the movements now.
 				
@@ -400,17 +400,17 @@ class Line < ActiveRecord::Base
 						self.isreceived=1
 					end
 				else # we are marking the line as not delivered after it was previously delivered
-					logger.debug  "we are marking the line as not delivered after it was previously delivered"
+					#logger.debug  "we are marking the line as not delivered after it was previously delivered"
 			
 					# This is a Devolucion of Compra(6), Venta(5), o Transaccion(7)
-					logger.debug  "setting isreceived=0"
+					#logger.debug  "setting isreceived=0"
 					self.isreceived=0
 					self.serialized_product = nil # s was also nil
 				end
 			else # the line was previously undelivered
-				#logger.debug  "the line was previously undelivered"
+				##logger.debug  "the line was previously undelivered"
 				if !(serial == "" or serial == "\n")
-					logger.debug  "delivering previously undelivered serial"
+					#logger.debug  "delivering previously undelivered serial"
 					# either this is a new order, or is simply undelivered until now.
 		
 					# This is a Compra(2), Venta(1), o Transaccion(3)

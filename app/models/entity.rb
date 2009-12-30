@@ -41,7 +41,7 @@ class Entity < ActiveRecord::Base
 	# 
 	#################################################################################################
   def validate
-  	logger.debug "HERE in validate++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
+  	#logger.debug "HERE in validate++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"
     errors.add "Nombre","no es válido" if !name or name==''
     if self.new_record?
     	errors.add "Nombre ","debe ser único" if Entity.find(:first,:conditions=> "name = '#{name}'")
