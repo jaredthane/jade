@@ -17,7 +17,7 @@ class LinesController < ApplicationController
 	skip_before_filter :verify_authenticity_token
 
 	before_filter :login_required
-	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin | Ventas | Compras)' 
+	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin | Vendedor | Compras)' 
 
 	def add_line(upc, quantity, order_type_id, relative_price = 1)
 		@additional=Line.new(:created_at=>User.current_user.today, :order_type_id=>order_type_id,:delete_me=>false)
