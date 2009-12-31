@@ -110,9 +110,8 @@
       
         <!-- Navigation Level 2 (Drop-down menus) -->
         <div class="nav2">
-        <% if current_user.has_rights(['Admin','Ventas','Gerente','Compras', 'Contabilidad']) %>
-        	<ul>
-     <% if current_user.has_rights(['Admin','Ventas','Gerente','Compras']) %>   	
+        
+        	<ul>  	
     <li><a title="Nuevo">Nuevo</a>
 			<ul>
 				<% if current_user.has_rights(['Admin','Ventas','Gerente']) %>
@@ -214,9 +213,7 @@
 	  			<li><a href="/sales_representatives" title="Corte de Caja">Corte de Caja</a></li>
 	  		</ul>
 	  	</li>
-	  <% end %>	  
 	</ul>
-	<% end %>
 					<%= yield :nav2 %>	
         </div>
 	  </div>
@@ -240,7 +237,6 @@
 		</dl>      
   <h1>Enlaces</h1>
 	<dl class="nav3-grid">
-	<% if current_user.has_rights(['Admin','Ventas','Gerente','Compras', 'Contabilidad','Inventario']) %>
 		<dt><a href="/products">Productos</a></dt>
 			<dd><a href="/products">Productos</a></dd>
 			<dd><a href="/services">Servicios</a></dd>
@@ -295,7 +291,6 @@
 			<dt><a href="/accounts">Contabilidad</a></dt>
 	  <% end %>
 			<dt><a href="/logout">Salir</a></dt>
-		<% end %>
 	</dl>        
         
 		   <%= yield :nav3 %>
