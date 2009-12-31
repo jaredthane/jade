@@ -27,6 +27,7 @@ class Line < ActiveRecord::Base
 	before_save :pre_save
 	def pre_save
 		prepare_movements
+		self.price = self.product.cost * (self.quantity - self.product.quantity) if order_type_id==Order::COUNT
 	end
 	before_save :post_save
 	def post_save
@@ -246,7 +247,11 @@ class Line < ActiveRecord::Base
 	# Returns the total price of the products on this line
 	###################################################################################
 	def total_price
-		total = ((price ||0) + (warranty_price || 0)) * (quantity || 0)
+		if order_type_id==Order::COUNT
+			total = self.product.cost * (self.quantity - self.product.quantity)
+		else
+			total = ((price ||0) + (warranty_price || 0)) * (quantity || 0)
+		end
 		return total
 	end
 	###################################################################################

@@ -55,6 +55,11 @@ class Order < ActiveRecord::Base
   def pre_save
 		#logger.debug "pre_save"
 		#logger.debug "self.receipt_number=#{self.receipt_number.to_s}"
+		if order_type_id==COUNT
+			for l in lines
+				
+			end
+		end
     if self.deleted
       self.grand_total = 0
     else
@@ -91,7 +96,7 @@ class Order < ActiveRecord::Base
 	  #logger.debug self.lines.inspect
   	self.receipt_filename = "#{RAILS_ROOT}/invoice_pdfs/#{self.id}.pdf"
   	self.send(:update_without_callbacks) # This is also serving to save the sequel_id
-	  if self.receipt_number
+	  if self.receipt_number and order_type_id == SALE
 	  	# Set next Receipt number
     	next_receipt=("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1)
     	loc=User.current_user.location
@@ -483,7 +488,7 @@ class Order < ActiveRecord::Base
 	# The payment model will do the accounting
 	#################################################################################################
 	def pay_off()
-	  if grand_total > amount_paid
+	  if grand_total != amount_paid
   	  Payment.create(:order=>self, :payment_method_id=>1, :user=>User.current_user, :presented=>grand_total-amount_paid, :created_at=>User.current_user.today)
   	  self.amount_paid=grand_total
   	  self.save

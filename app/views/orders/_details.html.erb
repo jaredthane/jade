@@ -13,7 +13,7 @@
 <% content_for :actions do %>
 	<% case @order.order_type_id
 	when 1 %>
-		<% if current_user.has_rights(['Admin','Ventas','Gerente']) %>
+		<% if current_user.has_right(User::CHANGE_SALES) %>
     			<dt><%= link_to 'Nueva Venta', new_sale_path %></dt>
     			<dt><%= link_to 'Cambiar', edit_order_path(@order) %></dt>
     			<% if current_user.has_rights(['Admin','Gerente']) %>
@@ -21,7 +21,13 @@
 					<% end %>
 		    <% if !@order.deleted %>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></dt>
+			    <% if @order.amount_paid < @order.grand_total %>
+			    	<dt><%= link_to 'Marcar Pagado', pay_off_path(:order_id=>@order.id) %></dt>
+			    <% elsif @order.amount_paid > @order.grand_total %>
+			    	<dt><%= link_to 'Devolver Dinero', pay_off_path(:order_id=>@order.id) %></dt>
+			    <% end %>
 			<% end %>
+			<dt><%= link_to 'Imprimir', count_sheet_url, :class => 'action' %></dt>
 		<% end %>
 		<% if view == 'products' %>
 		  <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
@@ -30,11 +36,16 @@
 		<% end %>
 		<dt><%= link_to 'Lista de Ventas', sales_path %> </dt>
 	<% when 2 %>
-		<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
+		<% if current_user.has_right(User::CHANGE_PURCHASES) %>
     			<dt><%= link_to 'Nueva Compra', new_purchase_path %></dt>
 			    <dt><%= link_to 'Cambiar', edit_order_path(@order) %></dt>
 		    <% if !@order.deleted %>
 			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></dt>
+			    <% if @order.amount_paid < @order.grand_total %>
+			    	<dt><%= link_to 'Marcar Pagado', pay_off_path(:order_id=>@order.id) %></dt>
+			    <% elsif @order.amount_paid > @order.grand_total %>
+			    	<dt><%= link_to 'Devolver Dinero', pay_off_path(:order_id=>@order.id) %></dt>
+			    <% end %>
 			<% end %>
 		  <% if view == 'products' %>
 		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
@@ -48,6 +59,11 @@
 	    <dt><%= link_to 'Cambiar', edit_order_path(@order) %></dt>
       <% if !@order.deleted %>
 		    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></dt>
+		    <% if @order.amount_paid < @order.grand_total %>
+		    	<dt><%= link_to 'Marcar Pagado', pay_off_path(:order_id=>@order.id) %></dt>
+		    <% elsif @order.amount_paid > @order.grand_total %>
+		    	<dt><%= link_to 'Devolver Dinero', pay_off_path(:order_id=>@order.id) %></dt>
+		    <% end %>
 			<% end %>
 		  <% if view == 'products' %>
 		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>

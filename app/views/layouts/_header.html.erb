@@ -110,16 +110,16 @@
       
         <!-- Navigation Level 2 (Drop-down menus) -->
         <div class="nav2">
-        <% if current_user.has_rights(['Admin','Ventas','Gerente','Compras', 'Contabilidad']) %>
+        
         	<ul>
-     <% if current_user.has_rights(['Admin','Ventas','Gerente','Compras']) %>   	
+       	
     <li><a title="Nuevo">Nuevo</a>
 			<ul>
-				<% if current_user.has_rights(['Admin','Ventas','Gerente']) %>
+				<% if current_user.has_rights(['Admin','Vendedor','Gerente']) %>
 	  			<li><a href="/sales/new" title="Venta">Venta</a></li>
 	  			<li><a href="/clients/new" title="Cliente">Cliente</a></li>
 	  		<% end %>
-	  		<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
+	  		<% if current_user.has_rights(['Admin','Comprador','Gerente']) %>
 					<li><a href="/purchases/new" title="Compra">Compra</a></li>
 					<li><a href="/products/new" title="Producto">Producto</a></li>
 					<li><a href="<%= new_service_path %>" title="Servicio">Servicio</a></li>
@@ -137,8 +137,8 @@
   			<li><a href="/sites/new" title="Sitio">Sitio</a></li>
   			</ul>
 		</li>
-		<% end %>
-		<% if current_user.has_rights(['Admin','Ventas','Gerente','Compras', 'Inventario']) %>
+
+
 		<li><a href="/products" title="Productos">Productos</a>
 			<ul>
 				<li><a href="/products" title="Productos">Productos</a></li>
@@ -154,8 +154,8 @@
 				<li><a href="/units" title="Unidades">Unidades</a></li>
 			</ul>
 		</li>
-		<% end %>
-		<% if current_user.has_rights(['Admin','Gerente','Compras']) %>
+
+		<% if current_user.has_rights(['Admin','Gerente','Comprador']) %>
 			<li><a href="/purchases" title="Compras">Compras</a>
 				<ul>
 					<li><a href="/purchases" title="Compras">Compras</a></li>
@@ -163,23 +163,23 @@
 				</ul>
 			</li>
 	 	<% end %>
-	 	<% if current_user.has_rights(['Admin','Gerente','Ventas', 'Contabilidad']) %>
-			<li><a href="/sales" title="Ventas">Ventas</a>		
+	 	<% if current_user.has_rights(['Admin','Gerente','Vendedor', 'Contabilidad']) %>
+			<li><a href="/sales" title="Vendedor">Vendedor</a>		
 				<ul>
-					<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
-						<li><a href="/sales" title="Ventas">Ventas</a></li>
+					<% if current_user.has_rights(['Admin','Gerente','Vendedor']) %>
+						<li><a href="/sales" title="Vendedor">Vendedor</a></li>
 					<% end %>
-					<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
+					<% if current_user.has_rights(['Admin','Gerente','Vendedor']) %>
 						<li><a href="/subscriptions" title="Suscripciones">Suscripciones</a></li>
 						<li><a href="/internal" title="Consumo Interno">Consumos Internos</a></li>
 					<% end %>
 				</ul>				
 			</li>
 	  <% end %>
-	  <% if current_user.has_rights(['Admin','Gerente','Compras']) %>
+	  <% if current_user.has_rights(['Admin','Gerente','Comprador']) %>
       <li><a href="/vendors" title="Proveedores">Proveedores</a></li>
     <% end %>
-    <% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
+    <% if current_user.has_rights(['Admin','Gerente','Vendedor']) %>
       <li><a href="/clients" title="Clientes">Clientes</a>
         <ul>
           <li><a href="/entities/my_clients" title="Mis Clientes">Mis Clientes</a></li>
@@ -199,7 +199,7 @@
   			<li><a href="/counts" title="Cuentas Fisicas">Cuentas Fisicas</a></li>
   		</ul>
   	</li>
-  	<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
+  	<% if current_user.has_rights(['Admin','Gerente','Vendedor']) %>
 	  	<li><a href="/payments" title="Pagos">Pagos</a></li>
 	  <% end %>
   	<% if current_user.has_rights(['Admin','Gerente']) %>
@@ -216,7 +216,7 @@
 	  	</li>
 	  <% end %>	  
 	</ul>
-	<% end %>
+
 					<%= yield :nav2 %>	
         </div>
 	  </div>
@@ -240,7 +240,7 @@
 		</dl>      
   <h1>Enlaces</h1>
 	<dl class="nav3-grid">
-	<% if current_user.has_rights(['Admin','Ventas','Gerente','Compras', 'Contabilidad','Inventario']) %>
+	<% if current_user.has_rights(['Admin','Vendedor','Gerente','Comprador', 'Contabilidad','Inventario']) %>
 		<dt><a href="/products">Productos</a></dt>
 			<dd><a href="/products">Productos</a></dd>
 			<dd><a href="/services">Servicios</a></dd>
@@ -251,17 +251,17 @@
 			<% if current_user.has_rights(['Admin','Gerente']) %>
 				<dd><a href="/prices">Cambiar Precios</a></dd>
 			<% end %>
-			<% if current_user.has_rights(['Admin','Gerente','Compras']) %>
+			<% if current_user.has_rights(['Admin','Gerente','Comprador']) %>
 				<dd><a href="/inventories">Reaprovisionar</a></dd>
 			<% end %>
 			<dd><a href="/units">Unidades</a></dd>
 		<dt><a href="/orders">Pedidos</a></dt>
-			<% if current_user.has_rights(['Admin','Gerente','Compras']) %>
+			<% if current_user.has_rights(['Admin','Gerente','Comprador']) %>
 		  <dd><a href="/purchases">Compras</a></dd>
 		  <dd><a href="/orders/show_batch">Últimas Compras</a></dd>
 		 <% end %>
-		 <% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
-		  <dd><a href="/sales">Ventas</a></dd>
+		 <% if current_user.has_rights(['Admin','Gerente','Vendedor']) %>
+		  <dd><a href="/sales">Vendedor</a></dd>
 		  <dd><a href="/subscriptions">Ver Suscripciones</a></dd>
 		  <dd><a href="/internal">Consumo Interno</a></dd>
 		  <% end %>
@@ -270,12 +270,12 @@
 			<dd><a href="/entities/<%= location.id %>"><%= location.name %></a></dd>		
   	<% end %>
   	<dt><a href="/entities">Entidades</a></dt>
-  		<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
+  		<% if current_user.has_rights(['Admin','Gerente','Vendedor']) %>
 	  	<dd><a href="/clients/">Clientes</a></dd>		
 	  	<dd><a href="/entities/my_clients">Mis Clientes</a></dd>		
 	  	
 	  <% end %>
-	  	<% if current_user.has_rights(['Admin','Gerente','Compras']) %>
+	  	<% if current_user.has_rights(['Admin','Gerente','Comprador']) %>
 	  	<dd><a href="/vendors/">Proveedores</a></dd>		
 	  <% end %>
 	  	<dd><a href="/sites/">Sitios</a></dd>		
@@ -283,7 +283,7 @@
 	  <% for category in get_product_categories %>
 			<dd><a href="/product_categories/<%= category.id %>"><%= category.name %></a></dd>		
   	<% end %>
-  	<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
+  	<% if current_user.has_rights(['Admin','Gerente','Vendedor']) %>
   		<dt><a href="/payments">Pagos</a></dt>
   	<% end %>
   	<% if current_user.has_rights(['Admin','Gerente']) %>

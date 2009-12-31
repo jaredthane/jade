@@ -16,8 +16,8 @@
 
 class OrdersController < ApplicationController
 	before_filter :login_required
-	access_control [:create_batch, :create_orders, :show_batch, :new_purchase] => '(Gerente | Admin | Compras)' 
-	access_control [:new_sale] => '(Gerente | Admin | Ventas)'
+	access_control [:create_batch, :create_orders, :show_batch, :new_purchase] => '(Gerente | Admin | Comprador)' 
+	access_control [:new_sale] => '(Gerente | Admin | Vendedor)'
 	access_control [:destroy] => '(Admin)'
 	def allowed(order_type_id, action)
 		case (order_type_id)
@@ -96,7 +96,7 @@ class OrdersController < ApplicationController
     else
 			flash[:error] = "No hay ningun pedido en el sistema con ese numero"
     end
-    redirect_back_or_default(@order.client)
+    redirect_back_or_default(@order)
     return false
   end
   ###################################################################################################
@@ -279,6 +279,7 @@ class OrdersController < ApplicationController
     respond_to do |format|
       if !errors
       	@order.save
+      	@order.pay_off if AUTO_PAY_OFF and @order.order_type_id == Order::SALE
     		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     		logger.debug "@order.id=#{@order.id.to_s}"
         generate_receipt(@order, true)

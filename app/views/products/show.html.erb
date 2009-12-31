@@ -1,10 +1,14 @@
 <% content_for :title do %><%=h @product.name %> - <%=h @product.upc %><% end %>
 <% content_for :actions do %>
-	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
+	<% if current_user.has_right(User::CHANGE_PRODUCTS) %>
 		<dt><%= link_to 'Nuevo producto', new_product_path, :class => 'action' %></dt>
 		<dt><%= link_to 'Cambiar', edit_product_path(@product), :class =>'action' %> </dt>		
-		<dt><%= link_to 'Codigo de Barra', show_barcode_path(@product), :class =>'action' %> </dt>		
+		<dt><%= link_to 'Codigo de Barra', show_barcode_path(@product), :class =>'action' %> </dt>	
+	<% end %>
+	<% if current_user.has_right(User::CHANGE_PRICES) %>	
 		<dt><%= link_to 'Cambiar Precio', :controller => "prices",:action => "index", :search => @product.upc, :class =>'action' %> </dt>
+	<% end %>
+	<% if current_user.has_right(User::CHANGE_PRODUCTS) %>
     <dt><%= link_to 'Añadir Oferta de Garantia', new_warranty_path(:product_id=>@product), :class => 'action' %></dt>
   <% end %>
   <dt><%= link_to 'Lista', products_path, :class =>'action' %></dt>
@@ -17,7 +21,7 @@
 <% end %>
 </h2>
 <div class="column3-unit-left">
-	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
+	<% if current_user.has_right(User::VIEW_VENDORS) %>
 	<p><b>Proveedor</b><br />
     <% if @product.vendor %>
     	<%=link_to @product.vendor.name, @product.vendor%>	
@@ -64,7 +68,7 @@
     	<%=h @product.product_category.name %>
     <% end %>
   </p>
-  <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
+  <% if current_user.has_right(User::VIEW_ACCOUNTS) %>
 		<p>
 			<b>Cuenta de Ingresos</b><br />
 			<% if @product.revenue_account %>
