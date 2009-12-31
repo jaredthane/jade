@@ -15,7 +15,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class EntitiesController < ApplicationController
 	before_filter :login_required
-	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin | Vendedor | Compras | Inventario)' 
+	access_control [:new, :create, :update, :edit, :destroy] => '(Gerente | Admin | Vendedor | Comprador | Inventario)' 
 	def allowed(entity_type)
 		case (entity_type)
 	  when 'sites'
