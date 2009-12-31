@@ -1,6 +1,6 @@
 <% content_for :title do %><%=h @product.name %> - <%=h @product.upc %><% end %>
 <% content_for :actions do %>
-	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
+	<% if current_user.has_rights(['Admin','Comprador','Gerente']) %>
 		<dt><%= link_to 'Nuevo producto', new_product_path, :class => 'action' %></dt>
 		<dt><%= link_to 'Cambiar', edit_product_path(@product), :class =>'action' %> </dt>		
 		<dt><%= link_to 'Codigo de Barra', show_barcode_path(@product), :class =>'action' %> </dt>		
@@ -17,7 +17,7 @@
 <% end %>
 </h2>
 <div class="column3-unit-left">
-	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
+	<% if current_user.has_rights(['Admin','Comprador','Gerente']) %>
 	<p><b>Proveedor</b><br />
     <% if @product.vendor %>
     	<%=link_to @product.vendor.name, @product.vendor%>	
