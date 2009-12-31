@@ -85,7 +85,7 @@
 		  <%= f.text_field :location, :class => 'field' %>
 		</p>
 		
-	  <% if current_user.has_rights(User::CHANGE_ACCOUNTING) %>
+	  <% if current_user.has_rights(User::CHANGE_ACCOUNTS) %>
 			<p>
 				<b>Cuenta de Ingresos</b><br />
 				Si desea, puede especificar una cuenta en que poner los ingresos para este producto.<br />

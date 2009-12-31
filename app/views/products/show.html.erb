@@ -17,7 +17,7 @@
 <% end %>
 </h2>
 <div class="column3-unit-left">
-	<% if current_user.has_rights(['Admin','Comprador','Gerente']) %>
+	<% if current_user.has_right(User::VIEW_VENDORS) %>
 	<p><b>Proveedor</b><br />
     <% if @product.vendor %>
     	<%=link_to @product.vendor.name, @product.vendor%>	
@@ -64,7 +64,7 @@
     	<%=h @product.product_category.name %>
     <% end %>
   </p>
-  <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
+  <% if current_user.has_rights(User::VIEW_ACCOUNTS) %>
 		<p>
 			<b>Cuenta de Ingresos</b><br />
 			<% if @product.revenue_account %>
