@@ -1,7 +1,7 @@
 <% content_for :title do %>Lista de Productos en <%= current_user.location.name %><% end %>
 
 <% content_for :actions do %>
-	<% if current_user.has_rights(['Admin','Comprador','Gerente']) %>
+	<% if current_user.has_right(User::CHANGE_PRODUCTS) %>
 		<dt><%= link_to 'Nuevo producto', new_product_path, :class => 'action' %></dt>
 		<dt><%= link_to 'Reaprovisionar', '/inventories?search=' + (@search||''), :class => 'action' %></dt>
 		<dt><%= link_to 'Lista de Precios', '/products/price_list?search=' + (@search||''), :class => 'action' %></dt>
@@ -20,14 +20,14 @@
 <div>
   <div class="table_header_row">
     <div class="table_cell_20">Nombre</div>
-    <% if current_user.has_rights(['Admin','Comprador','Gerente']) %>
+    <% if current_user.has_right(User::VIEW_VENDORS) %>
     	<div class="table_cell_20">Proveedor</div>
     <% end %>
     <div class="table_cell_5">Min</div>
     <div class="table_cell_5">Max</div>
     <div class="table_cell_10">Cantidad</div>
     <div class="table_cell_10">Precio</div>
-    <% if current_user.has_rights(['Admin','Comprador','Gerente']) %>
+    <% if current_user.has_right(User::CHANGE_PRICES) %>
     	<div class="table_cell_10">Costo</div>
     <% end %>
     <div class="table_cell">Upc</div>
@@ -36,14 +36,14 @@
 <% for product in @products %>
   <div class="table_row">
     <div class="table_cell_20"><%= link_to product.name[0..25], product %></div>
-    <% if current_user.has_rights(['Admin','Comprador','Gerente']) %>
+    <% if current_user.has_right(User::VIEW_VENDORS) %>
     	<div class="table_cell_20"><%= link_to product.vendor.name[0..25], product.vendor %></div>
     <% end %>
     <div class="table_cell_5"><%=h product.min(current_user.location_id) %></div>
     <div class="table_cell_5"><%=h product.max(current_user.location_id) %></div>
     <div class="table_cell_10"><%=h current_user.location.inventory(product) %></div>
     <div class="table_cell_10"><%=h number_to_currency(product.price) %></div>
-    <% if current_user.has_rights(['Admin','Comprador','Gerente']) %>
+    <% if current_user.has_right(User::CHANGE_PRICES) %>
 	    <div class="table_cell_10"><%=h number_to_currency(product.cost) %></div>
     <% end %>
     <div class="table_cell"><%=h product.show_upc %></div>
