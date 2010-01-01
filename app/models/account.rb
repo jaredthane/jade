@@ -42,10 +42,23 @@ class Account < ActiveRecord::Base
 			return (self.name||'')
 		end
 	end
-	def self.search(search, page)
-  	paginate :per_page => 20, :page => page,
-		         :conditions => ['(accounts.name like :search)', {:search => "%#{search}%"}],
-		         :order => 'accounts.number'
+	def self.find_by_name_or_create(arg)
+		find_by_name(arg[:name]) || create(arg)
+	end
+	def self.search(search, filter = '', page=nil)
+		c = "(accounts.name like '%#{search}%')"
+		o = 'accounts.number'
+		case filter
+		when 'parent'
+			c += ' AND is_parent=1'
+		when 'child'
+			c += ' AND is_parent=0'
+		end
+		if page
+  		paginate :per_page => 20, :page => page, :conditions => c, :order => o
+  	else
+  		find :all, :conditions => c, :order => o
+  	end
 	end
 	def children
 	  return Account.find_all_by_parent_id(self.id)

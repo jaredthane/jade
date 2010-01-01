@@ -21,7 +21,7 @@
 <% end %>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("#parent_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1});
+		$("#parent_lookup").autocomplete("/accounts.js?filter=parent",{matchSubset:0, autoFill:1});
 	});
 </script>
 <% form_for(@account, :html => {:id => 'account_form' }) do |f| %>
