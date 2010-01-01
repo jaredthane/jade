@@ -40,7 +40,7 @@
 		<% end %>
 	</p>
 	<p>
-	  <b>Tipo de cuenta</b><br />
+	  <b>description de cuenta</b><br />
 	  <% if @account.modifier == 1 %>
 	  	Debe
 	  <% else %>
@@ -53,36 +53,34 @@
   <div class="table_header_row">
     <div class="table_cell_15">Fecha</div>
     <div class="table_cell_15">Transaccion</div>
-    <div class="table_cell_15">Tipo</div>
+    <div class="table_cell_15">description</div>
     <div class="table_cell_20">Cuenta</div>
     <div class="table_cell_10">Debito</div>
     <div class="table_cell_10">Credito</div>
     <div class="table_cell">Saldo</div>
   </div>
-  <% for entry in @myposts %>
+  <% for post in @myposts %>
     <div class="table_row">
-      <div class="table_cell_15"><%= h entry.post.trans.created_at.to_date.to_s(:default) %></div>
-    	<div class="table_cell_15"><%= link_to entry.post.trans.id, tran_path(entry.post.trans) %></div>
+      <div class="table_cell_15"><%= h post.trans.created_at.to_date.to_s(:default) %></div>
+    	<div class="table_cell_15"><%= link_to post.trans.id, tran_path(post.trans) %></div>
     	<div class="table_cell_15">
-    		<% if entry.post.trans.tipo %>
-    			<%= link_to entry.post.trans.tipo, entry.post.trans.obj_link %>
+    		<% if post.trans.description %>
+    			<%= link_to post.trans.description, post.trans.obj_link %>
     		<% end %>
   		</div>
     	<div class="table_cell_20">
-    		<% if entry.post %>
-    			<% if entry.post.account %>
-    	    	<%= link_to entry.post.account.number_and_name, entry.post.account %>
-    	  	<% end %>
-    		<% end %>
+  			<% if post.account %>
+  	    	<%= link_to post.account.number_and_name, post.account %>
+  	  	<% end %>
     	</div>
-    	<% if entry.post.post_type_id==1 %>
-    	  <div class="table_cell_10"><%= h number_to_currency((entry.post.value||0)) %></div>
+    	<% if post.post_type_id==1 %>
+    	  <div class="table_cell_10"><%= h number_to_currency((post.value||0)) %></div>
     	  <div class="table_cell_10"></div>
     	<% else %>
     	  <div class="table_cell_10"></div>
-    	  <div class="table_cell_10"><%= h number_to_currency((entry.post.value||0)) %></div>
+    	  <div class="table_cell_10"><%= h number_to_currency((post.value||0)) %></div>
     	<% end %>
-    	<div class="table_cell"><%= h number_to_currency((entry.balance||0)) %></div>
+    	<div class="table_cell"><%= h number_to_currency((post.balance||0)) %></div>
     </div>
   <% end %>
 </div>

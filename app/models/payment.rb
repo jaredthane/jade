@@ -72,11 +72,10 @@ class Payment < ActiveRecord::Base
 			amount = self.amount
 		end
 		if amount != 0
-			if self.order
-			  t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :comments => self.order.comments, :tipo => 'Pago de ' + self.order.order_type.name)
-			else
-			  t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :tipo=> 'Pago')
-			end
+			tipo='Pago'
+			tipo += ' de ' + self.order.order_type.name if self.order
+			tipo = 'Devolucion de ' + tipo if amount < 0
+			t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :comments => (self.order.comments||''), :tipo => tipo)
 			if order.order_type_id=Order::SALE
 				o=1
 			else

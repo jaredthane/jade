@@ -21,30 +21,51 @@ class Post < ActiveRecord::Base
   belongs_to :post_type
   belongs_to :trans
 	belongs_to :account
-	has_many :entries, :order => "created_at DESC", :dependent => :destroy
+#	has_many :entries, :order => "created_at DESC", :dependent => :destroy
 	
 	CREDIT = -1
 	DEBIT = 1
 	
 	before_create :prepare_for_create
 	def prepare_for_create
+	
 		# Make value positive if its negative
-		logger.debug "making sure value is positive"
-		self.value = (self.value || 0 ) * -1 if (self.value || 0 ) < 0
+		logger.debug "VALUE============================================================================================================================="
+		logger.debug "self.value=#{self.value.to_s}"
+		if (self.value || 0 ) < 0
+			logger.debug "VALUE IS NEGATIVE"
+			logger.debug "self.post_type_id=#{self.post_type_id.to_s}"
+			logger.debug "self.value=#{self.value.to_s}"
+			self.value = (self.value || 0 ) * -1
+			self.post_type_id = self.post_type_id * -1
+			logger.debug "VALUE WAS CHANGED"
+			logger.debug "self.post_type_id=#{self.post_type_id.to_s}"
+			logger.debug "self.value=#{self.value.to_s}"
+		end
+		
 		#Set created_at to match the Trans
 		logger.debug "Set created_at to match the Trans"
 		self.created_at=trans.created_at if trans
+		
+		# Calculate balance
+		calculate_balance
 	end
-	after_create :create_entries
-	def create_entries
-		next_account = self.account
-		while next_account
-			Entry.create(:post=>self, :account=>next_account,:created_at=>self.created_at)
-			next_account = next_account.parent
+	before_destroy :prepare_for_destroy
+	def prepare_for_destroy
+#		recalculate_later_balances(delete=true)
+	end
+	def calculate_balance
+		if self.account
+	    mydate=(self.created_at||Time.now)
+		  last_post=Post.last(:conditions=> ['date(created_at) < :mydate AND account_id=:account', {:mydate=>mydate.to_s(:db), :account=>self.account_id}])
+		  last_balace = last_post ? (last_post.balance || 0 ) : 0
+		  change = (self.value || 0) * (self.post_type_id || 0) * (self.account.modifier || 0)
+		  self.balance = last_balace + change
+			self.account.balance = (self.account.balance || 0) + change
+			self.account.save
+			sql = ActiveRecord::Base.connection()
+			query = "UPDATE posts set balance = balance + #{change} where account_id = #{self.account_id} and created_at > '#{mydate.to_s(:db)}'"
+			results = sql.update(query)
 		end
-	end
-	def opposite_type
-		return -1 if post_type==1
-		return 1
 	end
 end

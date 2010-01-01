@@ -18,6 +18,9 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class Trans < ActiveRecord::Base
+	FORWARD = 1
+	REVERSE = -1
+	NEUTRAL = 0
   has_many :posts
   has_many :entities , :through => :posts
 	belongs_to :order
@@ -29,21 +32,6 @@ class Trans < ActiveRecord::Base
 			p=Post.new(post)
 			self.posts << p
 		end
-	end
-	def description
-	  if self.tipo
-	    d=self.tipo
-	  else
-	    if self.is_payment
-	      d='Pago'
-	    else
-	      d='Pedido'
-	    end
-	  end
-	  if self.order_id
-	    d+=' #' + self.order_id.to_s
-	  end
-	  return d
 	end
 	def obj_link
 	  if self.payment
@@ -67,5 +55,20 @@ class Trans < ActiveRecord::Base
 		for post in posts
 			return post if post.account_id==id
 		end
+	end
+	def search(order_type_id=nil, from=nil, till=nil, page=nil)
+		c = "order_type_id = #{order_type_id.to_s} "
+		c += " AND created_at >= '#{from.to_s(:db)}'" if from
+		c += " AND created_at <= '#{(till + 1).to_s(:db)}'" if till
+		j = 'inner join orders on order.id=trans.order_id'
+		
+		
+		
+		j += 'inner join posts on posts.trans_id=trans.id'
+		j += ' and direction=-1' if order_type_id == SALE
+		j += ' and direction=1' if order_type_id == PURCHASE
+		inner join posts on posts.account_id = accounts.id
+		Trans.find()
+		
 	end
 end

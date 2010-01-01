@@ -1,0 +1,75 @@
+Creating Sites
+	Accounting
+Creating Products
+	upcs
+	searching
+	printing bar code
+	units of measure
+	serial numbers
+	default cost
+	setting prices
+		concept: relative and fixed prices
+		price groups
+	reordering
+		vendor
+		min/max
+		pending orders
+		recommendations
+		creating orders automaticly
+creating Combos
+creating Discounts
+subscriptions
+	creating
+	provisioning
+	receiving payments
+Doing Fisical counts
+	creating from product list
+	creating manually
+	with serial numbers
+	printing count sheet
+	filling in values
+	posting differences
+	accounting considerations
+Creating Services
+Creating Clients
+	searching
+	Accounting
+		estado de cuenta
+	asesor
+		my clients
+	birthdays
+Viewing history
+	without serial numbers
+	of an order
+	with serial number
+Creating Vendors
+Making a Sale
+	bar codes and scanners
+Making a Purchase
+	note about auto reorder
+Internal consumption
+users
+	adding
+	setting roles
+	removing
+	changing password
+	changing date
+	changing details
+Accounting
+	viewing accounts
+	trees
+	balances
+	post terms
+		Change in agreement
+			Venta/Compra
+			Cancelacion de Venta/Compra
+		change in physical location of products
+			Entrega de Venta/Compra
+			Devolucion de Venta/Compra
+		change in $$
+			Pago de Venta/Compra
+			Devolucion de Pago de Venta/Compra
+			
+	transactions
+		creating
+		making notes

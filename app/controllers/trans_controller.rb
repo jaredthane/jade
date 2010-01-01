@@ -37,7 +37,23 @@ class TransController < ApplicationController
       format.xml  { render :xml => @trans }
     end
   end
-
+	def index
+		return false if !check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')
+	  @from=(untranslate_month(params[:from])||Date.today)
+    @till=(untranslate_month(params[:till])||Date.today)
+		if params[:pdf]=='1'
+      @entries = Entry.search(params[:filter], @from, @till)
+      params[:format] = 'pdf'
+    else
+      @entries = Entry.search(params[:filter], @from, @till, (params[:page]||1))
+    end
+		respond_to do |format|
+		  format.html # index.html.erb
+		  format.pdf {
+		    prawnto :prawn => {:skip_page_creation=>true}
+		  }
+		end
+	end
   # GET /trans/new
   # GET /trans/new.xml
   def new

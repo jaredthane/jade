@@ -1,0 +1,35 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "slider.jquery" %>
+  <%= stylesheet_link_tag 'ui.slider.extras' %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :actions do %>
+	<dt> <%= link_to 'Ver Cuenta', @account, :class => 'action' %> </dt>
+<% end %>
+<% content_for :title do %>Lista de Transacciones para <%= @account.name %><% end %>
+<%= render :partial => 'layouts/search', :locals => {:show_search => false, :show_sites=>false, :search => @search, :filter => @account_id,:from => @from,:till => @till,:search_path => entries_path,:sites=>@sites  } %>
+
+<%= will_paginate @entries, :class => 'pagination' %>
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_20">Factura</div>
+    <div class="table_cell_20">Cliente</div>
+    <div class="table_cell_20">Fecha</div>
+    <div class="table_cell_20">Cantidad</div>
+    <div class="table_cell">Usuario Responsable</div>
+  </div>
+	<% for entry in @entries %>
+		<div class="table_row">
+      <div class="table_cell_20"><%= link_to (entry.post.trans.order.receipt_number||'Sin número'), entry.post.trans.order %></div>
+      <div class="table_cell_20"><%= link_to entry.post.trans.order.client.name[0..25], entry.post.trans.order.client %></div>
+      <div class="table_cell_20"><%= h entry.created_at %></div> 
+      <div class="table_cell_20"><%=h number_to_currency(entry.post.value) %></div> 
+      <div class="table_cell"><%= link_to entry.post.trans.user.login, entry.post.trans.user %></div>
+		</div>
+	<% end %>
+</div>
+
+<br />
+<%= will_paginate @entries, :class => 'pagination' %>
+
+

@@ -35,12 +35,20 @@ class Line < ActiveRecord::Base
 	end
 	def attrs=(hash)
 		self.order_type_id = hash[:order_type_id] if hash[:order_type_id]
-		self.price = hash[:price] if hash[:price]
+		self.format_price = hash[:format_price] if hash[:format_price]
 		self.warranty_months = hash[:warranty_months] if hash[:warranty_months]
 		self.quantity = hash[:quantity] if hash[:quantity]
 		self.product_id = hash[:product_id] if hash[:product_id]
 		self.serial_number = hash[:serial_number] if hash[:serial_number]
 		self.isreceived_str = hash[:isreceived_str] if hash[:isreceived_str]
+	end
+	def format_price
+		return '$' + ("%5.2f" % self.price).strip
+	end
+	def format_price=(p)
+		logger.debug "p=#{p}"
+		logger.debug "p.gsub(',','_').gsub('$','_').to_f=#{p.gsub(',','_').gsub('$','_').to_f.to_s}"
+		self.price=p.gsub(',','_').gsub('$','_').to_f
 	end
   ##################################################################################################
 	# Returns quantity if it was marked as received, 0 otherwise

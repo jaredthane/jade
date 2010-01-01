@@ -234,6 +234,7 @@ class OrdersController < ApplicationController
 		return false if !check_user(User::POST_COUNTS,'No tiene los derechos suficientes para procesar cuentas fisicas.')
     @order = Order.find(params[:id])
     if @order.post
+    	@order.save
       flash[:notice] = 'Cuenta Fisica ha sido procesado exitosamente.'
       redirect_to(@order)
     else

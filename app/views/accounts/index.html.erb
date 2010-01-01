@@ -3,7 +3,11 @@
 	<dt><%= link_to 'Nueva Cuenta', new_account_path, :class => 'action' %></dt>
 	<dt><%= link_to 'Nueva Transaccion', new_tran_path  %></dt>
 <% end %>
-
+<% if Account.check==0 %>
+	<div class="accounting_good">Toda la contabilidad cuadra.</div>
+<% else %>
+	<div class="accounting_bad">La contabilidad NO cuadra!</div>
+<% end %>
 <br />
 <%= will_paginate @accounts, :class => 'pagination' %>
 <div>

@@ -36,7 +36,7 @@ class AccountsController < ApplicationController
   def show
   	return false if !check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')
     @account = Account.find(params[:id])
-		@myposts = @account.recent_entries(20)
+		@myposts = @account.recent_posts(20)
 
     respond_to do |format|
       format.html # show.html.erb

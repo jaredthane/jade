@@ -87,6 +87,14 @@ ALTER TABLE trans ADD INDEX(user_id);
 ALTER TABLE users ADD INDEX(login);
 ALTER TABLE warranties ADD INDEX(product_id);
 
-# base_data is updated up to here
 ALTER TABLE entities ADD INDEX(created_at);
 alter table orders change column next_order next_order_id int(11);
+
+alter table trans add column direction int(2);
+alter table accounts add column is_parent tinyint(1);
+update accounts set is_parent = true;
+update accounts left join (select parent_id id from accounts where parent_id is not null group by parent_id) as parents on parents.id=accounts.id set is_parent=0 where parents.id is null;
+drop table entries;
+# base_data is updated up to here
+alter table trans change column tipo description varchar(32);
+update accounts set modifier=1 where id=10;

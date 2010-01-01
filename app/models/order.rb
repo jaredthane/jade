@@ -28,6 +28,7 @@ class Order < ActiveRecord::Base
   INTERNAL=3
   TRANSFER=4
   COUNT=5
+  ANY=0
 	##################################################################################################
 	# 
 	#################################################################################################
@@ -223,7 +224,7 @@ class Order < ActiveRecord::Base
 	#################################################################################################
 	def reverse_transaction(t)
 	  if t
-	    t.tipo='Cancelacion de ' + t.tipo
+	    t.description='Cancelacion de ' + t.description
 		  for p in t.posts
 			  if p.post_type_id==Post::DEBIT
 				  p.post_type_id=Post::CREDIT
@@ -233,6 +234,12 @@ class Order < ActiveRecord::Base
 		  end
 		end
 		return t
+	end
+	###################################################################################################
+	# Simple mathematic function that returns 1 if the value is positive, -1 if its negative 0 if its zero
+	#################################################################################################
+	def pos_neg(x)
+		return x/x.abs if x!=0
 	end
 	#################################################################################################
 	# Adds a transaction to reflect the creation of the order if necissary
@@ -247,7 +254,14 @@ class Order < ActiveRecord::Base
 	    tax = self.total_tax - (old('total_tax') || 0)
 		  case order_type_id
 		  when 1 #Venta
-			  sale=Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> order_type.name)
+		  	if amount >=0 
+		  		description = 'Venta'
+		  		d=Trans::FORWARD
+		  	else
+		  		description = 'Devolucion de Venta'
+		  		d=Trans::REVERSE
+		  	end
+			  sale=Trans.new(:user=>User.current_user,:created_at=>date, :description=> description, :direction=>d)
         sale.posts << Post.new(:account => self.client.cash_account,:created_at=>date, :value=>amount, :post_type_id =>Post::DEBIT)
         if tax != 0
         	sale.posts << Post.new(:account => self.vendor.tax_account,:created_at=>date, :value=>tax, :post_type_id =>Post::CREDIT)
@@ -268,7 +282,14 @@ class Order < ActiveRecord::Base
 			  }    
 			  return sale
 		  when 2 # Compra
-	      purchase = Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> order_type.name)
+		  	if amount >=0 
+		  		description = 'Compra'
+		  		d=Trans::FORWARD
+		  	else
+		  		description = 'Cancelacion de Compra'
+		  		d=Trans::REVERSE
+		  	end
+	      purchase = Trans.new(:user=>User.current_user,:created_at=>date, :description=> description, :direction=>d)
 	      purchase.posts << Post.new(:account => self.vendor.cash_account,:created_at=>date, :value => amount, :post_type_id =>Post::CREDIT)
         purchase.posts << Post.new(:account => self.client.inventory_account,:created_at=>date, :value => amount, :post_type_id =>Post::DEBIT)
 			  return purchase
@@ -295,7 +316,14 @@ class Order < ActiveRecord::Base
 		return nil if order_type_id == COUNT
 		inventory_cost = self.inventory_value - (old('inventory_value')||0)
     if inventory_cost != 0
-    	inventory = Trans.new(:user=>User.current_user,:created_at=>date, :tipo=> 'Inventario de ' + order_type.name)
+	  	if inventory_cost >=0 
+	  		description = 'Entrega de ' + order_type.name
+	  		d=Trans::FORWARD
+	  	else
+	  		description = 'Devolucion de ' + order_type.name
+	  		d=Trans::REVERSE
+	  	end
+    	inventory = Trans.new(:user=>User.current_user,:created_at=>date, :description=> description, :direction=>d)
 	    inventory.posts << Post.new(:account => self.vendor.inventory_account,:created_at=>date, :value=>inventory_cost, :post_type_id =>Post::CREDIT)
 	    inventory.posts << Post.new(:account => self.vendor.expense_account,:created_at=>date, :value=>inventory_cost, :post_type_id =>Post::DEBIT)
 	  end
@@ -556,7 +584,7 @@ class Order < ActiveRecord::Base
 					#logger.debug "=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=#{serials_here.length.to_s}"
 					old_qty = serials_here.length
 					# Get a complete list of the lines in the order for this product
-					product_lines = {}
+#					product_lines = {}
 					product_lines = []
 					for l in self.lines
 						# Check if serial number is blank
@@ -649,9 +677,10 @@ class Order < ActiveRecord::Base
 				
 				# Do Accounting
 				if accounting_diff != 0
-					inventory = Trans.new(:order_id=>self.id, :user=>User.current_user,:created_at=>date, :tipo=> 'Cuenta Fisica')
-					inventory.posts << Post.new(:account => self.vendor.inventory_account,:created_at=>date, :value=>accounting_diff, :post_type_id =>pos_neg(accounting_diff))
-					inventory.posts << Post.new(:account => self.vendor.expense_account,:created_at=>date, :value=>accounting_diff, :post_type_id => -pos_neg(accounting_diff))
+					inventory = Trans.new(:order_id=>self.id, :user=>User.current_user,:created_at=>date, :description=> 'Cuenta Fisica')
+					logger.debug "accounting_diff=#{accounting_diff.to_s}"
+					inventory.posts << Post.new(:account => self.vendor.inventory_account,:created_at=>date, :value=>accounting_diff, :post_type_id => Post::DEBIT)
+					inventory.posts << Post.new(:account => self.vendor.expense_account,:created_at=>date, :value=>accounting_diff, :post_type_id => Post::CREDIT)
 					inventory.save
 				end
 			end
