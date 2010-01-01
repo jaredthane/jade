@@ -44,7 +44,6 @@ class AccountsController < ApplicationController
       format.xml  { render :xml => @account }
     end
   end
-
 	def new_balance_transfer
 		return false if !check_user(User::CREATE_TRANSACTIONS,'No tiene los derechos suficientes para hacer transferencias de saldo')
     @account = Account.find(params[:id])

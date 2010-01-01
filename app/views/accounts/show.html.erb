@@ -6,6 +6,7 @@
 		<dt><%= link_to 'Nueva Transaccion', new_tran_path  %></dt>
 		<dt><%= link_to 'Imprimir', account_path(@account, :format=>'pdf')  %></dt>
 		<dt><%= link_to 'Transferir Saldo', new_balance_transfer_path  %></dt>
+		<dt><%= link_to 'Ver Transacciones', entries_path(:filter=>@account.id)  %></dt>
 		<dt><%= link_to 'Contar Saldos', recount_balances_path  %></dt>
 		<dt><%= link_to 'Remover', @account, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
 	<% end %>

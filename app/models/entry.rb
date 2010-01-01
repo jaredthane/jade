@@ -92,4 +92,20 @@ class Entry < ActiveRecord::Base
   		end
 		end
 	end
+	def self.search(account_id = User.current_user.location_id, from=nil, till=nil, page=nil)
+		logger.debug "account_id=#{account_id.to_s}"
+		c = "account_id=#{account_id}"
+		logger.debug "from=#{from.to_s}"
+		logger.debug "till=#{till.to_s}"
+		logger.debug "c=#{c.to_s}"
+		c += " AND created_at >= '#{from.to_s(:db)}'" if from
+		logger.debug "c=#{c.to_s}"
+		c += " AND created_at <= '#{(till + 1).to_s(:db)}'" if till
+		logger.debug "c=#{c.to_s}"
+		if page
+		  paginate :per_page => 20, :page => page, :conditions => c, :order => 'created_at'
+		else
+		  find :all, :conditions =>c, :order=> 'created_at'
+		end
+	end
 end

@@ -20,29 +20,33 @@
         <div class="till_div">
           <%= text_field_tag 'till', @till.to_s, :class=> 'field datepicker', :id => 'till',:style=>'width:168px;' %>
         </div>
-        <div class="search_div">
-          <%= text_field_tag :search, params[:search], :class => 'field'%>
-			    <%= hidden_field_tag :filter, params[:filter], :class => 'field'%>
-			    <%= link_to_function 'Buscar', 'submit_index("date_range_form")', :class => 'action' %>
-        </div>
+	      <div class="search_div">
+        	<% if show_search %>
+		        <%= text_field_tag :search, params[:search], :class => 'field'%>
+        	<% end %>
+					  <%= link_to_function 'Buscar', 'submit_index("date_range_form")', :class => 'action' %>
+					  <%= hidden_field_tag :filter, params[:filter], :class => 'field'%>
+	      </div>
       </div>
       <%= select_tag(:select_from, options_for_select(date_selection, Date.today.to_s)) %>
       <%= select_tag(:select_till, options_for_select(date_selection, Date.today.to_s)) %>
       <br />
       <% sites=(params[:sites]||[]) %>
-    	<% if get_sites.length > 1 %>
-	      <div class="checkbox-list">
-	        <% get_sites.each do |site| -%>
-	          <%= check_box_tag "sites[]", site.id, sites.include?(site.id.to_s) -%> <%= site.name -%>
-	        <% end -%>
-	      </div>
-	    <% else %>
-	      <div class="checkbox-list" style="display:none;">
-	        <% get_sites.each do |site| -%>
-	          <%= check_box_tag "sites[]", site.id, sites.include?(site.id.to_s) -%> <%= site.name -%>
-	        <% end -%>
-	      </div>
-		  <% end %>
+      <% if show_sites %>
+     		<% if get_sites.length > 1 %>
+			    <div class="checkbox-list">
+			      <% get_sites.each do |site| -%>
+			        <%= check_box_tag "sites[]", site.id, sites.include?(site.id.to_s) -%> <%= site.name -%>
+			      <% end -%>
+			    </div>
+			  <% else %>
+			    <div class="checkbox-list" style="display:none;">
+			      <% get_sites.each do |site| -%>
+			        <%= check_box_tag "sites[]", site.id, sites.include?(site.id.to_s) -%> <%= site.name -%>
+			      <% end -%>
+			    </div>
+				<% end %>
+      <% end %>
       <%= hidden_field_tag 'pdf',true %>
       <%= hidden_field_tag 'order_type_id',@order_type_id %>
   </div>

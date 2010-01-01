@@ -50,6 +50,20 @@ class ProductsController < ApplicationController
       format.js
     end
   end
+#  def deactivate
+#  	return false if !check_user(User::CHANGE_PRODUCTS,'No tiene los derechos suficientes para cambiar ventas')
+#  	@product = Product.find(params[:id])
+#  	x=nil
+#  	until Product.find_by_name('DESACTIVADO: ' + @product.name + (x?"(" + x.to_s + ")":''))
+#  		x=(x||0)+1
+#  	end
+#  	@product.name='DESACTIVADO: ' + @product.name + (x?"(" + x.to_s + ")":'')
+#  	@product.save
+#  	for p in Price.find_all_by_product_id(@product.id)
+#  		p.available=false
+#  		p.save
+#  	end
+#  end
   def show_barcode
   	@product = Product.find(params[:id])
   	render :layout => false

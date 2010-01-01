@@ -32,10 +32,12 @@
     <b>Minimo</b><br />
     <%=h @product.min(current_user.location_id) %>
   </p>
-	<p>
-	  <b>Costo Actual</b><br />
-	    <%=h number_to_currency(@product.cost) %>
-	</p>
+  <% if current_user.has_right(User::VIEW_COSTS) %>
+		<p>
+			<b>Costo Actual</b><br />
+			  <%=h number_to_currency(@product.cost) %>
+		</p>
+	<% end %>
 	<p>
     <b>Se Usa numero de Serie</b><br />
     <% if @product.serialized %>
@@ -58,10 +60,12 @@
     <b>Maximo</b><br />
     <%=h @product.max(current_user.location_id) %>
   </p>
-	<p>
-	  <b>Costo por Defualt</b><br />
-	  <%= h number_to_currency(@product.default_cost) %>
-	</p>
+  <% if current_user.has_right(User::VIEW_COSTS) %>
+		<p>
+			<b>Costo por Defualt</b><br />
+			<%= h number_to_currency(@product.default_cost) %>
+		</p>
+	<% end %>
 	<p>
     <b>Categoría</b><br />
     <% if @product.product_category %>

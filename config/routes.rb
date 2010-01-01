@@ -4,6 +4,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :serialized_products
   map.resource :session
   map.resources :payments
+  map.resources :entries
+  map.deactivate_product 'products/:id/deactivate', :controller => 'products', :action => 'deactivate'
   map.show_barcode 'products/:id/barcode', :controller => 'products', :action => 'show_barcode'
   map.destroy_payment 'payments/:id/destroy', :controller => 'payments', :action => 'destroy'
   map.create_nul_receipt_number 'orders/create_nul_number', :controller => 'orders', :action => 'create_nul_number'
