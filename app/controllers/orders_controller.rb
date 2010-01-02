@@ -110,6 +110,7 @@ class OrdersController < ApplicationController
 		#logger.debug "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++="
 		#logger.debug "@order.errors=#{@order.errors.inspect}"
 		if @order.errors.length==0
+			generate_receipt(@order, true)
 		 	flash[:notice] = 'Cuenta fisica ha sido creado exitosamente.'
 			respond_to do |format|
 	    	format.html { redirect_to(@order) }

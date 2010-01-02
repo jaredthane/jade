@@ -3,6 +3,8 @@ CURRENT GOALS:
 		site
 		kind
 		order_type
+	lock products when counting
+	lock orders and others when editing
 	need some way of letting the user know when accounting wasn't done
 	iva para costos
 	new transaction should use auto completes for account
