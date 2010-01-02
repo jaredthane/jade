@@ -39,7 +39,7 @@ class DiscountsController < ApplicationController
   # GET /discounts/1
   # GET /discounts/1.xml
   def show
-  	return false if !current_user.has_right(User::VIEW_DISCOUNTS,'No tiene los derechos suficientes para ver los descuentos')
+  	return false if !check_user(User::VIEW_DISCOUNTS,'No tiene los derechos suficientes para ver los descuentos')
     @discount = Product.find(params[:id])
 		if @discount.product_type_id==1
 			redirect_to product_path(@discount)
@@ -61,7 +61,7 @@ class DiscountsController < ApplicationController
   # GET /discounts/new
   # GET /discounts/new.xml
   def new
-  	return false if !current_user.has_right(User::CREATE_DISCOUNTS,'No tiene los derechos suficientes para crear los descuentos')
+  	return false if !check_user(User::CREATE_DISCOUNTS,'No tiene los derechos suficientes para crear los descuentos')
     @discount = Product.new(:relative_price=>1,:static_price=>0)
     respond_to do |format|
       format.html # new.html.erb
@@ -71,14 +71,15 @@ class DiscountsController < ApplicationController
 
   # GET /discounts/1/edit
   def edit
-  	return false if !current_user.has_right(User::CHANGE_DISCOUNTS,'No tiene los derechos suficientes para cambiar los descuentos')
+  	return false if !check_user(User::CHANGE_DISCOUNTS,'No tiene los derechos suficientes para cambiar los descuentos')
     @discount = Product.find(params[:id])
   end
 
   # POST /discounts
   # POST /discounts.xml
   def create
-  	return false if !current_user.has_right(User::CREATE_DISCOUNTS,'No tiene los derechos suficientes para crear los descuentos')
+  	return false if !check_user(User::CREATE_DISCOUNTS,'No tiene los derechos suficientes para crear los descuentos')
+  	params[:product][:upc]=User.current_user.location.next_bar_code if params[:product][:upc]==""
     @discount = Product.new(params[:product])
     @discount.create_related_values(params[:product][:default_cost], params[:product][:static_price], params[:product][:relative_price])
     respond_to do |format|
@@ -104,7 +105,8 @@ class DiscountsController < ApplicationController
   # PUT /discounts/1.xml
   
   def update
-  	return false if !current_user.has_right(User::CHANGE_DISCOUNTS,'No tiene los derechos suficientes para cambiar los descuentos')
+  	return false if !check_user(User::CHANGE_DISCOUNTS,'No tiene los derechos suficientes para cambiar los descuentos')
+  	params[:product][:upc]=User.current_user.location.next_bar_code if params[:product][:upc]==""
 		logger.info "==============running discioutns update====================="
 		@discount = Product.find(params[:id])
 		#Update existing reqs
@@ -142,7 +144,7 @@ class DiscountsController < ApplicationController
   # DELETE /discounts/1
   # DELETE /discounts/1.xml
   def destroy
-  	return false if !current_user.has_right(User::DELETE_DISCOUNTS,'No tiene los derechos suficientes para borrar los descuentos')
+  	return false if !check_user(User::DELETE_DISCOUNTS,'No tiene los derechos suficientes para borrar los descuentos')
     @discount = Product.find(params[:id])
     @discount.destroy
 

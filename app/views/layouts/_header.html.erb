@@ -164,10 +164,10 @@
 			</li>
 	 	<% end %>
 	 	<% if current_user.has_rights(['Admin','Gerente','Vendedor', 'Contabilidad']) %>
-			<li><a href="/sales" title="Vendedor">Vendedor</a>		
+			<li><a href="/sales" title="Ventas">Ventas</a>		
 				<ul>
 					<% if current_user.has_rights(['Admin','Gerente','Vendedor']) %>
-						<li><a href="/sales" title="Vendedor">Vendedor</a></li>
+						<li><a href="/sales" title="Ventas">Ventas</a></li>
 					<% end %>
 					<% if current_user.has_rights(['Admin','Gerente','Vendedor']) %>
 						<li><a href="/subscriptions" title="Suscripciones">Suscripciones</a></li>
@@ -261,7 +261,7 @@
 		  <dd><a href="/orders/show_batch">Últimas Compras</a></dd>
 		 <% end %>
 		 <% if current_user.has_rights(['Admin','Gerente','Vendedor']) %>
-		  <dd><a href="/sales">Vendedor</a></dd>
+		  <dd><a href="/sales">Ventas</a></dd>
 		  <dd><a href="/subscriptions">Ver Suscripciones</a></dd>
 		  <dd><a href="/internal">Consumo Interno</a></dd>
 		  <% end %>

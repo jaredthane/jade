@@ -15,7 +15,7 @@
 	</p>
 	<p>
 	  <b>Discuento Relativo</b><br />
-	  <%=h number_to_percentage(@discount.relative_price*100, :precision => 0) %>
+	  <%=h number_to_percentage((@discount.relative_price||0)*100, :precision => 0) %>
 	</p>
 	<p>
     <b>Catagoría</b><br />
@@ -50,7 +50,7 @@
 		</div>
 		<% for requirement in @discount.requirements %>
 			<div class="table_row">
-				<div class="table_cell_25"><%=link_to requirement.required.name, edit_discount_path(requirement.required) %></div>
+				<div class="table_cell_25"><%=link_to requirement.required.name, requirement.required %></div>
 				<div class="table_cell_15"><%=h requirement.quantity %></div>
 				<div class="table_cell_10"><%=h number_to_currency(requirement.required.price) %></div>
 				<div class="table_cell_10"><%=h number_to_currency(requirement.static_price) %></div>

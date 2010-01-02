@@ -53,6 +53,12 @@ module ApplicationHelper
   def get_accounts
     @accounts = Account.find(:all, :order => "number")
   end
+  def get_parent_accounts
+    @accounts = Account.find(:all, :conditions=>'is_parent=1', :order => "number")
+  end
+  def get_child_accounts
+    @accounts = Account.find(:all, :conditions=>'is_parent=0', :order => "number")
+  end
   def get_users
     @users = User.find(:all, :order => "login")
   end

@@ -21,7 +21,7 @@
 <% end %>
 <script type="text/javascript">
 	$(document).ready(function(){
-		$("#parent_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1});
+		$("#parent_lookup").autocomplete("/accounts.js?filter=parent",{matchSubset:0, autoFill:1});
 	});
 </script>
 <% form_for(@account, :html => {:id => 'account_form' }) do |f| %>
@@ -48,6 +48,9 @@
 		<p>
 		  <b>Entidad</b><br />
 			<%= f.collection_select(:entity_id, get_entities, :id, :name, {:include_blank => true}) %>
+		</p>
+		<p>
+			<%= f.check_box :is_parent, :class => 'field' %><b> Es rama para otras cuentas?</b>
 		</p>
 	</div>
 	<hr class="clear-contentunit" />

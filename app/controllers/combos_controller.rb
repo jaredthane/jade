@@ -33,7 +33,7 @@ class CombosController < ApplicationController
   # GET /combos/1
   # GET /combos/1.xml
   def show
-  	return false if !current_user.has_right(User::VIEW_COMBOS,'No tiene los derechos suficientes para ver los combos')
+  	return false if !check_user(User::VIEW_COMBOS,'No tiene los derechos suficientes para ver los combos')
     @combo = Product.find(params[:id])
 
 		if @combo.product_type_id==1
@@ -55,7 +55,7 @@ class CombosController < ApplicationController
   # GET /combos/new
   # GET /combos/new.xml
   def new
-  	return false if !current_user.has_right(User::CREATE_COMBOS,'No tiene los derechos suficientes para crear combos')
+  	return false if !check_user(User::CREATE_COMBOS,'No tiene los derechos suficientes para crear combos')
     @combo = Product.new
 		@combo.relative_price=1
 		@combo.static_price=0
@@ -67,14 +67,15 @@ class CombosController < ApplicationController
 
   # GET /combos/1/edit
   def edit
-  	return false if !current_user.has_right(User::CHANGE_COMBOS,'No tiene los derechos suficientes para cambiar combos')
+  	return false if !check_user(User::CHANGE_COMBOS,'No tiene los derechos suficientes para cambiar combos')
     @combo = Product.find(params[:id])
   end
 
   # POST /combos
   # POST /combos.xml
   def create
-  	return false if !current_user.has_right(User::CREATE_COMBOS,'No tiene los derechos suficientes para crear combos')
+  	return false if !check_user(User::CREATE_COMBOS,'No tiene los derechos suficientes para crear combos')
+  	params[:product][:upc]=User.current_user.location.next_bar_code if params[:product][:upc]==""
     @combo = Product.new(params[:product])
     @combo.vendor_id=2
     @combo.create_related_values(params[:product][:default_cost], params[:product][:static_price], params[:product][:relative_price])
@@ -101,7 +102,8 @@ class CombosController < ApplicationController
   # PUT /combos/1.xml
   
   def update
-  	return false if !current_user.has_right(User::CHANGE_COMBOS,'No tiene los derechos suficientes para cambiar combos')
+  	return false if !check_user(User::CHANGE_COMBOS,'No tiene los derechos suficientes para cambiar combos')
+  	params[:product][:upc]=User.current_user.location.next_bar_code if params[:product][:upc]==""
 		logger.info "==============running discioutns update====================="
 		@combo = Product.find(params[:id])
 		#Update existing reqs
@@ -143,7 +145,7 @@ class CombosController < ApplicationController
   # DELETE /combos/1
   # DELETE /combos/1.xml
   def destroy
-  	return false if !current_user.has_right(User::DELETE_COMBOS,'No tiene los derechos suficientes para borrar combos')
+  	return false if !check_user(User::DELETE_COMBOS,'No tiene los derechos suficientes para borrar combos')
     @combo = Product.find(params[:id])
     @combo.destroy
 

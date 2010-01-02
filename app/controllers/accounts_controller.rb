@@ -24,7 +24,7 @@ class AccountsController < ApplicationController
 #  	logger.debug "!check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')=#{!check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas').to_s}"
   	return false if !check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')
  		search=((params[:search]||'') + ' ' + (params[:q]||'') ).strip
-		@accounts = Account.search(search, params[:page])
+		@accounts = Account.search(search, params[:filter], (params[:page]||1))
     respond_to do |format|
       format.html # index.html.erb
       format.js
@@ -36,7 +36,11 @@ class AccountsController < ApplicationController
   def show
   	return false if !check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')
     @account = Account.find(params[:id])
-		@myposts = @account.recent_entries(20)
+    if @account.is_parent
+    	@mychildren = @account.children
+    else
+			@myposts = @account.recent_posts(20)
+		end
 
     respond_to do |format|
       format.html # show.html.erb
@@ -44,7 +48,6 @@ class AccountsController < ApplicationController
       format.xml  { render :xml => @account }
     end
   end
-
 	def new_balance_transfer
 		return false if !check_user(User::CREATE_TRANSACTIONS,'No tiene los derechos suficientes para hacer transferencias de saldo')
     @account = Account.find(params[:id])

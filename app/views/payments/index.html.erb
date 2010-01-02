@@ -9,7 +9,7 @@
 	<dt> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </dt>
 <% end %>
 <% content_for :title do %>Lista de Pagos<% end %>
-<%= render :partial => 'layouts/search', :locals => { :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => payments_path } %>
+<%= render :partial => 'layouts/search', :locals => {:show_search => true, :show_sites=>true,  :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => payments_path } %>
 
 <%= will_paginate @payments, :class => 'pagination' %>
 <div>

@@ -35,7 +35,7 @@
 			</div>
 			<%= line_form.hidden_field :id %>
 			<div class="table_cell">
-				<input type="checkbox" value="1" style="display: none;" name="order[lines][<%= line.new_record? ? 'new' : 'existing' %>][<%= line.id.to_s %>][delete_me]" id="order_lines__delete_me"/>
+				<input type="checkbox" value="1" style="display: none;" name="order[plines][<%= line.new_record? ? 'new' : 'existing' %>][<%= line.id.to_s %>][delete_me]" id="order_lines__delete_me"/>
         <%= link_to_function "Remover", 'check_box($(this))' %>
 			</div>
 		</div>

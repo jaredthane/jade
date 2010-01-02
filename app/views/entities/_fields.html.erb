@@ -16,18 +16,18 @@
 		//Setup	date picker
 		$.datepicker.regional['es']
 		$(".datepicker").datepicker();
-		$("#cash_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
-		$("#inventory_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
-		$("#revenue_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
-		$("#tax_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
-		$("#expense_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
-		$("#new_individual_client_accounts_parent_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
-		$("#new_corporate_client_accounts_parent_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
-		$("#new_vendor_accounts_parent_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
-		$("#new_employee_accounts_parent_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
-		$("#client_accounts_group_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
-		$("#vendor_accounts_group_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
-		$("#employee_accounts_group_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
+		$("#cash_account_lookup").autocomplete("/accounts.js?filter=child",{matchSubset:0, autoFill:1}); 
+		$("#inventory_account_lookup").autocomplete("/accounts.js?filter=child",{matchSubset:0, autoFill:1}); 
+		$("#revenue_account_lookup").autocomplete("/accounts.js?filter=child",{matchSubset:0, autoFill:1}); 
+		$("#tax_account_lookup").autocomplete("/accounts.js?filter=child",{matchSubset:0, autoFill:1}); 
+		$("#expense_account_lookup").autocomplete("/accounts.js?filter=child",{matchSubset:0, autoFill:1}); 
+		$("#new_individual_client_accounts_parent_lookup").autocomplete("/accounts.js?filter=parent",{matchSubset:0, autoFill:1}); 
+		$("#new_corporate_client_accounts_parent_lookup").autocomplete("/accounts.js?filter=parent",{matchSubset:0, autoFill:1}); 
+		$("#new_vendor_accounts_parent_lookup").autocomplete("/accounts.js?filter=parent",{matchSubset:0, autoFill:1}); 
+		$("#new_employee_accounts_parent_lookup").autocomplete("/accounts.js?filter=parent",{matchSubset:0, autoFill:1}); 
+		$("#client_accounts_group_lookup").autocomplete("/accounts.js?filter=parent",{matchSubset:0, autoFill:1}); 
+		$("#vendor_accounts_group_lookup").autocomplete("/accounts.js?filter=parent",{matchSubset:0, autoFill:1}); 
+		$("#employee_accounts_group_lookup").autocomplete("/accounts.js?filter=parent",{matchSubset:0, autoFill:1}); 
 	});
 </script>
 <div class="column2-unit-left">
@@ -145,10 +145,11 @@
 	    <p>
 	    	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
         	<b>Cuenta del Cliente</b><br />
+	      	<%= f.text_field :client_account_name, :class=> 'lookup field', :id => 'cash_account_lookup',:style=>'width:281px;' %>
         <% else %>
         	<b>Cuenta del Proveedor</b><br />
+	     	 <%= f.text_field :vendor_account_name, :class=> 'lookup field', :id => 'cash_account_lookup',:style=>'width:281px;' %>
         <% end %>
-	      <%= f.text_field :cash_account_name, :class=> 'lookup field', :id => 'cash_account_lookup',:style=>'width:281px;' %>
       </p>
     <% end %>
 		<p>

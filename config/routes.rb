@@ -4,6 +4,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :serialized_products
   map.resource :session
   map.resources :payments
+  map.resources :entries
+  map.deactivate_product 'products/:id/deactivate', :controller => 'products', :action => 'deactivate'
   map.show_barcode 'products/:id/barcode', :controller => 'products', :action => 'show_barcode'
   map.destroy_payment 'payments/:id/destroy', :controller => 'payments', :action => 'destroy'
   map.create_nul_receipt_number 'orders/create_nul_number', :controller => 'orders', :action => 'create_nul_number'
@@ -23,7 +25,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :sales_representatives
   map.new_history 'entities/:id/new_history', :controller => 'entities', :action => 'new_history', :filter => ' tipo:cliente'
   map.create_history 'entities/:id/create_history', :controller => 'entities', :action => 'create_history', :filter => ' tipo:cliente'
-  map.new_post 'posts/new', :controller => 'posts', :action => 'new', :format =>'js'
+  map.resources :posts
   map.resources :trans
 #  map.consumidor_final_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>2, :format =>'pdf'
 #  map.credito_fiscal_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>5, :format =>'pdf'
