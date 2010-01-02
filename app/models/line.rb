@@ -27,8 +27,6 @@ class Line < ActiveRecord::Base
 	before_save :pre_save
 	def pre_save
 		prepare_movements
-#		debugger
-#		self.price = self.product.cost * (self.quantity - self.product.quantity) if order_type_id==Order::COUNT
 	end
 	before_save :post_save
 	def post_save
@@ -47,8 +45,6 @@ class Line < ActiveRecord::Base
 		return '$' + ("%5.2f" % self.price).strip
 	end
 	def format_price=(p)
-		#logger.debug "p=#{p}"
-		#logger.debug "p.gsub(',','_').gsub('$','_').to_f=#{p.gsub(',','_').gsub('$','_').to_f.to_s}"
 		self.price=p.gsub(',','_').gsub('$','_').to_f
 	end
   ##################################################################################################
@@ -68,18 +64,12 @@ class Line < ActiveRecord::Base
   ##################################################################################
 	def new_movement(entity_id, movement_type_id, quantity)
 	  value = total_price_with_tax_per_unit*quantity
-	  ##logger.debug "self.serialized_product_id=#{self.serialized_product_id.to_s}"	  
-	  ##logger.debug "old.serialized_product_id=#{old.serialized_product_id.to_s}" if old
 	  if self.serialized_product_id
-	  	##logger.debug "using first"
 	  	serial=self.serialized_product_id
 	  else
-	  	##logger.debug "using second"
 	  	serial = old.serialized_product_id
 	 	end
 		m=Movement.new(:created_at=>User.current_user.today,:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => serial)
-		##logger.debug "created movement"		
-		##logger.debug "m=#{m.inspect}"
 		return m
 	end
   ###################################################################################
@@ -256,7 +246,7 @@ class Line < ActiveRecord::Base
 	# Returns the amount of tax per unit
 	#################################################################################################
 	def tax	
-		return self.total_price * self.sales_tax
+		return self.total_price * TAX
 	end
 	###################################################################################
 	# Returns the total price of the products on this line
@@ -293,7 +283,7 @@ class Line < ActiveRecord::Base
 	# Returns the total price of the products on this line plus tax
 	###################################################################################
 	def total_price_with_tax_per_unit
-		return (price ||0) + (warranty_price || 0) * (1+self.sales_tax)
+		return (price ||0) + (warranty_price || 0) * (1+TAX)
 	end
 	###################################################################################
 	# Returns Si or No depending on whether the line has been marked as received
@@ -391,16 +381,6 @@ class Line < ActiveRecord::Base
 	# but only an existing serial if this is a sale, transfer, or otherwise
 	###################################################################################
 	def serial_number=(serial)
-		##logger.debug "##################################################################################################"
-		##logger.debug "# "
-		##logger.debug "#################################################################################################"
-		##logger.debug "serial == ''=#{(serial == '').to_s}"
-		##logger.debug "(serial == '\n')=#{(serial == '\n').to_s}"
-		##logger.debug "(self.order_type_id==2)=#{(self.order_type_id==2).to_s}"
-		##logger.debug "(self.order_type_id==5)=#{(self.order_type_id==5).to_s}"
-		##logger.debug "((self.order_type_id==5) or (self.order_type_id==5))=#{((self.order_type_id==2) or (self.order_type_id==5)).to_s}"
-		##logger.debug "!(serial == '' or serial == '\n')=#{!(serial == "" or serial == '\n').to_s}"
-		##logger.debug "(!(serial == '' or serial == '\n') and ((self.order_type_id==2) or (self.order_type_id==5)))=#{(!(serial == '' or serial == '\n') and ((self.order_type_id==2) or (self.order_type_id==5))).to_s}"
 		if (!(serial == "" or serial == "\n") and ((self.order_type_id==2) or (self.order_type_id==5)))
 			##logger.debug "Taking create path"
 			s=SerializedProduct.find_or_create_by_serial_number(serial)

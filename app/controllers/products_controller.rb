@@ -26,7 +26,6 @@ class ProductsController < ApplicationController
   def index
     #@products = Product.find(:all)
     @search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
-    logger.debug "params[:format]=#{params[:format].to_s}"
     params[:scope]='name' if params[:format]=='js'
     case params[:scope]
 		  when 'all'

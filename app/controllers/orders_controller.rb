@@ -326,8 +326,6 @@ class OrdersController < ApplicationController
     end
   end
 
-  # DELETE /orders/1
-  # DELETE /orders/1.xml
   def destroy
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
