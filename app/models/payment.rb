@@ -79,7 +79,7 @@ class Payment < ActiveRecord::Base
 	  		description = 'Devolucion de Pago de ' + self.order.order_type.name
 	  		d=Trans::REVERSE
 	  	end
-			t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :comments => (self.order.comments||''), :description => description, :direction=>d)
+			t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :comments => (self.order.comments||''), :description => description, :direction=>d, :kind_id=>Trans::MONEY)
 			if order.order_type_id=Order::SALE
 				o=1
 			else

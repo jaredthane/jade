@@ -49,6 +49,9 @@
 		  <b>Entidad</b><br />
 			<%= f.collection_select(:entity_id, get_entities, :id, :name, {:include_blank => true}) %>
 		</p>
+		<p>
+			<%= f.check_box :is_parent, :class => 'field' %><b> Es rama para otras cuentas?</b>
+		</p>
 	</div>
 	<hr class="clear-contentunit" />
 	

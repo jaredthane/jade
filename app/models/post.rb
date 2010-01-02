@@ -28,32 +28,18 @@ class Post < ActiveRecord::Base
 	
 	before_create :prepare_for_create
 	def prepare_for_create
-	
-		# Make value positive if its negative
-		logger.debug "VALUE============================================================================================================================="
-		logger.debug "self.value=#{self.value.to_s}"
-		if (self.value || 0 ) < 0
-			logger.debug "VALUE IS NEGATIVE"
-			logger.debug "self.post_type_id=#{self.post_type_id.to_s}"
-			logger.debug "self.value=#{self.value.to_s}"
-			self.value = (self.value || 0 ) * -1
-			self.post_type_id = self.post_type_id * -1
-			logger.debug "VALUE WAS CHANGED"
-			logger.debug "self.post_type_id=#{self.post_type_id.to_s}"
-			logger.debug "self.value=#{self.value.to_s}"
-		end
-		
 		#Set created_at to match the Trans
 		logger.debug "Set created_at to match the Trans"
 		self.created_at=trans.created_at if trans
-		
 		# Calculate balance
 		calculate_balance
 	end
+	
 	before_destroy :prepare_for_destroy
 	def prepare_for_destroy
 #		recalculate_later_balances(delete=true)
 	end
+	
 	def calculate_balance
 		if self.account
 	    mydate=(self.created_at||Time.now)
@@ -66,6 +52,22 @@ class Post < ActiveRecord::Base
 			sql = ActiveRecord::Base.connection()
 			query = "UPDATE posts set balance = balance + #{change} where account_id = #{self.account_id} and created_at > '#{mydate.to_s(:db)}'"
 			results = sql.update(query)
+		end
+	end
+	def self.search(kind=nil, from=nil, till=nil, page=nil, sites=[User.current_user.location_id])
+	  sites=[User.current_user.location_id] if !sites
+		ssites="(" + sites.collect{|a| a.to_s + ", "}.to_s.chop.chop + ")"
+		c = "trans.direction=posts.post_type_id AND order_type_id=1"
+		c += " AND kind_id=#{kind}" if kind
+		c += " AND (orders.vendor_id in #{ssites} or orders.client_id in #{ssites})"
+		c += " AND posts.created_at >= '#{from.to_s(:db)}'" if from
+		c += " AND posts.created_at <= '#{(till + 1).to_s(:db)}'" if till
+		j =  "inner join trans on posts.trans_id=trans.id"
+		j += " inner join orders on orders.id=trans.order_id"
+		if page
+		  paginate :per_page => 20, :page => page, :conditions => c, :order => 'receipt_number', :joins => j
+		else
+		  find :all, :conditions =>c, :joins => j, :order=> 'receipt_number'
 		end
 	end
 end

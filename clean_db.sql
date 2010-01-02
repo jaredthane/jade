@@ -1,7 +1,6 @@
 delete from accounts where id>23;
 delete from combo_lines;
 delete from entities where id>9;
-delete from entries;
 delete from inventories;
 delete from lines;
 delete from logs;

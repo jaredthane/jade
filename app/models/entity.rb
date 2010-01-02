@@ -262,7 +262,7 @@ class Entity < ActiveRecord::Base
 		puts "Account.find(parent_id)=#{Account.find(parent_id).to_s}"
 		parent=Account.find(parent_id)
 	  mod=parent.modifier if parent
-		account=Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'',:modifier=>mod)
+		account=Account.create(:name=> account_name, :parent_id=>parent_id, :number=>'',:modifier=>mod, :is_parent=>0)
 		puts "account=#{account.to_s}"
 		return account
 	end

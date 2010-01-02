@@ -1,0 +1,36 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "slider.jquery" %>
+  <%= stylesheet_link_tag 'ui.slider.extras' %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :actions do %>
+  <dt><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></dt>
+  <dt><%= link_to_function 'Imprimir', 'submit_report("date_range_form")', :class => 'action' %></dt>
+<% end %>
+<% content_for :title do %>Lista de Transacciones<% end %>
+<%= render :partial => 'layouts/search', :locals => {:show_search => false, :show_sites=>true, :search => @search, :filter => @account_id,:from => @from,:till => @till,:search_path => posts_path, :sites=>@sites} %>
+
+<%= will_paginate @posts, :class => 'pagination' %>
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_20">Factura</div>
+    <div class="table_cell_20">Cliente</div>
+    <div class="table_cell_20">Fecha</div>
+    <div class="table_cell_20">Cantidad</div>
+    <div class="table_cell">Usuario Responsable</div>
+  </div>
+	<% for post in @posts %>
+		<div class="table_row">
+      <div class="table_cell_20"><%= link_to (post.trans.order.receipt_number||'Sin número'), post.trans.order %></div>
+      <div class="table_cell_20"><%= link_to post.trans.order.client.name[0..25], post.trans.order.client %></div>
+      <div class="table_cell_20"><%= h post.created_at.to_date %></div> 
+      <div class="table_cell_20"><%=h number_to_currency(post.value*post.post_type_id) %></div> 
+      <div class="table_cell"><%= link_to post.trans.user.login, post.trans.user %></div>
+		</div>
+	<% end %>
+</div>
+
+<br />
+<%= will_paginate @posts, :class => 'pagination' %>
+
+

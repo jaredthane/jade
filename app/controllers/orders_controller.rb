@@ -45,17 +45,17 @@ class OrdersController < ApplicationController
     return true  
 	end
   def index
-#    logger.info params.inspect
+#    #logger.info params.inspect
 		return false if !allowed(params[:order_type_id], 'view')
 
 		@order_type_id=params[:order_type_id]
-#		logger.debug "@order_type_id=#{@order_type_id.to_s}"
+#		#logger.debug "@order_type_id=#{@order_type_id.to_s}"
     @site=User.current_user.location
 #  	@search_path = SEARCH_PATHS[@order_type_id]
   	params[:page]=(params[:page]||1)
 	  @from=(untranslate_month(params[:from])||Date.today)
     @till=(untranslate_month(params[:till])||Date.today)
-    logger.debug "params[:sites]=#{params[:sites].to_s}"
+    #logger.debug "params[:sites]=#{params[:sites].to_s}"
     if params[:pdf]=='1'
       @orders=Order.search(params[:search], @order_type_id, @from, @till, nil, params[:sites])
       params[:format] = 'pdf'
@@ -106,17 +106,17 @@ class OrdersController < ApplicationController
   	search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
 		@products = Product.search(search)
 		@order=Order.create_count_from_list(@products)
-#		logger.debug "@order=#{@order.inspect}"
-		logger.debug "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++="
-		logger.debug "@order.errors=#{@order.errors.inspect}"
+#		#logger.debug "@order=#{@order.inspect}"
+		#logger.debug "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++="
+		#logger.debug "@order.errors=#{@order.errors.inspect}"
 		if @order.errors.length==0
 		 	flash[:notice] = 'Cuenta fisica ha sido creado exitosamente.'
 			respond_to do |format|
 	    	format.html { redirect_to(@order) }
 		  end
 		else
-			logger.debug "unable to save new order"
-    	logger.debug "ORDERS ERRORS" + @order.errors.inspect
+			#logger.debug "unable to save new order"
+    	#logger.debug "ORDERS ERRORS" + @order.errors.inspect
     	@order.lines.each {|l| logger.debug "LINES ERRORS" + l.errors.inspect}
 			@order.errors.each {|e| logger.debug "ORDER ERROR" + e.to_s}
 			@order.lines.each {|l| l.errors.each {|e| logger.debug "LINE ERROR" + e.to_s}}
@@ -131,11 +131,11 @@ class OrdersController < ApplicationController
   end
   def show_receipt
     @order = Order.find(params[:id])
-  	logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
+  	#logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
     return false if !allowed(@order.order_type_id, 'view')
     if FileTest.exists?(@order.receipt_filename||'')
-    	logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
-    	logger.debug "could not find"
+    	#logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
+    	#logger.debug "could not find"
 		 	send_file @order.receipt_filename, :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
 	    #send_data @receipt.filename, :disposition => 'inline'
 	    # This is good for if the user wants to download the file
@@ -213,26 +213,13 @@ class OrdersController < ApplicationController
       format.xml  { render :xml => @order }
     end
   end
-#	def new_purchase
-#    @order = Order.new(:created_at=>User.current_user.today, :vendor_id=>4)
-
-#    respond_to do |format|
-#      format.html # new.html.erb
-#      format.xml  { render :xml => @order }
-#    end
-#  end
-#  def new_sale
-#    @order = Order.new(:created_at=>User.current_user.today, :client_id=>3)
-
-#    respond_to do |format|
-#      format.html # new.html.erb
-#      format.xml  { render :xml => @order }
-#    end
-#  end
-  # GET /orders/1/edit
+  ##################################################################################################
+  # Post a Physical Count
+  #################################################################################################
   def post
 		return false if !check_user(User::POST_COUNTS,'No tiene los derechos suficientes para procesar cuentas fisicas.')
     @order = Order.find(params[:id])
+    debugger
     if @order.post
     	@order.save
       flash[:notice] = 'Cuenta Fisica ha sido procesado exitosamente.'
@@ -241,6 +228,9 @@ class OrdersController < ApplicationController
       format.html { render :action => "edit" }
     end
   end
+  ##################################################################################################
+  # 
+  #################################################################################################
   def edit
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
@@ -249,60 +239,58 @@ class OrdersController < ApplicationController
     	return false
     end
   end
-  def new_nul_number
-  end
-  def create_null_number
-  end
-  # POST /orders
-  # POST /orders.xml
+  #################################################################################################
+  # 
+  #################################################################################################
+	def new_nul_number
+		if User.current_user.location
+			@next = User.current_user.location.next_receipt_number
+		else
+			@next=nil
+		end
+		respond_to do |format|
+			format.html # new.html.erb
+			format.xml { render :xml => @order }
+		end
+	end
+	#################################################################################################
+	# 
+	#################################################################################################
+	def create_nul_number
+		params[:created_at]=untranslate_month(params[:created_at])
+		o=Order.create(:vendor_id=>User.current_user.location_id, :client_id => 9, :receipt_number =>params[:number], :user=> User.current_user, :order_type_id=>1, :created_at=>params[:created_at].to_date, :deleted=>1)
+		redirect_to orders_url
+		return false
+	end
+  #################################################################################################
+  # 
+  #################################################################################################
   def create
     return false if !allowed(params["order"]["order_type_id"], 'edit')
     params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
     params[:order][:received]=untranslate_month(params[:order][:received]) if params[:order][:received]
-		logger.debug "paramorderorder_type_id=#{params["order"]["order_type_id"].to_s}"
     @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
-    logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
     @order.attrs = params["order"]
-    logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
-    logger.debug 'params["order"]["lines"]=#{params["order"]["lines"].to_s}'
-    logger.debug "@order.lines=#{@order.lines.to_s}"
-#    logger.info "heres the order we just created: " + @order.inspect
-
-#    @order.create_all_lines(params[:new_lines]) # we're not saving the lines yet, just filling them out
-#    logger.info "finished updating lines"
 		errors = false
-    logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
 		errors = true if !@order.valid?
+  	@order.save
 		if params[:submit_type] == 'post' and !errors
 			errors = true if !@order.post
 		end
-    logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
-    respond_to do |format|
+   respond_to do |format|
       if !errors
       	@order.save
       	@order.pay_off if AUTO_PAY_OFF and @order.order_type_id == Order::SALE
-    		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
-    		logger.debug "@order.id=#{@order.id.to_s}"
         generate_receipt(@order, true)
-    		logger.debug "@order.order_type_id=#{@order.order_type_id.to_s}"
-        logger.debug "@order.receipt_number=#{@order.receipt_number.to_s}"
         
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { redirect_to(@order) }
         format.xml  { render :xml => @order, :status => :created, :location => @order }
       else
-      	logger.debug "unable to save new order"
-      	logger.debug "ORDERS ERRORS" + @order.errors.inspect
-      	@order.lines.each {|l| logger.debug "LINES ERRORS" + l.errors.inspect}
+       	@order.lines.each {|l| logger.debug "LINES ERRORS" + l.errors.inspect}
 				
 				@order.errors.each {|e| logger.debug "ORDER ERROR" + e.to_s}
 				@order.lines.each {|l| l.errors.each {|e| logger.debug "LINE ERROR" + e.to_s}}
-#				@order.errors.each do |error|
-#					logger.debug "error[0]=#{error[0].to_s}"
-#					if error[0] == "lines"
-#						errors.delete(error)
-#					end
-#				end
         format.html { render :action => "new" }
         format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
       end
@@ -318,14 +306,8 @@ class OrdersController < ApplicationController
     params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
     params[:order][:received]=untranslate_month(params[:order][:received]) if params[:order][:received]
     errors = false
-#    logger.info "dumping lines before"
-#    logger.info @order.lines.inspect
     @order.attrs=params[:order]
-#    logger.info "dumping lines middle"
-#    logger.info @order.lines.inspect
 		errors = true if !@order.save
-#    logger.info "dumping lines after"
-#    logger.info @order.lines.inspect
 		if params[:submit_type] == 'post' and !errors
 			errors = true if !@order.post
 		end
@@ -337,7 +319,7 @@ class OrdersController < ApplicationController
         format.html { redirect_to(@order) }
         format.xml  { head :ok }
       else
-      	logger.debug "saving order didnt work"
+      	#logger.debug "saving order didnt work"
         format.html { render :action => "edit" }
         format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
       end

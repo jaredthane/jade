@@ -95,6 +95,34 @@ alter table accounts add column is_parent tinyint(1);
 update accounts set is_parent = true;
 update accounts left join (select parent_id id from accounts where parent_id is not null group by parent_id) as parents on parents.id=accounts.id set is_parent=0 where parents.id is null;
 drop table entries;
-# base_data is updated up to here
 alter table trans change column tipo description varchar(32);
 update accounts set modifier=1 where id=10;
+update accounts set is_parent=1 where id=23;
+insert into accounts (id, name, parent_id, entity_id, modifier, is_parent) VALUES (1,'Clientes Anonimos ',15,3,1,0);
+update accounts set number= '1' where id = 2;
+update accounts set number= '2' where id = 3;
+update accounts set number= '3' where id = 4;
+update accounts set number= '4' where id = 5;
+update accounts set number= '5' where id = 6;
+update accounts set number= '11' where id = 7;
+update accounts set number= '12' where id = 8;
+update accounts set number= '13' where id = 9;
+update accounts set number= '14' where id = 10;
+update accounts set number= '21' where id = 11;
+update accounts set number= '22' where id = 12;
+update accounts set number= '211' where id = 13;
+update accounts set number= '212' where id = 14;
+update accounts set number= '141' where id = 15;
+update accounts set number= '1101' where id = 16;
+update accounts set number= '501' where id = 17;
+update accounts set number= '401' where id = 18;
+update accounts set number= '2201' where id = 19;
+update accounts set number= '1201' where id = 20;
+update accounts set number= '21201' where id = 21;
+update accounts set number= '21101' where id = 22;
+update accounts set number= '14102' where id = 23;
+update accounts set number= '14101' where id = 1;
+
+# base_data is updated up to here
+alter table trans add column kind_id int(11);
+update entities set cash_account_id=1 where id=3;

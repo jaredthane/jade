@@ -28,7 +28,7 @@
 <div class="column2-unit-right">
 	<p>
 		<b>Total de diferencia:</b>
-		<%=h @order.grand_total %>
+		<%=h number_to_currency(@order.grand_total) %>
 	</p>
 	<p>
 		<b>Usuario Responsable:</b>
@@ -72,11 +72,7 @@
 					<div class="table_cell_15">N/A</div>
 				<% end %>
 				<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
-					<% if line.received %>
-						<div class="table_cell_15"><%=h number_to_currency(line.price) %></div>
-					<% else %>
-						<div class="table_cell_15"><%=h number_to_currency((line.product.cost||0) * ((line.quantity||0) - (line.product.quantity||0))) %></div>
-					<% end %>
+					<div class="table_cell_15"><%=h number_to_currency(line.price) %></div>
 				<% end %>
 				<div class="table_cell"><% if line.received %><%=h line.received.to_date.to_s %><% end %></div>
 			</div>

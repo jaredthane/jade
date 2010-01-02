@@ -49,39 +49,68 @@
 	</p>
 </div>
 <hr class="clear-contentunit" />
-<div>
-  <div class="table_header_row">
-    <div class="table_cell_15">Fecha</div>
-    <div class="table_cell_15">Transaccion</div>
-    <div class="table_cell_15">description</div>
-    <div class="table_cell_20">Cuenta</div>
-    <div class="table_cell_10">Debito</div>
-    <div class="table_cell_10">Credito</div>
-    <div class="table_cell">Saldo</div>
-  </div>
-  <% for post in @myposts %>
-    <div class="table_row">
-      <div class="table_cell_15"><%= h post.trans.created_at.to_date.to_s(:default) %></div>
-    	<div class="table_cell_15"><%= link_to post.trans.id, tran_path(post.trans) %></div>
-    	<div class="table_cell_15">
-    		<% if post.trans.description %>
-    			<%= link_to post.trans.description, post.trans.obj_link %>
-    		<% end %>
-  		</div>
-    	<div class="table_cell_20">
-  			<% if post.account %>
-  	    	<%= link_to post.account.number_and_name, post.account %>
-  	  	<% end %>
-    	</div>
-    	<% if post.post_type_id==1 %>
-    	  <div class="table_cell_10"><%= h number_to_currency((post.value||0)) %></div>
-    	  <div class="table_cell_10"></div>
-    	<% else %>
-    	  <div class="table_cell_10"></div>
-    	  <div class="table_cell_10"><%= h number_to_currency((post.value||0)) %></div>
-    	<% end %>
-    	<div class="table_cell"><%= h number_to_currency((post.balance||0)) %></div>
-    </div>
-  <% end %>
-</div>
+<% if @account.is_parent %>
+  <p><b>Cuentas en esta rama:</b></p>
+  <div>
+		<div class="table_header_row">
+		  <div class="table_cell_25">Numero</div>
+		  <div class="table_cell_25">Nombre</div>
+		  <div class="table_cell_25">Tipo</div>
+		  <div class="table_cell">Saldo</div>
+		</div>
+		<% for account in @mychildren %>
+			<div class="table_row">
+				<div class="table_cell_25"><%= link_to (account.number||''), account %></div>
+				<div class="table_cell_25"><%= link_to account.name, account %></div>
+				<div class="table_cell_25">
+					<% if account.modifier == 1 %>
+						<%= h 'Debe' %>
+					<% else %>
+						<%= h 'Haber' %>
+				  <% end %>
+				</div>
+				<div class="table_cell"><%= number_to_currency(account.balance) %></div>
+			</div>
+		<% end %>
+	</div>
+<% else %> 
+  <p><b>Transacciones recientes en esta cuenta.</b></p>
+  <div>
+		<div class="table_header_row">
+			<div class="table_cell_15">Fecha</div>
+			<div class="table_cell_15">Transaccion</div>
+			<div class="table_cell_15">description</div>
+			<div class="table_cell_20">Cuenta</div>
+			<div class="table_cell_10">Debito</div>
+			<div class="table_cell_10">Credito</div>
+			<div class="table_cell">Saldo</div>
+		</div>
+		<% for post in @myposts %>
+			<div class="table_row">
+			  <div class="table_cell_15"><%= h post.trans.created_at.to_date.to_s(:default) %></div>
+				<div class="table_cell_15"><%= link_to post.trans.id, tran_path(post.trans) %></div>
+				<div class="table_cell_15">
+					<% if post.trans.description %>
+						<%= link_to post.trans.description, post.trans.obj_link %>
+					<% end %>
+				</div>
+				<div class="table_cell_20">
+					<% if post.account %>
+				  	<%= link_to post.account.number_and_name, post.account %>
+					<% end %>
+				</div>
+				<% if post.post_type_id==1 %>
+				  <div class="table_cell_10"><%= h number_to_currency((post.value||0)) %></div>
+				  <div class="table_cell_10"></div>
+				<% else %>
+				  <div class="table_cell_10"></div>
+				  <div class="table_cell_10"><%= h number_to_currency((post.value||0)) %></div>
+				<% end %>
+				<div class="table_cell"><%= h number_to_currency((post.balance||0)) %></div>
+			</div>
+		<% end %>
+	</div>
+<% end %>
+
+
   

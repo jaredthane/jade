@@ -71,7 +71,7 @@ class Account < ActiveRecord::Base
 	  return list
 	end
 	def recent_posts(num=20)
-		return Post.find_all_by_account_id(self.id, :limit=>num)
+		return Post.find_all_by_account_id(self.id, :order=>'created_at DESC', :limit=>num)
 	end
 	def all_posts
 	  list = self.posts
@@ -81,10 +81,22 @@ class Account < ActiveRecord::Base
 	  return list
 	end
 	def balance
-		sql = ActiveRecord::Base.connection()
-		query = "select sum(value*post_type_id) total from posts where account_id = #{self.id.to_s}"
-		results = sql.execute(query).fetch_hash
-		return results["total"].to_i * self.modifier
+		if is_parent
+			list = all_children.collect{|c| c.id.to_s + ", "}.to_s.chop.chop
+			if list.length > 0
+				sql = ActiveRecord::Base.connection()
+				query = "select sum(value*post_type_id) total from posts where account_id in (#{list})"
+				results = sql.execute(query).fetch_hash
+				return results["total"].to_i * self.modifier
+			else
+				return 0
+			end
+		else
+			sql = ActiveRecord::Base.connection()
+			query = "select sum(value*post_type_id) total from posts where account_id = #{self.id.to_s}"
+			results = sql.execute(query).fetch_hash
+			return results["total"].to_i * self.modifier
+		end
 	end
   def validate
     errors.add "Nombre","no es válido" if !name or name==''
