@@ -16,6 +16,10 @@
 		<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
 			<dt><%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %></dt>
 		<% end %>
+	<% when 6 %>
+		<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
+			<dt><%= link_to 'Nuevas Etiquetas', '/labels/new', :class => 'action' %></dt>
+		<% end %>
 	<% when 3%>
 		<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
 			<dt><%= link_to 'Nuevo Consumo Interno', '/internal/new', :class => 'action' %></dt>
@@ -59,6 +63,9 @@
 	<% when 5%>
 		<% content_for :title do %>Lista de Cuentas Fisicas de <%= current_user.location.name %><% end %>
 		<%= render :partial => 'layouts/search', :locals => {:show_search => true, :show_sites=>true,  :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => counts_path,:sites=>@sites  } %>
+	<% when 6%>
+		<% content_for :title do %>Lista de Etiquetas<% end %>
+		<%= render :partial => 'layouts/search', :locals => {:show_search => false, :show_sites=>false,  :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => labels_path,:sites=>@sites  } %>
 	<% else %>
 		<% content_for :title do %>Lista de Pedidos en <%= current_user.location.name %><% end %>
 		<%= render :partial => 'layouts/search', :locals => {:show_search => true, :show_sites=>true,  :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => orders_path,:sites=>@sites  } %>

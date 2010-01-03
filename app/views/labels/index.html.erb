@@ -1,0 +1,23 @@
+<% content_for :title do %>Lista de Hojas de Etiquetas<% end %>
+<% content_for :actions do %>
+	<dt><%= link_to 'Nueva Cuenta Fisica', new_count_path, :class => 'action' %></dt>
+<% end %>
+<br /> <%= will_paginate @orders, :class => 'pagination' %>
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_30">Numero</div>
+    <div class="table_cell_30">Fecha</div>
+    <div class="table_cell">User</div>
+  </div>
+	<% for order in @orders %>
+		<div class="table_row">
+		  <div class="table_cell_30"><%= link_to order.id, order %></div>
+		  <div class="table_cell_30"><%=h order.created_at.to_date %></div> 
+		  <div class="table_cell"><%= link_to order.user.login, order.user %></div>
+		</div>
+	<% end %>
+</div>
+
+<br />
+<%= will_paginate @orders, :class => 'pagination' %>
+

@@ -110,9 +110,11 @@ ActionController::Routing::Routes.draw do |map|
 #	map.resources :counts, :controller=>'orders', :order_type_id => 5
   map.new_purchase 	'purchases/new', :controller => 'orders', :action => 'new', :order_type_id => 2
   map.new_sale 	'sales/new', :controller => 'orders', :action => 'new', :order_type_id => 1
+  map.new_label 'labels/new', :controller => 'orders', :action => 'new', :order_type_id => 6
   map.new_internal 	'internal/new', :controller => 'orders', :action => 'new', :order_type_id => 3
   map.purchases 'purchases/', :controller => 'orders', :action => 'index', :order_type_id => 2
   map.internals 'internals/', :controller => 'orders', :action => 'index', :order_type_id => 3
+  map.labels 'labels/', :controller => 'orders', :action => 'index', :order_type_id => 6
   map.transfers 'transfers/', :controller => 'orders', :action => 'index', :order_type_id => 4
   map.new_transfer 'transfer/new', :controller => 'orders', :action => 'new', :order_type_id => 4
   map.counts 'counts/', :controller => 'orders', :action => 'index', :order_type_id => 5

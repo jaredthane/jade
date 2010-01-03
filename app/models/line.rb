@@ -261,6 +261,8 @@ class Line < ActiveRecord::Base
 	def total_price
 		if order_type_id==Order::COUNT
 			total = self.product.cost * (self.quantity - self.product.quantity)
+		elsif order_type_id==Order::LABELS
+			total = 0
 		else
 			#logger.debug "CALCULATING TOTAL PRICE &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7"
 			#logger.debug "price=#{price.to_s}"

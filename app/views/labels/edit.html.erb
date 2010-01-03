@@ -1,0 +1,6 @@
+<% content_for :title do %>Cambiar Hoja de Etiquetas<% end %>
+<%form_for @order, :url => {:action => 'update', :controller => 'orders'}, :html => {:id => 'labels_form' } do |f|  %>
+	<%= render :partial => 'labels/fields', :locals => { :order_type_id => @order.order_type_id, :f => f} %>
+<% end %>
+<br />
+<%= render :partial => 'new_line_form', :locals => {:order => @order,:order_type_id => @order_type_id} %>

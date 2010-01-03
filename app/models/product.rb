@@ -70,7 +70,7 @@ class Product < ActiveRecord::Base
 		if err.include?("can't encode")
 			system("barcode -b '#{self.upc}' -o 'public/barcodes/#{self.upc}.ps'")
 		end
-		system("convert -trim 'public/barcodes/#{self.upc}.ps' 'public/barcodes/#{self.upc}.png'")
+		system("convert -trim 'public/barcodes/#{self.upc}.ps' 'public/barcodes/#{self.upc}.jpg'")
 		system("rm 'public/barcodes/#{self.upc}.ps'")
 		
 #		%x[rm 'public/barcodes/#{self.upc}.png']
@@ -83,10 +83,13 @@ class Product < ActiveRecord::Base
 #		%x[rm 'public/barcodes/#{self.upc}.ps']
 	end
 	def barcode_filename
-		return "/barcodes/" + self.upc + ".png"
+		return "/barcodes/" + self.upc + ".jpg"
 	end
 	def inventory(entity)
 		return self.inventories.find_by_entity_id(entity.id)
+	end
+	def cost_with_tax
+		self.cost * TAX
 	end
 	##################################################################################################
 	# Creates Inventories, Prices, and Warranties

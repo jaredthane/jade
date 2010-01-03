@@ -28,6 +28,7 @@ class Order < ActiveRecord::Base
   INTERNAL=3
   TRANSFER=4
   COUNT=5
+  LABELS=6
   ANY=0
 	##################################################################################################
 	# 
@@ -302,7 +303,7 @@ class Order < ActiveRecord::Base
 	# Returns transaction for inventory movement if any is necissary
 	###################################################################################
 	def inventory_transaction(date=User.current_user.today)
-		return nil if order_type_id == COUNT
+		return nil if order_type_id == COUNT or order_type_id == LABELS
 		inventory_cost = self.inventory_value - (old('inventory_value')||0)
     if inventory_cost != 0
 	  	if inventory_cost >=0 
@@ -761,6 +762,10 @@ class Order < ActiveRecord::Base
 	    ##logger.debug "searching COUNT"
 #	    c=['(location.id=:current_location) AND (orders.order_type_id = 5)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}",:sites => "#{ssites}"}]
 	    c= "(order_type_id = 5) AND (vendor_id in " + ssites + ") AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
+	  when LABELS
+	    ##logger.debug "searching COUNT"
+#	    c=['(location.id=:current_location) AND (orders.order_type_id = 5)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}",:sites => "#{ssites}"}]
+	    c= "(order_type_id = 6) AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
 	  else
 	    ##logger.debug "searching all according to rights"
   		search=search||''

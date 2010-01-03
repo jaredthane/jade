@@ -126,3 +126,6 @@ update accounts set number= '14101' where id = 1;
 # base_data is updated up to here
 alter table trans add column kind_id int(11);
 update entities set cash_account_id=1 where id=3;
+alter table orders add column sequel_id int(11);
+alter table orders add column prequel_id int(11);
+

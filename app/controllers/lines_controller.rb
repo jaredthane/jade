@@ -67,7 +67,6 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.xml
   def new
-  	
   	@order_type_id = params[:order_type_id] || 0
     if @order_type_id == 1
     	@client=Entity.find_by_name(params[:client_name])

@@ -27,15 +27,28 @@ class ProductsController < ApplicationController
     #@products = Product.find(:all)
     @search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
     params[:scope]='name' if params[:format]=='js'
-    case params[:scope]
-		  when 'all'
-		  	@products = Product.search_all(@search, (params[:page] || 1))
-		  when 'services'
-			  @products = Product.search_services(@search, (params[:page] || 1))
-		  when 'name'
-			  @products = Product.search_name(@search, (params[:page] || 1))
-		  else
-				@products = Product.search(@search, (params[:page] || 1))
+    if params[:format]=='pdf'
+    	case params[:scope]
+				when 'all'
+					@products = Product.search_all(@search)
+				when 'services'
+					@products = Product.search_services(@search)
+				when 'name'
+					@products = Product.search_name(@search)
+				else
+					@products = Product.search(@search)
+			end
+		else
+		  case params[:scope]
+				when 'all'
+					@products = Product.search_all(@search, (params[:page] || 1))
+				when 'services'
+					@products = Product.search_services(@search, (params[:page] || 1))
+				when 'name'
+					@products = Product.search_name(@search, (params[:page] || 1))
+				else
+					@products = Product.search(@search, (params[:page] || 1))
+			end
 		end
     respond_to do |format|
       format.html {
@@ -46,6 +59,7 @@ class ProductsController < ApplicationController
 			  end
       }
       format.xml
+      format.pdf {prawnto :prawn => {:skip_page_creation=>true}}
       format.js
     end
   end
