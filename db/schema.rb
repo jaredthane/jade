@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20081209171118) do
+ActiveRecord::Schema.define(:version => 20100103063648) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -312,6 +312,9 @@ ActiveRecord::Schema.define(:version => 20081209171118) do
     t.integer  "blocked_by_count",                                    :default => 0
     t.integer  "revenue_account_id"
     t.integer  "image_id"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
   end
 
   add_index "products", ["name"], :name => "name"

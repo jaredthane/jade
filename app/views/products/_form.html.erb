@@ -31,7 +31,7 @@
 	</p>
 <% end %>
 
-<% form_for @product, :html => {:id => 'product_form' } do |f| %>
+<% form_for @product, :html => {:id => 'product_form',:multipart => true } do |f| %>
 		
   <%= f.hidden_field :product_type_id, :value => 1 %>
 	<div class="column2-unit-left">
@@ -72,7 +72,10 @@
 		<p><b>Categoría</b><br />
 			<%= f.text_field :category_name, :class=> 'lookup field', :id => 'category_lookup',:style=>'width:168px;' %>
 		</p>
-
+		<p>
+			<b>Imagen</b><br />
+			<%= f.file_field :image, :size=>20 %>
+		</p>
 		<% if mode == 'edit' %>
 			<p>
 				<b>Costo</b><br />

@@ -45,6 +45,11 @@ class Product < ActiveRecord::Base
 	belongs_to :product_type
 	belongs_to :unit
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
+	# Paperclip
+	has_attached_file :image,
+		:styles => {
+		  :thumb=>  "100x100>",
+		  :large => "400x400>" }
 	##################################################################################################
 	# 
 	#################################################################################################
