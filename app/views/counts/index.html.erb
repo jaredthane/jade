@@ -10,6 +10,7 @@
 		<dt><%= link_to 'Nueva Cuenta Fisica', new_count_path, :class => 'action' %></dt>
 	<% end %>
 <% end %>
+<%= render :partial => 'layouts/search', :locals => {:show_search => true, :show_sites=>true,  :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => counts_path,:sites=>@sites  } %>
 <br /> <%= will_paginate @orders, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
