@@ -1,4 +1,10 @@
 <% content_for :title do %>Lista de Cuentas Fisicas en <%= current_user.location.name %><% end %>
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "slider.jquery" %>
+  <%= stylesheet_link_tag 'ui.slider.extras' %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+
 <% content_for :actions do %>
 	<% if current_user.has_right(User::CREATE_COUNTS) %>
 		<dt><%= link_to 'Nueva Cuenta Fisica', new_count_path, :class => 'action' %></dt>

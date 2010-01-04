@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100103063648) do
+ActiveRecord::Schema.define(:version => 20100103075955) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -176,15 +176,18 @@ ActiveRecord::Schema.define(:version => 20100103063648) do
     t.datetime "receipt_printed"
     t.text     "comments"
     t.integer  "order_type_id"
-    t.boolean  "deleted",                                                            :default => false
-    t.decimal  "grand_total",                          :precision => 8, :scale => 2, :default => 0.0
-    t.decimal  "amount_paid",                          :precision => 8, :scale => 2, :default => 0.0
-    t.boolean  "d",                                                                  :default => false
+    t.boolean  "deleted",                                                                 :default => false
+    t.decimal  "grand_total",                               :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "amount_paid",                               :precision => 8, :scale => 2, :default => 0.0
+    t.boolean  "d",                                                                       :default => false
     t.integer  "purchase_receipt_number"
     t.integer  "next_order_id"
     t.string   "receipt_filename"
     t.datetime "receipt_generated"
-    t.string   "receipt_number",          :limit => 8
+    t.string   "receipt_number",               :limit => 8
+    t.string   "scanned_receipt_file_name"
+    t.string   "scanned_receipt_content_type"
+    t.integer  "scanned_receipt_file_size"
   end
 
   add_index "orders", ["client_id"], :name => "client_id"

@@ -62,7 +62,7 @@ class OrdersController < ApplicationController
     else
       @orders=Order.search(params[:search], @order_type_id, @from, @till, (params[:page]||1), params[:sites])
     end
-    if @order_type_id==Order::COUNT
+    if @order_type_id==Order::TRANSFER
     	render :template=>'counts/index'
     	return false
     elsif @order_type_id == Order::LABELS

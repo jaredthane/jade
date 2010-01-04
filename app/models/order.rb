@@ -23,6 +23,8 @@ class Order < ActiveRecord::Base
 	belongs_to :order_type
 	belongs_to :sequel, :class_name => "Order", :foreign_key => 'sequel_id'
 	belongs_to :prequel, :class_name => "Order", :foreign_key => 'prequel_id'
+	# Paperclip
+	has_attached_file :scanned_receipt
   SALE=1
   PURCHASE=2
   INTERNAL=3

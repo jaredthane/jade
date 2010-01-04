@@ -25,7 +25,14 @@
 			<%= f.hidden_field :client_id, :value => current_user.location.id %>
 			
 		</div>
-
+		<div class="column3-unit-middle">
+			<% if order_type_id==Order::PURCHASE %>
+				<p>
+					<b>Factura Escaneado</b><br />
+					<%= f.file_field :scanned_receipt, :size=>20 %>
+				</p>
+			<% end %>
+		</div>
 	<% when 1 %>
 		<div class="column3-unit-left">
 			<p>
