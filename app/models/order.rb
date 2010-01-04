@@ -262,12 +262,12 @@ class Order < ActiveRecord::Base
 		      	r=line.revenue_account(self).id
 		      	if line.old
 		      		if line.old.order
-		      			price = (line.total_price * line.order.active) - (line.old.total_price * line.old.order.active)
+		      			price = (line.total_price * self.active) - (line.old.total_price * line.old.order.active)
 		      	 	else
-		      			price = (line.total_price * line.order.active)
+		      			price = (line.total_price * self.active)
 		      		end
 		      	else
-		      		price = (line.total_price * line.order.active)
+		      		price = (line.total_price * self.active)
 		      	end
 		      	if revenue_accts[r]
 		      		revenue_accts[r] += price
