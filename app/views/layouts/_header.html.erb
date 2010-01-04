@@ -169,6 +169,7 @@
 				<ul>
 					<% if current_user.has_rights(['Admin','Gerente','Vendedor']) %>
 						<li><a href="/sales" title="Ventas">Ventas</a></li>
+						<li><a href="/posts" title="Lista de Transacciones">Transacciones</a></li>
 					<% end %>
 					<% if current_user.has_rights(['Admin','Gerente','Vendedor']) %>
 						<li><a href="/subscriptions" title="Suscripciones">Suscripciones</a></li>

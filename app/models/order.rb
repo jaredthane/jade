@@ -364,9 +364,9 @@ class Order < ActiveRecord::Base
 	###################################################################################
   def product_qty(product)
   	sum=0
-  	o=Order.find(self.id)
+#  	o=Order.find(self.id)
   	## ###puts "num lines: " + o.lines.count.to_s
-  	for line in o.lines
+  	for line in self.lines
   		## ###puts "checking line#" + line.id.to_s
   		if line.product.id==product.id
   			## ###puts "found some"
