@@ -468,10 +468,8 @@ class Product < ActiveRecord::Base
 	end
   def self.find_single(search)
   	find :first,
-		         :conditions => ['(products.name like :search 
-		         										OR products.model like :search 
-		         										OR products.upc like :search 
-		         										OR description like :search )
+		         :conditions => ['(products.name = :search 
+		         							OR products.upc like :search)
 		         							AND (prices.price_group_id = :price_group_id)
 		         							AND (prices.available = True)',
 		         							{:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
