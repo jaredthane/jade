@@ -11,7 +11,7 @@ function DoAjaxRequest(){
 	$.ajax({
 			type: 'POST',
   		url: "/lines/new",
-  		data:{ bar_code: $("#bar_code_field").val(), client_name: $('#clients_lookup').val(), order_type_id:$('#order_order_type_id').val()},
+  		data:{ bar_code: $("#bar_code_field").val(), client_name: $('#clients_lookup').val(), order_type_id:$('#order_type_id').val()},
   		success: function(data){ 
   			var d = $('<div/>').append(data);
   			error=$('.error', d);

@@ -21,10 +21,8 @@ class LinesController < ApplicationController
 
 	def add_line(upc, quantity, order_type_id, relative_price = 1)
 		@additional=Line.new(:created_at=>User.current_user.today, :order_type_id=>order_type_id,:delete_me=>false)
-		puts "order_type_id=" + order_type_id.to_s
 #		@additional.order_type_id = order_type_id
 		@additional.bar_code = upc
-		puts "add price2" + @additional.price.to_s
 		@additional.price = @additional.price * relative_price
 #		if @additional.product
 #			if @additional.product.product_type==3
@@ -33,7 +31,6 @@ class LinesController < ApplicationController
 #				@additional.price = @additional.product.price(User.current_user.current_price_group, False) * relative_price
 #			end
 #		end
-		puts "add price3" + @additional.price.to_s
 		if order_type_id != '5'
 			@additional.quantity = quantity
 		else
