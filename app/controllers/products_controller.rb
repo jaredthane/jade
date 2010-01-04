@@ -27,15 +27,28 @@ class ProductsController < ApplicationController
     #@products = Product.find(:all)
     @search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
     params[:scope]='name' if params[:format]=='js'
-    case params[:scope]
-		  when 'all'
-		  	@products = Product.search_all(@search, (params[:page] || 1))
-		  when 'services'
-			  @products = Product.search_services(@search, (params[:page] || 1))
-		  when 'name'
-			  @products = Product.search_name(@search, (params[:page] || 1))
-		  else
-				@products = Product.search(@search, (params[:page] || 1))
+    if params[:format]=='pdf'
+    	case params[:scope]
+				when 'all'
+					@products = Product.search_all(@search)
+				when 'services'
+					@products = Product.search_services(@search)
+				when 'name'
+					@products = Product.search_name(@search)
+				else
+					@products = Product.search(@search)
+			end
+		else
+		  case params[:scope]
+				when 'all'
+					@products = Product.search_all(@search, (params[:page] || 1))
+				when 'services'
+					@products = Product.search_services(@search, (params[:page] || 1))
+				when 'name'
+					@products = Product.search_name(@search, (params[:page] || 1))
+				else
+					@products = Product.search(@search, (params[:page] || 1))
+			end
 		end
     respond_to do |format|
       format.html {
@@ -46,6 +59,7 @@ class ProductsController < ApplicationController
 			  end
       }
       format.xml
+      format.pdf {prawnto :prawn => {:skip_page_creation=>true}}
       format.js
     end
   end
@@ -133,15 +147,17 @@ class ProductsController < ApplicationController
   # POST /products
   # POST /products.xml
   def create
-  	params[:product][:upc]=User.current_user.location.next_bar_code if params[:product][:upc]==""
+  	if params[:product][:upc]==""
+  		while Product.find_by_upc(User.current_user.location.next_bar_code)
+  			User.current_user.location.next_bar_code=(User.current_user.location.next_bar_code.to_i + 1).to_s
+	  	end
+	  	params[:product][:upc]=User.current_user.location.next_bar_code
+	  end
     @product = Product.new(params[:product])
     respond_to do |format|
       if @product.save
       	@product.create_related_values(params[:product][:default_cost], params[:product][:static_price], params[:product][:relative_price])
-      	if @product.upc==User.current_user.location.next_bar_code
-					User.current_user.location.next_bar_code=(User.current_user.location.next_bar_code.to_i + 1).to_s
-					User.current_user.location.save
-				end
+	  		User.current_user.location.save if @product.upc==User.current_user.location.next_bar_code
 #      	@product.update_attributes(params[:product])
         flash[:notice] = 'Producto ha sido creado exitosamente.'
         format.html { redirect_to(@product) }

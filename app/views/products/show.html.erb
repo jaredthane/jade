@@ -21,6 +21,11 @@
 <% end %>
 </h2>
 <div class="column3-unit-left">
+	<% if @product.image.exists? then %>
+		<p><%= image_tag @product.image.url(:thumb) %></p>
+	<% else %>
+		<p> No hay ningun imagen para este producto. </p>
+	<% end %>
 	<% if current_user.has_right(User::VIEW_VENDORS) %>
 	<p><b>Proveedor</b><br />
     <% if @product.vendor %>
@@ -32,12 +37,6 @@
     <b>Minimo</b><br />
     <%=h @product.min(current_user.location_id) %>
   </p>
-  <% if current_user.has_right(User::VIEW_COSTS) %>
-		<p>
-			<b>Costo Actual</b><br />
-			  <%=h number_to_currency(@product.cost) %>
-		</p>
-	<% end %>
 	<p>
     <b>Se Usa numero de Serie</b><br />
     <% if @product.serialized %>
@@ -52,6 +51,16 @@
   </p>
 </div>
 <div class="column3-unit-middle">
+  <% if current_user.has_right(User::VIEW_COSTS) %>
+		<p>
+			<b>Costo por Defualt</b><br />
+			<%= h number_to_currency(@product.default_cost) %>
+		</p>
+		<p>
+			<b>Costo Actual</b><br />
+			  <%=h number_to_currency(@product.cost) %>
+		</p>
+	<% end %>
 <p>
     <b>Precio</b><br />
       <%=h number_to_currency(@product.price) %>
@@ -60,12 +69,6 @@
     <b>Maximo</b><br />
     <%=h @product.max(current_user.location_id) %>
   </p>
-  <% if current_user.has_right(User::VIEW_COSTS) %>
-		<p>
-			<b>Costo por Defualt</b><br />
-			<%= h number_to_currency(@product.default_cost) %>
-		</p>
-	<% end %>
 	<p>
     <b>Categoría</b><br />
     <% if @product.product_category %>
@@ -84,7 +87,6 @@
 <div class="column3-unit-right">
 	<%= link_to( image_tag(@product.barcode_filename, :style=>'border:none;'), show_barcode_url(@product) ) %>
 
-	
 	<p>
     <b>Unidad</b><br />
     <%=h @product.unit.name %>

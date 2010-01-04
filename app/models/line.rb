@@ -77,6 +77,7 @@ class Line < ActiveRecord::Base
   ##################################################################################
   MOVEMENT_TYPES=[[4,4],[5,1],[6,2],[9,8],[7,3],[4,4]]
 	def prepare_movements
+		#
 		##logger.debug "self.product.product_type_id=#{self.product.product_type_id.to_s}"
 	  if self.product.product_type_id == 1
 	  	##logger.debug "real_qty(self)=#{real_qty(self).to_s}"
@@ -85,6 +86,7 @@ class Line < ActiveRecord::Base
 		    dir = (real_qty(self)-real_qty(old))/(real_qty(self)-real_qty(old)).abs
 		    ##logger.debug "dir=#{dir.to_s}"
 		    move=MOVEMENT_TYPES[order_type_id.to_i][(dir+3)/2-1]
+		    
 		    ##logger.debug "move=#{move.to_s}"
 		    if [1,2,3,8].include?(move)    	# These are normal movements
 		    	self.movements << Movement.new(:created_at=>User.current_user.today,:entity_id => self.order.vendor_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => -(real_qty(self)-real_qty(old)), :movement_type_id => move, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => self.serialized_product_id)
@@ -261,6 +263,8 @@ class Line < ActiveRecord::Base
 	def total_price
 		if order_type_id==Order::COUNT
 			total = self.product.cost * (self.quantity - self.product.quantity)
+		elsif order_type_id==Order::LABELS
+			total = 0
 		else
 			#logger.debug "CALCULATING TOTAL PRICE &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7"
 			#logger.debug "price=#{price.to_s}"
@@ -326,7 +330,7 @@ class Line < ActiveRecord::Base
 		##logger.debug "self.order.void=#{self.order.void.to_s}"
 		if checkbox.to_i==1 and !self.order.void
 			if self.received == nil
-				self.received=Time.now
+				self.received=(User.current_user.today || Time.now)
 			end
 		else
 			if self.received != nil

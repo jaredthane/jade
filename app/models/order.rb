@@ -23,11 +23,14 @@ class Order < ActiveRecord::Base
 	belongs_to :order_type
 	belongs_to :sequel, :class_name => "Order", :foreign_key => 'sequel_id'
 	belongs_to :prequel, :class_name => "Order", :foreign_key => 'prequel_id'
+	# Paperclip
+	has_attached_file :scanned_receipt
   SALE=1
   PURCHASE=2
   INTERNAL=3
   TRANSFER=4
   COUNT=5
+  LABELS=6
   ANY=0
 	##################################################################################################
 	# 
@@ -228,6 +231,7 @@ class Order < ActiveRecord::Base
 	# Adds a transaction to reflect the creation of the order if necissary
 	#################################################################################################
 	def main_transaction(date=User.current_user.today)
+		return nil if !User.current_user.do_accounting
 		# Grand total is 0 when the order is deactivated, so we dont have to worry about that here
 		if old
 		  amount = self.grand_total - old.grand_total 
@@ -243,33 +247,42 @@ class Order < ActiveRecord::Base
 		  		d=Trans::FORWARD
 		  	else
 		  		description = 'Cancelacion de Venta'
+		  		
 		  		d=Trans::REVERSE
 		  	end
-			  sale=Trans.new(:user=>User.current_user,:created_at=>date, :description=> description, :direction=>d, :kind_id=>Trans::CONTRACT)
-        sale.posts << Post.new(:account => self.client.cash_account,:created_at=>date, :value=>amount, :post_type_id =>Post::DEBIT)
-        if tax != 0
-        	sale.posts << Post.new(:account => self.vendor.tax_account,:created_at=>date, :value=>tax, :post_type_id =>Post::CREDIT)
-        end
-        # Here we have to make sure we multiply the quantities by order.active to make them zero if the order is deactivated
-        revenue_accts={}
-        for line in self.lines
-        	r=line.revenue_account(self).id
-        	if line.old
-        		price = (line.total_price * line.order.active) - (line.old.total_price * line.old.order.active)
-        	else
-        		price = (line.total_price * line.order.active)
-        	end
-        	if revenue_accts[r]
-        		revenue_accts[r] += price
-        	else
-        		revenue_accts[r] = price
-        	end
-        end
-        revenue_accts.each { |key, value| 
-        	acct= Account.find(key)
-				  sale.posts << Post.new(:account => acct, :value=>value,:created_at=>date, :post_type_id =>Post::CREDIT)
-			  }    
-			  return sale
+		  	if User.current_user.do_accounting
+					sale=Trans.new(:user=>User.current_user,:created_at=>date, :description=> description, :direction=>Trans::FORWARD, :kind_id=>Trans::CONTRACT)
+		      sale.posts << Post.new(:account => self.client.cash_account,:created_at=>date, :value=>amount, :post_type_id =>Post::DEBIT)
+		      if tax != 0
+		      	sale.posts << Post.new(:account => self.vendor.tax_account,:created_at=>date, :value=>tax, :post_type_id =>Post::CREDIT)
+		      end
+		      # Here we have to make sure we multiply the quantities by order.active to make them zero if the order is deactivated
+		      revenue_accts={}
+		      for line in self.lines
+		      	r=line.revenue_account(self).id
+		      	if line.old
+		      		if line.old.order
+		      			price = (line.total_price * self.active) - (line.old.total_price * line.old.order.active)
+		      	 	else
+		      			price = (line.total_price * self.active)
+		      		end
+		      	else
+		      		price = (line.total_price * self.active)
+		      	end
+		      	if revenue_accts[r]
+		      		revenue_accts[r] += price
+		      	else
+		      		revenue_accts[r] = price
+		      	end
+		      end
+		      revenue_accts.each { |key, value| 
+		      	acct= Account.find(key)
+						sale.posts << Post.new(:account => acct, :value=>value,:created_at=>date, :post_type_id =>Post::CREDIT)
+					}    
+					return sale
+				else
+					return nil
+				end
 		  when 2 # Compra
 		  	if amount >=0 
 		  		description = 'Compra'
@@ -302,7 +315,7 @@ class Order < ActiveRecord::Base
 	# Returns transaction for inventory movement if any is necissary
 	###################################################################################
 	def inventory_transaction(date=User.current_user.today)
-		return nil if order_type_id == COUNT
+		return nil if order_type_id == COUNT or order_type_id == LABELS or !User.current_user.do_accounting
 		inventory_cost = self.inventory_value - (old('inventory_value')||0)
     if inventory_cost != 0
 	  	if inventory_cost >=0 
@@ -361,9 +374,9 @@ class Order < ActiveRecord::Base
 	###################################################################################
   def product_qty(product)
   	sum=0
-  	o=Order.find(self.id)
+#  	o=Order.find(self.id)
   	## ###puts "num lines: " + o.lines.count.to_s
-  	for line in o.lines
+  	for line in self.lines
   		## ###puts "checking line#" + line.id.to_s
   		if line.product.id==product.id
   			## ###puts "found some"
@@ -761,6 +774,10 @@ class Order < ActiveRecord::Base
 	    ##logger.debug "searching COUNT"
 #	    c=['(location.id=:current_location) AND (orders.order_type_id = 5)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}",:sites => "#{ssites}"}]
 	    c= "(order_type_id = 5) AND (vendor_id in " + ssites + ") AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
+	  when LABELS
+	    ##logger.debug "searching COUNT"
+#	    c=['(location.id=:current_location) AND (orders.order_type_id = 5)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}",:sites => "#{ssites}"}]
+	    c= "(order_type_id = 6) AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
 	  else
 	    ##logger.debug "searching all according to rights"
   		search=search||''

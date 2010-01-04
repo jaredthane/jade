@@ -9,7 +9,7 @@
 	<% else %>
 		<% content_for :title do %>Nuevo Pedido<% end %>
 <% end %>
-<%form_for :order, :url => {:action => 'create'}, :html => {:id => 'order_form' } do |f|  %>
+<%form_for :order, :url => {:action => 'create'}, :html => {:id => 'order_form',:multipart => true } do |f|  %>
 	<%= render :partial => 'fields', :locals => { :order_type_id => @order_type_id, :f => f, :mode => "new" } %>
 <% end %>
 <br />

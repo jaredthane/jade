@@ -1,8 +1,16 @@
 <%= error_messages_for :line %>
-
+<p>
+	TESTING
+</p>
 <% if @order_type_id == '5'  %>
+	COUNT
 	<%= render :partial => 'counts/line', :collection => @lines %>
+<% elsif @order_type_id == '6'  %>
+	HELLOW
+	<%= render :partial => 'labels/line', :collection => @lines %>
 <% else %>
+	ORDER
+	<%= @order_type_id %>
 	<%= render :partial => 'orders/line', :collection => @lines %>
 <% end %>
 

@@ -115,6 +115,13 @@
   	<% flash[:important] = 'Este cliente esta cumpliendo anos..' %> 
   <% end %>
 </p>
+<% if @order.order_type_id==Order::PURCHASE %>
+	<% if @order.scanned_receipt.exists? then %>
+		<p><%= image_tag @order.scanned_receipt.url(:thumb) %></p>
+	<% else %>
+		<p> No hay ninguna factura escaneado para esta compra. </p>
+	<% end %>
+<% end %>
 <p>
   <b>Fecha Solicitado:</b>
   <%=h @order.created_at.to_date.to_s(:long) %>

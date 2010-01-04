@@ -24,7 +24,7 @@
       <div class="table_cell_20"><%= link_to (post.trans.order.receipt_number||'Sin número'), post.trans.order %></div>
       <div class="table_cell_20"><%= link_to post.trans.order.client.name[0..25], post.trans.order.client %></div>
       <div class="table_cell_20"><%= h post.created_at.to_date %></div> 
-      <div class="table_cell_20"><%=h number_to_currency(post.value*post.post_type_id) %></div> 
+      <div class="table_cell_20"><%=h number_to_currency(post.value*post.post_type_id*post.trans.direction) %></div> 
       <div class="table_cell"><%= link_to post.trans.user.login, post.trans.user %></div>
 		</div>
 	<% end %>

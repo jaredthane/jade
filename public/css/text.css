@@ -70,6 +70,7 @@
 .main-content h2.side {clear:none;}
 .main-content h3.side {clear:none;}
 .main-content input[type=text] { padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
+.main-content input[type=file] { padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .main-content line input {text-align:center; padding:2px; background: #e1e1e1;border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .main-content select {padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 
@@ -98,6 +99,7 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .main-content .table_cell_10 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 10%; vertical-align: bottom;}
 .main-content .table_cell_50 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 50%; vertical-align: bottom;}
 .main-content .table_cell_80 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 80%; vertical-align: bottom;}
+.main-content .table_cell_70 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 70%; vertical-align: bottom;}
 .main-content .table_cell_25 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 25%; vertical-align: bottom;}
 .main-content .table_cell_30 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 30%; vertical-align: bottom;}
 .main-content .table_cell_35 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 35%; vertical-align: bottom;}
@@ -106,6 +108,7 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .main-content .table_row_red select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .main-content .table_row_green select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .main-content textarea.comments {height:25px;width:99%;}
+.main-content 
 .main-content textarea {width:600px; padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .accounting_good {background: #7cb4a9; color: white;}
 .accounting_bad {background: #ff6666; color: white;}

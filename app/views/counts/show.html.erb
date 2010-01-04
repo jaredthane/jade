@@ -10,6 +10,7 @@
 		<dt><%= link_to 'Lista', '/counts', :class => 'action' %></dt>
 	<% end %>
 <% end %>
+<% if @order.deleted %><p class="error_message" >Este pedido ha sido anulado.</p><% end %>
 <div class="column2-unit-left">
 
 	<p>

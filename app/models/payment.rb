@@ -64,32 +64,34 @@ class Payment < ActiveRecord::Base
 	#################################################################################################
 	def new_transaction
 		logger.debug "self.amount=#{self.amount.to_s}"
-		logger.debug "old('amount')=#{old('amount').to_s}" 
-#		logger.debug "old.amount =#{old.amount .to_s}"
-		if old
-		  amount = self.amount - old.amount 
-		else
-			amount = self.amount
-		end
-		if amount != 0
-	  	if amount >=0 
-	  		description = 'Pago de ' + self.order.order_type.name
-	  		d=Trans::FORWARD
-	  	else
-	  		description = 'Devolucion de Pago de ' + self.order.order_type.name
-	  		d=Trans::REVERSE
-	  	end
-			t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :comments => (self.order.comments||''), :description => description, :direction=>d, :kind_id=>Trans::MONEY)
-			if order.order_type_id=Order::SALE
-				o=1
+		if User.current_user.do_accounting
+			logger.debug "old('amount')=#{old('amount').to_s}" 
+	#		logger.debug "old.amount =#{old.amount .to_s}"
+			if old
+				amount = self.amount - old.amount 
 			else
-				o=-1
+				amount = self.amount
 			end
-			t.posts << Post.new(:trans=>t, :account => self.order.vendor.cash_account, :value=>amount, :post_type_id =>Post::DEBIT)
-			t.posts << Post.new(:trans=>t, :account => self.order.client.cash_account, :value=>amount, :post_type_id =>Post::CREDIT)
-			return t
-		else
-			return nil
+			if amount != 0
+				if amount >=0 
+					description = 'Pago de ' + self.order.order_type.name
+					d=Trans::FORWARD
+				else
+					description = 'Devolucion de Pago de ' + self.order.order_type.name
+					d=Trans::REVERSE
+				end
+				t = Trans.new(:order=>self.order, :created_at=>User.current_user.today,:user=>User.current_user, :payment_id => self.id, :comments => (self.order.comments||''), :description => description, :direction=>d, :kind_id=>Trans::MONEY)
+				if order.order_type_id=Order::SALE
+					o=1
+				else
+					o=-1
+				end
+				t.posts << Post.new(:trans=>t, :account => self.order.vendor.cash_account, :value=>amount, :post_type_id =>Post::DEBIT)
+				t.posts << Post.new(:trans=>t, :account => self.order.client.cash_account, :value=>amount, :post_type_id =>Post::CREDIT)
+				return t
+			else
+				return nil
+			end
 		end
 	end
   ##################################################################################################

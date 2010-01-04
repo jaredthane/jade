@@ -45,6 +45,11 @@ class Product < ActiveRecord::Base
 	belongs_to :product_type
 	belongs_to :unit
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
+	# Paperclip
+	has_attached_file :image,
+		:styles => {
+		  :thumb=>  "100x100>",
+		  :large => "400x400>" }
 	##################################################################################################
 	# 
 	#################################################################################################
@@ -70,7 +75,7 @@ class Product < ActiveRecord::Base
 		if err.include?("can't encode")
 			system("barcode -b '#{self.upc}' -o 'public/barcodes/#{self.upc}.ps'")
 		end
-		system("convert -trim 'public/barcodes/#{self.upc}.ps' 'public/barcodes/#{self.upc}.png'")
+		system("convert -trim 'public/barcodes/#{self.upc}.ps' 'public/barcodes/#{self.upc}.jpg'")
 		system("rm 'public/barcodes/#{self.upc}.ps'")
 		
 #		%x[rm 'public/barcodes/#{self.upc}.png']
@@ -83,10 +88,13 @@ class Product < ActiveRecord::Base
 #		%x[rm 'public/barcodes/#{self.upc}.ps']
 	end
 	def barcode_filename
-		return "/barcodes/" + self.upc + ".png"
+		return "/barcodes/" + self.upc + ".jpg"
 	end
 	def inventory(entity)
 		return self.inventories.find_by_entity_id(entity.id)
+	end
+	def cost_with_tax
+		self.cost * TAX
 	end
 	##################################################################################################
 	# Creates Inventories, Prices, and Warranties
@@ -460,10 +468,8 @@ class Product < ActiveRecord::Base
 	end
   def self.find_single(search)
   	find :first,
-		         :conditions => ['(products.name like :search 
-		         										OR products.model like :search 
-		         										OR products.upc like :search 
-		         										OR description like :search )
+		         :conditions => ['(products.name = :search 
+		         							OR products.upc like :search)
 		         							AND (prices.price_group_id = :price_group_id)
 		         							AND (prices.available = True)',
 		         							{:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],

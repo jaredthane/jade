@@ -73,6 +73,8 @@ class ApplicationController < ActionController::Base
   	prawnto :prawn => {:skip_page_creation=>true}
   	if order.order_type_id == Order::COUNT
   		pdf_string = render_to_string :template => 'counts/sheet.pdf.prawn', :layout => false
+  	elsif order.order_type_id == Order::LABELS
+  		pdf_string = render_to_string :template => 'labels/labels.pdf.prawn', :layout => false
   	else
 	  	pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false
 	  end

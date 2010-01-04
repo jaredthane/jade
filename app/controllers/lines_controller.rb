@@ -21,10 +21,8 @@ class LinesController < ApplicationController
 
 	def add_line(upc, quantity, order_type_id, relative_price = 1)
 		@additional=Line.new(:created_at=>User.current_user.today, :order_type_id=>order_type_id,:delete_me=>false)
-		puts "order_type_id=" + order_type_id.to_s
 #		@additional.order_type_id = order_type_id
 		@additional.bar_code = upc
-		puts "add price2" + @additional.price.to_s
 		@additional.price = @additional.price * relative_price
 #		if @additional.product
 #			if @additional.product.product_type==3
@@ -33,8 +31,11 @@ class LinesController < ApplicationController
 #				@additional.price = @additional.product.price(User.current_user.current_price_group, False) * relative_price
 #			end
 #		end
-		puts "add price3" + @additional.price.to_s
-		@additional.quantity = quantity
+		if order_type_id != '5'
+			@additional.quantity = quantity
+		else
+			@additional.quantity = 0
+		end
 		return @additional
 	end
 	def add_product_or_combo(list, upc, quantity, order_type_id, relative_price=1)
@@ -67,7 +68,6 @@ class LinesController < ApplicationController
   # GET /lines/new
   # GET /lines/new.xml
   def new
-  	
   	@order_type_id = params[:order_type_id] || 0
     if @order_type_id == 1
     	@client=Entity.find_by_name(params[:client_name])

@@ -106,13 +106,18 @@ for copy in ['cliente', 'vendor'] do
 			data << ["", "", "Suma", number_to_currency(total)]
 			data << ["", "", "IVA", number_to_currency(iva)]
 			data << ["", "", "Total", number_to_currency(total+iva)]
-			pdf.table(data,
-					:at=>[0,pdf.cursor],
-				  :font_size => 8,
-				  :align => { 0 => :center, 1 => :left, 2 => :center, 3 => :center },
-				  :headers => ['Cantidad', 'Producto', 'Unidad','Total'],
-				  :border_style => :underline_header,
-				  :column_widths => { 0 => 0.13*width, 1 => 0.6*width, 2 => 0.13*width, 3 => 0.13*width})	  
+			if data.length>0
+				pdf.table(data,
+						:at=>[0,pdf.cursor],
+						:font_size => 8,
+						:align => { 0 => :center, 1 => :left, 2 => :center, 3 => :center },
+						:headers => ['Cantidad', 'Producto', 'Unidad','Total'],
+						:border_style => :underline_header,
+						:column_widths => { 0 => 0.13*width, 1 => 0.6*width, 2 => 0.13*width, 3 => 0.13*width})
+			else
+				pdf.font_size = 10
+				pdf.text "Esta venta no contiene ningunos productos.", :align => :center, :style => :bold
+			end	  
 		end # receipt box
 	end # padded box
 	pdf.move_down 25

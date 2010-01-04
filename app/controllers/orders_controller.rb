@@ -62,8 +62,11 @@ class OrdersController < ApplicationController
     else
       @orders=Order.search(params[:search], @order_type_id, @from, @till, (params[:page]||1), params[:sites])
     end
-    if @order_type_id==5
+    if @order_type_id==Order::COUNT
     	render :template=>'counts/index'
+    	return false
+    elsif @order_type_id == Order::LABELS
+    	render :template=>'labels/index'
     	return false
     end
     respond_to do |format|
@@ -167,8 +170,11 @@ class OrdersController < ApplicationController
     end
     @payments = @order.recent_payments(10)
 		return false if !allowed(@order.order_type_id, 'view')
-    if @order.order_type_id == 5
+    if @order.order_type_id == Order::COUNT
     	render :template=>'counts/show'
+    	return false
+    elsif @order.order_type_id == Order::LABELS
+    	render :template=>'labels/show'
     	return false
     end
     respond_to do |format|
@@ -208,6 +214,9 @@ class OrdersController < ApplicationController
     if @order_type_id==5
     	render :template=>'counts/new'
     	return false
+    elsif @order_type_id == Order::LABELS
+    	render :template=>'labels/new'
+    	return false
     end
     respond_to do |format|
       format.html # new.html.erb
@@ -220,7 +229,6 @@ class OrdersController < ApplicationController
   def post
 		return false if !check_user(User::POST_COUNTS,'No tiene los derechos suficientes para procesar cuentas fisicas.')
     @order = Order.find(params[:id])
-    debugger
     if @order.post
     	@order.save
       flash[:notice] = 'Cuenta Fisica ha sido procesado exitosamente.'
@@ -237,6 +245,9 @@ class OrdersController < ApplicationController
     return false if !allowed(@order.order_type_id, 'edit')
     if @order.order_type_id == 5
     	render :template=>'counts/edit'
+    	return false
+    elsif @order.order_type_id == 6
+    	render :template=>'labels/edit'
     	return false
     end
   end
