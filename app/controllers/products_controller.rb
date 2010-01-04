@@ -150,8 +150,8 @@ class ProductsController < ApplicationController
   	if params[:product][:upc]==""
   		while Product.find_by_upc(User.current_user.location.next_bar_code)
   			User.current_user.location.next_bar_code=(User.current_user.location.next_bar_code.to_i + 1).to_s
-  			params[:product][:upc]=User.current_user.location.next_bar_code
 	  	end
+	  	params[:product][:upc]=User.current_user.location.next_bar_code
 	  end
     @product = Product.new(params[:product])
     respond_to do |format|
