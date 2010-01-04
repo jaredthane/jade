@@ -69,7 +69,13 @@
 						<%= h 'Haber' %>
 				  <% end %>
 				</div>
-				<div class="table_cell"><%= number_to_currency(account.balance) %></div>
+				<div class="table_cell">
+					<% if account.is_parent %>
+						N/A
+					<% else %>
+						<%= number_to_currency(account.balance) %>
+					<% end %>
+				</div>
 			</div>
 		<% end %>
 	</div>
