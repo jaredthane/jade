@@ -246,9 +246,10 @@ class Order < ActiveRecord::Base
 		  		d=Trans::FORWARD
 		  	else
 		  		description = 'Cancelacion de Venta'
+		  		
 		  		d=Trans::REVERSE
 		  	end
-			  sale=Trans.new(:user=>User.current_user,:created_at=>date, :description=> description, :direction=>d, :kind_id=>Trans::CONTRACT)
+			  sale=Trans.new(:user=>User.current_user,:created_at=>date, :description=> description, :direction=>Trans::FORWARD, :kind_id=>Trans::CONTRACT)
         sale.posts << Post.new(:account => self.client.cash_account,:created_at=>date, :value=>amount, :post_type_id =>Post::DEBIT)
         if tax != 0
         	sale.posts << Post.new(:account => self.vendor.tax_account,:created_at=>date, :value=>tax, :post_type_id =>Post::CREDIT)
