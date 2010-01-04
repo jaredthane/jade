@@ -328,7 +328,7 @@ class Line < ActiveRecord::Base
 		##logger.debug "self.order.void=#{self.order.void.to_s}"
 		if checkbox.to_i==1 and !self.order.void
 			if self.received == nil
-				self.received=Time.now
+				self.received=(User.current_user.today || Time.now)
 			end
 		else
 			if self.received != nil

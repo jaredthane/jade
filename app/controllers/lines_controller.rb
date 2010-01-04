@@ -34,7 +34,11 @@ class LinesController < ApplicationController
 #			end
 #		end
 		puts "add price3" + @additional.price.to_s
-		@additional.quantity = quantity
+		if order_type_id != '5'
+			@additional.quantity = quantity
+		else
+			@additional.quantity = 0
+		end
 		return @additional
 	end
 	def add_product_or_combo(list, upc, quantity, order_type_id, relative_price=1)

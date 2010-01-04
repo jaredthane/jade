@@ -15,16 +15,18 @@
 <div>
   <div class="table_header_row">
     <div class="table_cell_25">Numero</div>
-    <div class="table_cell_25">Esperando</div>
+    <div class="table_cell_25">Estado</div>
     <div class="table_cell_25">Última Acción</div>
     <div class="table_cell">User</div>
   </div>
 	<% for count in @orders %>
 		<div class="table_row">
-		  <div class="table_cell_25"><%= link_to count.id, count %></div>
-		  <div class="table_cell_25"><%= link_to awaiting(count), order_history_path(count)%></div> 
-		  <div class="table_cell_25"><%=h last_action(count) %></div> 
-		  <div class="table_cell"><%= link_to count.user.login, count.user %></div>
+		  <% if count.deleted %><div class="strikethrough"><% end %>
+				<div class="table_cell_25"><%= link_to count.id, count %></div>
+				<div class="table_cell_25"><%= link_to awaiting(count), order_history_path(count)%></div> 
+				<div class="table_cell_25"><%=h last_action(count) %></div> 
+				<div class="table_cell"><%= link_to count.user.login, count.user %></div>
+		  <% if count.deleted %></div><% end %>
 		</div>
 	<% end %>
 </div>

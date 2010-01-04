@@ -30,7 +30,7 @@ module OrdersHelper
 	end 
 	def awaiting(order)
 		if order.last_received == nil
-			if order.order_type_id==5
+			if order.order_type_id==Order::COUNT
 				return "En Proceso"
 			else
 				return "Esperando Entrega"
@@ -45,9 +45,17 @@ module OrdersHelper
 	end
 	def last_action(order)
 		if order.last_received == nil
-			return "Solicitado: " + order.created_at.to_date.to_s
+			if order.order_type_id==Order::COUNT
+				return "Creado: " + order.created_at.to_date.to_s
+			else
+				return "Solicitado: " + order.created_at.to_date.to_s
+			end
 		else
-			return "Entregado: " + order.last_received.to_date.to_s
+			if order.order_type_id==Order::COUNT				
+				return "Procesado: " + order.last_received.to_date.to_s
+			else
+				return "Entregado: " + order.last_received.to_date.to_s
+			end
 		end
 	end
 	
