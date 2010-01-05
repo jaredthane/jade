@@ -133,4 +133,9 @@ alter table orders add column prequel_id int(11);
 alter table products add column image_id int(11);
 alter table products add column image_content_type varchar(255);
 alter table products add image_file_name varchar(255);
- alter table products add image_file_size int(11);
+alter table products add image_file_size int(11);
+ 
+alter table orders add column scanned_recipt_id int(11);
+alter table orders add column scanned_recipt_content_type varchar(255);
+alter table orders add scanned_recipt_file_name varchar(255);
+alter table orders add scanned_recipt_file_size int(11);

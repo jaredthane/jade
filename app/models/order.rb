@@ -497,7 +497,7 @@ class Order < ActiveRecord::Base
 	def total_price_with_tax
 		total=0
 		if client
-			if client.entity_type_id == 2
+			if client.entity_type_id == 2 or self.order_type_id==Order::COUNT
 				for l in self.lines
 					total = (total||0) + (l.total_price||0)
 				end

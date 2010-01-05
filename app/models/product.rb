@@ -179,11 +179,14 @@ class Product < ActiveRecord::Base
 		end
 		return i.quantity
 	end
-	def update_cost(location_id = User.current_user.location_id)
-	    # #puts "Hello There <-------------------------------------------------------------"
-	    # #puts self.calculate_cost(location_id)
-	    self.cost = self.calculate_cost(location_id)
-	end
+#	def update_cost(location_id = User.current_user.location_id)
+#	    # #puts "Hello There <-------------------------------------------------------------"
+#	    # #puts self.calculate_cost(location_id)
+##	    self.cost = self.calculate_cost(location_id)
+#		debugger
+#		
+#		self.cost=self.default_cost
+#	end
 	def calculate_cost(location_id = User.current_user.location_id)
 		#puts "product.id=#{self.id.to_s}"
 		#puts "location_id=#{location_id.to_s}"
@@ -396,6 +399,7 @@ class Product < ActiveRecord::Base
 			i.cost=new_cost
 			i.save
 		end
+		debugger
 	end
 	def default_cost(site = User.current_user.location)
 		i = self.inventories.find_by_entity_id(site.id)
