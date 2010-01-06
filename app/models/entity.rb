@@ -34,6 +34,8 @@
 #
 #
 class Entity < ActiveRecord::Base
+	ANONIMO=3
+	ANULADO=9
   def to_param
     "#{id}-#{name.parameterize}"
   end

@@ -19,7 +19,6 @@ class PostsController < ApplicationController
     @till=(untranslate_month(params[:till])||Date.today)
     @site=current_user.location
     @sites=(params[:sites] || [])
-			debugger
 		if params[:pdf]=='1'
       @posts = Post.search(1, @from, @till, nil,params[:sites])
       params[:format] = 'pdf'

@@ -55,7 +55,6 @@ class Post < ActiveRecord::Base
 		end
 	end
 	def self.search(kind=nil, from=nil, till=nil, page=nil, sites=[User.current_user.location_id])
-	  debugger
 	  sites=[User.current_user.location_id] if !sites
 
 		ssites="(" + sites.collect{|a| a.to_s + ", "}.to_s.chop.chop + ")"
@@ -66,10 +65,12 @@ class Post < ActiveRecord::Base
 		c += " AND posts.created_at <= '#{(till + 1).to_s(:db)}'" if till
 		j =  "inner join trans on posts.trans_id=trans.id"
 		j += " inner join orders on orders.id=trans.order_id"
+		g = "group by"
+		s="posts.*, SUM(posts.value*posts.post_type_id) as sum"
 		if page
-		  paginate :per_page => 20, :page => page, :conditions => c, :order => 'receipt_number', :joins => j
+		  paginate :per_page => 20, :page => page, :conditions => c, :order => 'receipt_number', :joins => j, :select => s, :group => "order_id"
 		else
-		  find :all, :conditions =>c, :joins => j, :order=> 'receipt_number'
+		  find :all, :conditions =>c, :joins => j, :order=> 'receipt_number', :select => s, :group => "order_id"
 		end
 	end
 end
