@@ -16,3 +16,13 @@ function generate_orders(){
 	$("#generate").val(1);
 	$("#inventory_form").submit();
 }
+function AjaxPrint(url, data){
+	$.ajax({
+			type: 'POST',
+  		url: url,
+  		data: data,
+  		success: function(data){ 
+  			data.print();
+			},
+		});
+}

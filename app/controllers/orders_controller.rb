@@ -296,7 +296,12 @@ class OrdersController < ApplicationController
         generate_receipt(@order, true)
         
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
-        format.html { redirect_to(@order) }
+        format.html { 
+        	if SHOW_RECEIPT_ON_CREATE
+        		redirect_to(show_receipt_url(@order))
+        	else
+        		redirect_to(@order) 
+        	end }
         format.xml  { render :xml => @order, :status => :created, :location => @order }
       else
        	@order.lines.each {|l| logger.debug "LINES ERRORS" + l.errors.inspect}
