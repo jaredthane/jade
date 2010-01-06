@@ -47,6 +47,7 @@
 	<% end %>
   <dt><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></dt>
   <dt><%= link_to_function 'Imprimir', 'submit_report("date_range_form")', :class => 'action' %></dt>
+  <dt><%= link_to_function 'P', 'window.print();', :class => 'action' %></dt>
 <% end %>
 
 <% case @order_type_id 

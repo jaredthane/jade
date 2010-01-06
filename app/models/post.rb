@@ -55,7 +55,9 @@ class Post < ActiveRecord::Base
 		end
 	end
 	def self.search(kind=nil, from=nil, till=nil, page=nil, sites=[User.current_user.location_id])
+	  debugger
 	  sites=[User.current_user.location_id] if !sites
+
 		ssites="(" + sites.collect{|a| a.to_s + ", "}.to_s.chop.chop + ")"
 		c = "trans.direction=posts.post_type_id AND order_type_id=1"
 		c += " AND kind_id=#{kind}" if kind
