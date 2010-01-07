@@ -8,7 +8,7 @@ x = Object.new.extend(ActionView::Helpers::NumberHelper)
 count=0
 for l in @order.lines
 	for i in (1..l.quantity)
-		pdf.text l.product.name, :at => [pdf.bounds.left + (count % per_row) * 120 - 30, pdf.bounds.top + 7 - (count / per_row).to_i * 100] 
+		pdf.text truncate(l.product.name,20), :at => [pdf.bounds.left + (count % per_row) * 120 - 30, pdf.bounds.top + 7 - (count / per_row).to_i * 100] 
 		pic="#{RAILS_ROOT}/public/#{l.product.barcode_filename}"
 		pdf.image pic, :at => [pdf.bounds.left + (count % per_row) * 120 - 30 , pdf.bounds.top - (count / per_row).to_i * 100] 
 		count += 1

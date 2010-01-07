@@ -28,16 +28,16 @@ class Product < ActiveRecord::Base
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
-  has_many :prices
-  has_many :warranties
-  has_many :inventories
-	has_many :lines
+  has_many :prices, :dependent => :destroy
+  has_many :warranties, :dependent => :destroy
+  has_many :inventories, :dependent => :destroy
+	has_many :lines, :dependent => :destroy
 	belongs_to :revenue_account, :class_name => "Account", :foreign_key => 'revenue_account_id'
 
 	belongs_to :product_category
-	has_many :movements
-	has_many :serialized_products
-	has_many :requirements, :dependent => :destroy
+	has_many :movements, :dependent => :destroy
+	has_many :serialized_products, :dependent => :destroy
+	has_many :requirements, :dependent => :destroy, :dependent => :destroy
 	after_update :save_requirements
 	after_update :update_cost
 	after_create :update_cost
@@ -70,7 +70,7 @@ class Product < ActiveRecord::Base
 #		self.upc=self.upc.tr('^0-9a-zA-Z-_','')
 		require "open3"
 		system("rm 'public/barcodes/#{self.upc}.png'")
-		stdin, stdout, stderr = Open3.popen3("barcode -b '#{self.upc}' -e upc -o 'public/barcodes/#{self.upc}.ps'")
+		stdin, stdout, stderr = Open3.popen3("barcode -b '#{self.upc}' -g 80x40 -e upc -o 'public/barcodes/#{self.upc}.ps'")
 		err=(stderr.gets||'')
 		if err.include?("can't encode")
 			system("barcode -b '#{self.upc}' -o 'public/barcodes/#{self.upc}.ps'")
@@ -467,12 +467,13 @@ class Product < ActiveRecord::Base
 		         :limit => 10
 	end
   def self.find_single(search)
+  	
   	find :first,
 		         :conditions => ['(products.name = :search 
-		         							OR products.upc like :search)
+		         							OR products.upc = :search)
 		         							AND (prices.price_group_id = :price_group_id)
 		         							AND (prices.available = True)',
-		         							{:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
+		         							{:search => "#{search}", :price_group_id => User.current_user.current_price_group.id}],
 		         :order => 'name',
 		         :joins => 'inner join prices on prices.product_id=products.id',
 		         :group => 'products.id'

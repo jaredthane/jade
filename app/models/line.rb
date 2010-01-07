@@ -22,7 +22,7 @@ class Line < ActiveRecord::Base
 	validates_presence_of(:product, :message => " debe ser valido")
 	attr_accessor :client_name
 	belongs_to :serialized_product
-	has_many :movements
+	has_many :movements, :dependent => :destroy
 	attr_accessor :delete_me
 	before_save :pre_save
 	def pre_save

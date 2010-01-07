@@ -1,5 +1,5 @@
 <% content_for(:javascript) do %>
-  <%= javascript_include_tag "order_edit" %>
+  <%= javascript_include_tag "labels_edit" %>
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
@@ -12,7 +12,7 @@
 <%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 <%= f.hidden_field :client_id, :value => current_user.location.id %>
 <%= f.hidden_field :user_id, :value => current_user.id %>
-<%= f.hidden_field :order_type_id, :value => 6 %>
+<%= f.hidden_field :order_type_id, :id=> 'order_type_id', :value => 6 %>
 
 <p>
   <b>Descripcion</b><br />

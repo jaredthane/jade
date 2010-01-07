@@ -18,7 +18,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class PriceGroup < ActiveRecord::Base
-	has_many :prices
+	has_many :prices, :dependent => :destroy
 	belongs_to :entity
 	belongs_to :price_group_name
 	

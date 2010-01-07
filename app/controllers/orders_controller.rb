@@ -362,6 +362,11 @@ class OrdersController < ApplicationController
   
   def erase
     @order = Order.find(params[:id])
+  	if @order.order_type_id==Order::PURCHASE
+  		return false if !check_user(User::DELETE_PURCHASES,'No tiene los derechos suficientes para borrar compras')
+  	elsif @order.order_type_id==Order::PURCHASE
+  		return false if !check_user(User::DELETE_SALES,'No tiene los derechos suficientes para borrar ventas')
+  	end
     errors=false
     if !errors
     	errors=true if !@order.destroy

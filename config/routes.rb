@@ -5,6 +5,8 @@ ActionController::Routing::Routes.draw do |map|
   map.resource :session
   map.resources :payments
   map.resources :entries
+  map.corte_de_caja 'accounts/corte_de_caja', :controller => 'accounts', :action => 'corte_de_caja', :format=>'pdf'
+  map.create_shelf_labels 'products/shelf_labels', :controller => 'products', :action => 'shelf_labels', :shelf_labels=>1, :format=>'pdf'
   map.deactivate_product 'products/:id/deactivate', :controller => 'products', :action => 'deactivate'
   map.show_barcode 'products/:id/barcode', :controller => 'products', :action => 'show_barcode'
   map.destroy_payment 'payments/:id/destroy', :controller => 'payments', :action => 'destroy'
@@ -27,6 +29,9 @@ ActionController::Routing::Routes.draw do |map|
   map.create_history 'entities/:id/create_history', :controller => 'entities', :action => 'create_history', :filter => ' tipo:cliente'
   map.resources :posts
   map.resources :trans
+#  map.save
+#  map.resources :products, :member => { :short => :get, :toggle => :post }, :collection => { :sold => :get }
+  map.update_trans 'trans/:id/edit', :controller => 'trans', :action => 'update'
 #  map.consumidor_final_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>2, :format =>'pdf'
 #  map.credito_fiscal_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>5, :format =>'pdf'
   map.pay_off 'orders/:id/pay_off', :controller => 'orders', :action => 'pay_off'

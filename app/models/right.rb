@@ -18,7 +18,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class Right < ActiveRecord::Base
-	has_many :rights_roles
+	has_many :rights_roles, :dependent => :destroy
 	has_many :roles, :through => :rights_roles
 	CREATE_PAYMENTS_FOR_SALES = 1
 	EDIT_PAYMENTS_FOR_SALES = 2

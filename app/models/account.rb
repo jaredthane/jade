@@ -31,8 +31,8 @@ class Account < ActiveRecord::Base
   end
 	belongs_to :parent, :class_name => "Account", :foreign_key => "parent_id"
 	belongs_to :entity
-	has_many :posts
-	has_many :trans, :through => :posts
+	has_many :posts, :dependent => :destroy
+	has_many :trans, :through => :posts, :dependent => :destroy
 	CREDIT = -1
 	DEBIT = 1
 	def number_and_name
