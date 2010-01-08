@@ -27,28 +27,29 @@ class ProductsController < ApplicationController
     if params[:format]=='pdf'
     	case params[:scope]
 				when 'all'
-					@products = Product.search_all(@search)
+					# We are adding params[:category_id] in case they clicked on the print link from the products category page
+					@products = Product.search_all(@search, nil, params[:category_id]) 
 				when 'services'
-					@products = Product.search_services(@search)
+					@products = Product.search_services(@search, nil, params[:category_id])
 				when 'category'
-				@products = Product.search_categories(@search)
+				@products = Product.search_categories(@search, nil, params[:category_id])
 				when 'name'
-					@products = Product.search_name(@search)
+					@products = Product.search_name(@search, nil, params[:category_id])
 				else
-					@products = Product.search(@search)
+					@products = Product.search(@search, nil, params[:category_id])
 			end
 		else
 		  case params[:scope]
 				when 'all'
-					@products = Product.search_all(@search, (params[:page] || 1))
+					@products = Product.search_all(@search, (params[:page] || 1), params[:category_id])
 				when 'services'
-					@products = Product.search_services(@search, (params[:page] || 1))
+					@products = Product.search_services(@search, (params[:page] || 1), params[:category_id])
 				when 'category'
-				@products = Product.search_categories(@search, (params[:page] || 1))
+				@products = Product.search_categories(@search, (params[:page] || 1), params[:category_id])
 				when 'name'
-					@products = Product.search_name(@search, (params[:page] || 1))
+					@products = Product.search_name(@search, (params[:page] || 1), params[:category_id])
 				else
-					@products = Product.search(@search, (params[:page] || 1))
+					@products = Product.search(@search, (params[:page] || 1), params[:category_id])
 			end
 		end
     respond_to do |format|
@@ -60,7 +61,6 @@ class ProductsController < ApplicationController
 			  end
       }
       format.pdf {
-      	debugger
       	if params[:shelf_labels]
       		prawnto :prawn => {:template => 'shelf labels', :skip_page_creation=>true}
       	else

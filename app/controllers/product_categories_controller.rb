@@ -30,7 +30,7 @@ class ProductCategoriesController < ApplicationController
   end
   def show
   	@search=params[:search] || ""
-    @products = Product.find_all_by_product_category_id(params[:id])
+    @products = Product.search('', (params[:page]||1), params[:id])
 		@product_category = ProductCategory.find(params[:id])
     respond_to do |format|
       format.html # show.html.erb

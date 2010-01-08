@@ -248,7 +248,14 @@ class Line < ActiveRecord::Base
 	# Returns the amount of tax per unit
 	#################################################################################################
 	def tax	
-		return self.total_price * TAX
+		if self.order
+			if self.order.client
+				if self.order.client.entity_type_id == Entity::CREDITO_FISCAL
+					return self.total_price * TAX
+				end
+			end
+		end
+		return 0
 	end
 	###################################################################################
 	# Returns the total price of the products on this line

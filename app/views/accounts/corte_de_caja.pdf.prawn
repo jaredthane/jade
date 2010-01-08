@@ -28,7 +28,7 @@ def series_to_list(series)
 	return list
 end
 def show_orders_info(tipo, title)
-	c="payments.id is not null AND payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.created_at>= '#{@from.to_s(:db)}' AND orders.created_at< '#{(@till + 1).to_s(:db)}' AND entity_type_id=#{tipo} AND vendor_id = #{@site.id}"
+	c="payments.id is not null AND payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.created_at>= '#{@from.to_s(:db)}' AND orders.created_at< '#{(@till + 1).to_s(:db)}' AND entity_type_id=#{tipo} AND vendor_id = #{@site.id} AND orders.amount_paid>=orders.grand_total"
 	j="inner join entities on entities.id=client_id left join payments on orders.id=order_id"
 
 	series=Order.find(:all, :conditions=>c, :joins=>j, :order=>'receipt_number')
@@ -53,22 +53,22 @@ show_orders_info(Entity::CREDITO_FISCAL,"Comprobante de Credito Fiscal")
 
 
 ###################################################################################################
-# Notas de Abono
+# Notas de Abono TODO
 #################################################################################################
-c="payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.created_at>= '#{@from.to_s(:db)}' AND orders.created_at< '#{(@till + 1).to_s(:db)}' AND vendor_id = #{@site.id}"
-j="inner join payments on orders.id=order_id"
-series = Order.find(:all, :conditions=>c, :joins=>j)
-sum=series.inject(0) { |result, element| result + element.grand_total }
+#c="payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.created_at>= '#{@from.to_s(:db)}' AND orders.created_at< '#{(@till + 1).to_s(:db)}' AND vendor_id = #{@site.id}"
+#j="inner join payments on orders.id=order_id"
+#series = Payment.find(:all, :conditions=>c, :joins=>j)
+#sum=series.inject(0) { |result, element| result + element.grand_total }
 
-first=true
-@box << ["Notas de Abono","Total:",@x.number_to_currency(sum)]
-for o in series
-	@box << ["",o.receipt_number,@x.number_to_currency(o.grand_total)]
-end
+#first=true
+#@box << ["Notas de Abono","Total:",@x.number_to_currency(sum)]
+#for o in series
+#	@box << ["",o.receipt_number,@x.number_to_currency(o.grand_total)]
+#end
 ###################################################################################################
 # Facturas Credito
 #################################################################################################
-c="payments.id is null AND orders.created_at>= '#{@from.to_s(:db)}' AND orders.created_at< '#{(@till + 1).to_s(:db)}' AND vendor_id = #{@site.id}"
+c="orders.created_at>= '#{@from.to_s(:db)}' AND orders.created_at< '#{(@till + 1).to_s(:db)}' AND vendor_id = #{@site.id} AND orders.amount_paid<orders.grand_total"
 j="left join payments on orders.id=order_id"
 series = Order.find(:all, :conditions=>c, :joins=>j, :group=>'orders.id')
 sum=series.inject(0) { |result, element| result + element.grand_total }
@@ -80,6 +80,7 @@ for o in series
 end
 ##################################################################################################
 # Pagos de Facturas por Cobrar
+# (Orders made within the period that have not been fully paid)
 #################################################################################################
 c="payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.created_at< '#{@from.to_s(:db)}' AND vendor_id = #{@site.id}"
 j="inner join payments on orders.id=order_id"
@@ -104,6 +105,14 @@ end
 #		@box << ["",order.receipt_number,order.grand_total]
 #	end
 #end
+
+##################################################################################################
+# autoconsumos
+#################################################################################################
+
+##################################################################################################
+# now print it out
+#################################################################################################
 a=(pdf.bounds.width*0.6)
 b=(pdf.bounds.width*0.2)
 pdf.table(@box,

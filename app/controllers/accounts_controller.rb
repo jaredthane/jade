@@ -37,6 +37,7 @@ class AccountsController < ApplicationController
 		@till=Date.today
 		respond_to do |format|
 		  format.pdf
+		  format.html
 		end
 	end
   # GET /accounts/1

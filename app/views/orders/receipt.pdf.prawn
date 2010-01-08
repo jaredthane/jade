@@ -113,6 +113,7 @@ for copy in ['cliente', 'vendor', 'government'] do
 						:align => { 0 => :center, 1 => :left, 2 => :center, 3 => :center },
 						:headers => ['Cantidad', 'Producto', 'Unidad','Total'],
 						:border_style => :underline_header,
+						:vertical_padding => 1,
 						:column_widths => { 0 => 0.13*width, 1 => 0.6*width, 2 => 0.13*width, 3 => 0.13*width})
 			else
 				pdf.font_size = 10
