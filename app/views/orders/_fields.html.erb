@@ -77,6 +77,12 @@
 				<b>Anulado</b>
 				<%= f.check_box :void, :class=> 'field'%>
 			</p>
+			<% if AUTO_PAY_OFF and mode='new' %>
+				<p>
+					<b>Aceptar Pago Inmediatamente</b>
+					<%= check_box_tag :immediate_payment,1, :class=> 'field'%>
+				</p>
+			<% end %>
 	<%= f.hidden_field :user_id, :value => current_user.id %>
 </div>
 

@@ -292,7 +292,7 @@ class OrdersController < ApplicationController
    respond_to do |format|
       if !errors
       	@order.save
-      	@order.pay_off if AUTO_PAY_OFF and @order.order_type_id == Order::SALE
+      	@order.pay_off if params[:immediate_payment]=='1' and @order.order_type_id == Order::SALE
         generate_receipt(@order, true)
         
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'

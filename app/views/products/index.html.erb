@@ -13,7 +13,7 @@
 	<% if current_user.has_right(User::CREATE_COUNTS) %>
 		<dt><%= link_to "Hacer Cuenta Fisica", create_count_from_list_url(:search=>@search), :class => 'action' %></dt>
 	<% end %>
-	<dt><%= link_to "Hacer Etiquetas", create_shelf_labels_url(:search=>@search), :class => 'action' %></dt>
+	
 	<dt><%= link_to 'Movimientos', movements_url, :class => 'action' %></dt>
 <% end %>
 

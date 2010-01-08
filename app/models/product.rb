@@ -69,7 +69,7 @@ class Product < ActiveRecord::Base
 	def create_barcode
 #		self.upc=self.upc.tr('^0-9a-zA-Z-_','')
 		require "open3"
-		system("rm 'public/barcodes/#{self.upc}.png'")
+		system("rm 'public/barcodes/#{self.upc}.jpg'")
 		stdin, stdout, stderr = Open3.popen3("barcode -b '#{self.upc}' -g 80x40 -e upc -o 'public/barcodes/#{self.upc}.ps'")
 		err=(stderr.gets||'')
 		if err.include?("can't encode")
