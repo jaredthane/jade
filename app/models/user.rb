@@ -31,8 +31,7 @@ class User < ActiveRecord::Base
 	belongs_to :cash_account, :class_name => "Account", :foreign_key => 'cash_account_id'
 	belongs_to :revenue_account, :class_name => "Account", :foreign_key => 'revenue_account_id'
 	belongs_to :personal_account, :class_name => "Account", :foreign_key => 'personal_account_id'
-	has_many :receipts
-	has_many :roles_users
+	has_many :roles_users, :dependent => :destroy
 	has_many :roles, :through => :roles_users
 #	has_and_belongs_to_many :roles
   validates_presence_of     :login

@@ -20,34 +20,36 @@ class ProductsController < ApplicationController
   # GET /products.xml
 	before_filter :login_required
 	#before_filter {privilege_required('sales')}
-	access_control [:new, :create, :update, :edit, :bulk_edit, :bulk_update, :clear_quantities, :recommend_quantities] => '(Gerente | Admin | Comprador)' 
-	access_control [:update_prices, :edit_prices, :update_product] => '(Gerente | Admin)' 
-	access_control [:destroy] => '(Admin)'
-  def index
+	def index
     #@products = Product.find(:all)
     @search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
     params[:scope]='name' if params[:format]=='js'
     if params[:format]=='pdf'
     	case params[:scope]
 				when 'all'
-					@products = Product.search_all(@search)
+					# We are adding params[:category_id] in case they clicked on the print link from the products category page
+					@products = Product.search_all(@search, nil, params[:category_id]) 
 				when 'services'
-					@products = Product.search_services(@search)
+					@products = Product.search_services(@search, nil, params[:category_id])
+				when 'category'
+				@products = Product.search_categories(@search, nil, params[:category_id])
 				when 'name'
-					@products = Product.search_name(@search)
+					@products = Product.search_name(@search, nil, params[:category_id])
 				else
-					@products = Product.search(@search)
+					@products = Product.search(@search, nil, params[:category_id])
 			end
 		else
 		  case params[:scope]
 				when 'all'
-					@products = Product.search_all(@search, (params[:page] || 1))
+					@products = Product.search_all(@search, (params[:page] || 1), params[:category_id])
 				when 'services'
-					@products = Product.search_services(@search, (params[:page] || 1))
+					@products = Product.search_services(@search, (params[:page] || 1), params[:category_id])
+				when 'category'
+				@products = Product.search_categories(@search, (params[:page] || 1), params[:category_id])
 				when 'name'
-					@products = Product.search_name(@search, (params[:page] || 1))
+					@products = Product.search_name(@search, (params[:page] || 1), params[:category_id])
 				else
-					@products = Product.search(@search, (params[:page] || 1))
+					@products = Product.search(@search, (params[:page] || 1), params[:category_id])
 			end
 		end
     respond_to do |format|
@@ -58,9 +60,32 @@ class ProductsController < ApplicationController
 			    return false
 			  end
       }
-      format.xml
-      format.pdf {prawnto :prawn => {:skip_page_creation=>true}}
+      format.pdf {
+      	if params[:shelf_labels]
+      		prawnto :prawn => {:template => 'shelf labels', :skip_page_creation=>true}
+      	else
+      		prawnto :prawn => {:skip_page_creation=>true}
+      	end
+      }
       format.js
+    end
+  end
+  def shelf_labels
+  	@search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
+  	case params[:scope]
+			when 'all'
+				@products = Product.search_all(@search)
+			when 'services'
+				@products = Product.search_services(@search)
+			when 'category'
+				@products = Product.search_categories(@search)
+			when 'name'
+				@products = Product.search_name(@search)
+			else
+				@products = Product.search(@search)
+		end
+		respond_to do |format|
+      format.pdf {prawnto :prawn => {:skip_page_creation=>true} }
     end
   end
 #  def deactivate

@@ -1,0 +1,43 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+  <%= javascript_include_tag "trans_edit" %>
+<% end %>
+<% content_for :actions do %>
+	<dt><%= link_to_function 'Guardar', 'submit("trans_form")', :class => 'action' %></dt>
+	<% if mode == 'edit' %>
+		<dt><%= link_to 'Borrar',tran_url(@trans), :confirm => 'Esta seguro que desea borrar esta transaccion?', :method => :delete, :class => 'action' %></dt>
+	<% end %>
+<% end %>
+<% content_for :title do %><%= heading %><% end %>
+<%= error_messages_for :trans %>
+<% form_for(update_trans_url(@trans), :html => {:id => 'trans_form' }) do |f| %>
+<br />
+	<div class="column2-unit-left">
+		<p>
+			<b>Descripción</b>
+			<%= f.text_field :comments, :class => 'field' %>
+		</p>
+	</div>
+	<div class="column2-unit-right">
+		<p>
+	    <b>Fecha de Pedido</b><br />
+	    <%= f.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>
+    </p>
+	</div>
+	<hr class="clear-contentunit" />
+	<h1>Cuentas</h1>
+	<div>
+	  <div class="table_header_row">
+		  <div class="table_cell_25">Cuenta</div>
+		  <div class="table_cell_25">Tipo</div>
+		  <div class="table_cell_25">Valor</div>
+		  <div class="table_cell">Acciones</div>
+	  </div>
+	<div id="posts">
+		<%= render :partial => 'post', :collection => @trans.posts %>
+	</div>
+	<div id="posts_errors"></div>
+	<%= text_field_tag(:account_search, '', :html_options=>{ :id => 'account_search_field', :class => 'field'}) %> <%= link_to_function 'Añadir otra cuenta', 'DoAjaxRequest()', :class => 'action' %>
+
+<% end %>
+

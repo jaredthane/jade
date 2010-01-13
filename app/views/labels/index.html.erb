@@ -1,6 +1,6 @@
 <% content_for :title do %>Lista de Hojas de Etiquetas<% end %>
 <% content_for :actions do %>
-	<dt><%= link_to 'Nueva Cuenta Fisica', new_count_path, :class => 'action' %></dt>
+	<dt><%= link_to 'Nueva Hoja de Etiquetas', new_label_path, :class => 'action' %></dt>
 <% end %>
 <br /> <%= will_paginate @orders, :class => 'pagination' %>
 <div>

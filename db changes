@@ -139,3 +139,4 @@ alter table orders add column scanned_recipt_id int(11);
 alter table orders add column scanned_recipt_content_type varchar(255);
 alter table orders add scanned_recipt_file_name varchar(255);
 alter table orders add scanned_recipt_file_size int(11);
+

@@ -18,7 +18,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class Role < ActiveRecord::Base
-	has_many :roles_users
-	has_many :rights_roles
+	has_many :roles_users, :dependent => :destroy
+	has_many :rights_roles, :dependent => :destroy
 	has_many :rights, :through => :rights_roles
 end

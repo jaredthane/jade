@@ -1,0 +1,27 @@
+<% content_for :title do %>Lista de Transacciones<% end %>
+<% content_for :actions do %>
+	<% if current_user.has_right(User::CHANGE_TRANSACTIONS) %>
+		<dt><%= link_to 'Nueva Transaccion', new_tran_path, :class => 'action' %></dt>
+	<% end %>
+<% end %>
+<br />
+<%= will_paginate @trans, :class => 'pagination' %>
+<div>
+  <div class="table_header_row">
+		  <div class="table_cell_25">Numero</div>
+		  <div class="table_cell_25">Fecha</div>
+		  <div class="table_cell_25">Valor</div>
+		  <div class="table_cell">Usuario</div>
+  </div>
+
+
+<% for t in @trans %>
+  <div class="table_row">
+	  <div class="table_cell_25"><%= link_to t.id, tran_url(t) %></div>
+	  <div class="table_cell_25"><%= h t.created_at.to_date %></div>
+	  <div class="table_cell_25"></div>
+	  <div class="table_cell"><%= link_to t.user.name, t.user %></div>
+	</div>
+<% end %>
+</div>
+<%= will_paginate @trans, :class => 'pagination' %>

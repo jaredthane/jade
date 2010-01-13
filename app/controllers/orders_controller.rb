@@ -292,11 +292,16 @@ class OrdersController < ApplicationController
    respond_to do |format|
       if !errors
       	@order.save
-      	@order.pay_off if AUTO_PAY_OFF and @order.order_type_id == Order::SALE
+      	@order.pay_off if params[:immediate_payment]=='1' and @order.order_type_id == Order::SALE
         generate_receipt(@order, true)
         
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
-        format.html { redirect_to(@order) }
+        format.html { 
+        	if SHOW_RECEIPT_ON_CREATE
+        		redirect_to(show_receipt_url(@order))
+        	else
+        		redirect_to(@order) 
+        	end }
         format.xml  { render :xml => @order, :status => :created, :location => @order }
       else
        	@order.lines.each {|l| logger.debug "LINES ERRORS" + l.errors.inspect}
@@ -357,6 +362,11 @@ class OrdersController < ApplicationController
   
   def erase
     @order = Order.find(params[:id])
+  	if @order.order_type_id==Order::PURCHASE
+  		return false if !check_user(User::DELETE_PURCHASES,'No tiene los derechos suficientes para borrar compras')
+  	elsif @order.order_type_id==Order::PURCHASE
+  		return false if !check_user(User::DELETE_SALES,'No tiene los derechos suficientes para borrar ventas')
+  	end
     errors=false
     if !errors
     	errors=true if !@order.destroy

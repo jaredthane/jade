@@ -23,7 +23,7 @@ class Trans < ActiveRecord::Base
 	CONTRACT = 1
 	INVENTORY = 2
 	MONEY = 3
-  has_many :posts
+  has_many :posts, :dependent => :destroy
   has_many :entities , :through => :posts
 	belongs_to :order
 	belongs_to :payment
@@ -78,5 +78,18 @@ class Trans < ActiveRecord::Base
 		for post in posts
 			return post if post.account_id==id
 		end
+	end
+	def self.search(search, page=nil)
+		c = "description like '%#{search}%' OR accounts.name like '%#{search}%'"
+		if search.to_s !=''
+			c+=" OR trans.id = #{search} OR account_id = #{search}"
+		end
+		o = 'created_at'
+		j='inner join posts on trans_id=trans.id inner join accounts on account_id=accounts.id'
+		if page
+  		paginate :per_page => 20, :page => page, :conditions => c, :order => o, :joins=>j, :group=>'trans.id'
+  	else
+  		find :all, :conditions => c, :order => o, :joins=>j, :group=>'trans.id'
+  	end
 	end
 end

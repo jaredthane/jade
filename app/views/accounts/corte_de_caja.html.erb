@@ -1,0 +1,29 @@
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :title do %>Corte de Caja en <%= current_user.location.name %><% end %>
+<% content_for :actions do %>
+	<dt><%= link_to 'Imprimir', sales_representatives_report_path(:till=>@till, :from=>@from) %></dt>
+	<dt> <%= link_to 'Lista de Facturas', sales_url, :class => 'action' %>  </dt>
+<% end %>
+<script type="text/javascript">
+	$(document).ready(function(){
+	  //Setup	date picker
+	  $.datepicker.regional['en']
+	  $(".datepicker").datepicker();
+	});
+</script>
+<% form_tag sales_representatives_path, :method =>'get', :id => 'date_form' do %>
+	<div class="column2-unit-left">
+	  <p>
+	  	<b>Desde</b><br />
+			<%= text_field_tag 'from', @from.to_s(:default), :class=> 'field datepicker', :id => 'from',:style=>'width:168px;' %>
+	  </p>
+	</div>
+	<div class="column2-unit-right">
+		<p>
+			<b>Hasta</b><br />
+			<%= text_field_tag 'till', @till.to_s(:default), :class=> 'field datepicker', :id => 'till',:style=>'width:168px;' %>
+		</p>
+	</div>
+<% end %>

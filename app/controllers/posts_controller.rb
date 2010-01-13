@@ -2,11 +2,13 @@ class PostsController < ApplicationController
 # GET /warranties/new
   # GET /warranties/new.xml
   def new
-  	@post=Post.new(:trans_id=>params[:trans_id])
-    @accounts ={} 
-    for a in Account.find(:all)
-      @accounts[a.number.to_s+' '+a.name]=a.id
-    end
+  	a= params[:account_search] ? Account.search(params[:account_search], 'child')[0] : nil
+  	#debugger
+  	@post=Post.new(:trans_id=>params[:trans_id], :account=>a)
+#    @accounts ={} 
+#    for a in Account.find(:all)
+#      @accounts[a.number.to_s+' '+a.name]=a.id
+#    end
     respond_to do |format|
       format.html # new.html.erb
       format.js { render :partial => 'trans/post', :object => @post}
@@ -20,7 +22,7 @@ class PostsController < ApplicationController
     @site=current_user.location
     @sites=(params[:sites] || [])
 		if params[:pdf]=='1'
-      @posts = Post.search(1, @from, @till)
+      @posts = Post.search(1, @from, @till, nil,params[:sites])
       params[:format] = 'pdf'
     else
       @posts = Post.search(1, @from, @till, (params[:page]||1), params[:sites])

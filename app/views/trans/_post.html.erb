@@ -4,7 +4,8 @@
 	<% prefix = post.new_record? ? 'new_posts' : 'existing_posts' %>
   <% fields_for "#{prefix}[]", post do |post_form| %>
 		<div class="table_row">
-				<div class="table_cell_25"><%= post_form.collection_select(:account_id, get_child_accounts, :id, :number_and_name) %></div>
+				<div class="table_cell_25"><%= h @post.account.name %></div>
+					<%= post_form.hidden_field :account_id, :value => post.account.id %>
 				
 				<div class="table_cell_25"><%= post_form.select( :post_type_id, { "Debito" => "1", "Credito" => "-1"}) %></div>
 

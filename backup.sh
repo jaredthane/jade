@@ -1,7 +1,7 @@
 #!/bin/bash
 TIMESTAMP=`date +%m%d%Y`
 # edit the following 6 lines
-BACKUP_FOLDER=/srv/jade/backup
+BACKUP_FOLDER=/srv/jade/public/backup
 MYSQL_USER=root
 MYSQL_PASSWORD=YOURMYSQLPASSWORD
 DBNAME=Jade

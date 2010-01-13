@@ -27,24 +27,36 @@ for copy in ['cliente', 'vendor'] do
 					pdf.text (client.nit||''), :at=>[pdf.bounds.left + 225,pdf.bounds.bottom+317]
 				end #if vendor.office_phone!=''
 			end
-			if client.home_phone!=''
-				pdf.text "Fijo: " + (client.home_phone_number||'')
-      end #if vendor.home_phone!=''
-		end
-		data=[]
-		pdf.font_size = 9
-		total=0
-		iva=0
-		line=0
-		width=pdf.bounds.width
-		for l in @order.lines
-			x = Object.new.extend(ActionView::Helpers::NumberHelper)
-			if l.product.serialized and l.serialized_product
-				#data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x.number_to_currency(l.price), x.number_to_currency(l.total_price)]
-        pdf.text l.quantity,:at=>[pdf.bounds.left + 35, pdf.bounds.bottom + 235 - (line*10)]
-        pdf.text l.product.name + " - " + l.serialized_product.serial_number,:at=>[pdf.bounds.left + 75, pdf.bounds.bottom + 235 - (line*10)]
-        pdf.text x.number_to_currency(l.price),:at=>[pdf.bounds.left + 435, pdf.bounds.bottom + 235 - (line*10)]
-        pdf.text x.number_to_currency(l.total_price),:at=>[pdf.bounds.left + 510, pdf.bounds.bottom + 235 - (line*10)]
+			# Poner tabla de productos
+			pdf.move_up 10
+			data=[]
+			pdf.font_size = 9
+			total=0
+			iva=0
+			width=pdf.bounds.width
+			for l in @order.lines
+				x = Object.new.extend(ActionView::Helpers::NumberHelper)
+				if l.product.serialized and l.serialized_product
+						data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x=(l.price), x.number_to_currency(l.total_price)]
+				else
+					data << [l.quantity.to_s, l.product.name, x.number_to_currency(l.price),  x.number_to_currency(l.total_price)]
+				end
+				total += l.total_price
+				iva+=l.tax
+			end  
+			data << ["", "", "Suma", number_to_currency(total)]
+			data << ["", "", "IVA", number_to_currency(iva)]
+			data << ["", "", "Total", number_to_currency(total+iva)]
+			if data.length>0
+				pdf.table(data,
+						:at=>[0,pdf.cursor],
+						:font_size => 8,
+						:align => { 0 => :center, 1 => :left, 2 => :center, 3 => :center },
+						:headers => ['Cantidad', 'Producto', 'Unidad','Total'],
+						:border_style => :underline_header,
+						:vertical_padding => 1,
+						:column_widths => { 0 => 0.13*width, 1 => 0.6*width, 2 => 0.13*width, 3 => 0.13*width})
+
 			else
 				#data << [l.quantity.to_s, l.product.name, x.number_to_currency(l.price),  x.number_to_currency(l.total_price)]
         pdf.text l.quantity,:at=>[pdf.bounds.left + 35, pdf.bounds.bottom + 230 - (line*10)]

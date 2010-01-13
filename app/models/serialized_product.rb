@@ -18,8 +18,8 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class SerializedProduct < ActiveRecord::Base
-	has_many :lines
-	has_many :movements
+	has_many :lines, :dependent => :destroy
+	has_many :movements, :dependent => :destroy
 	belongs_to :product
 	def location
 #		logger.debug "=-=======================================-="

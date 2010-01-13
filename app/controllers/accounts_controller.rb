@@ -22,7 +22,7 @@ class AccountsController < ApplicationController
   # GET /accounts.xml
   def index
 #  	logger.debug "!check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')=#{!check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas').to_s}"
-  	return false if !check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver las cuentas')
+  	return false if !check_user(User::VIEW_SALES,'No tiene los derechos suficientes para ver las cuentas')
  		search=((params[:search]||'') + ' ' + (params[:q]||'') ).strip
 		@accounts = Account.search(search, params[:filter], (params[:page]||1))
     respond_to do |format|
@@ -30,7 +30,16 @@ class AccountsController < ApplicationController
       format.js
     end
   end
-
+	def corte_de_caja
+		return false if !check_user(User::VIEW_SALES,'No tiene los derechos suficientes para ver el corte de caja')
+		@site=Entity.find User.current_user.location_id
+		@from=Date.today
+		@till=Date.today
+		respond_to do |format|
+		  format.pdf
+		  format.html
+		end
+	end
   # GET /accounts/1
   # GET /accounts/1.xml
   def show
