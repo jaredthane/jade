@@ -1,0 +1,12 @@
+<% form_for @o do |parent_form| %>
+	<div id="consumption_lines">
+	  <% parent_form.fields_for :consumption_lines do |child_form| %>
+			<%= render :partial => "line", :locals => {:child_form=>child_form} %>
+	  <% end %>
+	</div>
+	<div id="production_lines">
+	  <% parent_form.fields_for :production_lines do |child_form| %>
+			<%= render :partial => "line", :locals => {:child_form=>child_form} %>
+	  <% end %>
+	</div>
+<% end %>

@@ -1,0 +1,114 @@
+<% content_for :title do %>
+	<% if @production_order.is_model %>
+		Proceso de Produccion <%=h @production_order.name %> - #<%=h @production_order.id %>
+	<% else %>
+		Orden de Produccion <%=h @production_order.name %> - #<%=h @production_order.id %>
+	<% end %>
+<% end %>
+<% content_for :actions do %>
+	<% if current_user.has_right(User::CREATE_PRODUCTION_PROCESSES) %>
+		<dt><%= link_to 'Nuevo proceso', new_production_order_path  %></dt>
+	<% end %>
+	<% if @production_order.is_model %>
+		<% if current_user.has_right(User::CHANGE_PRODUCTION_PROCESSES)  %>
+			<dt><%= link_to 'Cambiar', edit_production_order_path(@production_order) %> </dt>
+		<% end %>
+		<% if current_user.has_right(User::CREATE_PRODUCTION_ORDERS)  %>
+			<dt><%= link_to 'Crear Orden', new_production_path(@production_order) %> </dt>
+		<% end %>
+		<% if current_user.has_right(User::DELETE_PRODUCTION_PROCESSES)  %>
+			<dt><%= link_to 'Remover', @production_order, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+		<% end %>
+	<% else %>
+		<% if !@production_order.started_at %>
+			<% if current_user.has_right(User::START_PRODUCTION_ORDERS)  %>
+				<dt><%= link_to 'Iniciar', start_production_path(@production_order) %> </dt>
+			<% end %>			
+		<% elsif !@production_order.finished_at %>
+			<% if current_user.has_right(User::FINISH_PRODUCTION_ORDERS)  %>
+				<dt><%= link_to 'Terminar', finish_production_path(@production_order) %> </dt>
+			<% end %>
+		<% end %>
+		<% if current_user.has_right(User::CHANGE_PRODUCTION_ORDERS)  %>
+			<dt><%= link_to 'Cambiar', edit_production_order_path(@production_order) %> </dt>
+		<% end %>
+		<% if current_user.has_right(User::DELETE_PRODUCTION_ORDERS)  %>
+			<dt><%= link_to 'Remover', @production_order, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+		<% end %>
+	<% end %>
+	<% if current_user.has_right(User::VIEW_PRODUCTION_PROCESSES)  %>
+		<dt><%= link_to 'Lista de Procesos', production_orders_path(:filter=>'processes'), :class =>'action' %></dt>
+	<% end %>
+	<% if current_user.has_right(User::VIEW_PRODUCTION_ORDERS)  %>
+ 	 <dt><%= link_to 'Lista de Ordenes', production_orders_path(:filter=>'orders'), :class =>'action' %></dt>
+ 	<% end %>
+<% end %>
+<div class="column2-unit-left">
+	<p>
+		<b>Nombre:</b>
+		<%= h @production_order.name %>
+	</p>
+
+</div>
+<div class="column2-unit-right">
+	<% if !@production_order.is_model %>
+		<p>
+			<b>Planeado:</b>
+			<%= h @production_order.created_at.to_date %> <%= link_to @production_order.created_by.name, @production_order.created_by %>
+		</p>
+		<% if @production_order.started_at %>
+			<p>
+				<b>Iniciado:</b>
+				<%= h @production_order.started_at.to_date %> <%= link_to @production_order.started_by.name, @production_order.started_by %>
+			</p>
+		<% end %>
+		<% if @production_order.finished_at %>
+			<p>
+				<b>Terminado:</b>
+				<%= h @production_order.finished_at.to_date %> <%= link_to @production_order.finished_by.name, @production_order.finished_by %>
+			</p>
+		<% end %>
+	<% else %>
+		<p>
+			<b>Creado:</b>
+			<%= h @production_order.created_at.to_date %> <%= link_to @production_order.created_by.name, @production_order.created_by %>
+		</p>
+	<% end %>
+</div>
+<hr class="clear-contentunit" />
+  <p><b>Productos que se ocupan:</b></p>
+  <div>
+		<div class="table_header_row">
+		  <div class="table_cell_25">Numero</div>
+		  <div class="table_cell_25">Nombre</div>
+		  <div class="table_cell_25">Cantidad</div>
+		  <div class="table_cell">Costo</div>
+		</div>
+		<% for line in @production_order.consumption_lines %>
+			<div class="table_row">
+				<% p=line.product %>
+				<div class="table_cell_25"><%= link_to p.upc, p %></div>
+				<div class="table_cell_25"><%= link_to p.name, p %></div>
+				<div class="table_cell_25"><%= h line.quantity %></div>
+				<div class="table_cell"><%= h number_to_currency((p.cost||0).to_f * line.quantity) %></div>
+			</div>
+		<% end %>
+	</div>
+  <p><b>Productos que se producen:</b></p>
+  <div>
+		<div class="table_header_row">
+		  <div class="table_cell_25">Numero</div>
+		  <div class="table_cell_25">Nombre</div>
+		  <div class="table_cell_25">Cantidad</div>
+		  <div class="table_cell">Costo</div>
+		</div>
+		<% for line in @production_order.production_lines %>
+			<div class="table_row">
+				<% p=line.product %>
+				<div class="table_cell_25"><%= link_to p.upc, p %></div>
+				<div class="table_cell_25"><%= link_to p.name, p %></div>
+				<div class="table_cell_25"><%= h line.quantity %></div>
+				<div class="table_cell"><%= h number_to_currency((p.cost||0).to_f * line.quantity) %></div>
+			</div>
+		<% end %>
+	</div>

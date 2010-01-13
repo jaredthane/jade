@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100103075955) do
+ActiveRecord::Schema.define(:version => 20100113052610) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -36,7 +36,15 @@ ActiveRecord::Schema.define(:version => 20100103075955) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "combo_line_type_id"
-    t.integer  "quantity"
+    t.integer  "quantity_id"
+  end
+
+  create_table "default_branches", :id => false, :force => true do |t|
+    t.integer "entity_id"
+    t.integer "entity_type_id"
+    t.integer "account_id"
+    t.string  "prefix",         :limit => 32, :default => ""
+    t.string  "suffix",         :limit => 32, :default => ""
   end
 
   create_table "entities", :force => true do |t|
@@ -104,6 +112,25 @@ ActiveRecord::Schema.define(:version => 20100103075955) do
 
   add_index "inventories", ["entity_id"], :name => "entity_id"
   add_index "inventories", ["product_id"], :name => "product_id"
+
+  create_table "items", :force => true do |t|
+    t.string   "name"
+    t.text     "description"
+    t.integer  "vendor_id"
+    t.decimal  "oldcost",               :precision => 8, :scale => 2
+    t.string   "upc"
+    t.integer  "unit_id"
+    t.string   "location"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "model"
+    t.boolean  "serialized"
+    t.integer  "serialized_product_id"
+    t.integer  "product_type_id"
+    t.integer  "product_category_id"
+    t.integer  "blocked_by_count",                                    :default => 0
+    t.integer  "revenue_account_id"
+  end
 
   create_table "lines", :force => true do |t|
     t.integer  "product_id"
@@ -180,20 +207,25 @@ ActiveRecord::Schema.define(:version => 20100103075955) do
     t.decimal  "grand_total",                               :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "amount_paid",                               :precision => 8, :scale => 2, :default => 0.0
     t.boolean  "d",                                                                       :default => false
-    t.integer  "purchase_receipt_number"
+    t.string   "receipt_number",               :limit => 8
     t.integer  "next_order_id"
     t.string   "receipt_filename"
     t.datetime "receipt_generated"
-    t.string   "receipt_number",               :limit => 8
-    t.string   "scanned_receipt_file_name"
+    t.integer  "sequel_id"
+    t.integer  "prequel_id"
+    t.integer  "scanned_receipt_id"
     t.string   "scanned_receipt_content_type"
+    t.string   "scanned_receipt_file_name"
     t.integer  "scanned_receipt_file_size"
   end
 
   add_index "orders", ["client_id"], :name => "client_id"
+  add_index "orders", ["client_id"], :name => "client_id_2"
   add_index "orders", ["created_at"], :name => "created_at"
+  add_index "orders", ["created_at"], :name => "created_at_2"
   add_index "orders", ["receipt_number"], :name => "receipt_number"
   add_index "orders", ["vendor_id"], :name => "vendor_id"
+  add_index "orders", ["vendor_id"], :name => "vendor_id_2"
 
   create_table "payment_methods", :force => true do |t|
     t.string "name"
@@ -210,7 +242,10 @@ ActiveRecord::Schema.define(:version => 20100103075955) do
   end
 
   add_index "payments", ["created_at"], :name => "created_at"
+  add_index "payments", ["created_at"], :name => "created_at_2"
+  add_index "payments", ["created_at"], :name => "created_at_3"
   add_index "payments", ["order_id"], :name => "order_id"
+  add_index "payments", ["order_id"], :name => "order_id_2"
 
   create_table "people", :force => true do |t|
     t.string   "home_phone",   :limit => 8,  :default => ""
@@ -245,10 +280,11 @@ ActiveRecord::Schema.define(:version => 20100103075955) do
 
   create_table "posts", :force => true do |t|
     t.integer  "post_type_id"
-    t.decimal  "value",        :precision => 8, :scale => 2
+    t.decimal  "value",          :precision => 8, :scale => 2
     t.integer  "account_id"
     t.integer  "trans_id"
-    t.decimal  "balance",      :precision => 8, :scale => 2
+    t.decimal  "balance",        :precision => 8, :scale => 2
+    t.integer  "transaction_id"
     t.datetime "created_at"
   end
 
@@ -297,6 +333,26 @@ ActiveRecord::Schema.define(:version => 20100103075955) do
     t.string "name"
   end
 
+  create_table "production_order_lines", :force => true do |t|
+    t.integer "production_order_id"
+    t.integer "quantity"
+    t.integer "product_id"
+    t.boolean "is_output"
+    t.string  "type",                :limit => 30
+  end
+
+  create_table "production_orders", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.integer  "quantity"
+    t.boolean  "is_model"
+    t.integer  "created_by_id"
+    t.integer  "started_by_id"
+    t.integer  "finished_by_id"
+  end
+
   create_table "products", :force => true do |t|
     t.string   "name"
     t.text     "description"
@@ -315,8 +371,8 @@ ActiveRecord::Schema.define(:version => 20100103075955) do
     t.integer  "blocked_by_count",                                    :default => 0
     t.integer  "revenue_account_id"
     t.integer  "image_id"
-    t.string   "image_file_name"
     t.string   "image_content_type"
+    t.string   "image_file_name"
     t.integer  "image_file_size"
   end
 
@@ -324,7 +380,9 @@ ActiveRecord::Schema.define(:version => 20100103075955) do
   add_index "products", ["product_category_id"], :name => "product_category_id"
   add_index "products", ["product_type_id"], :name => "product_type_id"
   add_index "products", ["upc"], :name => "upc"
+  add_index "products", ["upc"], :name => "upc_2"
   add_index "products", ["vendor_id"], :name => "vendor_id"
+  add_index "products", ["vendor_id"], :name => "vendor_id_2"
 
   create_table "r", :force => true do |t|
     t.string   "oldid"
@@ -344,15 +402,11 @@ ActiveRecord::Schema.define(:version => 20100103075955) do
     t.integer  "number"
     t.integer  "user_id"
     t.datetime "deleted"
-    t.boolean  "tag"
     t.integer  "site_id"
     t.datetime "date"
   end
 
-  add_index "receipts", ["created_at"], :name => "created_at"
-  add_index "receipts", ["deleted"], :name => "deleted"
   add_index "receipts", ["order_id"], :name => "order_id"
-  add_index "receipts", ["site_id"], :name => "site_id"
 
   create_table "requirements", :force => true do |t|
     t.integer "product_id"
@@ -412,9 +466,7 @@ ActiveRecord::Schema.define(:version => 20100103075955) do
 
   add_index "serialized_products", ["product_id"], :name => "product_id"
   add_index "serialized_products", ["product_id"], :name => "product_id_2"
-  add_index "serialized_products", ["product_id"], :name => "product_id_3"
   add_index "serialized_products", ["serial_number"], :name => "serial_number"
-  add_index "serialized_products", ["serial_number"], :name => "serial_number_2"
 
   create_table "states", :force => true do |t|
     t.string "name"
@@ -442,11 +494,16 @@ ActiveRecord::Schema.define(:version => 20100103075955) do
     t.string "name"
   end
 
+  create_table "test2", :id => false, :force => true do |t|
+    t.boolean "tester"
+  end
+
   create_table "trans", :force => true do |t|
     t.integer  "order_id"
     t.text     "comments"
     t.datetime "created_at"
     t.integer  "user_id"
+    t.string   "type"
     t.string   "description", :limit => 32
     t.integer  "payment_id"
     t.integer  "direction"

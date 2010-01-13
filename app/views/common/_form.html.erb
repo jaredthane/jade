@@ -1,0 +1,31 @@
+<div>
+	<div class="table_header_row">
+		<div class="table_cell_30">Producto</div>
+		<div class="table_cell_10">Cantidad</div>
+		<div class="table_cell_10">Precio por unidad</div>
+		<div class="table_cell_20">Recibido <br /> / Num de Serie</div>
+		<div class="table_cell_15">Meses de Garantía</div>	
+		<div class="table_cell">Acciones</div>
+	</div>
+	<% form_for obj do |parent_form| %>
+		<div id="<%= children %>">
+		  <% parent_form.fields_for obj.send(children) do |child_form| %>
+				<%= render :partial => "common/line", :locals => {:type => type, :parent=>parent, :child=>child, :children=>children, :columns=>columns, :obj=>child_form.object} %>
+		  <% end %>
+		</div>
+		 <p>
+		  <%= add_task_link ("Add a " + child), parent_form %>
+		</p>
+	<% end %>
+	<div id="<%= child %>_errors"></div>
+</div>
+<p>
+	<b>Anadir otra linea</b><%= text_field_tag(:bar_code, :id => 'bar_code_field', :class => 'field') %>
+</p>
+<div id="prod_line_model" style="display:none;">
+  <p>
+    <label for="prod_order_prod_lines_attributes_0_quantity">quantity:</label>
+    <input type="text" value="5" size="30" name="prod_order[prod_lines_attributes][0][quantity]" id="prod_order_prod_lines_attributes_0_quantity"/>
+    <input type="hidden" name="prod_order[prod_lines_attributes][0][_delete]" id="prod_order_prod_lines_attributes_0__delete"/><a onclick="$(this).up('.prod_line').hide(); $(this).previous().value = '1'; return false;" href="#">remove</a>
+  </p>
+</div>
