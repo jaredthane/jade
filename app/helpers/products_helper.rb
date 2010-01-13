@@ -18,5 +18,13 @@
 # Likewise, all the methods added will be available for all controllers.
 
 module ProductsHelper
-
+	def add_warranty_link(name)
+    link_to_function name do |page|
+      page << %{
+var new_warranty_id = "new_" + new Date().getTime();
+$('#warranties').append($('#warranty_model').html().replace( /xxx/g,new_warranty_id ));
+$('.warranty:last').slideDown('slow')
+}
+    end
+  end
 end

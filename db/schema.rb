@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100113052610) do
+ActiveRecord::Schema.define(:version => 20100113133345) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -374,6 +374,7 @@ ActiveRecord::Schema.define(:version => 20100113052610) do
     t.string   "image_content_type"
     t.string   "image_file_name"
     t.integer  "image_file_size"
+    t.integer  "default_warranty_id"
   end
 
   add_index "products", ["name"], :name => "name"

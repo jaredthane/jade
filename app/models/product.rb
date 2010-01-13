@@ -30,6 +30,7 @@ class Product < ActiveRecord::Base
   end
   has_many :prices
   has_many :warranties
+  accepts_nested_attributes_for :warranties, :allow_destroy => true
   has_many :inventories
 	has_many :lines
 	belongs_to :revenue_account, :class_name => "Account", :foreign_key => 'revenue_account_id'
@@ -104,6 +105,9 @@ class Product < ActiveRecord::Base
     	i=Inventory.new(:entity=>e, :product=>self, :quantity=>0, :min=>0, :max=>0, :to_order=>0, :cost=>default_cost, :default_cost=>default_cost)
     	i.save
     end
+	  if product_type_id!=2 # no warranties for discounts
+    	Warranty.create(:product=>self, :price => 0, :months =>0)
+    end
     for g in PriceGroup.all
     	if g.entity_id == User.current_user.location_id
 		  	Price.create(:product_id=>self.id, :price_group_id => g.id, :fixed => static_price, :relative=>relative_price, :available => 1)
@@ -111,9 +115,6 @@ class Product < ActiveRecord::Base
 				Price.create(:product_id=>self.id, :price_group_id => g.id, :fixed => static_price, :relative=>relative_price, :available => 0)
 			end
 	  end
-	  if product_type_id!=2 # no warranties for discounts
-    	Warranty.create(:product=>self, :price => 0, :months =>0)
-    end
     if product_type_id==3 #for combos
     	self.calculate_quantity(e.id)
     end
@@ -179,14 +180,11 @@ class Product < ActiveRecord::Base
 		end
 		return i.quantity
 	end
-#	def update_cost(location_id = User.current_user.location_id)
-#	    # #puts "Hello There <-------------------------------------------------------------"
-#	    # #puts self.calculate_cost(location_id)
-##	    self.cost = self.calculate_cost(location_id)
-#		debugger
-#		
-#		self.cost=self.default_cost
-#	end
+	def update_cost(location_id = User.current_user.location_id)
+	    # #puts "Hello There <-------------------------------------------------------------"
+	    # #puts self.calculate_cost(location_id)
+	    self.cost = self.calculate_cost(location_id)
+	end
 	def calculate_cost(location_id = User.current_user.location_id)
 		#puts "product.id=#{self.id.to_s}"
 		#puts "location_id=#{location_id.to_s}"

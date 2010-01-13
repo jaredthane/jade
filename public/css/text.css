@@ -32,6 +32,7 @@
 .nav3-nobullet dt a:hover, .nav3-nobullet dd a:hover {text-decoration:underline; color:rgb(42,90,138);}
 .main-content p.notice_message {background: #7cb4a9; color: white; padding:2px;}
 .main-content p.error_message {background: #ff6666; color: white; padding:2px;width 100%;margin:0 0 0 0;}
+.error_message {background: #ff6666; color: white; padding:2px;width 100%;margin:0 0 0 0;}
 .main-content p.important_message {color: #ff6666; padding:2px;}
 .main-content .errorExplanation h2{background-color: #ff6666 ;color: white;  margin-bottom: 0; padding: 1px;}
 
