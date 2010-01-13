@@ -24,7 +24,7 @@ for copy in ['cliente', 'vendor'] do
 			pdf.font_size = 10
 			if client
 				if client.nit!=''
-					pdf.text (client.nit||''), :at=>[pdf.bounds.left + 225,pdf.bounds.bottom+317]
+					pdf.text ((client.nit||''), :at=>[pdf.bounds.left + 225,pdf.bounds.bottom+317])
 				end #if vendor.office_phone!=''
 			end
 			# Poner tabla de productos
