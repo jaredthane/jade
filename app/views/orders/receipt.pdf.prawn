@@ -27,13 +27,15 @@ for copy in ['cliente', 'vendor', 'government'] do
 			pdf.bounding_box([pdf.bounds.left, pdf.bounds.top-15], :width=>pdf.bounds.width/3-40, :height=>85) do
 				#pdf.stroke_bounds
 				pdf.font_size = 10
-				if vendor.address != ''
-					pdf.text vendor.address
-				end #vendor.address
-				if vendor.office_phone_number !='' 
+				if vendor
+					if vendor.address and vendor.address != ''
+						pdf.text vendor.address
+					end #vendor.address
+				end
+				if vendor.office_phone_number and vendor.office_phone_number !='' 
 					pdf.text vendor.office_phone_number
 				end #office_phone_number
-				if vendor.email != ''
+				if vendor.email and vendor.email != ''
 					pdf.text vendor.email
 				end #if vendor.email != ''
 			end
