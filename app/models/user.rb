@@ -217,7 +217,8 @@ class User < ActiveRecord::Base
 	def has_right(id)
 		return Right.find(:all, 
 			:conditions=>"user_id=#{self.id} AND rights.id=#{id}",
-			:joins=>"inner join rights_roles on rights_roles.right_id=rights.id inner join roles_users on roles_users.role_id=rights_roles.role_id")
+			:joins=>"inner join rights_roles on rights_roles.right_id=rights.id inner join roles_users on roles_users.role_id=rights_roles.role_id"
+			).length >0 ? true : false
 	end
 	def has_rights(needed)
 		r = rights
