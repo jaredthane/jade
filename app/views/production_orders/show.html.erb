@@ -48,7 +48,12 @@
 		<b>Nombre:</b>
 		<%= h @production_order.name %>
 	</p>
-
+	<% if !@production_order.is_model %>
+		<p>
+			<b>Cantidad:</b>
+			<%= h @production_order.quantity %>
+		</p>
+	<% end %>
 </div>
 <div class="column2-unit-right">
 	<% if !@production_order.is_model %>
