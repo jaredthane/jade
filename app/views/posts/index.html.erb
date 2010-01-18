@@ -17,7 +17,7 @@
     <div class="table_cell_20">Cliente</div>
     <div class="table_cell_20">Fecha</div>
     <div class="table_cell_20">Cantidad</div>
-    <div class="table_cell">Usuario Responsable</div>
+    <div class="table_cell">Asesor</div>
   </div>
 	<% for post in @posts %>
 		<% if post.sum != '0.00' or post.trans.order.client_id==Entity::ANULADO %>
@@ -26,7 +26,17 @@
 		    <div class="table_cell_20"><%= link_to truncate(post.trans.order.client.name), post.trans.order.client %></div>
 		    <div class="table_cell_20"><%= h post.created_at.to_date %></div> 
 		    <div class="table_cell_20"><%=h number_to_currency(post.sum) %></div> 
-		    <div class="table_cell"><%= link_to post.trans.user.login, post.trans.user %></div>
+		    <div class="table_cell">
+		    	<% if post.trans %>
+		    		<% if post.trans.order %>
+		    			<% if post.trans.order.client %>
+		    				<% if post.trans.order.client.user %>
+		    					<%= link_to post.trans.order.client.user.name, post.trans.order.client.user %>
+		    				<% end %>
+		    			<% end %>
+		    		<% end %>
+		    	<% end %>
+				</div>	
 			</div>	
 		<% end %>
 	<% end %>
