@@ -9,7 +9,7 @@ x = Object.new.extend(ActionView::Helpers::NumberHelper)
 for post in @posts
 	data << [(post.trans.order.receipt_number||'Sin número'), 
 						post.created_at.to_date, 
-						post.trans.order.client.name[0..25], 
+						truncate(post.trans.order.client.name), 
 						x.number_to_currency(post.value*post.post_type_id), 
 						post.trans.user.name]
 end

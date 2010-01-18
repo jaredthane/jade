@@ -63,7 +63,8 @@ else
 		end
 	end
 	pdf.font_size = 14
-		pdf.text "Transacciones recientes", :style => :bold
+	pdf.text "Transacciones recientes", :style => :bold
+	if @posts_table.length > 0
 		pdf.table(@posts_table,
 			 :font_size => 12,
 			 :headers => ['Fecha', 'Factura', 'Tipo', 'Cuenta','Debito', 'Credito', 'Saldo'],
@@ -73,4 +74,8 @@ else
 			 :border_style => :underline_header,
 			 :column_widths => { 0 => 81, 1 => 81, 2 => 81, 3 => 108, 4 => 54, 5 => 54, 6 => 81},
 			 :align => { 0 => :center,1 => :center, 2 => :center, 3 => :center, 4 => :center, 5 => :center, 6 => :center})
+	else
+		pdf.move_down 60
+		pdf.text "No hay ningunas transacciones para mostrar."
+	end
 end

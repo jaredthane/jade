@@ -23,7 +23,7 @@
 		<% if post.sum != '0.00' or post.trans.order.client_id==Entity::ANULADO %>
 			<div class="table_row">
 		    <div class="table_cell_20"><%= link_to (post.trans.order.receipt_number||'Sin número'), post.trans.order %></div>
-		    <div class="table_cell_20"><%= link_to post.trans.order.client.name[0..25], post.trans.order.client %></div>
+		    <div class="table_cell_20"><%= link_to truncate(post.trans.order.client.name), post.trans.order.client %></div>
 		    <div class="table_cell_20"><%= h post.created_at.to_date %></div> 
 		    <div class="table_cell_20"><%=h number_to_currency(post.sum) %></div> 
 		    <div class="table_cell"><%= link_to post.trans.user.login, post.trans.user %></div>
