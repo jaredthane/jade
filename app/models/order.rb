@@ -151,7 +151,6 @@ class Order < ActiveRecord::Base
 	#################################################################################################
   def number=(num)
     self.receipt_number=num
-    self.receipt_generated=Time.now
   end
 	##################################################################################################
 	# Returns receipt number
