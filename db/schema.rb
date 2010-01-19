@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100119061905) do
+ActiveRecord::Schema.define(:version => 1) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -81,10 +81,6 @@ ActiveRecord::Schema.define(:version => 20100119061905) do
   add_index "entities", ["entity_type_id"], :name => "entity_type_id"
   add_index "entities", ["name"], :name => "name"
   add_index "entities", ["site_id"], :name => "site_id"
-
-  create_table "entity_types", :force => true do |t|
-    t.string "name"
-  end
 
   create_table "inventories", :force => true do |t|
     t.integer "product_id"
@@ -285,23 +281,9 @@ ActiveRecord::Schema.define(:version => 20100119061905) do
   create_table "product_types", :force => true do |t|
     t.string "name"
   end
-
-  create_table "production_order_lines", :force => true do |t|
-    t.integer "quantity"
-    t.integer "quantity_planned"
-    t.integer "product_id"
-    t.string  "type"
-  end
-
-  create_table "production_orders", :force => true do |t|
-    t.string   "name",        :limit => 30,                    :null => false
-    t.boolean  "is_process",                :default => false
-    t.datetime "created_at"
-    t.datetime "started_at"
-    t.datetime "finished_at"
-    t.integer  "created_by"
-    t.integer  "started_by"
-    t.integer  "finished_by"
+  
+  create_table "entity_types", :force => true do |t|
+    t.string "name"
   end
 
   create_table "products", :force => true do |t|
@@ -361,6 +343,10 @@ ActiveRecord::Schema.define(:version => 20100119061905) do
   end
 
   add_index "roles_users", ["user_id"], :name => "user_id"
+
+  create_table "schema_info", :id => false, :force => true do |t|
+    t.integer "version"
+  end
 
   create_table "serialized_products", :force => true do |t|
     t.string  "serial_number"
