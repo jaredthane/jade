@@ -31,7 +31,8 @@
 .nav3-nobullet dd a, .nav3-nobullet dd a:visited {line-height:1.7em; margin:0 0 0 15px; text-decoration:none; color:rgb(70,122,167); font-weight:normal; font-size:120%;}
 .nav3-nobullet dt a:hover, .nav3-nobullet dd a:hover {text-decoration:underline; color:rgb(42,90,138);}
 .main-content p.notice_message {background: #7cb4a9; color: white; padding:2px;}
-.main-content p.error_message {background: #ff6666; color: white; padding:2px;width 100%;}
+.main-content p.error_message {background: #ff6666; color: white; padding:2px;width 100%;margin:0 0 0 0;}
+.error_message {background: #ff6666; color: white; padding:2px;width 100%;margin:0 0 0 0;}
 .main-content p.important_message {color: #ff6666; padding:2px;}
 .main-content .errorExplanation h2{background-color: #ff6666 ;color: white;  margin-bottom: 0; padding: 1px;}
 
@@ -100,6 +101,7 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .main-content .table_cell_50 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 50%; vertical-align: bottom;}
 .main-content .table_cell_80 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 80%; vertical-align: bottom;}
 .main-content .table_cell_70 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 70%; vertical-align: bottom;}
+.main-content .table_cell_60 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 60%; vertical-align: bottom;}
 .main-content .table_cell_25 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 25%; vertical-align: bottom;}
 .main-content .table_cell_30 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 30%; vertical-align: bottom;}
 .main-content .table_cell_35 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 35%; vertical-align: bottom;}

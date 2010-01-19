@@ -18,7 +18,7 @@ for copy in ['cliente', 'vendor', 'government'] do
 			pdf.bounding_box([pdf.bounds.left, pdf.bounds.top], :width=>pdf.bounds.width*2/3, :height=>20) do
 				#pdf.stroke_bounds
 				pdf.font_size = 14
-				pdf.text COMPANY_NAME + ' ' + @order.id.to_s, :style=>:bold
+				pdf.text COMPANY_NAME, :style=>:bold
 			end # company name bounding box
 			##################################################################################################
 			# 
@@ -27,13 +27,13 @@ for copy in ['cliente', 'vendor', 'government'] do
 			pdf.bounding_box([pdf.bounds.left, pdf.bounds.top-15], :width=>pdf.bounds.width/3-40, :height=>85) do
 				#pdf.stroke_bounds
 				pdf.font_size = 10
-				if vendor.address != ''
+				if vendor.address != '' and vendor.address
 					pdf.text vendor.address
 				end #vendor.address
-				if vendor.office_phone_number !='' 
+				if vendor.office_phone_number !=''  and vendor.office_phone_number
 					pdf.text vendor.office_phone_number
 				end #office_phone_number
-				if vendor.email != ''
+				if vendor.email != '' and vendor.email
 					pdf.text vendor.email
 				end #if vendor.email != ''
 			end
@@ -48,7 +48,7 @@ for copy in ['cliente', 'vendor', 'government'] do
 				if client.id != 3
 					pdf.font_size = 10
 					if client.full_address
-						if client.full_address != ''
+						if client.full_address != '' 
 							pdf.text truncate(client.full_address,50)
 						end #if client.full_address != ''
 					end
@@ -96,7 +96,7 @@ for copy in ['cliente', 'vendor', 'government'] do
 			for l in @order.lines
 				x = Object.new.extend(ActionView::Helpers::NumberHelper)
 				if l.product.serialized and l.serialized_product
-						data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x=(l.price), x.number_to_currency(l.total_price)]
+						data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x.number_to_currency(l.price), x.number_to_currency(l.total_price)]
 				else
 					data << [l.quantity.to_s, l.product.name, x.number_to_currency(l.price),  x.number_to_currency(l.total_price)]
 				end
@@ -124,3 +124,4 @@ for copy in ['cliente', 'vendor', 'government'] do
 	pdf.move_down 25
 	y-=pdf.bounds.height/3
 end # for each copy holder
+

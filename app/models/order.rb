@@ -24,7 +24,7 @@ class Order < ActiveRecord::Base
 	belongs_to :sequel, :class_name => "Order", :foreign_key => 'sequel_id'
 	belongs_to :prequel, :class_name => "Order", :foreign_key => 'prequel_id'
 #	# Paperclip
-#	has_attached_file :scanned_receipt
+	has_attached_file :scanned_receipt
   SALE=1
   PURCHASE=2
   INTERNAL=3
@@ -151,7 +151,6 @@ class Order < ActiveRecord::Base
 	#################################################################################################
   def number=(num)
     self.receipt_number=num
-    self.receipt_generated=Time.now
   end
 	##################################################################################################
 	# Returns receipt number
@@ -497,7 +496,7 @@ class Order < ActiveRecord::Base
 	def total_price_with_tax
 		total=0
 		if client
-			if client.entity_type_id == 2
+			if client.entity_type_id == 2 or self.order_type_id==Order::COUNT
 				for l in self.lines
 					total = (total||0) + (l.total_price||0)
 				end

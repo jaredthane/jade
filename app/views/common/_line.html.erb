@@ -1,0 +1,16 @@
+<div class="<%= child %>">
+	<div class="table_row">
+		<% for column in columns %>
+			<div class="table_cell_<%= column[:width] %>">
+				<% case column[:type]
+					when 'link' %>
+					<%= link_to obj.send(column[:name]), column[:link] %>
+				<% when 'data' %>
+					<%= h obj.send(column[:name]) %>
+				<% when 'text_box' %>
+					<input type="text" value="<%= obj.send(column[:name]) %>" name="<%= parent %>[<%= children %>_attributes][0][<%= attr %>]" id="<%= parent %>_<%= children %>_attributes_0_<%= attr %>"/>
+				<% end %>
+			</div>
+		<% end %>
+	</div>
+</div>

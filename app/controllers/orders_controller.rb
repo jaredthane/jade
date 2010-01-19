@@ -16,9 +16,6 @@
 
 class OrdersController < ApplicationController
 	before_filter :login_required
-	access_control [:create_batch, :create_orders, :show_batch, :new_purchase] => '(Gerente | Admin | Comprador)' 
-	access_control [:new_sale] => '(Gerente | Admin | Vendedor)'
-	access_control [:destroy] => '(Admin)'
 	def allowed(order_type_id, action)
 		case (order_type_id)
 	  when 1
