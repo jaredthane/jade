@@ -7,11 +7,17 @@ pdf.text @from.to_date.to_s(:long) + " - " + @till.to_date.to_s(:long), :align =
 data=[]
 x = Object.new.extend(ActionView::Helpers::NumberHelper)
 for post in @posts
+	asesor=''
+	if post.trans.order.client
+		if post.trans.order.client.user
+			asesor=post.trans.order.client.user.name
+		end # if 		post.trans.order.client.user
+	end # if 	post.trans.order.client
 	data << [(post.trans.order.receipt_number||'Sin número'), 
 						post.created_at.to_date, 
 						truncate(post.trans.order.client.name), 
 						x.number_to_currency(post.value*post.post_type_id), 
-						post.trans.user.name]
+						asesor]
 end
 pdf.font_size = 12
 pdf.table(data,
