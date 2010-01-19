@@ -128,6 +128,9 @@
 					<% if current_user.has_rights(['Ver Suscripciones']) %>
 						<li><a href=<%= new_subscription_url %> title="Suscripción">Suscripción</a></li>
 					<% end %>
+					<% if current_user.has_right(User::CREATE_PRODUCTION_PROCESSES) %>
+						<li><a href=<%= new_production_order_url %> title="Proceso de Produccion">Proceso de Produccion</a></li>
+					<% end %>
 	  		<% end %>
 	  		<% if current_user.has_rights(['Admin','Inventario','Gerente']) %>
         	<li><a href="/count/new" title="Cuenta Fisica">Cuenta Fisica</a></li>
