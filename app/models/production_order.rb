@@ -44,7 +44,7 @@ class ProductionOrder < ActiveRecord::Base
   	return po
   end
   def title
-  	if is_model
+  	if is_process
   		return 'Proceso de Produccion'
   	else
   		return 'Orden de Produccion'  		
@@ -59,9 +59,9 @@ class ProductionOrder < ActiveRecord::Base
 		o = 'production_orders.name'
 		case filter
 		when 'processes'
-			c += ' AND is_model=1'
+			c += ' AND is_process=1'
 		when 'orders'
-			c += ' AND is_model=0'
+			c += ' AND is_process=0'
 		end
 		if page
   		paginate :per_page => 20, :page => page, :conditions => c, :order => o
