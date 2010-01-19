@@ -1,6 +1,6 @@
 -- MySQL dump 10.13  Distrib 5.1.37, for debian-linux-gnu (i486)
 --
--- Host: localhost    Database: jade
+-- Host: localhost    Database: clean
 -- ------------------------------------------------------
 -- Server version	5.1.37-1ubuntu5
 
@@ -1184,4 +1184,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2010-01-18 13:19:07
+-- Dump completed on 2010-01-18 22:50:36
