@@ -1,7 +1,10 @@
 <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 
-
-<%= error_messages_for :line %>
+<p>
+	<div class="error_message">
+		<%= error_messages_for :line %>
+	</div>
+</p>
 
 <% if @order_type_id == '5'  %>
 	<%= render :partial => 'physical_counts/line', :collection => @lines %>

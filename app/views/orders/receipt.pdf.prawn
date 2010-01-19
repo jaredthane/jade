@@ -96,7 +96,7 @@ for copy in ['cliente', 'vendor', 'government'] do
 			for l in @order.lines
 				x = Object.new.extend(ActionView::Helpers::NumberHelper)
 				if l.product.serialized and l.serialized_product
-						data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x=(l.price), x.number_to_currency(l.total_price)]
+						data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x.number_to_currency(l.price), x.number_to_currency(l.total_price)]
 				else
 					data << [l.quantity.to_s, l.product.name, x.number_to_currency(l.price),  x.number_to_currency(l.total_price)]
 				end
@@ -124,3 +124,4 @@ for copy in ['cliente', 'vendor', 'government'] do
 	pdf.move_down 25
 	y-=pdf.bounds.height/3
 end # for each copy holder
+

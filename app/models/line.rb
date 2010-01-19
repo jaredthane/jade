@@ -47,6 +47,7 @@ class Line < ActiveRecord::Base
 	def format_price=(p)
 		self.price=p.gsub(',','_').gsub('$','_').to_f
 	end
+
   ##################################################################################################
 	# Returns quantity if it was marked as received, 0 otherwise
 	#################################################################################################

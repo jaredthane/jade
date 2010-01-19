@@ -41,7 +41,6 @@
   <link type="text/css" rel="stylesheet" media="screen" href="/css/text.css">
   <link type="text/css" rel="stylesheet" media="screen" href="/css/setup.css">
   <link rel="stylesheet" href="/css/jquery-ui-custom-theme/jquery-ui-1.7.2.custom.css" type="text/css">
-  <link rel="stylesheet" href="/css/thickbox.css" type="text/css" media="screen" />
 
   <%= stylesheet_link_tag 'jquery.autocomplete' %>
   <%= stylesheet_link_tag 'jquery-ui' %>
@@ -128,6 +127,9 @@
 					<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
 					<% if current_user.has_rights(['Ver Suscripciones']) %>
 						<li><a href=<%= new_subscription_url %> title="Suscripción">Suscripción</a></li>
+					<% end %>
+					<% if current_user.has_right(User::CREATE_PRODUCTION_PROCESSES) %>
+						<li><a href=<%= new_production_order_url %> title="Proceso de Produccion">Proceso de Produccion</a></li>
 					<% end %>
 	  		<% end %>
 	  		<% if current_user.has_rights(['Admin','Inventario','Gerente']) %>

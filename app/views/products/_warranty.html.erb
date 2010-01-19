@@ -1,0 +1,10 @@
+<div class="warranty">
+	<div class="table_row">
+		<div class="table_cell_30"><%= child_form.text_field :months, :class=>'field' %></div>
+		<div class="table_cell_30"><%= child_form.text_field :price, :class=>'field' %></div>
+		<div class="table_cell">
+			<%= child_form.check_box :_delete, :style=>'display:none;' %>
+	    <%= link_to_function "Remover", 'check_box($(this))' %>
+	  </div>
+	</div>
+</div>
