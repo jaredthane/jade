@@ -32,6 +32,7 @@ class User < ActiveRecord::Base
 	belongs_to :revenue_account, :class_name => "Account", :foreign_key => 'revenue_account_id'
 	belongs_to :personal_account, :class_name => "Account", :foreign_key => 'personal_account_id'
 	has_many :roles_users
+	accepts_nested_attributes_for :production_lines, :allow_destroy => true
 	has_many :roles, :through => :roles_users
 #	has_and_belongs_to_many :roles
   validates_presence_of     :login

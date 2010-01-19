@@ -1,26 +1,4 @@
-CURRENT GOALS:
-	filter transactions report by:
-		site
-		kind
-		order_type
-	lock products when counting
-	lock orders and others when editing
-	need some way of letting the user know when accounting wasn't done
-	iva para costos
-	new transaction should use auto completes for account
-	allow changing warranties
-	make sure accounting works right for paying compras
-	devoluciones de ventas are adding instead of subtracting accounting
-	fix order of accounts in index
-	tipo of trans is set to Venta when it should be 'devolucion de venta'
-	move error on bad username/password
-	returns don't show up right on sales report
-	labels
-	separate credito fiscal from consumidor final on sales report
-	diference doesnt stick on count show after you post
-	no return money action show s up when you cancel an order
-	Devolucion de venta description not coming out right
-	when you make a purchase, it shows up as a sale
+
 FUTURE FEATURES:
 	clean up line errors
 	get good tab order on new_product
