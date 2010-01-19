@@ -6,7 +6,6 @@ pdf.text COMPANY_NAME, :align => :center, :style => :bold
 pdf.text @from.to_date.to_s(:long) + " - " + @till.to_date.to_s(:long), :align => :center, :style => :bold
 data=[]
 x = Object.new.extend(ActionView::Helpers::NumberHelper)
-for post in @posts
 total=0
 for post in @posts
 	total+=post.value*post.post_type_id
