@@ -714,6 +714,12 @@ RightsRole.create(:role=>production_admin, :right_id =>'START_PRODUCTION_ORDERS'
 RightsRole.create(:role=>production_admin, :right_id =>'FINISH_PRODUCTION_ORDERS')
 RightsRole.create(:role=>production_viewer, :right_id =>'VIEW_PRODUCTION_ORDERS')
 
-
+Unit.create(:name=>'Cada Uno')
+Unit.create(:name=>'Hora')
+Unit.create(:name=>'Caja')
+Unit.create(:name=>'Dolares')
+Unit.create(:name=>'Mes')
+Unit.create(:name=>'Libra')
+Unit.create(:name=>'Galones')
 
 

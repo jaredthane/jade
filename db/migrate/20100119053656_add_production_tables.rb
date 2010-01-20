@@ -4,6 +4,7 @@ class AddProductionTables < ActiveRecord::Migration
       t.integer :quantity
       t.integer :quantity_planned
       t.integer :product_id
+      t.integer :production_order_id
       t.string :type
   	end
   	create_table :production_orders  do |t|

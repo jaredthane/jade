@@ -24,11 +24,11 @@
 		<p>
 			<b>Nombre:</b><br />
 			<%= parent_form.text_field :name, :class=> 'field' %>
-			<%= parent_form.hidden_field :is_model %>
+			<%= parent_form.hidden_field :is_process %>
 		</p>
 	</div>
 	<div class="column2-unit-right">
-		<% if !@production_order.is_model %>
+		<% if !@production_order.is_process %>
 			<p>
 			  <b>Planeado</b><br />
 			  <%= parent_form.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>

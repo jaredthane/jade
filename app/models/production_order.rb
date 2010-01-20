@@ -29,12 +29,12 @@ class ProductionOrder < ActiveRecord::Base
 	#################################################################################################
   def validate
     errors.add "Nombre","no puede dejarse en blanco." if !name or name==''
-    if self.new_record? and is_model==1
-    	errors.add "Nombre","debe ser único" if ProductionOrder.find(:first,:conditions=> "name = '#{name} AND is_model=1'")
+    if self.new_record? and is_process==1
+    	errors.add "Nombre","debe ser único" if ProductionOrder.find(:first,:conditions=> "name = '#{name} AND is_process=1'")
     end
   end
   def new_production_order
-  	po=ProductionOrder.new(:name=>self.name, :is_model=>false, :created_at=>User.current_user.today, :created_by=>User.current_user)
+  	po=ProductionOrder.new(:name=>self.name, :is_process=>false, :created_at=>User.current_user.today, :created_by=>User.current_user)
   	for line in self.consumption_lines
   		po.consumption_lines << ConsumptionLine.new(line.attributes)
   	end
@@ -48,7 +48,7 @@ class ProductionOrder < ActiveRecord::Base
   		return 'Proceso de Produccion'
   	else
   		return 'Orden de Produccion'  		
-  	end # if is_model
+  	end # if is_process
   end
   #################################################################################################
   # Searches for product orders and product processes based on name and filter

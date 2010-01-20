@@ -20,8 +20,12 @@ function DoAjaxRequest(is_output){
   				$('#' + errors_div +':hidden').append(error).slideDown('slow');
   			} else {
   				$('#' + errors_div +':visible').slideUp('slow',delete_errors);
+//  				$('.line', d).appendTo('#' + lines_div).hide().slideDown('slow',select_serial);
+					var new_task_id = "new_" + new Date().getTime();
+  				$('.line', d).html($('.line', d).html().replace(/\[0\]/gi, "["+new_task_id+"]"));
+  				$('.line', d).html($('.line', d).html().replace(/_0_/gi, "_"+new_task_id+"_"));
+  				$('.line', d).appendTo('#' + lines_div).hide().slideDown('slow',select_serial);
   			}
-  			$('.line', d).appendTo('#' + lines_div).hide().slideDown('slow',select_serial);
 			},
 		});
 }

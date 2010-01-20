@@ -48,7 +48,7 @@ class ProductionOrdersController < ApplicationController
   end
   
   def new
-    @production_order = ProductionOrder.new(:is_model=>true)
+    @production_order = ProductionOrder.new(:is_process=>true)
 		respond_to do |wants|
 			wants.html
 			wants.js
@@ -64,6 +64,7 @@ class ProductionOrdersController < ApplicationController
 		  	@o.production_lines << ProductionLine.new(:product=>p, :quantity=>1)
 			end # if params[:]
 		end
+		
 		respond_to do |wants|
 			if @o
 				wants.html do
