@@ -136,7 +136,7 @@ Right.create(:name=>"Crear Cuentas Fisicas") { |r| r.id='CREATE_COUNTS'}
 Right.create(:name=>"Cambiar Cuentas Fisicas") { |r| r.id='CHANGE_COUNTS'}
 Right.create(:name=>"Ver Cuentas Fisicas") { |r| r.id='VIEW_COUNTS'}
 Right.create(:name=>"Borrar Cuentas Fisicas") { |r| r.id='DELETE_COUNTS'}
-Right.create(:name=>"Ver COSTS") { |r| r.id='VIEW_COSTS'}
+Right.create(:name=>"Ver Costos") { |r| r.id='VIEW_COSTS'}
 Right.create(:name=>"Crear Cuentas") { |r| r.id='CREATE_ACCOUNTS'}
 Right.create(:name=>"Cambiar Cuentas") { |r| r.id='CHANGE_ACCOUNTS'}
 Right.create(:name=>"Ver Cuentas") { |r| r.id='VIEW_ACCOUNTS'}
