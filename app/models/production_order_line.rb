@@ -18,7 +18,4 @@ class ProductionOrderLine < ActiveRecord::Base
   belongs_to :production_order
   belongs_to :product
   belongs_to :serialized_product
-	def validate
-		errors.add "","Cantidad no puede quedarse en blanco" if !quantity or quantity==''
-	end
 end

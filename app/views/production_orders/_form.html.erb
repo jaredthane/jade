@@ -26,6 +26,12 @@
 			<%= parent_form.text_field :name, :class=> 'field' %>
 			<%= parent_form.hidden_field :is_process %>
 		</p>
+		<% if !@production_order.is_process and !@production_order.started_at %>
+			<p>
+				<b>Cantidad:</b><br />
+				<%= parent_form.text_field :quantity, :class=> 'field' %>
+			</p>
+		<% end %>
 	</div>
 	<div class="column2-unit-right">
 		<% if !@production_order.is_process %>
@@ -49,47 +55,86 @@
 	</div>
 	<br />
 	<hr class="clear-contentunit" />
-	<p>
-		<b>Productos que se ocuparan en este proceso:</b>
-	</p>
-	<div>
-		<div class="table_header_row">
-			<div class="table_cell_25">Codigo de Barra</div>
-			<div class="table_cell_25">Nombre</div>
-			<div class="table_cell_25">Cantidad</div>
-			<div class="table_cell">Acciones</div>
+	<% if !@production_order.started_at %>
+		<p>
+			<b>Productos que se ocuparan en este proceso:</b>
+		</p>
+		<div>
+			<div class="table_header_row">
+				<div class="table_cell_25">Codigo de Barra</div>
+				<div class="table_cell_25">Nombre</div>
+				<div class="table_cell_25">Cantidad</div>
+				<div class="table_cell">Acciones</div>
+			</div>
+				<div id="consumption_lines">
+					<% parent_form.fields_for :consumption_lines do |child_form| %>
+						<%= render :partial => "consumption_line", :locals => {:child_form=>child_form} %>
+					<% end %>
+				</div>
+			<div id="consumption_lines_errors"></div>
 		</div>
-			<div id="consumption_lines">
-				<% parent_form.fields_for :consumption_lines do |child_form| %>
-					<%= render :partial => "line", :locals => {:child_form=>child_form} %>
+		<p>
+			<b>Anadir otro producto</b>  <%= text_field_tag(:bar_code, '', :id => 'consumption_bar_code', :class => 'field') %>
+			<%= hidden_field_tag :is_output, 0 %>
+		</p>
+		<br />
+		<hr class="clear-contentunit" />
+		<p>
+			<b>Productos que se produciran por medio de este proceso:</b>
+		</p>
+		<div>
+			<div class="table_header_row">
+				<div class="table_cell_25">Codigo de Barra</div>
+				<div class="table_cell_25">Nombre</div>
+				<div class="table_cell_25">Cantidad</div>
+				<div class="table_cell">Acciones</div>
+			</div>
+			<div id="production_lines">
+				<% parent_form.fields_for :production_lines do |child_form| %>
+					<%= render :partial => "production_line", :locals => {:child_form=>child_form} %>
 				<% end %>
 			</div>
-		<div id="consumption_lines_errors"></div>
-	</div>
-	<p>
-		<b>Anadir otro producto</b>  <%= text_field_tag(:bar_code, '', :id => 'consumption_bar_code', :class => 'field') %>
-		<%= hidden_field_tag :is_output, 0 %>
-	</p>
-	<br />
-	<hr class="clear-contentunit" />
-	<p>
-		<b>Productos que se produciran por medio de este proceso:</b>
-	</p>
-	<div>
-		<div class="table_header_row">
-			<div class="table_cell_25">Codigo de Barra</div>
-			<div class="table_cell_25">Nombre</div>
-			<div class="table_cell_25">Cantidad</div>
-			<div class="table_cell">Acciones</div>
+			<div id="production_lines_errors"></div>
 		</div>
-		<div id="production_lines">
-		  <% parent_form.fields_for :production_lines do |child_form| %>
-				<%= render :partial => "line", :locals => {:child_form=>child_form} %>
-		  <% end %>
+		<p>
+			<b>Anadir otro producto</b>  <%= text_field_tag(:bar_code, '', :id => 'production_bar_code', :class => 'field') %>
+		</p>
+	<% else %>
+		<p><b>Productos que se ocupan:</b></p>
+		<div>
+			<div class="table_header_row">
+				<div class="table_cell_25">Numero</div>
+				<div class="table_cell_25">Nombre</div>
+				<div class="table_cell_25">Cantidad</div>
+				<div class="table_cell">Costo</div>
+			</div>
+			<% for line in @production_order.consumption_lines %>
+				<div class="table_row">
+					<% p=line.product %>
+					<div class="table_cell_25"><%= link_to p.upc, p %></div>
+					<div class="table_cell_25"><%= link_to p.name, p %></div>
+					<div class="table_cell_25"><%= h line.quantity %></div>
+					<div class="table_cell"><%= h number_to_currency((p.cost||0).to_f * line.quantity) %></div>
+				</div>
+			<% end %>
 		</div>
-		<div id="production_lines_errors"></div>
-	</div>
-	<p>
-		<b>Anadir otro producto</b>  <%= text_field_tag(:bar_code, '', :id => 'production_bar_code', :class => 'field') %>
-	</p>
+		<br />
+		<hr class="clear-contentunit" />
+		<p>
+			<b>Productos que se produciran por medio de este proceso:</b>
+		</p>
+		<div>
+			<div class="table_header_row">
+				<div class="table_cell_25">Codigo de Barra</div>
+				<div class="table_cell_25">Nombre</div>
+				<div class="table_cell_25">Cantidad Anticipado</div>
+				<div class="table_cell">Cantidad Producido</div>
+			</div>
+			<div id="production_lines">
+				<% parent_form.fields_for :production_lines do |child_form| %>
+					<%= render :partial => "started_line", :locals => {:child_form=>child_form} %>
+				<% end %>
+			</div>
+		</div>
+	<% end %>
 <% end %>

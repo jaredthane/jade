@@ -15,6 +15,25 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class ProductionLine < ProductionOrderLine
+	
+	##############################################################
+	# Checks to make sure we have a valid quantity
+	##############################################################
+	def validate
+		errors.add "","Cantidad no puede quedarse en blanco" if !quantity_planned or quantity_planned==''
+	end	
+	##############################################################
+	# Returns cost of product * quantity
+	##############################################################
+	def unit_cost
+		return production_order.cost  / (quantity||quantity_planned) / production_order.quantity
+	end # def cost
+	##############################################################
+	# Returns cost of product * quantity
+	##############################################################
+	def total_cost
+		return (production_order.cost ||0)
+	end # def cost
 	##############################################################
 	# Creates movement to bring produced product into stock
 	##############################################################

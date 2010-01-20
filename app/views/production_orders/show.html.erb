@@ -48,7 +48,7 @@
 		<b>Nombre:</b>
 		<%= h @production_order.name %>
 	</p>
-	<% if !@production_order.is_process %>
+	<% if !@production_order.is_process and !@production_order.started_at %>
 		<p>
 			<b>Cantidad:</b>
 			<%= h @production_order.quantity %>
@@ -105,18 +105,23 @@
   <p><b>Productos que se producen:</b></p>
   <div>
 		<div class="table_header_row">
-		  <div class="table_cell_25">Numero</div>
-		  <div class="table_cell_25">Nombre</div>
-		  <div class="table_cell_25">Cantidad</div>
-		  <div class="table_cell">Costo</div>
+		  <div class="table_cell_20">Numero</div>
+		  <div class="table_cell_20">Nombre</div>
+		  <div class="table_cell_20">Cantidad</div>
+		  <div class="table_cell_20">Costo por Unidad*</div>
+		  <div class="table_cell">Costo Total*</div>
 		</div>
 		<% for line in @production_order.production_lines %>
 			<div class="table_row">
 				<% p=line.product %>
-				<div class="table_cell_25"><%= link_to p.upc, p %></div>
-				<div class="table_cell_25"><%= link_to p.name, p %></div>
-				<div class="table_cell_25"><%= h line.quantity %></div>
-				<div class="table_cell"><%= h number_to_currency((p.cost||0).to_f * line.quantity) %></div>
+				<div class="table_cell_20"><%= link_to p.upc, p %></div>
+				<div class="table_cell_20"><%= link_to p.name, p %></div>
+				<div class="table_cell_20"><%= h (line.quantity || line.quantity_planned) %></div>
+				<div class="table_cell_20"><%= h number_to_currency(line.unit_cost) %></div>
+				<div class="table_cell"><%= h number_to_currency(line.total_cost) %></div>
 			</div>
 		<% end %>
+		<p style="font-size:80%;">
+			*Los costos citados aqui son los costos anticipados de este orden de produccion.
+		</p>
 	</div>

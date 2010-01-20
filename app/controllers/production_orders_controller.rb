@@ -61,7 +61,7 @@ class ProductionOrdersController < ApplicationController
 			if params[:is_output]=='0'
 		  	@o.consumption_lines << ConsumptionLine.new(:product=>p, :quantity=>1)
 			else
-		  	@o.production_lines << ProductionLine.new(:product=>p, :quantity=>1)
+		  	@o.production_lines << ProductionLine.new(:product=>p, :quantity_planned =>1, :quantity=>1)
 			end # if params[:]
 		end
 		
@@ -123,6 +123,9 @@ class ProductionOrdersController < ApplicationController
   # POST /requirements
   # POST /requirements.xml
   def create
+  	params[:production_order][:created_at]=untranslate_month(params[:production_order][:created_at]) if params[:production_order][:created_at]
+   	params[:production_order][:started_at]=untranslate_month(params[:production_order][:started_at]) if params[:production_order][:started_at]
+   	params[:production_order][:finished_at]=untranslate_month(params[:production_order][:finished_at]) if params[:production_order][:finished_at]
    	@production_order = ProductionOrder.new(params[:production_order])
    	@production_order.site=User.current_user.location
    	@production_order.created_by=User.current_user
@@ -145,7 +148,10 @@ class ProductionOrdersController < ApplicationController
   # PUT /requirements/1
   # PUT /requirements/1.xml
   def update
-    @production_order = ProductionOrder.find(params[:id])
+    params[:production_order][:created_at]=untranslate_month(params[:production_order][:created_at]) if params[:production_order][:created_at]
+   	params[:production_order][:started_at]=untranslate_month(params[:production_order][:started_at]) if params[:production_order][:started_at]
+   	params[:production_order][:finished_at]=untranslate_month(params[:production_order][:finished_at]) if params[:production_order][:finished_at]
+   	@production_order = ProductionOrder.find(params[:id])
 
     respond_to do |format|
       if @production_order.update_attributes(params[:production_order])
