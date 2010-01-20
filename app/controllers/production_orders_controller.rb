@@ -94,8 +94,7 @@ class ProductionOrdersController < ApplicationController
 	end
 	def start_production
 		@production_order = ProductionOrder.find(params[:id])
-		@production_order.started_at=User.current_user.today
-		@production_order.started_by=User.current_user
+		@production_order.start
 		@production_order.save
 		respond_to do |wants|
 			wants.html do	
@@ -106,8 +105,7 @@ class ProductionOrdersController < ApplicationController
 	end
 	def finish_production
 		@production_order = ProductionOrder.find(params[:id])
-		@production_order.finished_at=User.current_user.today
-		@production_order.finished_by=User.current_user
+		@production_order.finish
 		@production_order.save
 		respond_to do |wants|
 			wants.html do	

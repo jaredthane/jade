@@ -17,7 +17,40 @@
 class ProductionOrderLine < ActiveRecord::Base
   belongs_to :production_order
   belongs_to :product
+  belongs_to :serialized_product
 	def validate
 		errors.add "","Cantidad no puede quedarse en blanco" if !quantity or quantity==''
 	end
+	##############################################################
+	# Requires: entity_id, product_id, quantity, movement_type_id, order_id
+	# Accepts all other attributes of Movement
+	##############################################################
+	def start_movement(params={})
+		params={:quantity => - self.quantity, 
+		:serialized_product_id => self.serialized_product_id, 
+		:created_at=>User.current_user.today, 
+		:user_id => User.current_user.id, 
+		:order_id => nil,
+		:entity_id => self.production_order.site_id,
+		:product_id => self.product_id,
+		:movement_type_id => 13, 
+		}.merge!(params)
+		return Movement.create(params)
+	end # def start_movement
+	
+	##############################################################
+	#
+	##############################################################
+	def finish_movement
+		params={:quantity => + self.quantity, 
+		:serialized_product_id => self.serialized_product_id, 
+		:created_at=>User.current_user.today, 
+		:user_id => User.current_user.id, 
+		:order_id => nil,
+		:entity_id => self.production_order.site_id,
+		:product_id => self.product_id,
+		:movement_type_id => 14, 
+		}.merge!(params)
+		return Movement.create(params)
+	end # def finish_movement
 end

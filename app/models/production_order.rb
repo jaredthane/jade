@@ -17,6 +17,7 @@
 class ProductionOrder < ActiveRecord::Base
   has_many :production_lines
   has_many :consumption_lines
+  belongs_to :site, :class_name => "Entity", :foreign_key => 'site_id'
   belongs_to :created_by, :class_name => "User", :foreign_key => "created_by_id"
   belongs_to :started_by, :class_name => "User", :foreign_key => "started_by_id"
   belongs_to :finished_by, :class_name => "User", :foreign_key => "finished_by_id"
@@ -33,8 +34,10 @@ class ProductionOrder < ActiveRecord::Base
     	errors.add "Nombre","debe ser único" if ProductionOrder.find(:first,:conditions=> "name = '#{name} AND is_process=1'")
     end
   end
-  def new_production_order
-  	po=ProductionOrder.new(:name=>self.name, :is_process=>false, :created_at=>User.current_user.today, :created_by=>User.current_user)
+  def new_production_order(params={})
+  	params={:name=>self.name, :quantity=>1, :is_process=>false, :created_at=>User.current_user.today, :created_by=>User.current_user}.merge!(params)
+  	puts params.inspect
+  	po=ProductionOrder.new(params)
   	for line in self.consumption_lines
   		po.consumption_lines << ConsumptionLine.new(line.attributes)
   	end
@@ -50,6 +53,30 @@ class ProductionOrder < ActiveRecord::Base
   		return 'Orden de Produccion'  		
   	end # if is_process
   end
+  ##############################################################
+  # Starts production
+  # Creates movements to remove consumed items from stock
+  ##############################################################
+  def start(params={})
+  	params={:started_at => User.current_user.today, :started_by => User.current_user}.merge!(params)
+  	self.started_at=params[:started_at]
+		self.started_by=params[:started_by]
+		for l in self.consumption_lines
+			l.start_movement(params)
+		end
+  end # def start
+  ##############################################################
+  # Finishes Production
+  # Creates movements to bring produced products into stock
+  ##############################################################
+  def finish(params={})
+  	params={:finished_at => User.current_user.today, :finished_by => User.current_user}.merge!(params)
+  	self.finished_at=params[:finished_at]
+		self.finished_by=params[:finished_by]
+		for l in self.production_lines
+			l.finish_movement(params)
+		end
+  end # def finish
   #################################################################################################
   # Searches for product orders and product processes based on name and filter
   # Paginates if page is specified

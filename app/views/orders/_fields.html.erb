@@ -7,6 +7,24 @@
 	<dt><%= link_to_function 'Guardar', 'submit("order_form")', :class => 'action' %></dt>
 	<dt><%= link_to 'Cancelar', orders_url, :class => 'action' %></dt>
 <% end %>
+<% if @order.new_record? %>
+	<% case @order_type_id
+	when Order::SALE %>
+		<%= hidden_field_tag :cancel_url, sales_url %>
+	<% when Order::PURCHASE %>
+		<%= hidden_field_tag :cancel_url, purchases_url %>
+	<% when Order::INTERNAL %>
+		<%= hidden_field_tag :cancel_url, internals_url %>
+	<% when Order::TRANSFER %>
+		<%= hidden_field_tag :cancel_url, transfers_url %>
+	<% when Order::COUNT %>
+		<%= hidden_field_tag :cancel_url, counts_url %>
+	<% when Order::LABELS %>
+		<%= hidden_field_tag :cancel_url, labels_url %>
+	<% end %>
+<% else %>
+	<%= hidden_field_tag :cancel_url, order_url(@order) %>
+<% end %>
 
 <% for error in @order.errors %>
 	<p class="error_message">

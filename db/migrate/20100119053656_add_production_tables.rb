@@ -5,6 +5,7 @@ class AddProductionTables < ActiveRecord::Migration
       t.integer :quantity_planned
       t.integer :product_id
       t.integer :production_order_id
+      t.integer :serialized_product_id
       t.string :type
   	end
   	create_table :production_orders  do |t|
@@ -16,6 +17,8 @@ class AddProductionTables < ActiveRecord::Migration
       t.integer :created_by
       t.integer :started_by
       t.integer :finished_by
+      t.integer :site_id
+      t.integer :quantity
     end
   end
 

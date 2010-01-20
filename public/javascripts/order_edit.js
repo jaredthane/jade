@@ -47,6 +47,9 @@ $(document).ready(function(){
 	//Setup	date picker
 	$.datepicker.regional['es']
 	$(".datepicker").datepicker();
+//	$(document).bind('keydown', '6', submit('order_form'));
+	jQuery(document).bind('keydown', 'f1',function (evt){submit('order_form'); return false; }); 
+	jQuery(document).bind('keydown', 'esc',function (evt){window.location = $('#cancel_url').val(); return false; }); 
 	// Prepare lookups
 	$("#client_lookup").autocomplete("/clients.js",{matchSubset:0, autoFill:1}); 
 	$("#vendor_lookup").autocomplete("/vendors.js",{matchSubset:0, autoFill:1}); 

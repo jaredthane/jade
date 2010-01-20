@@ -11,9 +11,8 @@ MovementType.create(:name=>"Devolucion de Consumo Interno"){ |r| r.id=9}
 MovementType.create(:name=>"Pago"){ |r| r.id=10}
 MovementType.create(:name=>"Deposito"){ |r| r.id=11}
 MovementType.create(:name=>"Retiro"){ |r| r.id=12}
-MovementType.create(:name=>"Pago"){ |r| r.id=13}
-MovementType.create(:name=>"Deposito"){ |r| r.id=14}
-MovementType.create(:name=>"Retiro"){ |r| r.id=15}
+MovementType.create(:name=>"Consumo de Produccion"){ |r| r.id=13}
+MovementType.create(:name=>"Production"){ |r| r.id=14}
 OrderType.create(:name=>"Venta"){ |r| r.id=1}
 OrderType.create(:name=>"Compra"){ |r| r.id=2}
 OrderType.create(:name=>"Consumo Interno"){ |r| r.id=3}
