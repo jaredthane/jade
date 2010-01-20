@@ -149,7 +149,7 @@ class Line < ActiveRecord::Base
 									###logger.debug  "@order.vendor.id=" + @order.vendor.id.to_s
 									errors.add "El numero de serie " + self.serialized_product.serial_number + " no esta disponible en este sitio" if self.serialized_product.location != @order.vendor
 							else
-								errors.add "El numero de serie " + self.serialized_product.serial_number + " no se encuentra en el registro"
+								errors.add "El numero de serie no se encuentra en el registro"
 							end
 						end
 						# Serial number should exist, and be in vendors location

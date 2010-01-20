@@ -69,19 +69,19 @@ for copy in ['cliente', 'vendor', 'government'] do
 				pdf.bounding_box([pdf.bounds.width/3*2, pdf.bounds.top-30], :width=>pdf.bounds.width/3, :height=>65) do
 					#pdf.stroke_bounds
 					pdf.font_size = 10
-					if client.home_phone!=''
+					if client.home_phone!='' and client.home_phone
 						pdf.text "Fijo: " + (client.home_phone_number||'')
 					end #if vendor.home_phone!=''
-					if client.office_phone!=''
+					if client.office_phone!='' and client.office_phone
 						pdf.text "Oficina: " + (client.office_phone_number||'')
 					end #if vendor.office_phone!=''
-					if client.office_phone!=''
+					if client.office_phone!='' and client.office_phone
 						pdf.text "Celular: " + (client.cell_phone_number||'')
 					end #if vendor.office_phone!=''
-					if client.email!=''
+					if client.email!='' and client.email
 						pdf.text client.email
 					end #if vendor.email!=''
-					if client.giro!=''
+					if client.giro!='' and client.giro
 						pdf.text "Giro: " + (client.giro||'')
 					end #if client.giro!=''
 				end # client second box
