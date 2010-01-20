@@ -26,7 +26,7 @@ class ProductionLine < ProductionOrderLine
 	# Returns cost of product * quantity
 	##############################################################
 	def unit_cost
-		return (production_order.cost||0)  / (quantity||quantity_planned) / (production_order.quantity||0)
+		return (production_order.cost||0)  / (quantity||quantity_planned) / (production_order.quantity||1)
 	end # def cost
 	##############################################################
 	# Returns cost of product * quantity
