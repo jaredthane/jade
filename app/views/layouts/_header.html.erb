@@ -156,8 +156,6 @@
 				<% end %>
   			</ul>
 		</li>
-
-
 		<li><a href="/products" title="Productos">Productos</a>
 			<ul>
 				<% if current_user.has_right('VIEW_PRODUCTS') %>
@@ -238,6 +236,16 @@
   			<% end %>
   		</ul>
   	</li>
+		<% if current_user.has_right('VIEW_PRODUCTION_ORDERS') %>
+			<li><a href="<%= production_orders_url(:filter=>'orders') %>" title="Produccion">Produccion</a>
+				<ul>
+					<li><a href="<%= production_orders_url(:filter=>'orders') %>" title="Ordenes">Ordenes</a></li>
+					<% if current_user.has_right('VIEW_PRODUCTION_PROCESSES') %>
+						<li><a href="<%= production_orders_url(:filter=>'processes') %>" title="Procesos">Procesos</a></li>
+					<% end %>
+				</ul>
+			</li>
+		<% end %>
   	<% if current_user.has_right('VIEW_PAYMENTS') %>
 	  	<li><a href="/payments" title="Pagos">Pagos</a></li>
   	<% end %>

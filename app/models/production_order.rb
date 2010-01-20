@@ -35,7 +35,7 @@ class ProductionOrder < ActiveRecord::Base
     end
   end
   def new_production_order(params={})
-  	params={:name=>self.name, :quantity=>1, :is_process=>false, :created_at=>User.current_user.today, :created_by=>User.current_user}.merge!(params)
+  	params={:name=>self.name, :site=>self.site, :quantity=>1, :is_process=>false, :created_at=>User.current_user.today, :created_by=>User.current_user}.merge!(params)
   	puts params.inspect
   	po=ProductionOrder.new(params)
   	for line in self.consumption_lines
@@ -59,8 +59,8 @@ class ProductionOrder < ActiveRecord::Base
   ##############################################################
   def start(params={})
   	params={:started_at => User.current_user.today, :started_by => User.current_user}.merge!(params)
-  	self.started_at=params[:started_at]
-		self.started_by=params[:started_by]
+  	self.started_at=params.delete(:started_at)
+		self.started_by=params.delete(:started_by)
 		for l in self.consumption_lines
 			l.start_movement(params)
 		end
@@ -71,8 +71,8 @@ class ProductionOrder < ActiveRecord::Base
   ##############################################################
   def finish(params={})
   	params={:finished_at => User.current_user.today, :finished_by => User.current_user}.merge!(params)
-  	self.finished_at=params[:finished_at]
-		self.finished_by=params[:finished_by]
+  	self.finished_at=params.delete(:finished_at)
+		self.finished_by=params.delete(:finished_by)
 		for l in self.production_lines
 			l.finish_movement(params)
 		end

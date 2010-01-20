@@ -51,13 +51,8 @@ class User < ActiveRecord::Base
 		return Entity.find_all_by_user_id(self.id)
 	end
 	def today
-		if self.date
-			logger.debug "self.date=#{self.date.to_s}"
-			logger.debug "Time.now.change(:year=>self.date.year, :month=>self.date.month, :day=>self.date.day)=#{Time.now.change(:year=>self.date.year, :month=>self.date.month, :day=>self.date.day).to_s}"
-			return Time.now.change(:year=>self.date.year, :month=>self.date.month, :day=>self.date.day)
-		else
-			return Date.today
-		end
+		self.date=Date.today if !self.date
+		return Time.now.change(:year=>self.date.year, :month=>self.date.month, :day=>self.date.day)
 	end
 	def today=(value)
 		self.date=value.to_date

@@ -124,6 +124,7 @@ class ProductionOrdersController < ApplicationController
   # POST /requirements.xml
   def create
    	@production_order = ProductionOrder.new(params[:production_order])
+   	@production_order.site=User.current_user.location
    	@production_order.created_by=User.current_user
     respond_to do |wants|
     	if @production_order.valid?

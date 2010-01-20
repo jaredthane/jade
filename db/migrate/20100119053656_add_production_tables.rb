@@ -14,9 +14,9 @@ class AddProductionTables < ActiveRecord::Migration
       t.datetime :created_at
       t.datetime :started_at
       t.datetime :finished_at
-      t.integer :created_by
-      t.integer :started_by
-      t.integer :finished_by
+      t.integer :created_by_id
+      t.integer :started_by_id
+      t.integer :finished_by_id
       t.integer :site_id
       t.integer :quantity
     end

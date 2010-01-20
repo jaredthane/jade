@@ -31,26 +31,28 @@ class ProductionOrderLine < ActiveRecord::Base
 		:created_at=>User.current_user.today, 
 		:user_id => User.current_user.id, 
 		:order_id => nil,
-		:entity_id => self.production_order.site_id,
+		:entity => self.production_order.site,
 		:product_id => self.product_id,
 		:movement_type_id => 13, 
 		}.merge!(params)
-		return Movement.create(params)
+		m=Movement.new(params)
+		return m.save
 	end # def start_movement
 	
 	##############################################################
 	#
 	##############################################################
-	def finish_movement
+	def finish_movement(params={})
 		params={:quantity => + self.quantity, 
 		:serialized_product_id => self.serialized_product_id, 
 		:created_at=>User.current_user.today, 
 		:user_id => User.current_user.id, 
 		:order_id => nil,
-		:entity_id => self.production_order.site_id,
+		:entity => self.production_order.site,
 		:product_id => self.product_id,
 		:movement_type_id => 14, 
 		}.merge!(params)
-		return Movement.create(params)
+		m=Movement.new(params)
+		return m.save
 	end # def finish_movement
 end
