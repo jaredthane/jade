@@ -1,795 +1,719 @@
 
-ooooo=MovementType.new(:id=>1, :name=>"Venta")
-ooooo.id=1
-ooooo.save
-ooooo=MovementType.new(:id=>2, :name=>"Compra")
-ooooo.id=2
-ooooo.save
-ooooo=MovementType.new(:id=>3, :name=>"Transferencia")
-ooooo.id=3
-ooooo.save
-ooooo=MovementType.new(:id=>4, :name=>"Cuenta Fisica")
-ooooo.id=4
-ooooo.save
-ooooo=MovementType.new(:id=>5, :name=>"Devolucion de Venta")
-ooooo.id=5
-ooooo.save
-ooooo=MovementType.new(:id=>6, :name=>"Devolucion de Compra")
-ooooo.id=6
-ooooo.save
-ooooo=MovementType.new(:id=>7, :name=>"Devolucion de Transferencia")
-ooooo.id=7
-ooooo.save
-ooooo=MovementType.new(:id=>8, :name=>"Consumo Interno")
-ooooo.id=8
-ooooo.save
-ooooo=MovementType.new(:id=>9, :name=>"Devolucion de Consumo Interno")
-ooooo.id=9
-ooooo.save
-ooooo=MovementType.new(:id=>10, :name=>"Pago")
-ooooo.id=10
-ooooo.save
-ooooo=MovementType.new(:id=>11, :name=>"Deposito")
-ooooo.id=11
-ooooo.save
-ooooo=MovementType.new(:id=>12, :name=>"Retiro")
-ooooo.id=12
-ooooo.save
-ooooo=MovementType.new(:id=>13, :name=>"Pago")
-ooooo.id=13
-ooooo.save
-ooooo=MovementType.new(:id=>14, :name=>"Deposito")
-ooooo.id=14
-ooooo.save
-ooooo=MovementType.new(:id=>15, :name=>"Retiro")
-ooooo.id=15
-ooooo.save
-ooooo=OrderType.new(:id=>1, :name=>"Venta")
-ooooo.id=1
-ooooo.save
-ooooo=OrderType.new(:id=>2, :name=>"Compra")
-ooooo.id=2
-ooooo.save
-ooooo=OrderType.new(:id=>3, :name=>"Consumo Interno")
-ooooo.id=3
-ooooo.save
-ooooo=OrderType.new(:id=>4, :name=>"Transferencia")
-ooooo.id=4
-ooooo.save
-ooooo=OrderType.new(:id=>5, :name=>"Cuenta Fisica")
-ooooo.id=5
-ooooo.save
-ooooo=OrderType.new(:id=>6, :name=>"Abono a cuenta")
-ooooo.id=6
-ooooo.save
-ooooo=OrderType.new(:id=>7, :name=>"Transferencia de Fondos")
-ooooo.id=7
-ooooo.save
-ooooo=PaymentMethod.new(:id=>1, :name=>"Efectivo")
-ooooo.id=1
-ooooo.save
-ooooo=PaymentMethod.new(:id=>2, :name=>"Cheque")
-ooooo.id=2
-ooooo.save
-ooooo=PaymentMethod.new(:id=>3, :name=>"Tarjeta de Credito")
-ooooo.id=3
-ooooo.save
-ooooo=PaymentMethod.new(:id=>4, :name=>"Credito")
-ooooo.id=4
-ooooo.save
-debito=PostType.new(:id=>1, :name=>"Debito")
-debito.id=1
-debito.save
-credito=PostType.new(:id=>-1, :name=>"Credito")
-credito.id=-1
-credito.save
-ooooo=Preference.new(:id=>1, :name=>"Producto", :value=>1, :pref_group=>"revenue")
-ooooo.id=1
-ooooo.save
-ooooo=Preference.new(:id=>2, :name=>"Categoria", :value=>2, :pref_group=>"revenue")
-ooooo.id=2
-ooooo.save
-ooooo=Preference.new(:id=>3, :name=>"Proveedor", :value=>3, :pref_group=>"revenue")
-ooooo.id=3
-ooooo.save
-ooooo=Preference.new(:id=>4, :name=>"Sitio", :value=>5, :pref_group=>"revenue")
-ooooo.id=4
-ooooo.save
-ooooo=Preference.new(:id=>5, :name=>"Asesor", :value=>4, :pref_group=>"revenue")
-ooooo.id=5
-ooooo.save
-ooooo=Preference.new(:id=>6, :name=>"Usuario", :value=>6, :pref_group=>"revenue")
-ooooo.id=6
-ooooo.save
-ooooo=Preference.new(:id=>7, :name=>"Sitio", :value=>4, :pref_group=>"cash")
-ooooo.id=7
-ooooo.save
-ooooo=Preference.new(:id=>8, :name=>"Asesor", :value=>2, :pref_group=>"cash")
-ooooo.id=8
-ooooo.save
-ooooo=Preference.new(:id=>9, :name=>"Usuario", :value=>3, :pref_group=>"cash")
-ooooo.id=9
-ooooo.save
-publico=PriceGroupName.new(:id=>1, :name=>"Publico")
-publico.id=1
-publico.save
-mayoreo=PriceGroupName.new(:id=>2, :name=>"Mayoreo")
-mayoreo.id=2
-mayoreo.save
-proveedor=EntityType.new(:id=>1, :name=>"Proveedor")
-proveedor.id=1
-proveedor.save
-consumidor=EntityType.new(:id=>2, :name=>"Consumidor Final")
-consumidor.id=2
-consumidor.save
-sitio=EntityType.new(:id=>3, :name=>"Sitio")
-sitio.id=3
-sitio.save
-credito_fiscal=EntityType.new(:id=>5, :name=>"Credito Fiscal")
-credito_fiscal.id=5
-credito_fiscal.save
-empleado=EntityType.new(:id=>6, :name=>"Empleado")
-empleado.id=6
-empleado.save
-banco=EntityType.new(:id=>7, :name=>"Cuenta Bancaria")
-banco.id=7
-banco.save
-ooooo=State.new(:id=>1, :name=>'Ahuachapán')
-ooooo.id=1
-ooooo.save
-ooooo=State.new(:id=>14, :name=>'Usulután')
-ooooo.id=14
-ooooo.save
-ooooo=State.new(:id=>13, :name=>'Sonsonate')
-ooooo.id=13
-ooooo.save
-ooooo=State.new(:id=>11, :name=>'San Vicente')
-ooooo.id=11
-ooooo.save
-santa_ana=State.new(:id=>12, :name=>'Santa Ana')
-santa_ana.id=12
-santa_ana.save
-ooooo=State.new(:id=>10, :name=>'San Salvador')
-ooooo.id=10
-ooooo.save
-ooooo=State.new(:id=>9, :name=>'San Miguel')
-ooooo.id=9
-ooooo.save
-ooooo=State.new(:id=>8, :name=>'Morazán')
-ooooo.id=8
-ooooo.save
-ooooo=State.new(:id=>7, :name=>'La Unión')
-ooooo.id=7
-ooooo.save
-ooooo=State.new(:id=>5, :name=>'La Libertad')
-ooooo.id=5
-ooooo.save
-ooooo=State.new(:id=>6, :name=>'La Paz')
-ooooo.id=6
-ooooo.save
-ooooo=State.new(:id=>4, :name=>'Cuscatlán')
-ooooo.id=4
-ooooo.save
-ooooo=State.new(:id=>3, :name=>'Chalatenango')
-ooooo.id=3
-ooooo.save
-ooooo=State.new(:id=>2, :name=>'Cabañas')
-ooooo.id=2
-ooooo.save
-activos=Account.new(:id=>2, :name=>"Activos", :number=>"1", :modifier=>1, :is_parent=>1)
-activos.id=2
-activos.save
-pasivos=Account.new(:id=>3, :name=>"Pasivos", :number=>"2", :modifier=>-1, :is_parent=>1)
-pasivos.id=3
-pasivos.save
-ooooo=Account.new(:id=>4, :name=>"Patrimonio", :number=>"3", :modifier=>-1, :is_parent=>0)
-ooooo.id=4
-ooooo.save
-ooooo=Account.new(:id=>5, :name=>"Ingresos", :number=>"4", :modifier=>-1, :is_parent=>1)
-ooooo.id=5
-ooooo.save
-ooooo=Account.new(:id=>6, :name=>"Gastos", :number=>"5", :modifier=>1, :is_parent=>1)
-ooooo.id=6
-ooooo.save
-ooooo=Account.new(:id=>7, :name=>"Efectivo", :parent=>activos, :number=>"11", :modifier=>1, :is_parent=>1)
-ooooo.id=7
-ooooo.save
-ooooo=Account.new(:id=>8, :name=>"Inventario", :parent=>activos, :number=>"12", :modifier=>1, :is_parent=>1)
-ooooo.id=8
-ooooo.save
-ooooo=Account.new(:id=>9, :name=>"Cuenta Bancaria", :parent=>activos, :number=>"13", :modifier=>1, :is_parent=>0)
-ooooo.id=9
-ooooo.save
-cobrar=Account.new(:id=>10, :name=>"Cuentas a Cobrar", :parent=>activos, :number=>"14", :modifier=>1, :is_parent=>1)
-cobrar.id=10
-cobrar.save
-pagar=Account.new(:id=>11, :name=>"Cuentas por Pagar", :parent=>pasivos, :number=>"21", :modifier=>-1, :is_parent=>1)
-pagar.id=11
-pagar.save
-ooooo=Account.new(:id=>12, :name=>"Impuesto", :parent=>pasivos, :number=>"22", :modifier=>-1, :is_parent=>1)
-ooooo.id=12
-ooooo.save
-ooooo=Account.new(:id=>13, :name=>"Empleados", :parent=>pagar, :number=>"211", :modifier=>-1, :is_parent=>1)
-ooooo.id=13
-ooooo.save
-ooooo=Account.new(:id=>14, :name=>"Proveedores", :parent=>pagar, :number=>"212", :modifier=>-1, :is_parent=>1)
-ooooo.id=14
-ooooo.save
-ooooo=Account.new(:id=>15, :name=>"Clientes", :parent=>cobrar, :number=>"141", :modifier=>1, :is_parent=>1)
-ooooo.id=15
-ooooo.save
+MovementType.create(:name=>"Venta"){ |r| r.id=1}
+MovementType.create(:name=>"Compra"){ |r| r.id=2}
+MovementType.create(:name=>"Transferencia"){ |r| r.id=3}
+MovementType.create(:name=>"Cuenta Fisica"){ |r| r.id=4}
+MovementType.create(:name=>"Devolucion de Venta"){ |r| r.id=5}
+MovementType.create(:name=>"Devolucion de Compra"){ |r| r.id=6}
+MovementType.create(:name=>"Devolucion de Transferencia"){ |r| r.id=7}
+MovementType.create(:name=>"Consumo Interno"){ |r| r.id=8}
+MovementType.create(:name=>"Devolucion de Consumo Interno"){ |r| r.id=9}
+MovementType.create(:name=>"Pago"){ |r| r.id=10}
+MovementType.create(:name=>"Deposito"){ |r| r.id=11}
+MovementType.create(:name=>"Retiro"){ |r| r.id=12}
+MovementType.create(:name=>"Pago"){ |r| r.id=13}
+MovementType.create(:name=>"Deposito"){ |r| r.id=14}
+MovementType.create(:name=>"Retiro"){ |r| r.id=15}
+OrderType.create(:name=>"Venta"){ |r| r.id=1}
+OrderType.create(:name=>"Compra"){ |r| r.id=2}
+OrderType.create(:name=>"Consumo Interno"){ |r| r.id=3}
+OrderType.create(:name=>"Transferencia"){ |r| r.id=4}
+OrderType.create(:name=>"Cuenta Fisica"){ |r| r.id=5}
+OrderType.create(:name=>"Abono a cuenta"){ |r| r.id=6}
+OrderType.create(:name=>"Transferencia de Fondos"){ |r| r.id=7}
+PaymentMethod.create(:name=>"Efectivo"){ |r| r.id=1}
+PaymentMethod.create(:name=>"Cheque"){ |r| r.id=2}
+PaymentMethod.create(:name=>"Tarjeta de Credito"){ |r| r.id=3}
+PaymentMethod.create(:name=>"Credito"){ |r| r.id=4}
+debito=PostType.create(:name=>"Debito"){ |r| r.id=1}
+credito=PostType.create(:name=>"Credito"){ |r| r.id=-1}
+Preference.create(:name=>"Producto", :value=>1, :pref_group=>"revenue")
+Preference.create(:name=>"Categoria", :value=>2, :pref_group=>"revenue")
+Preference.create(:name=>"Proveedor", :value=>3, :pref_group=>"revenue")
+Preference.create(:name=>"Sitio", :value=>5, :pref_group=>"revenue")
+Preference.create(:name=>"Asesor", :value=>4, :pref_group=>"revenue")
+Preference.create(:name=>"Usuario", :value=>6, :pref_group=>"revenue")
+Preference.create(:name=>"Sitio", :value=>4, :pref_group=>"cash")
+Preference.create(:name=>"Asesor", :value=>2, :pref_group=>"cash")
+Preference.create(:name=>"Usuario", :value=>3, :pref_group=>"cash")
+publico=PriceGroupName.create( :name=>"Publico"){ |r| r.id=1}
+mayoreo=PriceGroupName.create( :name=>"Mayoreo"){ |r| r.id=2}
+proveedor=EntityType.create( :name=>"Proveedor"){ |r| r.id=1}
+consumidor=EntityType.create( :name=>"Consumidor Final"){ |r| r.id=2}
+sitio=EntityType.create( :name=>"Sitio"){ |r| r.id=3}
+credito_fiscal=EntityType.create( :name=>"Credito Fiscal"){ |r| r.id=5}
+empleado=EntityType.create( :name=>"Empleado"){ |r| r.id=6}
+banco=EntityType.create( :name=>"Cuenta Bancaria"){ |r| r.id=7}
+State.create( :name=>'Ahuachapán'){ |r| r.id=1}
+State.create( :name=>'Usulután'){ |r| r.id=14}
+State.create( :name=>'Sonsonate'){ |r| r.id=13}
+State.create( :name=>'San Vicente'){ |r| r.id=11}
+santa_ana=State.create( :name=>'Santa Ana'){ |r| r.id=12}
+State.create( :name=>'San Salvador'){ |r| r.id=10}
+State.create( :name=>'San Miguel'){ |r| r.id=9}
+State.create( :name=>'Morazán'){ |r| r.id=8}
+State.create( :name=>'La Unión'){ |r| r.id=7}
+State.create( :name=>'La Libertad'){ |r| r.id=5}
+State.create( :name=>'La Paz'){ |r| r.id=6}
+State.create( :name=>'Cuscatlán'){ |r| r.id=4}
+State.create( :name=>'Chalatenango'){ |r| r.id=3}
+State.create( :name=>'Cabañas'){ |r| r.id=2}
 
-home=Entity.new(:id=>5, :name=>'Principal', :entity_type=>sitio, :state=>santa_ana, :active=>1, :price_group_id=> 1, :next_receipt_number=> "1001", :next_bar_code=>"1001")
-home.id=5
-home.save
-ooooo=Entity.new(:id=>1, :name=>'Consumo Interno', :entity_type_id=>0, :state=>santa_ana, :active=>1, :site=>home)
-ooooo.id=1
-ooooo.save
-ooooo=Entity.new(:id=>2, :name=>'Varios', :entity_type=>proveedor, :state=>santa_ana, :active=>1, :site=>home)
-ooooo.id=2
-ooooo.save
-anonimo=Entity.new(:id=>3, :name=>'Anonimo', :entity_type=>consumidor, :price_group_id=>1, :price_group_name=>publico, :site=>home, :state=>santa_ana, :active=>1, :site=>home)
-anonimo.id=3
-anonimo.save
-ooooo=Entity.new(:id=>4, :name=>'No Specificado', :entity_type=>proveedor, :state=>santa_ana, :active=>1, :site=>home)
-ooooo.id=4
-ooooo.save
-ooooo=Entity.new(:id=>9, :name=>'Anulado', :entity_type=>consumidor, :state=>santa_ana, :active=>1, :site=>home)
-ooooo.id=9
-ooooo.save
-jade=User.new(:id=>1, :name=>'Sistema Jade', :login=>'Sistema Jade', :location=> home, :price_group_name=>PriceGroupName.first, :do_accounting=>1)
-jade.id=1
+activos=Account.create( :name=>"Activos", :number=>"1", :modifier=>1, :is_parent=>1){ |r| r.id=2}
+pasivos=Account.create( :name=>"Pasivos", :number=>"2", :modifier=>-1, :is_parent=>1){ |r| r.id=3}
+Account.create( :name=>"Patrimonio", :number=>"3", :modifier=>-1, :is_parent=>0){ |r| r.id=4}
+Account.create( :name=>"Ingresos", :number=>"4", :modifier=>-1, :is_parent=>1){ |r| r.id=5}
+Account.create( :name=>"Gastos", :number=>"5", :modifier=>1, :is_parent=>1){ |r| r.id=6}
+Account.create( :name=>"Efectivo", :parent=>activos, :number=>"11", :modifier=>1, :is_parent=>1){ |r| r.id=7}
+Account.create( :name=>"Inventario", :parent=>activos, :number=>"12", :modifier=>1, :is_parent=>1){ |r| r.id=8}
+Account.create( :name=>"Cuenta Bancaria", :parent=>activos, :number=>"13", :modifier=>1, :is_parent=>0){ |r| r.id=9}
+cobrar=Account.create( :name=>"Cuentas a Cobrar", :parent=>activos, :number=>"14", :modifier=>1, :is_parent=>1){ |r| r.id=10}
+pagar=Account.create( :name=>"Cuentas por Pagar", :parent=>pasivos, :number=>"21", :modifier=>-1, :is_parent=>1){ |r| r.id=11}
+Account.create( :name=>"Impuesto", :parent=>pasivos, :number=>"22", :modifier=>-1, :is_parent=>1){ |r| r.id=12}
+Account.create( :name=>"Empleados", :parent=>pagar, :number=>"211", :modifier=>-1, :is_parent=>1){ |r| r.id=13}
+Account.create( :name=>"Proveedores", :parent=>pagar, :number=>"212", :modifier=>-1, :is_parent=>1){ |r| r.id=14}
+Account.create( :name=>"Clientes", :parent=>cobrar, :number=>"141", :modifier=>1, :is_parent=>1){ |r| r.id=15}
+
+home=Entity.create(:id=>5, :name=>'Principal', :entity_type=>sitio, :state=>santa_ana, :active=>1, :price_group_id=> 1, :next_receipt_number=> "1001", :next_bar_code=>"1001"){ |r| r.id=5}
+Entity.create(:id=>1, :name=>'Consumo Interno', :entity_type_id=>0, :state=>santa_ana, :active=>1, :site=>home){ |r| r.id=1}
+Entity.create(:id=>2, :name=>'Varios', :entity_type=>proveedor, :state=>santa_ana, :active=>1, :site=>home){ |r| r.id=2}
+anonimo=Entity.create(:id=>3, :name=>'Anonimo', :entity_type=>consumidor, :price_group_id=>1, :price_group_name=>publico, :site=>home, :state=>santa_ana, :active=>1, :site=>home){ |r| r.id=3}
+Entity.create(:id=>4, :name=>'No Specificado', :entity_type=>proveedor, :state=>santa_ana, :active=>1, :site=>home){ |r| r.id=4}
+Entity.create(:id=>9, :name=>'Anulado', :entity_type=>consumidor, :state=>santa_ana, :active=>1, :site=>home){ |r| r.id=9}
+jade=User.new(:id=>1, :name=>'Sistema Jade', :login=>'Sistema Jade', :location=> home, :price_group_name=>PriceGroupName.first, :do_accounting=>1){ |r| r.id=1}
 jade.save_with_validation(perform_validation = false) 
 User.current_user=jade
-ooooo=User.new(:id=>2, :name=>'Administrador', :login=>'admin', :password=>"admin", :password_confirmation=>"admin", :location=> home, :price_group_name=>PriceGroupName.first, :do_accounting=>1)
-ooooo.id=2
-ooooo.save
+administrator=User.create(:id=>2, :name=>'Administrador', :login=>'admin', :password=>"admin", :password_confirmation=>"admin", :location=> home, :price_group_name=>PriceGroupName.first, :do_accounting=>1){ |r| r.id=2}
 anonimo.cash_account.number="14101"
 anonimo.cash_account.id=1
 anonimo.cash_account.save
 
-ooooo=ProductType.new(:id=>1, :name=>"Simple")
-ooooo.id=1
-ooooo.save
-ooooo=ProductType.new(:id=>2, :name=>"Discount")
-ooooo.id=2
-ooooo.save
-ooooo=ProductType.new(:id=>3, :name=>"Combo")
-ooooo.id=3
-ooooo.save
-ooooo=ProductType.new(:id=>4, :name=>"Service")
-ooooo.id=4
-ooooo.save
-ooooo=Right.new(:id=>1, :name=>"Crear Pagos para Ventas")
-ooooo.id=1
-ooooo.save
-ooooo=Right.new(:id=>2, :name=>"Cambiar Pagos para Ventas")
-ooooo.id=2
-ooooo.save
-ooooo=Right.new(:id=>3, :name=>"Ver Pagos para Ventas")
-ooooo.id=3
-ooooo.save
-ooooo=Right.new(:id=>4, :name=>"Borrar Pagos para Ventas")
-ooooo.id=4
-ooooo.save
-ooooo=Right.new(:id=>5, :name=>"Crear Pagos para Compras")
-ooooo.id=5
-ooooo.save
-ooooo=Right.new(:id=>6, :name=>"Cambiar Pagos para Compras")
-ooooo.id=6
-ooooo.save
-ooooo=Right.new(:id=>7, :name=>"Ver Pagos para Compras")
-ooooo.id=7
-ooooo.save
-ooooo=Right.new(:id=>8, :name=>"Borrar Pagos para Compras")
-ooooo.id=8
-ooooo.save
-ooooo=Right.new(:id=>9, :name=>"Crear Ventas")
-ooooo.id=9
-ooooo.save
-ooooo=Right.new(:id=>10, :name=>"Cambiar Ventas")
-ooooo.id=10
-ooooo.save
-ooooo=Right.new(:id=>11, :name=>"Ver Ventas")
-ooooo.id=11
-ooooo.save
-ooooo=Right.new(:id=>12, :name=>"Borrar Ventas")
-ooooo.id=12
-ooooo.save
-ooooo=Right.new(:id=>13, :name=>"Crear Compras")
-ooooo.id=13
-ooooo.save
-ooooo=Right.new(:id=>14, :name=>"Cambiar Compras")
-ooooo.id=14
-ooooo.save
-ooooo=Right.new(:id=>15, :name=>"Ver Compras")
-ooooo.id=15
-ooooo.save
-ooooo=Right.new(:id=>16, :name=>"Borrar Compras")
-ooooo.id=16
-ooooo.save
-ooooo=Right.new(:id=>17, :name=>"Crear Consumidor Final")
-ooooo.id=17
-ooooo.save
-ooooo=Right.new(:id=>18, :name=>"Cambiar Consumidor Final")
-ooooo.id=18
-ooooo.save
-ooooo=Right.new(:id=>19, :name=>"Ver Consumidor Final")
-ooooo.id=19
-ooooo.save
-ooooo=Right.new(:id=>20, :name=>"Borrar Consumidor Final")
-ooooo.id=20
-ooooo.save
-ooooo=Right.new(:id=>21, :name=>"Crear Credito Fiscal")
-ooooo.id=21
-ooooo.save
-ooooo=Right.new(:id=>22, :name=>"Cambiar Credito Fiscal")
-ooooo.id=22
-ooooo.save
-ooooo=Right.new(:id=>23, :name=>"Ver Credito Fiscal")
-ooooo.id=23
-ooooo.save
-ooooo=Right.new(:id=>24, :name=>"Borrar Credito Fiscal")
-ooooo.id=24
-ooooo.save
-ooooo=Right.new(:id=>25, :name=>"Crear Productos")
-ooooo.id=25
-ooooo.save
-ooooo=Right.new(:id=>26, :name=>"Cambiar Productos")
-ooooo.id=26
-ooooo.save
-ooooo=Right.new(:id=>27, :name=>"Ver Productos")
-ooooo.id=27
-ooooo.save
-ooooo=Right.new(:id=>28, :name=>"Borrar Productos")
-ooooo.id=28
-ooooo.save
-ooooo=Right.new(:id=>29, :name=>"Crear Suscripciones")
-ooooo.id=29
-ooooo.save
-ooooo=Right.new(:id=>30, :name=>"Cambiar Suscripciones")
-ooooo.id=30
-ooooo.save
-ooooo=Right.new(:id=>31, :name=>"Ver Suscripciones")
-ooooo.id=31
-ooooo.save
-ooooo=Right.new(:id=>32, :name=>"Borrar Suscripciones")
-ooooo.id=32
-ooooo.save
-ooooo=Right.new(:id=>33, :name=>"Crear Papeles")
-ooooo.id=33
-ooooo.save
-ooooo=Right.new(:id=>34, :name=>"Cambiar Papeles")
-ooooo.id=34
-ooooo.save
-ooooo=Right.new(:id=>35, :name=>"Ver Papeles")
-ooooo.id=35
-ooooo.save
-ooooo=Right.new(:id=>36, :name=>"Borrar Papeles")
-ooooo.id=36
-ooooo.save
-ooooo=Right.new(:id=>37, :name=>"Crear Usuarios")
-ooooo.id=37
-ooooo.save
-ooooo=Right.new(:id=>38, :name=>"Cambiar Usuarios")
-ooooo.id=38
-ooooo.save
-ooooo=Right.new(:id=>39, :name=>"Ver Usuarios")
-ooooo.id=39
-ooooo.save
-ooooo=Right.new(:id=>40, :name=>"Borrar Usuarios")
-ooooo.id=40
-ooooo.save
-ooooo=Right.new(:id=>41, :name=>"Crear Sitios")
-ooooo.id=41
-ooooo.save
-ooooo=Right.new(:id=>42, :name=>"Cambiar Sitios")
-ooooo.id=42
-ooooo.save
-ooooo=Right.new(:id=>43, :name=>"Ver Sitios")
-ooooo.id=43
-ooooo.save
-ooooo=Right.new(:id=>44, :name=>"Borrar Sitios")
-ooooo.id=44
-ooooo.save
-ooooo=Right.new(:id=>45, :name=>"Crear Cuentas Fisicas")
-ooooo.id=45
-ooooo.save
-ooooo=Right.new(:id=>46, :name=>"Cambiar Cuentas Fisicas")
-ooooo.id=46
-ooooo.save
-ooooo=Right.new(:id=>47, :name=>"Ver Cuentas Fisicas")
-ooooo.id=47
-ooooo.save
-ooooo=Right.new(:id=>48, :name=>"Borrar Cuentas Fisicas")
-ooooo.id=48
-ooooo.save
-ooooo=Right.new(:id=>49, :name=>"Ver COSTS")
-ooooo.id=49
-ooooo.save
-ooooo=Right.new(:id=>50, :name=>"Crear Cuentas")
-ooooo.id=50
-ooooo.save
-ooooo=Right.new(:id=>51, :name=>"Cambiar Cuentas")
-ooooo.id=51
-ooooo.save
-ooooo=Right.new(:id=>52, :name=>"Ver Cuentas")
-ooooo.id=52
-ooooo.save
-ooooo=Right.new(:id=>53, :name=>"Borrar Cuentas")
-ooooo.id=53
-ooooo.save
-ooooo=Right.new(:id=>54, :name=>"Crear Servicios")
-ooooo.id=54
-ooooo.save
-ooooo=Right.new(:id=>55, :name=>"Cambiar Servicios")
-ooooo.id=55
-ooooo.save
-ooooo=Right.new(:id=>56, :name=>"Ver Servicios")
-ooooo.id=56
-ooooo.save
-ooooo=Right.new(:id=>57, :name=>"Borrar Servicios")
-ooooo.id=57
-ooooo.save
-ooooo=Right.new(:id=>58, :name=>"Crear Combos")
-ooooo.id=58
-ooooo.save
-ooooo=Right.new(:id=>59, :name=>"Cambiar Combos")
-ooooo.id=59
-ooooo.save
-ooooo=Right.new(:id=>60, :name=>"Ver Combos")
-ooooo.id=60
-ooooo.save
-ooooo=Right.new(:id=>61, :name=>"Borrar Combos")
-ooooo.id=61
-ooooo.save
-ooooo=Right.new(:id=>62, :name=>"Crear Descuentos")
-ooooo.id=62
-ooooo.save
-ooooo=Right.new(:id=>63, :name=>"Cambiar Descuentos")
-ooooo.id=63
-ooooo.save
-ooooo=Right.new(:id=>64, :name=>"Ver Descuentos")
-ooooo.id=64
-ooooo.save
-ooooo=Right.new(:id=>65, :name=>"Borrar Descuentos")
-ooooo.id=65
-ooooo.save
-ooooo=Right.new(:id=>66, :name=>"Crear Garantias")
-ooooo.id=66
-ooooo.save
-ooooo=Right.new(:id=>67, :name=>"Cambiar Garantias")
-ooooo.id=67
-ooooo.save
-ooooo=Right.new(:id=>68, :name=>"Ver Garantias")
-ooooo.id=68
-ooooo.save
-ooooo=Right.new(:id=>69, :name=>"Borrar Garantias")
-ooooo.id=69
-ooooo.save
-ooooo=Right.new(:id=>70, :name=>"Crear Consumos Internos")
-ooooo.id=70
-ooooo.save
-ooooo=Right.new(:id=>71, :name=>"Cambiar Consumos Internos")
-ooooo.id=71
-ooooo.save
-ooooo=Right.new(:id=>72, :name=>"Ver Consumos Internos")
-ooooo.id=72
-ooooo.save
-ooooo=Right.new(:id=>73, :name=>"Borrar Consumos Internos")
-ooooo.id=73
-ooooo.save
-ooooo=Right.new(:id=>74, :name=>"Crear Numeros de Serie")
-ooooo.id=74
-ooooo.save
-ooooo=Right.new(:id=>75, :name=>"Cambiar Numeros de Serie")
-ooooo.id=75
-ooooo.save
-ooooo=Right.new(:id=>76, :name=>"Ver Numeros de Serie")
-ooooo.id=76
-ooooo.save
-ooooo=Right.new(:id=>77, :name=>"Borrar Numeros de Serie")
-ooooo.id=77
-ooooo.save
-ooooo=Right.new(:id=>78, :name=>"Cambiar Prices")
-ooooo.id=78
-ooooo.save
-ooooo=Right.new(:id=>79, :name=>"Crear Proveedores")
-ooooo.id=79
-ooooo.save
-ooooo=Right.new(:id=>80, :name=>"Cambiar Proveedores")
-ooooo.id=80
-ooooo.save
-ooooo=Right.new(:id=>81, :name=>"Ver Proveedores")
-ooooo.id=81
-ooooo.save
-ooooo=Right.new(:id=>82, :name=>"Borrar Proveedores")
-ooooo.id=82
-ooooo.save
-ooooo=Right.new(:id=>83, :name=>"Crear Transacciones")
-ooooo.id=83
-ooooo.save
-ooooo=Right.new(:id=>84, :name=>"Cambiar Transacciones")
-ooooo.id=84
-ooooo.save
-ooooo=Right.new(:id=>85, :name=>"Ver Transacciones")
-ooooo.id=85
-ooooo.save
-ooooo=Right.new(:id=>86, :name=>"Borrar Transacciones")
-ooooo.id=86
-ooooo.save
-ooooo=Right.new(:id=>87, :name=>"Procesar Cuentas Fisicas")
-ooooo.id=87
-ooooo.save
-ooooo=Right.new(:id=>88, :name=>"Crear Ordenes de Produccion")
-ooooo.id=88
-ooooo.save
-ooooo=Right.new(:id=>89, :name=>"Cambiar Ordenes de Produccion")
-ooooo.id=89
-ooooo.save
-ooooo=Right.new(:id=>90, :name=>"Ver Ordenes de Produccion")
-ooooo.id=90
-ooooo.save
-ooooo=Right.new(:id=>91, :name=>"Borrar Ordenes de Produccion")
-ooooo.id=91
-ooooo.save
-ooooo=Right.new(:id=>92, :name=>"Crear Procesos de Produccion")
-ooooo.id=92
-ooooo.save
-ooooo=Right.new(:id=>93, :name=>"Cambiar Procesos de Produccion")
-ooooo.id=93
-ooooo.save
-ooooo=Right.new(:id=>94, :name=>"Ver Procesos de Produccion")
-ooooo.id=94
-ooooo.save
-ooooo=Right.new(:id=>95, :name=>"Borrar Procesos de Produccion")
-ooooo.id=95
-ooooo.save
-ooooo=Right.new(:id=>96, :name=>"Iniciar Ordenes de Produccion")
-ooooo.id=96
-ooooo.save
-ooooo=Right.new(:id=>97, :name=>"Terminar Ordenes de Produccion")
-ooooo.id=97
-ooooo.save
-cobrador=Role.new(:id=>1, :title=>'Cobrador')
-vendedor=Role.new(:id=>2, :title=>'Vendedor')
-comprador=Role.new(:id=>3, :title=>'Comprador')
-accountant=Role.new(:id=>4, :title=>'Contabilidad')
-inventory=Role.new(:id=>5, :title=>'Inventario')
-gerente=Role.new(:id=>6, :title=>'Gerente')
-admin=Role.new(:id=>7, :title=>'Admin')
-versubs=Role.new(:id=>8, :title=>'Ver Suscripciones')
-cambiarsubs=Role.new(:id=>9, :title=>'Cambiar Suscripciones')
-oldadmin=Role.new(:id=>10, :title=>'admin')
-RightsRole.create(:role=>cobrador, :right_id =>1)
-RightsRole.create(:role=>cobrador, :right_id =>2)
-RightsRole.create(:role=>cobrador, :right_id =>3)
-RightsRole.create(:role=>cobrador, :right_id =>11)
-RightsRole.create(:role=>cobrador, :right_id =>19)
-RightsRole.create(:role=>cobrador, :right_id =>23)
-RightsRole.create(:role=>cobrador, :right_id =>43)
-RightsRole.create(:role=>cobrador, :right_id =>56)
-RightsRole.create(:role=>cobrador, :right_id =>60)
-RightsRole.create(:role=>cobrador, :right_id =>64)
-RightsRole.create(:role=>vendedor, :right_id =>3)
-RightsRole.create(:role=>vendedor, :right_id =>9)
-RightsRole.create(:role=>vendedor, :right_id =>10)
-RightsRole.create(:role=>vendedor, :right_id =>11)
-RightsRole.create(:role=>vendedor, :right_id =>17)
-RightsRole.create(:role=>vendedor, :right_id =>18)
-RightsRole.create(:role=>vendedor, :right_id =>19)
-RightsRole.create(:role=>vendedor, :right_id =>21)
-RightsRole.create(:role=>vendedor, :right_id =>22)
-RightsRole.create(:role=>vendedor, :right_id =>23)
-RightsRole.create(:role=>vendedor, :right_id =>27)
-RightsRole.create(:role=>vendedor, :right_id =>43)
-RightsRole.create(:role=>vendedor, :right_id =>56)
-RightsRole.create(:role=>vendedor, :right_id =>60)
-RightsRole.create(:role=>vendedor, :right_id =>64)
-RightsRole.create(:role=>comprador, :right_id =>5)
-RightsRole.create(:role=>comprador, :right_id =>6)
-RightsRole.create(:role=>comprador, :right_id =>7)
-RightsRole.create(:role=>comprador, :right_id =>11)
-RightsRole.create(:role=>comprador, :right_id =>13)
-RightsRole.create(:role=>comprador, :right_id =>14)
-RightsRole.create(:role=>comprador, :right_id =>15)
-RightsRole.create(:role=>comprador, :right_id =>16)
-RightsRole.create(:role=>comprador, :right_id =>25)
-RightsRole.create(:role=>comprador, :right_id =>26)
-RightsRole.create(:role=>comprador, :right_id =>27)
-RightsRole.create(:role=>comprador, :right_id =>43)
-RightsRole.create(:role=>comprador, :right_id =>49)
-RightsRole.create(:role=>comprador, :right_id =>56)
-RightsRole.create(:role=>comprador, :right_id =>60)
-RightsRole.create(:role=>comprador, :right_id =>64)
-RightsRole.create(:role=>accountant, :right_id =>3)
-RightsRole.create(:role=>accountant, :right_id =>7)
-RightsRole.create(:role=>accountant, :right_id =>11)
-RightsRole.create(:role=>accountant, :right_id =>15)
-RightsRole.create(:role=>accountant, :right_id =>43)
-RightsRole.create(:role=>accountant, :right_id =>49)
-RightsRole.create(:role=>accountant, :right_id =>50)
-RightsRole.create(:role=>accountant, :right_id =>51)
-RightsRole.create(:role=>accountant, :right_id =>52)
-RightsRole.create(:role=>accountant, :right_id =>53)
-RightsRole.create(:role=>inventory, :right_id =>11)
-RightsRole.create(:role=>inventory, :right_id =>15)
-RightsRole.create(:role=>inventory, :right_id =>19)
-RightsRole.create(:role=>inventory, :right_id =>23)
-RightsRole.create(:role=>inventory, :right_id =>25)
-RightsRole.create(:role=>inventory, :right_id =>26)
-RightsRole.create(:role=>inventory, :right_id =>27)
-RightsRole.create(:role=>inventory, :right_id =>31)
-RightsRole.create(:role=>inventory, :right_id =>43)
-RightsRole.create(:role=>inventory, :right_id =>45)
-RightsRole.create(:role=>inventory, :right_id =>46)
-RightsRole.create(:role=>inventory, :right_id =>47)
-RightsRole.create(:role=>inventory, :right_id =>48)
-RightsRole.create(:role=>inventory, :right_id =>49)
-RightsRole.create(:role=>inventory, :right_id =>56)
-RightsRole.create(:role=>inventory, :right_id =>58)
-RightsRole.create(:role=>inventory, :right_id =>59)
-RightsRole.create(:role=>inventory, :right_id =>60)
-RightsRole.create(:role=>inventory, :right_id =>64)
-RightsRole.create(:role=>gerente, :right_id =>1)
-RightsRole.create(:role=>gerente, :right_id =>2)
-RightsRole.create(:role=>gerente, :right_id =>3)
-RightsRole.create(:role=>gerente, :right_id =>5)
-RightsRole.create(:role=>gerente, :right_id =>6)
-RightsRole.create(:role=>gerente, :right_id =>7)
-RightsRole.create(:role=>gerente, :right_id =>9)
-RightsRole.create(:role=>gerente, :right_id =>10)
-RightsRole.create(:role=>gerente, :right_id =>11)
-RightsRole.create(:role=>gerente, :right_id =>12)
-RightsRole.create(:role=>gerente, :right_id =>13)
-RightsRole.create(:role=>gerente, :right_id =>14)
-RightsRole.create(:role=>gerente, :right_id =>15)
-RightsRole.create(:role=>gerente, :right_id =>16)
-RightsRole.create(:role=>gerente, :right_id =>17)
-RightsRole.create(:role=>gerente, :right_id =>18)
-RightsRole.create(:role=>gerente, :right_id =>19)
-RightsRole.create(:role=>gerente, :right_id =>21)
-RightsRole.create(:role=>gerente, :right_id =>22)
-RightsRole.create(:role=>gerente, :right_id =>23)
-RightsRole.create(:role=>gerente, :right_id =>25)
-RightsRole.create(:role=>gerente, :right_id =>26)
-RightsRole.create(:role=>gerente, :right_id =>27)
-RightsRole.create(:role=>gerente, :right_id =>29)
-RightsRole.create(:role=>gerente, :right_id =>30)
-RightsRole.create(:role=>gerente, :right_id =>31)
-RightsRole.create(:role=>gerente, :right_id =>32)
-RightsRole.create(:role=>gerente, :right_id =>43)
-RightsRole.create(:role=>gerente, :right_id =>45)
-RightsRole.create(:role=>gerente, :right_id =>46)
-RightsRole.create(:role=>gerente, :right_id =>47)
-RightsRole.create(:role=>gerente, :right_id =>48)
-RightsRole.create(:role=>gerente, :right_id =>49)
-RightsRole.create(:role=>gerente, :right_id =>50)
-RightsRole.create(:role=>gerente, :right_id =>51)
-RightsRole.create(:role=>gerente, :right_id =>52)
-RightsRole.create(:role=>gerente, :right_id =>53)
-RightsRole.create(:role=>gerente, :right_id =>54)
-RightsRole.create(:role=>gerente, :right_id =>55)
-RightsRole.create(:role=>gerente, :right_id =>56)
-RightsRole.create(:role=>gerente, :right_id =>58)
-RightsRole.create(:role=>gerente, :right_id =>59)
-RightsRole.create(:role=>gerente, :right_id =>60)
-RightsRole.create(:role=>gerente, :right_id =>62)
-RightsRole.create(:role=>gerente, :right_id =>63)
-RightsRole.create(:role=>gerente, :right_id =>64)
-RightsRole.create(:role=>admin, :right_id =>62)
-RightsRole.create(:role=>admin, :right_id =>61)
-RightsRole.create(:role=>admin, :right_id =>60)
-RightsRole.create(:role=>admin, :right_id =>59)
-RightsRole.create(:role=>admin, :right_id =>58)
-RightsRole.create(:role=>admin, :right_id =>57)
-RightsRole.create(:role=>admin, :right_id =>56)
-RightsRole.create(:role=>admin, :right_id =>55)
-RightsRole.create(:role=>admin, :right_id =>54)
-RightsRole.create(:role=>admin, :right_id =>53)
-RightsRole.create(:role=>admin, :right_id =>52)
-RightsRole.create(:role=>admin, :right_id =>51)
-RightsRole.create(:role=>admin, :right_id =>50)
-RightsRole.create(:role=>admin, :right_id =>49)
-RightsRole.create(:role=>admin, :right_id =>48)
-RightsRole.create(:role=>admin, :right_id =>47)
-RightsRole.create(:role=>admin, :right_id =>46)
-RightsRole.create(:role=>admin, :right_id =>45)
-RightsRole.create(:role=>admin, :right_id =>44)
-RightsRole.create(:role=>admin, :right_id =>43)
-RightsRole.create(:role=>admin, :right_id =>42)
-RightsRole.create(:role=>admin, :right_id =>41)
-RightsRole.create(:role=>admin, :right_id =>40)
-RightsRole.create(:role=>admin, :right_id =>39)
-RightsRole.create(:role=>admin, :right_id =>38)
-RightsRole.create(:role=>admin, :right_id =>37)
-RightsRole.create(:role=>admin, :right_id =>36)
-RightsRole.create(:role=>admin, :right_id =>35)
-RightsRole.create(:role=>admin, :right_id =>34)
-RightsRole.create(:role=>admin, :right_id =>33)
-RightsRole.create(:role=>admin, :right_id =>32)
-RightsRole.create(:role=>admin, :right_id =>31)
-RightsRole.create(:role=>admin, :right_id =>30)
-RightsRole.create(:role=>admin, :right_id =>29)
-RightsRole.create(:role=>admin, :right_id =>28)
-RightsRole.create(:role=>admin, :right_id =>27)
-RightsRole.create(:role=>admin, :right_id =>26)
-RightsRole.create(:role=>admin, :right_id =>25)
-RightsRole.create(:role=>admin, :right_id =>24)
-RightsRole.create(:role=>admin, :right_id =>23)
-RightsRole.create(:role=>admin, :right_id =>22)
-RightsRole.create(:role=>admin, :right_id =>21)
-RightsRole.create(:role=>admin, :right_id =>20)
-RightsRole.create(:role=>admin, :right_id =>19)
-RightsRole.create(:role=>admin, :right_id =>18)
-RightsRole.create(:role=>admin, :right_id =>17)
-RightsRole.create(:role=>admin, :right_id =>16)
-RightsRole.create(:role=>admin, :right_id =>15)
-RightsRole.create(:role=>versubs, :right_id =>31)
-RightsRole.create(:role=>cambiarsubs, :right_id =>29)
-RightsRole.create(:role=>cambiarsubs, :right_id =>30)
-RightsRole.create(:role=>cambiarsubs, :right_id =>31)
-RightsRole.create(:role=>cambiarsubs, :right_id =>32)
-RightsRole.create(:role=>comprador, :right_id =>66)
-RightsRole.create(:role=>comprador, :right_id =>67)
-RightsRole.create(:role=>comprador, :right_id =>68)
-RightsRole.create(:role=>vendedor, :right_id =>68)
-RightsRole.create(:role=>inventory, :right_id =>68)
-RightsRole.create(:role=>gerente, :right_id =>68)
-RightsRole.create(:role=>admin, :right_id =>14)
-RightsRole.create(:role=>gerente, :right_id =>66)
-RightsRole.create(:role=>gerente, :right_id =>67)
-RightsRole.create(:role=>admin, :right_id =>13)
-RightsRole.create(:role=>admin, :right_id =>12)
-RightsRole.create(:role=>admin, :right_id =>11)
-RightsRole.create(:role=>gerente, :right_id =>70)
-RightsRole.create(:role=>gerente, :right_id =>71)
-RightsRole.create(:role=>gerente, :right_id =>72)
-RightsRole.create(:role=>inventory, :right_id =>72)
-RightsRole.create(:role=>vendedor, :right_id =>72)
-RightsRole.create(:role=>comprador, :right_id =>72)
-RightsRole.create(:role=>accountant, :right_id =>72)
-RightsRole.create(:role=>admin, :right_id =>10)
-RightsRole.create(:role=>admin, :right_id =>9)
-RightsRole.create(:role=>admin, :right_id =>8)
-RightsRole.create(:role=>admin, :right_id =>7)
-RightsRole.create(:role=>vendedor, :right_id =>76)
-RightsRole.create(:role=>comprador, :right_id =>76)
-RightsRole.create(:role=>inventory, :right_id =>76)
-RightsRole.create(:role=>gerente, :right_id =>76)
-RightsRole.create(:role=>admin, :right_id =>6)
-RightsRole.create(:role=>admin, :right_id =>5)
-RightsRole.create(:role=>gerente, :right_id =>78)
-RightsRole.create(:role=>comprador, :right_id =>79)
-RightsRole.create(:role=>comprador, :right_id =>80)
-RightsRole.create(:role=>comprador, :right_id =>81)
-RightsRole.create(:role=>gerente, :right_id =>81)
-RightsRole.create(:role=>gerente, :right_id =>79)
-RightsRole.create(:role=>gerente, :right_id =>80)
-RightsRole.create(:role=>admin, :right_id =>4)
-RightsRole.create(:role=>admin, :right_id =>3)
-RightsRole.create(:role=>admin, :right_id =>2)
-RightsRole.create(:role=>admin, :right_id =>1)
-RightsRole.create(:role=>admin, :right_id =>63)
-RightsRole.create(:role=>admin, :right_id =>64)
-RightsRole.create(:role=>admin, :right_id =>65)
-RightsRole.create(:role=>admin, :right_id =>66)
-RightsRole.create(:role=>admin, :right_id =>67)
-RightsRole.create(:role=>admin, :right_id =>68)
-RightsRole.create(:role=>admin, :right_id =>69)
-RightsRole.create(:role=>admin, :right_id =>70)
-RightsRole.create(:role=>admin, :right_id =>71)
-RightsRole.create(:role=>admin, :right_id =>72)
-RightsRole.create(:role=>admin, :right_id =>73)
-RightsRole.create(:role=>admin, :right_id =>74)
-RightsRole.create(:role=>admin, :right_id =>75)
-RightsRole.create(:role=>admin, :right_id =>76)
-RightsRole.create(:role=>admin, :right_id =>77)
-RightsRole.create(:role=>admin, :right_id =>78)
-RightsRole.create(:role=>admin, :right_id =>79)
-RightsRole.create(:role=>admin, :right_id =>80)
-RightsRole.create(:role=>admin, :right_id =>81)
-RightsRole.create(:role=>admin, :right_id =>82)
+ProductType.create(:name=>"Simple"){ |r| r.id=1}
+ProductType.create(:name=>"Discount"){ |r| r.id=2}
+ProductType.create(:name=>"Combo"){ |r| r.id=3}
+ProductType.create(:name=>"Service"){ |r| r.id=4}
+Right.create(:name=>"Crear Pagos para Ventas") { |r| r.id='CREATE_PAYMENTS_FOR_SALES'}
+Right.create(:name=>"Cambiar Pagos para Ventas") { |r| r.id='CHANGE_PAYMENTS_FOR_SALES'}
+Right.create(:name=>"Ver Pagos para Ventas") { |r| r.id='VIEW_PAYMENTS_FOR_SALES'}
+Right.create(:name=>"Borrar Pagos para Ventas") { |r| r.id='DELETE_PAYMENTS_FOR_SALES'}
+Right.create(:name=>"Crear Pagos para Compras") { |r| r.id='CREATE_PAYMENTS_FOR_PURCHASES'}
+Right.create(:name=>"Cambiar Pagos para Compras") { |r| r.id='CHANGE_PAYMENTS_FOR_PURCHASES'}
+Right.create(:name=>"Ver Pagos para Compras") { |r| r.id='VIEW_PAYMENTS_FOR_PURCHASES'}
+Right.create(:name=>"Borrar Pagos para Compras") { |r| r.id='DELETE_PAYMENTS_FOR_PURCHASES'}
+Right.create(:name=>"Crear Ventas") { |r| r.id='CREATE_SALES'}
+Right.create(:name=>"Cambiar Ventas") { |r| r.id='CHANGE_SALES'}
+Right.create(:name=>"Ver Ventas") { |r| r.id='VIEW_SALES'}
+Right.create(:name=>"Borrar Ventas") { |r| r.id='DELETE_SALES'}
+Right.create(:name=>"Crear Compras") { |r| r.id='CREATE_PURCHASES'}
+Right.create(:name=>"Cambiar Compras") { |r| r.id='CHANGE_PURCHASES'}
+Right.create(:name=>"Ver Compras") { |r| r.id='VIEW_PURCHASES'}
+Right.create(:name=>"Borrar Compras") { |r| r.id='DELETE_PURCHASES'}
+Right.create(:name=>"Crear Clientes") { |r| r.id='CREATE_CLIENTS'}
+Right.create(:name=>"Cambiar Clientes") { |r| r.id='CHANGE_CLIENTS'}
+Right.create(:name=>"Ver Clientes") { |r| r.id='VIEW_CLIENTS'}
+Right.create(:name=>"Borrar Clientes") { |r| r.id='DELETE_CLIENTS'}
+Right.create(:name=>"Crear Productos") { |r| r.id='CREATE_PRODUCTS'}
+Right.create(:name=>"Cambiar Productos") { |r| r.id='CHANGE_PRODUCTS'}
+Right.create(:name=>"Ver Productos") { |r| r.id='VIEW_PRODUCTS'}
+Right.create(:name=>"Borrar Productos") { |r| r.id='DELETE_PRODUCTS'}
+Right.create(:name=>"Crear Suscripciones") { |r| r.id='CREATE_SUBSCRIPTIONS'}
+Right.create(:name=>"Cambiar Suscripciones") { |r| r.id='CHANGE_SUBSCRIPTIONS'}
+Right.create(:name=>"Ver Suscripciones") { |r| r.id='VIEW_SUBSCRIPTIONS'}
+Right.create(:name=>"Borrar Suscripciones") { |r| r.id='DELETE_SUBSCRIPTIONS'}
+Right.create(:name=>"Crear Papeles") { |r| r.id='CREATE_ROLES'}
+Right.create(:name=>"Cambiar Papeles") { |r| r.id='CHANGE_ROLES'}
+Right.create(:name=>"Ver Papeles") { |r| r.id='VIEW_ROLES'}
+Right.create(:name=>"Borrar Papeles") { |r| r.id='DELETE_ROLES'}
+Right.create(:name=>"Crear Usuarios") { |r| r.id='CREATE_USERS'}
+Right.create(:name=>"Cambiar Usuarios") { |r| r.id='CHANGE_USERS'}
+Right.create(:name=>"Ver Usuarios") { |r| r.id='VIEW_USERS'}
+Right.create(:name=>"Borrar Usuarios") { |r| r.id='DELETE_USERS'}
+Right.create(:name=>"Crear Sitios") { |r| r.id='CREATE_SITES'}
+Right.create(:name=>"Cambiar Sitios") { |r| r.id='CHANGE_SITES'}
+Right.create(:name=>"Ver Sitios") { |r| r.id='VIEW_SITES'}
+Right.create(:name=>"Borrar Sitios") { |r| r.id='DELETE_SITES'}
+Right.create(:name=>"Crear Cuentas Fisicas") { |r| r.id='CREATE_COUNTS'}
+Right.create(:name=>"Cambiar Cuentas Fisicas") { |r| r.id='CHANGE_COUNTS'}
+Right.create(:name=>"Ver Cuentas Fisicas") { |r| r.id='VIEW_COUNTS'}
+Right.create(:name=>"Borrar Cuentas Fisicas") { |r| r.id='DELETE_COUNTS'}
+Right.create(:name=>"Ver COSTS") { |r| r.id='VIEW_COSTS'}
+Right.create(:name=>"Crear Cuentas") { |r| r.id='CREATE_ACCOUNTS'}
+Right.create(:name=>"Cambiar Cuentas") { |r| r.id='CHANGE_ACCOUNTS'}
+Right.create(:name=>"Ver Cuentas") { |r| r.id='VIEW_ACCOUNTS'}
+Right.create(:name=>"Borrar Cuentas") { |r| r.id='DELETE_ACCOUNTS'}
+Right.create(:name=>"Crear Servicios") { |r| r.id='CREATE_SERVICES'}
+Right.create(:name=>"Cambiar Servicios") { |r| r.id='CHANGE_SERVICES'}
+Right.create(:name=>"Ver Servicios") { |r| r.id='VIEW_SERVICES'}
+Right.create(:name=>"Borrar Servicios") { |r| r.id='DELETE_SERVICES'}
+Right.create(:name=>"Crear Combos") { |r| r.id='CREATE_COMBOS'}
+Right.create(:name=>"Cambiar Combos") { |r| r.id='CHANGE_COMBOS'}
+Right.create(:name=>"Ver Combos") { |r| r.id='VIEW_COMBOS'}
+Right.create(:name=>"Borrar Combos") { |r| r.id='DELETE_COMBOS'}
+Right.create(:name=>"Crear Descuentos") { |r| r.id='CREATE_DISCOUNTS'}
+Right.create(:name=>"Cambiar Descuentos") { |r| r.id='CHANGE_DISCOUNTS'}
+Right.create(:name=>"Ver Descuentos") { |r| r.id='VIEW_DISCOUNTS'}
+Right.create(:name=>"Borrar Descuentos") { |r| r.id='DELETE_DISCOUNTS'}
+Right.create(:name=>"Crear Garantias") { |r| r.id='CREATE_WARRANTIES'}
+Right.create(:name=>"Cambiar Garantias") { |r| r.id='CHANGE_WARRANTIES'}
+Right.create(:name=>"Ver Garantias") { |r| r.id='VIEW_WARRANTIES'}
+Right.create(:name=>"Borrar Garantias") { |r| r.id='DELETE_WARRANTIES'}
+Right.create(:name=>"Crear Consumos Internos") { |r| r.id='CREATE_INTERNAL_CONSUMPTIONS'}
+Right.create(:name=>"Cambiar Consumos Internos") { |r| r.id='CHANGE_INTERNAL_CONSUMPTIONS'}
+Right.create(:name=>"Ver Consumos Internos") { |r| r.id='VIEW_INTERNAL_CONSUMPTIONS'}
+Right.create(:name=>"Borrar Consumos Internos") { |r| r.id='DELETE_INTERNAL_CONSUMPTIONS'}
+Right.create(:name=>"Crear Numeros de Serie") { |r| r.id='CREATE_SERIAL_NUMBERS'}
+Right.create(:name=>"Cambiar Numeros de Serie") { |r| r.id='CHANGE_SERIAL_NUMBERS'}
+Right.create(:name=>"Ver Numeros de Serie") { |r| r.id='VIEW_SERIAL_NUMBERS'}
+Right.create(:name=>"Borrar Numeros de Serie") { |r| r.id='DELETE_SERIAL_NUMBERS'}
+Right.create(:name=>"Cambiar Prices") { |r| r.id='CHANGE_PRICES'}
+Right.create(:name=>"Crear Proveedores") { |r| r.id='CREATE_VENDORS'}
+Right.create(:name=>"Cambiar Proveedores") { |r| r.id='CHANGE_VENDORS'}
+Right.create(:name=>"Ver Proveedores") { |r| r.id='VIEW_VENDORS'}
+Right.create(:name=>"Borrar Proveedores") { |r| r.id='DELETE_VENDORS'}
+Right.create(:name=>"Crear Transacciones") { |r| r.id='CREATE_TRANSACTIONS'}
+Right.create(:name=>"Cambiar Transacciones") { |r| r.id='CHANGE_TRANSACTIONS'}
+Right.create(:name=>"Ver Transacciones") { |r| r.id='VIEW_TRANSACTIONS'}
+Right.create(:name=>"Borrar Transacciones") { |r| r.id='DELETE_TRANSACTIONS'}
+Right.create(:name=>"Procesar Cuentas Fisicas") { |r| r.id='POST_COUNTS'}
+Right.create(:name=>"Crear Ordenes de Produccion") { |r| r.id='CREATE_PRODUCTION_ORDERS'}
+Right.create(:name=>"Cambiar Ordenes de Produccion") { |r| r.id='CHANGE_PRODUCTION_ORDERS'}
+Right.create(:name=>"Ver Ordenes de Produccion") { |r| r.id='VIEW_PRODUCTION_ORDERS'}
+Right.create(:name=>"Borrar Ordenes de Produccion") { |r| r.id='DELETE_PRODUCTION_ORDERS'}
+Right.create(:name=>"Crear Procesos de Produccion") { |r| r.id='CREATE_PRODUCTION_PROCESSES'}
+Right.create(:name=>"Cambiar Procesos de Produccion") { |r| r.id='CHANGE_PRODUCTION_PROCESSES'}
+Right.create(:name=>"Ver Procesos de Produccion") { |r| r.id='VIEW_PRODUCTION_PROCESSES'}
+Right.create(:name=>"Borrar Procesos de Produccion") { |r| r.id='DELETE_PRODUCTION_PROCESSES'}
+Right.create(:name=>"Iniciar Ordenes de Produccion") { |r| r.id='START_PRODUCTION_ORDERS'}
+Right.create(:name=>"Terminar Ordenes de Produccion") { |r| r.id='FINISH_PRODUCTION_ORDERS'}
+Right.create(:name=>"Hacer Etiquetas") { |r| r.id='CREATE_LABELS'}
+Right.create(:name=>"Borrar Etiquetas") { |r| r.id='DELETE_LABELS'}
+Right.create(:name=>"Ver Etiquetas") { |r| r.id='VIEW_LABELS'}
+Right.create(:name=>"Cambiar Etiquetas") { |r| r.id='CHANGE_LABELS'}
+
+cobrador=Role.create(:title=>'Cobrador')
+vendedor=Role.create(:title=>'Vendedor')
+comprador=Role.create(:title=>'Comprador')
+accountant=Role.create(:title=>'Contabilidad')
+inventory=Role.create(:title=>'Inventario')
+gerente=Role.create(:title=>'Gerente')
+admin=Role.create(:title=>'Admin')
+versubs=Role.create(:title=>'Ver Suscripciones')
+cambiarsubs=Role.create(:title=>'Cambiar Suscripciones')
+oldadmin=Role.create(:title=>'admin')
+process_creator=Role.create(:title=>'Planificador de Produccion')
+production_starter=Role.create(:title=>'Iniciador de Produccion')
+production_finisher=Role.create(:title=>'Terminador de Produccion')
+production_viewer=Role.create(:title=>'Ver Produccion')
+production_admin=Role.create(:title=>'Administrar Produccion')
+
+RolesUser.create(:user=>administrator,:role=>accountant)
+RolesUser.create(:user=>administrator,:role=>admin)
+RolesUser.create(:user=>administrator,:role=>versubs)
+RolesUser.create(:user=>administrator,:role=>oldadmin)
+RolesUser.create(:user=>administrator,:role=>production_admin)
+
+
+RightsRole.create(:role=>cobrador, :right_id =>'CREATE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>cobrador, :right_id =>'CHANGE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_SERVICES')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_COMBOS')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_DISCOUNTS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>vendedor, :right_id =>'CREATE_SALES')
+RightsRole.create(:role=>vendedor, :right_id =>'CHANGE_SALES')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>vendedor, :right_id =>'CREATE_CLIENTS')
+RightsRole.create(:role=>vendedor, :right_id =>'CHANGE_CLIENTS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>vendedor, :right_id =>'CREATE_CLIENTS')
+RightsRole.create(:role=>vendedor, :right_id =>'CHANGE_CLIENTS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_PRODUCTS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_SERVICES')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_COMBOS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_DISCOUNTS')
+RightsRole.create(:role=>comprador, :right_id =>'CREATE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'CHANGE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>comprador, :right_id =>'CREATE_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'CHANGE_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'DELETE_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'CREATE_PRODUCTS')
+RightsRole.create(:role=>comprador, :right_id =>'CHANGE_PRODUCTS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_PRODUCTS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_COSTS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_SERVICES')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_COMBOS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_DISCOUNTS')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_PURCHASES')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_COSTS')
+RightsRole.create(:role=>accountant, :right_id =>'CREATE_ACCOUNTS')
+RightsRole.create(:role=>accountant, :right_id =>'CHANGE_ACCOUNTS')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_ACCOUNTS')
+RightsRole.create(:role=>accountant, :right_id =>'DELETE_ACCOUNTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_PURCHASES')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>inventory, :right_id =>'CREATE_PRODUCTS')
+RightsRole.create(:role=>inventory, :right_id =>'CHANGE_PRODUCTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_PRODUCTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_SUBSCRIPTIONS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>inventory, :right_id =>'CREATE_COUNTS')
+RightsRole.create(:role=>inventory, :right_id =>'CHANGE_COUNTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_COUNTS')
+RightsRole.create(:role=>inventory, :right_id =>'DELETE_COUNTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_COSTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_SERVICES')
+RightsRole.create(:role=>inventory, :right_id =>'CREATE_COMBOS')
+RightsRole.create(:role=>inventory, :right_id =>'CHANGE_COMBOS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_COMBOS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_DISCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'DELETE_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'DELETE_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_CLIENTS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_CLIENTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_CLIENTS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_CLIENTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_PRODUCTS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_PRODUCTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_PRODUCTS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_SUBSCRIPTIONS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_SUBSCRIPTIONS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_SUBSCRIPTIONS')
+RightsRole.create(:role=>gerente, :right_id =>'DELETE_SUBSCRIPTIONS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_COUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_COUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_COUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'DELETE_COUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_COSTS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_ACCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_ACCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_ACCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'DELETE_ACCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_SERVICES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_SERVICES')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_SERVICES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_COMBOS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_COMBOS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_COMBOS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_DISCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_DISCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_DISCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_DISCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_COMBOS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_COMBOS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_COMBOS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_COMBOS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_SERVICES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_SERVICES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_SERVICES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_SERVICES')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_ACCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_ACCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_ACCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_ACCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_COSTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_COUNTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_COUNTS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_COUNTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_COUNTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_SITES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_SITES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_SITES')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_USERS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_USERS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_USERS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_USERS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_ROLES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_ROLES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_ROLES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_ROLES')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_SUBSCRIPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_SUBSCRIPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_SUBSCRIPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_SUBSCRIPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_PRODUCTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_PRODUCTS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_PRODUCTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_PRODUCTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_PURCHASES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_PURCHASES')
+RightsRole.create(:role=>versubs, :right_id =>'VIEW_SUBSCRIPTIONS')
+RightsRole.create(:role=>cambiarsubs, :right_id =>'CREATE_SUBSCRIPTIONS')
+RightsRole.create(:role=>cambiarsubs, :right_id =>'CHANGE_SUBSCRIPTIONS')
+RightsRole.create(:role=>cambiarsubs, :right_id =>'VIEW_SUBSCRIPTIONS')
+RightsRole.create(:role=>cambiarsubs, :right_id =>'DELETE_SUBSCRIPTIONS')
+RightsRole.create(:role=>comprador, :right_id =>'CREATE_WARRANTIES')
+RightsRole.create(:role=>comprador, :right_id =>'CHANGE_WARRANTIES')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_WARRANTIES')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_WARRANTIES')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_WARRANTIES')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_WARRANTIES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_WARRANTIES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_WARRANTIES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_PURCHASES')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_SALES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_SALES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_SALES')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_SERIAL_NUMBERS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_SERIAL_NUMBERS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_SERIAL_NUMBERS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_SERIAL_NUMBERS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_PRICES')
+RightsRole.create(:role=>comprador, :right_id =>'CREATE_VENDORS')
+RightsRole.create(:role=>comprador, :right_id =>'CHANGE_VENDORS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_VENDORS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_VENDORS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_VENDORS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_VENDORS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_DISCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_DISCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_DISCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_WARRANTIES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_WARRANTIES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_WARRANTIES')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_WARRANTIES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_SERIAL_NUMBERS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_SERIAL_NUMBERS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_SERIAL_NUMBERS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_SERIAL_NUMBERS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_PRICES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_VENDORS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_VENDORS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_VENDORS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_VENDORS')
+RightsRole.create(:role=>process_creator, :right_id =>'CREATE_PRODUCTION_ORDERS')
+RightsRole.create(:role=>process_creator, :right_id =>'CHANGE_PRODUCTION_ORDERS')
+RightsRole.create(:role=>process_creator, :right_id =>'VIEW_PRODUCTION_ORDERS')
+RightsRole.create(:role=>process_creator, :right_id =>'CREATE_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>process_creator, :right_id =>'CHANGE_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>process_creator, :right_id =>'VIEW_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>production_starter, :right_id =>'VIEW_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_starter, :right_id =>'START_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_finisher, :right_id =>'VIEW_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_finisher, :right_id =>'FINISH_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_admin, :right_id =>'CREATE_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_admin, :right_id =>'CHANGE_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_admin, :right_id =>'VIEW_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_admin, :right_id =>'DELETE_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_admin, :right_id =>'CREATE_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>production_admin, :right_id =>'CHANGE_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>production_admin, :right_id =>'VIEW_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>production_admin, :right_id =>'DELETE_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>production_admin, :right_id =>'START_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_admin, :right_id =>'FINISH_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_viewer, :right_id =>'VIEW_PRODUCTION_ORDERS')
+RightsRole.create(:role=>cobrador, :right_id =>'CREATE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>cobrador, :right_id =>'CHANGE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_SERVICES')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_COMBOS')
+RightsRole.create(:role=>cobrador, :right_id =>'VIEW_DISCOUNTS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>vendedor, :right_id =>'CREATE_SALES')
+RightsRole.create(:role=>vendedor, :right_id =>'CHANGE_SALES')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>vendedor, :right_id =>'CREATE_CLIENTS')
+RightsRole.create(:role=>vendedor, :right_id =>'CHANGE_CLIENTS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>vendedor, :right_id =>'CREATE_CLIENTS')
+RightsRole.create(:role=>vendedor, :right_id =>'CHANGE_CLIENTS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_PRODUCTS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_SERVICES')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_COMBOS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_DISCOUNTS')
+RightsRole.create(:role=>comprador, :right_id =>'CREATE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'CHANGE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>comprador, :right_id =>'CREATE_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'CHANGE_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'DELETE_PURCHASES')
+RightsRole.create(:role=>comprador, :right_id =>'CREATE_PRODUCTS')
+RightsRole.create(:role=>comprador, :right_id =>'CHANGE_PRODUCTS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_PRODUCTS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_COSTS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_SERVICES')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_COMBOS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_DISCOUNTS')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_PURCHASES')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_COSTS')
+RightsRole.create(:role=>accountant, :right_id =>'CREATE_ACCOUNTS')
+RightsRole.create(:role=>accountant, :right_id =>'CHANGE_ACCOUNTS')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_ACCOUNTS')
+RightsRole.create(:role=>accountant, :right_id =>'DELETE_ACCOUNTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_PURCHASES')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>inventory, :right_id =>'CREATE_PRODUCTS')
+RightsRole.create(:role=>inventory, :right_id =>'CHANGE_PRODUCTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_PRODUCTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_SUBSCRIPTIONS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>inventory, :right_id =>'CREATE_COUNTS')
+RightsRole.create(:role=>inventory, :right_id =>'CHANGE_COUNTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_COUNTS')
+RightsRole.create(:role=>inventory, :right_id =>'DELETE_COUNTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_COSTS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_SERVICES')
+RightsRole.create(:role=>inventory, :right_id =>'CREATE_COMBOS')
+RightsRole.create(:role=>inventory, :right_id =>'CHANGE_COMBOS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_COMBOS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_DISCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'DELETE_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'DELETE_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_CLIENTS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_CLIENTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_CLIENTS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_CLIENTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_PRODUCTS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_PRODUCTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_PRODUCTS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_SUBSCRIPTIONS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_SUBSCRIPTIONS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_SUBSCRIPTIONS')
+RightsRole.create(:role=>gerente, :right_id =>'DELETE_SUBSCRIPTIONS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_COUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_COUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_COUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'DELETE_COUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_COSTS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_ACCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_ACCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_ACCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'DELETE_ACCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_SERVICES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_SERVICES')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_SERVICES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_COMBOS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_COMBOS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_COMBOS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_DISCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_DISCOUNTS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_DISCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_DISCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_COMBOS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_COMBOS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_COMBOS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_COMBOS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_SERVICES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_SERVICES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_SERVICES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_SERVICES')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_ACCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_ACCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_ACCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_ACCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_COSTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_COUNTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_COUNTS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_COUNTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_COUNTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_SITES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_SITES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_SITES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_SITES')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_USERS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_USERS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_USERS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_USERS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_ROLES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_ROLES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_ROLES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_ROLES')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_SUBSCRIPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_SUBSCRIPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_SUBSCRIPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_SUBSCRIPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_PRODUCTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_PRODUCTS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_PRODUCTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_PRODUCTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_CLIENTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_PURCHASES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_PURCHASES')
+RightsRole.create(:role=>versubs, :right_id =>'VIEW_SUBSCRIPTIONS')
+RightsRole.create(:role=>cambiarsubs, :right_id =>'CREATE_SUBSCRIPTIONS')
+RightsRole.create(:role=>cambiarsubs, :right_id =>'CHANGE_SUBSCRIPTIONS')
+RightsRole.create(:role=>cambiarsubs, :right_id =>'VIEW_SUBSCRIPTIONS')
+RightsRole.create(:role=>cambiarsubs, :right_id =>'DELETE_SUBSCRIPTIONS')
+RightsRole.create(:role=>comprador, :right_id =>'CREATE_WARRANTIES')
+RightsRole.create(:role=>comprador, :right_id =>'CHANGE_WARRANTIES')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_WARRANTIES')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_WARRANTIES')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_WARRANTIES')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_WARRANTIES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_WARRANTIES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_WARRANTIES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_PURCHASES')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_SALES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_SALES')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>accountant, :right_id =>'VIEW_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_SALES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_SALES')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>vendedor, :right_id =>'VIEW_SERIAL_NUMBERS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_SERIAL_NUMBERS')
+RightsRole.create(:role=>inventory, :right_id =>'VIEW_SERIAL_NUMBERS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_SERIAL_NUMBERS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_PAYMENTS_FOR_PURCHASES')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_PRICES')
+RightsRole.create(:role=>comprador, :right_id =>'CREATE_VENDORS')
+RightsRole.create(:role=>comprador, :right_id =>'CHANGE_VENDORS')
+RightsRole.create(:role=>comprador, :right_id =>'VIEW_VENDORS')
+RightsRole.create(:role=>gerente, :right_id =>'VIEW_VENDORS')
+RightsRole.create(:role=>gerente, :right_id =>'CREATE_VENDORS')
+RightsRole.create(:role=>gerente, :right_id =>'CHANGE_VENDORS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_PAYMENTS_FOR_SALES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_DISCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_DISCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_DISCOUNTS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_WARRANTIES')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_WARRANTIES')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_WARRANTIES')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_WARRANTIES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_INTERNAL_CONSUMPTIONS')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_SERIAL_NUMBERS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_SERIAL_NUMBERS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_SERIAL_NUMBERS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_SERIAL_NUMBERS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_PRICES')
+RightsRole.create(:role=>admin, :right_id =>'CREATE_VENDORS')
+RightsRole.create(:role=>admin, :right_id =>'CHANGE_VENDORS')
+RightsRole.create(:role=>admin, :right_id =>'VIEW_VENDORS')
+RightsRole.create(:role=>admin, :right_id =>'DELETE_VENDORS')
+RightsRole.create(:role=>process_creator, :right_id =>'CREATE_PRODUCTION_ORDERS')
+RightsRole.create(:role=>process_creator, :right_id =>'CHANGE_PRODUCTION_ORDERS')
+RightsRole.create(:role=>process_creator, :right_id =>'VIEW_PRODUCTION_ORDERS')
+RightsRole.create(:role=>process_creator, :right_id =>'CREATE_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>process_creator, :right_id =>'CHANGE_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>process_creator, :right_id =>'VIEW_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>production_starter, :right_id =>'VIEW_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_starter, :right_id =>'START_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_finisher, :right_id =>'VIEW_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_finisher, :right_id =>'FINISH_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_admin, :right_id =>'CREATE_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_admin, :right_id =>'CHANGE_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_admin, :right_id =>'VIEW_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_admin, :right_id =>'DELETE_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_admin, :right_id =>'CREATE_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>production_admin, :right_id =>'CHANGE_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>production_admin, :right_id =>'VIEW_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>production_admin, :right_id =>'DELETE_PRODUCTION_PROCESSES')
+RightsRole.create(:role=>production_admin, :right_id =>'START_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_admin, :right_id =>'FINISH_PRODUCTION_ORDERS')
+RightsRole.create(:role=>production_viewer, :right_id =>'VIEW_PRODUCTION_ORDERS')
+
 
 
 

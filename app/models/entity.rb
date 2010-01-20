@@ -86,6 +86,16 @@ class Entity < ActiveRecord::Base
 	has_many :products, :through => :movements
 
 	
+	after_create :create_price_groups
+	##############################################################
+	# Creates a Price group for each price group name
+	##############################################################
+	def create_price_groups
+		for price_group_name in PriceGroupName.all
+			PriceGroup.create(:price_group_name=>price_group_name, :entity=> self)
+		end # for price_group_name in price_group_names
+	end # def create_price_groups
+	
 	
 	has_many :movements, :dependent => :destroy, :order => 'created_at'
 	belongs_to :cash_account, :class_name => "Account", :foreign_key => "cash_account_id", :dependent => :destroy

@@ -1,4 +1,15 @@
 class AddProductionRights < ActiveRecord::Migration
+	##############################################################
+	#
+	##############################################################
+	def save_if_unique(r)
+		Right.find(r.id)
+		return r if r
+		return Right.new(params)
+		Tag.find_or_create_by_name("Summer") # equal to Tag.create(:name => "Summer")
+		Right.find_or_create_by_name(r.id)
+
+	end # def find_or_new_by_id(id)
   def self.up
   	r=Right.new(:name=>'Crear Ordenes de Produccion')
   	r.id=88

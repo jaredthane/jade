@@ -322,10 +322,14 @@ ActiveRecord::Schema.define(:version => 1) do
     t.decimal "relative_price", :precision => 8, :scale => 2
   end
 
-  create_table "rights", :force => true do |t|
+	create_table "rights", :primary_key => :id do |t|
+	  t.string "id"
     t.string "name"
   end
-
+  
+  change_column :rights, :id, :string
+  add_index "rights", ["id"], :name => "id"
+  
   create_table "rights_roles", :force => true do |t|
     t.integer "role_id"
     t.integer "right_id"
