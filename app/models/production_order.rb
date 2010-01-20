@@ -66,16 +66,25 @@ class ProductionOrder < ActiveRecord::Base
 		end
   end # def start
   ##############################################################
+  # Calculates and caches cost of production
+  ##############################################################
+  attr_accessor :local_cost
+  def cost
+  	local_cost = quantity * consumption_lines.inject(0) { |result, element| result + element.cost } if !local_cost
+  	return local_cost
+  end # def cost
+  ##############################################################
   # Finishes Production
   # Creates movements to bring produced products into stock
   ##############################################################
   def finish(params={})
-  	params={:finished_at => User.current_user.today, :finished_by => User.current_user}.merge!(params)
+  	params={:order_quantity=>quantity, :finished_at => User.current_user.today, :finished_by => User.current_user}.merge!(params)
   	self.finished_at=params.delete(:finished_at)
 		self.finished_by=params.delete(:finished_by)
 		for l in self.production_lines
 			l.finish_movement(params)
 		end
+		
   end # def finish
   #################################################################################################
   # Searches for product orders and product processes based on name and filter
