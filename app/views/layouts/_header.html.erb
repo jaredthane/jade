@@ -50,6 +50,7 @@
 	<%= javascript_include_tag 'jquery.autocomplete' %>
 	<%= javascript_include_tag 'application.js' %>
 	<%= javascript_include_tag 'jquery.hotkeys.min' %>
+	<%= javascript_include_tag 'menus' %>
   <style type="text/css">
     div.auto_complete {
       position:absolute;
@@ -90,7 +91,6 @@
           <% end %>
         </div>
       </div>
-
       <!-- A.1 HEADER MIDDLE -->
       <div class="header-middle">    
    
@@ -109,95 +109,93 @@
       <div class="header-bottom">
       
         <!-- Navigation Level 2 (Drop-down menus) -->
-        <div class="nav2">
         
-        	<ul>
-       	
-    <li><a title="Nuevo">Nuevo</a>
+<ul class="menu" id="menu">
+	<li><a href="#" class="menulink">Nuevo</a>
+		<ul>
+			<% if current_user.has_right('CREATE_SALES') %>
+  			<li><a href="/sales/new" title="Venta">Venta</a></li>
+  		<% end %>
+  		<% if current_user.has_right('CREATE_CLIENTS') %>
+  			<li><a href="/clients/new" title="Cliente">Cliente</a></li>
+  		<% end %>
+  		<% if current_user.has_right('CREATE_PURCHASES') %>
+				<li><a href="/purchases/new" title="Compra">Compra</a></li>
+  		<% end %>
+  		<% if current_user.has_right('CREATE_PRODUCTS') %>
+				<li><a href="/products/new" title="Producto">Producto</a></li>	  			
+  		<% end %>
+  		<% if current_user.has_right('CREATE_SERVICES') %>
+  			<li><a href="<%= new_service_path %>" title="Servicio">Servicio</a></li>
+  		<% end %>
+  		<% if current_user.has_right('CREATE_DISCOUNTS') %>
+  			<li><a href="/discounts/new" title="Descuento">Descuento</a></li>
+  		<% end %>
+  		<% if current_user.has_right('CREATE_COMBOS') %>
+  			<li><a href="/combos/new" title="Combo">Combo</a></li>
+  		<% end %>
+  		<% if current_user.has_right('CREATE_VENDORS') %>
+  			<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
+  		<% end %>
+  		<% if current_user.has_right('CREATE_SUBSCRIPTIONS') %>
+  			<li><a href=<%= new_subscription_url %> title="Suscripción">Suscripción</a></li>
+  		<% end %>
+  		<% if current_user.has_right('CREATE_PRODUCTION_PROCESSES') %>
+					<li><a href=<%= new_production_order_url %> title="Proceso de Produccion">Proceso de Produccion</a></li>
+			<% end %>
+			<% if current_user.has_right('CREATE_COUNTS') %>
+      	<li><a href="/count/new" title="Cuenta Fisica">Cuenta Fisica</a></li>
+			<% end %>
+			<% if current_user.has_right('CREATE_INTERNAL_CONSUMPTIONS') %>
+				<li><a href="/internal/new" title="Consumo Interno">Consumo Interno</a></li>
+			<% end %>
+			<% if current_user.has_right('CREATE_SITES') %>
+				<li><a href="/sites/new" title="Sitio">Sitio</a></li>
+			<% end %>
+		</ul>
+	</li>
+	<li><a href="#" class="menulink" >Productos</a>
+		<ul>
+			<% if current_user.has_right('VIEW_PRODUCTS') %>
+				<li><a href="/products" title="Productos">Productos</a></li>
+				<li><a href="/movements" title="Movimientos">Movimientos</a></li>
+				<li><a href="/units" title="Unidades">Unidades</a></li>
+			<% end %>
+			<% if current_user.has_right('VIEW_SERVICES') %>
+				<li><a href="/services" title="Servicios">Servicios</a></li>
+			<% end %>
+			<% if current_user.has_right('VIEW_COMBOS') %>
+				<li><a href="/combos" title="Combos">Combos</a></li>
+			<% end %>
+			<% if current_user.has_right('VIEW_SERIAL_NUMBERS') %>
+				<li><a href="/serialized_products" title="Numeros de Serie">Numeros de Serie</a></li>
+			<% end %>
+			<% if current_user.has_right('VIEW_WARRANTIES') %>
+				<li><a href="/warranties" title="Garantías">Garantías</a></li>
+			<% end %>
+			<% if current_user.has_right('VIEW_DISCOUNTS') %>
+				<li><a href="/discounts" title="Descuentos">Descuentos</a></li>
+			<% end %>
+			<% if current_user.has_right('VIEW_LABELS') %>
+				<li><a href="/labels" title="Etiquetas">Etiquetas</a></li>
+			<% end %>
+			<% if current_user.has_right('VIEW_PRICES') %>
+				<li><a href="/prices" title="Cambiar Precios">Cambiar Precios</a></li>
+			<% end %>
+		</ul>
+	</li>
+	<% if current_user.has_right('VIEW_PURCHASES') %>
+		<li><a class="menulink" href="/purchases" title="Compras">Compras</a>
 			<ul>
-				<% if current_user.has_right('CREATE_SALES') %>
-	  			<li><a href="/sales/new" title="Venta">Venta</a></li>
-	  		<% end %>
-	  		<% if current_user.has_right('CREATE_CLIENTS') %>
-	  			<li><a href="/clients/new" title="Cliente">Cliente</a></li>
-	  		<% end %>
-	  		<% if current_user.has_right('CREATE_PURCHASES') %>
-					<li><a href="/purchases/new" title="Compra">Compra</a></li>
-	  		<% end %>
-	  		<% if current_user.has_right('CREATE_PRODUCTS') %>
-					<li><a href="/products/new" title="Producto">Producto</a></li>	  			
-	  		<% end %>
-	  		<% if current_user.has_right('CREATE_SERVICES') %>
-	  			<li><a href="<%= new_service_path %>" title="Servicio">Servicio</a></li>
-	  		<% end %>
-	  		<% if current_user.has_right('CREATE_DISCOUNTS') %>
-	  			<li><a href="/discounts/new" title="Descuento">Descuento</a></li>
-	  		<% end %>
-	  		<% if current_user.has_right('CREATE_COMBOS') %>
-	  			<li><a href="/combos/new" title="Combo">Combo</a></li>
-	  		<% end %>
-	  		<% if current_user.has_right('CREATE_VENDORS') %>
-	  			<li><a href="/vendors/new" title="Proveedor">Proveedor</a></li>
-	  		<% end %>
-	  		<% if current_user.has_right('CREATE_SUBSCRIPTIONS') %>
-	  			<li><a href=<%= new_subscription_url %> title="Suscripción">Suscripción</a></li>
-	  		<% end %>
-	  		<% if current_user.has_right('CREATE_PRODUCTION_PROCESSES') %>
-						<li><a href=<%= new_production_order_url %> title="Proceso de Produccion">Proceso de Produccion</a></li>
-				<% end %>
-				<% if current_user.has_right('CREATE_COUNTS') %>
-        	<li><a href="/count/new" title="Cuenta Fisica">Cuenta Fisica</a></li>
-				<% end %>
-				<% if current_user.has_right('CREATE_INTERNAL_CONSUMPTIONS') %>
-  				<li><a href="/internal/new" title="Consumo Interno">Consumo Interno</a></li>
-				<% end %>
-				<% if current_user.has_right('CREATE_SITES') %>
-  				<li><a href="/sites/new" title="Sitio">Sitio</a></li>
-				<% end %>
-  			</ul>
-		</li>
-		<li><a href="/products" title="Productos">Productos</a>
-			<ul>
-				<% if current_user.has_right('VIEW_PRODUCTS') %>
-					<li><a href="/products" title="Productos">Productos</a></li>
-					<li><a href="/movements" title="Movimientos">Movimientos</a></li>
-					<li><a href="/units" title="Unidades">Unidades</a></li>
-				<% end %>
-				<% if current_user.has_right('VIEW_SERVICES') %>
-					<li><a href="/services" title="Servicios">Servicios</a></li>
-				<% end %>
-				<% if current_user.has_right('VIEW_COMBOS') %>
-					<li><a href="/combos" title="Combos">Combos</a></li>
-				<% end %>
-				<% if current_user.has_right('VIEW_SERIAL_NUMBERS') %>
-					<li><a href="/serialized_products" title="Numeros de Serie">Numeros de Serie</a></li>
-				<% end %>
-				<% if current_user.has_right('VIEW_WARRANTIES') %>
-					<li><a href="/warranties" title="Garantías">Garantías</a></li>
-				<% end %>
-				<% if current_user.has_right('VIEW_DISCOUNTS') %>
-					<li><a href="/discounts" title="Descuentos">Descuentos</a></li>
-				<% end %>
-				<% if current_user.has_right('VIEW_LABELS') %>
-					<li><a href="/labels" title="Etiquetas">Etiquetas</a></li>
-				<% end %>
-				<% if current_user.has_right('VIEW_PRICES') %>
-					<li><a href="/prices" title="Cambiar Precios">Cambiar Precios</a></li>
+				<li><a href="/purchases" title="Compras">Compras</a></li>
+				<% if current_user.has_right('CREATE_PURCHASES') %>
+					<li><a href="/inventories" title="Reaprovisionar">Reaprovisionar</a></li>
 				<% end %>
 			</ul>
 		</li>
-		<% if current_user.has_right('VIEW_PURCHASES') %>
-			<li><a href="/purchases" title="Compras">Compras</a>
-				<ul>
-					<li><a href="/purchases" title="Compras">Compras</a></li>
-					<% if current_user.has_right('CREATE_PURCHASES') %>
-						<li><a href="/inventories" title="Reaprovisionar">Reaprovisionar</a></li>
-					<% end %>
-				</ul>
-			</li>
-		<% end %>
-		<% if current_user.has_right('VIEW_SALES') %>
-			<li><a href="/sales" title="Ventas">Ventas</a>		
+	<% end %>
+	<% if current_user.has_right('VIEW_SALES') %>
+			<li><a class="menulink" href="/sales" title="Ventas">Ventas</a>		
 				<ul>
 					<li><a href="/sales" title="Ventas">Ventas</a></li>
 					<li><a href="/posts" title="Lista de Transacciones">Transacciones</a></li>
@@ -211,10 +209,10 @@
 			</li>
 		<% end %>
 		<% if current_user.has_right('VIEW_VENDORS') %>
-      <li><a href="/vendors" title="Proveedores">Proveedores</a></li>
+      <li><a class="menulink"  href="/vendors" title="Proveedores">Proveedores</a></li>
 		<% end %>
 		<% if current_user.has_right('VIEW_CLIENTS') %>
-      <li><a href="/clients" title="Clientes">Clientes</a>
+      <li><a class="menulink"  href="/clients" title="Clientes">Clientes</a>
         <ul>
           <li><a href="/entities/my_clients" title="Mis Clientes">Mis Clientes</a></li>
           <li><a href="/entities/my_end_users" title="Mis Clientes Consumidor Final">Mis Consumidor Final</a></li>
@@ -226,7 +224,7 @@
       </li>
 		<% end %>
 		
-	  <li><a href="/sites" title="Sitios">Sitios</a>
+	  <li><a class="menulink"  href="/sites" title="Sitios">Sitios</a>
 	  	<ul>
   			<% for location in get_sites %>
   				<li><a href="/entities/<%= location.id %>" title=<%= location.name %>><%= location.name %></a></li>
@@ -237,7 +235,7 @@
   		</ul>
   	</li>
 		<% if current_user.has_right('VIEW_PRODUCTION_ORDERS') %>
-			<li><a href="<%= production_orders_url(:filter=>'orders') %>" title="Produccion">Produccion</a>
+			<li><a class="menulink"  href="<%= production_orders_url(:filter=>'orders') %>" title="Produccion">Produccion</a>
 				<ul>
 					<li><a href="<%= production_orders_url(:filter=>'orders') %>" title="Ordenes">Ordenes</a></li>
 					<% if current_user.has_right('VIEW_PRODUCTION_PROCESSES') %>
@@ -247,15 +245,15 @@
 			</li>
 		<% end %>
   	<% if current_user.has_right('VIEW_PAYMENTS') %>
-	  	<li><a href="/payments" title="Pagos">Pagos</a></li>
+	  	<li><a class="menulink"  href="/payments" title="Pagos">Pagos</a></li>
   	<% end %>
   	<% if current_user.has_right('VIEW_USERS') %>
-	  	<li><a href="/users" title="Usuarios">Usuarios</a></li>
+	  	<li><a class="menulink"  href="/users" title="Usuarios">Usuarios</a></li>
   	<% else %>
-	  	<li><a href="/me" title="Mi Cuenta">Mi Cuenta</a></li>
+	  	<li><a class="menulink"  href="/me" title="Mi Cuenta">Mi Cuenta</a></li>
   	<% end %>
   	<% if current_user.has_right('VIEW_ACCOUNTS') %>
-	  	<li><a href="/accounts" title="Contabilidad">Contabilidad</a>
+	  	<li><a class="menulink"  href="/accounts" title="Contabilidad">Contabilidad</a>
 	  		<ul>
 	  			<li><a href="/accounts" title="Contabilidad">Contabilidad</a></li>
 	  			<li><a href="/accounts/corte_de_caja" title="Corte de Caja">Corte de Caja</a></li>
@@ -263,14 +261,20 @@
 	  	</li>
 	  <% end %>
 		</ul>
-
-					<%= yield :nav2 %>	
-        </div>
+	
+	
+	
+	
 	  </div>
 
       
     </div>
 
+  <!-- For menus -->
+	<script type="text/javascript">
+		var menu=new menu.dd("menu");
+		menu.init("menu","menuhover");
+	</script>
     <!-- B. MAIN -->
     <div class="main">
     <div class="nav-daddy">
