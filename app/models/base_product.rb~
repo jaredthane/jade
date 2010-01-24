@@ -1,0 +1,5 @@
+class BaseProduct < ActiveRecord::Base
+	belongs_to :unit
+	belongs_to :category
+	belongs_to :revenue_account, :class_name => "Account"
+end

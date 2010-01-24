@@ -1,0 +1,3 @@
+class Purchsae < Order
+	
+end

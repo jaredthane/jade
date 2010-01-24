@@ -1,0 +1,3 @@
+class Requirement < BaseLine
+
+end
