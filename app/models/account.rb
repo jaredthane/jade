@@ -66,4 +66,19 @@ class Account < ActiveRecord::Base
 	  end
 	  return list
 	end
+	#################################################################################################
+	# Returns balance of account
+	#################################################################################################
+	def balance
+		if is_parent
+			list = all_children.collect{|c| c.id.to_s + ", "}.to_s.chop.chop
+			if list.length > 0
+				return Entry.sum('value*multiplier', :conditions=>"account_id in (#{list})") * self.modifier
+			else
+				return 0
+			end
+		else
+			return Entry.sum('value*multiplier', :conditions=>"account_id = #{self.id}") * self.modifier
+		end
+	end
 end
