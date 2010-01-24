@@ -152,3 +152,966 @@ Migrating to CreateWarranties (20100124015441)
   [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `warranties`[0m
   [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `warranties`[0m
   [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `warranties`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateBaseContracts (20100123215247)
+Migrating to CreateBaseLines (20100123215703)
+Migrating to CreateEntries (20100123223231)
+Migrating to CreateMovements (20100123223500)
+Migrating to CreateSerials (20100123223700)
+Migrating to CreateBaseProducts (20100123224200)
+Migrating to CreateAccounts (20100123225313)
+Migrating to CreateEntities (20100123233456)
+Migrating to CreateInventories (20100123234629)
+Migrating to CreatePreferences (20100124004924)
+Migrating to CreateLogs (20100124004925)
+Migrating to CreatePriceGroups (20100124010448)
+Migrating to CreatePrices (20100124010450)
+Migrating to CreateCategories (20100124010719)
+Migrating to CreatePriceSets (20100124011531)
+Migrating to CreateRights (20100124013750)
+Migrating to CreateRightRoles (20100124013751)
+Migrating to CreateRoles (20100124013752)
+Migrating to CreateRoleUsers (20100124013753)
+Migrating to CreateStates (20100124013754)
+Migrating to CreateSubscriptions (20100124013755)
+Migrating to CreateUnits (20100124013756)
+Migrating to CreateUsers (20100124013757)
+Migrating to CreateWarranties (20100124015441)
+Migrating to AddEntitiesToBaseContract (20100124034203)
+  [4;36;1mSQL (51.3ms)[0m   [0;1mALTER TABLE `base_contracts` ADD `entityA_id` int(11)[0m
+  [4;35;1mSQL (4.1ms)[0m   [0mALTER TABLE `base_contracts` ADD `entityB_id` int(11)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124034203')[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `accounts`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `accounts`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `accounts`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSHOW FIELDS FROM `base_contracts`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mdescribe `base_contracts`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `base_contracts`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW FIELDS FROM `base_lines`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mdescribe `base_lines`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `base_lines`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `base_products`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `base_products`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `categories`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `categories`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `categories`[0m
+  [4;35;1mSQL (1.2ms)[0m   [0mSHOW FIELDS FROM `entities`[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1mdescribe `entities`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW KEYS FROM `entities`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `entries`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `entries`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `entries`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `inventories`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `inventories`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `inventories`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `logs`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `logs`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `logs`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `movements`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `movements`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `movements`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `preferences`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `preferences`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `preferences`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `price_groups`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `price_groups`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `price_groups`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `price_sets`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `price_sets`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `price_sets`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `prices`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `prices`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `prices`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `right_roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `right_roles`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `right_roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `rights`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `rights`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `rights`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `role_users`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `role_users`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `role_users`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `roles`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `serials`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mdescribe `serials`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `serials`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `states`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `states`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `states`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `subscriptions`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mdescribe `subscriptions`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `subscriptions`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `units`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `units`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `units`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mdescribe `users`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `users`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `warranties`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `warranties`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `warranties`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateBaseContracts (20100123215247)
+Migrating to CreateBaseLines (20100123215703)
+Migrating to CreateEntries (20100123223231)
+Migrating to CreateMovements (20100123223500)
+Migrating to CreateSerials (20100123223700)
+Migrating to CreateBaseProducts (20100123224200)
+Migrating to CreateAccounts (20100123225313)
+Migrating to CreateEntities (20100123233456)
+Migrating to CreateInventories (20100123234629)
+Migrating to CreatePreferences (20100124004924)
+Migrating to CreateLogs (20100124004925)
+Migrating to CreatePriceGroups (20100124010448)
+Migrating to CreatePrices (20100124010450)
+Migrating to CreateCategories (20100124010719)
+Migrating to CreatePriceSets (20100124011531)
+Migrating to CreateRights (20100124013750)
+Migrating to CreateRightRoles (20100124013751)
+Migrating to CreateRoles (20100124013752)
+Migrating to CreateRoleUsers (20100124013753)
+Migrating to CreateStates (20100124013754)
+Migrating to CreateSubscriptions (20100124013755)
+Migrating to CreateUnits (20100124013756)
+Migrating to CreateUsers (20100124013757)
+Migrating to CreateWarranties (20100124015441)
+Migrating to AddEntitiesToBaseContract (20100124034203)
+Migrating to ChangeEntitiesOnBaseContract (20100124035636)
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSHOW FIELDS FROM `base_contracts`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW COLUMNS FROM `base_contracts` LIKE 'entityA_id'[0m
+  [4;36;1mSQL (39.1ms)[0m   [0;1mALTER TABLE `base_contracts` CHANGE `entityA_id` `vendor_id` int(11) DEFAULT NULL[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mSHOW FIELDS FROM `base_contracts`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mSHOW COLUMNS FROM `base_contracts` LIKE 'entityB_id'[0m
+  [4;35;1mSQL (5.7ms)[0m   [0mALTER TABLE `base_contracts` CHANGE `entityB_id` `client_id` int(11) DEFAULT NULL[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124035636')[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `accounts`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `accounts`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `accounts`[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSHOW FIELDS FROM `base_contracts`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mdescribe `base_contracts`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `base_contracts`[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSHOW FIELDS FROM `base_lines`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mdescribe `base_lines`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `base_lines`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mdescribe `base_products`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `base_products`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `categories`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `categories`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `categories`[0m
+  [4;35;1mSQL (1.3ms)[0m   [0mSHOW FIELDS FROM `entities`[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1mdescribe `entities`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `entities`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `entries`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `entries`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `entries`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `inventories`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `inventories`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `inventories`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `logs`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `logs`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `logs`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `movements`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mdescribe `movements`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `movements`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `preferences`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `preferences`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `preferences`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `price_groups`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `price_groups`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `price_groups`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `price_sets`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `price_sets`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `price_sets`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `prices`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `prices`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `prices`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `right_roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `right_roles`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `right_roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `rights`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `rights`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `rights`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `role_users`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `role_users`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `role_users`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `roles`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `serials`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `serials`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `serials`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `states`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `states`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `states`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `subscriptions`[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mdescribe `subscriptions`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `subscriptions`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `units`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `units`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `units`[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mdescribe `users`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW KEYS FROM `users`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `warranties`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `warranties`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `warranties`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateBaseContracts (20100123215247)
+Migrating to CreateBaseLines (20100123215703)
+Migrating to CreateEntries (20100123223231)
+Migrating to CreateMovements (20100123223500)
+Migrating to CreateSerials (20100123223700)
+Migrating to CreateBaseProducts (20100123224200)
+Migrating to CreateAccounts (20100123225313)
+Migrating to CreateEntities (20100123233456)
+Migrating to CreateInventories (20100123234629)
+Migrating to CreatePreferences (20100124004924)
+Migrating to CreateLogs (20100124004925)
+Migrating to CreatePriceGroups (20100124010448)
+Migrating to CreatePrices (20100124010450)
+Migrating to CreateCategories (20100124010719)
+Migrating to CreatePriceSets (20100124011531)
+Migrating to CreateRights (20100124013750)
+Migrating to CreateRightRoles (20100124013751)
+Migrating to CreateRoles (20100124013752)
+Migrating to CreateRoleUsers (20100124013753)
+Migrating to CreateStates (20100124013754)
+Migrating to CreateSubscriptions (20100124013755)
+Migrating to CreateUnits (20100124013756)
+Migrating to CreateUsers (20100124013757)
+Migrating to CreateWarranties (20100124015441)
+Migrating to AddEntitiesToBaseContract (20100124034203)
+Migrating to ChangeEntitiesOnBaseContract (20100124035636)
+Migrating to ChangeSerialIdOnBaseLine (20100124040258)
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSHOW FIELDS FROM `base_lines`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW COLUMNS FROM `base_lines` LIKE 'serial_number_id'[0m
+  [4;36;1mSQL (17.8ms)[0m   [0;1mALTER TABLE `base_lines` CHANGE `serial_number_id` `serial_id` varchar(255) DEFAULT NULL[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20100124040258')[0m
+Migrating to AddTaxGroups (20100124042216)
+  [4;36;1mSQL (1.8ms)[0m   [0;1mCREATE TABLE `tax_groups` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255), `rate` decimal) ENGINE=InnoDB[0m
+  [4;35;1mSQL (18.4ms)[0m   [0mALTER TABLE `entities` ADD `tax_group_id` int(11)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124042216')[0m
+Migrating to AddNewAccountParentsToEntities (20100124042828)
+  [4;35;1mSQL (5.1ms)[0m   [0mALTER TABLE `entities` ADD `new_client_accounts_parent_id` int(11)[0m
+  [4;36;1mSQL (22.6ms)[0m   [0;1mALTER TABLE `entities` ADD `new_vendor_accounts_parent_id` int(11)[0m
+  [4;35;1mSQL (5.2ms)[0m   [0mALTER TABLE `entities` ADD `new_employee_accounts_parent_id` int(11)[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124042828')[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `accounts`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `accounts`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `accounts`[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mSHOW FIELDS FROM `base_contracts`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mdescribe `base_contracts`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `base_contracts`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `base_lines`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `base_lines`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `base_lines`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `base_products`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `base_products`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `categories`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `categories`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `categories`[0m
+  [4;35;1mSQL (1.5ms)[0m   [0mSHOW FIELDS FROM `entities`[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1mdescribe `entities`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `entities`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `entries`[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mdescribe `entries`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `entries`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `inventories`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `inventories`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `inventories`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `logs`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `logs`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `logs`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `movements`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `movements`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `movements`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `preferences`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `preferences`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `preferences`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `price_groups`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `price_groups`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `price_groups`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `price_sets`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `price_sets`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `price_sets`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `prices`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `prices`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW KEYS FROM `prices`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `right_roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `right_roles`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `right_roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `rights`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `rights`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `rights`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `role_users`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `role_users`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `role_users`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `roles`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `roles`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW FIELDS FROM `serials`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mdescribe `serials`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `serials`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `states`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `states`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `states`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW FIELDS FROM `subscriptions`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `subscriptions`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `subscriptions`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `tax_groups`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `tax_groups`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `tax_groups`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `units`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `units`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `units`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mdescribe `users`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `users`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW FIELDS FROM `warranties`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `warranties`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `warranties`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateBaseContracts (20100123215247)
+Migrating to CreateBaseLines (20100123215703)
+Migrating to CreateEntries (20100123223231)
+Migrating to CreateMovements (20100123223500)
+Migrating to CreateSerials (20100123223700)
+Migrating to CreateBaseProducts (20100123224200)
+Migrating to CreateAccounts (20100123225313)
+Migrating to CreateEntities (20100123233456)
+Migrating to CreateInventories (20100123234629)
+Migrating to CreatePreferences (20100124004924)
+Migrating to CreateLogs (20100124004925)
+Migrating to CreatePriceGroups (20100124010448)
+Migrating to CreatePrices (20100124010450)
+Migrating to CreateCategories (20100124010719)
+Migrating to CreatePriceSets (20100124011531)
+Migrating to CreateRights (20100124013750)
+Migrating to CreateRightRoles (20100124013751)
+Migrating to CreateRoles (20100124013752)
+Migrating to CreateRoleUsers (20100124013753)
+Migrating to CreateStates (20100124013754)
+Migrating to CreateSubscriptions (20100124013755)
+Migrating to CreateUnits (20100124013756)
+Migrating to CreateUsers (20100124013757)
+Migrating to CreateWarranties (20100124015441)
+Migrating to AddEntitiesToBaseContract (20100124034203)
+Migrating to ChangeEntitiesOnBaseContract (20100124035636)
+Migrating to ChangeSerialIdOnBaseLine (20100124040258)
+Migrating to AddTaxGroups (20100124042216)
+Migrating to AddNewAccountParentsToEntities (20100124042828)
+Migrating to DropPayablesFromEntities (20100124043123)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateBaseContracts (20100123215247)
+Migrating to CreateBaseLines (20100123215703)
+Migrating to CreateEntries (20100123223231)
+Migrating to CreateMovements (20100123223500)
+Migrating to CreateSerials (20100123223700)
+Migrating to CreateBaseProducts (20100123224200)
+Migrating to CreateAccounts (20100123225313)
+Migrating to CreateEntities (20100123233456)
+Migrating to CreateInventories (20100123234629)
+Migrating to CreatePreferences (20100124004924)
+Migrating to CreateLogs (20100124004925)
+Migrating to CreatePriceGroups (20100124010448)
+Migrating to CreatePrices (20100124010450)
+Migrating to CreateCategories (20100124010719)
+Migrating to CreatePriceSets (20100124011531)
+Migrating to CreateRights (20100124013750)
+Migrating to CreateRightRoles (20100124013751)
+Migrating to CreateRoles (20100124013752)
+Migrating to CreateRoleUsers (20100124013753)
+Migrating to CreateStates (20100124013754)
+Migrating to CreateSubscriptions (20100124013755)
+Migrating to CreateUnits (20100124013756)
+Migrating to CreateUsers (20100124013757)
+Migrating to CreateWarranties (20100124015441)
+Migrating to AddEntitiesToBaseContract (20100124034203)
+Migrating to ChangeEntitiesOnBaseContract (20100124035636)
+Migrating to ChangeSerialIdOnBaseLine (20100124040258)
+Migrating to AddTaxGroups (20100124042216)
+Migrating to AddNewAccountParentsToEntities (20100124042828)
+Migrating to DropPayablesFromEntities (20100124043123)
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateBaseContracts (20100123215247)
+Migrating to CreateBaseLines (20100123215703)
+Migrating to CreateEntries (20100123223231)
+Migrating to CreateMovements (20100123223500)
+Migrating to CreateSerials (20100123223700)
+Migrating to CreateBaseProducts (20100123224200)
+Migrating to CreateAccounts (20100123225313)
+Migrating to CreateEntities (20100123233456)
+Migrating to CreateInventories (20100123234629)
+Migrating to CreatePreferences (20100124004924)
+Migrating to CreateLogs (20100124004925)
+Migrating to CreatePriceGroups (20100124010448)
+Migrating to CreatePrices (20100124010450)
+Migrating to CreateCategories (20100124010719)
+Migrating to CreatePriceSets (20100124011531)
+Migrating to CreateRights (20100124013750)
+Migrating to CreateRightRoles (20100124013751)
+Migrating to CreateRoles (20100124013752)
+Migrating to CreateRoleUsers (20100124013753)
+Migrating to CreateStates (20100124013754)
+Migrating to CreateSubscriptions (20100124013755)
+Migrating to CreateUnits (20100124013756)
+Migrating to CreateUsers (20100124013757)
+Migrating to CreateWarranties (20100124015441)
+Migrating to AddEntitiesToBaseContract (20100124034203)
+Migrating to ChangeEntitiesOnBaseContract (20100124035636)
+Migrating to ChangeSerialIdOnBaseLine (20100124040258)
+Migrating to AddTaxGroups (20100124042216)
+Migrating to AddNewAccountParentsToEntities (20100124042828)
+Migrating to DropPayablesFromEntities (20100124043123)
+  [4;36;1mSQL (37.7ms)[0m   [0;1mALTER TABLE `entities` DROP `payables_account_id`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20100124043123')[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `accounts`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `accounts`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `accounts`[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSHOW FIELDS FROM `base_contracts`[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mdescribe `base_contracts`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `base_contracts`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `base_lines`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `base_lines`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `base_lines`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `base_products`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mdescribe `base_products`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `base_products`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `categories`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `categories`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `categories`[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1mSHOW FIELDS FROM `entities`[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mdescribe `entities`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `entities`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `entries`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `entries`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `entries`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `inventories`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `inventories`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `inventories`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `logs`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `logs`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `logs`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW FIELDS FROM `movements`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `movements`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `movements`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `preferences`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `preferences`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `preferences`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `price_groups`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `price_groups`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `price_groups`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `price_sets`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `price_sets`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `price_sets`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `prices`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `prices`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `prices`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `right_roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `right_roles`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `right_roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `rights`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `rights`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `rights`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `role_users`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `role_users`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `role_users`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `roles`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `serials`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `serials`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `states`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `states`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `states`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `subscriptions`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mdescribe `subscriptions`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `subscriptions`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `tax_groups`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `tax_groups`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `tax_groups`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `units`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `units`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `units`[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mdescribe `users`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `users`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `warranties`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `warranties`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `warranties`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateBaseContracts (20100123215247)
+Migrating to CreateBaseLines (20100123215703)
+Migrating to CreateEntries (20100123223231)
+Migrating to CreateMovements (20100123223500)
+Migrating to CreateSerials (20100123223700)
+Migrating to CreateBaseProducts (20100123224200)
+Migrating to CreateAccounts (20100123225313)
+Migrating to CreateEntities (20100123233456)
+Migrating to CreateInventories (20100123234629)
+Migrating to CreatePreferences (20100124004924)
+Migrating to CreateLogs (20100124004925)
+Migrating to CreatePriceGroups (20100124010448)
+Migrating to CreatePrices (20100124010450)
+Migrating to CreateCategories (20100124010719)
+Migrating to CreatePriceSets (20100124011531)
+Migrating to CreateRights (20100124013750)
+Migrating to CreateRightRoles (20100124013751)
+Migrating to CreateRoles (20100124013752)
+Migrating to CreateRoleUsers (20100124013753)
+Migrating to CreateStates (20100124013754)
+Migrating to CreateSubscriptions (20100124013755)
+Migrating to CreateUnits (20100124013756)
+Migrating to CreateUsers (20100124013757)
+Migrating to CreateWarranties (20100124015441)
+Migrating to AddEntitiesToBaseContract (20100124034203)
+Migrating to ChangeEntitiesOnBaseContract (20100124035636)
+Migrating to ChangeSerialIdOnBaseLine (20100124040258)
+Migrating to AddTaxGroups (20100124042216)
+Migrating to AddNewAccountParentsToEntities (20100124042828)
+Migrating to DropPayablesFromEntities (20100124043123)
+Migrating to AddEmployeeAccountsGroupToEntities (20100124043446)
+  [4;36;1mSQL (51.1ms)[0m   [0;1mALTER TABLE `entities` ADD `employee_accounts_group_id` int(11)[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20100124043446')[0m
+  [4;36;1mSQL (9.8ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (14.3ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `accounts`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mdescribe `accounts`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `accounts`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mSHOW FIELDS FROM `base_contracts`[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mdescribe `base_contracts`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `base_contracts`[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mSHOW FIELDS FROM `base_lines`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `base_lines`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `base_lines`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW FIELDS FROM `base_products`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `base_products`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW KEYS FROM `base_products`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `categories`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `categories`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `categories`[0m
+  [4;36;1mSQL (1.3ms)[0m   [0;1mSHOW FIELDS FROM `entities`[0m
+  [4;35;1mSQL (1.3ms)[0m   [0mdescribe `entities`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `entities`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `entries`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `entries`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `entries`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `inventories`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `inventories`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `inventories`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `logs`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `logs`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `logs`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `movements`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `movements`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `movements`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `preferences`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `preferences`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `preferences`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `price_groups`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `price_groups`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW KEYS FROM `price_groups`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `price_sets`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `price_sets`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `price_sets`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `prices`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `prices`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `prices`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `right_roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `right_roles`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `right_roles`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `rights`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `rights`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `rights`[0m
+  [4;35;1mSQL (2.1ms)[0m   [0mSHOW FIELDS FROM `role_users`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `role_users`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `role_users`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `roles`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `roles`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mdescribe `serials`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `serials`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `states`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `states`[0m
+  [4;36;1mSQL (1.8ms)[0m   [0;1mSHOW KEYS FROM `states`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `subscriptions`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mdescribe `subscriptions`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `subscriptions`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `tax_groups`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `tax_groups`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `tax_groups`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `units`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `units`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `units`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mdescribe `users`[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSHOW KEYS FROM `users`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `warranties`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `warranties`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `warranties`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateBaseContracts (20100123215247)
+Migrating to CreateBaseLines (20100123215703)
+Migrating to CreateEntries (20100123223231)
+Migrating to CreateMovements (20100123223500)
+Migrating to CreateSerials (20100123223700)
+Migrating to CreateBaseProducts (20100123224200)
+Migrating to CreateAccounts (20100123225313)
+Migrating to CreateEntities (20100123233456)
+Migrating to CreateInventories (20100123234629)
+Migrating to CreatePreferences (20100124004924)
+Migrating to CreateLogs (20100124004925)
+Migrating to CreatePriceGroups (20100124010448)
+Migrating to CreatePrices (20100124010450)
+Migrating to CreateCategories (20100124010719)
+Migrating to CreatePriceSets (20100124011531)
+Migrating to CreateRights (20100124013750)
+Migrating to CreateRightRoles (20100124013751)
+Migrating to CreateRoles (20100124013752)
+Migrating to CreateRoleUsers (20100124013753)
+Migrating to CreateStates (20100124013754)
+Migrating to CreateSubscriptions (20100124013755)
+Migrating to CreateUnits (20100124013756)
+Migrating to CreateUsers (20100124013757)
+Migrating to CreateWarranties (20100124015441)
+Migrating to AddEntitiesToBaseContract (20100124034203)
+Migrating to ChangeEntitiesOnBaseContract (20100124035636)
+Migrating to ChangeSerialIdOnBaseLine (20100124040258)
+Migrating to AddTaxGroups (20100124042216)
+Migrating to AddNewAccountParentsToEntities (20100124042828)
+Migrating to DropPayablesFromEntities (20100124043123)
+Migrating to AddEmployeeAccountsGroupToEntities (20100124043446)
+Migrating to RenameObjectIdToContractId (20100124044818)
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `movements`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW COLUMNS FROM `movements` LIKE 'object_id'[0m
+  [4;36;1mSQL (37.0ms)[0m   [0;1mALTER TABLE `movements` CHANGE `object_id` `contract_id` int(11) DEFAULT NULL[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20100124044818')[0m
+Migrating to MakeProductAndSerialIdsString (20100124045429)
+  [4;36;1mSQL (0.9ms)[0m   [0;1mSHOW FIELDS FROM `base_products`[0m
+  [4;35;1mSQL (4.7ms)[0m   [0mALTER TABLE `base_products` CHANGE `id` `id` varchar(255) NOT NULL[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `serials`[0m
+  [4;35;1mSQL (45.6ms)[0m   [0mALTER TABLE `serials` CHANGE `id` `id` varchar(255) NOT NULL[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124045429')[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `accounts`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `accounts`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `accounts`[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mSHOW FIELDS FROM `base_contracts`[0m
+  [4;36;1mSQL (6.6ms)[0m   [0;1mdescribe `base_contracts`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSHOW KEYS FROM `base_contracts`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `base_lines`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mdescribe `base_lines`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `base_lines`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mdescribe `base_products`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `base_products`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `categories`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `categories`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `categories`[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mSHOW FIELDS FROM `entities`[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1mdescribe `entities`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `entities`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `entries`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mdescribe `entries`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `entries`[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mSHOW FIELDS FROM `inventories`[0m
+  [4;36;1mSQL (0.9ms)[0m   [0;1mdescribe `inventories`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `inventories`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `logs`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `logs`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `logs`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `movements`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `movements`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `movements`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `preferences`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `preferences`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `preferences`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `price_groups`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `price_groups`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `price_groups`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `price_sets`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `price_sets`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `price_sets`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `prices`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `prices`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `prices`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `right_roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `right_roles`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `right_roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `rights`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `rights`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `rights`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `role_users`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `role_users`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `role_users`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `roles`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `serials`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `serials`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `serials`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `states`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `states`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `states`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `subscriptions`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mdescribe `subscriptions`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `subscriptions`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `tax_groups`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `tax_groups`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `tax_groups`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `units`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `units`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `units`[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mSHOW FIELDS FROM `users`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mdescribe `users`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `users`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `warranties`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `warranties`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `warranties`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateBaseContracts (20100123215247)
+Migrating to CreateBaseLines (20100123215703)
+Migrating to CreateEntries (20100123223231)
+Migrating to CreateMovements (20100123223500)
+Migrating to CreateSerials (20100123223700)
+Migrating to CreateBaseProducts (20100123224200)
+Migrating to CreateAccounts (20100123225313)
+Migrating to CreateEntities (20100123233456)
+Migrating to CreateInventories (20100123234629)
+Migrating to CreatePreferences (20100124004924)
+Migrating to CreateLogs (20100124004925)
+Migrating to CreatePriceGroups (20100124010448)
+Migrating to CreatePrices (20100124010450)
+Migrating to CreateCategories (20100124010719)
+Migrating to CreatePriceSets (20100124011531)
+Migrating to CreateRights (20100124013750)
+Migrating to CreateRightRoles (20100124013751)
+Migrating to CreateRoles (20100124013752)
+Migrating to CreateRoleUsers (20100124013753)
+Migrating to CreateStates (20100124013754)
+Migrating to CreateSubscriptions (20100124013755)
+Migrating to CreateUnits (20100124013756)
+Migrating to CreateUsers (20100124013757)
+Migrating to CreateWarranties (20100124015441)
+Migrating to AddEntitiesToBaseContract (20100124034203)
+Migrating to ChangeEntitiesOnBaseContract (20100124035636)
+Migrating to ChangeSerialIdOnBaseLine (20100124040258)
+Migrating to AddTaxGroups (20100124042216)
+Migrating to AddNewAccountParentsToEntities (20100124042828)
+Migrating to DropPayablesFromEntities (20100124043123)
+Migrating to AddEmployeeAccountsGroupToEntities (20100124043446)
+Migrating to RenameObjectIdToContractId (20100124044818)
+Migrating to MakeProductAndSerialIdsString (20100124045429)
+Migrating to AddBlockedBy (20100124050816)
+  [4;36;1mSQL (24.2ms)[0m   [0;1mALTER TABLE `base_products` ADD `blocked_by` int(11)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mMysql::Error: Table 'jade2dev.base_contract' doesn't exist: ALTER TABLE `base_contract` ADD `blocked_by` int(11)[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateBaseContracts (20100123215247)
+Migrating to CreateBaseLines (20100123215703)
+Migrating to CreateEntries (20100123223231)
+Migrating to CreateMovements (20100123223500)
+Migrating to CreateSerials (20100123223700)
+Migrating to CreateBaseProducts (20100123224200)
+Migrating to CreateAccounts (20100123225313)
+Migrating to CreateEntities (20100123233456)
+Migrating to CreateInventories (20100123234629)
+Migrating to CreatePreferences (20100124004924)
+Migrating to CreateLogs (20100124004925)
+Migrating to CreatePriceGroups (20100124010448)
+Migrating to CreatePrices (20100124010450)
+Migrating to CreateCategories (20100124010719)
+Migrating to CreatePriceSets (20100124011531)
+Migrating to CreateRights (20100124013750)
+Migrating to CreateRightRoles (20100124013751)
+Migrating to CreateRoles (20100124013752)
+Migrating to CreateRoleUsers (20100124013753)
+Migrating to CreateStates (20100124013754)
+Migrating to CreateSubscriptions (20100124013755)
+Migrating to CreateUnits (20100124013756)
+Migrating to CreateUsers (20100124013757)
+Migrating to CreateWarranties (20100124015441)
+Migrating to AddEntitiesToBaseContract (20100124034203)
+Migrating to ChangeEntitiesOnBaseContract (20100124035636)
+Migrating to ChangeSerialIdOnBaseLine (20100124040258)
+Migrating to AddTaxGroups (20100124042216)
+Migrating to AddNewAccountParentsToEntities (20100124042828)
+Migrating to DropPayablesFromEntities (20100124043123)
+Migrating to AddEmployeeAccountsGroupToEntities (20100124043446)
+Migrating to RenameObjectIdToContractId (20100124044818)
+Migrating to MakeProductAndSerialIdsString (20100124045429)
+Migrating to AddBlockedBy (20100124050816)
+  [4;36;1mSQL (0.0ms)[0m   [0;1mMysql::Error: Duplicate column name 'blocked_by': ALTER TABLE `base_products` ADD `blocked_by` int(11)[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (1.5ms)[0m   [0mSELECT version FROM schema_migrations[0m
+Migrating to CreateBaseContracts (20100123215247)
+Migrating to CreateBaseLines (20100123215703)
+Migrating to CreateEntries (20100123223231)
+Migrating to CreateMovements (20100123223500)
+Migrating to CreateSerials (20100123223700)
+Migrating to CreateBaseProducts (20100123224200)
+Migrating to CreateAccounts (20100123225313)
+Migrating to CreateEntities (20100123233456)
+Migrating to CreateInventories (20100123234629)
+Migrating to CreatePreferences (20100124004924)
+Migrating to CreateLogs (20100124004925)
+Migrating to CreatePriceGroups (20100124010448)
+Migrating to CreatePrices (20100124010450)
+Migrating to CreateCategories (20100124010719)
+Migrating to CreatePriceSets (20100124011531)
+Migrating to CreateRights (20100124013750)
+Migrating to CreateRightRoles (20100124013751)
+Migrating to CreateRoles (20100124013752)
+Migrating to CreateRoleUsers (20100124013753)
+Migrating to CreateStates (20100124013754)
+Migrating to CreateSubscriptions (20100124013755)
+Migrating to CreateUnits (20100124013756)
+Migrating to CreateUsers (20100124013757)
+Migrating to CreateWarranties (20100124015441)
+Migrating to AddEntitiesToBaseContract (20100124034203)
+Migrating to ChangeEntitiesOnBaseContract (20100124035636)
+Migrating to ChangeSerialIdOnBaseLine (20100124040258)
+Migrating to AddTaxGroups (20100124042216)
+Migrating to AddNewAccountParentsToEntities (20100124042828)
+Migrating to DropPayablesFromEntities (20100124043123)
+Migrating to AddEmployeeAccountsGroupToEntities (20100124043446)
+Migrating to RenameObjectIdToContractId (20100124044818)
+Migrating to MakeProductAndSerialIdsString (20100124045429)
+Migrating to AddBlockedBy (20100124050816)
+  [4;36;1mSQL (5.6ms)[0m   [0;1mALTER TABLE `base_products` ADD `blocked_by` int(11)[0m
+  [4;35;1mSQL (6.4ms)[0m   [0mALTER TABLE `base_contracts` ADD `blocked_by` int(11)[0m
+  [4;36;1mSQL (10.0ms)[0m   [0;1mALTER TABLE `accounts` ADD `blocked_by` int(11)[0m
+  [4;35;1mSQL (3.9ms)[0m   [0mALTER TABLE `movements` ADD `blocked_by` int(11)[0m
+  [4;36;1mSQL (5.0ms)[0m   [0;1mALTER TABLE `entities` ADD `blocked_by` int(11)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mINSERT INTO schema_migrations (version) VALUES ('20100124050816')[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSELECT version FROM schema_migrations[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mSHOW FIELDS FROM `accounts`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `accounts`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `accounts`[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mSHOW FIELDS FROM `base_contracts`[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mdescribe `base_contracts`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `base_contracts`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `base_lines`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mdescribe `base_lines`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `base_lines`[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSHOW FIELDS FROM `base_products`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mdescribe `base_products`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `base_products`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `categories`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `categories`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `categories`[0m
+  [4;36;1mSQL (1.5ms)[0m   [0;1mSHOW FIELDS FROM `entities`[0m
+  [4;35;1mSQL (1.3ms)[0m   [0mdescribe `entities`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `entities`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `entries`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `entries`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `entries`[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSHOW FIELDS FROM `inventories`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mdescribe `inventories`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `inventories`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `logs`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `logs`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `logs`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `movements`[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mdescribe `movements`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `movements`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `preferences`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `preferences`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `preferences`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `price_groups`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `price_groups`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `price_groups`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `price_sets`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `price_sets`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `price_sets`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `prices`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `prices`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `prices`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `right_roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `right_roles`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `right_roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `rights`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `rights`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `rights`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `role_users`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `role_users`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `role_users`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `roles`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `serials`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `serials`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `states`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `states`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `states`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `subscriptions`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mdescribe `subscriptions`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `subscriptions`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `tax_groups`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mdescribe `tax_groups`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `tax_groups`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `units`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `units`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `units`[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mdescribe `users`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `users`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `warranties`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `warranties`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `warranties`[0m

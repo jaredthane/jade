@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100124015441) do
+ActiveRecord::Schema.define(:version => 20100124050816) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(:version => 20100124015441) do
     t.boolean  "is_parent"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "blocked_by"
   end
 
   create_table "base_contracts", :force => true do |t|
@@ -42,17 +43,20 @@ ActiveRecord::Schema.define(:version => 20100124015441) do
     t.integer  "entity_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "vendor_id"
+    t.integer  "client_id"
+    t.integer  "blocked_by"
   end
 
   create_table "base_lines", :force => true do |t|
     t.string   "product_id"
     t.integer  "parent_id"
     t.integer  "quantity"
-    t.integer  "value1",           :limit => 10, :precision => 10, :scale => 0
-    t.integer  "value2",           :limit => 10, :precision => 10, :scale => 0
+    t.integer  "value1",       :limit => 10, :precision => 10, :scale => 0
+    t.integer  "value2",       :limit => 10, :precision => 10, :scale => 0
     t.datetime "completed_at"
     t.integer  "completed_by"
-    t.string   "serial_number_id"
+    t.string   "serial_id"
     t.text     "comments"
     t.string   "type"
     t.integer  "old_qty"
@@ -70,6 +74,7 @@ ActiveRecord::Schema.define(:version => 20100124015441) do
     t.string  "type"
     t.integer "category_id"
     t.integer "revenue_account_id"
+    t.integer "blocked_by"
   end
 
   create_table "categories", :force => true do |t|
@@ -109,8 +114,13 @@ ActiveRecord::Schema.define(:version => 20100124015441) do
     t.integer  "expense_account_id"
     t.integer  "returns_account_id"
     t.integer  "discounts_account_id"
-    t.integer  "payables_account_id"
     t.string   "next_bar_code"
+    t.integer  "tax_group_id"
+    t.integer  "new_client_accounts_parent_id"
+    t.integer  "new_vendor_accounts_parent_id"
+    t.integer  "new_employee_accounts_parent_id"
+    t.integer  "employee_accounts_group_id"
+    t.integer  "blocked_by"
   end
 
   create_table "entries", :force => true do |t|
@@ -150,13 +160,14 @@ ActiveRecord::Schema.define(:version => 20100124015441) do
   end
 
   create_table "movements", :force => true do |t|
-    t.integer  "object_id"
+    t.integer  "contract_id"
     t.integer  "created_by"
     t.datetime "created_at"
     t.text     "comments"
     t.string   "type"
     t.integer  "direction"
     t.string   "category"
+    t.integer  "blocked_by"
   end
 
   create_table "preferences", :force => true do |t|
@@ -218,6 +229,11 @@ ActiveRecord::Schema.define(:version => 20100124015441) do
     t.integer  "frequency",                                    :default => 1
     t.datetime "created_at"
     t.datetime "next_date"
+  end
+
+  create_table "tax_groups", :force => true do |t|
+    t.string  "name"
+    t.integer "rate", :limit => 10, :precision => 10, :scale => 0
   end
 
   create_table "units", :force => true do |t|
