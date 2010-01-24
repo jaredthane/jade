@@ -1,0 +1,29 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  id: MyString
+  name: MyString
+  description: MyText
+  vendor_id: 1
+  unit_id: 1
+  location: MyString
+  model: MyString
+  manufacturer: MyString
+  uses_serial: false
+  type: MyString
+  blocked_by: 1
+  revenue_account_id: 1
+
+two:
+  id: MyString
+  name: MyString
+  description: MyText
+  vendor_id: 1
+  unit_id: 1
+  location: MyString
+  model: MyString
+  manufacturer: MyString
+  uses_serial: false
+  type: MyString
+  blocked_by: 1
+  revenue_account_id: 1

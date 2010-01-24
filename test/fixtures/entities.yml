@@ -1,0 +1,41 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  type: MyString
+  home_phone: MyString
+  office_phone: MyString
+  fax_number: MyString
+  address: MyText
+  active: false
+  state_id: 1
+  cell_phone: MyString
+  tax_id: MyString
+  city: MyString
+  email: MyString
+  business: MyString
+  register: MyString
+  cash_account_id: 1
+  revenue_account_id: 1
+  tax_account_id: 1
+  comments: MyText
+
+two:
+  name: MyString
+  type: MyString
+  home_phone: MyString
+  office_phone: MyString
+  fax_number: MyString
+  address: MyText
+  active: false
+  state_id: 1
+  cell_phone: MyString
+  tax_id: MyString
+  city: MyString
+  email: MyString
+  business: MyString
+  register: MyString
+  cash_account_id: 1
+  revenue_account_id: 1
+  tax_account_id: 1
+  comments: MyText

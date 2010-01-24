@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  movement_id: 1
+  value: 9.99
+  account_id: 1
+  balance: 9.99
+  product_id: MyString
+  quantity: 1
+  serial_number_id: MyString
+  entity_id: 1
+
+two:
+  movement_id: 1
+  value: 9.99
+  account_id: 1
+  balance: 9.99
+  product_id: MyString
+  quantity: 1
+  serial_number_id: MyString
+  entity_id: 1

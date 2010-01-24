@@ -1,0 +1,154 @@
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW TABLES[0m
+  [4;35;1mSQL (5.7ms)[0m   [0mCREATE TABLE `schema_migrations` (`version` varchar(255) NOT NULL) ENGINE=InnoDB[0m
+  [4;36;1mSQL (6.6ms)[0m   [0;1mCREATE UNIQUE INDEX `unique_schema_migrations` ON `schema_migrations` (`version`)[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+Migrating to CreateBaseContracts (20100123215247)
+  [4;35;1mSQL (2.6ms)[0m   [0mCREATE TABLE `base_contracts` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `site_id` int(11), `total` decimal, `comments` text, `deleted_at` datetime, `deleted_by` int(11), `created_by` int(11), `updated_by` int(11), `completed_at` datetime, `completed_by` datetime, `type` varchar(255), `paid` decimal, `next_id` int(11), `document_filename` varchar(255), `document_generated` datetime, `document_number` varchar(255), `entity_id` int(11), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100123215247')[0m
+Migrating to CreateBaseLines (20100123215703)
+  [4;35;1mSQL (4.9ms)[0m   [0mCREATE TABLE `base_lines` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `product_id` varchar(255), `parent_id` int(11), `quantity` int(11), `value1` decimal, `value2` decimal, `completed_at` datetime, `completed_by` int(11), `serial_number_id` varchar(255), `comments` text, `type` varchar(255), `old_qty` int(11)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100123215703')[0m
+Migrating to CreateEntries (20100123223231)
+  [4;35;1mSQL (2.3ms)[0m   [0mCREATE TABLE `entries` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `movement_id` int(11), `value` decimal, `account_id` int(11), `balance` decimal, `product_id` varchar(255), `quantity` int(11), `serial_id` varchar(255), `entity_id` int(11), `stock` int(11), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100123223231')[0m
+Migrating to CreateMovements (20100123223500)
+  [4;35;1mSQL (3.5ms)[0m   [0mCREATE TABLE `movements` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `object_id` int(11), `created_by` int(11), `created_at` datetime, `comments` text, `type` varchar(255), `direction` int(11), `category` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (3.1ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100123223500')[0m
+Migrating to CreateSerials (20100123223700)
+  [4;35;1mSQL (2.6ms)[0m   [0mCREATE TABLE `serials` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100123223700')[0m
+Migrating to CreateBaseProducts (20100123224200)
+  [4;35;1mSQL (2.4ms)[0m   [0mCREATE TABLE `base_products` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255), `description` text, `vendor_id` int(11), `unit_id` int(11), `location` varchar(255), `model` varchar(255), `manufacturer` varchar(255), `uses_serial` tinyint(1), `type` varchar(255), `category_id` int(11), `revenue_account_id` int(11)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100123224200')[0m
+Migrating to CreateAccounts (20100123225313)
+  [4;35;1mSQL (2.1ms)[0m   [0mCREATE TABLE `accounts` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255), `parent_id` int(11), `entity_id` int(11), `number` varchar(255), `modifier` int(11), `balance` decimal, `is_parent` tinyint(1), `created_at` datetime, `updated_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100123225313')[0m
+Migrating to CreateEntities (20100123233456)
+  [4;35;1mSQL (4.2ms)[0m   [0mCREATE TABLE `entities` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255), `type` varchar(255), `home_phone` varchar(255), `office_phone` varchar(255), `fax_number` varchar(255), `address` text, `active` tinyint(1), `state_id` int(11), `cell_phone` varchar(255), `tax_id` varchar(255), `city` varchar(255), `email` varchar(255), `business` varchar(255), `register` varchar(255), `cash_account_id` int(11), `revenue_account_id` int(11), `tax_account_id` int(11), `comments` text, `birth` datetime, `price_group_id` int(11), `user_id` int(11), `site_id` int(11), `payday` datetime, `price_set_id` int(11), `next_receipt_number` varchar(255), `client_accounts_group_id` int(11), `vendor_acccounts_group_id` int(11), `inventory_account_id` int(11), `expense_account_id` int(11), `returns_account_id` int(11), `discounts_account_id` int(11), `payables_account_id` int(11), `next_bar_code` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100123233456')[0m
+Migrating to CreateInventories (20100123234629)
+  [4;35;1mSQL (2.3ms)[0m   [0mCREATE TABLE `inventories` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `product_id` varchar(255), `entity_id` int(11), `min` int(11), `max` int(11), `to_order` int(11), `quantity` int(11), `default_sales_warranty_id` int(11), `default_purchase_warrany_id` int(11), `cost` decimal, `default_cost` decimal, `blocked_by` int(11)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100123234629')[0m
+Migrating to CreatePreferences (20100124004924)
+  [4;35;1mSQL (1.8ms)[0m   [0mCREATE TABLE `preferences` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `value` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124004924')[0m
+Migrating to CreateLogs (20100124004925)
+  [4;35;1mSQL (2.0ms)[0m   [0mCREATE TABLE `logs` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `severity` integer, `msg` varchar(255), `object_class` varchar(32), `object_id` int(11), `created_at` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124004925')[0m
+Migrating to CreatePriceGroups (20100124010448)
+  [4;35;1mSQL (6.1ms)[0m   [0mCREATE TABLE `price_groups` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124010448')[0m
+Migrating to CreatePrices (20100124010450)
+  [4;35;1mSQL (2.0ms)[0m   [0mCREATE TABLE `prices` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `price_set_id` int(11), `product_id` varchar(255), `fixed` decimal(8,2), `relative` decimal(8,2), `available` tinyint(1)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124010450')[0m
+Migrating to CreateCategories (20100124010719)
+  [4;35;1mSQL (2.8ms)[0m   [0mCREATE TABLE `categories` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255) DEFAULT '', `revenue_account_id` int(11)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124010719')[0m
+Migrating to CreatePriceSets (20100124011531)
+  [4;35;1mSQL (2.0ms)[0m   [0mCREATE TABLE `price_sets` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `price_group_id` int(11), `entity_id` int(11)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124011531')[0m
+Migrating to CreateRights (20100124013750)
+  [4;35;1mSQL (7.9ms)[0m   [0mCREATE TABLE `rights` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124013750')[0m
+Migrating to CreateRightRoles (20100124013751)
+  [4;35;1mSQL (2.2ms)[0m   [0mCREATE TABLE `right_roles` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `role_id` int(11), `right_id` int(11)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124013751')[0m
+Migrating to CreateRoles (20100124013752)
+  [4;35;1mSQL (2.2ms)[0m   [0mCREATE TABLE `roles` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124013752')[0m
+Migrating to CreateRoleUsers (20100124013753)
+  [4;35;1mSQL (2.1ms)[0m   [0mCREATE TABLE `role_users` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `user_id` int(11), `role_id` int(11)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124013753')[0m
+Migrating to CreateStates (20100124013754)
+  [4;35;1mSQL (5.7ms)[0m   [0mCREATE TABLE `states` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (4.5ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124013754')[0m
+Migrating to CreateSubscriptions (20100124013755)
+  [4;35;1mSQL (2.4ms)[0m   [0mCREATE TABLE `subscriptions` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255), `client_id` int(11), `vendor_id` int(11), `quantity` int(11) DEFAULT 1, `end_date` datetime, `end_times` int(11), `fixed_price` decimal(8,2) DEFAULT 0.0, `relative_price` decimal(8,2) DEFAULT 0.0, `product_id` varchar(255), `frequency` int(11) DEFAULT 1, `created_at` datetime, `next_date` datetime) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124013755')[0m
+Migrating to CreateUnits (20100124013756)
+  [4;35;1mSQL (2.1ms)[0m   [0mCREATE TABLE `units` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `name` varchar(255)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124013756')[0m
+Migrating to CreateUsers (20100124013757)
+  [4;35;1mSQL (2.3ms)[0m   [0mCREATE TABLE `users` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `login` varchar(255), `email` varchar(255), `crypted_password` varchar(40), `salt` varchar(40), `remember_token` varchar(255), `remember_token_expires_at` datetime, `site_id` int(11), `default_received` tinyint(1), `price_group_id` int(11), `cash_account_id` int(11), `personal_account_id` int(11), `revenue_account_id` int(11), `do_accounting` tinyint(1) DEFAULT 1, `name` varchar(255), `default_page` varchar(255), `date` date) ENGINE=InnoDB[0m
+  [4;36;1mSQL (3.2ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124013757')[0m
+Migrating to CreateWarranties (20100124015441)
+  [4;35;1mSQL (2.0ms)[0m   [0mCREATE TABLE `warranties` (`id` int(11) DEFAULT NULL auto_increment PRIMARY KEY, `product_id` varchar(255), `price` decimal(8,2), `order_type` int(11), `months` int(11)) ENGINE=InnoDB[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mINSERT INTO schema_migrations (version) VALUES ('20100124015441')[0m
+  [4;35;1mSQL (0.8ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSELECT version FROM schema_migrations[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW TABLES[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSHOW FIELDS FROM `accounts`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `accounts`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `accounts`[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mSHOW FIELDS FROM `base_contracts`[0m
+  [4;36;1mSQL (2.3ms)[0m   [0;1mdescribe `base_contracts`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `base_contracts`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `base_lines`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `base_lines`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `base_lines`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mdescribe `base_products`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `base_products`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `categories`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `categories`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `categories`[0m
+  [4;35;1mSQL (1.2ms)[0m   [0mSHOW FIELDS FROM `entities`[0m
+  [4;36;1mSQL (1.1ms)[0m   [0;1mdescribe `entities`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `entities`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `entries`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `entries`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `entries`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mSHOW FIELDS FROM `inventories`[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mdescribe `inventories`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `inventories`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `logs`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `logs`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `logs`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSHOW FIELDS FROM `movements`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mdescribe `movements`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `movements`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `preferences`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `preferences`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `preferences`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `price_groups`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `price_groups`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `price_groups`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `price_sets`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `price_sets`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `price_sets`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `prices`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `prices`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `prices`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSHOW FIELDS FROM `right_roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `right_roles`[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSHOW KEYS FROM `right_roles`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `rights`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `rights`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `rights`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `role_users`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mdescribe `role_users`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `role_users`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `roles`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `roles`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSHOW FIELDS FROM `serials`[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mdescribe `serials`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `serials`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `states`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `states`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `states`[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mSHOW FIELDS FROM `subscriptions`[0m
+  [4;35;1mSQL (0.6ms)[0m   [0mdescribe `subscriptions`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `subscriptions`[0m
+  [4;35;1mSQL (0.4ms)[0m   [0mSHOW FIELDS FROM `units`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `units`[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSHOW KEYS FROM `units`[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mSHOW FIELDS FROM `users`[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mdescribe `users`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSHOW KEYS FROM `users`[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSHOW FIELDS FROM `warranties`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mdescribe `warranties`[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSHOW KEYS FROM `warranties`[0m

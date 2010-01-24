@@ -1,0 +1,17 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  object_id: 2010-01-23 16:35:00
+  comments: 1
+  created_by: 1
+  type: MyString
+  direction: 1
+  category: MyString
+
+two:
+  object_id: 2010-01-23 16:35:00
+  comments: 1
+  created_by: 1
+  type: MyString
+  direction: 1
+  category: MyString

@@ -1,0 +1,21 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  product_id: 1
+  contract_id: 1
+  quantity: 1
+  value: 9.99
+  completed_at: 2010-01-23 15:57:03
+  completed_by: 1
+  serial_number_id: 1
+  comments: MyText
+
+two:
+  product_id: 1
+  contract_id: 1
+  quantity: 1
+  value: 9.99
+  completed_at: 2010-01-23 15:57:03
+  completed_by: 1
+  serial_number_id: 1
+  comments: MyText

@@ -1,0 +1,19 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  name: MyString
+  parent_id: 1
+  entity_id: 1
+  number: MyString
+  modifier: 1
+  balance: 9.99
+  is_parent: false
+
+two:
+  name: MyString
+  parent_id: 1
+  entity_id: 1
+  number: MyString
+  modifier: 1
+  balance: 9.99
+  is_parent: false

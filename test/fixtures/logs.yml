@@ -1,0 +1,13 @@
+# Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
+
+one:
+  severity: 1
+  msg: MyString
+  object_class: MyString
+  object_id: 1
+
+two:
+  severity: 1
+  msg: MyString
+  object_class: MyString
+  object_id: 1

@@ -1,0 +1,194 @@
+jared@dell-desktop:~$ rails jade
+      create  
+      create  app/controllers
+      create  app/helpers
+      create  app/models
+      create  app/views/layouts
+      create  config/environments
+      create  config/initializers
+      create  config/locales
+      create  db
+      create  doc
+      create  lib
+      create  lib/tasks
+      create  log
+      create  public/images
+      create  public/javascripts
+      create  public/stylesheets
+      create  script/performance
+      create  test/fixtures
+      create  test/functional
+      create  test/integration
+      create  test/performance
+      create  test/unit
+      create  vendor
+      create  vendor/plugins
+      create  tmp/sessions
+      create  tmp/sockets
+      create  tmp/cache
+      create  tmp/pids
+      create  Rakefile
+      create  README
+      create  app/controllers/application_controller.rb
+      create  app/helpers/application_helper.rb
+      create  config/database.yml
+      create  config/routes.rb
+      create  config/locales/en.yml
+      create  db/seeds.rb
+      create  config/initializers/backtrace_silencers.rb
+      create  config/initializers/inflections.rb
+      create  config/initializers/mime_types.rb
+      create  config/initializers/new_rails_defaults.rb
+      create  config/initializers/session_store.rb
+      create  config/environment.rb
+      create  config/boot.rb
+      create  config/environments/production.rb
+      create  config/environments/development.rb
+      create  config/environments/test.rb
+      create  script/about
+      create  script/console
+      create  script/dbconsole
+      create  script/destroy
+      create  script/generate
+      create  script/runner
+      create  script/server
+      create  script/plugin
+      create  script/performance/benchmarker
+      create  script/performance/profiler
+      create  test/test_helper.rb
+      create  test/performance/browsing_test.rb
+      create  public/404.html
+      create  public/422.html
+      create  public/500.html
+      create  public/index.html
+      create  public/favicon.ico
+      create  public/robots.txt
+      create  public/images/rails.png
+      create  public/javascripts/prototype.js
+      create  public/javascripts/effects.js
+      create  public/javascripts/dragdrop.js
+      create  public/javascripts/controls.js
+      create  public/javascripts/application.js
+      create  doc/README_FOR_APP
+      create  log/server.log
+      create  log/production.log
+      create  log/development.log
+      create  log/test.log
+jared@dell-desktop:~$ cd jade
+jared@dell-desktop:~/jade$ ./script/generate model BaseContract site_id:integer total:decimal comments:text deleted_at:datetime created_by:integer updated_by:integer
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+      create  app/models/base_contract.rb
+      create  test/unit/base_contract_test.rb
+      create  test/fixtures/base_contracts.yml
+      create  db/migrate
+      create  db/migrate/20100123215247_create_base_contracts.rb
+jared@dell-desktop:~/jade$ ./script/generate model BaseLine product_id:integer contract_id:integer quantity:integer value:decimal completed_at:datetime completed_by:integer serial_number_id:integer comments:text
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+      create  app/models/base_line.rb
+      create  test/unit/base_line_test.rb
+      create  test/fixtures/base_lines.yml
+      exists  db/migrate
+      create  db/migrate/20100123215703_create_base_lines.rb
+jared@dell-desktop:~/jade$ ^C
+jared@dell-desktop:~/jade$ ./script/generate model Entry movement_id:integer value:decimal account_id:integer balance:decimal product_id:string quantity:integer serial_number_id:string entity_id:integer
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+      create  app/models/entry.rb
+      create  test/unit/entry_test.rb
+      create  test/fixtures/entries.yml
+      exists  db/migrate
+      create  db/migrate/20100123223231_create_entries.rb
+jared@dell-desktop:~/jade$ ^C
+jared@dell-desktop:~/jade$ ./script/generate model Entry object_id:datetime comments:integer created_by:integer type:string direction:integer category:string
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+   identical  app/models/entry.rb
+   identical  test/unit/entry_test.rb
+overwrite test/fixtures/entries.yml? (enter "h" for help) [Ynaqdh] h
+Y - yes, overwrite
+n - no, do not overwrite
+a - all, overwrite this and all others
+q - quit, abort
+d - diff, show the differences between the old and the new
+h - help, show this help
+overwrite test/fixtures/entries.yml? (enter "h" for help) [Ynaqdh] q
+aborting model
+jared@dell-desktop:~/jade$ ./script/generate model Movement object_id:datetime comments:integer created_by:integer type:string direction:integer category:string
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+      create  app/models/movement.rb
+      create  test/unit/movement_test.rb
+      create  test/fixtures/movements.yml
+      exists  db/migrate
+      create  db/migrate/20100123223500_create_movements.rb
+jared@dell-desktop:~/jade$ ./script/generate model Serial
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+      create  app/models/serial.rb
+      create  test/unit/serial_test.rb
+      create  test/fixtures/serials.yml
+      exists  db/migrate
+      create  db/migrate/20100123223700_create_serials.rb
+jared@dell-desktop:~/jade$ ./script/generate model BaseProduct id:string name:string description:text vendor_id:integer unit_id:integer location:string model:string manufacturer:string uses_serial:boolean type:string blocked_by:integer revenue_account_id:integer
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+      create  app/models/base_product.rb
+      create  test/unit/base_product_test.rb
+      create  test/fixtures/base_products.yml
+      exists  db/migrate
+      create  db/migrate/20100123224200_create_base_products.rb
+jared@dell-desktop:~/jade$ ./script/generate model Account name:string parent_id:integer entity_id:integer number:string modifier:integer balance:decimal is_parent:boolean
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+      create  app/models/account.rb
+      create  test/unit/account_test.rb
+      create  test/fixtures/accounts.yml
+      exists  db/migrate
+      create  db/migrate/20100123225313_create_accounts.rb
+jared@dell-desktop:~/jade$ ./script/generate model Entity name:string type:string home_phone:string office_phone:string fax_number:string address:text active:boolean state_id:integer cell_phone:string tax_id:string city:string email:string business:string register:string cash_account_id:integer revenue_account_id:integer tax_account_id:integer comments:text
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+      create  app/models/entity.rb
+      create  test/unit/entity_test.rb
+      create  test/fixtures/entities.yml
+      exists  db/migrate
+      create  db/migrate/20100123233456_create_entities.rb
+jared@dell-desktop:~/jade$ ./script/generate model Inventory product_id:string entity_id:integer min:integer max:integer to_order:integer quantity:integer default_sales_warranty_id:integer default_purchase_warrany_id:integer cost:decimal default_cost:decimal blocked_by:integer
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+      create  app/models/inventory.rb
+      create  test/unit/inventory_test.rb
+      create  test/fixtures/inventories.yml
+      exists  db/migrate
+      create  db/migrate/20100123234629_create_inventories.rb
+jared@dell-desktop:~/jade$ ./script/generate model Preference id:string value:string
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+      create  app/models/preference.rb
+      create  test/unit/preference_test.rb
+      create  test/fixtures/preferences.yml
+      exists  db/migrate
+      create  db/migrate/20100124004924_create_preferences.rb
+jared@dell-desktop:~/jade$ ./script/generate model Log severity:integer msg:string object_class:string object_id:integer
+      exists  app/models/
+      exists  test/unit/
+      exists  test/fixtures/
+      create  app/models/log.rb
+      create  test/unit/log_test.rb
+      create  test/fixtures/logs.yml
+      exists  db/migrate
+      create  db/migrate/20100124004925_create_logs.rb
+
