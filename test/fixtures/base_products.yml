@@ -1,29 +1,29 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
 
-one:
-  id: MyString
-  name: MyString
-  description: MyText
+dog:
+  id: '111'
+  name: 'Dog'
+  description: 'Golden Retreiver'
   vendor_id: 1
   unit_id: 1
-  location: MyString
-  model: MyString
-  manufacturer: MyString
-  uses_serial: false
-  type: MyString
-  blocked_by: 1
-  revenue_account_id: 1
+  location: 'In the doghouse'
+  model: 'ugly'
+  manufacturer: 'Mama Mutt'
+  uses_serial: true
+  type: 'Product'
+  blocked_by: nil
+  revenue_account_id: nil
 
 two:
-  id: MyString
-  name: MyString
-  description: MyText
+  id: "222"
+  name: "Internet"
+  description: "Constantly high speed"
   vendor_id: 1
   unit_id: 1
   location: MyString
   model: MyString
   manufacturer: MyString
   uses_serial: false
-  type: MyString
+  type: "Service"
   blocked_by: 1
   revenue_account_id: 1

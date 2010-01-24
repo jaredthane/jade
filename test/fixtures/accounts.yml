@@ -1,19 +1,323 @@
 # Read about fixtures at http://ar.rubyonrails.org/classes/Fixtures.html
-
+activos:
+  name: "Efectivo"
+  parent_id: nil
+  entity_id: nil
+  number: '1000'
+  modifier: 1
+  balance: 9.99
+  is_parent: true
 one:
-  name: MyString
-  parent_id: 1
+  name: "Efectivo"
+  parent: activos
   entity_id: 1
-  number: MyString
+  number: '1001'
   modifier: 1
   balance: 9.99
   is_parent: false
 
-two:
-  name: MyString
+pagar:
+  name: "Cuentas por Pagar"
   parent_id: 1
   entity_id: 1
-  number: MyString
-  modifier: 1
-  balance: 9.99
+  number: "2001"
+  modifier: -1
+  balance: -9.99
+  is_parent: true
+
+fred:
+  name: "Fred"
+  parent: 1
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+two:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+three:
+  name: MyString
+  parent: two
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+fef:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+adfd:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+four:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+five:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+six:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+tsevenwo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+eight:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+nine:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+ten:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+eleven:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+twelve:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+thirteen:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+tw14o:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t15wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t16wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t17wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t18wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+tw19o:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t20wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t21wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+tw22o:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t23wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t24wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+tw25o:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t26wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t27wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t28wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t29wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t30wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+tw31o:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t32wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t33wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+tw34o:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
+  is_parent: false
+t35wo:
+  name: MyString
+  parent: pagar
+  entity_id: 1
+  number: "200101"
+  modifier: -1
+  balance: -9.99
   is_parent: false

@@ -1,0 +1,1055 @@
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (1.2ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.5ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.2ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mROLLBACK TO SAVEPOINT active_record_1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK TO SAVEPOINT active_record_1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (1.2ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.5ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mSerial Create (0.4ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.6ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.3ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mSerial Create (0.1ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (1.3ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.5ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mSerial Create (0.3ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (0.7ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mProduct Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `base_products`[0m
+  [4;35;1mProduct Load (0.3ms)[0m   [0mSELECT * FROM `base_products` WHERE ( (`base_products`.`type` = 'Product' ) ) [0m
+  [4;36;1mBaseProduct Load (0.6ms)[0m   [0;1mSELECT * FROM `base_products` [0m
+  [4;35;1mBaseProduct Columns (2.5ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mBaseProduct Load (0.1ms)[0m   [0;1mSELECT * FROM `base_products` [0m
+  [4;35;1mBaseProduct Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mBaseProduct Load (0.1ms)[0m   [0;1mSELECT * FROM `base_products` [0m
+  [4;35;1mBaseProduct Columns (23.3ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (11.7ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mProduct Columns (0.9ms)[0m   [0;1mSHOW FIELDS FROM `base_products`[0m
+  [4;35;1mProduct Load (0.4ms)[0m   [0mSELECT * FROM `base_products` WHERE ( (`base_products`.`type` = 'Product' ) ) [0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` [0m
+  [4;35;1mBaseProduct Columns (2.2ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mBaseProduct Load (0.4ms)[0m   [0;1mSELECT * FROM `base_products` [0m
+  [4;35;1mProduct Columns (2.7ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mProduct Load (0.5ms)[0m   [0;1mSELECT * FROM `base_products` WHERE ( (`base_products`.`type` = 'Product' ) ) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mSerial Create (0.1ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSerial Columns (1.5ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Columns (6.8ms)[0m   [0;1mSHOW FIELDS FROM `base_products`[0m
+  [4;35;1mBaseProduct Load (0.3ms)[0m   [0mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Create (0.4ms)[0m   [0mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;36;1mSQL (13.7ms)[0m   [0;1mCOMMIT[0m
+  [4;35;1mBaseProduct Load (0.2ms)[0m   [0mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Create (0.3ms)[0m   [0mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mCOMMIT[0m
+  [4;35;1mBaseProduct Load (0.2ms)[0m   [0mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Create (0.3ms)[0m   [0mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mCOMMIT[0m
+  [4;35;1mBaseProduct Load (0.2ms)[0m   [0mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Create (0.9ms)[0m   [0mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mCOMMIT[0m
+  [4;35;1mBaseProduct Load (0.5ms)[0m   [0mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 112) [0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mSerial Create (0.3ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (0.9ms)[0m   [0mCOMMIT[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSerial Columns (7.4ms)[0m   [0;1mSHOW FIELDS FROM `serials`[0m
+  [4;35;1mBaseProduct Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mBaseProduct Load (0.1ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 112) [0m
+  [4;35;1mBaseProduct Load (0.2ms)[0m   [0mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Create (0.4ms)[0m   [0mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;36;1mSQL (2.3ms)[0m   [0;1mCOMMIT[0m
+  [4;35;1mBaseProduct Load (0.1ms)[0m   [0mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Create (0.2ms)[0m   [0mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mCOMMIT[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSerial Columns (0.6ms)[0m   [0;1mSHOW FIELDS FROM `serials`[0m
+  [4;35;1mBaseProduct Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mBaseProduct Load (0.1ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 112) [0m
+  [4;35;1mBaseProduct Load (0.2ms)[0m   [0mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+Here!
+  [4;35;1mSerial Create (0.2ms)[0m   [0mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;36;1mSQL (0.7ms)[0m   [0;1mCOMMIT[0m
+Here!
+Here!
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSerial Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `serials`[0m
+  [4;35;1mBaseProduct Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mBaseProduct Load (0.1ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+AAAA~111
+Here!
+  [4;36;1mSerial Create (0.2ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (1.4ms)[0m   [0mCOMMIT[0m
+AAAA~111
+Here!
+AAAA~111
+Here!
+  [4;36;1mSQL (3.6ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSerial Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `serials`[0m
+  [4;35;1mBaseProduct Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mBaseProduct Load (0.1ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+AAAA~111
+  [4;36;1mSerial Create (1.0ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (20.3ms)[0m   [0mCOMMIT[0m
+AAAA~111
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (1.9ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.3ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = '111') [0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.1ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES('AAAAA~111')[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (4.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSerial Columns (0.5ms)[0m   [0;1mSHOW FIELDS FROM `serials`[0m
+  [4;35;1mBaseProduct Columns (0.7ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mBaseProduct Load (0.5ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = '111') [0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+AAAA~111
+  [4;36;1mSerial Create (0.1ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES('AAAA~111')[0m
+  [4;35;1mSQL (1.0ms)[0m   [0mCOMMIT[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.5ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.3ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.9ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.6ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.3ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (1.5ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.1ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (2.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.1ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (1.2ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.5ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.3ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.0ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.1ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (0.3ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (6.6ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = 111) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.1ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES(0)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = '111') [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.1ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES('AAAAA~111')[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (1.2ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.5ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = '111') [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.3ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES('AAAAA~111')[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSerial Load (0.1ms)[0m   [0;1mSELECT * FROM `serials` WHERE (`serials`.`id` = 'AAAAA~111') [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.5ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = '111') [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.3ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES('AAAAA~111')[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSerial Load (0.2ms)[0m   [0;1mSELECT * FROM `serials` WHERE (`serials`.`id` = 'AAAAA~111') [0m
+  [4;35;1mProduct Columns (0.9ms)[0m   [0mSHOW FIELDS FROM `base_products`[0m
+  [4;36;1mProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = '111') AND ( (`base_products`.`type` = 'Product' ) ) [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (0.4ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.2ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = '111') [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.1ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES('AAAAA~111')[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSerial Load (0.1ms)[0m   [0;1mSELECT * FROM `serials` WHERE (`serials`.`id` = 'AAAAA~111') [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSerial Columns (1.2ms)[0m   [0mSHOW FIELDS FROM `serials`[0m
+  [4;36;1mBaseProduct Load (0.5ms)[0m   [0;1mSELECT * FROM `base_products` WHERE (`base_products`.`id` = '111') [0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSAVEPOINT active_record_1[0m
+AAAAA~111
+  [4;36;1mSerial Create (0.3ms)[0m   [0;1mINSERT INTO `serials` (`id`) VALUES('AAAAA~111')[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSerial Load (0.4ms)[0m   [0;1mSELECT * FROM `serials` WHERE (`serials`.`id` = 'AAAAA~111') [0m
+  [4;35;1mSQL (0.5ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.6ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` IS NULL) LIMIT 1[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.1ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 06:57:38', NULL, NULL, '2010-01-24 06:57:38', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (6.2ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.5ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.4ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 06:58:34', NULL, NULL, '2010-01-24 06:58:34', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.4ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 06:58:46', NULL, NULL, '2010-01-24 06:58:46', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.5ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.4ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.1ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:03:53', NULL, NULL, '2010-01-24 07:03:53', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (1.2ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mSQL (0.8ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:04:11', NULL, NULL, '2010-01-24 07:04:11', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` [0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:04:39', NULL, NULL, '2010-01-24 07:04:39', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` [0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.5ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (1.1ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:06:00', NULL, NULL, '2010-01-24 07:06:00', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` [0m
+  [4;36;1mSQL (1.0ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:06:38', NULL, NULL, '2010-01-24 07:06:38', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:07:18', NULL, NULL, '2010-01-24 07:07:18', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+  [4;36;1mAccount Load (0.7ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (1.9ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (1.6ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.6ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:08:25', NULL, NULL, '2010-01-24 07:08:25', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.4ms)[0m   [0mSELECT * FROM `accounts` [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+  [4;36;1mAccount Load (0.9ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;35;1mAccount Load (0.9ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;36;1mSQL (1.2ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.4ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:08:36', NULL, NULL, '2010-01-24 07:08:36', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+  [4;36;1mAccount Load (0.7ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:10:17', NULL, NULL, '2010-01-24 07:10:17', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+  [4;36;1mAccount Load (0.8ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;35;1mAccount Load (1.0ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;36;1mSQL (25.8ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.4ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:11:04', NULL, NULL, '2010-01-24 07:11:04', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.9ms)[0m   [0mSELECT * FROM `accounts` [0m
+c=(accounts.name like '%Ef%')
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+c=(accounts.name like '%Ef%')
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+c=(accounts.name like '%%')
+  [4;36;1mAccount Load (0.7ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+c=(accounts.name like '%%')
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (1.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.5ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.3ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:11:31', NULL, NULL, '2010-01-24 07:11:31', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+c=(accounts.name like '%Ef%')=======================================================================================================================
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+c=(accounts.name like '%Ef%')=======================================================================================================================
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+c=(accounts.name like '%%')=======================================================================================================================
+  [4;36;1mAccount Load (0.7ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+c=(accounts.name like '%%')=======================================================================================================================
+  [4;35;1mAccount Load (1.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (2.3ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:12:22', NULL, NULL, '2010-01-24 07:12:22', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+filter=
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=filterparent
+  [4;36;1mAccount Load (0.7ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+filter=filterparent
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:13:04', NULL, NULL, '2010-01-24 07:13:04', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+filter=
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=parent
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=1) ORDER BY accounts.number[0m
+filter=filterparent
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;36;1mSQL (22.0ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:13:18', NULL, NULL, '2010-01-24 07:13:18', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+filter=
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=child
+  [4;36;1mAccount Load (0.7ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=filterchild
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%')) ORDER BY accounts.number[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.6ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.6ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:13:35', NULL, NULL, '2010-01-24 07:13:35', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` [0m
+filter=
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=child
+  [4;36;1mAccount Load (0.7ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=child
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+  [4;36;1mSQL (0.4ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (1.9ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.5ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.2ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.1ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:14:23', NULL, NULL, '2010-01-24 07:14:23', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.6ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+filter=
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=child
+  [4;36;1mAccount Load (0.9ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=child
+  [4;35;1mAccount Load (0.6ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=parent
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=1) ORDER BY accounts.number[0m
+filter=parent
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=1) ORDER BY accounts.number[0m
+filter=child
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=child
+  [4;35;1mAccount Load (0.9ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:18:14', NULL, NULL, '2010-01-24 07:18:14', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (1.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+filter=
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=child
+  [4;36;1mAccount Load (0.7ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=child
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=parent
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=1) ORDER BY accounts.number[0m
+filter=parent
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=1) ORDER BY accounts.number[0m
+filter=child
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=child
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;36;1mSQL (13.5ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.5ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.2ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 07:18:53', NULL, NULL, '2010-01-24 07:18:53', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+filter=
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=child
+  [4;36;1mAccount Load (0.7ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=child
+  [4;35;1mAccount Load (0.6ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=parent
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=1) ORDER BY accounts.number[0m
+filter=parent
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=1) ORDER BY accounts.number[0m
+filter=child
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=child
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 21578242) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 31787397) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 51848956) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 110873823) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 123315944) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 143170919) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 155907920) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 179853286) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 185354505) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 201712085) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 231181282) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 231830481) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 239296396) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 255866127) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 281110143) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 298486374) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 113629430) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 343426536) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 367790342) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 457008489) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 489986645) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 507103779) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 514870843) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 527574028) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 587967610) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 608937655) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 638205575) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 722088049) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 838242359) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 846349405) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 867184238) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 926765792) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 991788158) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1016266177) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1018350795) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1058417071) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 21578242) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 31787397) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 51848956) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 110873823) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 123315944) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 143170919) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 155907920) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 179853286) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 185354505) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 201712085) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 231181282) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 231830481) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 239296396) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 255866127) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 281110143) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 298486374) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 113629430) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 343426536) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 367790342) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 457008489) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 489986645) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 507103779) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 514870843) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 527574028) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 587967610) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 608937655) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 638205575) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 722088049) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 838242359) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 846349405) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 867184238) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 926765792) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 991788158) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1016266177) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1018350795) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1058417071) [0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mAccount Load (0.0ms)[0m   [0;1mMysql::Error: Unknown column 'value' in 'field list': SELECT sum(value*post_type_id) total FROM `accounts` WHERE (account_id in (1)) [0m
+  [4;35;1mAccount Load (0.0ms)[0m   [0mMysql::Error: Unknown column 'value' in 'field list': SELECT accounts.*, sum(value*post_type_id) total FROM `accounts` WHERE (account_id in (1)) [0m
+  [4;36;1mEntry Load (0.0ms)[0m   [0;1mMysql::Error: Unknown table 'accounts': SELECT accounts.*, sum(value*post_type_id) total FROM `entries` WHERE (account_id in (1)) [0m
+  [4;35;1mEntry Load (0.0ms)[0m   [0mMysql::Error: Unknown column 'post_type_id' in 'field list': SELECT entries.*, sum(value*post_type_id) total FROM `entries` WHERE (account_id in (1)) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mEntry Load (0.0ms)[0m   [0;1mMysql::Error: Unknown column 'modifier' in 'field list': SELECT sum(value*modifier) total FROM `entries` WHERE (account_id in (1)) [0m
+  [4;35;1mEntry Load (0.0ms)[0m   [0mMysql::Error: Unknown column 'multiplier' in 'field list': SELECT sum(value*multiplier) total FROM `entries` WHERE (account_id in (1)) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mEntry Load (0.3ms)[0m   [0;1mSELECT sum(value*multiplier) total FROM `entries` WHERE (account_id = 1) [0m
+  [4;35;1mEntry Columns (0.8ms)[0m   [0mSHOW FIELDS FROM `entries`[0m
+  [4;36;1mEntry Load (0.1ms)[0m   [0;1mSELECT sum(value*multiplier) total FROM `entries` WHERE (account_id = 1) [0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSELECT count(*) AS count_all FROM `entries` WHERE (account_id = 1) [0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mMysql::Error: Unknown column 'conditionsaccount_id' in 'field list': SELECT sum(conditionsaccount_id = 1) AS sum_conditionsaccount_id_1 FROM `entries` [0m
+  [4;35;1mSQL (1.0ms)[0m   [0mSELECT sum(value*multiplier) AS sum_valueallmultiplier FROM `entries` WHERE (account_id = 1) [0m
+  [4;36;1mEntry Load (0.5ms)[0m   [0;1mSELECT * FROM `entries` [0m
+  [4;35;1mSQL (0.2ms)[0m   [0mBEGIN[0m
+  [4;36;1mEntry Create (0.2ms)[0m   [0;1mINSERT INTO `entries` (`created_at`, `movement_id`, `product_id`, `quantity`, `entity_id`, `updated_at`, `multiplier`, `account_id`, `stock`, `value`, `serial_id`, `balance`) VALUES('2010-01-24 07:56:49', NULL, NULL, NULL, NULL, '2010-01-24 07:56:49', 1, 4, NULL, 4, NULL, NULL)[0m
+  [4;35;1mSQL (1.1ms)[0m   [0mCOMMIT[0m
+  [4;36;1mSQL (0.2ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mEntry Create (0.4ms)[0m   [0mINSERT INTO `entries` (`created_at`, `movement_id`, `product_id`, `quantity`, `entity_id`, `updated_at`, `multiplier`, `account_id`, `stock`, `value`, `serial_id`, `balance`) VALUES('2010-01-24 07:56:54', NULL, NULL, NULL, NULL, '2010-01-24 07:56:54', 1, 4, NULL, 4, NULL, NULL)[0m
+  [4;36;1mSQL (9.1ms)[0m   [0;1mCOMMIT[0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSELECT sum(value*multiplier) AS sum_valueallmultiplier FROM `entries` WHERE (account_id = 1) [0m
+  [4;36;1mSQL (0.5ms)[0m   [0;1mSELECT count(*) AS count_all FROM `entries` WHERE (account_id = 1) [0m
+  [4;35;1mSQL (0.5ms)[0m   [0mSELECT count(*) AS count_all FROM `entries` WHERE (account_id = 4) [0m
+  [4;36;1mSQL (0.6ms)[0m   [0;1mSELECT sum(value*multiplier) AS sum_valueallmultiplier FROM `entries` WHERE (account_id = 4) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (6.6ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.3ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`id` = 1) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 21578242) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 31787397) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 51848956) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 110873823) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 123315944) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 143170919) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 155907920) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 179853286) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 185354505) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 201712085) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 231181282) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 231830481) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 239296396) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 255866127) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 281110143) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 298486374) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 113629430) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 343426536) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 367790342) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 457008489) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 489986645) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 507103779) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 514870843) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 527574028) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 587967610) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 608937655) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 638205575) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 722088049) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 838242359) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 846349405) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 867184238) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 926765792) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 991788158) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1016266177) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1018350795) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1058417071) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 21578242) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 31787397) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 51848956) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 110873823) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 123315944) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 143170919) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 155907920) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 179853286) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 185354505) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 201712085) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 231181282) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 231830481) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 239296396) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 255866127) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 281110143) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 298486374) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 113629430) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 343426536) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 367790342) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 457008489) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 489986645) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 507103779) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 514870843) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 527574028) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 587967610) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 608937655) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 638205575) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 722088049) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 838242359) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 846349405) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 867184238) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 926765792) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 991788158) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1016266177) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1018350795) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1058417071) [0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mBEGIN[0m
+filter=
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=child
+  [4;36;1mAccount Load (0.7ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=child
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=parent
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=1) ORDER BY accounts.number[0m
+filter=parent
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=1) ORDER BY accounts.number[0m
+filter=child
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=child
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mROLLBACK[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mBEGIN[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSAVEPOINT active_record_1[0m
+  [4;35;1mAccount Create (0.3ms)[0m   [0mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 08:16:25', NULL, NULL, '2010-01-24 08:16:25', NULL, NULL, NULL)[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mRELEASE SAVEPOINT active_record_1[0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mSQL (0.3ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.1ms)[0m   [0;1mSET NAMES 'utf8'[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSET SQL_AUTO_IS_NULL=0[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;36;1mAccount Load (0.8ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;35;1mAccount Load (2.0ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 21578242) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 31787397) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 51848956) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 110873823) [0m
+  [4;35;1mAccount Load (0.5ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 123315944) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 143170919) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 155907920) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 179853286) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 185354505) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 201712085) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 231181282) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 231830481) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 239296396) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 255866127) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 281110143) [0m
+  [4;36;1mAccount Load (0.4ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 298486374) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 113629430) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 343426536) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 367790342) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 457008489) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 489986645) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 507103779) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 514870843) [0m
+  [4;36;1mAccount Load (0.4ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 527574028) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 587967610) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 608937655) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 638205575) [0m
+  [4;36;1mAccount Load (0.4ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 722088049) [0m
+  [4;35;1mAccount Load (0.8ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 838242359) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 846349405) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 867184238) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 926765792) [0m
+  [4;35;1mAccount Load (0.5ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 991788158) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1016266177) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1018350795) [0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1058417071) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`number` = '2001') LIMIT 1[0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 857673959) [0m
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 21578242) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 31787397) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 51848956) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 110873823) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 123315944) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 143170919) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 155907920) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 179853286) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 185354505) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 201712085) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 231181282) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 231830481) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 239296396) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 255866127) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 281110143) [0m
+  [4;36;1mAccount Load (0.7ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 298486374) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 113629430) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 343426536) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 367790342) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 457008489) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 489986645) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 507103779) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 514870843) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 527574028) [0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 587967610) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 608937655) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 638205575) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 722088049) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 838242359) [0m
+  [4;36;1mAccount Load (0.4ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 846349405) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 867184238) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 926765792) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 991788158) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1016266177) [0m
+  [4;35;1mAccount Load (0.1ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1018350795) [0m
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`parent_id` = 1058417071) [0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+filter=
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%')) ORDER BY accounts.number[0m
+filter=child
+  [4;35;1mAccount Load (0.7ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=child
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=parent
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=1) ORDER BY accounts.number[0m
+filter=parent
+  [4;36;1mAccount Load (0.1ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=1) ORDER BY accounts.number[0m
+filter=child
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE ((accounts.name like '%Ef%') AND is_parent=0) ORDER BY accounts.number[0m
+filter=child
+  [4;36;1mAccount Load (0.4ms)[0m   [0;1mSELECT * FROM `accounts` WHERE ((accounts.name like '%%') AND is_parent=0) ORDER BY accounts.number[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mROLLBACK[0m
+  [4;36;1mSQL (0.0ms)[0m   [0;1mBEGIN[0m
+  [4;35;1mAccount Load (0.2ms)[0m   [0mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Efectivo') LIMIT 1[0m
+  [4;36;1mAccount Load (0.2ms)[0m   [0;1mSELECT * FROM `accounts` WHERE (`accounts`.`name` = 'Zoomer') LIMIT 1[0m
+  [4;35;1mSQL (0.1ms)[0m   [0mSAVEPOINT active_record_1[0m
+  [4;36;1mAccount Create (0.3ms)[0m   [0;1mINSERT INTO `accounts` (`name`, `number`, `is_parent`, `created_at`, `entity_id`, `modifier`, `updated_at`, `blocked_by`, `parent_id`, `balance`) VALUES('Zoomer', '9999', NULL, '2010-01-24 08:17:21', NULL, NULL, '2010-01-24 08:17:21', NULL, NULL, NULL)[0m
+  [4;35;1mSQL (0.0ms)[0m   [0mRELEASE SAVEPOINT active_record_1[0m
+  [4;36;1mAccount Load (0.3ms)[0m   [0;1mSELECT * FROM `accounts` [0m
+  [4;35;1mAccount Load (0.3ms)[0m   [0mSELECT * FROM `accounts` [0m
+  [4;36;1mSQL (0.8ms)[0m   [0;1mROLLBACK[0m
