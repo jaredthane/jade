@@ -1,8 +1,0 @@
-class RenameObjectIdToContractId < ActiveRecord::Migration
-  def self.up
-  	rename_column :movements, :object_id, :contract_id
-  end
-
-  def self.down
-  end
-end

@@ -1,3 +1,0 @@
-class Combo < BaseProduct
-	belongs_to :vendor
-end

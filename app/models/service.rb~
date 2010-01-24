@@ -1,3 +1,0 @@
-class Service < BaseProduct
-	belongs_to :vendor
-end

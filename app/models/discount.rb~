@@ -1,3 +1,0 @@
-class Discount < BaseProduct
-	belongs_to :vendor
-end

@@ -1,7 +1,0 @@
-class Order < BaseContract
-	has_attached_file :document
-	
-	has_many :order_lines, :dependent => :destroy
-	accepts_nested_attributes_for :production_lines, :allow_destroy => true
-  validates_associated :production_lines
-end
