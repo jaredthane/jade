@@ -32,15 +32,16 @@ def show_orders_info(tipo, title)
 	j="inner join entities on entities.id=client_id left join payments on orders.id=order_id"
 
 	series=Order.find(:all, :conditions=>c, :joins=>j, :order=>'receipt_number')
-
+	group_total=0
 	for group in series_to_list(series)
 		cc=" AND orders.receipt_number in(#{group.collect{|a| "'" + a.to_s + "', "}.to_s.chop.chop})"
-		total=Order.find(:all, :conditions=>(c + cc), :joins=>j, :select=>'sum(grand_total) total')
-		@box << [title,"del #{group.first} al #{group.last}",@x.number_to_currency(total[0].total)]
+#		total=Order.find(:all, :conditions=>(c + cc), :joins=>j, :select=>'sum(grand_total) total')
+		total=Order.sum(:grand_total, :conditions=>(c + cc), :joins=>j)
+		@box << [title,"del #{group.first} al #{group.last}",@x.number_to_currency(total)]
+		group_total += total
 		title=""
 	end
-	@box << ["","Total:",@x.number_to_currency(series.inject(0) { |result, element| result + element.grand_total })] if series.length>0
-	@box << [title,"",@x.number_to_currency(0)] if series.length==0
+	@box << ["","Total:",@x.number_to_currency(group_total)] if series.length>1
 end
 
 @box=[]
