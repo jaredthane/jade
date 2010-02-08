@@ -18,17 +18,17 @@
 class TransController < ApplicationController
   # GET /trans
   # GET /trans.xml
-#  def index
-#		@trans = Trans.search(params[:search], params[:page])
-#    respond_to do |format|
-#      format.html # index.html.erb
-#      format.xml  { render :xml => @trans }
-#    end
-#  end
-	access_control [:new, :create, :show, :new_post, :new_balance_move, :create_balance_move] => '(Gerente | Admin | Contabilidad)' 
+  def index
+		@trans = Trans.search(params[:search], (params[:page]||1))
+    respond_to do |format|
+      format.html # index.html.erb
+      format.xml  { render :xml => @trans }
+    end
+  end 
   # GET /trans/1
   # GET /trans/1.xml
   def show
+  	return false if !check_user(User::VIEW_TRANSACTIONS,'No tiene los derechos suficientes para ver transacciones')
     @trans = Trans.find(params[:id])
 
     respond_to do |format|
@@ -41,6 +41,7 @@ class TransController < ApplicationController
   # GET /trans/new
   # GET /trans/new.xml
   def new
+  	return false if !check_user(User::CREATE_TRANSACTIONS,'No tiene los derechos suficientes para crear transacciones')
     @accounts ={} 
     for a in Account.find(:all)
       @accounts[a.number.to_s+' '+a.name]=a.id
@@ -55,9 +56,17 @@ class TransController < ApplicationController
   end
   
   def edit
+  	return false if !check_user(User::CHANGE_TRANSACTIONS,'No tiene los derechos suficientes para cambiar transacciones')
+
     @trans = Trans.find(params[:id])
+    respond_to do |format|
+      format.html # new.html.erb
+      format.xml  { render :xml => @trans }
+    end
   end
   def update
+  	return false if !check_user(User::CHANGE_TRANSACTIONS,'No tiene los derechos suficientes para cambiar transacciones')
+  	debugger
     @trans = Trans.find(params[:id])
 
     respond_to do |format|
@@ -74,6 +83,7 @@ class TransController < ApplicationController
   # GET /posts/new
   # GET /posts/new.xml
   def new_post
+  	return false if !check_user(User::CREATE_TRANSACTIONS,'No tiene los derechos suficientes para crear transacciones')
   	@post=Post.new(:trans=>params[:trans_id])
     @accounts ={} 
     for a in Account.find(:all, :conditions=> 'postable = True')
@@ -88,6 +98,7 @@ class TransController < ApplicationController
   # POST /trans
   # POST /trans.xml
   def create
+  	return false if !check_user(User::CREATE_TRANSACTIONS,'No tiene los derechos suficientes para crear transacciones')
     @trans = Trans.new(params[:trans])
     @trans.created_at=User.current_user.today
 		@trans.add_posts(params[:new_posts])
@@ -100,6 +111,16 @@ class TransController < ApplicationController
         format.html { render :action => "new" }
         format.xml  { render :xml => @trans.errors, :status => :unprocessable_entity }
       end
+    end
+  end
+  def destroy
+  	return false if !check_user(User::DELETE_TRANSACTIONS,'No tiene los derechos suficientes para borrar transacciones')
+    t = Trans.find(params[:id])
+    t.destroy
+
+    respond_to do |format|
+      format.html { redirect_to(trans_url) }
+      format.xml  { head :ok }
     end
   end
 end

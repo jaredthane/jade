@@ -18,7 +18,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class PriceGroupName < ActiveRecord::Base
-	has_many :price_groups
+	has_many :price_groups, :dependent => :destroy
 	has_many :users
 	def price_group(location_id = User.current_user.location_id)
   	pg = price_groups.find_by_entity_id(location_id)

@@ -31,7 +31,6 @@ class User < ActiveRecord::Base
 	belongs_to :cash_account, :class_name => "Account", :foreign_key => 'cash_account_id'
 	belongs_to :revenue_account, :class_name => "Account", :foreign_key => 'revenue_account_id'
 	belongs_to :personal_account, :class_name => "Account", :foreign_key => 'personal_account_id'
-	has_many :receipts
 	has_many :roles_users
 	has_many :roles, :through => :roles_users
 #	has_and_belongs_to_many :roles
@@ -218,7 +217,8 @@ class User < ActiveRecord::Base
 	def has_right(id)
 		return Right.find(:all, 
 			:conditions=>"user_id=#{self.id} AND rights.id=#{id}",
-			:joins=>"inner join rights_roles on rights_roles.right_id=rights.id inner join roles_users on roles_users.role_id=rights_roles.role_id")
+			:joins=>"inner join rights_roles on rights_roles.right_id=rights.id inner join roles_users on roles_users.role_id=rights_roles.role_id"
+			).length >0 ? true : false
 	end
 	def has_rights(needed)
 		r = rights
@@ -371,4 +371,14 @@ class User < ActiveRecord::Base
 	VIEW_TRANSACTIONS=85
 	DELETE_TRANSACTIONS=86
 	POST_COUNTS=87
+	CREATE_PRODUCTION_ORDERS=88
+	CHANGE_PRODUCTION_ORDERS=89
+	VIEW_PRODUCTION_ORDERS=90
+	DELETE_PRODUCTION_ORDERS=91
+	CREATE_PRODUCTION_PROCESSES=92
+	CHANGE_PRODUCTION_PROCESSES=93
+	VIEW_PRODUCTION_PROCESSES=94
+	DELETE_PRODUCTION_PROCESSES=95
+	START_PRODUCTION_ORDERS=96
+	FINISH_PRODUCTION_ORDERS=97
 end

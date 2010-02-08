@@ -138,3 +138,24 @@
 	</p>
 <% end %>
 
+<hr class="clear-contentunit" />
+<p>
+	<b>Garantias ofrecidas para este producto</b>
+</p>
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_40">Producto</div>
+    <div class="table_cell_20">Meses</div>
+    <div class="table_cell_20">Precio</div>
+    <div class="table_cell">Acciones</div>
+  </div>
+	<% for warranty in @product.warranties %>
+		<div class="table_row">
+		  <div class="table_cell_40"><%= link_to warranty.product.name, warranty.product %></div>
+			<div class="table_cell_20"><%= link_to warranty.months, warranty %></div>
+		  <div class="table_cell_20"><%= link_to number_to_currency(warranty.price), warranty %></div>
+		  <div class="table_cell"><%= link_to 'Remover', warranty, :confirm => 'Esta seguro?', :method => :delete %></div>
+		</div>
+	<% end %>
+</div>
+

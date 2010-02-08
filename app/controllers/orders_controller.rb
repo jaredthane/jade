@@ -16,9 +16,6 @@
 
 class OrdersController < ApplicationController
 	before_filter :login_required
-	access_control [:create_batch, :create_orders, :show_batch, :new_purchase] => '(Gerente | Admin | Comprador)' 
-	access_control [:new_sale] => '(Gerente | Admin | Vendedor)'
-	access_control [:destroy] => '(Admin)'
 	def allowed(order_type_id, action)
 		case (order_type_id)
 	  when 1
@@ -292,7 +289,7 @@ class OrdersController < ApplicationController
    respond_to do |format|
       if !errors
       	@order.save
-      	@order.pay_off if AUTO_PAY_OFF and @order.order_type_id == Order::SALE
+      	@order.pay_off if params[:immediate_payment]=='1' and @order.order_type_id == Order::SALE
         generate_receipt(@order, true)
         
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
@@ -362,6 +359,11 @@ class OrdersController < ApplicationController
   
   def erase
     @order = Order.find(params[:id])
+  	if @order.order_type_id==Order::PURCHASE
+  		return false if !check_user(User::DELETE_PURCHASES,'No tiene los derechos suficientes para borrar compras')
+  	elsif @order.order_type_id==Order::PURCHASE
+  		return false if !check_user(User::DELETE_SALES,'No tiene los derechos suficientes para borrar ventas')
+  	end
     errors=false
     if !errors
     	errors=true if !@order.destroy

@@ -1,0 +1,95 @@
+<%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "production_order_edit" %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :actions do %>
+	<dt><%= link_to_function 'Guardar', 'submit("production_order_form")', :class => 'action' %></dt>
+	<dt><%= link_to 'Cancelar', production_orders_url, :class => 'action' %></dt>
+<% end %>
+<% content_for :title do %>
+	<% if mode=='edit' %>
+		Cambiar <%= @production_order.title %>
+	<% else %>
+		Nuevo <%= @production_order.title %>
+	<% end %>
+<% end %>
+<% for error in @production_order.errors %>
+	<p class="error_message">
+		<%= error[0] %> <%= error[1] %>
+	</p>
+<% end %>
+<% form_for @production_order, :html=>{:id=>'production_order_form'} do |parent_form| %>
+	<div class="column2-unit-left">
+		<p>
+			<b>Nombre:</b><br />
+			<%= parent_form.text_field :name, :class=> 'field' %>
+			<%= parent_form.hidden_field :is_model %>
+		</p>
+	</div>
+	<div class="column2-unit-right">
+		<% if !@production_order.is_model %>
+			<p>
+			  <b>Planeado</b><br />
+			  <%= parent_form.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>
+		  </p>
+			<% if @production_order.started_at %>
+				<p>
+					<b>Iniciado</b><br />
+					<%= parent_form.text_field :started_at, :class=> 'field datepicker', :id => 'started_date_picker',:style=>'width:168px;' %>
+				</p>
+			<% end %>
+			<% if @production_order.finished_at %>
+				<p>
+					<b>Terminado</b><br />
+					<%= parent_form.text_field :finished_at, :class=> 'field datepicker', :id => 'finished_date_picker',:style=>'width:168px;' %>
+				</p>
+			<% end %>
+		<% end %>
+	</div>
+	<br />
+	<hr class="clear-contentunit" />
+	<p>
+		<b>Productos que se ocuparan en este proceso:</b>
+	</p>
+	<div>
+		<div class="table_header_row">
+			<div class="table_cell_25">Codigo de Barra</div>
+			<div class="table_cell_25">Nombre</div>
+			<div class="table_cell_25">Cantidad</div>
+			<div class="table_cell">Acciones</div>
+		</div>
+			<div id="consumption_lines">
+				<% parent_form.fields_for :consumption_lines do |child_form| %>
+					<%= render :partial => "line", :locals => {:child_form=>child_form} %>
+				<% end %>
+			</div>
+		<div id="consumption_lines_errors"></div>
+	</div>
+	<p>
+		<b>Anadir otro producto</b>  <%= text_field_tag(:bar_code, '', :id => 'consumption_bar_code', :class => 'field') %>
+		<%= hidden_field_tag :is_output, 0 %>
+	</p>
+	<br />
+	<hr class="clear-contentunit" />
+	<p>
+		<b>Productos que se produciran por medio de este proceso:</b>
+	</p>
+	<div>
+		<div class="table_header_row">
+			<div class="table_cell_25">Codigo de Barra</div>
+			<div class="table_cell_25">Nombre</div>
+			<div class="table_cell_25">Cantidad</div>
+			<div class="table_cell">Acciones</div>
+		</div>
+		<div id="production_lines">
+		  <% parent_form.fields_for :production_lines do |child_form| %>
+				<%= render :partial => "line", :locals => {:child_form=>child_form} %>
+		  <% end %>
+		</div>
+		<div id="production_lines_errors"></div>
+	</div>
+	<p>
+		<b>Anadir otro producto</b>  <%= text_field_tag(:bar_code, '', :id => 'production_bar_code', :class => 'field') %>
+	</p>
+<% end %>

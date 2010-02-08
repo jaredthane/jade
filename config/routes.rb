@@ -2,15 +2,22 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :product_types
   map.resources :roles
   map.resources :serialized_products
-  map.resource :session
+  map.resource  :session
   map.resources :payments
   map.resources :entries
+  map.resources :production_orders
+  map.new_production 'production_orders/:id/new', :controller => 'production_orders', :action => 'new_production'
+  map.start_production 'production_orders/:id/start', :controller => 'production_orders', :action => 'start_production'
+  map.finish_production 'production_orders/:id/finish', :controller => 'production_orders', :action => 'finish_production'
+ 	map.deactivate_product 'products/:id/deactivate', :controller => 'products', :action => 'deactivate'
+  map.corte_de_caja 'accounts/corte_de_caja', :controller => 'accounts', :action => 'corte_de_caja', :format=>'pdf'
+  map.create_shelf_labels 'products/shelf_labels', :controller => 'products', :action => 'shelf_labels', :shelf_labels=>1, :format=>'pdf'
   map.deactivate_product 'products/:id/deactivate', :controller => 'products', :action => 'deactivate'
   map.show_barcode 'products/:id/barcode', :controller => 'products', :action => 'show_barcode'
   map.destroy_payment 'payments/:id/destroy', :controller => 'payments', :action => 'destroy'
   map.create_nul_receipt_number 'orders/create_nul_number', :controller => 'orders', :action => 'create_nul_number'
   map.new_nul_receipt_number 'orders/new_nul_number', :controller => 'orders', :action => 'new_nul_number'
-#  map.process_subscriptions 'receipts/process_subscriptions', :controller => 'receipts', :action => 'process_subscriptions'
+	#  map.process_subscriptions 'receipts/process_subscriptions', :controller => 'receipts', :action => 'process_subscriptions'
   map.new_balance_transfer 'accounts/:id/new_balance_transfer', :controller => 'accounts', :action => 'new_balance_transfer'
   map.recount_balances 'accounts/:id/recount', :controller => 'accounts', :action => 'recount'
   map.create_balance_transfer 'accounts/:id/create_balance_transfer', :controller => 'accounts', :action => 'create_balance_transfer'
@@ -27,6 +34,9 @@ ActionController::Routing::Routes.draw do |map|
   map.create_history 'entities/:id/create_history', :controller => 'entities', :action => 'create_history', :filter => ' tipo:cliente'
   map.resources :posts
   map.resources :trans
+#  map.save
+#  map.resources :products, :member => { :short => :get, :toggle => :post }, :collection => { :sold => :get }
+  map.update_trans 'trans/:id/edit', :controller => 'trans', :action => 'update'
 #  map.consumidor_final_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>2, :format =>'pdf'
 #  map.credito_fiscal_today 'receipts/concat_pdf', :controller => 'receipts', :action => 'concat_pdf', :entity_type_id =>5, :format =>'pdf'
   map.pay_off 'orders/:id/pay_off', :controller => 'orders', :action => 'pay_off'

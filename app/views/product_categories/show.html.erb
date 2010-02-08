@@ -8,6 +8,7 @@
     <dt><%= link_to 'Reaprovisionar', '/products/bulk_edit?search=' + @search.to_s %></dt>
     <dt><%= link_to "Cambiar Precios", '/prices?search=' + @search.to_s %></dt>
 	<% end %>
+	<dt><%= link_to 'Imprimir', products_url(:search=>@search, :format=>'pdf', :category_id=>@product_category.id), :class => 'action' %></dt>
   <dt><%= link_to 'Lista', product_categories_path %></dt>
 <% end %>
 <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
@@ -18,8 +19,8 @@
 	  <% end %>
   </p>
 <% end %>
-<p>
-	<b>Productos en esta Categoria</b>
+<p>	<b>Productos en esta Categoria</b></p>
+<%= will_paginate @products, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
     <div class="table_cell_20">Nombre</div>
@@ -57,7 +58,7 @@
 <% end %>
 <br />
 </div>
-</p>
 
+<%= will_paginate @products, :class => 'pagination' %>
 
 

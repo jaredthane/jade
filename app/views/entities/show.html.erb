@@ -26,7 +26,7 @@
 	    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
 	    <dt><%= link_to 'Lista', clients_path, :class => 'action' %></dt>
   	  <dt><%= link_to 'Imprimir', entity_path(@entity, :format=>'pdf'), :class => 'action' %></dt>
-  	  <% if current_user.has_rights(['Ver Suscripciones']) %>
+  	  <% if current_user.has_right(User::CREATE_SUBSCRIPTIONS) %>
 	    	<dt><%= link_to 'Anadir Suscripcion', new_subscription_path(:client_id=>@entity.id), :class => 'action' %></dt>
 	    <% end %>
 	<% end %>

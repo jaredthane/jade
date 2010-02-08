@@ -36,6 +36,10 @@
 class Entity < ActiveRecord::Base
 	ANONIMO=3
 	ANULADO=9
+	CONSUMIDOR_FINAL=2
+	SITE=3
+	CREDITO_FISCAL=5
+	VENDOR=1
   def to_param
     "#{id}-#{name.parameterize}"
   end
@@ -76,28 +80,27 @@ class Entity < ActiveRecord::Base
     
   belongs_to :user
   
-	has_many :orders, :order => 'created_at'
+	has_many :orders, :order => 'created_at', :dependent => :destroy
 	belongs_to :site, :class_name => "Entity", :foreign_key => "site_id"
 	has_many :products, :through => :inventories
 	has_many :products, :through => :movements
-	has_many :receipts, :through => :orders, :foreign_key => "client_id"
 
 	
 	
 	has_many :movements, :dependent => :destroy, :order => 'created_at'
-	belongs_to :cash_account, :class_name => "Account", :foreign_key => "cash_account_id"
-	belongs_to :inventory_account, :class_name => "Account", :foreign_key => "inventory_account_id"
-	belongs_to :revenue_account, :class_name => "Account", :foreign_key => "revenue_account_id"
-	belongs_to :tax_account, :class_name => "Account", :foreign_key => "tax_account_id"
-	belongs_to :expense_account, :class_name => "Account", :foreign_key => "expense_account_id"
+	belongs_to :cash_account, :class_name => "Account", :foreign_key => "cash_account_id", :dependent => :destroy
+	belongs_to :inventory_account, :class_name => "Account", :foreign_key => "inventory_account_id", :dependent => :destroy
+	belongs_to :revenue_account, :class_name => "Account", :foreign_key => "revenue_account_id", :dependent => :destroy
+	belongs_to :tax_account, :class_name => "Account", :foreign_key => "tax_account_id", :dependent => :destroy
+	belongs_to :expense_account, :class_name => "Account", :foreign_key => "expense_account_id", :dependent => :destroy
 	
-	belongs_to :new_individual_client_accounts_parent, :class_name => "Account", :foreign_key => "new_individual_client_accounts_parent_id"
-	belongs_to :new_corporate_client_accounts_parent, :class_name => "Account", :foreign_key => "new_corporate_client_accounts_parent_id"
-	belongs_to :new_vendor_accounts_parent, :class_name => "Account", :foreign_key => "new_vendor_accounts_parent_id"
-	belongs_to :new_employee_accounts_parent, :class_name => "Account", :foreign_key => "new_employee_accounts_parent_id"
-	belongs_to :client_accounts_group, :class_name => "Account", :foreign_key => "client_accounts_group_id"
-	belongs_to :vendor_accounts_group, :class_name => "Account", :foreign_key => "vendor_accounts_group_id"
-	belongs_to :employee_accounts_group, :class_name => "Account", :foreign_key => "employee_accounts_group_id"
+	belongs_to :new_individual_client_accounts_parent, :class_name => "Account", :foreign_key => "new_individual_client_accounts_parent_id", :dependent => :destroy
+	belongs_to :new_corporate_client_accounts_parent, :class_name => "Account", :foreign_key => "new_corporate_client_accounts_parent_id", :dependent => :destroy
+	belongs_to :new_vendor_accounts_parent, :class_name => "Account", :foreign_key => "new_vendor_accounts_parent_id", :dependent => :destroy
+	belongs_to :new_employee_accounts_parent, :class_name => "Account", :foreign_key => "new_employee_accounts_parent_id", :dependent => :destroy
+	belongs_to :client_accounts_group, :class_name => "Account", :foreign_key => "client_accounts_group_id", :dependent => :destroy
+	belongs_to :vendor_accounts_group, :class_name => "Account", :foreign_key => "vendor_accounts_group_id", :dependent => :destroy
+	belongs_to :employee_accounts_group, :class_name => "Account", :foreign_key => "employee_accounts_group_id", :dependent => :destroy
 	
 	validates_associated :movements
 	after_update :save_movements

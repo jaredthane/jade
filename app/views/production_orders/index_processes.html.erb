@@ -1,0 +1,24 @@
+<% content_for :title do %>Lista de Procesos de Produccion<% end %>
+<% content_for :actions do %>
+	<dt><%= link_to 'Nuevo Proceso', new_production_order_path, :class => 'action' %></dt>
+	<dt><%= link_to 'Mostrar Ordenes', production_orders_path(:filter=>'orders'), :class => 'action' %></dt>
+<% end %>
+
+<br />
+<%= will_paginate @production_orders, :class => 'pagination' %>
+<div>
+  <div class="table_header_row">
+    <div class="table_cell_20">Numero</div>
+    <div class="table_cell">Nombre</div>
+  </div>
+
+<% for production_order in @production_orders %>
+  <div class="table_row">
+    <div class="table_cell_20"><%= link_to production_order.id, production_order %></div>
+  	<div class="table_cell"><%= link_to production_order.name, production_order %></div>
+	</div>
+<% end %>
+</div>
+<br />
+<%= will_paginate @production_orders, :class => 'pagination' %>
+

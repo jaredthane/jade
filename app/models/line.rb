@@ -22,7 +22,7 @@ class Line < ActiveRecord::Base
 	validates_presence_of(:product, :message => " debe ser valido")
 	attr_accessor :client_name
 	belongs_to :serialized_product
-	has_many :movements
+	has_many :movements, :dependent => :destroy
 	attr_accessor :delete_me
 	before_save :pre_save
 	def pre_save
@@ -47,6 +47,7 @@ class Line < ActiveRecord::Base
 	def format_price=(p)
 		self.price=p.gsub(',','_').gsub('$','_').to_f
 	end
+
   ##################################################################################################
 	# Returns quantity if it was marked as received, 0 otherwise
 	#################################################################################################
@@ -148,7 +149,7 @@ class Line < ActiveRecord::Base
 									###logger.debug  "@order.vendor.id=" + @order.vendor.id.to_s
 									errors.add "El numero de serie " + self.serialized_product.serial_number + " no esta disponible en este sitio" if self.serialized_product.location != @order.vendor
 							else
-								errors.add "El numero de serie " + self.serialized_product.serial_number + " no se encuentra en el registro"
+								errors.add "El numero de serie no se encuentra en el registro"
 							end
 						end
 						# Serial number should exist, and be in vendors location
@@ -248,7 +249,14 @@ class Line < ActiveRecord::Base
 	# Returns the amount of tax per unit
 	#################################################################################################
 	def tax	
-		return self.total_price * TAX
+		if self.order
+			if self.order.client
+				if self.order.client.entity_type_id == Entity::CREDITO_FISCAL
+					return self.total_price * TAX
+				end
+			end
+		end
+		return 0
 	end
 	###################################################################################
 	# Returns the total price of the products on this line

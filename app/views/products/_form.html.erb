@@ -13,6 +13,10 @@
 <% end %>
 
 <script type="text/javascript">
+	function check_box(e) {
+		e.prev(":check_box").attr( "checked", "true" );
+		e.closest(".warranty").slideUp("slow");
+	}
 	$(document).ready(function(){
 		$("#upc").keydown(function(e){
 			if (e.keyCode == 13) {
@@ -23,6 +27,7 @@
 		$("#vendor_lookup").autocomplete("/vendors.js",{matchSubset:0, autoFill:1}); 
 		$("#unit_lookup").autocomplete("/units.js",{matchSubset:0, autoFill:1}); 
 		$("#category_lookup").autocomplete("/product_categories.js",{matchSubset:0, autoFill:1});
+		$("#revenue_account_lookup").autocomplete("/accounts.js?filter=child",{matchSubset:0, autoFill:1});
 	});
 </script>
 <% for error in @product.errors %>
@@ -30,6 +35,20 @@
 		<%= error[0] %> <%= error[1] %>
 	</p>
 <% end %>
+
+<div id="warranty_model" style="display:none;">
+	<div class="warranty" style="display:none;">				
+		<div class="table_row">
+			<div class="table_cell_30"><input type="text" value="0" size="30" name="product[warranties_attributes][xxx][months]" id="product_warranties_attributes_xxx_months" class="field"/></div>
+			<div class="table_cell_30"><input type="text" value="0.00" size="30" name="product[warranties_attributes][xxx][price]" id="product_warranties_attributes_xxx_price" class="field"/></div>
+			<div class="table_cell">
+				<input type="checkbox" value="0" style="display: none;" name="product[warranties_attributes][xxx][_delete]" id="product_warranties_attributes_xxx__delete"/>
+				<a onclick="check_box($(this)); return false;" href="#">Remover</a>
+			</div>
+		</div>
+	</div>
+</div>
+
 
 <% form_for @product, :html => {:id => 'product_form',:multipart => true } do |f| %>
 		
@@ -92,7 +111,7 @@
 			<p>
 				<b>Cuenta de Ingresos</b><br />
 				Si desea, puede especificar una cuenta en que poner los ingresos para este producto.<br />
-				<%= f.collection_select(:revenue_account_id, get_accounts, :id, :name, {:include_blank => true}) %>
+				<%= f.text_field :revenue_account_id, :class=> 'lookup field', :id => 'revenue_account_lookup',:style=>'width:168px;' %>
 			</p>
 		<% end %>
 	</div>
@@ -124,6 +143,24 @@
 	  <%= f.text_area :description %>
 	</p>
 	
+	<p>
+		<b>Garantias:</b>
+	</p>
+	<div>
+		<div class="table_header_row">
+	  <div class="table_cell_30">Meses</div>
+	  <div class="table_cell_30">Precio</div>
+	  <div class="table_cell">Acciones</div>
+	</div>
+	<div id="warranties">
+		<% f.fields_for :warranties do |child_form| %>
+			<%= render :partial => "warranty", :locals => {:child_form=>child_form} %>
+		<% end %>
+	</div>
+	
+	<p>
+		<%= add_warranty_link 'Add Warranty'  %>
+	</p>
 <% end %>
 
 

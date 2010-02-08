@@ -17,13 +17,13 @@
 class Order < ActiveRecord::Base
 	has_many :lines, :dependent => :destroy
 	has_many :products, :through => :lines
-	has_many :payments
-	has_many :movements
-	has_many :transactions, :class_name => "Trans"
+	has_many :payments, :dependent => :destroy
+	has_many :movements, :dependent => :destroy
+	has_many :transactions, :class_name => "Trans", :dependent => :destroy
 	belongs_to :order_type
 	belongs_to :sequel, :class_name => "Order", :foreign_key => 'sequel_id'
 	belongs_to :prequel, :class_name => "Order", :foreign_key => 'prequel_id'
-	# Paperclip
+#	# Paperclip
 	has_attached_file :scanned_receipt
   SALE=1
   PURCHASE=2
@@ -151,7 +151,6 @@ class Order < ActiveRecord::Base
 	#################################################################################################
   def number=(num)
     self.receipt_number=num
-    self.receipt_generated=Time.now
   end
 	##################################################################################################
 	# Returns receipt number
@@ -497,7 +496,7 @@ class Order < ActiveRecord::Base
 	def total_price_with_tax
 		total=0
 		if client
-			if client.entity_type_id == 2
+			if client.entity_type_id == 2 or self.order_type_id==Order::COUNT
 				for l in self.lines
 					total = (total||0) + (l.total_price||0)
 				end

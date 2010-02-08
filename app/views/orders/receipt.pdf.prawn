@@ -156,3 +156,4 @@ for copy in ['cliente', 'vendor'] do
 	pdf.move_down 25
 	y-=pdf.bounds.height/2
 end # for each copy holder
+

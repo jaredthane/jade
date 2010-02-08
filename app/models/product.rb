@@ -28,16 +28,20 @@ class Product < ActiveRecord::Base
   def self.human_attribute_name(attr)
     HUMANIZED_ATTRIBUTES[attr.to_sym] || super
   end
+  has_many :prices, :dependent => :destroy
+  has_many :warranties, :dependent => :destroy
+  accepts_nested_attributes_for :warranties, :allow_destroy => true
+  has_many :inventories, :dependent => :destroy
+	has_many :lines, :dependent => :destroy
   has_many :prices
-  has_many :warranties
   has_many :inventories
 	has_many :lines
 	belongs_to :revenue_account, :class_name => "Account", :foreign_key => 'revenue_account_id'
 
 	belongs_to :product_category
-	has_many :movements
-	has_many :serialized_products
-	has_many :requirements, :dependent => :destroy
+	has_many :movements, :dependent => :destroy
+	has_many :serialized_products, :dependent => :destroy
+	has_many :requirements, :dependent => :destroy, :dependent => :destroy
 	after_update :save_requirements
 	after_update :update_cost
 	after_create :update_cost
@@ -69,8 +73,8 @@ class Product < ActiveRecord::Base
 	def create_barcode
 #		self.upc=self.upc.tr('^0-9a-zA-Z-_','')
 		require "open3"
-		system("rm 'public/barcodes/#{self.upc}.png'")
-		stdin, stdout, stderr = Open3.popen3("barcode -b '#{self.upc}' -e upc -o 'public/barcodes/#{self.upc}.ps'")
+		system("rm 'public/barcodes/#{self.upc}.jpg'")
+		stdin, stdout, stderr = Open3.popen3("barcode -b '#{self.upc}' -g 80x40 -e upc -o 'public/barcodes/#{self.upc}.ps'")
 		err=(stderr.gets||'')
 		if err.include?("can't encode")
 			system("barcode -b '#{self.upc}' -o 'public/barcodes/#{self.upc}.ps'")
@@ -104,6 +108,9 @@ class Product < ActiveRecord::Base
     	i=Inventory.new(:entity=>e, :product=>self, :quantity=>0, :min=>0, :max=>0, :to_order=>0, :cost=>default_cost, :default_cost=>default_cost)
     	i.save
     end
+	  if product_type_id!=2 # no warranties for discounts
+    	Warranty.create(:product=>self, :price => 0, :months =>0)
+    end
     for g in PriceGroup.all
     	if g.entity_id == User.current_user.location_id
 		  	Price.create(:product_id=>self.id, :price_group_id => g.id, :fixed => static_price, :relative=>relative_price, :available => 1)
@@ -111,9 +118,6 @@ class Product < ActiveRecord::Base
 				Price.create(:product_id=>self.id, :price_group_id => g.id, :fixed => static_price, :relative=>relative_price, :available => 0)
 			end
 	  end
-	  if product_type_id!=2 # no warranties for discounts
-    	Warranty.create(:product=>self, :price => 0, :months =>0)
-    end
     if product_type_id==3 #for combos
     	self.calculate_quantity(e.id)
     end
@@ -396,6 +400,7 @@ class Product < ActiveRecord::Base
 			i.cost=new_cost
 			i.save
 		end
+		debugger
 	end
 	def default_cost(site = User.current_user.location)
 		i = self.inventories.find_by_entity_id(site.id)
@@ -467,12 +472,13 @@ class Product < ActiveRecord::Base
 		         :limit => 10
 	end
   def self.find_single(search)
+  	
   	find :first,
 		         :conditions => ['(products.name = :search 
-		         							OR products.upc like :search)
+		         							OR products.upc = :search)
 		         							AND (prices.price_group_id = :price_group_id)
 		         							AND (prices.available = True)',
-		         							{:search => "%#{search}%", :price_group_id => User.current_user.current_price_group.id}],
+		         							{:search => "#{search}", :price_group_id => User.current_user.current_price_group.id}],
 		         :order => 'name',
 		         :joins => 'inner join prices on prices.product_id=products.id',
 		         :group => 'products.id'
@@ -497,7 +503,7 @@ class Product < ActiveRecord::Base
 #		         						left join product_categories on product_categories.id=products.product_category_id',
 #		         :group => 'products.id'
 #	end
-	def self.search(search, page=nil)
+	def self.search(search, page=nil, category_id=nil)
 		conditions = "(products.name like '%#{search}%' 
    								OR products.model like '%#{search}%'
    								OR products.upc like '%#{search}%'
@@ -506,6 +512,7 @@ class Product < ActiveRecord::Base
    								OR product_categories.name like '%#{search}%') 
    								AND (prices.price_group_id = #{User.current_user.current_price_group.id.to_s})
    								AND (prices.available = True)"  
+   	conditions += " AND product_category_id=#{category_id}" if category_id
 		order = 'name'
 		joins = 'inner join entities as vendors on vendors.id = products.vendor_id 
  						inner join prices on prices.product_id=products.id
