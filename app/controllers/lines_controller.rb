@@ -24,6 +24,7 @@ class LinesController < ApplicationController
 #		@additional.order_type_id = order_type_id
 		@additional.bar_code = upc
 		@additional.price = @additional.price * relative_price
+		@additional.previous_qty=@additional.product.quantity
 #		if @additional.product
 #			if @additional.product.product_type==3
 #				## If its a combo, we don't want the price of the components included
