@@ -83,7 +83,7 @@ class Line < ActiveRecord::Base
 	  if self.product.product_type_id == 1
 	  	##logger.debug "real_qty(self)=#{real_qty(self).to_s}"
 	  	##logger.debug "real_qty(old)=#{real_qty(old).to_s}"
-		  if real_qty(self) != real_qty(old)
+		  if real_qty(self) != real_qty(old) and self.quantity
 		    dir = (real_qty(self)-real_qty(old))/(real_qty(self)-real_qty(old)).abs
 		    ##logger.debug "dir=#{dir.to_s}"
 		    move=MOVEMENT_TYPES[order_type_id.to_i][(dir+3)/2-1]
@@ -269,20 +269,20 @@ class Line < ActiveRecord::Base
 	# Returns the total price of the products on this line
 	###################################################################################
 	def total_price
-		if order_type_id==Order::COUNT
-			total = self.product.cost * ((self.quantity || 0) - self.product.quantity)
+		if order_type_id==Order::COUNT 
+			return 0 if !self.quantity
+			return self.product.cost * ((self.quantity || 0) - self.previous_qty)
 		elsif order_type_id==Order::LABELS
-			total = 0
+			return 0
 		else
 			#logger.debug "CALCULATING TOTAL PRICE &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7"
 			#logger.debug "price=#{price.to_s}"
 			#logger.debug "warranty_price=#{warranty_price.to_s}"
 			#logger.debug "quantity=#{quantity.to_s}"
 			#logger.debug "((price ||0) + (warranty_price || 0)) * (quantity || 0)=#{(((price ||0) + (warranty_price || 0)) * (quantity || 0)).to_s}"
-			total = ((price ||0) + (warranty_price || 0)) * (quantity || 0)
+			return ((price ||0) + (warranty_price || 0)) * (quantity || 0)
 			#logger.debug "total=#{total.to_s}"
 		end
-		return total
 	end
 	###################################################################################
 	# Returns the total price of the products on this line plus tax
