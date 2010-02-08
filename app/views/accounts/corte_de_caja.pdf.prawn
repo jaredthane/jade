@@ -28,7 +28,7 @@ def series_to_list(series)
 	return list
 end
 def show_orders_info(tipo, title)
-	c="payments.id is not null AND payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.received>= '#{@from.to_s(:db)}' AND orders.received< '#{(@till + 1).to_s(:db)}' AND entity_type_id=#{tipo} AND vendor_id = #{@site.id} AND orders.amount_paid>=orders.grand_total"
+	c="payments.id is not null AND payments.created_at>= '#{@from.to_date.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.received>= '#{@from.to_date.to_s(:db)}' AND orders.received< '#{(@till + 1).to_s(:db)}' AND entity_type_id=#{tipo} AND vendor_id = #{@site.id} AND orders.amount_paid>=orders.grand_total"
 	j="inner join entities on entities.id=client_id left join payments on orders.id=order_id"
 
 	series=Order.find(:all, :conditions=>c, :joins=>j, :order=>'receipt_number')
