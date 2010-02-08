@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100208153143) do
+ActiveRecord::Schema.define(:version => 20100208220845) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -33,7 +33,7 @@ ActiveRecord::Schema.define(:version => 20100208153143) do
   create_table "combo_lines", :force => true do |t|
     t.integer  "product_id"
     t.integer  "combo_id"
-    t.integer  "quantity"
+    t.decimal  "quantity",              :precision => 8, :scale => 2
     t.integer  "serialized_product_id"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -99,12 +99,12 @@ ActiveRecord::Schema.define(:version => 20100208153143) do
   create_table "inventories", :force => true do |t|
     t.integer "product_id"
     t.integer "entity_id"
-    t.integer "min"
-    t.integer "max"
-    t.integer "to_order"
+    t.decimal "min",                           :precision => 8, :scale => 2
+    t.decimal "max",                           :precision => 8, :scale => 2
+    t.decimal "to_order",                      :precision => 8, :scale => 2
     t.date    "created_at"
     t.date    "updated_at"
-    t.integer "quantity"
+    t.decimal "quantity",                      :precision => 8, :scale => 2
     t.integer "default_warranty_sales_id"
     t.integer "default_warranty_purchases_id"
     t.decimal "cost",                          :precision => 8, :scale => 2
@@ -136,7 +136,7 @@ ActiveRecord::Schema.define(:version => 20100208153143) do
   create_table "lines", :force => true do |t|
     t.integer  "product_id"
     t.integer  "order_id"
-    t.integer  "quantity"
+    t.decimal  "quantity",              :precision => 8, :scale => 2
     t.decimal  "price",                 :precision => 8, :scale => 2, :default => 0.0
     t.datetime "received"
     t.datetime "created_at"
@@ -146,7 +146,7 @@ ActiveRecord::Schema.define(:version => 20100208153143) do
     t.decimal  "warranty_price",        :precision => 8, :scale => 2, :default => 0.0
     t.integer  "warranty_id"
     t.decimal  "tax",                   :precision => 8, :scale => 2, :default => 0.0
-    t.integer  "previous_qty"
+    t.decimal  "previous_qty",          :precision => 8, :scale => 2
     t.integer  "warranty_months"
     t.integer  "receipt_id"
     t.text     "note"
@@ -173,7 +173,7 @@ ActiveRecord::Schema.define(:version => 20100208153143) do
   create_table "movements", :force => true do |t|
     t.integer  "entity_id"
     t.integer  "product_id"
-    t.integer  "quantity"
+    t.decimal  "quantity",              :precision => 8, :scale => 2
     t.integer  "movement_type_id"
     t.integer  "user_id"
     t.datetime "created_at"
@@ -337,8 +337,8 @@ ActiveRecord::Schema.define(:version => 20100208153143) do
   end
 
   create_table "production_order_lines", :force => true do |t|
-    t.integer "quantity"
-    t.integer "quantity_planned"
+    t.decimal "quantity",              :precision => 8, :scale => 2
+    t.decimal "quantity_planned",      :precision => 8, :scale => 2
     t.integer "product_id"
     t.integer "production_order_id"
     t.integer "serialized_product_id"
@@ -346,8 +346,8 @@ ActiveRecord::Schema.define(:version => 20100208153143) do
   end
 
   create_table "production_orders", :force => true do |t|
-    t.string   "name",           :limit => 30,                    :null => false
-    t.boolean  "is_process",                   :default => false
+    t.string   "name",           :limit => 30,                                                  :null => false
+    t.boolean  "is_process",                                                 :default => false
     t.datetime "created_at"
     t.datetime "started_at"
     t.datetime "finished_at"
@@ -355,7 +355,7 @@ ActiveRecord::Schema.define(:version => 20100208153143) do
     t.integer  "started_by_id"
     t.integer  "finished_by_id"
     t.integer  "site_id"
-    t.integer  "quantity"
+    t.decimal  "quantity",                     :precision => 8, :scale => 2
   end
 
   create_table "products", :force => true do |t|
@@ -416,7 +416,7 @@ ActiveRecord::Schema.define(:version => 20100208153143) do
   create_table "requirements", :force => true do |t|
     t.integer "product_id"
     t.integer "required_id"
-    t.integer "quantity"
+    t.decimal "quantity",       :precision => 8, :scale => 2
     t.decimal "static_price",   :precision => 8, :scale => 2
     t.decimal "relative_price", :precision => 8, :scale => 2
   end
@@ -483,7 +483,7 @@ ActiveRecord::Schema.define(:version => 20100208153143) do
     t.string   "name"
     t.integer  "client_id"
     t.integer  "vendor_id"
-    t.integer  "quantity",                                      :default => 1
+    t.decimal  "quantity",        :precision => 8, :scale => 2, :default => 1.0
     t.datetime "end_date"
     t.integer  "end_times"
     t.decimal  "fixed_price",     :precision => 8, :scale => 2, :default => 0.0
