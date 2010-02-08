@@ -52,7 +52,7 @@
     <% if current_user.has_right(User::CHANGE_PRICES) %>
 	    <div class="table_cell_10"><%=h number_to_currency(product.cost) %></div>
     <% end %>
-    <div class="table_cell"><%=h product.show_upc %></div>
+    <div class="table_cell"><%=link_to product.show_upc, product %></div>
    </div>
 <% end %>
 <br />

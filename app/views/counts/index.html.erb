@@ -14,15 +14,17 @@
 <br /> <%= will_paginate @orders, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
-    <div class="table_cell_25">Numero</div>
-    <div class="table_cell_25">Estado</div>
-    <div class="table_cell_25">Última Acción</div>
+    <div class="table_cell_20">Numero</div>
+    <div class="table_cell_20">Descripcion</div>
+    <div class="table_cell_20">Estado</div>
+    <div class="table_cell_20">Última Acción</div>
     <div class="table_cell">User</div>
   </div>
 	<% for count in @orders %>
 		<div class="table_row">
 		  <% if count.deleted %><div class="strikethrough"><% end %>
 				<div class="table_cell_25"><%= link_to count.id, count %></div>
+				<div class="table_cell_25"><%= link_to count.comments, count %></div>
 				<div class="table_cell_25"><%= link_to awaiting(count), order_history_path(count)%></div> 
 				<div class="table_cell_25"><%=h last_action(count) %></div> 
 				<div class="table_cell"><%= link_to count.user.login, count.user %></div>
