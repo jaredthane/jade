@@ -28,7 +28,7 @@ class OrdersController < ApplicationController
 	  	return false if !check_user(User::VIEW_PURCHASES,'No tiene los derechos suficientes para ver compras')
 	  when 3
 	  	if action=="edit"
-				return false if !check_user(User::CHANGE_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para cambiar consumos internos')
+				return false if !check_user(User::CHANGE_INTERNAL_CONSUMPTIONS,'No tiene los derechos suficientes para cambiar consumos internos')
 			elsif action=="view"
 				return false if !check_user(User::VIEW_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para ver consumos internos')
 			end
