@@ -128,15 +128,12 @@
 		  <%= f.text_field :max, :class => 'field',:style=>'width:100px;' %>
 		</p>
 	</div>
-	<% if mode == 'new' %>
 	<div class="column3-unit-right">
-	<p>
-	  <b>Unidad</b><br />
-		<%= f.text_field :unit_name, :class=> 'lookup field', :id => 'unit_lookup',:style=>'width:100px;' %>
-	</p>
-
+		<p>
+			<b>Unidad</b><br />
+			<%= f.text_field :unit_name, :class=> 'lookup field', :id => 'unit_lookup',:style=>'width:100px;' %>
+		</p>
 	</div>
-	<% end %>
 	<hr class="clear-contentunit" />
 	<p>
 	  <b>Descripcion</b><br />
