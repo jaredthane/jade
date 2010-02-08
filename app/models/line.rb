@@ -136,6 +136,7 @@ class Line < ActiveRecord::Base
 	#################################################################################################
 	def validate
 		if self.product.product_type_id == 1
+			self.quantity=0 if !self.quantity
 			if real_qty(self) != real_qty(old)
 				case self.order_type_id	# check inventory levels
 					when 1 # Venta     
@@ -270,7 +271,7 @@ class Line < ActiveRecord::Base
 	###################################################################################
 	def total_price
 		if order_type_id==Order::COUNT
-			total = self.product.cost * (self.quantity - self.product.quantity)
+			total = self.product.cost * ((self.quantity || 0) - self.product.quantity)
 		elsif order_type_id==Order::LABELS
 			total = 0
 		else
