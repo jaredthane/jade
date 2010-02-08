@@ -2,7 +2,7 @@ pdf.start_new_page(
 	:size => 'LETTER')
 pdf.font_size = 15
 x = Object.new.extend(ActionView::Helpers::NumberHelper)
-pdf.text "Listado de Productos", :align => :center, :style => :bold
+pdf.text "Listado de Productos - #{@date}", :align => :center, :style => :bold
 pdf.text COMPANY_NAME, :align => :center, :style => :bold
 data=[]
 x = Object.new.extend(ActionView::Helpers::NumberHelper)
