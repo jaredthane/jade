@@ -41,7 +41,7 @@ class SubscriptionsController < ApplicationController
     end
   end
   def process_me
-  	logger.debug "here"
+#  	logger.debug "here"
   	params[:next_order_date] = Date.strptime(params[:next_order_date], '%d/%m/%Y').to_s(:db)
   	logger.debug "params[:next_order_date]=#{params[:next_order_date].to_s}"
 		sub=Subscription.find_by_id(params[:sub_id])

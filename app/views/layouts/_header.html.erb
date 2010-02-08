@@ -274,6 +274,22 @@
 	<script type="text/javascript">
 		var menu=new menu.dd("menu");
 		menu.init("menu","menuhover");
+		$(document).ready(function(){
+			jQuery(document).bind('keydown', 'f1',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 
+			jQuery(document).bind('keydown', 'f2',function (evt){window.location = '<%= new_product_path %>'; return false; }); 
+			jQuery(document).bind('keydown', 'f3',function (evt){window.location = '<%= new_client_path %>'; return false; }); 
+			jQuery(document).bind('keydown', 'f4',function (evt){window.location = '<%= new_purchase_path %>'; return false; }); 
+			jQuery(document).bind('keydown', 'f5',function (evt){window.location = '<%= new_vendor_path %>'; return false; }); 
+			jQuery(document).bind('keydown', 'f6',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 
+			jQuery(document).bind('keydown', 'f7',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 
+			jQuery(document).bind('keydown', 'f8',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 
+			jQuery(document).bind('keydown', 'f9',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 
+			jQuery(document).bind('keydown', 'f10',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 
+			jQuery(document).bind('keydown', 'f11',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 
+			jQuery(document).bind('keydown', 'f12',function (evt){window.location = '<%= new_count_path %>'; return false; });  
+			jQuery(document).bind('keydown', 'Ctrl+return',function (evt){$("form:first").submit(); return false; });  
+			jQuery(document).bind('keydown', 'esc',function (evt){window.location = $('#cancel_url').val(); return false; }); 
+		});
 	</script>
     <!-- B. MAIN -->
     <div class="main">
