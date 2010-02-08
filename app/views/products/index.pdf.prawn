@@ -22,3 +22,8 @@ pdf.table(data,
    :border_style => :underline_header,
    :column_widths => { 0 => 350, 1 => 50, 2 => 50, 3 => 50, 4 => 50 },
    :align => { 0 => :left,1 => :center, 2 => :center, 3 => :center, 4 => :center })
+pdf.move_down 10
+pdf.text "Total - #{x.number_to_currency(@total)}", :align => :right, :style => :bold
+
+pdf.font_size = 10
+pdf.number_pages "Pagina <page> de <total>", [pdf.bounds.right - 80, 0]

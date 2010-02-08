@@ -37,6 +37,7 @@ class ProductsController < ApplicationController
 					@products = Product.search_name(@search, nil, params[:category_id])
 				else
 					@products = Product.search(@search, nil, params[:category_id])
+					@total = Product.total(@search, nil, params[:category_id])
 			end
 		else
 		  case params[:scope]

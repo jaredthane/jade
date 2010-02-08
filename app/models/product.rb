@@ -502,19 +502,32 @@ class Product < ActiveRecord::Base
 #		         						left join product_categories on product_categories.id=products.product_category_id',
 #		         :group => 'products.id'
 #	end
-	def self.search(search, page=nil, category_id=nil)
+	def self.total(search, page=nil, category_id=nil)
 		conditions = "(products.name like '%#{search}%' 
    								OR products.model like '%#{search}%'
    								OR products.upc like '%#{search}%'
    								OR description like '%#{search}%'
-   								OR vendors.name like '%#{search}%'
    								OR product_categories.name like '%#{search}%') 
    								AND (prices.price_group_id = #{User.current_user.current_price_group.id.to_s})
    								AND (prices.available = True)"  
    	conditions += " AND product_category_id=#{category_id}" if category_id
 		order = 'name'
-		joins = 'inner join entities as vendors on vendors.id = products.vendor_id 
- 						inner join prices on prices.product_id=products.id
+		joins = 'inner join inventories on inventories.product_id=products.id
+						inner join prices on prices.product_id=products.id
+ 						left join product_categories on product_categories.id=products.product_category_id'
+ 		sum('cost * quantity', :conditions => conditions, :joins => joins)
+	end
+	def self.search(search, page=nil, category_id=nil)
+		conditions = "(products.name like '%#{search}%' 
+   								OR products.model like '%#{search}%'
+   								OR products.upc like '%#{search}%'
+   								OR description like '%#{search}%'
+   								OR product_categories.name like '%#{search}%') 
+   								AND (prices.price_group_id = #{User.current_user.current_price_group.id.to_s})
+   								AND (prices.available = True)"  
+   	conditions += " AND product_category_id=#{category_id}" if category_id
+		order = 'name'
+		joins = 'inner join prices on prices.product_id=products.id
  						left join product_categories on product_categories.id=products.product_category_id'
 		group = 'products.id'
 		if page
