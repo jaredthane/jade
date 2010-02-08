@@ -23,10 +23,10 @@
 	<% for count in @orders %>
 		<div class="table_row">
 		  <% if count.deleted %><div class="strikethrough"><% end %>
-				<div class="table_cell_25"><%= link_to count.id, count %></div>
-				<div class="table_cell_25"><%= link_to count.comments, count %></div>
-				<div class="table_cell_25"><%= link_to awaiting(count), order_history_path(count)%></div> 
-				<div class="table_cell_25"><%=h last_action(count) %></div> 
+				<div class="table_cell_20"><%= link_to count.id, count %></div>
+				<div class="table_cell_20"><%= link_to count.comments, count %></div>
+				<div class="table_cell_20"><%= link_to awaiting(count), order_history_path(count)%></div> 
+				<div class="table_cell_20"><%=h last_action(count) %></div> 
 				<div class="table_cell"><%= link_to count.user.login, count.user %></div>
 		  <% if count.deleted %></div><% end %>
 		</div>
