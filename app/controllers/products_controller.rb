@@ -38,6 +38,7 @@ class ProductsController < ApplicationController
 				else
 					@products = Product.search(@search, nil, params[:category_id])
 					@total = Product.total(@search, nil, params[:category_id])
+					@date=User.current_user.today.to_date
 			end
 		else
 		  case params[:scope]
