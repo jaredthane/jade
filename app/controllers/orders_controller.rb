@@ -103,8 +103,12 @@ class OrdersController < ApplicationController
   # Allows user to create a count based on a product listing
   #################################################################################################
   def create_count_from_list
-  	search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
-		@products = Product.search(search)
+  	if params[:category]
+  		@products = Product.search('', nil, params[:category])
+  	else
+  		search = ((params[:search]||'') + ' ' + (params[:q]||'')).strip
+			@products = Product.search(search)
+  	end # if params[:category]
 		@order=Order.create_count_from_list(@products)
 #		#logger.debug "@order=#{@order.inspect}"
 		#logger.debug "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++="

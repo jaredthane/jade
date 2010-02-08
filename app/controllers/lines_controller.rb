@@ -33,8 +33,8 @@ class LinesController < ApplicationController
 #		end
 		if order_type_id != '5'
 			@additional.quantity = quantity
-		else
-			@additional.quantity = 0
+#		else
+#			@additional.quantity = 0
 		end
 		return @additional
 	end
