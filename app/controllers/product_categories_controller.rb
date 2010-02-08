@@ -18,7 +18,7 @@
 class ProductCategoriesController < ApplicationController
   def index
   	if params[:q]
-  		search=params[:q] 
+  		search=params[:q]
   	else
     	search=(params[:search]||'')
     end

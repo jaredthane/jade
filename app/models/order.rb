@@ -100,7 +100,7 @@ class Order < ActiveRecord::Base
 		o=Order.new(:client_id=>user.location_id, :vendor_id=>user.location_id, :created_at=>user.today, :user_id=>user.id, :order_type_id=> 5)
 		for p in list
 			if p.product_type_id==1
-				o.lines << Line.new(:product_id=>p.id, :quantity=>p.quantity(user.location_id), :order_type_id=> 5)
+				o.lines << Line.new(:product_id=>p.id, :previous_qty=>p.quantity(user.location_id), :order_type_id=> 5)
 			end
 		end
 		o.save
@@ -634,7 +634,7 @@ class Order < ActiveRecord::Base
 				else
 					line.previous_qty = line.product.quantity
         	line.price = (line.product.cost||0) * ((line.quantity||0) - (line.product.quantity||0))
-					if line.quantity != line.product.quantity
+					if (line.quantity != line.product.quantity) and line.quantity
 						m=Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => line.quantity - line.product.quantity, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
 						i=line.product.inventories.find_by_entity_id(self.vendor_id)
 						i.quantity=line.quantity

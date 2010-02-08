@@ -18,6 +18,10 @@
     <%=h @order.vendor.name %>
   </p>
 	<p>
+    <b>Description</b><br />
+    <%=h @order.comments %>
+  </p>
+	<p>
 		<b>Fecha Aplicado:</b>
 		<% if @order.received != nil %>
 			<%=h @order.received.to_date.to_s(:long) %>

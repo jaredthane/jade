@@ -1,10 +1,13 @@
 pdf.start_new_page(
 	:size => 'LETTER')
 pdf.font_size = 20
-pdf.text "Cuenta Fisica - " + @order.created_at.to_date.to_s, :align => :center, :style => :bold
+pdf.text "Cuenta Fisica ##{@order.id} - #{@order.created_at.to_date}", :align => :center, :style => :bold
+if @order.comments
+	pdf.text @order.comments, :align => :center
+end
 data=[]
 for l in @order.lines
-	data << [l.product.upc, l.product.name, l.product.location, l.product.unit.name, l.product.quantity, l.quantity==0 ? '' : l.quantity.to_s]
+	data << [l.product.upc, l.product.name, l.product.location, l.product.unit.name, l.previous_qty, l.quantity.to_s]
 end
 width=pdf.bounds.width
 
@@ -19,3 +22,6 @@ else
 	pdf.font_size = 10
 	pdf.text "Esta cuenta no contiene ningunos productos.", :align => :center, :style => :bold
 end
+
+pdf.font_size = 10
+pdf.number_pages "Pagina <page> de <total>", [pdf.bounds.right - 50, 0]
