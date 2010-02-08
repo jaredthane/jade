@@ -27,7 +27,9 @@ function calc_dif(e) {
 	count= parseFloat(e.val());
 	//x = e.parentNode.nextSibling.nextSibling.childNodes[0].id
 	//alert(x);
-	e.parent().next().next().children(':first').val('$'+((count-qty)*cost).toFixed(2))
+	if (qty){
+		e.parent().next().next().children(':first').val('$'+((count-qty)*cost).toFixed(2))
+	}
 }
 
 function DoAjaxRequest(){

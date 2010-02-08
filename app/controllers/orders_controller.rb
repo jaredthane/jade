@@ -110,6 +110,7 @@ class OrdersController < ApplicationController
 			@products = Product.search(search)
   	end # if params[:category]
 		@order=Order.create_count_from_list(@products)
+		@order.update_attribute(:comments,ProductCategory.find(params[:category]).name)  if params[:category]
 #		#logger.debug "@order=#{@order.inspect}"
 		#logger.debug "+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++="
 		#logger.debug "@order.errors=#{@order.errors.inspect}"
