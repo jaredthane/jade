@@ -1,0 +1,20 @@
+<div class="line">
+	<% for error in child_form.object.errors %>
+		<p class="error_message">
+			<%= error[1] %>
+		</p>
+	<% end %>
+	<div class="table_row">
+		<% p=child_form.object.product %>
+		<div class="table_cell_25"><%= link_to p.upc, p %></div>
+		<div class="table_cell_25"><%= link_to p.name, p %></div>
+		<%= child_form.hidden_field :product_id, :value => p.id %>
+		<div class="table_cell_25">
+			<%= child_form.text_field :quantity_planned, :class=>'field' %>
+		</div>
+		<div class="table_cell">
+			<%= child_form.check_box :_delete, :style=>'display:none;' %>
+      <%= link_to_function "Remover", 'check_box($(this))' %>
+    </div>
+	</div>
+</div>

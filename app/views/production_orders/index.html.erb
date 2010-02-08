@@ -18,7 +18,7 @@
   <div class="table_row">
     <div class="table_cell_20"><%= link_to production_order.id, production_order %></div>
   	<div class="table_cell_60"><%= link_to production_order.name, production_order %></div>
-  	<% if production_order.is_model %>
+  	<% if production_order.is_process %>
   		<div class="table_cell">Proceso</div>
   	<% else %>
   		<div class="table_cell">Orden</div>

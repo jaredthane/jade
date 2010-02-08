@@ -48,7 +48,7 @@ class ProductionOrdersController < ApplicationController
   end
   
   def new
-    @production_order = ProductionOrder.new(:is_model=>true)
+    @production_order = ProductionOrder.new(:is_process=>true)
 		respond_to do |wants|
 			wants.html
 			wants.js
@@ -61,9 +61,10 @@ class ProductionOrdersController < ApplicationController
 			if params[:is_output]=='0'
 		  	@o.consumption_lines << ConsumptionLine.new(:product=>p, :quantity=>1)
 			else
-		  	@o.production_lines << ProductionLine.new(:product=>p, :quantity=>1)
+		  	@o.production_lines << ProductionLine.new(:product=>p, :quantity_planned =>1, :quantity=>1)
 			end # if params[:]
 		end
+		
 		respond_to do |wants|
 			if @o
 				wants.html do
@@ -93,8 +94,7 @@ class ProductionOrdersController < ApplicationController
 	end
 	def start_production
 		@production_order = ProductionOrder.find(params[:id])
-		@production_order.started_at=User.current_user.today
-		@production_order.started_by=User.current_user
+		@production_order.start
 		@production_order.save
 		respond_to do |wants|
 			wants.html do	
@@ -105,8 +105,7 @@ class ProductionOrdersController < ApplicationController
 	end
 	def finish_production
 		@production_order = ProductionOrder.find(params[:id])
-		@production_order.finished_at=User.current_user.today
-		@production_order.finished_by=User.current_user
+		@production_order.finish
 		@production_order.save
 		respond_to do |wants|
 			wants.html do	
@@ -124,7 +123,11 @@ class ProductionOrdersController < ApplicationController
   # POST /requirements
   # POST /requirements.xml
   def create
+  	params[:production_order][:created_at]=untranslate_month(params[:production_order][:created_at]) if params[:production_order][:created_at]
+   	params[:production_order][:started_at]=untranslate_month(params[:production_order][:started_at]) if params[:production_order][:started_at]
+   	params[:production_order][:finished_at]=untranslate_month(params[:production_order][:finished_at]) if params[:production_order][:finished_at]
    	@production_order = ProductionOrder.new(params[:production_order])
+   	@production_order.site=User.current_user.location
    	@production_order.created_by=User.current_user
     respond_to do |wants|
     	if @production_order.valid?
@@ -145,7 +148,10 @@ class ProductionOrdersController < ApplicationController
   # PUT /requirements/1
   # PUT /requirements/1.xml
   def update
-    @production_order = ProductionOrder.find(params[:id])
+    params[:production_order][:created_at]=untranslate_month(params[:production_order][:created_at]) if params[:production_order][:created_at]
+   	params[:production_order][:started_at]=untranslate_month(params[:production_order][:started_at]) if params[:production_order][:started_at]
+   	params[:production_order][:finished_at]=untranslate_month(params[:production_order][:finished_at]) if params[:production_order][:finished_at]
+   	@production_order = ProductionOrder.find(params[:id])
 
     respond_to do |format|
       if @production_order.update_attributes(params[:production_order])

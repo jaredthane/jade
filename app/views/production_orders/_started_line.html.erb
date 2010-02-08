@@ -1,0 +1,12 @@
+<div class="line">
+	<div class="table_row">
+		<% p=child_form.object.product %>
+		<div class="table_cell_25"><%= link_to p.upc, p %></div>
+		<div class="table_cell_25"><%= link_to p.name, p %></div>
+		<%= child_form.hidden_field :product_id, :value => p.id %>
+		<div class="table_cell_25"><%= h child_form.object.quantity_planned %></div>
+		<div class="table_cell">
+			<%= child_form.text_field :quantity, :class=>'field' %>
+    </div>
+	</div>
+</div>

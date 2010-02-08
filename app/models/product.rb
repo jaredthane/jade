@@ -397,8 +397,7 @@ class Product < ActiveRecord::Base
 	def cost=(new_cost, site = User.current_user.location)
 		i = self.inventories.find_by_entity_id(site.id)
 		if i
-			i.cost=new_cost
-			i.save
+			i.update_attribute(:cost, new_cost)
 		end
 		debugger
 	end

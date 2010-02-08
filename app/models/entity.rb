@@ -58,10 +58,10 @@ class Entity < ActiveRecord::Base
   # These are all of the price groups that are available at this site.
   # For use with Sites
   has_many :price_groups
-  
-  # These are the default branches that entities made in this site should be under
-  # For use with Sites
-  has_many :default_branches
+#  
+#  # These are the default branches that entities made in this site should be under
+#  # For use with Sites
+#  has_many :default_branches
   
   # This is the default price Group Name to use for this client
   # For use with Clients
@@ -85,6 +85,16 @@ class Entity < ActiveRecord::Base
 	has_many :products, :through => :inventories
 	has_many :products, :through => :movements
 
+	
+	after_create :create_price_groups
+	##############################################################
+	# Creates a Price group for each price group name
+	##############################################################
+	def create_price_groups
+		for price_group_name in PriceGroupName.all
+			PriceGroup.create(:price_group_name=>price_group_name, :entity=> self)
+		end # for price_group_name in price_group_names
+	end # def create_price_groups
 	
 	
 	has_many :movements, :dependent => :destroy, :order => 'created_at'

@@ -103,23 +103,22 @@ class Account < ActiveRecord::Base
     if self.new_record?
     	errors.add "Nombre ","debe ser único" if Account.find(:first,:conditions=> "name = '#{name}'")
     end
-  end  
-	def parent_name
- 		parent.name if parent
-	end
-	def parent_name=(name)
-		self.parent = Account.find_or_create_by_name(name) unless name.blank?
-	end
+  end
+#	def parent_name
+# 		parent.name if parent
+#	end
+#	def parent_name=(name)
+#		self.parent = Account.find_or_create_by_name(name) unless name.blank?
+#	end
 	def transfer_balance_to(account)
 		trans = Trans.create(:created_at=>User.current_user.today)
 		amt=self.balance
-		#puts "amt="+amt.to_s
 		if account.modifier==1 and self.modifier==1
 			act1 = Post.create(:trans=>trans, :account => self, :value=>amt, :post_type_id =>Post::CREDIT)
 			act2 = Post.create(:trans=>trans, :account => account, :value=>amt, :post_type_id =>Post::DEBIT)
 		elsif account.modifier==-1 and self.modifier==-1
 			act1 = Post.create(:trans=>trans, :account => self, :value=>amt, :post_type_id =>Post::DEBIT)
-			act2 = Post.create(:trans=>trans, :account => account, :value=>amt, :post_type_id =>Post::CREDIT)		
+			act2 = Post.create(:trans=>trans, :account => account, :value=>amt, :post_type_id =>Post::CREDIT)
 		end
 	end
 	def recount_balances()
