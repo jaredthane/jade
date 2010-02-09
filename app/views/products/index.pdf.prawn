@@ -26,4 +26,4 @@ pdf.move_down 10
 pdf.text "Total - #{x.number_to_currency(@total)}", :align => :right, :style => :bold
 
 pdf.font_size = 10
-pdf.number_pages "Pagina <page> de <total>", [pdf.bounds.right - 80, 0]
+pdf.number_pages "Pagina <page> de <total>", [pdf.bounds.right - 80, -10]

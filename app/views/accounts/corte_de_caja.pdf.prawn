@@ -6,104 +6,160 @@ pdf.text COMPANY_NAME, :align => :center, :style => :bold
 if @from == @till
 	pdf.text @from.to_date.to_s(:long), :align => :center, :style => :bold
 else
-	pdf.text @from.to_date.to_s(:long) + " - " + @till.to_date.to_s(:long), :align => :center, :style => :bold
+	pdf.text @from.to_date.to_s(:long) + " - " + (@till.to_date-1).to_s(:long), :align => :center, :style => :bold
 end
 pdf.text " "
+#def series_to_list(series)
+#	list=[]
+#	for o in series
+#		if list==[]
+#			d={}
+#			d[o.receipt_number.to_i]=o
+#			list<<[d]
+#		else
+#			x=o.receipt_number.to_i
+#			next if x==list.last.last
+#			if x-1==list.last.last or x==list.last.last
+#				list.last << x
+#			else
+#				list << [x]
+#			end
+#		end
+#	end
+#	return list
+#end
 
 def series_to_list(series)
 	list=[]
+	last=0
 	for o in series
 		if list==[]
-			list<<[o.receipt_number.to_i]
+			list<<[o.receipt_number]
+			last=o.receipt_number.to_i
 		else
 			x=o.receipt_number.to_i
-			next if x==list.last.last
-			if x-1==list.last.last or x==list.last.last
-				list.last << x
+			next if x==last
+			if x-1==last or x==last
+				list.last << o.receipt_number
 			else
-				list << [x]
+				list << [o.receipt_number]
 			end
+			last=x
 		end
 	end
 	return list
 end
+##################################################################################################
+## 
+##################################################################################################
+#def series_to_list(series)
+#	list=[]
+#	for o in series
+#		if list ==[]
+#			list<<{o.receipt_number.to_i}
+#		else
+#		end
+#	end
+#end # def series_to_list(series)
 def show_orders_info(tipo, title)
-	c="payments.id is not null AND payments.created_at>= '#{@from.to_date.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.received>= '#{@from.to_date.to_s(:db)}' AND orders.received< '#{(@till + 1).to_s(:db)}' AND entity_type_id=#{tipo} AND vendor_id = #{@site.id} AND orders.amount_paid>=orders.grand_total"
+	#c="payments.id is not null AND payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.received>= '#{@from.to_s(:db)}' AND orders.received< '#{(@till + 1).to_s(:db)}' AND entity_type_id=#{tipo} AND vendor_id = #{@site.id} AND orders.amount_paid>=orders.grand_total AND deleted =0 AND order_type_id=1"
+	c="orders.received>= '#{@from.to_s(:db)}' AND orders.received< '#{(@till).to_s(:db)}' AND entity_type_id=#{tipo} AND vendor_id = #{@site.id} AND orders.amount_paid>=orders.grand_total AND deleted_at is null AND order_type_id=1"
 	j="inner join entities on entities.id=client_id left join payments on orders.id=order_id"
 
 	series=Order.find(:all, :conditions=>c, :joins=>j, :order=>'receipt_number')
 	group_total=0
 	for group in series_to_list(series)
-		cc=" AND orders.receipt_number in(#{group.collect{|a| "'" + a.to_s + "', "}.to_s.chop.chop})"
+		c="orders.receipt_number in(#{group.collect{|a| "'" + a.to_s + "', "}.to_s.chop.chop})"
 #		total=Order.find(:all, :conditions=>(c + cc), :joins=>j, :select=>'sum(grand_total) total')
-		total=Order.sum(:grand_total, :conditions=>(c + cc), :joins=>j)
+		total=Order.sum(:grand_total, :conditions=>(c), :joins=>j)
 		@box << [title,"del #{group.first} al #{group.last}",@x.number_to_currency(total)]
 		group_total += total
 		title=""
 	end
 	@box << ["","Total:",@x.number_to_currency(group_total)] if series.length>1
+	return group_total
 end
 
 @box=[]
-show_orders_info(Entity::CONSUMIDOR_FINAL,"Facturas Consumidor Final")
-show_orders_info(Entity::CREDITO_FISCAL,"Comprobantes de Credito Fiscal")
+grand_total=0
+grand_total += show_orders_info(Entity::CONSUMIDOR_FINAL,"Facturas Consumidor Final")
+@box << ["","",""]
+@box << ["","",""]
+grand_total += show_orders_info(Entity::CREDITO_FISCAL,"Comprobantes de Credito Fiscal")
+@box << ["","",""]
+@box << ["","",""]
 
 
-
-###################################################################################################
-# Notas de Abono TODO
-#################################################################################################
-c="payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.received is null AND vendor_id = #{@site.id}"
-j="inner join orders on orders.id=order_id"
-s="payments.*, receipt_number"
-series = Payment.find(:all, :conditions=>c, :joins=>j, :select=>s)
-sum=series.inject(0) { |result, element| result + element.presented-element.returned }
-
-@box << ["Notas de Abono","Total:",@x.number_to_currency(sum)] if sum!=0
-for p in series
-	@box << ["",p.receipt_number,@x.number_to_currency(p.presented-p.returned)]
-end
-###################################################################################################
-# Facturas Credito
-#################################################################################################
-c="orders.created_at>= '#{@from.to_s(:db)}' AND orders.created_at< '#{(@till + 1).to_s(:db)}' AND vendor_id = #{@site.id} AND orders.amount_paid<orders.grand_total"
-j="left join payments on orders.id=order_id"
-series = Order.find(:all, :conditions=>c, :joins=>j, :group=>'orders.id')
-sum=series.inject(0) { |result, element| result + element.grand_total }
-
-first=true
-@box << ["Facturas Credito","Total:",@x.number_to_currency(sum)] if sum!=0
-for o in series
-	@box << ["",o.receipt_number,@x.number_to_currency(o.grand_total)]
-end
+####################################################################################################
+## Notas de Abono TODO
 ##################################################################################################
-# Pagos de Facturas por Cobrar
-# (Orders made within the period that have not been fully paid)
-#################################################################################################
-c="payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.created_at< '#{@from.to_s(:db)}' AND vendor_id = #{@site.id}"
-j="inner join payments on orders.id=order_id"
-series = Order.find(:all, :conditions=>c, :joins=>j)
-first=true
-for group in series_to_list(series)
-	cc=" AND orders.id in(${group.collect{|a| a.to_s + ", "}.to_s.chop.chop})"
-	total=Order.find(:all, :conditions=>c, :joins=>j, :select=>'sum(grand_total) total')[0].total
-	if first
-		@box << ["Pagos de Facturas por Cobrar","del #{group.first} al #{group.last}",@x.number_to_currency(total)]
-		first=false
-	else
-		@box << ["","del ${group.first} al ${group.last}",@x.number_to_currency(total)]
-	end
-end
+#c="payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.received is null AND vendor_id = #{@site.id}"
+#j="inner join orders on orders.id=order_id"
+#s="payments.*, receipt_number"
+#series = Payment.find(:all, :conditions=>c, :joins=>j, :select=>s)
+#sum=series.inject(0) { |result, element| result + element.presented-element.returned }
+
+#@box << ["Notas de Abono","Total:",@x.number_to_currency(sum)] if sum!=0
+#for p in series
+#	@box << ["",p.receipt_number,@x.number_to_currency(p.presented-p.returned)]
+#end
+####################################################################################################
+## Facturas Credito
+##################################################################################################
+#c="orders.created_at>= '#{@from.to_s(:db)}' AND orders.created_at< '#{(@till + 1).to_s(:db)}' AND vendor_id = #{@site.id} AND orders.amount_paid<orders.grand_total AND order_type_id=1"
+#j="left join payments on orders.id=order_id"
+#series = Order.find(:all, :conditions=>c, :joins=>j, :group=>'orders.id')
+#sum=series.inject(0) { |result, element| result + element.grand_total }
+
+#first=true
+#@box << ["Facturas Credito","Total:",@x.number_to_currency(sum)] if sum!=0
+#for o in series
+#	@box << ["",o.receipt_number,@x.number_to_currency(o.grand_total)]
+#end
+###################################################################################################
+## Pagos de Facturas por Cobrar
+## (Orders made within the period that have not been fully paid)
+##################################################################################################
+#c="payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.created_at< '#{@from.to_s(:db)}' AND vendor_id = #{@site.id}"
+#j="inner join payments on orders.id=order_id"
+#series = Order.find(:all, :conditions=>c, :joins=>j)
+#first=true
+#for group in series_to_list(series)
+#	cc=" AND orders.id in(${group.collect{|a| a.to_s + ", "}.to_s.chop.chop})"
+#	total=Order.find(:all, :conditions=>c, :joins=>j, :select=>'sum(grand_total) total')[0].total
+#	if first
+#		@box << ["Pagos de Facturas por Cobrar","del #{group.first} al #{group.last}",@x.number_to_currency(total)]
+#		first=false
+#	else
+#		@box << ["","del ${group.first} al ${group.last}",@x.number_to_currency(total)]
+#	end
+#end
 ##################################################################################################
 # Devoluciones
 #################################################################################################
-#if # There are returns
-#	@box << ["Devoluciones:","",""]
-#	for order in orders
-#		@box << ["",order.receipt_number,order.grand_total]
-#	end
-#end
+c="orders.deleted_at>= '#{@from.to_s(:db)}' AND orders.deleted_at< '#{(@till).to_s(:db)}' AND vendor_id = #{@site.id} AND order_type_id=1"
+j="inner join payments on orders.id=order_id"
+series = Order.find(:all, :conditions=>c, :joins=>j)
+first=true
+total=0
+for order in series
+	cc=" AND orders.id =#{order.id})"
+	value=order.total_price_with_tax
+	total+=value
+	if first
+		@box << ["Devoluciones",order.receipt_number,"(#{@x.number_to_currency(value)})"]
+		first=false
+	else
+		@box << ["",order.receipt_number,"(#{@x.number_to_currency(value)})"]
+	end
+	@box << ["","Total","(#{@x.number_to_currency(value)})"] if series.length>1
+end
+grand_total-=total
 
+
+@box << ["","",""]
+@box << ["","",""]
+@box << ["","Total Final",@x.number_to_currency(grand_total)]
 ##################################################################################################
 # autoconsumos
 #################################################################################################

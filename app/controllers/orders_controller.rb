@@ -280,31 +280,39 @@ class OrdersController < ApplicationController
   # 
   #################################################################################################
   def create
+  	logger.debug "111111111111111111111111111111111111111111111111111111111111111111111111111111111111111"
     return false if !allowed(params["order"]["order_type_id"], 'edit')
     params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
     params[:order][:received]=untranslate_month(params[:order][:received]) if params[:order][:received]
+  	logger.debug "222222222222222222222222222222222222222222222222222222222222222222222222222222222222222"
     @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
     @order.attrs = params["order"]
 		errors = false
 		errors = true if !@order.valid?
-  	@order.save
-		if params[:submit_type] == 'post' and !errors
-			errors = true if !@order.post
-		end
+  	logger.debug "33333333333333333333333333333333333333333333333333333333333333333333333333333333333333333"
+  	logger.debug "444444444444444444444444444444444444444444444444444444444444444444444444444444444444444"
+		logger.debug "5555555555555555555555555555555555555555555555555555555555555555555555555555555555555555555"
    respond_to do |format|
       if !errors
       	@order.save
-      	@order.pay_off if params[:immediate_payment]=='1' and @order.order_type_id == Order::SALE
+      	@order.pay_off  if params[:immediate_payment]=='1' and @order.order_type_id == Order::SALE
+      	@order.post if params[:submit_type] == 'post'
+  	logger.debug "666666666666666666666666666666666666666666666666666666666666666666666666666666666666666666"
+      	
+  	logger.debug "777777777777777777777777777777777777777777777777777777777777777777777777777777777777777777"
         generate_receipt(@order, true)
+  	logger.debug "8888888888888888888888888888888888888888888888888888888888888888888888888888888888888888888"
         
       	flash[:notice] = 'Pedido ha sido creado exitosamente.'
         format.html { 
+  	logger.debug "9999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999"
         	if SHOW_RECEIPT_ON_CREATE
         		redirect_to(show_receipt_url(@order))
         	else
         		redirect_to(@order) 
         	end }
         format.xml  { render :xml => @order, :status => :created, :location => @order }
+  	logger.debug "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
       else
        	@order.lines.each {|l| logger.debug "LINES ERRORS" + l.errors.inspect}
 				
@@ -312,8 +320,10 @@ class OrdersController < ApplicationController
 				@order.lines.each {|l| l.errors.each {|e| logger.debug "LINE ERROR" + e.to_s}}
         format.html { render :action => "new" }
         format.xml  { render :xml => @order.errors, :status => :unprocessable_entity }
+  	logger.debug "@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@"
       end
     end
+  	logger.debug "##########################################################################################"
   end
 
   # PUT /orders/1

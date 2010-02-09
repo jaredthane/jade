@@ -33,8 +33,8 @@ class AccountsController < ApplicationController
 	def corte_de_caja
 		return false if !check_user(User::VIEW_ACCOUNTS,'No tiene los derechos suficientes para ver el corte de caja')
 		@site=Entity.find User.current_user.location_id
-		@from=User.current_user.today
-		@till=User.current_user.today
+		@from=User.current_user.today.to_date
+		@till=User.current_user.today.to_date+1
 		respond_to do |format|
 		  format.pdf
 		  format.html

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100208220845) do
+ActiveRecord::Schema.define(:version => 20100209145806) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -205,7 +205,6 @@ ActiveRecord::Schema.define(:version => 20100208220845) do
     t.datetime "receipt_printed"
     t.text     "comments"
     t.integer  "order_type_id"
-    t.boolean  "deleted",                                                                :default => false
     t.decimal  "grand_total",                              :precision => 8, :scale => 2, :default => 0.0
     t.decimal  "amount_paid",                              :precision => 8, :scale => 2, :default => 0.0
     t.boolean  "d",                                                                      :default => false
@@ -219,6 +218,7 @@ ActiveRecord::Schema.define(:version => 20100208220845) do
     t.string   "scanned_recipt_content_type"
     t.string   "scanned_recipt_file_name"
     t.integer  "scanned_recipt_file_size"
+    t.date     "deleted_at"
   end
 
   add_index "orders", ["client_id"], :name => "client_id"

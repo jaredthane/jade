@@ -35,7 +35,7 @@ class Order < ActiveRecord::Base
 	# 
 	#################################################################################################
   def validate
-  	puts "validating order<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+  	logger.debug "validating order<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
     errors.add "Cliente"," no es válido" if !client
     errors.add "Proveedor"," no es válido" if !vendor
     errors.add "Debe ingresarse al sistema antes de hacer cambios","" if !user
@@ -56,18 +56,26 @@ class Order < ActiveRecord::Base
   ####################################################################################
   before_save :pre_save
   def pre_save
+  	logger.debug "---------------------------------------------------------------------------------------"
     if self.deleted
       self.grand_total = 0
     else
   	  self.grand_total = self.total_price_with_tax
   	end
+  	logger.debug "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 	  check_for_discounts
+  	logger.debug "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
 	  split_over_sized_order
+  	logger.debug "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
 	  m = main_transaction
+  	logger.debug "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
 	  i = inventory_transaction
+  	logger.debug "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
 	  self.transactions << m if m
 	  self.transactions << i if i
+  	logger.debug "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
 	  self.received=last_received
+  	logger.debug "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
   end
   
 	after_save :post_save
@@ -75,8 +83,7 @@ class Order < ActiveRecord::Base
 	  save_related(lines, true)
 	  if self.sequel
 	  	if self.sequel.new_record?
-				self.sequel.prequel = self
-				self.sequel.save 
+	  		self.sequel.update_attribute(:prequel, self)
 	 			self.sequel_id=self.sequel.id
 			end
 	  end
@@ -85,12 +92,13 @@ class Order < ActiveRecord::Base
 	  if self.receipt_number and order_type_id == SALE
 	  	# Set next Receipt number
     	next_receipt=("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1)
-    	loc=User.current_user.location
-    	loc.next_receipt_number = next_receipt
-    	loc.save
+    	User.current_user.location.update_attribute(:next_receipt_number, next_receipt)
     end
 	  save_related(movements, true)
 	  save_related(transactions, true)
+  	logger.debug "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+	  save_related(payments)
+  	logger.debug "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
 	end
 	##################################################################################################
 	# Creates a Physical Count from a list of products
@@ -111,11 +119,11 @@ class Order < ActiveRecord::Base
 	#################################################################################################
 	def split_over_sized_order
 	  if lines.length > MAX_LINES_PER_ORDER and MAX_LINES_PER_ORDER > 0 and order_type_id==1
-	  	##logger.debug "self.attributes=#{self.attributes.to_s}"
+	  	logger.debug "self.attributes=#{self.attributes.to_s}"
 	    self.sequel = Order.new(self.attributes)
 	    self.sequel.receipt_number = ("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1) if self.receipt_number
-	    ##logger.debug "-----------------------------------------"
-	  	##logger.debug "self.sequel=#{self.sequel.to_s}"
+	    logger.debug "-----------------------------------------"
+	  	logger.debug "self.sequel=#{self.sequel.to_s}"
       for line in self.lines[MAX_LINES_PER_ORDER..-1]
       	l=Line.new(line.attributes)
       	l.order=self.sequel
@@ -132,9 +140,9 @@ class Order < ActiveRecord::Base
 	def save_related(list, update=false, include_errors=true)
 	  for item in list
 	  	if item
-	  		##logger.debug "item=#{item.inspect}"
+	  		logger.debug "item=#{item.inspect}"
     	  item.order=self
-	  		##logger.debug "item=#{item.inspect}"
+	  		logger.debug "item=#{item.inspect}"
 	  	  if !item.id or update
 				  if !item.save and include_errors
 				    for field, msg in item.errors
@@ -175,8 +183,7 @@ class Order < ActiveRecord::Base
 			if fecha != ""
 				self.received = fecha
 				for line in lines
-					line.received = fecha
-					line.save
+					line.update_attribute(:received, fecha)
 				end
 			end
 		end
@@ -333,27 +340,27 @@ class Order < ActiveRecord::Base
   # updates existing lines on the order, adds new ones and deletes missing ones. DOES NOT SAVE THEM
   ##################################################################################
 	def plines=(lines)
-		##logger.debug "Saving lines"
+		logger.debug "Saving lines"
 	  i={}
 	  for l in self.lines
 	    i[l.id]=l
 	  end
-	  ##logger.debug "\nlines=#{lines.inspect}\n"
+	  logger.debug "\nlines=#{lines.inspect}\n"
     for l in (lines[:new] || [])
 	  	if l[:delete_me]!='1'
 	      line=self.lines.new()
 	      line.order=self
 	      line.attrs=l
-	      ##logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
+	      logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
 	      self.lines << line
 	    end
     end
     for key, l in (lines[:existing]||[])
     	if line = i[l[:id].to_i]
 	      line.order=self
-    		##logger.debug "l[:order_type_id]=#{l[:order_type_id].to_s}"
+    		logger.debug "l[:order_type_id]=#{l[:order_type_id].to_s}"
     		line.attrs=l
-    		##logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
+    		logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
       	line.destroy if l[:delete_me]=='1' #<------------ Not sure if this will work right. It needs to stick, but cancel if theres errors
                                          # ALSO: NEED TO DO ACCOUNTING AND INVENTORY ON THIS LINE!!!!!
       end # if line = i[l[:id].to_i]
@@ -517,9 +524,11 @@ class Order < ActiveRecord::Base
 	#################################################################################################
 	def pay_off()
 	  if grand_total != amount_paid
-  	  Payment.create(:order=>self, :payment_method_id=>1, :user=>User.current_user, :presented=>grand_total-amount_paid, :created_at=>User.current_user.today)
+  	  Payment.create(:order_id=>self.id, :payment_method_id=>1, :user=>User.current_user, :presented=>grand_total-amount_paid, :created_at=>User.current_user.today)
+  	  logger.debug "QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ"
   	  self.amount_paid=grand_total
-  	  self.save
+  	  self.update_attribute(:amount_paid, grand_total)
+  	  logger.debug "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
     end
 	end
 	###################################################################################
@@ -554,9 +563,9 @@ class Order < ActiveRecord::Base
 		end
 	end
 	def attrs=(a)
-		##logger.debug "Saving VOID"
+		logger.debug "Saving VOID"
 		self.void=a[:void]
-		##logger.debug "Saving Other values"
+		logger.debug "Saving Other values"
 		self.attributes=a
 	end
 	###################################################################################
@@ -595,10 +604,8 @@ class Order < ActiveRecord::Base
 								end
 								# Make a movement to bring it here
 								e=Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
-								logger.debug "e=#{e.to_s}"
-								i = l.product.inventories.find_by_entity_id(self.vendor_id)
-								i.quantity=i.quantity+1
-								i.save
+								i=l.product.inventories.find_by_entity_id(self.vendor_id)
+								i.update_attribute(:quantity, i.quantity+1)
 							end
 						else	# This serial was just created
 							# Make a movement to put it here
@@ -626,9 +633,7 @@ class Order < ActiveRecord::Base
 	          l.price = l.product.cost
 	        end
 	        if old_loc.id
-						i = l.product.inventories.find_by_entity_id(old_loc.id)
-						i.quantity = product_lines.length
-						i.save
+						l.product.inventories.find_by_entity_id(old_loc.id).update_attribute(:quantity, product_lines.length)
 					end
 				  accounting_diff=(product_lines.length-old_qty) * line.product.cost
 				else
@@ -636,10 +641,7 @@ class Order < ActiveRecord::Base
         	line.price = (line.product.cost||0) * ((line.quantity||0) - (line.product.quantity||0))
 					if (line.quantity != line.product.quantity) and line.quantity
 						m=Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => line.quantity - line.product.quantity, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
-						i=line.product.inventories.find_by_entity_id(self.vendor_id)
-						i.quantity=line.quantity
-						products_done << line.product_id
-						i.save
+						line.product.inventories.find_by_entity_id(self.vendor_id).update_attribute(:quantity, line.quantity)
 						products_done << line.product_id
 					end
 			    accounting_diff=((line.quantity||0) - line.previous_qty) * line.product.cost
@@ -730,7 +732,7 @@ class Order < ActiveRecord::Base
   				end
   			end
   		end
-  		##logger.debug "Saving order"
+  		logger.debug "Saving order"
   		o.save if o
   	end
   	self.sql_update('UPDATE inventories set to_order=0 where to_order>0;')
@@ -745,39 +747,39 @@ class Order < ActiveRecord::Base
 	  sfrom=from.to_s(:db)
 	  sites=[User.current_user.location_id] if !sites
 	  search='' if !search
-	  ##logger.debug "sites=#{sites.inspect}"
-	  ##logger.debug "User.current_user.location_id=#{User.current_user.location_id.to_s}"
+	  logger.debug "sites=#{sites.inspect}"
+	  logger.debug "User.current_user.location_id=#{User.current_user.location_id.to_s}"
 #	  ssites=a_to_s(sites)
 	  ssites="(" + sites.collect{|a| a.to_s + ", "}.to_s.chop.chop + ")"
-	  ##logger.debug "search=#{search.inspect}"
-	  ##logger.debug "ssites=#{ssites}"
+	  logger.debug "search=#{search.inspect}"
+	  logger.debug "ssites=#{ssites}"
 	  case order_type
 	  when SALE
-	    ##logger.debug "searching sales"
-	    ##logger.debug "sites=#{sites.inspect}"
+	    logger.debug "searching sales"
+	    logger.debug "sites=#{sites.inspect}"
 #	    c= ['(order_type_id = 1) AND (clients.name like :search OR orders.receipt_number like :search) AND (vendor_id in #{ssites}) AND (clients.id != 1) AND orders.created_at<:till AND orders.created_at>=:from', {:search => "%#{search}%", :from => "#{sfrom}",:till => "#{still}",:sites => "#{ssites}", :current_location => "#{User.current_user.location_id}"}]
 	    c= "(order_type_id = 1) AND (clients.name like '%" + search + "%' OR orders.receipt_number like '%" + search + "%') AND (vendor_id in " + ssites + ") AND (clients.id != 1) AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
 	    j= "inner join entities as clients on clients.id = orders.client_id"
 	  when PURCHASE
-	    ##logger.debug "searching PURCHASE"
+	    logger.debug "searching PURCHASE"
 #	    c=['((vendors.name like :search OR orders.receipt_number like :search) AND order_type_id = 2 and clients.entity_type_id = 3) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}",:sites => "#{ssites}"}]
 	    c= "(order_type_id = 2) AND (vendors.name like '%" + search + "%' OR orders.receipt_number like '%" + search + "%') AND (client_id in " + ssites + ") AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
 	    j="inner join entities as vendors on vendors.id = orders.vendor_id"
 	  when INTERNAL
-	    ##logger.debug "searching INTERNAL"
+	    logger.debug "searching INTERNAL"
 #	    c=['(vendors.name like :search OR orders.receipt_number like :search) AND orders.client_id = 1 AND orders.vendor_id=:current_location', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}",:sites => "#{ssites}"}]
 	    c= "(order_type_id = 3) AND (orders.receipt_number like '%" + search + "%') AND (vendors_id in " + ssites + ") AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
 	    j="inner join entities as vendors on vendors.id = orders.vendor_id"
 	  when COUNT
-	    ##logger.debug "searching COUNT"
+	    logger.debug "searching COUNT"
 #	    c=['(location.id=:current_location) AND (orders.order_type_id = 5)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}",:sites => "#{ssites}"}]
 	    c= "(order_type_id = 5) AND (vendor_id in " + ssites + ") AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
 	  when LABELS
-	    ##logger.debug "searching COUNT"
+	    logger.debug "searching COUNT"
 #	    c=['(location.id=:current_location) AND (orders.order_type_id = 5)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}",:sites => "#{ssites}"}]
 	    c= "(order_type_id = 6) AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
 	  else
-	    ##logger.debug "searching all according to rights"
+	    logger.debug "searching all according to rights"
   		search=search||''
 		  c = "vendors.name like '%" + search + "%' OR clients.name like '%" + search + "%' OR orders.id like '%" + search + "%') AND (vendors.id in " + ssites + " OR clients.id in " + ssites
 		  c += ' AND order_type_id != 2' if !User.current_user.has_rights(['admin','gerente','compras'])
