@@ -114,6 +114,22 @@ class Order < ActiveRecord::Base
 		o.save
 		return o
 	end
+	#################################################################################################
+	# Returns 1 if deleted_at is set 0 if its null
+	#################################################################################################
+	def deleted
+		deleted_at ? return 1 : return 0
+	end # def deleted
+	#################################################################################################
+	# Returns 1 if deleted_at is set 0 if its null
+	#################################################################################################
+	def deleted=(value)
+		if value=1
+			deleted_at=User.current_user.today
+		else
+			deleted_at=nil
+		end
+	end # def deleted
 	##################################################################################################
 	# Will split a large order into smaller ones; works recursively
 	#################################################################################################
