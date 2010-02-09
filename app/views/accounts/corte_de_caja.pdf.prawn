@@ -152,8 +152,8 @@ for order in series
 	else
 		@box << ["",order.receipt_number,"(#{@x.number_to_currency(value)})"]
 	end
-	@box << ["","Total","(#{@x.number_to_currency(value)})"] if series.length>1
 end
+@box << ["","Total","(#{@x.number_to_currency(total)})"] if series.length>1
 grand_total-=total
 
 
