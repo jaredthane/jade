@@ -63,8 +63,9 @@ end
 #end # def series_to_list(series)
 def show_orders_info(tipo, title)
 	#c="payments.id is not null AND payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.received>= '#{@from.to_s(:db)}' AND orders.received< '#{(@till + 1).to_s(:db)}' AND entity_type_id=#{tipo} AND vendor_id = #{@site.id} AND orders.amount_paid>=orders.grand_total AND deleted =0 AND order_type_id=1"
-	c="orders.received>= '#{@from.to_s(:db)}' AND orders.received< '#{(@till).to_s(:db)}' AND entity_type_id=#{tipo} AND vendor_id = #{@site.id} AND orders.amount_paid>=orders.grand_total AND deleted_at is null AND order_type_id=1"
-	j="inner join entities on entities.id=client_id left join payments on orders.id=order_id"
+	c="entity_type_id=#{tipo} AND vendor_id = #{@site.id} AND orders.amount_paid>=orders.grand_total AND order_type_id=1 AND orders.received>= '#{@from.to_s(:db)}' AND orders.received< '#{(@till).to_s(:db)}'"
+	j="inner join entities on entities.id=client_id"
+	g="orders.id"
 
 	series=Order.find(:all, :conditions=>c, :joins=>j, :order=>'receipt_number')
 	group_total=0
@@ -159,7 +160,7 @@ grand_total-=total
 
 @box << ["","",""]
 @box << ["","",""]
-@box << ["","Total Final",@x.number_to_currency(grand_total)]
+#@box << ["","Total Final",@x.number_to_currency(grand_total)]
 ##################################################################################################
 # autoconsumos
 #################################################################################################

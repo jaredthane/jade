@@ -720,7 +720,11 @@ class Order < ActiveRecord::Base
 	  self.deleted ? 0 : 1
 	end
 	def void=(num)
-	  self.deleted=num
+		logger.info "num=#{num}"
+		if num=='1'
+			logger.info "DOING IT #{User.current_user.today}"
+			self.deleted_at=User.current_user.today
+		end
 	end
 	def void
 	  return true if deleted
