@@ -121,7 +121,7 @@ class Order < ActiveRecord::Base
 		if deleted_at
 			return 1
 		else
-			return 0
+			return nil
 		end
 	end # def deleted
 	#################################################################################################
