@@ -398,8 +398,7 @@ class Line < ActiveRecord::Base
 			s=SerializedProduct.find_or_create_by_serial_number(serial)
 			if s.product_id==nil
 				##logger.debug "self.product_id=#{self.product_id.to_s}"
-				s.product_id=(self.product_id )
-				s.save
+				s.update_attribute(:product_id, self.product_id)
 			end   
 		else
 			##logger.debug  "taking find path"
