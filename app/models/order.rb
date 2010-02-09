@@ -118,13 +118,17 @@ class Order < ActiveRecord::Base
 	# Returns 1 if deleted_at is set 0 if its null
 	#################################################################################################
 	def deleted
-		deleted_at ? return 1 : return 0
+		if deleted_at
+			return 1
+		else
+			return 0
+		end
 	end # def deleted
 	#################################################################################################
 	# Returns 1 if deleted_at is set 0 if its null
 	#################################################################################################
 	def deleted=(value)
-		if value=1
+		if value==1
 			deleted_at=User.current_user.today
 		else
 			deleted_at=nil
