@@ -5,7 +5,6 @@ activos:
   entity_id: nil
   number: '1000'
   modifier: 1
-  balance: 9.99
   is_parent: true
 one:
   name: "Efectivo"
@@ -13,7 +12,6 @@ one:
   entity_id: 1
   number: '1001'
   modifier: 1
-  balance: 9.99
   is_parent: false
 
 pagar:
@@ -22,16 +20,14 @@ pagar:
   entity_id: 1
   number: "2001"
   modifier: -1
-  balance: -9.99
   is_parent: true
 
 fred:
-  name: "Fred"
+  name: "Fred777"
   parent: 1
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 two:
   name: MyString
@@ -39,7 +35,6 @@ two:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 three:
   name: MyString
@@ -47,7 +42,6 @@ three:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 fef:
   name: MyString
@@ -55,7 +49,6 @@ fef:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 adfd:
   name: MyString
@@ -63,7 +56,6 @@ adfd:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 four:
   name: MyString
@@ -71,7 +63,6 @@ four:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 five:
   name: MyString
@@ -79,7 +70,6 @@ five:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 six:
   name: MyString
@@ -87,7 +77,6 @@ six:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 tsevenwo:
   name: MyString
@@ -95,7 +84,6 @@ tsevenwo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 eight:
   name: MyString
@@ -103,7 +91,6 @@ eight:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 nine:
   name: MyString
@@ -111,7 +98,6 @@ nine:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 ten:
   name: MyString
@@ -119,7 +105,6 @@ ten:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 eleven:
   name: MyString
@@ -127,7 +112,6 @@ eleven:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 twelve:
   name: MyString
@@ -135,7 +119,6 @@ twelve:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 thirteen:
   name: MyString
@@ -143,7 +126,6 @@ thirteen:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 tw14o:
   name: MyString
@@ -151,7 +133,6 @@ tw14o:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t15wo:
   name: MyString
@@ -159,7 +140,6 @@ t15wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t16wo:
   name: MyString
@@ -167,7 +147,6 @@ t16wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t17wo:
   name: MyString
@@ -175,7 +154,6 @@ t17wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t18wo:
   name: MyString
@@ -183,7 +161,6 @@ t18wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 tw19o:
   name: MyString
@@ -191,7 +168,6 @@ tw19o:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t20wo:
   name: MyString
@@ -199,7 +175,6 @@ t20wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t21wo:
   name: MyString
@@ -207,7 +182,6 @@ t21wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 tw22o:
   name: MyString
@@ -215,7 +189,6 @@ tw22o:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t23wo:
   name: MyString
@@ -223,7 +196,6 @@ t23wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t24wo:
   name: MyString
@@ -231,7 +203,6 @@ t24wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 tw25o:
   name: MyString
@@ -239,7 +210,6 @@ tw25o:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t26wo:
   name: MyString
@@ -247,7 +217,6 @@ t26wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t27wo:
   name: MyString
@@ -255,7 +224,6 @@ t27wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t28wo:
   name: MyString
@@ -263,7 +231,6 @@ t28wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t29wo:
   name: MyString
@@ -271,7 +238,6 @@ t29wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t30wo:
   name: MyString
@@ -279,7 +245,6 @@ t30wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 tw31o:
   name: MyString
@@ -287,7 +252,6 @@ tw31o:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t32wo:
   name: MyString
@@ -295,7 +259,6 @@ t32wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t33wo:
   name: MyString
@@ -303,7 +266,6 @@ t33wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 tw34o:
   name: MyString
@@ -311,7 +273,6 @@ tw34o:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false
 t35wo:
   name: MyString
@@ -319,5 +280,4 @@ t35wo:
   entity_id: 1
   number: "200101"
   modifier: -1
-  balance: -9.99
   is_parent: false

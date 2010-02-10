@@ -1,0 +1,2 @@
+class BalanceTransfer < Movement
+end

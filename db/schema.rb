@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100124074519) do
+ActiveRecord::Schema.define(:version => 20100204005446) do
 
   create_table "accounts", :force => true do |t|
     t.string   "name"
@@ -17,7 +17,6 @@ ActiveRecord::Schema.define(:version => 20100124074519) do
     t.integer  "entity_id"
     t.string   "number"
     t.integer  "modifier"
-    t.integer  "balance",    :limit => 10, :precision => 10, :scale => 0
     t.boolean  "is_parent"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -166,9 +165,8 @@ ActiveRecord::Schema.define(:version => 20100124074519) do
     t.datetime "created_at"
     t.text     "comments"
     t.string   "type"
-    t.integer  "direction"
-    t.string   "category"
     t.integer  "blocked_by"
+    t.integer  "direction",   :default => 1
   end
 
   create_table "preferences", :force => true do |t|
