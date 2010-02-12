@@ -102,16 +102,16 @@ for copy in ['cliente', 'vendor'] do
 				x = Object.new.extend(ActionView::Helpers::NumberHelper)
 				if l.product.serialized and l.serialized_product
 						#data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x.number_to_currency(l.price), x.number_to_currency(l.total_price)]
-		                        pdf.text l.quantity,:at=>[pdf.bounds.left + 35, pdf.bounds.bottom + 235 - (line*10)]
-                		        pdf.text l.product.name + " - " + l.serialized_product.serial_number,:at=>[pdf.bounds.left + 75, pdf.bounds.bottom + 235 - (line*10)]
-                		        pdf.text x.number_to_currency(l.price),:at=>[pdf.bounds.left + 435, pdf.bounds.bottom + 235 - (line*10)]
-                		        pdf.text x.number_to_currency(l.total_price),:at=>[pdf.bounds.left + 510, pdf.bounds.bottom + 235 - (line*10)]
+          pdf.text l.quantity,:at=>[pdf.bounds.left + 35, pdf.bounds.bottom + 235 - (line*10)]
+	        pdf.text l.product.upc + " - " + l.product.name + " - " + l.serialized_product.serial_number,:at=>[pdf.bounds.left + 75, pdf.bounds.bottom + 235 - (line*10)]
+	        pdf.text x.number_to_currency(l.price),:at=>[pdf.bounds.left + 435, pdf.bounds.bottom + 235 - (line*10)]
+	        pdf.text x.number_to_currency(l.total_price),:at=>[pdf.bounds.left + 510, pdf.bounds.bottom + 235 - (line*10)]
 				else
 					#data << [l.quantity.to_s, l.product.name, x.number_to_currency(l.price),  x.number_to_currency(l.total_price)]
-                                        pdf.text l.quantity,:at=>[pdf.bounds.left + 35, pdf.bounds.bottom + 235 - (line*10)]
-                                        pdf.text l.product.name,:at=>[pdf.bounds.left + 75, pdf.bounds.bottom + 235 - (line*10)]
-                                        pdf.text x.number_to_currency(l.price),:at=>[pdf.bounds.left + 435, pdf.bounds.bottom + 235 - (line*10)]
-                                        pdf.text x.number_to_currency(l.total_price),:at=>[pdf.bounds.left + 510, pdf.bounds.bottom + 235 - (line*10)]
+          pdf.text l.quantity,:at=>[pdf.bounds.left + 35, pdf.bounds.bottom + 235 - (line*10)]
+          pdf.text l.product.upc + " - " + l.product.name,:at=>[pdf.bounds.left + 75, pdf.bounds.bottom + 235 - (line*10)]
+          pdf.text x.number_to_currency(l.price),:at=>[pdf.bounds.left + 435, pdf.bounds.bottom + 235 - (line*10)]
+          pdf.text x.number_to_currency(l.total_price),:at=>[pdf.bounds.left + 510, pdf.bounds.bottom + 235 - (line*10)]
   
 				end
 				total += l.total_price
