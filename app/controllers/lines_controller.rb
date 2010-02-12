@@ -46,7 +46,9 @@ class LinesController < ApplicationController
 			## If it doesnt need a serial number mark it received if the user wants
 #			logger.debug "------------------------->order_type_id=#{order_type_id.to_s}"
 			if order_type_id != '5'
-				@newline.received=current_user.default_received if !@newline.product.serialized
+				if current_user.default_received and !@newline.product.serialized
+					@newline.received=User.current_user.today
+				end
 			else
 #				logger.debug "left null"
 				@newline.received= nil
