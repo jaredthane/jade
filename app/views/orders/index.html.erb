@@ -76,8 +76,27 @@
 <div>
   <div class="table_header_row">
     <div class="table_cell_10">Numero</div>
-    <div class="table_cell_20">Proveedor</div>
-    <div class="table_cell_20">Cliente</div>
+    <% case @order_type_id 
+			 when 2 %>
+			<div class="table_cell_20">Proveedor</div>
+		<% when 1%>
+			<div class="table_cell_20">Cliente</div>
+		<% when 3%>
+			<div class="table_cell_20">Sitio</div>
+		<% when 4%>
+			<div class="table_cell_20">Proveedor</div>
+		<% when 5%>
+			<div class="table_cell_20">Sitio</div>
+		<% else %>
+			<% content_for :title do %>Lista de Pedidos en <%= current_user.location.name %><% end %>
+			<%= render :partial => 'layouts/search', :locals => {:show_search => true, :show_sites=>true,  :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => orders_path,:sites=>@sites  } %>
+		<% end %>
+		<% case @order_type_id 
+			 when 4 %>
+			<div class="table_cell_20">Cliente</div>
+		<% else %>
+			<div class="table_cell_20">Total</div>
+		<% end %>
     <div class="table_cell_15">Esperando</div>
     <div class="table_cell_15">Última Acción</div>
     <div class="table_cell">User</div>
@@ -89,8 +108,23 @@
 <% if order.order_type_id==5 %><%= link_to order.id, order %><% else %>
 <%= link_to (order.receipt_number||'Sin número'), order %>
 <% end %></div>
-		      <div class="table_cell_20"><%= link_to order.vendor.name[0..25], order.vendor %></div>
-		      <div class="table_cell_20"><%= link_to order.client.name[0..25], order.client %></div>
+    <% case @order_type_id 
+			 when 2 %>
+			<div class="table_cell_20"><%= link_to order.vendor.name[0..25], order.vendor %></div>
+			<div class="table_cell_20"><%= h number_to_currency(order.grand_total) %></div>
+		<% when 1%>
+			<div class="table_cell_20"><%= link_to order.client.name[0..25], order.client %></div>
+			<div class="table_cell_20"><%= h number_to_currency(order.grand_total) %></div>
+		<% when 3%>
+			<div class="table_cell_20"><%= link_to order.vendor.name[0..25], order.vendor %></div>
+			<div class="table_cell_20"><%= h number_to_currency(order.grand_total) %></div>
+		<% when 4%>
+			<div class="table_cell_20"><%= link_to order.vendor.name[0..25], order.vendor %></div>
+			<div class="table_cell_20"><%= link_to order.client.name[0..25], order.client %></div>
+		<% else %>
+			<div class="table_cell_20"><%= link_to order.vendor.name[0..25], order.vendor %></div>
+			<div class="table_cell_20"><%= link_to order.client.name[0..25], order.client %></div>
+		<% end %>
 		      <div class="table_cell_15"><%= link_to awaiting(order), order_history_path(order)%></div> 
 		      <div class="table_cell_15"><%=h last_action(order) %></div> 
 		      <div class="table_cell"><%= link_to order.user.login, order.user %></div>
