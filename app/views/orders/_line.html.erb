@@ -23,7 +23,7 @@
 				<% if line.product.serialized %>
 					<div class="table_cell_20"><%= line_form.text_field :serial_number, :id => 'serial', :class => 'serial' %></div>
 				<% else %>
-					<div class="table_cell_20"><%= line_form.text_field :isreceived_str, :class => 'field' %></div>
+					<div class="table_cell_20"><%= line_form.text_field :received, :class=> 'field datepicker', :id => 'line_received_date_picker' %></div>
 				<% end %>
 					<div class="table_cell_15"><%= line_form.collection_select(:warranty_months, line.product.warranties, :id, :months) %></div>
 				

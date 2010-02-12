@@ -39,7 +39,7 @@ class Line < ActiveRecord::Base
 		self.quantity = hash[:quantity] if hash[:quantity]
 		self.product_id = hash[:product_id] if hash[:product_id]
 		self.serial_number = hash[:serial_number] if hash[:serial_number]
-		self.isreceived_str = hash[:isreceived_str] if hash[:isreceived_str]
+		self.received = Date.strptime(hash[:received], '%d/%m/%Y') if hash[:received]
 	end
 	def format_price
 		return '$' + ("%5.2f" % self.price).strip
