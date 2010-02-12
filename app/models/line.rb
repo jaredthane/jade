@@ -32,6 +32,28 @@ class Line < ActiveRecord::Base
 	def post_save
 		save_movements
 	end
+	
+	def untranslate_month(date)
+	  if date
+	    if date.class==String
+	      if date.include? "-"
+	        return DateTime.strptime(date, '%Y-%m-%d %H:%M:%S')
+	      elsif date.include? ":"
+	        return DateTime.strptime(date, '%d/%m/%Y %H:%M:%S')
+	      else
+	        if date!=''
+        		return Date.strptime(date, '%d/%m/%Y')
+        	else 
+        	  return nil
+        	end
+        end
+      elsif date.class==Date
+        return date
+      end
+    else
+      return nil	
+    end
+	end
 	def attrs=(hash)
 		self.order_type_id = hash[:order_type_id] if hash[:order_type_id]
 		self.format_price = hash[:format_price] if hash[:format_price]
@@ -39,7 +61,7 @@ class Line < ActiveRecord::Base
 		self.quantity = hash[:quantity] if hash[:quantity]
 		self.product_id = hash[:product_id] if hash[:product_id]
 		self.serial_number = hash[:serial_number] if hash[:serial_number]
-		self.received = Date.strptime(hash[:received], '%d/%m/%Y') if hash[:received]
+		self.received = untranslate_month(hash[:received]) if hash[:received]
 	end
 	def format_price
 		return '$' + ("%5.2f" % self.price).strip
