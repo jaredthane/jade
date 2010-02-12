@@ -251,7 +251,7 @@ class Line < ActiveRecord::Base
 	def tax	
 		if self.order
 			if self.order.client
-				if self.order.client.entity_type_id == Entity::CREDITO_FISCAL
+				if self.order.client.entity_type_id == Entity::CREDITO_FISCAL or Entity::SITE
 					return self.total_price * TAX
 				end
 			end

@@ -66,7 +66,7 @@
 	<%= yield :javascript %>
   
   <link rel="icon" type="image/x-icon" href="/img/jade.ico" />
-  <title>Sistema de Control de Inventario y Contabilidad Jade | <%= page_title %>
+  <title>Sistema de Control de Inventario y Contabilidad de <%= COMPANY_NAME %> | <%= page_title %>
 </title>
   
 </head>
@@ -81,7 +81,7 @@
         <a class="sitelogo" href="#" title="Inicio"></a>
         <div class="sitename">
           <h1><a href="/products" title="Inicio" %}">Jade&nbsp;&bull;&nbsp;1.20</a></h1> 
-          <h2>Sistema de Control de Inventario y Contabilidad Jade<br/>Solido. Sencillo. Elegante.</h2>
+          <h2>Sistema de Control de Inventario y Contabilidad de <%= COMPANY_NAME %><br/>Solido. Sencillo. Elegante.</h2>
         </div>
         <div class="searchform">
           <% form_tag search_path, :method =>'get', :id => 'search_form' do %>
