@@ -127,7 +127,7 @@ class Line < ActiveRecord::Base
 	  case move
     when Movement::SALE
       self.cost_ref = Cost.ref(product, self.order.vendor)
-      debugger
+      #debugger
       self.cost = Cost.consume(self.product, qty, self.order.vendor)
     when Movement::INTERNAL_CONSUMPTION
       self.cost_ref = Cost.ref(product, self.order.vendor)
@@ -145,7 +145,7 @@ class Line < ActiveRecord::Base
       self.cost = Cost.consume_last(self.product, qty, self.order.vendor)
     end 
     if [1,2,3,8].include?(move)    	# These are normal movements
-      debugger
+#      debugger
     	self.movements << Movement.new(
   	    :created_at=>User.current_user.today,
   	    :entity_id => self.order.vendor_id, 
@@ -157,7 +157,6 @@ class Line < ActiveRecord::Base
   	    :order_id => self.id, 
   	    :serialized_product_id => self.serialized_product_id, 
   	    :cost => self.cost, 
-  	    :cost_ref => self.cost_ref,
   	    :value_left => Cost.stock_value(product,self.order.vendor),
   	    :quantity_left => (product.quantity(self.order.vendor_id)||0) - qty
   	  )
@@ -172,7 +171,7 @@ class Line < ActiveRecord::Base
 		    :order_id => self.id, 
 		    :serialized_product_id => self.serialized_product_id,
   	    :cost => self.cost, 
-  	    :cost_ref => self.cost_ref,
+#  	    :cost_ref => self.cost_ref,
   	    :value_left => Cost.stock_value(product,self.order.client_id),
   	    :quantity_left => (product.quantity(self.order.client_id)||0) + qty
   	  ) if move != 8 # Dont worry about the client for an internal consuption
@@ -241,55 +240,55 @@ class Line < ActiveRecord::Base
 	# Validates the line and adds any errors it finds
 	#################################################################################################
 	def validate
-		if self.product.product_type_id == 1
-			if real_qty(self) != real_qty(old)
-				case self.order_type_id	# check inventory levels
-					when 1 # Venta     
-						##logger.debug "VALIDATING LINE: self=#{self.inspect}"
-						qty=order.vendor.inventory(self.product)
-						errors.add " ","Solo hay " + qty.to_s + " " + self.product.unit.name + " del producto " + self.product.name + " en el inventario"  if self.quantity > qty
-						###logger.debug  "self.serialized_product=" + self.serialized_product.to_s if self.serialized_product
-						if self.product.serialized
-							if self.serialized_product
-									####logger.debug  "self.serialized_product.location.id=" + self.serialized_product.location.id.to_s
-									###logger.debug  "@order.vendor.id=" + @order.vendor.id.to_s
-									errors.add "El numero de serie " + self.serialized_product.serial_number + " no esta disponible en este sitio" if self.serialized_product.location != @order.vendor
-							else
-								errors.add "El numero de serie no se encuentra en el registro"
-							end
-						end
-						# Serial number should exist, and be in vendors location
-					when 2 # Compra
-						####logger.debug  "validating Compra"
-						# Serial number may or may not exist
-						# if it does its location should be nil
-						# if not, it should be unqiue to the product, add it
-					when 3 # Transferencia
-						####logger.debug  "validating Transferencia"
-						###logger.debug  "order.vendor.inventory(self.product)=" + order.vendor.inventory(self.product).to_s
-						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.vendor.inventory(self.product)	
-						errors.add "numero de serie no esta disponible en sitio señalado" if !self.serialized_product 
-						# Serial number should exist, and be in vendors location
-					when 5 # Devolucion de Venta
-						#####logger.debug  "validating Devolucion de Venta"
-						#####logger.debug  "self.product.id=" + self.product.id.to_s
-						#errors.add "insufficient stock" if self.quantity > order.client.inventory(self.product)
-						# Serial number should exist
-						# its location should be nil
-						# dont need to validate serial cause it was already validated
-					when 6 # Devolucion de Compra
-						####logger.debug  "validating Devolucion de Compra"
-						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.inventory(self.product)	
-						# Serial number should exist, and be in clients location
-						# dont need to validate serial cause it was already validated
-					when 7 # Devolucion de Transferencia	
-						####logger.debug  "validating Devolucion de Transferencia"				
-						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.location.inventory(self.product)
-						# Serial number should exist, and be in clients location
-						# dont need to validate serial cause it was already validated
-				end # case self.order_type_id
-			end # if real_qty(self) != real_qty(old)
-		end # if self.product.product_type_id == 1
+#		if self.product.product_type_id == 1
+#			if real_qty(self) != real_qty(old)
+#				case self.order_type_id	# check inventory levels
+#					when 1 # Venta     
+#						##logger.debug "VALIDATING LINE: self=#{self.inspect}"
+#						qty=order.vendor.inventory(self.product)
+#						errors.add " ","Solo hay " + qty.to_s + " " + self.product.unit.name + " del producto " + self.product.name + " en el inventario"  if self.quantity > qty
+#						###logger.debug  "self.serialized_product=" + self.serialized_product.to_s if self.serialized_product
+#						if self.product.serialized
+#							if self.serialized_product
+#									####logger.debug  "self.serialized_product.location.id=" + self.serialized_product.location.id.to_s
+#									###logger.debug  "@order.vendor.id=" + @order.vendor.id.to_s
+#									errors.add "El numero de serie " + self.serialized_product.serial_number + " no esta disponible en este sitio" if self.serialized_product.location != @order.vendor
+#							else
+#								errors.add "El numero de serie no se encuentra en el registro"
+#							end
+#						end
+##						# Serial number should exist, and be in vendors location
+#					when 2 # Compra
+#						####logger.debug  "validating Compra"
+#						# Serial number may or may not exist
+#						# if it does its location should be nil
+#						# if not, it should be unqiue to the product, add it
+#					when 3 # Transferencia
+##						####logger.debug  "validating Transferencia"
+##						###logger.debug  "order.vendor.inventory(self.product)=" + order.vendor.inventory(self.product).to_s
+##						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.vendor.inventory(self.product)	
+##						errors.add "numero de serie no esta disponible en sitio señalado" if !self.serialized_product 
+##						# Serial number should exist, and be in vendors location
+#					when 5 # Devolucion de Venta
+#						#####logger.debug  "validating Devolucion de Venta"
+#						#####logger.debug  "self.product.id=" + self.product.id.to_s
+#						#errors.add "insufficient stock" if self.quantity > order.client.inventory(self.product)
+#						# Serial number should exist
+#						# its location should be nil
+##						# dont need to validate serial cause it was already validated
+##					when 6 # Devolucion de Compra
+##						####logger.debug  "validating Devolucion de Compra"
+##						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.inventory(self.product)	
+##						# Serial number should exist, and be in clients location
+##						# dont need to validate serial cause it was already validated
+##					when 7 # Devolucion de Transferencia	
+##						####logger.debug  "validating Devolucion de Transferencia"				
+##						errors.add "no hay suficiente inventario del producto señalado" if self.quantity > order.client.location.inventory(self.product)
+##						# Serial number should exist, and be in clients location
+##						# dont need to validate serial cause it was already validated
+#				end # case self.order_type_id
+#			end # if real_qty(self) != real_qty(old)
+#		end # if self.product.product_type_id == 1
 	end # validate
   ##################################################################################################
   # Saves unsaved movements
