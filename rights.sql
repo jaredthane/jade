@@ -1,0 +1,52 @@
+
+--
+-- Table structure for table `rights`
+--
+
+DROP TABLE IF EXISTS `rights`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rights` (
+  `id` varchar(255) NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rights`
+--
+
+LOCK TABLES `rights` WRITE;
+/*!40000 ALTER TABLE `rights` DISABLE KEYS */;
+INSERT INTO `rights` VALUES ('CHANGE_ACCOUNTS','Cambiar Cuentas'),('CHANGE_CLIENTS','Cambiar Clientes'),('CHANGE_COMBOS','Cambiar Combos'),('CHANGE_COUNTS','Cambiar Cuentas Fisicas'),('CHANGE_DISCOUNTS','Cambiar Descuentos'),('CHANGE_INTERNAL_CONSUMPTIONS','Cambiar Consumos Internos'),('CHANGE_LABELS','Cambiar Etiquetas'),('CHANGE_PAYMENTS_FOR_PURCHASES','Cambiar Pagos para Compras'),('CHANGE_PAYMENTS_FOR_SALES','Cambiar Pagos para Ventas'),('CHANGE_PRICES','Cambiar Prices'),('CHANGE_PRODUCTION_ORDERS','Cambiar Ordenes de Produccion'),('CHANGE_PRODUCTION_PROCESSES','Cambiar Procesos de Produccion'),('CHANGE_PRODUCTS','Cambiar Productos'),('CHANGE_PURCHASES','Cambiar Compras'),('CHANGE_ROLES','Cambiar Papeles'),('CHANGE_SALES','Cambiar Ventas'),('CHANGE_SERIAL_NUMBERS','Cambiar Numeros de Serie'),('CHANGE_SERVICES','Cambiar Servicios'),('CHANGE_SITES','Cambiar Sitios'),('CHANGE_SUBSCRIPTIONS','Cambiar Suscripciones'),('CHANGE_TRANSACTIONS','Cambiar Transacciones'),('CHANGE_USERS','Cambiar Usuarios'),('CHANGE_VENDORS','Cambiar Proveedores'),('CHANGE_WARRANTIES','Cambiar Garantias'),('CREATE_ACCOUNTS','Crear Cuentas'),('CREATE_CLIENTS','Crear Clientes'),('CREATE_COMBOS','Crear Combos'),('CREATE_COUNTS','Crear Cuentas Fisicas'),('CREATE_DISCOUNTS','Crear Descuentos'),('CREATE_INTERNAL_CONSUMPTIONS','Crear Consumos Internos'),('CREATE_LABELS','Hacer Etiquetas'),('CREATE_PAYMENTS_FOR_PURCHASES','Crear Pagos para Compras'),('CREATE_PAYMENTS_FOR_SALES','Crear Pagos para Ventas'),('CREATE_PRODUCTION_ORDERS','Crear Ordenes de Produccion'),('CREATE_PRODUCTION_PROCESSES','Crear Procesos de Produccion'),('CREATE_PRODUCTS','Crear Productos'),('CREATE_PURCHASES','Crear Compras'),('CREATE_ROLES','Crear Papeles'),('CREATE_SALES','Crear Ventas'),('CREATE_SERIAL_NUMBERS','Crear Numeros de Serie'),('CREATE_SERVICES','Crear Servicios'),('CREATE_SITES','Crear Sitios'),('CREATE_SUBSCRIPTIONS','Crear Suscripciones'),('CREATE_TRANSACTIONS','Crear Transacciones'),('CREATE_USERS','Crear Usuarios'),('CREATE_VENDORS','Crear Proveedores'),('CREATE_WARRANTIES','Crear Garantias'),('DELETE_ACCOUNTS','Borrar Cuentas'),('DELETE_CLIENTS','Borrar Clientes'),('DELETE_COMBOS','Borrar Combos'),('DELETE_COUNTS','Borrar Cuentas Fisicas'),('DELETE_DISCOUNTS','Borrar Descuentos'),('DELETE_INTERNAL_CONSUMPTIONS','Borrar Consumos Internos'),('DELETE_LABELS','Borrar Etiquetas'),('DELETE_PAYMENTS_FOR_PURCHASES','Borrar Pagos para Compras'),('DELETE_PAYMENTS_FOR_SALES','Borrar Pagos para Ventas'),('DELETE_PRODUCTION_ORDERS','Borrar Ordenes de Produccion'),('DELETE_PRODUCTION_PROCESSES','Borrar Procesos de Produccion'),('DELETE_PRODUCTS','Borrar Productos'),('DELETE_PURCHASES','Borrar Compras'),('DELETE_ROLES','Borrar Papeles'),('DELETE_SALES','Borrar Ventas'),('DELETE_SERIAL_NUMBERS','Borrar Numeros de Serie'),('DELETE_SERVICES','Borrar Servicios'),('DELETE_SITES','Borrar Sitios'),('DELETE_SUBSCRIPTIONS','Borrar Suscripciones'),('DELETE_TRANSACTIONS','Borrar Transacciones'),('DELETE_USERS','Borrar Usuarios'),('DELETE_VENDORS','Borrar Proveedores'),('DELETE_WARRANTIES','Borrar Garantias'),('FINISH_PRODUCTION_ORDERS','Terminar Ordenes de Produccion'),('POST_COUNTS','Procesar Cuentas Fisicas'),('START_PRODUCTION_ORDERS','Iniciar Ordenes de Produccion'),('VIEW_ACCOUNTS','Ver Cuentas'),('VIEW_CLIENTS','Ver Clientes'),('VIEW_COMBOS','Ver Combos'),('VIEW_COSTS','Ver Costos'),('VIEW_COUNTS','Ver Cuentas Fisicas'),('VIEW_DISCOUNTS','Ver Descuentos'),('VIEW_INTERNAL_CONSUMPTIONS','Ver Consumos Internos'),('VIEW_LABELS','Ver Etiquetas'),('VIEW_PAYMENTS_FOR_PURCHASES','Ver Pagos para Compras'),('VIEW_PAYMENTS_FOR_SALES','Ver Pagos para Ventas'),('VIEW_PRODUCTION_ORDERS','Ver Ordenes de Produccion'),('VIEW_PRODUCTION_PROCESSES','Ver Procesos de Produccion'),('VIEW_PRODUCTS','Ver Productos'),('VIEW_PURCHASES','Ver Compras'),('VIEW_ROLES','Ver Papeles'),('VIEW_SALES','Ver Ventas'),('VIEW_SERIAL_NUMBERS','Ver Numeros de Serie'),('VIEW_SERVICES','Ver Servicios'),('VIEW_SITES','Ver Sitios'),('VIEW_SUBSCRIPTIONS','Ver Suscripciones'),('VIEW_TRANSACTIONS','Ver Transacciones'),('VIEW_USERS','Ver Usuarios'),('VIEW_VENDORS','Ver Proveedores'),('VIEW_WARRANTIES','Ver Garantias');
+/*!40000 ALTER TABLE `rights` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `rights_roles`
+--
+
+DROP TABLE IF EXISTS `rights_roles`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `rights_roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `role_id` int(11) DEFAULT NULL,
+  `right_id` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `role_id` (`role_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=501 DEFAULT CHARSET=latin1;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `rights_roles`
+--
+
+LOCK TABLES `rights_roles` WRITE;
+/*!40000 ALTER TABLE `rights_roles` DISABLE KEYS */;
+INSERT INTO `rights_roles` VALUES (1,1,0),(2,1,0),(3,1,0),(4,1,0),(5,1,0),(6,1,0),(7,1,0),(8,1,0),(9,1,0),(10,1,0),(11,2,0),(12,2,0),(13,2,0),(14,2,0),(15,2,0),(16,2,0),(17,2,0),(18,2,0),(19,2,0),(20,2,0),(21,2,0),(22,2,0),(23,2,0),(24,2,0),(25,2,0),(26,3,0),(27,3,0),(28,3,0),(29,3,0),(30,3,0),(31,3,0),(32,3,0),(33,3,0),(34,3,0),(35,3,0),(36,3,0),(37,3,0),(38,3,0),(39,3,0),(40,3,0),(41,3,0),(42,4,0),(43,4,0),(44,4,0),(45,4,0),(46,4,0),(47,4,0),(48,4,0),(49,4,0),(50,4,0),(51,4,0),(52,5,0),(53,5,0),(54,5,0),(55,5,0),(56,5,0),(57,5,0),(58,5,0),(59,5,0),(60,5,0),(61,5,0),(62,5,0),(63,5,0),(64,5,0),(65,5,0),(66,5,0),(67,5,0),(68,5,0),(69,5,0),(70,5,0),(71,6,0),(72,6,0),(73,6,0),(74,6,0),(75,6,0),(76,6,0),(77,6,0),(78,6,0),(79,6,0),(80,6,0),(81,6,0),(82,6,0),(83,6,0),(84,6,0),(85,6,0),(86,6,0),(87,6,0),(88,6,0),(89,6,0),(90,6,0),(91,6,0),(92,6,0),(93,6,0),(94,6,0),(95,6,0),(96,6,0),(97,6,0),(98,6,0),(99,6,0),(100,6,0),(101,6,0),(102,6,0),(103,6,0),(104,6,0),(105,6,0),(106,6,0),(107,6,0),(108,6,0),(109,6,0),(110,6,0),(111,6,0),(112,6,0),(113,6,0),(114,6,0),(115,6,0),(116,6,0),(117,7,0),(118,7,0),(119,7,0),(120,7,0),(121,7,0),(122,7,0),(123,7,0),(124,7,0),(125,7,0),(126,7,0),(127,7,0),(128,7,0),(129,7,0),(130,7,0),(131,7,0),(132,7,0),(133,7,0),(134,7,0),(135,7,0),(136,7,0),(137,7,0),(138,7,0),(139,7,0),(140,7,0),(141,7,0),(142,7,0),(143,7,0),(144,7,0),(145,7,0),(146,7,0),(147,7,0),(148,7,0),(149,7,0),(150,7,0),(151,7,0),(152,7,0),(153,7,0),(154,7,0),(155,7,0),(156,7,0),(157,7,0),(158,7,0),(159,7,0),(160,7,0),(161,7,0),(162,7,0),(163,7,0),(164,7,0),(165,8,0),(166,9,0),(167,9,0),(168,9,0),(169,9,0),(170,3,0),(171,3,0),(172,3,0),(173,2,0),(174,5,0),(175,6,0),(176,7,0),(177,6,0),(178,6,0),(179,7,0),(180,7,0),(181,7,0),(182,6,0),(183,6,0),(184,6,0),(185,5,0),(186,2,0),(187,3,0),(188,4,0),(189,7,0),(190,7,0),(191,7,0),(192,7,0),(193,2,0),(194,3,0),(195,5,0),(196,6,0),(197,7,0),(198,7,0),(199,6,0),(200,3,0),(201,3,0),(202,3,0),(203,6,0),(204,6,0),(205,6,0),(206,7,0),(207,7,0),(208,7,0),(209,7,0),(210,7,0),(211,7,0),(212,7,0),(213,7,0),(214,7,0),(215,7,0),(216,7,0),(217,7,0),(218,7,0),(219,7,0),(220,7,0),(221,7,0),(222,7,0),(223,7,0),(224,7,0),(225,7,0),(226,7,0),(227,7,0),(228,7,0),(229,7,0),(230,11,0),(231,11,0),(232,11,0),(233,11,0),(234,11,0),(235,11,0),(236,12,0),(237,12,0),(238,13,0),(239,13,0),(240,15,0),(241,15,0),(242,15,0),(243,15,0),(244,15,0),(245,15,0),(246,15,0),(247,15,0),(248,15,0),(249,15,0),(250,14,0),(251,1,0),(252,1,0),(253,1,0),(254,1,0),(255,1,0),(256,1,0),(257,1,0),(258,1,0),(259,1,0),(260,1,0),(261,2,0),(262,2,0),(263,2,0),(264,2,0),(265,2,0),(266,2,0),(267,2,0),(268,2,0),(269,2,0),(270,2,0),(271,2,0),(272,2,0),(273,2,0),(274,2,0),(275,2,0),(276,3,0),(277,3,0),(278,3,0),(279,3,0),(280,3,0),(281,3,0),(282,3,0),(283,3,0),(284,3,0),(285,3,0),(286,3,0),(287,3,0),(288,3,0),(289,3,0),(290,3,0),(291,3,0),(292,4,0),(293,4,0),(294,4,0),(295,4,0),(296,4,0),(297,4,0),(298,4,0),(299,4,0),(300,4,0),(301,4,0),(302,5,0),(303,5,0),(304,5,0),(305,5,0),(306,5,0),(307,5,0),(308,5,0),(309,5,0),(310,5,0),(311,5,0),(312,5,0),(313,5,0),(314,5,0),(315,5,0),(316,5,0),(317,5,0),(318,5,0),(319,5,0),(320,5,0),(321,6,0),(322,6,0),(323,6,0),(324,6,0),(325,6,0),(326,6,0),(327,6,0),(328,6,0),(329,6,0),(330,6,0),(331,6,0),(332,6,0),(333,6,0),(334,6,0),(335,6,0),(336,6,0),(337,6,0),(338,6,0),(339,6,0),(340,6,0),(341,6,0),(342,6,0),(343,6,0),(344,6,0),(345,6,0),(346,6,0),(347,6,0),(348,6,0),(349,6,0),(350,6,0),(351,6,0),(352,6,0),(353,6,0),(354,6,0),(355,6,0),(356,6,0),(357,6,0),(358,6,0),(359,6,0),(360,6,0),(361,6,0),(362,6,0),(363,6,0),(364,6,0),(365,6,0),(366,6,0),(367,7,0),(368,7,0),(369,7,0),(370,7,0),(371,7,0),(372,7,0),(373,7,0),(374,7,0),(375,7,0),(376,7,0),(377,7,0),(378,7,0),(379,7,0),(380,7,0),(381,7,0),(382,7,0),(383,7,0),(384,7,0),(385,7,0),(386,7,0),(387,7,0),(388,7,0),(389,7,0),(390,7,0),(391,7,0),(392,7,0),(393,7,0),(394,7,0),(395,7,0),(396,7,0),(397,7,0),(398,7,0),(399,7,0),(400,7,0),(401,7,0),(402,7,0),(403,7,0),(404,7,0),(405,7,0),(406,7,0),(407,7,0),(408,7,0),(409,7,0),(410,7,0),(411,7,0),(412,7,0),(413,7,0),(414,7,0),(415,8,0),(416,9,0),(417,9,0),(418,9,0),(419,9,0),(420,3,0),(421,3,0),(422,3,0),(423,2,0),(424,5,0),(425,6,0),(426,7,0),(427,6,0),(428,6,0),(429,7,0),(430,7,0),(431,7,0),(432,6,0),(433,6,0),(434,6,0),(435,5,0),(436,2,0),(437,3,0),(438,4,0),(439,7,0),(440,7,0),(441,7,0),(442,7,0),(443,2,0),(444,3,0),(445,5,0),(446,6,0),(447,7,0),(448,7,0),(449,6,0),(450,3,0),(451,3,0),(452,3,0),(453,6,0),(454,6,0),(455,6,0),(456,7,0),(457,7,0),(458,7,0),(459,7,0),(460,7,0),(461,7,0),(462,7,0),(463,7,0),(464,7,0),(465,7,0),(466,7,0),(467,7,0),(468,7,0),(469,7,0),(470,7,0),(471,7,0),(472,7,0),(473,7,0),(474,7,0),(475,7,0),(476,7,0),(477,7,0),(478,7,0),(479,7,0),(480,11,0),(481,11,0),(482,11,0),(483,11,0),(484,11,0),(485,11,0),(486,12,0),(487,12,0),(488,13,0),(489,13,0),(490,15,0),(491,15,0),(492,15,0),(493,15,0),(494,15,0),(495,15,0),(496,15,0),(497,15,0),(498,15,0),(499,15,0),(500,14,0);
+/*!40000 ALTER TABLE `rights_roles` ENABLE KEYS */;
+UNLOCK TABLES;
+

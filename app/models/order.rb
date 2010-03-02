@@ -545,10 +545,8 @@ class Order < ActiveRecord::Base
 	def pay_off()
 	  if grand_total != amount_paid
   	  Payment.create(:order_id=>self.id, :payment_method_id=>1, :user=>User.current_user, :presented=>grand_total-amount_paid, :created_at=>User.current_user.today)
-  	  logger.debug "QQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQQ"
-  	  self.amount_paid=grand_total
+   	  self.amount_paid=grand_total
   	  self.update_attribute(:amount_paid, grand_total)
-  	  logger.debug "WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW"
     end
 	end
 	###################################################################################
@@ -619,6 +617,7 @@ class Order < ActiveRecord::Base
 							if old_loc.id != self.vendor_id # It was not already here
 								if old_loc.entity_type== 3 # It was in a different site
 									# Make a movement to take it out of the other site
+									
 									e=Movement.create(:created_at=>date,:entity_id => old_loc.id, :comments => self.comments, :product_id => l.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
 									logger.debug "e=#{e.to_s}"
 								end

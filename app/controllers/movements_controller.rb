@@ -27,11 +27,20 @@ class MovementsController < ApplicationController
   end
   def index
     #@movements = Movement.find(:all)
-	@movements = Movement.search(params[:search], params[:page])
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @movements }
-    end
+		@from=(untranslate_month(params[:from])||Date.today)
+		@till=(untranslate_month(params[:till])||Date.today)
+		if params[:pdf]=='1'
+		    @movements = Movement.search(@from, @till, params[:sites], params[:search])
+		    params[:format] = 'pdf'
+		else
+		  @movements = Movement.search(@from, @till, params[:sites], params[:search], (params[:page]||1))
+		end
+		respond_to do |format|
+		  format.html # index.html.erb
+      format.pdf {
+        prawnto :prawn => {:skip_page_creation=>true}
+      }
+		end
   end
 
   # GET /movements/1

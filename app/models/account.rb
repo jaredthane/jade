@@ -87,7 +87,8 @@ class Account < ActiveRecord::Base
 				sql = ActiveRecord::Base.connection()
 				query = "select sum(value*post_type_id) total from posts where account_id in (#{list})"
 				results = sql.execute(query).fetch_hash
-				return results["total"].to_i * self.modifier
+				return results["total"].to_d * self.modifier if results["total"]
+			  return 0  
 			else
 				return 0
 			end
@@ -95,7 +96,8 @@ class Account < ActiveRecord::Base
 			sql = ActiveRecord::Base.connection()
 			query = "select sum(value*post_type_id) total from posts where account_id = #{self.id.to_s}"
 			results = sql.execute(query).fetch_hash
-			return results["total"].to_i * self.modifier
+			return results["total"].to_d * self.modifier if results["total"]
+			return 0
 		end
 	end
   def validate

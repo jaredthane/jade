@@ -19,6 +19,8 @@ class Line < ActiveRecord::Base
 	belongs_to :order
 	belongs_to :warranty
 	belongs_to :product	
+	belongs_to :movement
+	belongs_to :cost_ref, :class_name => "Order", :foreign_key => 'cost_ref'
 	validates_presence_of(:product, :message => " debe ser valido")
 	attr_accessor :client_name
 	belongs_to :serialized_product
@@ -32,7 +34,21 @@ class Line < ActiveRecord::Base
 	def post_save
 		save_movements
 	end
-	
+#	#################################################################################################
+#	# 
+#	#################################################################################################
+#	def set_cost
+#	    self.cost = Cost.consume(:product=>self.product, :quantity=>self.quantity, :entity=>self.order.client) / (self.quantity/0) if order_type_id == Order::SALE
+#	end # def set_cost
+#	#################################################################################################
+#	# 
+#	#################################################################################################
+#	def create_costs
+#	    Cost.create(:product=>self.product, :entity=>self.order.client, :order=>self.order, :value=>self.price, :quantity=>self.quantity) if order_type_id = Order::PURCHASE
+#	end # def create_costs
+	##################################################################################################
+	# 
+	#################################################################################################
 	def untranslate_month(date)
 	  if date
 	    if date.class==String
@@ -100,30 +116,98 @@ class Line < ActiveRecord::Base
   ##################################################################################
   MOVEMENT_TYPES=[[4,4],[5,1],[6,2],[9,8],[7,3],[4,4]]
 	def prepare_movements
-		#
-		##logger.debug "self.product.product_type_id=#{self.product.product_type_id.to_s}"
-	  if self.product.product_type_id == 1
-	  	##logger.debug "real_qty(self)=#{real_qty(self).to_s}"
-	  	##logger.debug "real_qty(old)=#{real_qty(old).to_s}"
-		  if real_qty(self) != real_qty(old) and self.quantity
-		    dir = (real_qty(self)-real_qty(old))/(real_qty(self)-real_qty(old)).abs
-		    ##logger.debug "dir=#{dir.to_s}"
-		    move=MOVEMENT_TYPES[order_type_id.to_i][(dir+3)/2-1]
-		    
-		    ##logger.debug "move=#{move.to_s}"
-		    if [1,2,3,8].include?(move)    	# These are normal movements
-		    	self.movements << Movement.new(:created_at=>User.current_user.today,:entity_id => self.order.vendor_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => -(real_qty(self)-real_qty(old)), :movement_type_id => move, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => self.serialized_product_id)
-		    	if move != 8									# Dont worry about the client for an internal consuption
-		    		self.movements << Movement.new(:created_at=>User.current_user.today,:entity_id => self.order.client_id, :comments => self.order.comments, :product_id => self.product_id, :quantity =>  (real_qty(self)-real_qty(old)), :movement_type_id => move, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => self.serialized_product_id)
-		    	end
-		    elsif [5,6,7,9].include?(move) 	# These are returns, use old serial_number
-		    	if move != 9									# Dont worry about the client for an internal consuption
-		    		self.movements << Movement.new(:created_at=>User.current_user.today,:entity_id => self.order.client_id, :comments => self.order.comments, :product_id => self.product_id, :quantity =>  (real_qty(self)-real_qty(old)), :movement_type_id => move, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => old.serialized_product_id)
-		    	end
-		    	self.movements << Movement.new(:created_at=>User.current_user.today,:entity_id => self.order.vendor_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => -(real_qty(self)-real_qty(old)), :movement_type_id => move, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => old.serialized_product_id)
-				end	    	
-		  end # if dir != 0
-	  end # if self.product.product_type_id == 1
+    return 0 if self.product.product_type_id != 1
+    return 0 if real_qty(self) == real_qty(old) and self.quantity
+    
+    dir = (real_qty(self)-real_qty(old))/(real_qty(self)-real_qty(old)).abs
+    move=MOVEMENT_TYPES[order_type_id.to_i][(dir+3)/2-1]
+    qty=(real_qty(self)-real_qty(old))
+    
+	  # First work with costs
+	  case move
+    when Movement::SALE
+      self.cost_ref = Cost.ref(product, self.order.vendor)
+      debugger
+      self.cost = Cost.consume(self.product, qty, self.order.vendor)
+    when Movement::INTERNAL_CONSUMPTION
+      self.cost_ref = Cost.ref(product, self.order.vendor)
+      self.cost = Cost.consume(self.product, qty, self.order.vendor)
+    when Movement::PURCHASE
+      self.cost_ref = self.order
+      self.cost=self.price
+      Cost.create(:order=>self.order, :product=>self.product, :quantity=>qty, :value=>self.price, :entity=>self.order.client)
+    when Movement::SALE_RETURN
+      Cost.create(:order=>self.cost_ref, :product=>self.product, :quantity=>qty, :value=>self.cost, :entity=>self.order.vendor)
+    when Movement::INTERNAL_CONSUMPTION_RETURN
+      Cost.create(:order=>self.cost_ref, :product=>self.product, :quantity=>qty, :value=>self.cost, :entity=>self.order.vendor)
+    when Movement::PURCHASE_RETURN
+      self.cost_ref = self.order
+      self.cost = Cost.consume_last(self.product, qty, self.order.vendor)
+    end 
+    if [1,2,3,8].include?(move)    	# These are normal movements
+      debugger
+    	self.movements << Movement.new(
+  	    :created_at=>User.current_user.today,
+  	    :entity_id => self.order.vendor_id, 
+  	    :comments => self.order.comments, 
+  	    :product_id => self.product_id, 
+  	    :quantity => -qty, 
+  	    :movement_type_id => move, 
+  	    :user_id => User.current_user.id,
+  	    :order_id => self.id, 
+  	    :serialized_product_id => self.serialized_product_id, 
+  	    :cost => self.cost, 
+  	    :cost_ref => self.cost_ref,
+  	    :value_left => Cost.stock_value(product,self.order.vendor),
+  	    :quantity_left => (product.quantity(self.order.vendor_id)||0) - qty
+  	  )
+  		self.movements << Movement.new(
+		    :created_at=>User.current_user.today,
+		    :entity_id => self.order.client_id, 
+		    :comments => self.order.comments, 
+		    :product_id => self.product_id, 
+		    :quantity =>  qty,
+		    :movement_type_id => move, 
+		    :user_id => User.current_user.id,
+		    :order_id => self.id, 
+		    :serialized_product_id => self.serialized_product_id,
+  	    :cost => self.cost, 
+  	    :cost_ref => self.cost_ref,
+  	    :value_left => Cost.stock_value(product,self.order.client_id),
+  	    :quantity_left => (product.quantity(self.order.client_id)||0) + qty
+  	  ) if move != 8 # Dont worry about the client for an internal consuption
+		elsif [5,6,7,9].include?(move) 	# These are returns, use old serial_number
+  		self.movements << Movement.new(
+		    :created_at=>User.current_user.today,
+		    :entity_id => self.order.client_id, 
+		    :comments => self.order.comments, 
+		    :product_id => self.product_id, 
+		    :quantity =>  qty, 
+		    :movement_type_id => move, 
+		    :user_id => User.current_user.id,
+		    :order_id => self.id, 
+		    :serialized_product_id => old.serialized_product_id,
+  	    :cost => self.cost, 
+  	    :cost_ref => self.cost_ref,
+  	    :value_left => Cost.stock_value(product,self.order.client_id),
+  	    :quantity_left => (product.quantity(self.order.client_id)||0) - qty
+  	  ) if move != 9 # Dont worry about the client for an internal consuption
+    	self.movements << Movement.new(
+  	    :created_at=>User.current_user.today,
+  	    :entity_id => self.order.vendor_id, 
+  	    :comments => self.order.comments, 
+  	    :product_id => self.product_id, 
+  	    :quantity => -qty, 
+  	    :movement_type_id => move, 
+  	    :user_id => User.current_user.id,
+  	    :order_id => self.id, 
+  	    :serialized_product_id => old.serialized_product_id,
+  	    :cost => self.cost, 
+  	    :cost_ref => self.cost_ref,
+  	    :value_left => Cost.stock_value(product,self.order.vendor),
+  	    :quantity_left => (product.quantity(self.order.vendor)||0) + qty
+  	  )	
+  	end
 	end # prepare_movements
 	#################################################################################################
 	# Holds a copy of the old version of this object for reference

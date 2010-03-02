@@ -1,10 +1,15 @@
 
+  <%= javascript_include_tag "slider.jquery" %>
+  <%= stylesheet_link_tag 'ui.slider.extras' %>
+  <%= javascript_include_tag "submit_link" %>
 <% content_for :title do %>Lista de Movimientos en <%= current_user.location.name %><% end %>
 <% content_for :actions do %>
 	<dt><%= link_to 'Inventario', products_url, :class => 'action' %></dt>
+	<dt><%= link_to_function 'Imprimir', 'submit_report("date_range_form")', :class => 'action' %></dt>
 <% end %>
 
 <br />
+<%= render :partial => 'layouts/search', :locals => {:show_search => true, :show_sites=>true,  :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => movements_path,:sites=>current_user.location  } %>
 <%= will_paginate @movements, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
@@ -14,7 +19,6 @@
     <div class="table_cell_20">Usuario</div>
     <div class="table_cell">Fecha</div>
   </div>
-
 
 <% for movement in @movements %>
   <div class="table_row">

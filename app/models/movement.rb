@@ -24,9 +24,20 @@ class Movement < ActiveRecord::Base
 	belongs_to :order
 	belongs_to :line
 	belongs_to :user
+	belongs_to :cost_ref
 	belongs_to :serialized_product
 #	belongs_to :line
 
+    SALE=1                      
+    PURCHASE=2                        
+    TRANSFER=3
+    COUNT=4
+    SALE_RETURN=5
+    PURCHASE_RETURN=6
+    TRANSFER_RETURN=7
+    INTERNAL_CONSUMPTION=8
+    INTERNAL_CONSUMPTION_RETURN=9
+    
 	before_create :post_create
 	def description
 		return "Cuenta Fisica" if movement_type_id==4
@@ -79,11 +90,24 @@ class Movement < ActiveRecord::Base
 		           :order => 'movements.created_at DESC',
 		           :joins => 'inner join products on products.id = movements.product_id inner join users on users.id = movements.user_id inner join entities on entities.id = movements.entity_id'
     end
-    def self.search(search, page)
-	    paginate :per_page => 20, :page => page,
-		           :conditions => ['(products.name like :search OR users.login like :search OR products.upc like :search) AND (entities.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
-		           :order => 'movements.created_at DESC',
-		           :joins => 'inner join products on products.id = movements.product_id inner join users on users.id = movements.user_id inner join entities on entities.id = movements.entity_id'
+#    def self.search(search, page)
+#	    paginate :per_page => 20, :page => page,
+#		           :conditions => ['(products.name like :search OR users.login like :search OR products.upc like :search) AND (entities.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
+#		           :order => 'movements.created_at DESC',
+#		           :joins => 'inner join products on products.id = movements.product_id inner join users on users.id = movements.user_id inner join entities on entities.id = movements.entity_id'
+#    end
+    def self.search(from, till, sites, search=nil, page=nil)
+			till = till.to_date + 1
+			sites_string="(" + (sites |[User.current_user.location_id]).collect{|a| a.to_s + ", "}.to_s.chop.chop + ")"
+    	c="movements.created_at >= '#{from.to_s(:db)}' and movements.created_at < '#{till.to_s(:db)}' AND movements.entity_id in #{sites_string}"
+    	c += " AND (products.name like '%#{search}%' OR products.upc like '%#{search}%')" if search
+    	j="inner join products on products.id = movements.product_id" if search
+	    o = "movements.created_at DESC"
+		  if page
+				paginate :per_page => 20, :page => page, :conditions => c, :order => o, :joins=>j
+			else
+				find :all, :conditions => c, :order => o, :joins=>j
+			end
     end
 
 end

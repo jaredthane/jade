@@ -43,8 +43,6 @@ class Product < ActiveRecord::Base
 	has_many :serialized_products, :dependent => :destroy
 	has_many :requirements, :dependent => :destroy, :dependent => :destroy
 	after_update :save_requirements
-	after_update :update_cost
-	after_create :update_cost
 	after_create :create_requirements
 	belongs_to :product_type
 	belongs_to :unit
@@ -77,7 +75,7 @@ class Product < ActiveRecord::Base
 		stdin, stdout, stderr = Open3.popen3("barcode -b '#{self.upc}' -g 80x40 -e upc -o 'public/barcodes/#{self.upc}.ps'")
 		err=(stderr.gets||'')
 		if err.include?("can't encode")
-			system("barcode -b '#{self.upc}' -o 'public/barcodes/#{self.upc}.ps'")
+			system("barcode -b '#{self.upc}' -g 80x40 -o 'public/barcodes/#{self.upc}.ps'")
 		end
 		system("convert -trim 'public/barcodes/#{self.upc}.ps' 'public/barcodes/#{self.upc}.jpg'")
 		system("rm 'public/barcodes/#{self.upc}.ps'")
@@ -183,66 +181,66 @@ class Product < ActiveRecord::Base
 		end
 		return i.quantity
 	end
-	def update_cost(location_id = User.current_user.location_id)
-	    # #puts "Hello There <-------------------------------------------------------------"
-	    # #puts self.calculate_cost(location_id)
-	    self.cost = self.calculate_cost(location_id)
-	end
-	def calculate_cost(location_id = User.current_user.location_id)
-		#puts "product.id=#{self.id.to_s}"
-		#puts "location_id=#{location_id.to_s}"
-		#puts "hello"
-#		moves=connection.select_all("select movements.* from (select max(movements.id) as id from movements where product_id=#{self.id.to_s} group by order_id order by id DESC) as list left join movements on list.id=movements.id where movement_type_id=2;")
-		#moves = movements.find_all_by_entity_id(location_id, :order => 'created_at desc')
-		lines=self.lines.find(:all, :conditions => "orders.client_id=#{User.current_user.location_id} AND `lines`.received is not null", :joins => 'inner join orders on orders.id=`lines`.order_id')
-		#puts "self.quantity(location_id)=" + self.quantity(location_id).to_s
-		# #puts moves.inspect
-		stock = self.quantity(location_id)
-		#puts "stock" + stock.to_s
-		#puts "lines.length=" + lines.length.to_s
-		if (stock == 0) or (lines.length == 0)
-		    return self.default_cost
-		end
-		items_to_count = stock
-		totalcost=0
-		for l in lines
-		  take = [items_to_count, l.quantity].min
-		  totalcost += (l.price || 0) * (take || 0)
-		  items_to_count -= take
-		  break if items_to_count < 1
-		end
-#		while	(moves[movement_counter]) do
-#			#puts moves[movement_counter].inspect
-#			#puts "stock" + stock.inspect
-#			#puts "items_counted" + items_counted.inspect
-#			## #puts "moves[movement_counter].quantity" + moves[movement_counter].quantity
-#			#puts "moves[movement_counter][quantity]" + moves[movement_counter]["quantity"].to_s
-#			#puts "stock-items_counted" + (stock-items_counted).inspect
-#			#puts "[stock-items_counted, moves[movement_counter].quantity].min=" + [stock-items_counted, moves[movement_counter]["quantity"].to_i].min.inspect
-#      #puts "id:"+moves[movement_counter]["id"].to_s
-#			#puts moves[movement_counter]["quantity"].to_i
-#			#puts stock
-#			#puts items_counted
-#			take = [stock-items_counted, moves[movement_counter]["quantity"].to_i].min
-#			l=Line.find(moves[movement_counter]["line_id"].to_i)
-#			#puts "take" + take.to_s
-#			#puts "couldnt find line#" +  moves[movement_counter]["line_id"].to_i.to_s if !l
-#			#puts "take=#{take.to_s}"
-#			#puts "m.value=#{m.value.to_s}"
-#			totalcost += (l.price||0)*(take||0)
-#			#puts items_counted.inspect
-#			items_counted = items_counted + take
-#			end
-#			movement_counter = movement_counter + 1
+#	def update_cost(location_id = User.current_user.location_id)
+#	    # #puts "Hello There <-------------------------------------------------------------"
+#	    # #puts self.calculate_cost(location_id)
+#	    self.cost = self.calculate_cost(location_id)
+#	end
+#	def calculate_cost(location_id = User.current_user.location_id)
+#		#puts "product.id=#{self.id.to_s}"
+#		#puts "location_id=#{location_id.to_s}"
+#		#puts "hello"
+##		moves=connection.select_all("select movements.* from (select max(movements.id) as id from movements where product_id=#{self.id.to_s} group by order_id order by id DESC) as list left join movements on list.id=movements.id where movement_type_id=2;")
+#		#moves = movements.find_all_by_entity_id(location_id, :order => 'created_at desc')
+#		lines=self.lines.find(:all, :conditions => "orders.client_id=#{User.current_user.location_id} AND `lines`.received is not null", :joins => 'inner join orders on orders.id=`lines`.order_id')
+#		#puts "self.quantity(location_id)=" + self.quantity(location_id).to_s
+#		# #puts moves.inspect
+#		stock = self.quantity(location_id)
+#		#puts "stock" + stock.to_s
+#		#puts "lines.length=" + lines.length.to_s
+#		if (stock == 0) or (lines.length == 0)
+#		    return self.default_cost
 #		end
-		if stock > 0
-			#puts "totalcost=#{totalcost.to_s}"
-			#puts "stock=#{stock.to_s}"
-			return totalcost/stock
-		else
-			return 0
-		end
-	end
+#		items_to_count = stock
+#		totalcost=0
+#		for l in lines
+#		  take = [items_to_count, l.quantity].min
+#		  totalcost += (l.price || 0) * (take || 0)
+#		  items_to_count -= take
+#		  break if items_to_count < 1
+#		end
+##		while	(moves[movement_counter]) do
+##			#puts moves[movement_counter].inspect
+##			#puts "stock" + stock.inspect
+##			#puts "items_counted" + items_counted.inspect
+##			## #puts "moves[movement_counter].quantity" + moves[movement_counter].quantity
+##			#puts "moves[movement_counter][quantity]" + moves[movement_counter]["quantity"].to_s
+##			#puts "stock-items_counted" + (stock-items_counted).inspect
+##			#puts "[stock-items_counted, moves[movement_counter].quantity].min=" + [stock-items_counted, moves[movement_counter]["quantity"].to_i].min.inspect
+##      #puts "id:"+moves[movement_counter]["id"].to_s
+##			#puts moves[movement_counter]["quantity"].to_i
+##			#puts stock
+##			#puts items_counted
+##			take = [stock-items_counted, moves[movement_counter]["quantity"].to_i].min
+##			l=Line.find(moves[movement_counter]["line_id"].to_i)
+##			#puts "take" + take.to_s
+##			#puts "couldnt find line#" +  moves[movement_counter]["line_id"].to_i.to_s if !l
+##			#puts "take=#{take.to_s}"
+##			#puts "m.value=#{m.value.to_s}"
+##			totalcost += (l.price||0)*(take||0)
+##			#puts items_counted.inspect
+##			items_counted = items_counted + take
+##			end
+##			movement_counter = movement_counter + 1
+##		end
+#		if stock > 0
+#			#puts "totalcost=#{totalcost.to_s}"
+#			#puts "stock=#{stock.to_s}"
+#			return totalcost/stock
+#		else
+#			return 0
+#		end
+#	end
 	def producttype
  		product_type.name if product_type
 	end
@@ -267,6 +265,9 @@ class Product < ActiveRecord::Base
 			i.max = value
 			return i.save
 		end
+	end
+	def inventory(entity)
+		return self.inventories.find_by_entity_id(entity.id)
 	end
 	def quantity(location_id = User.current_user.location_id)
 		if self.product_type_id!=4
@@ -386,21 +387,20 @@ class Product < ActiveRecord::Base
 		end
 	end
 	def cost(site = User.current_user.location)
+		c=Cost.first(:conditions=>"product_id=#{self.id} AND entity_id = #{site.id}")
+		puts Cost.first(:conditions=>"product_id=#{self.id} AND entity_id = #{site.id}")
+		return c.value if c
 		i = self.inventories.find_by_entity_id(site.id)
-		if i
-			if i.cost
-			    return i.cost
-			end
-		end
-		return 0
+		return i.default_cost if i
+		raise "Unable to find inventory for product##{self.id} in site ##{site.id}"
 	end
-	def cost=(new_cost, site = User.current_user.location)
-		i = self.inventories.find_by_entity_id(site.id)
-		if i
-			i.update_attribute(:cost, new_cost)
-		end
-		debugger
-	end
+	#################################################################################################
+	# 
+	#################################################################################################
+	def stock_value(site)
+       return Cost.stock_value(self, site)
+	end # def stock_value
+	
 	def default_cost(site = User.current_user.location)
 		i = self.inventories.find_by_entity_id(site.id)
 		if i

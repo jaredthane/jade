@@ -73,4 +73,5 @@ class Post < ActiveRecord::Base
 		  find :all, :conditions =>c, :joins => j, :order=> 'receipt_number', :select => s, :group => "order_id"
 		end
 	end
+
 end
