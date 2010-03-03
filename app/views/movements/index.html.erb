@@ -55,11 +55,6 @@
        <div class="table_cell"><%= number_to_currency(movement.cost) %></div>
     <% end %>
 	</div>
-  <% if movement.comments %>
-  	<% if movement.comments != "" %>
-  		<div class="table_row"><div class="table_cell"><%=h movement.comments %></div></div>
-  	<% end %>
-  <% end %>
 <% end %>
 </div>
 <br />

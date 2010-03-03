@@ -134,7 +134,7 @@ class Line < ActiveRecord::Base
       self.cost = Cost.consume(self.product, qty, self.order.vendor)
     when Movement::PURCHASE
       self.cost_ref = self.order
-      self.cost=self.price
+      self.cost=self.price * self.quantity
       Cost.create(:order=>self.order, :product=>self.product, :quantity=>qty, :value=>self.price, :entity=>self.order.client)
     when Movement::SALE_RETURN
       Cost.create(:order=>self.cost_ref, :product=>self.product, :quantity=>qty, :value=>self.cost, :entity=>self.order.vendor)

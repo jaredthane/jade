@@ -18,11 +18,11 @@ for m in @movements
   value[m.product] = (value.has_key?(m.product) ? value[m.product] + m.quantity * (m.cost||0) : m.quantity * (m.cost||0))
   case m.movement_type_id
   when Movement::SALE
-  	data.unshift([m.id, "Venta", m.created_at.to_date, m.order.receipt_number, m.order.client.name, m.product.name, m.quantity, number_to_currency(m.quantity * (m.cost||0)), total[m.product], number_to_currency(value[m.product])])
+  	data.unshift([m.id, "Venta", m.created_at.to_date, m.order.receipt_number, m.order.client.name, m.product.name, m.quantity, number_to_currency(m.cost), total[m.product], number_to_currency(value[m.product])])
   when Movement::PURCHASE
-  	data.unshift([m.id, "Compra", m.created_at.to_date, m.order.receipt_number, m.order.vendor.name, m.product.name, m.quantity, number_to_currency(m.quantity * (m.cost||0)), total[m.product], number_to_currency(value[m.product])])
+  	data.unshift([m.id, "Compra", m.created_at.to_date, m.order.receipt_number, m.order.vendor.name, m.product.name, m.quantity, number_to_currency(m.cost), total[m.product], number_to_currency(value[m.product])])
   when Movement::COUNT
-  	data.unshift([m.id, "Cuenta Fisica", m.created_at.to_date, m.order.id.to_s,"", m.product.name, m.quantity, number_to_currency(m.quantity * (m.cost||0)), total[m.product], number_to_currency(total[m.product]* (m.cost||0))])
+  	data.unshift([m.id, "Cuenta Fisica", m.created_at.to_date, m.order.id.to_s,"", m.product.name, m.quantity, number_to_currency(m.cost), total[m.product], number_to_currency(value[m.product])])
   end
 end
 width=pdf.bounds.width
