@@ -76,9 +76,7 @@
 				<% else %>
 					<div class="table_cell_15">N/A</div>
 				<% end %>
-				<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
-					<div class="table_cell_15"><%=h number_to_currency(line.total_price||0) %></div>
-				<% end %>
+				<div class="table_cell_15"><%=h number_to_currency(line.total_price||0) %></div>
 				<div class="table_cell"><% if line.received %><%=h line.received.to_date.to_s %><% end %></div>
 			</div>
 		<% end %>

@@ -20,7 +20,7 @@
 				</div>
 			<% else %>
 				<div id="test1" class="table_cell_10">
-					<%= line_form.text_field :quantity, :id => 'serial', :class => 'serial', :onblur=>'calc_dif($(this))' %>
+					<%= line_form.text_field :quantity, :id => 'serial', :class => 'serial' %>
 				</div>	
 			<% end %>
 			<% if line.product.serialized %>
@@ -31,7 +31,7 @@
 				<div class="table_cell_15"></div>
 			<% end %>
 			<div id="test4" class="table_cell_15">
-				<%= line_form.text_field :price, :value => ((line.quantity||0) - (line.product.quantity||0))* (line.product.cost||0), :disabled =>'True', :class => 'field'  %>
+				<%= line_form.text_field :format_price, :class => 'field'  %>
 			</div>
 			<%= line_form.hidden_field :id %>
 			<div class="table_cell">

@@ -98,7 +98,7 @@ class Movement < ActiveRecord::Base
 #    end
     def self.search(from, till, sites, search=nil, page=nil)
 			till = till.to_date + 1
-			sites_string="(" + (sites |[User.current_user.location_id]).collect{|a| a.to_s + ", "}.to_s.chop.chop + ")"
+			sites_string="(" + (sites ||[User.current_user.location_id]).collect{|a| a.to_s + ", "}.to_s.chop.chop + ")"
     	c="movements.created_at >= '#{from.to_s(:db)}' and movements.created_at < '#{till.to_s(:db)}' AND movements.entity_id in #{sites_string}"
     	c += " AND (products.name like '%#{search}%' OR products.upc like '%#{search}%')" if search
     	j="inner join products on products.id = movements.product_id" if search

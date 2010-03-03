@@ -14,23 +14,23 @@ function post_count(){
 	$('#submit_type').val("post")
   $('#counts_form').submit();
 }
-function calc_dif(e) {
-	// $(this).parent().prev().children(':first')           <--- qty
-//	$(this).prev('#qty')
-//	// $("this").prev().prev()  <--- cost
-//	$(this).prev('#cost')
-//	// $("this")										<--- count
-//	$(this)
-	//test = (parseFloat(e.value) - parseFloat(e.previousSibling.previousSibling.value)) * parseFloat(e.previousSibling.previousSibling..previousSibling.previousSibling).toFixed(2);
-	qty= parseFloat(e.parent().prev().children(':first').val());
-	cost= parseFloat(e.parent().prev().prev().val());
-	count= parseFloat(e.val());
-	//x = e.parentNode.nextSibling.nextSibling.childNodes[0].id
-	//alert(x);
-	if (qty){
-		e.parent().next().next().children(':first').val('$'+((count-qty)*cost).toFixed(2))
-	}
-}
+//function calc_dif(e) {
+//	// $(this).parent().prev().children(':first')           <--- qty
+////	$(this).prev('#qty')
+////	// $("this").prev().prev()  <--- cost
+////	$(this).prev('#cost')
+////	// $("this")										<--- count
+////	$(this)
+//	//test = (parseFloat(e.value) - parseFloat(e.previousSibling.previousSibling.value)) * parseFloat(e.previousSibling.previousSibling..previousSibling.previousSibling).toFixed(2);
+//	qty= parseFloat(e.parent().prev().children(':first').val());
+//	cost= parseFloat(e.parent().prev().prev().val());
+//	count= parseFloat(e.val());
+//	//x = e.parentNode.nextSibling.nextSibling.childNodes[0].id
+//	//alert(x);
+//	if (qty){
+//		e.parent().next().next().children(':first').val('$'+((count-qty)*cost).toFixed(2))
+//	}
+//}
 
 function DoAjaxRequest(){
 	$.ajax({

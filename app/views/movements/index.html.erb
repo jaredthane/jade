@@ -13,24 +13,47 @@
 <%= will_paginate @movements, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
-    <div class="table_cell_20">Tipo</div>
-    <div class="table_cell_20">Producto</div>
-    <div class="table_cell_20">Cantidad <br /> (Numero Serie)</div>
-    <div class="table_cell_20">Usuario</div>
-    <div class="table_cell">Fecha</div>
+    <div class="table_cell_10">ID</div>
+    <div class="table_cell_10">Tipo</div>
+    <div class="table_cell_15">Fecha</div>
+    <div class="table_cell_10">Factura</div>
+    <div class="table_cell_20">Entidad</div>
+    <div class="table_cell_10">Producto</div>
+    <div class="table_cell_10">Cantidad</div>
+    <div class="table_cell">Valor</div>
   </div>
 
 <% for movement in @movements %>
   <div class="table_row">
-    <div class="table_cell_20"><%= link_to movement.order.id.to_s + "<br />(" + movement.movement_type.name + ")", movement.order %></div>
-    <div class="table_cell_20"><%= link_to movement.product.name[0..20], movement.product %></div>
-  	<% if movement.serialized_product %>
-  		<div class="table_cell_20"><%= link_to "("+movement.serialized_product.serial_number.to_s+")", movement.serialized_product %></div>
-  	<% else %>
-  		<div class="table_cell_20"><%= h movement.quantity %></div>
-  	<% end %>
-    <div class="table_cell_20"><%= link_to movement.user.login, movement.user %></div>
-    <div class="table_cell"><%=h movement.created_at.to_date.to_s %></div>
+    <% case movement.movement_type_id
+     when Movement::SALE %>
+       <div class="table_cell_10"><%= link_to movement.order.id.to_s, movement.order %></div>
+       <div class="table_cell_10">Venta</div>
+       <div class="table_cell_15"><%= movement.created_at.to_date %></div>
+       <div class="table_cell_10"><%= link_to movement.order.receipt_number, movement.order %></div>
+       <div class="table_cell_20"><%= link_to movement.order.client.name, movement.order.client %></div>
+       <div class="table_cell_10"><%= link_to movement.product.name, movement.product %></div>
+       <div class="table_cell_10"><%= movement.quantity %></div>
+       <div class="table_cell"><%= number_to_currency(movement.cost) %></div>
+     <% when Movement::PURCHASE %>
+       <div class="table_cell_10"><%= link_to movement.order.id.to_s, movement.order %></div>
+       <div class="table_cell_10">Compra</div>
+       <div class="table_cell_15"><%= movement.created_at.to_date %></div>
+       <div class="table_cell_10"><%= link_to movement.order.receipt_number, movement.order %></div>
+       <div class="table_cell_20"><%= link_to movement.order.vendor.name, movement.order.vendor %></div>
+       <div class="table_cell_10"><%= link_to movement.product.name, movement.product %></div>
+       <div class="table_cell_10"><%= movement.quantity %></div>
+       <div class="table_cell"><%= number_to_currency(movement.cost) %></div>
+    <% when Movement::COUNT %>
+       <div class="table_cell_10"><%= link_to movement.order.id.to_s, movement.order %></div>
+       <div class="table_cell_10">Cuenta Fisica</div>
+       <div class="table_cell_15"><%= movement.created_at.to_date %></div>
+       <div class="table_cell_10"></div>
+       <div class="table_cell_20"><%= link_to movement.order.client.name, movement.order.client %></div>
+       <div class="table_cell_10"><%= link_to movement.product.name, movement.product %></div>
+       <div class="table_cell_10"><%= movement.quantity %></div>
+       <div class="table_cell"><%= number_to_currency(movement.cost) %></div>
+    <% end %>
 	</div>
   <% if movement.comments %>
   	<% if movement.comments != "" %>

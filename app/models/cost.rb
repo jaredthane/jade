@@ -10,13 +10,20 @@ class Cost < ActiveRecord::Base
     def self.consume(product, quantity, site)
         puts "product=#{product.inspect}"
         puts "site=#{site.inspect}"
+        puts "quantity=#{quantity.to_s}"
         cost = first(:conditions=>"product_id=#{product.id} AND entity_id=#{site.id}")
         total=0
         puts "cost=#{cost.inspect}"
         while quantity > 0 and cost
+            puts "quantity=#{quantity.to_s}"
+            puts "cost.quantity=#{cost.quantity.to_s}"
             amt = [quantity, cost.quantity].min
+            puts "amt=#{amt.to_s}"
             quantity -= amt
+            puts "cost.value=#{cost.value.to_s}"
+            puts "total=#{total.to_s}"
             total += cost.value * amt
+            puts "total=#{total.to_s}"
             if cost.quantity == amt
                 cost.destroy
             else
@@ -24,6 +31,7 @@ class Cost < ActiveRecord::Base
             end
             cost = first(:conditions=>"product_id=#{product.id} AND entity_id=#{site.id}")
         end
+        puts "total=#{total.to_s}"
         return total
     end # def self.consume(product, quantity, site)
     #################################################################################################

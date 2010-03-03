@@ -546,7 +546,7 @@ class Order < ActiveRecord::Base
 	  if grand_total != amount_paid
   	  Payment.create(:order_id=>self.id, :payment_method_id=>1, :user=>User.current_user, :presented=>grand_total-amount_paid, :created_at=>User.current_user.today)
    	  self.amount_paid=grand_total
-  	  self.update_attribute(:amount_paid, grand_total)
+  	  self.send(:update_without_callbacks)
     end
 	end
 	###################################################################################
@@ -617,12 +617,13 @@ class Order < ActiveRecord::Base
 							if old_loc.id != self.vendor_id # It was not already here
 								if old_loc.entity_type== 3 # It was in a different site
 									# Make a movement to take it out of the other site
-									
 									e=Movement.create(:created_at=>date,:entity_id => old_loc.id, :comments => self.comments, :product_id => l.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
+#									self.cost = Cost.consume(Product.find(l.product_id), 1, old_loc)
 									logger.debug "e=#{e.to_s}"
 								end
 								# Make a movement to bring it here
 								e=Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
+#								Cost.create(:order=>self, :product=>self.product, :quantity=>qty, :value=>self.price, :entity=>self.order.client)
 								i=l.product.inventories.find_by_entity_id(self.vendor_id)
 								i.update_attribute(:quantity, i.quantity+1)
 							end
@@ -657,13 +658,22 @@ class Order < ActiveRecord::Base
 				  accounting_diff=(product_lines.length-old_qty) * line.product.cost
 				else
 					line.previous_qty = line.product.quantity
-        	line.price = (line.product.cost||0) * ((line.quantity||0) - (line.product.quantity||0))
 					if (line.quantity != line.product.quantity) and line.quantity
-						m=Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => line.quantity - line.product.quantity, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
+					  qty=line.quantity - line.product.quantity
+					  if qty > 0
+  					  Cost.create(:order=>self, :product=>line.product, :quantity=>qty, :value=>line.price*qty, :entity=>self.client)
+  					else
+  					  puts "Consuming:"
+  					  puts "line.price=#{line.price.to_s}"
+  					  line.price = Cost.consume(line.product, -qty, self.client)
+  					  puts "line.price=#{line.price.to_s}"
+  					  line.send(:update_without_callbacks)
+  					end					  
+						m=Movement.create(:cost=>line.price, :created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => qty, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
 						line.product.inventories.find_by_entity_id(self.vendor_id).update_attribute(:quantity, line.quantity)
 						products_done << line.product_id
 					end
-			    accounting_diff=((line.quantity||0) - line.previous_qty) * line.product.cost
+			    accounting_diff = qty * line.price
 				end
 				
 				# Do Accounting
