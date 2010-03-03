@@ -34,7 +34,7 @@ if data.length>0
 	pdf.table(data,
 		:font_size => 8,
 		:align => { 0 => :center, 1 => :left, 2 => :center, 3 => :center, 4 => :center, 5 => :center , 6 => :center , 7 => :center, 8 => :center, 9 => :center },
-		:headers => ['ID',      'Tipo',     'Fecha',     'Factura',    'Entidad',   'Producto',    'Cantidad', 'Valor Unitario', 'Inventario', 'Saldo'],
+		:headers => ['ID',      'Tipo',     'Fecha',     'Factura',    'Entidad',   'Producto',    'Cantidad', 'Valor Unitario', 'Existencias', 'Saldo'],
 		:border_style => :grid,
 		:column_widths => { 0 => 0.05*width, 1 => 0.10*width, 2 => 0.10*width, 3 => 0.10*width, 4 => 0.10*width, 5 => 0.15*width, 6 => 0.10*width, 7 => 0.10*width, 8 => 0.10*width, 9 => 0.10*width})
 else
