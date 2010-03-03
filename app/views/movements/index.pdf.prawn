@@ -15,13 +15,15 @@ value={}
 @movements.reverse!
 for m in @movements    
   total[m.product] = (total.has_key?(m.product) ? total[m.product] + m.quantity : +m.quantity)
-  value[m.product] = (value.has_key?(m.product) ? value[m.product] + (m.cost||0) : (m.cost||0))
   case m.movement_type_id
   when Movement::SALE
+   value[m.product] = (value.has_key?(m.product) ? value[m.product] - (m.cost||0) : (m.cost||0))
   	data.unshift([m.id, "Venta", m.created_at.to_date, m.order.receipt_number, m.order.client.name, m.product.name, m.quantity, number_to_currency(m.cost), total[m.product], number_to_currency(value[m.product])])
   when Movement::PURCHASE
+    value[m.product] = (value.has_key?(m.product) ? value[m.product] + (m.cost||0) : (m.cost||0))
   	data.unshift([m.id, "Compra", m.created_at.to_date, m.order.receipt_number, m.order.vendor.name, m.product.name, m.quantity, number_to_currency(m.cost), total[m.product], number_to_currency(value[m.product])])
   when Movement::COUNT
+    value[m.product] = (value.has_key?(m.product) ? value[m.product] + (m.cost||0) : (m.cost||0))
   	data.unshift([m.id, "Cuenta Fisica", m.created_at.to_date, m.order.id.to_s,"", m.product.name, m.quantity, number_to_currency(m.cost), total[m.product], number_to_currency(value[m.product])])
   end
 end
