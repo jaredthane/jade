@@ -173,20 +173,18 @@
 		<b>Correo Electronico</b>
 		<%= f.text_field :email, :class => 'field' %>
 	</p>
-	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
-		<p>
-			<b>Registro</b><br />
-			<%= f.text_field :register, :class => 'field' %>
-		</p>
-		<p>
-			<b>NIT</b><br />
-			<%= f.text_field :nit_number, :class => 'field' %>
-		</p>
-		<p>
-			<b>Giro</b>
-			<%= f.text_field :giro, :class => 'field' %>
-		</p>
-	<% end %>
+	<p>
+		<b>Registro</b><br />
+		<%= f.text_field :register, :class => 'field' %>
+	</p>
+	<p>
+		<b>NIT</b><br />
+		<%= f.text_field :nit_number, :class => 'field' %>
+	</p>
+	<p>
+		<b>Giro</b>
+		<%= f.text_field :giro, :class => 'field' %>
+	</p>
 	<p>
 		<b>Activo</b><br />
 		<%= f.check_box :active %>

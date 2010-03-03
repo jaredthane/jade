@@ -212,25 +212,23 @@
 		<b>Correo E</b>
 		<%=h @entity.email %>
 	</p>
-	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
 		<p>
-			<b>Registro</b>
-			<%=h @entity.register %>
-		</p>
+		<b>Registro</b>
+		<%=h @entity.register %>
+	</p>
+	<p>
+		<b>NIT</b><br />
+		<%=h @entity.nit_number %>
+	</p>
+	<p>
+		<b>Giro</b><br />
+		<%=h @entity.giro %>
+	</p>
+	<% if @entity.subscription_day %>
 		<p>
-			<b>NIT</b><br />
-			<%=h @entity.nit_number %>
+			<b>Dia de Procesar Subscripciones</b><br />
+			<%=h @entity.subscription_day %>
 		</p>
-		<p>
-			<b>Giro</b><br />
-			<%=h @entity.giro %>
-		</p>
-		<% if @entity.subscription_day %>
-			<p>
-				<b>Dia de Procesar Subscripciones</b><br />
-				<%=h @entity.subscription_day %>
-			</p>
-		<% end %>
 	<% end %>
 </div>
 <hr class="clear-contentunit" />

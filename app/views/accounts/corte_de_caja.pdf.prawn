@@ -3,11 +3,16 @@ pdf.font_size = 15
 @x = Object.new.extend(ActionView::Helpers::NumberHelper)
 pdf.text "Corte de Caja en " + @site.name, :align => :center, :style => :bold
 pdf.text COMPANY_NAME, :align => :center, :style => :bold
-if @from == @till
+if @from.to_date == @till.to_date-1
 	pdf.text @from.to_date.to_s(:long), :align => :center, :style => :bold
 else
 	pdf.text @from.to_date.to_s(:long) + " - " + (@till.to_date-1).to_s(:long), :align => :center, :style => :bold
 end
+pdf.font_size = 8
+pdf.text "NIT:" + @site.nit_number, :align => :center if @site.nit
+pdf.text "Registro:" + @site.register, :align => :center if @site.register
+pdf.text @site.giro, :align => :center if @site.giro
+
 pdf.text " "
 #def series_to_list(series)
 #	list=[]
@@ -70,14 +75,19 @@ def show_orders_info(tipo, title)
 	series=Order.find(:all, :conditions=>c, :joins=>j, :order=>'receipt_number')
 	group_total=0
 	for group in series_to_list(series)
-		c="orders.receipt_number in(#{group.collect{|a| "'" + a.to_s + "', "}.to_s.chop.chop})"
+		c="orders.receipt_number in(#{group.collect{|a| "'" + a.to_s + "', "}.to_s.chop.chop}) and order_type_id=1"
 #		total=Order.find(:all, :conditions=>(c + cc), :joins=>j, :select=>'sum(grand_total) total')
 		total=Order.sum(:grand_total, :conditions=>(c), :joins=>j)
 		@box << [title,"del #{group.first} al #{group.last}",@x.number_to_currency(total)]
 		group_total += total
 		title=""
 	end
-	@box << ["","Total:",@x.number_to_currency(group_total)] if series.length>1
+	if series.length>1
+  	@box << ["","Total:",@x.number_to_currency(group_total)] 
+  else
+    @box << [title,"Total:","$0.00"] 
+  end
+	
 	return group_total
 end
 
@@ -104,6 +114,7 @@ grand_total += show_orders_info(Entity::CREDITO_FISCAL,"Comprobantes de Credito 
 #for p in series
 #	@box << ["",p.receipt_number,@x.number_to_currency(p.presented-p.returned)]
 #end
+@box << ["Notas de Abono","Total:","$0.00"]
 ####################################################################################################
 ## Facturas Credito
 ##################################################################################################
@@ -117,6 +128,7 @@ grand_total += show_orders_info(Entity::CREDITO_FISCAL,"Comprobantes de Credito 
 #for o in series
 #	@box << ["",o.receipt_number,@x.number_to_currency(o.grand_total)]
 #end
+@box << ["Facturas Credito","Total:","$0.00"]
 ###################################################################################################
 ## Pagos de Facturas por Cobrar
 ## (Orders made within the period that have not been fully paid)
@@ -135,6 +147,7 @@ grand_total += show_orders_info(Entity::CREDITO_FISCAL,"Comprobantes de Credito 
 #		@box << ["","del ${group.first} al ${group.last}",@x.number_to_currency(total)]
 #	end
 #end
+@box << ["Pagos de Facturas por Cobrar","Total:","$0.00"]
 ##################################################################################################
 # Devoluciones
 #################################################################################################
@@ -156,14 +169,21 @@ for order in series
 end
 @box << ["","Total","(#{@x.number_to_currency(total)})"] if series.length>1
 grand_total-=total
-
+if series.length==0
+  @box << ["Devoluciones","Total","$0.00"]
+end
 
 @box << ["","",""]
 @box << ["","",""]
 #@box << ["","Total Final",@x.number_to_currency(grand_total)]
+
 ##################################################################################################
 # autoconsumos
 #################################################################################################
+
+
+
+
 
 ##################################################################################################
 # now print it out
