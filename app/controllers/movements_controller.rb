@@ -30,8 +30,12 @@ class MovementsController < ApplicationController
 		@from=(untranslate_month(params[:from])||Date.today)
 		@till=(untranslate_month(params[:till])||Date.today)
 		if params[:pdf]=='1'
-		    @movements = Movement.search(@from, @till, params[:sites], params[:search])
+		  @movements = {}
+		  @site=current_user.location
+		  for product in Product.all()
+  		  @movements[product] = Movement.for_product_in_site(product.id)
 		    params[:format] = 'pdf'
+		  end
 		else
 		  @movements = Movement.search(@from, @till, params[:sites], params[:search], (params[:page]||1))
 		end
@@ -42,7 +46,7 @@ class MovementsController < ApplicationController
       }
 		end
   end
-
+  
   # GET /movements/1
   # GET /movements/1.xml
   def show

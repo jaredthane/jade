@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100220224933) do
+ActiveRecord::Schema.define(:version => 20100303204450) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -85,6 +85,7 @@ ActiveRecord::Schema.define(:version => 20100220224933) do
     t.integer  "vendor_accounts_group_id"
     t.string   "next_bar_code",            :limit => 32
     t.string   "fax",                      :limit => 8
+    t.string   "country"
   end
 
   add_index "entities", ["entity_type_id"], :name => "entity_type_id"

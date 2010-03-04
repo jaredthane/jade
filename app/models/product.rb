@@ -98,6 +98,12 @@ class Product < ActiveRecord::Base
 	def cost_with_tax
 		self.cost * TAX
 	end
+	def total_value_of_inventory(site)
+	  val=Cost.sum(:value, :conditions=>"entity_id=#{site.id} AND product_id=#{self.id}")
+	  qty=Cost.sum(:quantity, :conditions=>"entity_id=#{site.id} AND product_id=#{self.id}")
+	  raise "Costs out of sync" if qty != self.quantity(site)
+	  return val
+	end
 	##################################################################################################
 	# Creates Inventories, Prices, and Warranties
 	#################################################################################################

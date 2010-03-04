@@ -82,13 +82,17 @@ class Movement < ActiveRecord::Base
     def user_name=(name)
 	    self.user = User.find_by_login(name) unless name.blank?
     end
-    def self.for_product_in_site(product_id, page, site_id = User.current_user.location_id)
-        puts "product_id"+product_id.to_s
-        puts "site_id"+site_id.to_s
-        paginate :per_page => 20, :page => page,
-		           :conditions => ['(products.id = :search) AND (entities.id=:current_location)', {:search => "#{product_id}", :current_location => "#{site_id}"}],
-		           :order => 'movements.created_at DESC',
-		           :joins => 'inner join products on products.id = movements.product_id inner join users on users.id = movements.user_id inner join entities on entities.id = movements.entity_id'
+    def self.for_product_in_site(product_id, page=nil, site_id = User.current_user.location_id)
+#        puts "product_id"+product_id.to_s
+#        puts "site_id"+site_id.to_s
+      c="(products.id = #{product_id}) AND (entities.id=#{site_id})"
+      o='movements.created_at'
+      j='inner join products on products.id = movements.product_id inner join users on users.id = movements.user_id inner join entities on entities.id = movements.entity_id'
+      if page  
+        paginate :per_page => 20, :page => page, :conditions => c, :order => o, :joins => j
+      else
+        find :all, :conditions => c, :order => o, :joins=>j
+      end
     end
 #    def self.search(search, page)
 #	    paginate :per_page => 20, :page => page,
@@ -96,6 +100,7 @@ class Movement < ActiveRecord::Base
 #		           :order => 'movements.created_at DESC',
 #		           :joins => 'inner join products on products.id = movements.product_id inner join users on users.id = movements.user_id inner join entities on entities.id = movements.entity_id'
 #    end
+
     def self.search(from, till, sites, search=nil, page=nil)
 			till = till.to_date + 1
 			sites_string="(" + (sites ||[User.current_user.location_id]).collect{|a| a.to_s + ", "}.to_s.chop.chop + ")"

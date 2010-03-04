@@ -82,12 +82,11 @@ def show_orders_info(tipo, title)
 		group_total += total
 		title=""
 	end
-	if series.length>1
+	if series.length>0
   	@box << ["","Total:",@x.number_to_currency(group_total)] 
   else
     @box << [title,"Total:","$0.00"] 
-  end
-	
+  end	
 	return group_total
 end
 
@@ -104,50 +103,37 @@ grand_total += show_orders_info(Entity::CREDITO_FISCAL,"Comprobantes de Credito 
 ####################################################################################################
 ## Notas de Abono TODO
 ##################################################################################################
-#c="payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.received is null AND vendor_id = #{@site.id}"
-#j="inner join orders on orders.id=order_id"
-#s="payments.*, receipt_number"
-#series = Payment.find(:all, :conditions=>c, :joins=>j, :select=>s)
-#sum=series.inject(0) { |result, element| result + element.presented-element.returned }
+c="payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.received is null AND vendor_id = #{@site.id}"
+j="inner join orders on orders.id=order_id"
+s="payments.*, receipt_number"
+series = Payment.find(:all, :conditions=>c, :joins=>j, :select=>s)
+sum=series.inject(0) { |result, element| result + element.presented-element.returned }
 
-#@box << ["Notas de Abono","Total:",@x.number_to_currency(sum)] if sum!=0
-#for p in series
-#	@box << ["",p.receipt_number,@x.number_to_currency(p.presented-p.returned)]
-#end
-@box << ["Notas de Abono","Total:","$0.00"]
-####################################################################################################
-## Facturas Credito
-##################################################################################################
-#c="orders.created_at>= '#{@from.to_s(:db)}' AND orders.created_at< '#{(@till + 1).to_s(:db)}' AND vendor_id = #{@site.id} AND orders.amount_paid<orders.grand_total AND order_type_id=1"
-#j="left join payments on orders.id=order_id"
-#series = Order.find(:all, :conditions=>c, :joins=>j, :group=>'orders.id')
-#sum=series.inject(0) { |result, element| result + element.grand_total }
-
-#first=true
-#@box << ["Facturas Credito","Total:",@x.number_to_currency(sum)] if sum!=0
-#for o in series
-#	@box << ["",o.receipt_number,@x.number_to_currency(o.grand_total)]
-#end
-@box << ["Facturas Credito","Total:","$0.00"]
+@box << ["Notas de Abono","",""] if sum!=0
+for p in series
+	@box << ["",p.receipt_number,@x.number_to_currency(p.presented-p.returned)]
+end
+@box << ["","Total:",@x.number_to_currency(sum)] if sum!=0
+@box << ["Notas de Abono","Total:",number_to_currency(sum)] if series.length==0
 ###################################################################################################
 ## Pagos de Facturas por Cobrar
 ## (Orders made within the period that have not been fully paid)
 ##################################################################################################
-#c="payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.created_at< '#{@from.to_s(:db)}' AND vendor_id = #{@site.id}"
-#j="inner join payments on orders.id=order_id"
-#series = Order.find(:all, :conditions=>c, :joins=>j)
-#first=true
-#for group in series_to_list(series)
-#	cc=" AND orders.id in(${group.collect{|a| a.to_s + ", "}.to_s.chop.chop})"
-#	total=Order.find(:all, :conditions=>c, :joins=>j, :select=>'sum(grand_total) total')[0].total
-#	if first
-#		@box << ["Pagos de Facturas por Cobrar","del #{group.first} al #{group.last}",@x.number_to_currency(total)]
-#		first=false
-#	else
-#		@box << ["","del ${group.first} al ${group.last}",@x.number_to_currency(total)]
-#	end
-#end
-@box << ["Pagos de Facturas por Cobrar","Total:","$0.00"]
+c="payments.created_at>= '#{@from.to_s(:db)}' AND payments.created_at< '#{(@till + 1).to_s(:db)}' AND orders.created_at< '#{@from.to_s(:db)}' AND vendor_id = #{@site.id}"
+j="inner join payments on orders.id=order_id"
+series = Order.find(:all, :conditions=>c, :joins=>j)
+first=true
+for group in series_to_list(series)
+	cc=" AND orders.id in(${group.collect{|a| a.to_s + ", "}.to_s.chop.chop})"
+	total=Order.find(:all, :conditions=>c, :joins=>j, :select=>'sum(grand_total) total')[0].total
+	if first
+		@box << ["Pagos de Facturas por Cobrar","del #{group.first} al #{group.last}",@x.number_to_currency(total)]
+		first=false
+	else
+		@box << ["","del ${group.first} al ${group.last}",@x.number_to_currency(total)]
+	end
+end
+@box << ["Pagos de Facturas por Cobrar","Total:","$0.00"] if series.length<1
 ##################################################################################################
 # Devoluciones
 #################################################################################################
@@ -173,17 +159,32 @@ if series.length==0
   @box << ["Devoluciones","Total","$0.00"]
 end
 
-@box << ["","",""]
-@box << ["","",""]
-#@box << ["","Total Final",@x.number_to_currency(grand_total)]
 
 ##################################################################################################
-# autoconsumos
+# Total de Corte
 #################################################################################################
+@box << ["","",""]
+@box << ["","",""]
+@box << ["","Total Final",@x.number_to_currency(grand_total)]
 
 
 
 
+####################################################################################################
+## Facturas Credito
+##################################################################################################
+c="orders.created_at>= '#{@from.to_s(:db)}' AND orders.created_at< '#{(@till + 1).to_s(:db)}' AND vendor_id = #{@site.id} AND orders.amount_paid<orders.grand_total AND order_type_id=1"
+j="left join payments on orders.id=order_id"
+series = Order.find(:all, :conditions=>c, :joins=>j, :group=>'orders.id')
+sum=series.inject(0) { |result, element| result + element.grand_total }
+
+first=true
+@box << ["Facturas Credito","",""] if series.length>0
+for o in series
+	@box << ["",o.receipt_number,@x.number_to_currency(o.grand_total)]
+end
+@box << ["","Total:",number_to_currency(sum)] if series.length>0
+@box << ["Facturas Credito","Total:",number_to_currency(sum)] if series.length==0
 
 ##################################################################################################
 # now print it out
