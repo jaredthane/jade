@@ -78,14 +78,14 @@ def show_orders_info(tipo, title)
 		c="orders.receipt_number in(#{group.collect{|a| "'" + a.to_s + "', "}.to_s.chop.chop}) and order_type_id=1"
 #		total=Order.find(:all, :conditions=>(c + cc), :joins=>j, :select=>'sum(grand_total) total')
 		total=Order.sum(:grand_total, :conditions=>(c), :joins=>j)
-		@box << [title,"del #{group.first} al #{group.last}",@x.number_to_currency(total)]
+		@box << [title,"","del #{group.first} al #{group.last}",@x.number_to_currency(total)]
 		group_total += total
 		title=""
 	end
 	if series.length>0
-  	@box << ["","Total:",@x.number_to_currency(group_total)] 
+  	@box << ["","","Total:",@x.number_to_currency(group_total)] 
   else
-    @box << [title,"Total:","$0.00"] 
+    @box << [title,"","Total:","$0.00"] 
   end	
 	return group_total
 end
@@ -93,11 +93,11 @@ end
 @box=[]
 grand_total=0
 grand_total += show_orders_info(Entity::CONSUMIDOR_FINAL,"Facturas Consumidor Final")
-@box << ["","",""]
-@box << ["","",""]
+@box << ["","","",""]
+@box << ["","","",""]
 grand_total += show_orders_info(Entity::CREDITO_FISCAL,"Comprobantes de Credito Fiscal")
-@box << ["","",""]
-@box << ["","",""]
+@box << ["","","",""]
+@box << ["","","",""]
 
 
 ####################################################################################################
@@ -109,12 +109,12 @@ s="payments.*, receipt_number"
 series = Payment.find(:all, :conditions=>c, :joins=>j, :select=>s)
 sum=series.inject(0) { |result, element| result + element.presented-element.returned }
 
-@box << ["Notas de Abono","",""] if sum!=0
+@box << ["Notas de Abono","","",""] if sum!=0
 for p in series
-	@box << ["",p.receipt_number,@x.number_to_currency(p.presented-p.returned)]
+	@box << ["",p.order.client.name,p.receipt_number,@x.number_to_currency(p.presented-p.returned)]
 end
-@box << ["","Total:",@x.number_to_currency(sum)] if sum!=0
-@box << ["Notas de Abono","Total:",number_to_currency(sum)] if series.length==0
+@box << ["","","Total:",@x.number_to_currency(sum)] if sum!=0
+@box << ["Notas de Abono","","Total:",number_to_currency(sum)] if series.length==0
 ###################################################################################################
 ## Pagos de Facturas por Cobrar
 ## (Orders made within the period that have not been fully paid)
@@ -127,13 +127,13 @@ for group in series_to_list(series)
 	cc=" AND orders.id in(${group.collect{|a| a.to_s + ", "}.to_s.chop.chop})"
 	total=Order.find(:all, :conditions=>c, :joins=>j, :select=>'sum(grand_total) total')[0].total
 	if first
-		@box << ["Pagos de Facturas por Cobrar","del #{group.first} al #{group.last}",@x.number_to_currency(total)]
+		@box << ["Pagos de Facturas por Cobrar","","del #{group.first} al #{group.last}",@x.number_to_currency(total)]
 		first=false
 	else
-		@box << ["","del ${group.first} al ${group.last}",@x.number_to_currency(total)]
+		@box << ["","","del ${group.first} al ${group.last}",@x.number_to_currency(total)]
 	end
 end
-@box << ["Pagos de Facturas por Cobrar","Total:","$0.00"] if series.length<1
+@box << ["Pagos de Facturas por Cobrar","","Total:","$0.00"] if series.length<1
 ##################################################################################################
 # Devoluciones
 #################################################################################################
@@ -147,25 +147,26 @@ for order in series
 	value=order.total_price_with_tax
 	total+=value
 	if first
-		@box << ["Devoluciones",order.receipt_number,"(#{@x.number_to_currency(value)})"]
+		@box << ["Devoluciones","",order.receipt_number,"(#{@x.number_to_currency(value)})"]
 		first=false
 	else
-		@box << ["",order.receipt_number,"(#{@x.number_to_currency(value)})"]
+		@box << ["","",order.receipt_number,"(#{@x.number_to_currency(value)})"]
 	end
 end
-@box << ["","Total","(#{@x.number_to_currency(total)})"] if series.length>1
+@box << ["","","Total","(#{@x.number_to_currency(total)})"] if series.length>1
 grand_total-=total
 if series.length==0
-  @box << ["Devoluciones","Total","$0.00"]
+  @box << ["Devoluciones","","Total","$0.00"]
 end
 
 
 ##################################################################################################
 # Total de Corte
 #################################################################################################
-@box << ["","",""]
-@box << ["","",""]
-@box << ["","Total Final",@x.number_to_currency(grand_total)]
+@box << ["","","",""]
+@box << ["","","",""]
+@box << ["","","Total Final",@x.number_to_currency(grand_total)]
+@box << ["","","","______"]
 
 
 
@@ -179,17 +180,17 @@ series = Order.find(:all, :conditions=>c, :joins=>j, :group=>'orders.id')
 sum=series.inject(0) { |result, element| result + element.grand_total }
 
 first=true
-@box << ["Facturas Credito","",""] if series.length>0
+@box << ["Facturas Credito","","",""] if series.length>0
 for o in series
-	@box << ["",o.receipt_number,@x.number_to_currency(o.grand_total)]
+	@box << ["",o.client.name,o.receipt_number,@x.number_to_currency(o.grand_total)]
 end
-@box << ["","Total:",number_to_currency(sum)] if series.length>0
-@box << ["Facturas Credito","Total:",number_to_currency(sum)] if series.length==0
+@box << ["","Total:","",number_to_currency(sum)] if series.length>0
+@box << ["Facturas Credito","","Total:",number_to_currency(sum)] if series.length==0
 
 ##################################################################################################
 # now print it out
 #################################################################################################
-a=(pdf.bounds.width*0.6)
+a=(pdf.bounds.width*0.4)
 b=(pdf.bounds.width*0.2)
 	pdf.table(@box,
 		 :font_size => 10,
@@ -197,7 +198,7 @@ b=(pdf.bounds.width*0.2)
 		 :vertical_padding => 5,
 		 :border_width => 1,
 		 :border_style => :underline_header,
-		 :column_widths => { 0 => a, 1 => b, 2 => b },
+		 :column_widths => { 0 => a, 1 => b, 2 => b, 3 => b },
 		 :align => { 0 => :left,1 => :left, 2 => :left })
 pdf.font_size = 10
 pdf.number_pages "pagina <page> de <total>", [pdf.bounds.right - 50, 0]
