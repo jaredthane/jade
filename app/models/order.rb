@@ -62,6 +62,8 @@ class Order < ActiveRecord::Base
     else
   	  self.grand_total = self.total_price_with_tax
   	end
+	  self.total_expense = self.total_cost
+	  self.total_revenue = self.total_price - self.total_expense
   	logger.debug "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 	  check_for_discounts
   	logger.debug "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"

@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100303204450) do
+ActiveRecord::Schema.define(:version => 20100304170341) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -217,6 +217,8 @@ ActiveRecord::Schema.define(:version => 20100303204450) do
     t.integer  "sequel_id"
     t.integer  "prequel_id"
     t.date     "deleted_at"
+    t.decimal  "total_revenue",                             :precision => 8, :scale => 2
+    t.decimal  "total_expense",                             :precision => 8, :scale => 2
   end
 
   add_index "orders", ["client_id"], :name => "client_id"
