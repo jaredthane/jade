@@ -367,7 +367,7 @@ class Line < ActiveRecord::Base
 	# Returns the total price of the products on this line
 	###################################################################################
 	def total_cost
-	  return self.cost * self.quantity
+	  return (self.cost||0) * (self.quantity||0)
 #	  if order_type_id==Order::COUNT 
 #	    total = (product.cost(self.order.client.site) ||0) * quantity
 #	  elsif order_type_id==Order::PURCHASE
