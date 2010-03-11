@@ -57,7 +57,7 @@ for product,list in @movements
 		  :align => { 0 => :center, 1 => :left, 2 => :center, 3 => :center, 4 => :center, 5 => :center ,     6 => :center,             7 => :center,          8 => :center, 9 => :center, 10 => :center, 11 => :center, 12 => :center, 13 => :center},
 		  :headers => ['',       'Fecha',    'No. Doc',    'Entidad',  'Nacionalidad',  'Referencia',  'Precio Unitario Entrada','Precio Unitario Salida',  'Entrada',  'Salida',   'Existencias',     'Debe',        'Haber',      'Saldo'],
 		  :border_style => :grid,
-		  :column_widths => { 0 => 0.07*width, 1 => 0.07*width, 2 => 0.07*width, 3 => 0.07*width, 4 => 0.07*width, 5 => 0.07*width, 6 => 0.07*width, 7 => 0.07*width, 8 => 0.07*width, 9 => 0.07*width, 10 => 0.07*width, 11 => 0.07*width, 12 => 0.07*width, 13 => 0.07*width})
+		  :column_widths => { 0 => 0.04*width, 1 => 0.07*width, 2 => 0.06*width, 3 => 0.18*width, 4 => 0.07*width, 5 => 0.06*width, 6 => 0.06*width, 7 => 0.06*width, 8 => 0.06*width, 9 => 0.06*width, 10 => 0.06*width, 11 => 0.06*width, 12 => 0.06*width, 13 => 0.08*width})
   else
 	  pdf.font_size = 10
 	  pdf.text "No hubieron ningunos movimientos en las fechas specificadas.", :align => :center, :style => :bold
