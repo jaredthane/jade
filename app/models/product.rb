@@ -36,6 +36,7 @@ class Product < ActiveRecord::Base
   has_many :prices
   has_many :inventories
 	has_many :lines
+	has_many :costs
 	belongs_to :revenue_account, :class_name => "Account", :foreign_key => 'revenue_account_id'
 
 	belongs_to :product_category
@@ -99,7 +100,7 @@ class Product < ActiveRecord::Base
 		self.cost * TAX
 	end
 	def total_value_of_inventory(site)
-	  val=Cost.sum(:value, :conditions=>"entity_id=#{site.id} AND product_id=#{self.id}")
+	  val=Cost.sum('value*quantity', :conditions=>"entity_id=#{site.id} AND product_id=#{self.id}").to_d
 	  qty=Cost.sum(:quantity, :conditions=>"entity_id=#{site.id} AND product_id=#{self.id}")
 	  raise "Costs out of sync" if qty != self.quantity(site)
 	  return val
