@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100304170341) do
+ActiveRecord::Schema.define(:version => 20100318162504) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -53,13 +53,13 @@ ActiveRecord::Schema.define(:version => 20100304170341) do
     t.integer  "entity_type_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.string   "home_phone",               :limit => 8,  :default => ""
+    t.string   "home_phone",               :limit => 9,  :default => ""
     t.string   "office_phone",             :limit => 8,  :default => ""
     t.text     "address"
     t.datetime "birth"
     t.integer  "state_id"
-    t.string   "cell_phone",               :limit => 8
-    t.string   "nit",                      :limit => 14
+    t.string   "cell_phone",               :limit => 9
+    t.string   "nit",                      :limit => 17
     t.string   "city"
     t.string   "email"
     t.string   "register"
@@ -84,7 +84,7 @@ ActiveRecord::Schema.define(:version => 20100304170341) do
     t.integer  "client_accounts_group_id"
     t.integer  "vendor_accounts_group_id"
     t.string   "next_bar_code",            :limit => 32
-    t.string   "fax",                      :limit => 8
+    t.string   "fax",                      :limit => 9
     t.string   "country"
   end
 

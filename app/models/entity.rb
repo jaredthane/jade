@@ -243,15 +243,15 @@ class Entity < ActiveRecord::Base
 	def recent_entries
 		return Entry.find(:all, :conditions=> "accounts.entity_id=#{self.id}",:joins=>'inner join accounts on entries.account_id=accounts.id', :order=>'created_at DESC', :limit=>20)
 	end
-  def strip(s, c)
-   clean=''
-   s.each_char do |l|
-		 if !c.include?(l)
-		 	clean << l
-		 end
-   end
-   return clean; 
-  end
+#  def strip(s, c)
+#   clean=''
+#   s.each_char do |l|
+#		 if !c.include?(l)
+#		 	clean << l
+#		 end
+#   end
+#   return clean; 
+#  end
   def birth_string
     return birth.to_s
   end
@@ -352,48 +352,34 @@ class Entity < ActiveRecord::Base
     end
   end
   def home_phone_number
-  	if self.home_phone
-			if self.home_phone.length == 8
-				return self.home_phone[0..3] + "-" + self.home_phone[4..7]
-			end
-		end
+  	return self.home_phone
   end
   def home_phone_number=(number)
-  	self.home_phone=strip(number, ['-',' '])
-  end
-  def office_phone_number
-  	if self.office_phone
-			if self.office_phone.length == 8
-				return self.office_phone[0..3] + "-" + self.office_phone[4..7]
-			end
-		end
+    number.gsub!("-", "")
+    number.gsub!(" ", "")
+  	number=number.ljust(8, ' ')
+    number.insert(4, '-')
+  	self.home_phone=number
   end
   def fax_number
-  	if self.fax
-			if self.fax.length == 8
-				return self.fax[0..3] + "-" + self.fax[4..7]
-			end
-		end
+  	return self.fax
   end
   def fax_number=(number)
-  	self.fax=strip(number, ['-',' '])
+    number.gsub!("-", "")
+    number.gsub!(" ", "")
+  	number=number.ljust(8, ' ')
+    number.insert(4, '-')
+  	self.fax=number
   end
   def office_phone_number
-  	if self.office_phone
-			if self.office_phone.length == 8
-				return self.office_phone[0..3] + "-" + self.office_phone[4..7]
-			end
-		end
+		return self.office_phone
   end
   def office_phone_number=(number)
-  	self.office_phone=strip(number, ['-',' '])
-  end
-  def cell_phone_number
-	  if self.cell_phone
-			if self.cell_phone.length == 8
-				return self.cell_phone[0..3] + "-" + self.cell_phone[4..7]
-			end
-		end
+    number.gsub!("-", "")
+    number.gsub!(" ", "")
+  	number=number.ljust(8, ' ')
+    number.insert(4, '-')
+  	self.office_phone=number
   end
   def full_address
   	address=''
@@ -408,18 +394,29 @@ class Entity < ActiveRecord::Base
   	end
   	return address
   end
+  def cell_phone_number
+	  return self.cell_phone
+  end
   def cell_phone_number=(number)
-  	self.cell_phone=strip(number, ['-',' '])
+    number.gsub!("-", "")
+    number.gsub!(" ", "")
+  	number=number.ljust(8, ' ')
+    number.insert(4, '-')
+  	self.cell_phone=number
   end
   def nit_number
   	if self.nit
-			if self.nit.length == 14
-				return self.nit[0..3] + "-" + self.nit[4..9] + "-" + self.nit[10..12] + "-" + self.nit[13].to_s
-			end
+			return self.nit
 		end
   end
   def nit_number=(number)
-  	self.nit=strip(number, ['-',' '])
+    number.gsub!("-", "")
+    number.gsub!(" ", "")
+  	number=number.ljust(14, ' ')
+    number.insert(4, '-')
+    number.insert(11, '-')
+    number.insert(15, '-')
+    self.nit=number
   end
   def compile_condition(search)
   	search = search || ""
