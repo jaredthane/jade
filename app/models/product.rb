@@ -91,7 +91,7 @@ class Product < ActiveRecord::Base
 #		%x[rm 'public/barcodes/#{self.upc}.ps']
 	end
 	def barcode_filename
-		return "/barcodes/" + self.upc + ".jpg"
+		return "/barcodes/" + (self.upc||'') + ".jpg"
 	end
 	def inventory(entity)
 		return self.inventories.find_by_entity_id(entity.id)
