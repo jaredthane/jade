@@ -85,7 +85,7 @@
 	<% end %>
 </div>
 <div class="column3-unit-right">
-	<%= link_to( image_tag(@product.barcode_filename, :style=>'border:none;'), show_barcode_url(@product) ) %>
+	<%= link_to( image_tag((@product.barcode_filename||''), :style=>'border:none;'), show_barcode_url(@product) ) %>
 
 	<p>
     <b>Unidad</b><br />
