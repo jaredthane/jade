@@ -1,0 +1,21 @@
+<% content_for :title do %>Cambiar Platilla de Reporte<% end %>
+<% content_for(:javascript) do %>
+  <%= javascript_include_tag "submit_link" %>
+<% end %>
+<% content_for :actions do %>
+    <dt><%= link_to_function 'Guardar', 'submit("report_form")', :class => 'action' %></dt>
+	<dt><%= link_to 'Cancelar', report_templates_path, :class => 'action' %></dt>
+<% end %>
+
+<%= error_messages_for :report %>
+
+<% form_for(@report, :html => {:id => 'report_form'}) do |f| %>
+  <p>
+    <b>Reporte</b><br />
+    <%= h @report.name %>
+  </p>
+  <p>
+    <b>Plantilla:</b><br />
+    <%= f.text_area :content, :style=>'width:90%;' %>
+  </p>
+<% end %>

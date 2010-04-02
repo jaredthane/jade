@@ -4,6 +4,7 @@ ActionController::Routing::Routes.draw do |map|
   map.resources :serialized_products
   map.resource  :session
   map.resources :payments
+  map.resources :report_templates
   map.resources :entries
   map.resources :production_orders
   map.new_production 'production_orders/:id/new', :controller => 'production_orders', :action => 'new_production'

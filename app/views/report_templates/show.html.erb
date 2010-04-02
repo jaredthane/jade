@@ -1,0 +1,22 @@
+
+<% content_for :title do %>Plantilla de Reporte<% end %>
+
+<% content_for :actions do %>
+	<% if current_user.has_right('CHANGE_REPORTS')  %>
+		<dt><%= link_to 'Cambiar', edit_report_template_path(@report) %></dt>
+	<% end %>	
+	<dt><%= link_to 'Lista de Plantillas', report_templates_path %></dt>
+<% end %>
+
+<div class="column2-unit-left">
+<p>
+  <b>Nombre de Reporte:</b>
+  <%=h @report.name %>
+</p>
+
+<p>
+  <b>Contenido:</b><br />
+  <%= @report.content %>
+</p>
+
+

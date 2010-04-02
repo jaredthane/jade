@@ -139,15 +139,15 @@ class OrdersController < ApplicationController
     @order = Order.find(params[:id])
   	#logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
     return false if !allowed(@order.order_type_id, 'view')
-    if FileTest.exists?(@order.receipt_filename||'')
+    if FileTest.exists?(@order.receipt_filename+".pdf"||'')
     	#logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
     	#logger.debug "could not find"
-		 	send_file @order.receipt_filename, :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
+		 	send_file @order.receipt_filename+".pdf", :type => 'application/pdf', :disposition => 'inline'  #, :x_sendfile=>true
 	    #send_data @receipt.filename, :disposition => 'inline'
 	    # This is good for if the user wants to download the file
 		else
 			redirect_back_or_default(@order)
-			flash[:error] = "La factura '#{@order.receipt_filename}' no se encuentra entre los archivos"
+			flash[:error] = "La factura '#{@order.receipt_filename+".pdf"}' no se encuentra entre los archivos"
 	    return false
 		end
   end

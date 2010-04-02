@@ -1,0 +1,12 @@
+<% content_for :title do %>Lista de Plantillas de Reporte<% end %>
+<div>
+    <div class="table_header_row">
+        <div class="table_cell">Nombre de Reporte</div>
+    </div>
+    <% for report in @reports %>
+        <div class="table_row"> 
+            <div class="table_cell"><%= link_to report.name, report %></div>
+        </div>
+    <% end %>
+</div>
+

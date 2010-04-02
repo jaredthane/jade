@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100318162504) do
+ActiveRecord::Schema.define(:version => 20100402172852) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -346,6 +346,21 @@ ActiveRecord::Schema.define(:version => 20100318162504) do
   add_index "products", ["upc"], :name => "upc"
   add_index "products", ["vendor_id"], :name => "vendor_id"
 
+  create_table "report_parts", :force => true do |t|
+    t.integer "report_id"
+    t.string  "name"
+    t.text    "content"
+  end
+
+  create_table "report_templates", :force => true do |t|
+    t.string "name"
+    t.text   "content"
+  end
+
+  create_table "reports", :force => true do |t|
+    t.string "name"
+  end
+
   create_table "requirements", :force => true do |t|
     t.integer "product_id"
     t.integer "required_id"
@@ -362,7 +377,8 @@ ActiveRecord::Schema.define(:version => 20100318162504) do
 
   create_table "rights_roles", :force => true do |t|
     t.integer "role_id"
-    t.integer "right_id"
+    t.integer "old_id"
+    t.string  "right_id"
   end
 
   add_index "rights_roles", ["role_id"], :name => "role_id"

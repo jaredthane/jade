@@ -31,6 +31,11 @@ class Order < ActiveRecord::Base
   TRANSFER=4
   COUNT=5
   LABELS=6
+  def to_liquid
+    { "receipt_number"  => self.receipt_number,
+      "lines" => self.lines }
+  end
+
 	##################################################################################################
 	# 
 	#################################################################################################
@@ -89,7 +94,7 @@ class Order < ActiveRecord::Base
 	 			self.sequel_id=self.sequel.id
 			end
 	  end
-  	self.receipt_filename = "#{RAILS_ROOT}/invoice_pdfs/#{self.id}.pdf"
+  	self.receipt_filename = "#{RAILS_ROOT}/invoice_pdfs/#{self.id}"
   	self.send(:update_without_callbacks) # This is also serving to save the sequel_id
 	  if self.receipt_number and order_type_id == SALE
 	  	# Set next Receipt number
