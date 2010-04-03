@@ -40,9 +40,9 @@ class Entity < ActiveRecord::Base
 	SITE=3
 	CREDITO_FISCAL=5
 	VENDOR=1
-  def to_param
-    "#{id}-#{name.parameterize}"
-  end
+#  def to_param
+#    "#{id}-#{name.parameterize}"
+#  end
 	##################################################################################################
 	# 
 	#################################################################################################

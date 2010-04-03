@@ -60,26 +60,27 @@ class ProductionOrder < ActiveRecord::Base
   def start(params={})
   	params={:started_at => User.current_user.today, :started_by => User.current_user}.merge!(params)
   	self.started_at=params.delete(:started_at)
-		self.started_by=params.delete(:started_by)
-		for l in self.production_lines
-			l.quantity_planned = l.quantity_planned * self.quantity
-			l.quantity = l.quantity_planned
-		end
-		for l in self.consumption_lines
-			l.quantity = l.quantity * self.quantity
-			l.start_movement(params)
-		end
-		self.quantity=1
+	self.started_by=params.delete(:started_by)
+	for l in self.production_lines
+		l.quantity_planned = l.quantity_planned * self.quantity
+		l.quantity = l.quantity_planned
+	end
+	for l in self.consumption_lines
+		l.quantity = l.quantity * self.quantity
+        l.cost = Cost.consume(l.product, l.quantity, self.site)
+		l.start_movement(params)
+	end
+	self.quantity=1
   end # def start
   ##############################################################
   # Calculates and caches cost of production
   ##############################################################
-  attr_accessor :local_cost
+#  attr_accessor :local_cost
   def cost
-  	if !local_cost
+#  	if !self.started_at
   		c=consumption_lines.inject(0) { |result, element| result + element.cost }
   		local_cost = (quantity||1) * (c||0)
-  	end
+#  	end
   	return local_cost
   end # def cost
   ##############################################################
@@ -89,25 +90,13 @@ class ProductionOrder < ActiveRecord::Base
   def finish(params={})
   	params={:finished_at => User.current_user.today, :finished_by => User.current_user}.merge!(params)
   	self.finished_at=params.delete(:finished_at)
-		self.finished_by=params.delete(:finished_by)
-		for l in self.production_lines
-          Cost.create(:product=>l.product, :quantity=>l.quantity, :value=>l.total_cost/l.quantity, :entity=>self.site)
-#			
-#			
-#			
-#			old_cost=l.product.cost
-#			logger.debug "old_cost=#{old_cost.to_s}"
-#			logger.debug "old_qty=#{old_qty.to_s}"
-#			logger.debug "l.total_cost=#{l.total_cost.to_s}"
-#			logger.debug "l.quantity=#{l.quantity.to_s}"
-#			logger.debug "(old_cost*old_qty+l.total_cost)=#{(old_cost*old_qty+l.total_cost).to_s}"
-#			logger.debug "(old_qty+l.quantity)=#{(old_qty+l.quantity).to_s}"
-#			logger.debug "(old_cost*old_qty+l.total_cost)/(old_qty+l.quantity)=#{((old_cost*old_qty+l.total_cost)/(old_qty+l.quantity)).to_s}"
-#			l.product.cost = (old_cost*old_qty+l.total_cost)/(old_qty+l.quantity)
-		end # for l in self.production_lines
-		for l in self.production_lines
-			l.finish_movement(params)
-		end
+	self.finished_by=params.delete(:finished_by)
+	for l in self.production_lines
+      Cost.create(:product=>l.product, :quantity=>l.quantity, :value=>l.total_cost/l.quantity, :entity=>self.site)
+	end # for l in self.production_lines
+	for l in self.production_lines
+		l.finish_movement(params)
+	end
 
   end # def finish
   #################################################################################################

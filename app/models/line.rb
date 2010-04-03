@@ -20,7 +20,6 @@ class Line < ActiveRecord::Base
 	belongs_to :warranty
 	belongs_to :product	
 	belongs_to :movement
-	belongs_to :cost_ref, :class_name => "Order", :foreign_key => 'cost_ref'
 	validates_presence_of(:product, :message => " debe ser valido")
 	attr_accessor :client_name
 	belongs_to :serialized_product
@@ -102,7 +101,7 @@ class Line < ActiveRecord::Base
     end
     return qty
   end
-	###################################################################################
+###################################################################################
   # prepares a single movement to be created but DOES NOT SAVE IT
   ##################################################################################
 	def new_movement(entity_id, movement_type_id, quantity)
@@ -133,8 +132,10 @@ class Line < ActiveRecord::Base
       self.cost = Cost.consume(self.product, qty, self.order.vendor)
     when Movement::INTERNAL_CONSUMPTION
       self.cost = Cost.consume(self.product, qty, self.order.vendor)
+    when Movement::TRANSFER
+      self.cost = Cost.consume(self.product, qty, self.order.vendor)
+      Cost.create(:product=>self.product, :quantity=>qty, :value=>self.cost, :entity=>self.order.client)
     when Movement::PURCHASE
-      self.cost_ref = self.order
       self.cost=self.price * self.quantity
       Cost.create(:product=>self.product, :quantity=>qty, :value=>self.price, :entity=>self.order.client)
     when Movement::SALE_RETURN
@@ -145,66 +146,62 @@ class Line < ActiveRecord::Base
       self.cost = Cost.consume_last(self.product, qty, self.order.vendor)
     end 
     if [1,2,3,8].include?(move)    	# These are normal movements
-#      debugger
     	self.movements << Movement.new(
-  	    :created_at=>User.current_user.today,
-  	    :entity_id => self.order.vendor_id, 
-  	    :comments => self.order.comments, 
-  	    :product_id => self.product_id, 
-  	    :quantity => -qty, 
-  	    :movement_type_id => move, 
-  	    :user_id => User.current_user.id,
-  	    :order_id => self.id, 
-  	    :serialized_product_id => self.serialized_product_id, 
-  	    :cost => self.cost, 
-  	    :value_left => Cost.stock_value(product,self.order.vendor),
-  	    :quantity_left => (product.quantity(self.order.vendor_id)||0) - qty
+            :created_at=>User.current_user.today,
+            :entity_id => self.order.vendor_id, 
+            :comments => self.order.comments, 
+            :product_id => self.product_id, 
+            :quantity => -qty, 
+            :movement_type_id => move, 
+            :user_id => User.current_user.id,
+            :order_id => self.id, 
+            :serialized_product_id => self.serialized_product_id, 
+            :cost => self.cost, 
+            :value_left => Cost.stock_value(product,self.order.vendor),
+            :quantity_left => (product.quantity(self.order.vendor_id)||0) - qty
   	  )
   		self.movements << Movement.new(
-		    :created_at=>User.current_user.today,
-		    :entity_id => self.order.client_id, 
-		    :comments => self.order.comments, 
-		    :product_id => self.product_id, 
-		    :quantity =>  qty,
-		    :movement_type_id => move, 
-		    :user_id => User.current_user.id,
-		    :order_id => self.id, 
-		    :serialized_product_id => self.serialized_product_id,
-  	    :cost => self.cost, 
-#  	    :cost_ref => self.cost_ref,
-  	    :value_left => Cost.stock_value(product,self.order.client_id),
-  	    :quantity_left => (product.quantity(self.order.client_id)||0) + qty
+            :created_at=>User.current_user.today,
+            :entity_id => self.order.client_id, 
+            :comments => self.order.comments, 
+            :product_id => self.product_id, 
+            :quantity =>  qty,
+            :movement_type_id => move, 
+            :user_id => User.current_user.id,
+            :order_id => self.id, 
+            :serialized_product_id => self.serialized_product_id,
+            :cost => self.cost, 
+            :value_left => Cost.stock_value(product,self.order.client_id),
+            :quantity_left => (product.quantity(self.order.client_id)||0) + qty
   	  ) if move != 8 # Dont worry about the client for an internal consuption
-		elsif [5,6,7,9].include?(move) 	# These are returns, use old serial_number
+	elsif [5,6,7,9].include?(move) 	# These are returns, use old serial_number
   		self.movements << Movement.new(
-		    :created_at=>User.current_user.today,
-		    :entity_id => self.order.client_id, 
-		    :comments => self.order.comments, 
-		    :product_id => self.product_id, 
-		    :quantity =>  qty, 
-		    :movement_type_id => move, 
-		    :user_id => User.current_user.id,
-		    :order_id => self.id, 
-		    :serialized_product_id => old.serialized_product_id,
-  	    :cost => self.cost, 
-  	    :cost_ref => self.cost_ref,
-  	    :value_left => Cost.stock_value(product,self.order.client_id),
-  	    :quantity_left => (product.quantity(self.order.client_id)||0) - qty
+            :created_at=>User.current_user.today,
+            :entity_id => self.order.client_id, 
+            :comments => self.order.comments, 
+            :product_id => self.product_id, 
+            :quantity =>  qty, 
+            :movement_type_id => move, 
+            :user_id => User.current_user.id,
+            :order_id => self.id, 
+            :serialized_product_id => old.serialized_product_id,
+            :cost => self.cost, 
+            :value_left => Cost.stock_value(product,self.order.client_id),
+            :quantity_left => (product.quantity(self.order.client_id)||0) - qty
   	  ) if move != 9 # Dont worry about the client for an internal consuption
     	self.movements << Movement.new(
-  	    :created_at=>User.current_user.today,
-  	    :entity_id => self.order.vendor_id, 
-  	    :comments => self.order.comments, 
-  	    :product_id => self.product_id, 
-  	    :quantity => -qty, 
-  	    :movement_type_id => move, 
-  	    :user_id => User.current_user.id,
-  	    :order_id => self.id, 
-  	    :serialized_product_id => old.serialized_product_id,
-  	    :cost => self.cost, 
-  	    :cost_ref => self.cost_ref,
-  	    :value_left => Cost.stock_value(product,self.order.vendor),
-  	    :quantity_left => (product.quantity(self.order.vendor)||0) + qty
+            :created_at=>User.current_user.today,
+            :entity_id => self.order.vendor_id, 
+            :comments => self.order.comments, 
+            :product_id => self.product_id, 
+            :quantity => -qty, 
+            :movement_type_id => move, 
+            :user_id => User.current_user.id,
+            :order_id => self.id, 
+            :serialized_product_id => old.serialized_product_id,
+            :cost => self.cost, 
+            :value_left => Cost.stock_value(product,self.order.vendor),
+            :quantity_left => (product.quantity(self.order.vendor)||0) + qty
   	  )	
   	end
 	end # prepare_movements

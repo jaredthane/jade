@@ -787,19 +787,16 @@ class Order < ActiveRecord::Base
 	  sfrom=from.to_s(:db)
 	  sites=[User.current_user.location_id] if !sites
 	  search='' if !search
-	  logger.debug "sites=#{sites.inspect}"
-	  logger.debug "User.current_user.location_id=#{User.current_user.location_id.to_s}"
 #	  ssites=a_to_s(sites)
 	  ssites="(" + sites.collect{|a| a.to_s + ", "}.to_s.chop.chop + ")"
-	  logger.debug "search=#{search.inspect}"
-	  logger.debug "ssites=#{ssites}"
 	  case order_type
 	  when SALE
-	    logger.debug "searching sales"
-	    logger.debug "sites=#{sites.inspect}"
 #	    c= ['(order_type_id = 1) AND (clients.name like :search OR orders.receipt_number like :search) AND (vendor_id in #{ssites}) AND (clients.id != 1) AND orders.created_at<:till AND orders.created_at>=:from', {:search => "%#{search}%", :from => "#{sfrom}",:till => "#{still}",:sites => "#{ssites}", :current_location => "#{User.current_user.location_id}"}]
 	    c= "(order_type_id = 1) AND (clients.name like '%" + search + "%' OR orders.receipt_number like '%" + search + "%') AND (vendor_id in " + ssites + ") AND (clients.id != 1) AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
 	    j= "inner join entities as clients on clients.id = orders.client_id"
+	  when TRANSFER
+	    c= "(order_type_id = 4) AND (clients.name like '%" + search + "%' OR vendors.name like '%" + search + "%' OR orders.receipt_number like '%" + search + "%') AND (vendor_id in " + ssites + " OR  client_id in " + ssites + ") AND orders.created_at<'" + still + "' AND orders.created_at>='" + sfrom + "'"
+	    j= "inner join entities as clients on clients.id = orders.client_id inner join entities as vendors on vendors.id = orders.vendor_id"
 	  when PURCHASE
 	    logger.debug "searching PURCHASE"
 #	    c=['((vendors.name like :search OR orders.receipt_number like :search) AND order_type_id = 2 and clients.entity_type_id = 3) AND (vendors.id=:current_location OR clients.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}",:sites => "#{ssites}"}]

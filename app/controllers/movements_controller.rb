@@ -19,7 +19,7 @@ class MovementsController < ApplicationController
   # GET /movements
   # GET /movements.xml
   def for_product
-    @movements = Movement.for_product_in_site(params[:id], params[:page], params[:site])
+    @movements = Movement.for_product_in_site(params[:id], (params[:page]||1), params[:site])
     respond_to do |format|
       format.html {render :template=> "/movements/index"}
       format.xml  { render :xml => @movements }

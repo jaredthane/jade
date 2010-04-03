@@ -38,7 +38,7 @@
 		<div class="column3-unit-left">
 			<p>
 				<b>Proveedor</b><br />
-				<%= f.text_field :vendor_name, :class=> 'lookup field', :id => 'vendor_lookup',:style=>'width:168px;' %>
+				<%= f.text_field :vendor_name, :class=> 'lookup field', :id => 'vendor_lookup',:style=>'width:168px;', :tabindex=>1 %>
 			</p>
 			<%= f.hidden_field :client_id, :value => current_user.location.id %>
 			
@@ -55,7 +55,7 @@
 		<div class="column3-unit-left">
 			<p>
 				<b>Cliente</b><br />
-				<%= f.text_field :client_name, :class=> 'lookup field', :id => 'client_lookup',:style=>'width:168px;' %>
+				<%= f.text_field :client_name, :class=> 'lookup field', :id => 'client_lookup',:style=>'width:168px;', :tabindex=>1 %>
 			</p>
 			<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 		</div>
@@ -66,6 +66,23 @@
 		    <%= f.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>
 	    </p>
 		</div>
+    <% when 4 %>
+		<div class="column3-unit-left">
+			<p>
+				<b>Origen:</b><br />
+				<%= f.text_field :vendor_name, :class=> 'lookup field site_lookup', :id => 'site_lookup',:style=>'width:168px;', :tabindex=>1 %>
+			</p>
+			<p>
+				<b>Destino:</b><br />
+				<%= f.text_field :client_name, :class=> 'lookup field site_lookup', :id => 'site_lookup',:style=>'width:168px;', :tabindex=>1 %>
+			</p>
+		</div>
+		<div class="column3-unit-middle">
+		    <p>
+		        <b>Fecha de Pedido</b><br />
+		        <%= f.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>
+	        </p>
+		</div>
 	<% when 3 %>
 		<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
 		<%= f.hidden_field :client_id, :value => 1 %>
@@ -73,14 +90,14 @@
 		<div class="column3-unit-left">
 			<p>
 				<b>Proveedor</b><br />
-				<%= f.text_field :vendor_name, :class=> 'lookup field', :id => 'vendor_lookup',:style=>'width:168px;' %>
+				<%= f.text_field :vendor_name, :class=> 'lookup field', :id => 'vendor_lookup',:style=>'width:168px;', :tabindex=>1 %>
 
 			</p>
 		</div>
 		<div class="column3-unit-middle">
 			<p>
 				<b>Cliente</b><br />
-				<%= f.text_field :client_name, :class=> 'lookup field', :id => 'client_lookup',:style=>'width:168px;' %>
+				<%= f.text_field :client_name, :class=> 'lookup field', :id => 'client_lookup',:style=>'width:168px;', :tabindex=>2 %>
 			</p>
 		</div>
 

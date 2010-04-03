@@ -3,7 +3,7 @@
 	<%= line_form.hidden_field(:order_id, :value=> @order_id) %>
 	<p>
 		<b>Código UPC para producto adicional</b><br />
-		<%= line_form.text_field(:bar_code, :id => 'bar_code_field', :class => 'field') %>
+		<%= line_form.text_field(:bar_code, :id => 'bar_code_field', :class => 'field', :tabindex=>5) %>
 		<%= line_form.hidden_field(:client_name, :id=> 'client_name', :value=>'') %>
 		<%= line_form.hidden_field(:order_type_id, :id=> 'order_type', :value=>@order_type_id) %> 
 	</p>

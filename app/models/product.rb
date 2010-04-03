@@ -110,22 +110,22 @@ class Product < ActiveRecord::Base
 	#################################################################################################
 	def create_related_values(default_cost, static_price, relative_price)
 		for e in Entity.find_all_by_entity_type_id(3)
-    	i=Inventory.new(:entity=>e, :product=>self, :quantity=>0, :min=>0, :max=>0, :to_order=>0, :cost=>default_cost, :default_cost=>default_cost)
-    	i.save
-    end
-	  if product_type_id!=2 # no warranties for discounts
-    	Warranty.create(:product=>self, :price => 0, :months =>0)
-    end
-    for g in PriceGroup.all
-    	if g.entity_id == User.current_user.location_id
-		  	Price.create(:product_id=>self.id, :price_group_id => g.id, :fixed => static_price, :relative=>relative_price, :available => 1)
-		  else
-				Price.create(:product_id=>self.id, :price_group_id => g.id, :fixed => static_price, :relative=>relative_price, :available => 0)
-			end
-	  end
-    if product_type_id==3 #for combos
-    	self.calculate_quantity(e.id)
-    end
+        	i=Inventory.new(:entity=>e, :product=>self, :quantity=>0, :min=>0, :max=>0, :to_order=>0, :cost=>default_cost, :default_cost=>default_cost)
+        	i.save
+        end
+        if product_type_id!=2 # no warranties for discounts
+            Warranty.create(:product=>self, :price => 0, :months =>0)
+        end
+        for g in PriceGroup.all
+        	if g.entity_id == User.current_user.location_id
+                Price.create(:product_id=>self.id, :price_group_id => g.id, :fixed => static_price, :relative=>relative_price, :available => 1)
+            else
+	            Price.create(:product_id=>self.id, :price_group_id => g.id, :fixed => static_price, :relative=>relative_price, :available => 0)
+            end
+        end
+        if product_type_id==3 #for combos
+        	self.calculate_quantity(e.id)
+        end
 	end
 	def category_name
  		product_category.name if product_category
@@ -150,7 +150,7 @@ class Product < ActiveRecord::Base
 		if self.product_type_id==1
 			#puts "getting simple sum"
 #			i.quantity=self.movements.sum(:quantity)
-      movements=self.movements.find_all_by_entity_id(location_id)
+            movements=self.movements.find_all_by_entity_id(location_id)
 			i.quantity=movements.inject(0) { |result, element| result + element.quantity }
 #			i.quantity=self.movements.find_all_by_entity_id(location_id).sum(:quantity)
 #			moves=self.movements.find_all_by_entity_id(location_id)
@@ -395,7 +395,7 @@ class Product < ActiveRecord::Base
 	end
 	def cost(site = User.current_user.location)
 		c=Cost.first(:conditions=>"product_id=#{self.id} AND entity_id = #{site.id}")
-		puts Cost.first(:conditions=>"product_id=#{self.id} AND entity_id = #{site.id}")
+#		puts Cost.first(:conditions=>"product_id=#{self.id} AND entity_id = #{site.id}")
 		return c.value if c
 		i = self.inventories.find_by_entity_id(site.id)
 		return i.default_cost if i

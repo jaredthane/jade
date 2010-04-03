@@ -15,7 +15,14 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class ProductionOrderLine < ActiveRecord::Base
-  belongs_to :production_order
-  belongs_to :product
-  belongs_to :serialized_product
+    belongs_to :production_order
+    belongs_to :product
+    belongs_to :serialized_product
+    def cost
+	    return self._cost if self._cost
+	    return self.product.cost * self.quantity
+    end
+    def cost=(value)
+	    self._cost = value
+    end
 end

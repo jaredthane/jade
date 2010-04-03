@@ -25,6 +25,7 @@ function DoAjaxRequest(is_output){
   				$('.line', d).html($('.line', d).html().replace(/\[0\]/gi, "["+new_task_id+"]"));
   				$('.line', d).html($('.line', d).html().replace(/_0_/gi, "_"+new_task_id+"_"));
   				$('.line', d).appendTo('#' + lines_div).hide().slideDown('slow',select_serial);
+  				$('#' + bar_code_field).select();
   			}
 			},
 		});

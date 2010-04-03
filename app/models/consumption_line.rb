@@ -15,12 +15,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class ConsumptionLine < ProductionOrderLine
-	##############################################################
-	# Returns cost of product * quantity
-	##############################################################
-	def cost
-		return product.cost * quantity
-	end # def cost
+#	##############################################################
+#	# Returns cost of product * quantity
+#	##############################################################
+#	def cost
+#		return product.cost * quantity
+#	end # def cost
 	##############################################################
 	# Requires: entity_id, product_id, quantity, movement_type_id, order_id
 	# Accepts all other attributes of Movement

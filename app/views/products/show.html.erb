@@ -112,7 +112,7 @@
 		</div>
 		<% for location in get_locations %>
 			<div class="table_row">
-				<div class="table_cell_80"><%=link_to location.name, movements_for_product_url(location, @product) %></div>
+				<div class="table_cell_80"><%=link_to location.name, movements_for_product_url(location, @product.id) %></div>
 				<div class="table_cell"><%=h location.inventory(@product) %></div>
 			</div>
 		<% end %>

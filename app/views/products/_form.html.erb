@@ -28,6 +28,7 @@
 		$("#unit_lookup").autocomplete("/units.js",{matchSubset:0, autoFill:1}); 
 		$("#category_lookup").autocomplete("/product_categories.js",{matchSubset:0, autoFill:1});
 		$("#revenue_account_lookup").autocomplete("/accounts.js?filter=child",{matchSubset:0, autoFill:1});
+		$('#name').select();
 	});
 </script>
 <% for error in @product.errors %>
@@ -56,7 +57,7 @@
 	<div class="column2-unit-left">
 		<p>
 		  <b>Nombre</b><br />
-		  <%= f.text_field :name, :class => 'field' %>
+		  <%= f.text_field :name, :class => 'field',:id=>'name' %>
 		</p>
 		 <p>
 		  <b>Precio Fijo (+)</b><br />

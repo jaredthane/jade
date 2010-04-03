@@ -12,7 +12,7 @@ function DoAjaxRequest(){
 			type: 'POST',
   		url: "/lines/new",
   		data:{ bar_code: $("#bar_code_field").val(), client_name: $('#clients_lookup').val(), order_type_id:$('#order_type_id').val()},
-  		success: function(data){ 
+  		success: function(data){
   			var d = $('<div/>').append(data);
   			error=$('.error', d);
   			if (error.length>0){
@@ -22,12 +22,13 @@ function DoAjaxRequest(){
   				$('#lines_errors:visible').slideUp('slow',delete_errors);
   			}
   			$('.line', d).appendTo('#lines').hide().slideDown('slow',select_serial);
-				$(".serial:last").keydown(function(e){
-					if (e.keyCode == 13) {
-					 	 $('#bar_code_field').select(); 
-						 return false;
-					 }
-				});
+	        $(".datepicker:last").datepicker();
+//				$(".serial:last").keydown(function(e){
+//					if (e.keyCode == 13) {
+//					 	 $('#bar_code_field').select(); 
+//						 return false;
+//					 }
+//				});
 			},
 		});
 }
@@ -42,6 +43,7 @@ function select_serial() {
 //}
 $(document).ready(function(){
 	$('#add_new_line').hide();
+	
 	$('#bar_code_form').show();
 	$('#lines_errors').hide();
 	//Setup	date picker
@@ -53,6 +55,7 @@ $(document).ready(function(){
 	// Prepare lookups
 	$("#client_lookup").autocomplete("/clients.js",{matchSubset:0, autoFill:1}); 
 	$("#vendor_lookup").autocomplete("/vendors.js",{matchSubset:0, autoFill:1}); 
+	$(".site_lookup").autocomplete("/sites.js",{matchSubset:0, autoFill:1}); 
 	$("#bar_code_field").autocomplete("/products.js",{matchSubset:0, autoFill:1}); 
 	$("#bar_code_field").keydown(function(e){
 		if (e.keyCode == 13) {
@@ -61,4 +64,6 @@ $(document).ready(function(){
 			return false;
 		}
 	});
+	$('#vendor_lookup').select();
+	$('#client_lookup').select();
 });

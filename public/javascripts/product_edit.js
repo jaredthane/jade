@@ -3,4 +3,5 @@ function check_box(e) {
   e.closest(".warranty").slideUp("slow");
 }
 $(document).ready(function(){
+	$('#name').select();
 });

@@ -270,7 +270,7 @@
 			jQuery(document).bind('keydown', 'f3',function (evt){window.location = '<%= new_client_path %>'; return false; }); 
 			jQuery(document).bind('keydown', 'f4',function (evt){window.location = '<%= new_purchase_path %>'; return false; }); 
 			jQuery(document).bind('keydown', 'f5',function (evt){window.location = '<%= new_vendor_path %>'; return false; }); 
-			jQuery(document).bind('keydown', 'f6',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 
+			jQuery(document).bind('keydown', 'f6',function (evt){window.location = '<%= production_orders_path(:filter=>'processes') %>'; return false; }); 
 			jQuery(document).bind('keydown', 'f7',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 
 			jQuery(document).bind('keydown', 'f8',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 
 			jQuery(document).bind('keydown', 'f9',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 

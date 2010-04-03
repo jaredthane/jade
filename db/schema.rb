@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100403151936) do
+ActiveRecord::Schema.define(:version => 20100403205028) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -300,6 +300,7 @@ ActiveRecord::Schema.define(:version => 20100403151936) do
     t.integer "production_order_id"
     t.integer "serialized_product_id"
     t.string  "type"
+    t.decimal "_cost",                 :precision => 8, :scale => 2
   end
 
   create_table "production_orders", :force => true do |t|
