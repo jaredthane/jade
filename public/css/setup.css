@@ -108,7 +108,10 @@
 .header-breadcrumbs ul a {color:rgb(70,122,167); text-decoration:none;}
 .header-breadcrumbs ul a:hover {color:rgb(42,90,138); text-decoration:underline;}
 
-.header-top .searchform {float:right; width:210px; padding:50px 17px 0px 0px !important /*Non-IE6*/; padding:0 12px 0px 0px /*IE6*/;}
+.user-info  {margin:10px 0 0 0;}
+.user-info h2 {color:white; font-weight:normal; font-size:110%; }
+.right-side-header {float:right; width:210px; padding:0px 17px 0px 0px !important /*Non-IE6*/; padding:0 17px 0px 0px /*IE6*/;}
+.header-top .searchform {padding:10px 0px 0px 0px !important /*Non-IE6*/;}
 .header-top .searchform form fieldset {float:right; border:none;}
 .header-top .searchform input.field {width:150px; padding:0.2em 0 0.2em 0; border:1px solid rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:120%; }
 .header-top .searchform input.button {width:50px; padding:1px !important /*Non-IE6*/; padding:0 /*IE6*/; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:120%;}
