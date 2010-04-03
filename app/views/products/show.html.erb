@@ -8,9 +8,6 @@
 	<% if current_user.has_right(User::CHANGE_PRICES) %>	
 		<dt><%= link_to 'Cambiar Precio', :controller => "prices",:action => "index", :search => @product.upc, :class =>'action' %> </dt>
 	<% end %>
-	<% if current_user.has_right(User::CHANGE_PRODUCTS) %>
-    <dt><%= link_to 'Añadir Oferta de Garantia', new_warranty_path(:product_id=>@product), :class => 'action' %></dt>
-  <% end %>
   <dt><%= link_to 'Lista', products_path, :class =>'action' %></dt>
 <% end %>
 <h2>
@@ -144,16 +141,14 @@
 </p>
 <div>
   <div class="table_header_row">
-    <div class="table_cell_40">Producto</div>
-    <div class="table_cell_20">Meses</div>
-    <div class="table_cell_20">Precio</div>
+    <div class="table_cell_40">Meses</div>
+    <div class="table_cell_40">Precio</div>
     <div class="table_cell">Acciones</div>
   </div>
 	<% for warranty in @product.warranties %>
 		<div class="table_row">
-		  <div class="table_cell_40"><%= link_to warranty.product.name, warranty.product %></div>
-			<div class="table_cell_20"><%= link_to warranty.months, warranty %></div>
-		  <div class="table_cell_20"><%= link_to number_to_currency(warranty.price), warranty %></div>
+			<div class="table_cell_40"><%= h warranty.months %></div>
+		  <div class="table_cell_40"><%= h number_to_currency(warranty.price) %></div>
 		  <div class="table_cell"><%= link_to 'Remover', warranty, :confirm => 'Esta seguro?', :method => :delete %></div>
 		</div>
 	<% end %>
