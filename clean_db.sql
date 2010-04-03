@@ -24,3 +24,5 @@ delete from units where id>7;
 delete from users where id>2;
 delete from warranties;
 delete from costs;
+delete from production_orders;
+delete from production_order_lines;

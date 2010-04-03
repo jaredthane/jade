@@ -277,7 +277,7 @@
 			jQuery(document).bind('keydown', 'f10',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 
 			jQuery(document).bind('keydown', 'f11',function (evt){window.location = '<%= products_path %>'; return false; }); 
 			jQuery(document).bind('keydown', 'f12',function (evt){window.location = '<%= new_count_path %>'; return false; });  
-			jQuery(document).bind('keydown', 'Ctrl+return',function (evt){$("form:first").submit(); return false; });  
+			jQuery(document).bind('keydown', 'Ctrl+return',function (evt){$("form:not(#search_form):first").submit(); return false; });  
 			jQuery(document).bind('keydown', 'esc',function (evt){window.location = $('#cancel_url').val(); return false; }); 
 		});
 	</script>
