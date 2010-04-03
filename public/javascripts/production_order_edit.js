@@ -44,6 +44,8 @@ $(document).ready(function(){
 	//Setup	date picker
 	$.datepicker.regional['es']
 	$(".datepicker").datepicker();
+	$("#consumption_bar_code").autocomplete("/products.js",{matchSubset:0, autoFill:1}); 
+	$("#production_bar_code").autocomplete("/products.js",{matchSubset:0, autoFill:1}); 
 	$("#consumption_bar_code").keydown(function(e){
 		if (e.keyCode == 13) {
 			DoAjaxRequest(0);

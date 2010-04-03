@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100402172852) do
+ActiveRecord::Schema.define(:version => 20100403151936) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -42,7 +42,6 @@ ActiveRecord::Schema.define(:version => 20100402172852) do
 
   create_table "costs", :force => true do |t|
     t.integer "product_id"
-    t.integer "order_id"
     t.integer "entity_id"
     t.decimal "quantity",   :precision => 8, :scale => 2, :default => 0.0
     t.decimal "value",      :precision => 8, :scale => 2, :default => 0.0
@@ -145,7 +144,6 @@ ActiveRecord::Schema.define(:version => 20100402172852) do
     t.decimal  "sales_tax",             :precision => 8, :scale => 2, :default => 0.0
     t.integer  "order_type_id"
     t.decimal  "cost",                  :precision => 8, :scale => 2
-    t.integer  "cost_ref"
   end
 
   add_index "lines", ["order_id"], :name => "order_id"

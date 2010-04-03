@@ -91,16 +91,19 @@ class ProductionOrder < ActiveRecord::Base
   	self.finished_at=params.delete(:finished_at)
 		self.finished_by=params.delete(:finished_by)
 		for l in self.production_lines
-			old_qty=l.product.quantity
-			old_cost=l.product.cost
-			logger.debug "old_cost=#{old_cost.to_s}"
-			logger.debug "old_qty=#{old_qty.to_s}"
-			logger.debug "l.total_cost=#{l.total_cost.to_s}"
-			logger.debug "l.quantity=#{l.quantity.to_s}"
-			logger.debug "(old_cost*old_qty+l.total_cost)=#{(old_cost*old_qty+l.total_cost).to_s}"
-			logger.debug "(old_qty+l.quantity)=#{(old_qty+l.quantity).to_s}"
-			logger.debug "(old_cost*old_qty+l.total_cost)/(old_qty+l.quantity)=#{((old_cost*old_qty+l.total_cost)/(old_qty+l.quantity)).to_s}"
-			l.product.cost = (old_cost*old_qty+l.total_cost)/(old_qty+l.quantity)
+          Cost.create(:product=>l.product, :quantity=>l.quantity, :value=>l.total_cost/l.quantity, :entity=>self.site)
+#			
+#			
+#			
+#			old_cost=l.product.cost
+#			logger.debug "old_cost=#{old_cost.to_s}"
+#			logger.debug "old_qty=#{old_qty.to_s}"
+#			logger.debug "l.total_cost=#{l.total_cost.to_s}"
+#			logger.debug "l.quantity=#{l.quantity.to_s}"
+#			logger.debug "(old_cost*old_qty+l.total_cost)=#{(old_cost*old_qty+l.total_cost).to_s}"
+#			logger.debug "(old_qty+l.quantity)=#{(old_qty+l.quantity).to_s}"
+#			logger.debug "(old_cost*old_qty+l.total_cost)/(old_qty+l.quantity)=#{((old_cost*old_qty+l.total_cost)/(old_qty+l.quantity)).to_s}"
+#			l.product.cost = (old_cost*old_qty+l.total_cost)/(old_qty+l.quantity)
 		end # for l in self.production_lines
 		for l in self.production_lines
 			l.finish_movement(params)

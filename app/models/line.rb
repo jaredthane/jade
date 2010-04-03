@@ -130,22 +130,18 @@ class Line < ActiveRecord::Base
 	  # First work with costs
 	  case move
     when Movement::SALE
-      self.cost_ref = Cost.ref(product, self.order.vendor)
-      #debugger
       self.cost = Cost.consume(self.product, qty, self.order.vendor)
     when Movement::INTERNAL_CONSUMPTION
-      self.cost_ref = Cost.ref(product, self.order.vendor)
       self.cost = Cost.consume(self.product, qty, self.order.vendor)
     when Movement::PURCHASE
       self.cost_ref = self.order
       self.cost=self.price * self.quantity
-      Cost.create(:order=>self.order, :product=>self.product, :quantity=>qty, :value=>self.price, :entity=>self.order.client)
+      Cost.create(:product=>self.product, :quantity=>qty, :value=>self.price, :entity=>self.order.client)
     when Movement::SALE_RETURN
-      Cost.create(:order=>self.cost_ref, :product=>self.product, :quantity=>qty, :value=>self.cost, :entity=>self.order.vendor)
+      Cost.create(:product=>self.product, :quantity=>-qty, :value=>self.cost, :entity=>self.order.vendor)
     when Movement::INTERNAL_CONSUMPTION_RETURN
-      Cost.create(:order=>self.cost_ref, :product=>self.product, :quantity=>qty, :value=>self.cost, :entity=>self.order.vendor)
+      Cost.create(:product=>self.product, :quantity=>-qty, :value=>self.cost, :entity=>self.order.vendor)
     when Movement::PURCHASE_RETURN
-      self.cost_ref = self.order
       self.cost = Cost.consume_last(self.product, qty, self.order.vendor)
     end 
     if [1,2,3,8].include?(move)    	# These are normal movements

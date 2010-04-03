@@ -20,23 +20,23 @@ class OrdersController < ApplicationController
 		case (order_type_id)
 	  when 1
 	  	if action=="edit"
-				return false if !check_user(User::CHANGE_SALES,'No tiene los derechos suficientes para cambiar ventas')
+				return false if !check_user('CHANGE_SALES','No tiene los derechos suficientes para cambiar ventas')
 			elsif action=="view"
-				return false if !check_user(User::VIEW_SALES,'No tiene los derechos suficientes para ver ventas')
+				return false if !check_user('VIEW_SALES','No tiene los derechos suficientes para ver ventas')
 			end
 	  when 2
-	  	return false if !check_user(User::VIEW_PURCHASES,'No tiene los derechos suficientes para ver compras')
+	  	return false if !check_user('VIEW_PURCHASES','No tiene los derechos suficientes para ver compras')
 	  when 3
 	  	if action=="edit"
-				return false if !check_user(User::CHANGE_INTERNAL_CONSUMPTIONS,'No tiene los derechos suficientes para cambiar consumos internos')
+				return false if !check_user('CHANGE_INTERNAL_CONSUMPTIONS','No tiene los derechos suficientes para cambiar consumos internos')
 			elsif action=="view"
-				return false if !check_user(User::VIEW_INTERNAL_CONSUMPTION,'No tiene los derechos suficientes para ver consumos internos')
+				return false if !check_user('VIEW_INTERNAL_CONSUMPTIONS','No tiene los derechos suficientes para ver consumos internos')
 			end
 		when 5
 	  	if action=="edit"
-				return false if !check_user(User::CHANGE_COUNTS,'No tiene los derechos suficientes para cambiar cuentas fisicas')
+				return false if !check_user('CHANGE_COUNTS','No tiene los derechos suficientes para cambiar cuentas fisicas')
 			elsif action=="view"
-				return false if !check_user(User::VIEW_COUNTS,'No tiene los derechos suficientes para ver cuentas fisicas')
+				return false if !check_user('VIEW_COUNTS','No tiene los derechos suficientes para ver cuentas fisicas')
 			end
     end  
     return true  

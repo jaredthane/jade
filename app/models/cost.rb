@@ -1,6 +1,5 @@
 class Cost < ActiveRecord::Base
     belongs_to :product
-    belongs_to :order
     belongs_to :entity
     
     #################################################################################################
@@ -24,6 +23,7 @@ class Cost < ActiveRecord::Base
             puts "total=#{total.to_s}"
             total += cost.value * amt
             puts "total=#{total.to_s}"
+            puts "cost.quantity == amt=#{(cost.quantity == amt).to_s}"
             if cost.quantity == amt
                 cost.destroy
             else
@@ -70,13 +70,6 @@ class Cost < ActiveRecord::Base
     def self.quantity(product, site)
         return sum(:quantity, :conditions=>"product_id=#{product.id} AND entity_id=#{site.id}")
     end # def quantity()
-    #################################################################################################
-    # 
-    #################################################################################################
-    def self.ref(product, site)
-        c = first(:conditions=>"product_id=#{product.id} AND entity_id=#{site.id}")
-        return Order.find_by_id(c.order_id) if c
-        return nil
-    end # def self.ref(product, site)
+
 
 end

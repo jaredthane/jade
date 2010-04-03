@@ -56,7 +56,7 @@ class ProductionOrdersController < ApplicationController
   end
     
   def new_line
-  	if p=Product.find_by_upc(params[:bar_code])
+  	if p=Product.find_single(params[:bar_code])
   		@o=ProductionOrder.new
 			if params[:is_output]=='0'
 		  	@o.consumption_lines << ConsumptionLine.new(:product=>p, :quantity=>1)

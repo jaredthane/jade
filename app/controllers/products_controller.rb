@@ -49,7 +49,7 @@ class ProductsController < ApplicationController
 				when 'category'
 				@products = Product.search_categories(@search, (params[:page] || 1), params[:category_id])
 				when 'name'
-					@products = Product.search_name(@search, (params[:page] || 1), params[:category_id])
+					@products = Product.search_name(@search, (params[:page] || 1))
 				else
 					@products = Product.search(@search, (params[:page] || 1), params[:category_id])
 			end

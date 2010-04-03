@@ -53,6 +53,7 @@ $(document).ready(function(){
 	// Prepare lookups
 	$("#client_lookup").autocomplete("/clients.js",{matchSubset:0, autoFill:1}); 
 	$("#vendor_lookup").autocomplete("/vendors.js",{matchSubset:0, autoFill:1}); 
+	$("#bar_code_field").autocomplete("/products.js",{matchSubset:0, autoFill:1}); 
 	$("#bar_code_field").keydown(function(e){
 		if (e.keyCode == 13) {
 			DoAjaxRequest();
