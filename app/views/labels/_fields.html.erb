@@ -3,9 +3,9 @@
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
-	<dt><%= link_to_function 'Guardar Cambios', 'submit("labels_form")', :class => 'action' %></dt>
-	<dt><%= link_to 'Remover', @order, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
-	<dt><%= link_to 'Cancelar', counts_url, :class => 'action' %></dt>
+	<li><%= link_to_function 'Guardar Cambios', 'submit("labels_form")', :class => 'action' %></li>
+	<li><%= link_to 'Remover', @order, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></li>
+	<li><%= link_to 'Cancelar', counts_url, :class => 'action' %></li>
 <% end %>
 
 <%= error_messages_for :count, :header_message => "Surgieron los siguentes dificultades guardando los cambios las etiquetas:", :message => "" %>

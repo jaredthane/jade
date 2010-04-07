@@ -3,8 +3,8 @@
 <% end %>
 <% content_for :title do %>Lista de Suscripciones que se Procesaran<% end %>
 <% content_for :actions do %>
-	<dt><%= link_to 'Suscripción Nuevo', new_subscription_path %></dt>
-	<dt><%= link_to_function 'Provisionar', 'submit("receipt_form")' %></dt>
+	<li><%= link_to 'Suscripción Nuevo', new_subscription_path %></li>
+	<li><%= link_to_function 'Provisionar', 'submit("receipt_form")' %></li>
 <% end %>
 <% form_tag process_subscriptions_url, :method =>'post', :id => 'receipt_form' do %>
 <br />

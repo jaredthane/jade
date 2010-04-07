@@ -3,9 +3,9 @@
   <%= javascript_include_tag "trans_edit" %>
 <% end %>
 <% content_for :actions do %>
-	<dt><%= link_to_function 'Guardar', 'submit("trans_form")', :class => 'action' %></dt>
+	<li><%= link_to_function 'Guardar', 'submit("trans_form")', :class => 'action' %></li>
 	<% if mode == 'edit' %>
-		<dt><%= link_to 'Borrar',tran_url(@trans), :confirm => 'Esta seguro que desea borrar esta transaccion?', :method => :delete, :class => 'action' %></dt>
+		<li><%= link_to 'Borrar',tran_url(@trans), :confirm => 'Esta seguro que desea borrar esta transaccion?', :method => :delete, :class => 'action' %></li>
 	<% end %>
 <% end %>
 <% content_for :title do %><%= heading %><% end %>

@@ -22,16 +22,16 @@
 	<% case @entity_type
 		 when 'sites' %>
 		 	<% if current_user.has_rights(['Admin','Gerente']) %>
-				<dt><%= link_to 'Nuevo sitio', "/sites/new", :class => 'action' %></dt>
+				<li><%= link_to 'Nuevo sitio', "/sites/new", :class => 'action' %></li>
 			<% end %>
 		<% when 'vendors' %>
 		 	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
-				<dt><%= link_to 'Nuevo proveedor', "/vendors/new", :class => 'action' %></dt>
+				<li><%= link_to 'Nuevo proveedor', "/vendors/new", :class => 'action' %></li>
 			<% end %>
 		<% when 'clients' %>
 		 	<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
-				<dt><%= link_to 'Nuevo cliente', "/clients/new", :class => 'action' %></dt>
-				<dt><%= link_to 'Provisionar', preview_process_path(:search=>(params[:search]||"")), :class => 'action' %></dt>
+				<li><%= link_to 'Nuevo cliente', "/clients/new", :class => 'action' %></li>
+				<li><%= link_to 'Provisionar', preview_process_path(:search=>(params[:search]||"")), :class => 'action' %></li>
 			<% end %>
 	<% end %>
 <% end %>

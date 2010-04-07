@@ -1,8 +1,8 @@
 <% content_for :title do %><%=h @combo.name %> - <%=h @combo.upc %><% end %>
 <% content_for :actions do %>
-	<dt> <%= link_to 'Nuevo Combo', new_combo_path, :class => 'action' %> </dt>
-	<dt> <%= link_to 'Cambiar', edit_combo_path(@combo), :class =>'action' %>  </dt>
-	<dt> <%= link_to 'Lista', combos_path, :class =>'action' %> </dt>
+	<li> <%= link_to 'Nuevo Combo', new_combo_path, :class => 'action' %> </li>
+	<li> <%= link_to 'Cambiar', edit_combo_path(@combo), :class =>'action' %>  </li>
+	<li> <%= link_to 'Lista', combos_path, :class =>'action' %> </li>
 <% end %>
 
 <h2>

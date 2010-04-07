@@ -1,8 +1,8 @@
 <% content_for :title do %>Lista de Procesos y Ordenes de Produccion<% end %>
 <% content_for :actions do %>
-	<dt><%= link_to 'Nuevo Proceso', new_production_order_path, :class => 'action' %></dt>
-	<dt><%= link_to 'Mostrar Ordenes', production_orders_path(:filter=>'orders'), :class => 'action' %></dt>
-	<dt><%= link_to 'Mostrar Procesos', production_orders_path(:filter=>'processes'), :class => 'action' %></dt>
+	<li><%= link_to 'Nuevo Proceso', new_production_order_path, :class => 'action' %></li>
+	<li><%= link_to 'Mostrar Ordenes', production_orders_path(:filter=>'orders'), :class => 'action' %></li>
+	<li><%= link_to 'Mostrar Procesos', production_orders_path(:filter=>'processes'), :class => 'action' %></li>
 <% end %>
 
 <br />

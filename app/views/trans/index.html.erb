@@ -1,7 +1,7 @@
 <% content_for :title do %>Lista de Transacciones<% end %>
 <% content_for :actions do %>
 	<% if current_user.has_right(User::CHANGE_TRANSACTIONS) %>
-		<dt><%= link_to 'Nueva Transaccion', new_tran_path, :class => 'action' %></dt>
+		<li><%= link_to 'Nueva Transaccion', new_tran_path, :class => 'action' %></li>
 	<% end %>
 <% end %>
 <br />

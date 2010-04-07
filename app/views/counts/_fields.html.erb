@@ -2,10 +2,10 @@
   <%= javascript_include_tag "count_edit" %>
 <% end %>
 <% content_for :actions do %>
-	<dt><%= link_to_function 'Guardar Cambios', 'submit("counts_form")', :class => 'action' %></dt>
-	<dt><%= link_to_function 'Procesar', 'post_count()', :class => 'action' %></dt>
-	<dt><%= link_to 'Remover', @order, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
-	<dt><%= link_to 'Cancelar', counts_url, :class => 'action' %></dt>
+	<li><%= link_to_function 'Guardar Cambios', 'submit("counts_form")', :class => 'action' %></li>
+	<li><%= link_to_function 'Procesar', 'post_count()', :class => 'action' %></li>
+	<li><%= link_to 'Remover', @order, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></li>
+	<li><%= link_to 'Cancelar', counts_url, :class => 'action' %></li>
 <% end %>
 
 <%= error_messages_for :count, :header_message => "Surgieron los siguentes dificultades guardando los cambios a la cuenta fisica:", :message => "" %>

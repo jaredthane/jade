@@ -4,11 +4,11 @@
 <% end %>
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
-	<dt><%= link_to_function 'Guardar', 'submit("user_form")', :class => 'action' %></dt>
+	<li><%= link_to_function 'Guardar', 'submit("user_form")', :class => 'action' %></li>
 	<% if mode=='edit' %>
-		<dt><%= link_to 'Remover', @user, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+		<li><%= link_to 'Remover', @user, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></li>
 	<% end %>
-	<dt><%= link_to 'Cancelar', @user, :class => 'action' %></dt>
+	<li><%= link_to 'Cancelar', @user, :class => 'action' %></li>
 <% end %>
 
 <%= error_messages_for :unit %>

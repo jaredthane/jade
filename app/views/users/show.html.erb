@@ -1,10 +1,10 @@
 <% content_for :title do %><%=h @user.name %><% end %>
 <% content_for :actions do %>
 	<% if @user==current_user or current_user.has_rights(['Admin','Gerente']) %>
-		<dt><%= link_to 'Cambiar', edit_user_path(@user) %></dt>
+		<li><%= link_to 'Cambiar', edit_user_path(@user) %></li>
 	<% end %>
 	<% if current_user.has_rights(['Admin','Gerente']) %>
-		<dt><%= link_to 'Lista', users_path %></dt>
+		<li><%= link_to 'Lista', users_path %></li>
 	<% end %>
 <% end %>
 	
@@ -85,7 +85,7 @@
 	<b>Papeles:</b>
 	<div>
 		<% for role in @user.roles %>
-			<dt><%=h role.title %></dt>
+			<li><%=h role.title %></li>
 		<% end %>
 	</div>
 </p>

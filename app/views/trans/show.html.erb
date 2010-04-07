@@ -1,8 +1,8 @@
 <% content_for :title do %>Transaccion #<%=h @trans.id %><% end %>
 <% content_for :actions do %>
 	<% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
-		<dt><%= link_to 'Nueva Transaccion', new_tran_path  %></dt>
-		<dt><%= link_to 'Cambiar Transaccion', edit_tran_path  %></dt>
+		<li><%= link_to 'Nueva Transaccion', new_tran_path  %></li>
+		<li><%= link_to 'Cambiar Transaccion', edit_tran_path  %></li>
 	<% end %>
 <% end %>
 <div class="column2-unit-left">

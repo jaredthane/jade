@@ -4,11 +4,11 @@
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
 <% if mode == 'edit' %>
-		<dt><%= link_to 'Ver', @category, :class => 'action' %></dt>
-		<dt><%= link_to 'Remover', @category, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+		<li><%= link_to 'Ver', @category, :class => 'action' %></li>
+		<li><%= link_to 'Remover', @category, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></li>
 	<% end %>
-	<dt><%= link_to 'Lista', product_categories_path, :class => 'action' %></dt>
-	<dt><%= link_to_function 'Guardar', 'submit("category_form")', :class => 'action' %></dt>
+	<li><%= link_to 'Lista', product_categories_path, :class => 'action' %></li>
+	<li><%= link_to_function 'Guardar', 'submit("category_form")', :class => 'action' %></li>
 <% end %>
 
 <%= error_messages_for :category %>

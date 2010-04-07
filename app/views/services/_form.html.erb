@@ -4,10 +4,10 @@
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
     <% if mode == 'edit' %>
-		<dt><%= link_to 'Ver', @service, :class => 'action' %></dt>
+		<li><%= link_to 'Ver', @service, :class => 'action' %></li>
 	<% end %>
-	<dt><%= link_to 'Lista', services_path, :class => 'action' %></dt>
-	<dt><%= link_to_function 'Guardar', 'submit("service_form")', :class => 'action' %></dt>
+	<li><%= link_to 'Lista', services_path, :class => 'action' %></li>
+	<li><%= link_to_function 'Guardar', 'submit("service_form")', :class => 'action' %></li>
 <% end %>
 <%= error_messages_for :service %>
 

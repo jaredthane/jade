@@ -4,13 +4,13 @@
 <% content_for :title do %>Lista de Inventario para <%= current_user.location.name %><% end %>
 <% content_for :actions do %>
 	<% if current_user.has_rights(['admin','compras','gerente']) %>
-		<dt><%= link_to_function 'Guardar', 'submit("inventory_form")', :class => 'action' %></dt>
-		<dt><%= link_to_function 'Generar Pedidos', 'generate_orders()', :class => 'action' %></dt>
-		<dt><%= link_to "Dar Recomendaciones", 'inventories/recommend?search=' + @search, :class => 'action' %></dt>
-		<dt><%= link_to "Borrar Recomendaciones", 'inventories/clear?search=' + @search, :class => 'action' %></dt>
+		<li><%= link_to_function 'Guardar', 'submit("inventory_form")', :class => 'action' %></li>
+		<li><%= link_to_function 'Generar Pedidos', 'generate_orders()', :class => 'action' %></li>
+		<li><%= link_to "Dar Recomendaciones", 'inventories/recommend?search=' + @search, :class => 'action' %></li>
+		<li><%= link_to "Borrar Recomendaciones", 'inventories/clear?search=' + @search, :class => 'action' %></li>
 	<% end %>
-	<dt><%= link_to "Cancelar Cambios", inventories_url, :class => 'action' %></dt>
-	<dt> <%= link_to 'Lista de Productos', products_url, :class => 'action' %>  </dt>
+	<li><%= link_to "Cancelar Cambios", inventories_url, :class => 'action' %></li>
+	<li> <%= link_to 'Lista de Productos', products_url, :class => 'action' %>  </li>
 <% end %>
 	<br />
 

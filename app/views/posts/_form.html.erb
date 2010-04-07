@@ -2,7 +2,7 @@
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
-	<dt><%= link_to_function 'Guardar', 'submit("trans_form")', :class => 'action' %></dt>
+	<li><%= link_to_function 'Guardar', 'submit("trans_form")', :class => 'action' %></li>
 <% end %>
 
 <%= error_messages_for :trans %>

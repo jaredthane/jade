@@ -2,12 +2,12 @@
 <% content_for :actions do %>
 	<% if current_user.has_right(User::VIEW_COUNTS) %>
 		<% if @order.last_received == nil %>
-			<dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
-			<dt><%= link_to 'Procesar', post_count_path(@order), :class => 'action' %></dt>
+			<li><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></li>
+			<li><%= link_to 'Procesar', post_count_path(@order), :class => 'action' %></li>
 		<% end %>
-		<dt><%= link_to 'Nueva Cuenta Fisica', '/count/new', :class => 'action' %></dt>
-		<dt><%= link_to 'Imprimir', count_sheet_url, :class => 'action' %></dt>
-		<dt><%= link_to 'Lista', '/counts', :class => 'action' %></dt>
+		<li><%= link_to 'Nueva Cuenta Fisica', '/count/new', :class => 'action' %></li>
+		<li><%= link_to 'Imprimir', count_sheet_url, :class => 'action' %></li>
+		<li><%= link_to 'Lista', '/counts', :class => 'action' %></li>
 	<% end %>
 <% end %>
 <% if @order.deleted %><p class="error_message" >Este pedido ha sido anulado.</p><% end %>

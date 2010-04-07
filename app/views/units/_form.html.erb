@@ -2,9 +2,9 @@
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
 	<% if mode=='edit' %>
-		<dt><%= link_to 'Remover', @unit, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+		<li><%= link_to 'Remover', @unit, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></li>
 	<% end %>
-	<dt><%= link_to 'Cancelar', units_path, :class => 'action' %></dt>
+	<li><%= link_to 'Cancelar', units_path, :class => 'action' %></li>
 <% end %>
 
 <%= error_messages_for :unit %>

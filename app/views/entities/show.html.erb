@@ -14,28 +14,28 @@
 <% end %>
 <% content_for :actions do %>
 	<% if @entity.entity_type_id == 3 %>
-    <dt><%= link_to 'Nuevo', new_site_path, :class => 'action' %></dt>
-    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
-		<dt><%= link_to 'Compras Aqui', purchases_path, :class => 'action' %>  </dt>
-		<dt><%= link_to 'Ventas Aqui', sales_path, :class => 'action' %>  </dt>
-    <dt><%= link_to 'Lista', sites_path, :class => 'action' %></dt>
-    <dt><%= link_to 'Imprimir', entity_path(@entity, :format=>'pdf'), :class => 'action' %></dt>
+    <li><%= link_to 'Nuevo', new_site_path, :class => 'action' %></li>
+    <li><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></li>
+		<li><%= link_to 'Compras Aqui', purchases_path, :class => 'action' %>  </li>
+		<li><%= link_to 'Ventas Aqui', sales_path, :class => 'action' %>  </li>
+    <li><%= link_to 'Lista', sites_path, :class => 'action' %></li>
+    <li><%= link_to 'Imprimir', entity_path(@entity, :format=>'pdf'), :class => 'action' %></li>
 	<% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
-	    <dt><%= link_to 'Nuevo', new_client_path, :class => 'action' %></dt>
-	    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
-	    <dt><%= link_to 'Lista', clients_path, :class => 'action' %></dt>
-  	  <dt><%= link_to 'Imprimir', entity_path(@entity, :format=>'pdf'), :class => 'action' %></dt>
+	    <li><%= link_to 'Nuevo', new_client_path, :class => 'action' %></li>
+	    <li><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></li>
+	    <li><%= link_to 'Lista', clients_path, :class => 'action' %></li>
+  	  <li><%= link_to 'Imprimir', entity_path(@entity, :format=>'pdf'), :class => 'action' %></li>
   	  <% if current_user.has_right(User::CREATE_SUBSCRIPTIONS) %>
-	    	<dt><%= link_to 'Anadir Suscripcion', new_subscription_path(:client_id=>@entity.id), :class => 'action' %></dt>
+	    	<li><%= link_to 'Anadir Suscripcion', new_subscription_path(:client_id=>@entity.id), :class => 'action' %></li>
 	    <% end %>
 	<% end %>
 	<% if @entity.entity_type_id == 1 %>
-	    <dt><%= link_to 'Nuevo', new_vendor_path, :class => 'action' %></dt>
-	    <dt><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></dt>
-	    <dt><%= link_to 'Lista', vendors_path, :class => 'action' %></dt>
-  	  <dt><%= link_to 'Compras', orders_path(:search=>@entity.name), :class => 'action' %></dt>
- 		  <dt><%= link_to 'Imprimir', entity_path(@entity, :format=>'pdf'), :class => 'action' %></dt>
+	    <li><%= link_to 'Nuevo', new_vendor_path, :class => 'action' %></li>
+	    <li><%= link_to 'Cambiar', edit_entity_path(@entity), :class => 'action' %></li>
+	    <li><%= link_to 'Lista', vendors_path, :class => 'action' %></li>
+  	  <li><%= link_to 'Compras', orders_path(:search=>@entity.name), :class => 'action' %></li>
+ 		  <li><%= link_to 'Imprimir', entity_path(@entity, :format=>'pdf'), :class => 'action' %></li>
 	<% end %>
 <% end %>
 <script type="text/javascript">

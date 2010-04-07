@@ -1,9 +1,9 @@
 
 <% content_for :title do %>Detalle de Movimiento<% end %>
 <% content_for :actions do %>
-	<dt><%= link_to 'Cambiar | ', edit_movement_path(@movement), :class => 'action' %></dt>
-	<dt><%= link_to 'Movimientos Para Este Producto | ', :controller => "movements", :search => @movement.product.upc, :class => 'action' %></dt>
-	<dt><%= link_to 'Movimientos Recientes', movements_path, :class => 'action' %></dt>
+	<li><%= link_to 'Cambiar | ', edit_movement_path(@movement), :class => 'action' %></li>
+	<li><%= link_to 'Movimientos Para Este Producto | ', :controller => "movements", :search => @movement.product.upc, :class => 'action' %></li>
+	<li><%= link_to 'Movimientos Recientes', movements_path, :class => 'action' %></li>
 <% end %>
 
 <p>

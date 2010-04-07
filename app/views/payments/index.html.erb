@@ -4,9 +4,9 @@
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
-	<dt><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></dt>
-	<dt><%= link_to_function 'Reporte', 'submit_report("date_range_form")', :class => 'action' %></dt>
-	<dt> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </dt>
+	<li><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></li>
+	<li><%= link_to_function 'Reporte', 'submit_report("date_range_form")', :class => 'action' %></li>
+	<li> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </li>
 <% end %>
 <% content_for :title do %>Lista de Pagos<% end %>
 <%= render :partial => 'layouts/search', :locals => {:show_search => true, :show_sites=>true,  :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => payments_path } %>

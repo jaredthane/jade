@@ -6,13 +6,13 @@
 <% end %>
 
 <% content_for :actions do %>
-  <dt><%= link_to_function 'Guardar', 'submit("payment_form")' %></dt>
+  <li><%= link_to_function 'Guardar', 'submit("payment_form")' %></li>
   <% if mode == 'edit' %>
-    <dt><%= link_to 'Cancelar', @payment %></dt>
-    <dt><%= link_to 'Borrar', @payment, :confirm => 'Esta seguro?', :method => :delete %></dt>
-    <dt><%= link_to 'Lista', payments_path %></dt>
+    <li><%= link_to 'Cancelar', @payment %></li>
+    <li><%= link_to 'Borrar', @payment, :confirm => 'Esta seguro?', :method => :delete %></li>
+    <li><%= link_to 'Lista', payments_path %></li>
   <% else %>
-    <dt><%= link_to 'Cancelar', payments_path %></dt>
+    <li><%= link_to 'Cancelar', payments_path %></li>
   <% end %>
 <% end %>
 

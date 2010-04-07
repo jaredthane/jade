@@ -4,11 +4,11 @@
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
 <% if mode == 'edit' %>
-		<dt><%= link_to 'Ver', @warranty, :class => 'action' %></dt>
-		<dt><%= link_to 'Remover', @warranty, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+		<li><%= link_to 'Ver', @warranty, :class => 'action' %></li>
+		<li><%= link_to 'Remover', @warranty, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></li>
 	<% end %>
-	<dt><%= link_to 'Lista', warranties_path, :class => 'action' %></dt>
-	<dt><%= link_to_function 'Guardar', 'submit("warranty_form")', :class => 'action' %></dt>
+	<li><%= link_to 'Lista', warranties_path, :class => 'action' %></li>
+	<li><%= link_to_function 'Guardar', 'submit("warranty_form")', :class => 'action' %></li>
 <% end %>
 
 <%= error_messages_for :warranty %>

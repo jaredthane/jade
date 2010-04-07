@@ -1,8 +1,8 @@
 
 <h1>Editing serialized_product</h1>
 <% content_for :actions do %>
-	<dt><%= link_to 'Ver', @serialized_product %></dt>
-	<dt><%= link_to 'Cancelar', serialized_products_path %></dt>
+	<li><%= link_to 'Ver', @serialized_product %></li>
+	<li><%= link_to 'Cancelar', serialized_products_path %></li>
 <% end %>
 <%= error_messages_for :serialized_product %>
 

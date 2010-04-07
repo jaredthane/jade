@@ -1,8 +1,8 @@
 <% content_for :title do %><%=h @discount.name %> - <%=h @discount.upc %><% end %>
 <% content_for :actions do %>
-	<dt> <%= link_to 'Nuevo Descuento', new_discount_path, :class => 'action' %> </dt>
-	<dt> <%= link_to 'Cambiar', edit_discount_path(@discount), :class =>'action' %>  </dt>
-	<dt> <%= link_to 'Lista', discounts_path, :class =>'action' %> </dt>
+	<li> <%= link_to 'Nuevo Descuento', new_discount_path, :class => 'action' %> </li>
+	<li> <%= link_to 'Cambiar', edit_discount_path(@discount), :class =>'action' %>  </li>
+	<li> <%= link_to 'Lista', discounts_path, :class =>'action' %> </li>
 <% end %>
 
 <h2>

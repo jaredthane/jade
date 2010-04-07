@@ -4,8 +4,8 @@
 <% content_for :title do %>Nueva Historia para <%= @entity.name %><% end %>
 <% content_for :actions do %>
 
-	<dt><%= link_to 'Cancelar', @entity %></dt>
-	<dt><%= link_to_function 'Generar', 'submit("receipt_form")' %></dt>
+	<li><%= link_to 'Cancelar', @entity %></li>
+	<li><%= link_to_function 'Generar', 'submit("receipt_form")' %></li>
 <% end %>
 
 <%= error_messages_for :receipt %>

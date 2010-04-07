@@ -47,15 +47,20 @@
 .main-navigation .loginform input.button {float:left; width:5.0em; margin:10px 0 5px 0; padding:1px; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:110%;}
 .main-navigation .loginform input.button:hover {cursor:pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:rgb(80,80,80);}
 
+
+
+
+.main-navigation a:visited {color:rgb(255,255,255);}
+.main-navigation a {clear:both; margin:0px;  font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:150%;}
 .main-navigation h1.first {clear:both; margin:0px; padding:4px 20px 3px 20px; background-color:#008597; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:150%;}
 .main-navigation h1 {clear:both; margin:30px 0 20px 0; padding:4px 20px 3px 20px; background:#008597; font-family:"trebuchet ms",arial,sans-serif; color:rgb(255,255,255); font-weight:bold; font-size:150%;}
-.main-navigation h2 {clear:both; margin:20px 10px 10px 20px; font-family:"trebuchet ms",arial,sans-serif; color:rgb(100,100,100); font-weight:bold; font-size:150%;}
+.main-navigation h2 {clear:both; font-family:"trebuchet ms",arial,sans-serif; color:rgb(100,100,100); font-weight:bold; font-size:150%;}
 .main-navigation h3 {clear:both; margin:10px 10px 5px 20px; color:rgb(80,80,80); font-weight:bold; font-size:110%;} /* Note: h2 not existent, to make identical to formats for main-navigation for easier exchange */
 .main-navigation p {clear:both; margin:0 10px 10px 20px; color:rgb(80,80,80); line-height:1.3em; font-size:110%;}
 .main-navigation p.center {text-align:center;}
 .main-navigation p.right {text-align:right;}
 
-.main-navigation ul {list-style:none; margin:0.5em 10px 1.0em 20px;}
+.main-navigation ul {list-style:none; }
 .main-navigation ul li {margin:5px 0 0.2em 2px; padding:0px 0px 0 11px; background:url(../img/bg_bullet_full_1.gif) no-repeat 0 0.4em; line-height:1.2em; font-size:110%;}
 .main-navigation ol {margin:0.5em 10px 1.0em 40px !important /*Non-IE6*/; margin:0.5em 10px 1.0em 45px /*IE6*/;}
 .main-navigation ol li {list-style-position:outside; margin:0 0 0.4em 0; font-size:110%;}
@@ -89,23 +94,37 @@
 .main-content .table_row input.field {width:90%;background: #e1e1e1;}
 .main-content .table_row input.serial {width:90%;background: #e1e1e1;}
 p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,80,80); font-size:110%;}
-.main-content .table_row {height:2.5em; background: #e1e1e1; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
+.main-content .table_row {height:2.5em; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
 .main-content .table_row_green {height:2.5em; background: #96c09c; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
 .main-content .table_row_red {height:2.5em; background: #ff6666; border-top:solid 1px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:normal; color:rgb(80,80,80); font-size:120%;}
-.main-content .table_header_row {height:2.5em; background: #008597; border-top:solid 2px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:bold; color: #FFFFFF; font-size:120%;}
-.main-content .table_cell_20 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 20%; vertical-align: bottom;}
-.main-content .table_cell {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em;}
-.main-content .table_cell_5 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 5%; vertical-align: bottom;}
-.main-content .table_cell_15 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 15%; vertical-align: bottom;}
-.main-content .table_cell_10 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 10%; vertical-align: bottom;}
-.main-content .table_cell_50 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 50%; vertical-align: bottom;}
-.main-content .table_cell_80 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 80%; vertical-align: bottom;}
-.main-content .table_cell_70 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 70%; vertical-align: bottom;}
-.main-content .table_cell_60 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 60%; vertical-align: bottom;}
-.main-content .table_cell_25 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 25%; vertical-align: bottom;}
-.main-content .table_cell_30 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 30%; vertical-align: bottom;}
-.main-content .table_cell_35 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 35%; vertical-align: bottom;}
-.main-content .table_cell_40 {overflow:hidden; border-right:solid 2px rgb(255,255,255); height:2.5em; float: left; width: 40%; vertical-align: bottom;}
+.main-content .table_header_row {height:2.5em; border-top:solid 2px rgb(255,255,255); border-bottom:solid 1px rgb(255,255,255); color: #000000; margin-top: 0; margin-right: 0px; margin-bottom: 0; margin-left: 0px; padding: 0; text-align: center; font-weight:bold; color: #FFFFFF; font-size:120%;}
+.main-content .table_header_row .table_cell_20 {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin:1px; height:2.5em; float: left; width: 20%; vertical-align: bottom;}
+.main-content .table_header_row .table_cell {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin:1px; height:2.5em;}
+.main-content .table_header_row .table_cell_5 {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin:1px; height:2.5em; float: left; width: 5%; vertical-align: bottom;}
+.main-content .table_header_row .table_cell_15 {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin 1px; height:2.5em; float: left; width: 15%; vertical-align: bottom;}
+.main-content .table_header_row .table_cell_10 {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin 1px; height:2.5em; float: left; width: 10%; vertical-align: bottom;}
+.main-content .table_header_row .table_cell_50 {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin 1px; height:2.5em; float: left; width: 50%; vertical-align: bottom;}
+.main-content .table_header_row .table_cell_80 {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin 1px; height:2.5em; float: left; width: 80%; vertical-align: bottom;}
+.main-content .table_header_row .table_cell_70 {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin:1px; height:2.5em; float: left; width: 70%; vertical-align: bottom;}
+.main-content .table_header_row .table_cell_60 {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin:1px; height:2.5em; float: left; width: 60%; vertical-align: bottom;}
+.main-content .table_header_row .table_cell_25 {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin:1px; height:2.5em; float: left; width: 25%; vertical-align: bottom;}
+.main-content .table_header_row .table_cell_30 {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin:1px; height:2.5em; float: left; width: 30%; vertical-align: bottom;}
+.main-content .table_header_row .table_cell_35 {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin:1px; height:2.5em; float: left; width: 35%; vertical-align: bottom;}
+.main-content .table_header_row .table_cell_40 {-moz-border-radius:4px;background:	#008597; overflow:hidden; margin:1px; height:2.5em; float: left; width: 40%; vertical-align: bottom;}
+
+.main-content .table_cell_20 {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em; float: left; width: 20%; vertical-align: bottom;}
+.main-content .table_cell {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em;}
+.main-content .table_cell_5 {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em; float: left; width: 5%; vertical-align: bottom;}
+.main-content .table_cell_15 {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em; float: left; width: 15%; vertical-align: bottom;}
+.main-content .table_cell_10 {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em; float: left; width: 10%; vertical-align: bottom;}
+.main-content .table_cell_50 {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em; float: left; width: 50%; vertical-align: bottom;}
+.main-content .table_cell_80 {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em; float: left; width: 80%; vertical-align: bottom;}
+.main-content .table_cell_70 {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em; float: left; width: 70%; vertical-align: bottom;}
+.main-content .table_cell_60 {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em; float: left; width: 60%; vertical-align: bottom;}
+.main-content .table_cell_25 {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em; float: left; width: 25%; vertical-align: bottom;}
+.main-content .table_cell_30 {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em; float: left; width: 30%; vertical-align: bottom;}
+.main-content .table_cell_35 {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em; float: left; width: 35%; vertical-align: bottom;}
+.main-content .table_cell_40 {-moz-border-radius:4px;background:#E1E1E1; overflow:hidden; margin:1px; height:2.5em; float: left; width: 40%; vertical-align: bottom;}
 .main-content .table_row select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;background: #e1e1e1;}
 .main-content .table_row_red select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
 .main-content .table_row_green select {width:95%;padding:2px; border:solid 1px rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:110%;}
@@ -123,7 +142,28 @@ p.caption {clear:both; margin:0.5em 0 2.0em 20px; text-align:left; color:rgb(80,
 .slider_bar .button{width:50px; height:16px;}
 .slider_bar a{font-size:130%;}
 .ui-slider {clear:both;}
-
+/*ui-accordion-header ui-helper-reset ui-state-default ui-corner-all*/
+.main-navigation .ui-state-active{
+    background:#008597 ;
+    padding-left:15px;
+    color:#FFFFFF}
+.main-navigation .ui-state-default{
+    background:#E1E1E1 ;
+    padding-left:15px;
+    color:#505050}
+.ui-icon {
+margin-left:-10px;
+}
+/*.ui-accordion-content .action {*/
+/*    font-family:verdana,arial,sans-serif;*/
+/*    font-size:12px;*/
+/*    font-weight:normal;*/
+/*    font-style:normal;*/
+/*    color:#2A5A8A;*/
+/*}*/
+.main-navigation .ui-accordion-content{
+    padding:1em 0em;
+}
 ul.menu {list-style:none; margin:0; padding:0}
 ul.menu * {margin:0; padding:0}
 ul.menu a {display:block; color:#000; text-decoration:none}
@@ -170,3 +210,11 @@ ul.menu .topline {border-top:1px solid #aaa}
 
 .main a img {border:none;}
 .main a:hover img {border:none;}
+
+.ui-accordion-content a{
+    font-family:verdana,arial,sans-serif;
+    font-size:12px;
+    font-weight:normal;
+    font-style:normal;
+    color:#2A5A8A;
+}

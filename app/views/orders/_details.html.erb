@@ -14,64 +14,64 @@
 	<% case @order.order_type_id
 	when 1 %>
 		<% if current_user.has_right(User::CHANGE_SALES) %>
-    			<dt><%= link_to 'Nueva Venta', new_sale_path %></dt>
-    			<dt><%= link_to 'Cambiar', edit_order_path(@order) %></dt>
+    			<li><%= link_to 'Nueva Venta', new_sale_path %></li>
+    			<li><%= link_to 'Cambiar', edit_order_path(@order) %></li>
     			<% if current_user.has_rights(['Admin','Gerente']) %>
-						<dt><%= link_to 'Borrar', erase_order_path(@order) %></dt>
+						<li><%= link_to 'Borrar', erase_order_path(@order) %></li>
 					<% end %>
 		    <% if !@order.deleted %>
-			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></dt>
+			    <li><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></li>
 			    <% if @order.amount_paid < @order.grand_total %>
-			    	<dt><%= link_to 'Marcar Pagado', pay_off_path(:order_id=>@order.id) %></dt>
+			    	<li><%= link_to 'Marcar Pagado', pay_off_path(:order_id=>@order.id) %></li>
 			    <% elsif @order.amount_paid > @order.grand_total %>
-			    	<dt><%= link_to 'Devolver Dinero', pay_off_path(:order_id=>@order.id) %></dt>
+			    	<li><%= link_to 'Devolver Dinero', pay_off_path(:order_id=>@order.id) %></li>
 			    <% end %>
 			<% end %>
-			<dt><%= link_to 'Imprimir', count_sheet_url, :class => 'action' %></dt>
+			<li><%= link_to 'Imprimir', count_sheet_url, :class => 'action' %></li>
 		<% end %>
 		<% if view == 'products' %>
-		  <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
+		  <li><%= link_to 'Historia', order_history_path(@order) %></li>
 		<% elsif view == 'history' %>
-		  <dt><%= link_to 'Productos', order_path(@order) %></dt>
+		  <li><%= link_to 'Productos', order_path(@order) %></li>
 		<% end %>
-		<dt><%= link_to 'Lista de Ventas', sales_path %> </dt>
+		<li><%= link_to 'Lista de Ventas', sales_path %> </li>
 	<% when 2 %>
 		<% if current_user.has_right(User::CHANGE_PURCHASES) %>
-    			<dt><%= link_to 'Nueva Compra', new_purchase_path %></dt>
-			    <dt><%= link_to 'Cambiar', edit_order_path(@order) %></dt>
+    			<li><%= link_to 'Nueva Compra', new_purchase_path %></li>
+			    <li><%= link_to 'Cambiar', edit_order_path(@order) %></li>
 		    <% if !@order.deleted %>
-			    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></dt>
+			    <li><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></li>
 			    <% if @order.amount_paid < @order.grand_total %>
-			    	<dt><%= link_to 'Marcar Pagado', pay_off_path(:order_id=>@order.id) %></dt>
+			    	<li><%= link_to 'Marcar Pagado', pay_off_path(:order_id=>@order.id) %></li>
 			    <% elsif @order.amount_paid > @order.grand_total %>
-			    	<dt><%= link_to 'Devolver Dinero', pay_off_path(:order_id=>@order.id) %></dt>
+			    	<li><%= link_to 'Devolver Dinero', pay_off_path(:order_id=>@order.id) %></li>
 			    <% end %>
 			<% end %>
 		  <% if view == 'products' %>
-		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
+		    <li><%= link_to 'Historia', order_history_path(@order) %></li>
 		  <% elsif view == 'history' %>
-		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
+		    <li><%= link_to 'Productos', order_path(@order) %></li>
 		  <% end %>
-			<dt><%= link_to 'Lista de Compras', purchases_path %> </dt>
+			<li><%= link_to 'Lista de Compras', purchases_path %> </li>
 		<% end %>
 	<% else %>
 		<% if current_user.has_rights(['Admin','Gerente']) %>
-	    <dt><%= link_to 'Cambiar', edit_order_path(@order) %></dt>
+	    <li><%= link_to 'Cambiar', edit_order_path(@order) %></li>
       <% if !@order.deleted %>
-		    <dt><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></dt>
+		    <li><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></li>
 		    <% if @order.amount_paid < @order.grand_total %>
-		    	<dt><%= link_to 'Marcar Pagado', pay_off_path(:order_id=>@order.id) %></dt>
+		    	<li><%= link_to 'Marcar Pagado', pay_off_path(:order_id=>@order.id) %></li>
 		    <% elsif @order.amount_paid > @order.grand_total %>
-		    	<dt><%= link_to 'Devolver Dinero', pay_off_path(:order_id=>@order.id) %></dt>
+		    	<li><%= link_to 'Devolver Dinero', pay_off_path(:order_id=>@order.id) %></li>
 		    <% end %>
 			<% end %>
 		  <% if view == 'products' %>
-		    <dt><%= link_to 'Historia', order_history_path(@order) %></dt>
+		    <li><%= link_to 'Historia', order_history_path(@order) %></li>
 		  <% elsif view == 'history' %>
-		    <dt><%= link_to 'Productos', order_path(@order) %></dt>
+		    <li><%= link_to 'Productos', order_path(@order) %></li>
 		  <% end %>
 		<% end %>
-		<dt><%= link_to 'Lista de Pedidos', orders_path %> </dt>
+		<li><%= link_to 'Lista de Pedidos', orders_path %> </li>
     <% end %>
 <% end %>
 

@@ -3,9 +3,9 @@
 <% end %>
 <% content_for :title do %>Lista de Asesores en <%= current_user.location.name %><% end %>
 <% content_for :actions do %>
-	<dt><%= link_to_function 'Actualizar', 'submit("date_form")', :class => 'action' %></dt>
-	<dt><%= link_to 'Reporte', sales_representatives_report_path(:till=>@till, :from=>@from) %></dt>
-	<dt> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </dt>
+	<li><%= link_to_function 'Actualizar', 'submit("date_form")', :class => 'action' %></li>
+	<li><%= link_to 'Reporte', sales_representatives_report_path(:till=>@till, :from=>@from) %></li>
+	<li> <%= link_to 'Lista de Ventas', sales_url, :class => 'action' %>  </li>
 <% end %>
 <script type="text/javascript">
 	$(document).ready(function(){

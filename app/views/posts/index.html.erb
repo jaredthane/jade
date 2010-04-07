@@ -4,8 +4,8 @@
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
-  <dt><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></dt>
-  <dt><%= link_to_function 'Imprimir', 'submit_report("date_range_form")', :class => 'action' %></dt>
+  <li><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></li>
+  <li><%= link_to_function 'Imprimir', 'submit_report("date_range_form")', :class => 'action' %></li>
 <% end %>
 <% content_for :title do %>Lista de Transacciones<% end %>
 <%= render :partial => 'layouts/search', :locals => {:show_search => false, :show_sites=>true, :search => @search, :filter => @account_id,:from => @from,:till => @till,:search_path => posts_path, :sites=>@sites} %>

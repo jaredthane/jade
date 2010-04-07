@@ -1,10 +1,10 @@
 <% content_for :title do %>Detalles de Hoja de Etiquetas #<%= @order.id %><% end %>
 <% content_for :actions do %>
 	<% if current_user.has_right(User::VIEW_PRODUCTS) %>
-		<dt><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></dt>
-		<dt><%= link_to 'Nueva Hoja', '/labels/new', :class => 'action' %></dt>
-		<dt><%= link_to 'Imprimir', show_receipt_url(@order), :class => 'action' %></dt>
-		<dt><%= link_to 'Lista', '/counts', :class => 'action' %></dt>
+		<li><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></li>
+		<li><%= link_to 'Nueva Hoja', '/labels/new', :class => 'action' %></li>
+		<li><%= link_to 'Imprimir', show_receipt_url(@order), :class => 'action' %></li>
+		<li><%= link_to 'Lista', '/counts', :class => 'action' %></li>
 	<% end %>
 <% end %>
 <div class="column2-unit-left">

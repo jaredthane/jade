@@ -1,11 +1,11 @@
 <% content_for :title do %><%=h @subscription.product.name %> para <%=h @subscription.client.name %><% end %>
 <% content_for :actions do %>
     <% if current_user.has_rights(['Admin','ventas','gerente']) %>
-        <dt><%= link_to 'Nuevo', new_subscription_path %></dt>
-        <dt><%= link_to 'Cambiar', edit_subscription_path(@subscription) %></dt>
-				<dt><%= link_to 'Remover', @subscription, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
+        <li><%= link_to 'Nuevo', new_subscription_path %></li>
+        <li><%= link_to 'Cambiar', edit_subscription_path(@subscription) %></li>
+				<li><%= link_to 'Remover', @subscription, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></li>
     <% end %>
-    <dt><%= link_to 'Lista', subscriptions_path %></dt>
+    <li><%= link_to 'Lista', subscriptions_path %></li>
 <% end %>
 <div class="column2-unit-left">
 	<p>

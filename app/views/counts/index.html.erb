@@ -7,7 +7,7 @@
 
 <% content_for :actions do %>
 	<% if current_user.has_right(User::CREATE_COUNTS) %>
-		<dt><%= link_to 'Nueva Cuenta Fisica', new_count_path, :class => 'action' %></dt>
+		<li><%= link_to 'Nueva Cuenta Fisica', new_count_path, :class => 'action' %></li>
 	<% end %>
 <% end %>
 <%= render :partial => 'layouts/search', :locals => {:show_search => true, :show_sites=>true,  :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => counts_path,:sites=>@sites  } %>

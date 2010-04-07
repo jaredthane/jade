@@ -7,13 +7,13 @@
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
 	<% if current_user.has_rights(['admin','compras','gerente']) %>
-		<dt><%= link_to_function 'Guardar', 'submit("combo_form")', :class => 'action' %></dt>
+		<li><%= link_to_function 'Guardar', 'submit("combo_form")', :class => 'action' %></li>
 		<% if mode == 'edit' %>
-			<dt> <%= link_to 'Remover', :class => 'action', :controller => "combos", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
-			<dt> <%= link_to 'Cancelar', combo_url(@combo), :class => 'action' %> </dt>
-			<dt><%= link_to 'Lista', combos_path, :class => 'action' %></dt> 
+			<li> <%= link_to 'Remover', :class => 'action', :controller => "combos", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </li>
+			<li> <%= link_to 'Cancelar', combo_url(@combo), :class => 'action' %> </li>
+			<li><%= link_to 'Lista', combos_path, :class => 'action' %></li> 
 		<% else %>
-			<dt> <%= link_to 'Cancelar', combos_path, :class => 'action' %> </dt>
+			<li> <%= link_to 'Cancelar', combos_path, :class => 'action' %> </li>
 		<% end %>
   <% end %>
    

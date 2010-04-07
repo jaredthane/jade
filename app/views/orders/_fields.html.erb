@@ -4,8 +4,8 @@
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
-	<dt><%= link_to_function 'Guardar', 'submit("order_form")', :class => 'action' %></dt>
-	<dt><%= link_to 'Cancelar', orders_url, :class => 'action' %></dt>
+	<li><%= link_to_function 'Guardar', 'submit("order_form")', :class => 'action' %></li>
+	<li><%= link_to 'Cancelar', orders_url, :class => 'action' %></li>
 <% end %>
 <% if @order.new_record? %>
 	<% case @order_type_id

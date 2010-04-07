@@ -7,46 +7,46 @@
 	<% case @order_type_id
 	when 1%>
 		<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
-			<dt><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %></dt>
-			<dt><%= link_to 'Anular No. de Factura', new_nul_receipt_number_url, :class => 'action' %></dt>
+			<li><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %></li>
+			<li><%= link_to 'Anular No. de Factura', new_nul_receipt_number_url, :class => 'action' %></li>
 			<% if current_user.has_rights(['Suscripciones','Admin']) %>
-			  <dt><%= link_to 'Lista de Suscripciones', subscriptions_url %></dt>
+			  <li><%= link_to 'Lista de Suscripciones', subscriptions_url %></li>
 			<% end %>
 		<% end %>
 	 <% when 2 %>
 		<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
-			<dt><%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %></dt>
+			<li><%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %></li>
 		<% end %>
 	<% when 6 %>
 		<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
-			<dt><%= link_to 'Nuevas Etiquetas', '/labels/new', :class => 'action' %></dt>
+			<li><%= link_to 'Nuevas Etiquetas', '/labels/new', :class => 'action' %></li>
 		<% end %>
 	<% when 3%>
 		<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
-			<dt><%= link_to 'Nuevo Consumo Interno', '/internal/new', :class => 'action' %></dt>
+			<li><%= link_to 'Nuevo Consumo Interno', '/internal/new', :class => 'action' %></li>
 		<% end %>	
 	<% when 4%>
 		<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
-			<dt><%= link_to 'Nueva Transferencia', '/transfer/new', :class => 'action' %></dt>
+			<li><%= link_to 'Nueva Transferencia', '/transfer/new', :class => 'action' %></li>
 		<% end %>	
 	<% when 5%>
 		<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
-			<dt><%= link_to 'Nueva Cuenta Fisica', '/count/new', :class => 'action' %></dt>
+			<li><%= link_to 'Nueva Cuenta Fisica', '/count/new', :class => 'action' %></li>
 		<% end %>	
 	<% else %>
 		<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
-			<dt><%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %></dt>
+			<li><%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %></li>
 		<% end %>
 		<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
-			<dt><%= link_to 'Nuevo Consumo Interno', '/internal/new', :class => 'action' %></dt>
+			<li><%= link_to 'Nuevo Consumo Interno', '/internal/new', :class => 'action' %></li>
 		<% end %>	
 		<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
-			<dt><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %></dt>
-			<dt><%= link_to 'Anular No. de Factura', new_nul_receipt_number_url, :class => 'action' %></dt>
+			<li><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %></li>
+			<li><%= link_to 'Anular No. de Factura', new_nul_receipt_number_url, :class => 'action' %></li>
 		<% end %>
 	<% end %>
-  <dt><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></dt>
-  <dt><%= link_to_function 'Imprimir', 'submit_report("date_range_form")', :class => 'action' %></dt>
+  <li><%= link_to_function 'Actualizar', 'submit_index("date_range_form")', :class => 'action' %></li>
+  <li><%= link_to_function 'Imprimir', 'submit_report("date_range_form")', :class => 'action' %></li>
 <% end %>
 
 <% case @order_type_id 

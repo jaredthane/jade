@@ -4,7 +4,7 @@
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
-	<dt> <%= link_to 'Ver Cuenta', @account, :class => 'action' %> </dt>
+	<li> <%= link_to 'Ver Cuenta', @account, :class => 'action' %> </li>
 <% end %>
 <% content_for :title do %>Lista de Transacciones para <%= @account.name %><% end %>
 <%= render :partial => 'layouts/search', :locals => {:show_search => false, :show_sites=>false, :search => @search, :filter => @account_id,:from => @from,:till => @till,:search_path => entries_path,:sites=>@sites  } %>

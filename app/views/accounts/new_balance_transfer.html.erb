@@ -1,11 +1,10 @@
-<% content_for(:javascript) do %>
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :title do %>Transferencia de Saldo<% end %>
 <% content_for :actions do %>
 
-	<dt><%= link_to 'Cancelar', @account %></dt>
-	<dt><%= link_to_function 'Generar', 'submit("transfer_form")' %></dt>
+	<li><%= link_to 'Cancelar', @account %></li>
+	<li><%= link_to_function 'Generar', 'submit("transfer_form")' %></li>
 <% end %>
 
 <% form_tag create_balance_transfer_path, :method =>'post', :id => 'transfer_form'  do %>

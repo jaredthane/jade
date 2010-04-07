@@ -7,13 +7,13 @@
 <% end %>
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
-	<dt><%= link_to_function 'Guardar', 'submit("discount_form");', :class => 'action' %></dt>
+	<li><%= link_to_function 'Guardar', 'submit("discount_form");', :class => 'action' %></li>
   <% if @mode =='edit' %>
- 		<dt> <%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </dt>
-    <dt><%= link_to 'Lista de Descuentos', discounts_path, :class => 'action' %></dt>
-    <dt><%= link_to 'Cancelar', discount_url(@discount), :class => 'action' %></dt>
+ 		<li> <%= link_to 'Remover', :class => 'action', :controller => "discounts", :action => "delete", :confirm => 'Esta seguro?', :method => :delete %> </li>
+    <li><%= link_to 'Lista de Descuentos', discounts_path, :class => 'action' %></li>
+    <li><%= link_to 'Cancelar', discount_url(@discount), :class => 'action' %></li>
   <% else %>
-    <dt><%= link_to 'Cancelar', discounts_path, :class => 'action' %></dt>
+    <li><%= link_to 'Cancelar', discounts_path, :class => 'action' %></li>
   <% end %>
 <% end %>
 <%= error_messages_for :discount %>

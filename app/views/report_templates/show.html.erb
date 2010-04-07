@@ -3,9 +3,9 @@
 
 <% content_for :actions do %>
 	<% if current_user.has_right('CHANGE_REPORTS')  %>
-		<dt><%= link_to 'Cambiar', edit_report_template_path(@report) %></dt>
+		<li><%= link_to 'Cambiar', edit_report_template_path(@report) %></li>
 	<% end %>	
-	<dt><%= link_to 'Lista de Plantillas', report_templates_path %></dt>
+	<li><%= link_to 'Lista de Plantillas', report_templates_path %></li>
 <% end %>
 
 <div class="column2-unit-left">

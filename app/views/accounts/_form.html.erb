@@ -4,14 +4,14 @@
 <% content_for :title do %><%= heading %><% end %>
 <% content_for :actions do %>
   <% if mode == 'edit' %>
-	  <dt><%= link_to 'Lista', accounts_path, :class => 'action' %></dt>
-		<dt><%= link_to 'Remover', @account, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></dt>
-	  <dt><%= link_to 'Cancelar', @account, :class => 'action' %></dt>
+	  <li><%= link_to 'Lista', accounts_path, :class => 'action' %></li>
+		<li><%= link_to 'Remover', @account, :confirm => 'Esta seguro?', :method => :delete, :class => 'action' %></li>
+	  <li><%= link_to 'Cancelar', @account, :class => 'action' %></li>
   <% else %>
-    <dt><%= link_to 'Cancelar', accounts_path, :class => 'action' %></dt>
+    <li><%= link_to 'Cancelar', accounts_path, :class => 'action' %></li>
 	<% end %>
-	<dt><%= link_to_function 'Guardar', 'submit("account_form")', :class => 'action' %></dt>
-	<dt><%= link_to 'Nueva Transaccion', new_tran_path  %></dt>
+	<li><%= link_to_function 'Guardar', 'submit("account_form")', :class => 'action' %></li>
+	<li><%= link_to 'Nueva Transaccion', new_tran_path  %></li>
 <% end %>
 
 <% for error in @account.errors %>

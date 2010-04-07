@@ -38,9 +38,9 @@
   <meta name="keywords" content="Your keywords, keywords, keywords, here ..." />
   <%= javascript_tag "var AUTH_TOKEN = #{form_authenticity_token.inspect};" if protect_against_forgery? %>
 
-  <link type="text/css" rel="stylesheet" media="screen" href="/css/text.css">
-  <link type="text/css" rel="stylesheet" media="screen" href="/css/setup.css">
-  <link rel="stylesheet" href="/css/jquery-ui-custom-theme/jquery-ui-1.7.2.custom.css" type="text/css">
+  <link type="text/css" rel="stylesheet" media="screen" href="/css/text.css"/>
+  <link type="text/css" rel="stylesheet" media="screen" href="/css/setup.css"/>
+  <link rel="stylesheet" href="/css/jquery-ui-custom-theme/jquery-ui-1.7.2.custom.css" type="text/css"/>
 
   <%= stylesheet_link_tag 'jquery.autocomplete' %>
   <%= stylesheet_link_tag 'jquery-ui' %>
@@ -51,9 +51,6 @@
 	<%= javascript_include_tag 'application.js' %>
 	<%= javascript_include_tag 'jquery.hotkeys.min' %>
 	
-  <br/>
-  
-
 	<%= yield :javascript %>
   
   <link rel="icon" type="image/x-icon" href="/img/jade.ico" />
@@ -78,7 +75,23 @@
             <div class="user-info">
                 <h2>Usuario: <%= current_user.name%> <a href="/logout" style="color:white;text-decoration:none;">(Salir)</a></h2>
                 <h2>Fecha: <%= current_user.date%></h2>
-                <h2>Sitio: <%= current_user.location.name%> / <%= current_user.price_group_name.name %></h2>
+                <div ><ul id="site-switcher"><li>Punto de vista: "</li>
+                <li>
+                    <a class="price_group_switch" href="#" title="<%= current_user.price_group_name.name%>"><%= current_user.price_group_name.name%></a>
+                    <ul>
+                        <% for location in get_locations %>
+        			        <li><a href="/entities/<%= location.id %>"><%= location.name %></a></li>
+              	        <% end %>
+        		    </ul>
+        		</li>
+                <li>"  en "</li>
+        		<li><a class="site_switch" href="#" title="<%= current_user.location.name%>"><%= current_user.location.name%></a>
+                    <ul>
+                        <% for location in get_locations %>
+        			        <li><a href="/entities/<%= location.id %>"><%= location.name %></a></li>
+              	        <% end %>
+        		    </ul>
+                </li><li>"</li></ul></div>
             </div>
             <div class="searchform">
               <% form_tag search_path, :method =>'get', :id => 'search_form' do %>
@@ -110,7 +123,7 @@
         <!-- Navigation Level 2 (Drop-down menus) -->
         <div class="nav2">
           <ul>
-	<li><a href="#">Nuevo</a>
+	<li class="ui-corner-all"><a class="ui-corner-all" href="#">Nuevo</a>
 		<ul>
 			<% if current_user.has_right('CREATE_SALES') %>
   			<li><a href="/sales/new" title="Venta">Venta</a></li>
@@ -270,8 +283,58 @@
     </div>
 
   <!-- For menus -->
+	
+    <!-- B. MAIN -->
+    <div class="main">
+    <div class="nav-daddy">
+      <div class="main-nav-spacer"></div>
+      <!-- B.1 MAIN NAVIGATION -->
+      <div class="main-navigation" id="accordion" >
+<!--        <div class="round-border-topright"></div>-->
+<!--        <div class="round-border-topright"></div>-->
+        <h2>Acciones</h2>
+        <div>
+            <ul>
+                <%= yield :actions %>
+		    </ul>
+		</div>
+        <h2>Sitios</h2>
+        <div>
+            <ul>
+                <% for location in get_locations %>
+			        <li><a href="/entities/<%= location.id %>"><%= location.name %></a></li>
+      	        <% end %>
+		    </ul>
+        </div>
+        <h2>Categorias</h2>
+        <div>
+            <ul>
+                <% for category in get_product_categories %>
+			        <li><a href="/product_categories/<%= category.id %>"><%= category.name %></a></li>
+      	        <% end %>
+		    </ul>
+        </div>
+        <h2>Productos</h2>
+        <div>
+            <ul>
+		    <li><a href="/products">Productos</a></li>
+		    <li><a href="/services">Servicios</a></li>
+		    <li><a href="/combos">Combos</a></li>
+		    <li><a href="/serialized_products">Numeros de Serie</a></li>
+		    <li><a href="/prices">Cambiar Precios</a></li>
+		    <li><a href="/warranties">Garantías</a></li>
+		    <li><a href="/discounts">Descuentos</a></li>
+		    <li><a href="/inventories">Reaprovisionar</a></li>
+		    <li><a href="/units">Unidades</a></li>
+		    </ul>
+        </div>
+		
+		
 	<script type="text/javascript">
 		$(document).ready(function(){
+	    	$("#accordion").accordion({ header: 'h2' });
+
+
 			jQuery(document).bind('keydown', 'f1',function (evt){window.location = '<%= new_sale_path %>'; return false; }); 
 			jQuery(document).bind('keydown', 'f2',function (evt){window.location = '<%= new_product_path %>'; return false; }); 
 			jQuery(document).bind('keydown', 'f3',function (evt){window.location = '<%= new_client_path %>'; return false; }); 
@@ -288,91 +351,10 @@
 			jQuery(document).bind('keydown', 'esc',function (evt){window.location = $('#cancel_url').val(); return false; }); 
 		});
 	</script>
-    <!-- B. MAIN -->
-    <div class="main">
-    <div class="nav-daddy">
-      <div class="main-nav-spacer"></div>
-      <!-- B.1 MAIN NAVIGATION -->
-      <div class="main-navigation">
+		
+		
+		
 
-        <!-- Navigation Level 3 -->
-        <div class="round-border-topright"></div>
-        <div class="round-border-topright"></div>
-  <h1 class="first">Acciones</h1>
-		<dl class="nav3-bullet">
-		   <%= yield :actions %>
-		</dl>      
-  <h1>Enlaces</h1>
-	<dl class="nav3-grid">
-	<% if current_user.has_right('VIEW_PRODUCTS') %>
-		<dt><a href="/products">Productos</a></dt>
-		<dd><a href="/products">Productos</a></dd>
-		<% if current_user.has_right('VIEW_CLIENTS') %>
-			<dd><a href="/services">Servicios</a></dd>
-		<% end %>
-		<% if current_user.has_right('VIEW_CLIENTS') %>
-			<dd><a href="/combos">Combos</a></dd>
-		<% end %>
-		<% if current_user.has_right('VIEW_CLIENTS') %>
-			<dd><a href="/serialized_products">Numeros de Serie</a></dd>
-		<% end %>
-		<% if current_user.has_right('VIEW_CLIENTS') %>
-				<dd><a href="/prices">Cambiar Precios</a></dd>
-		<% end %>
-		<% if current_user.has_right('VIEW_CLIENTS') %>
-			<dd><a href="/warranties">Garantías</a></dd>
-		<% end %>
-		<% if current_user.has_right('CREATE_CLIENTS') %>
-			<dd><a href="/discounts">Descuentos</a></dd>
-		<% end %>
-		<% if current_user.has_right('CREATE_CLIENTS') %>
-			<dd><a href="/inventories">Reaprovisionar</a></dd>
-		<% end %>
-		<dd><a href="/units">Unidades</a></dd>
-		<dt><a href="/products">Inventario</a></dt>
-		<% for location in get_locations %>
-			<dd><a href="/entities/<%= location.id %>"><%= location.name %></a></dd>		
-  	<% end %>
-  	<dt><a href="/product_categories">Categorías</a></dt>
-	  <% for category in get_product_categories %>
-			<dd><a href="/product_categories/<%= category.id %>"><%= category.name %></a></dd>		
-  	<% end %>
-	<% end %>
-	<dt><a href="/orders">Pedidos</a></dt>
-	<% if current_user.has_right('CREATE_CLIENTS') %>
-		<dd><a href="/purchases">Compras</a></dd>
-	<% end %>
-	<% if current_user.has_right('CREATE_CLIENTS') %>
-  	<dd><a href="/sales">Ventas</a></dd>
-	<% end %>
-	<% if current_user.has_right('CREATE_CLIENTS') %>
-  	<dd><a href="/subscriptions">Suscripciones</a></dd>
-	<% end %>	
-	<% if current_user.has_right('CREATE_CLIENTS') %>
-  	<dd><a href="/internal">Consumo Interno</a></dd>
-	<% end %>
-	<% if current_user.has_right('CREATE_CLIENTS') %>
-		<dt><a href="/clients/">Clientes</a></dd>		
-		<dd><a href="/entities/my_clients">Mis Clientes</a></dd>		
-	<% end %>
-	<% if current_user.has_right('CREATE_CLIENTS') %>
-	<dt><a href="/vendors/">Proveedores</a></dd>		
-	<% end %>
-	<% if current_user.has_right('CREATE_CLIENTS') %>
-  		<dt><a href="/payments">Pagos</a></dt>
-	<% end %>
-	<% if current_user.has_right('CREATE_CLIENTS') %>
-		<dt><a href="/users">Usuarios</a></dt>
-	<% else %>
-		<dt><a href="/me">Mi Cuenta</a></dt>
-	<% end %>
-	<% if current_user.has_right('CREATE_CLIENTS') %>
-		<dt><a href="/accounts">Contabilidad</a></dt>
-	<% end %>
-	<dt><a href="/logout">Salir</a></dt>
-	</dl>        
-        
-		   <%= yield :nav3 %>
 
 </div>
 

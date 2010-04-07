@@ -3,8 +3,8 @@
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 <% content_for :actions do %>
-    <dt><%= link_to_function 'Guardar', 'submit("report_form")', :class => 'action' %></dt>
-	<dt><%= link_to 'Cancelar', report_templates_path, :class => 'action' %></dt>
+    <li><%= link_to_function 'Guardar', 'submit("report_form")', :class => 'action' %></li>
+	<li><%= link_to 'Cancelar', report_templates_path, :class => 'action' %></li>
 <% end %>
 
 <%= error_messages_for :report %>

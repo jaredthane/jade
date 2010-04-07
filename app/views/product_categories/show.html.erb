@@ -1,24 +1,24 @@
 <% content_for :title do %>Categoria <%= @product_category.name %><% end %>
 <% content_for :actions do %>
 	<% if current_user.has_right(User::CREATE_PRODUCTS) %>
-		<dt><%= link_to 'Nuevo producto', new_product_path %></dt>
+		<li><%= link_to 'Nuevo producto', new_product_path %></li>
 	<% end %>
 	<% if current_user.has_right(User::CHANGE_PRODUCTS) %>
-    <dt><%= link_to 'Nueva Categoria', new_product_category_path %></dt>
-    <dt><%= link_to 'Cambiar', edit_product_category_path(@product_category) %></dt>
-    <dt><%= link_to "Borrar esta Categoría", @product_category, :confirm => 'Esta seguro?', :method => :delete %></dt>
+    <li><%= link_to 'Nueva Categoria', new_product_category_path %></li>
+    <li><%= link_to 'Cambiar', edit_product_category_path(@product_category) %></li>
+    <li><%= link_to "Borrar esta Categoría", @product_category, :confirm => 'Esta seguro?', :method => :delete %></li>
 	<% end %>
 	<% if current_user.has_right(User::CREATE_PURCHASES) %>
-    <dt><%= link_to 'Reaprovisionar', '/products/bulk_edit?search=' + @search.to_s %></dt>
+    <li><%= link_to 'Reaprovisionar', '/products/bulk_edit?search=' + @search.to_s %></li>
 	<% end %>
 	<% if current_user.has_right(User::CHANGE_PRICES) %>
-    <dt><%= link_to "Cambiar Precios", '/prices?search=' + @search.to_s %></dt>
+    <li><%= link_to "Cambiar Precios", '/prices?search=' + @search.to_s %></li>
 	<% end %>
 	<% if current_user.has_right(User::CREATE_COUNTS) %>
-		<dt><%= link_to "Hacer Cuenta Fisica", create_count_from_list_url(:category=>@product_category), :class => 'action' %></dt>
+		<li><%= link_to "Hacer Cuenta Fisica", create_count_from_list_url(:category=>@product_category), :class => 'action' %></li>
 	<% end %>
-	<dt><%= link_to 'Imprimir', products_url(:search=>@search, :format=>'pdf', :category_id=>@product_category.id), :class => 'action' %></dt>
-  <dt><%= link_to 'Lista', product_categories_path %></dt>
+	<li><%= link_to 'Imprimir', products_url(:search=>@search, :format=>'pdf', :category_id=>@product_category.id), :class => 'action' %></li>
+  <li><%= link_to 'Lista', product_categories_path %></li>
 <% end %>
 <% if current_user.has_right('VIEW_ACCOUNTS') and @product_category.revenue_account %>
   <p>
