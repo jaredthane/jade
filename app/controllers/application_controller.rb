@@ -82,18 +82,40 @@ class ApplicationController < ActionController::Base
 #		generate_receipt(order.sequel, true) if sequels_too and order.sequel
 #	end
 def generate_receipt(order, sequels_too=false)
+    logger.debug "about to generate receipt"
+    @order = order # !This line is important for the render_to_string
+    if order.order_type_id == Order::COUNT
+        html = Liquid::Template.parse(ReportTemplate.find_by_name('Count').content).render 'order' => order
+#  	elsif order.order_type_id == Order::LABELS
+#  		pdf_string = render_to_string :template => 'labels/labels.pdf.prawn', :layout => false
+  	else
+  	    template=ReportTemplate.find_by_name('Factura')
+	  	html = Liquid::Template.parse(template.content).render 'order' => @order, 'background'=>template_background_url(template.id), 'copies'=>['self', 'client']
+	end
+    File.open(order.receipt_filename+".html", 'w') { |f| f.write(html) }
+logger.debug "order.receipt_filename+''.html''" + order.receipt_filename+".html"
+    system("htmldoc --cont --format pdf14 #{order.receipt_filename}.html > #{order.receipt_filename+".pdf"}")
+#    system("rm #{order.receipt_filename}.html")
+    if sequels_too and order.sequel
+	    generate_receipt(order.sequel, true) 
+	else
+	    order.receipt_generated=User.current_user.today
+  	    order.send(:update_without_callbacks)
+	end
+	
+end
+def preview_receipt(order, sequels_too=false)
     @order = order # !This line is important for the render_to_string
     if order.order_type_id == Order::COUNT
         html = Liquid::Template.parse(ReportTemplate.find_by_name('Count').content).render 'order' => order
   	elsif order.order_type_id == Order::LABELS
   		pdf_string = render_to_string :template => 'labels/labels.pdf.prawn', :layout => false
   	else
-	  	html = Liquid::Template.parse(ReportTemplate.find_by_name('Factura').content).render 'order' => order
+	  	return Liquid::Template.parse(ReportTemplate.find_by_name('Factura').content).render 'order' => order
 	end
     File.open(order.receipt_filename+".html", 'w') { |f| f.write(html) }
-    system("htmldoc --cont --format pdf14 #{order.receipt_filename}.html > #{order.receipt_filename+".pdf"}")
-    system("rm #{order.receipt_filename}.html")
-	generate_receipt(order.sequel, true) if sequels_too and order.sequel
+puts "order.receipt_filename+''.html''" + order.receipt_filename+".html"
+	
 end
 	def check_user(right_id, msg)
 		#logger.debug "current_user.has_right(right_id)=#{current_user.has_right(right_id).to_s}"

@@ -15,6 +15,7 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 class Order < ActiveRecord::Base
+    liquid_methods :lines, :client, :created_at, :liquidlines
 	has_many :lines, :dependent => :destroy
 	has_many :products, :through => :lines
 	has_many :payments, :dependent => :destroy
@@ -31,10 +32,10 @@ class Order < ActiveRecord::Base
   TRANSFER=4
   COUNT=5
   LABELS=6
-  def to_liquid
-    { "receipt_number"  => self.receipt_number,
-      "lines" => self.lines }
-  end
+#  def to_liquid
+#    { "receipt_number"  => self.receipt_number,
+#      "lines" => self.lines }
+#  end
 
 	##################################################################################################
 	# 
@@ -69,20 +70,20 @@ class Order < ActiveRecord::Base
   	end
 	  self.total_expense = self.total_cost
 	  self.total_revenue = self.total_price - self.total_expense
-  	logger.debug "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
+#  	logger.debug "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"
 	  check_for_discounts
-  	logger.debug "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
+#  	logger.debug "BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"
 	  split_over_sized_order
-  	logger.debug "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
+#  	logger.debug "CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC"
 	  m = main_transaction
-  	logger.debug "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
+#  	logger.debug "DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD"
 	  i = inventory_transaction
-  	logger.debug "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
+#  	logger.debug "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE"
 	  self.transactions << m if m
 	  self.transactions << i if i
-  	logger.debug "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
+#  	logger.debug "FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF"
 	  self.received=last_received
-  	logger.debug "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
+#  	logger.debug "GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG"
   end
   
 	after_save :post_save
@@ -103,9 +104,9 @@ class Order < ActiveRecord::Base
     end
 	  save_related(movements, true)
 	  save_related(transactions, true)
-  	logger.debug "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
+#  	logger.debug "hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh"
 	  save_related(payments)
-  	logger.debug "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
+#  	logger.debug "iiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii"
 	end
 	##################################################################################################
 	# Creates a Physical Count from a list of products
@@ -146,11 +147,11 @@ class Order < ActiveRecord::Base
 	#################################################################################################
 	def split_over_sized_order
 	  if lines.length > MAX_LINES_PER_ORDER and MAX_LINES_PER_ORDER > 0 and order_type_id==1
-	  	logger.debug "self.attributes=#{self.attributes.to_s}"
+#	  	logger.debug "self.attributes=#{self.attributes.to_s}"
 	    self.sequel = Order.new(self.attributes)
 	    self.sequel.receipt_number = ("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1) if self.receipt_number
-	    logger.debug "-----------------------------------------"
-	  	logger.debug "self.sequel=#{self.sequel.to_s}"
+#	    logger.debug "-----------------------------------------"
+#	  	logger.debug "self.sequel=#{self.sequel.to_s}"
       for line in self.lines[MAX_LINES_PER_ORDER..-1]
       	l=Line.new(line.attributes)
       	l.order=self.sequel
@@ -167,9 +168,9 @@ class Order < ActiveRecord::Base
 	def save_related(list, update=false, include_errors=true)
 	  for item in list
 	  	if item
-	  		logger.debug "item=#{item.inspect}"
+#	  		logger.debug "item=#{item.inspect}"
     	  item.order=self
-	  		logger.debug "item=#{item.inspect}"
+#	  		logger.debug "item=#{item.inspect}"
 	  	  if !item.id or update
 				  if !item.save and include_errors
 				    for field, msg in item.errors
@@ -185,6 +186,9 @@ class Order < ActiveRecord::Base
 	#################################################################################################
   def number=(num)
     self.receipt_number=num
+  end
+  def liquidlines()
+    return self.lines
   end
 	##################################################################################################
 	# Returns receipt number
@@ -204,7 +208,7 @@ class Order < ActiveRecord::Base
 	# lines but have the widget stay null by default
 	#################################################################################################
 	def markreceived=(fecha)
-	  puts "saving fecha######################################################"
+#	  puts "saving fecha######################################################"
 		#puts "fecha:" + fecha.to_s
 		if fecha
 			if fecha != ""
@@ -367,27 +371,27 @@ class Order < ActiveRecord::Base
   # updates existing lines on the order, adds new ones and deletes missing ones. DOES NOT SAVE THEM
   ##################################################################################
 	def plines=(lines)
-		logger.debug "Saving lines"
+#		logger.debug "Saving lines"
 	  i={}
 	  for l in self.lines
 	    i[l.id]=l
 	  end
-	  logger.debug "\nlines=#{lines.inspect}\n"
+#	  logger.debug "\nlines=#{lines.inspect}\n"
     for l in (lines[:new] || [])
 	  	if l[:delete_me]!='1'
 	      line=self.lines.new()
 	      line.order=self
 	      line.attrs=l
-	      logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
+#	      logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
 	      self.lines << line
 	    end
     end
     for key, l in (lines[:existing]||[])
     	if line = i[l[:id].to_i]
 	      line.order=self
-    		logger.debug "l[:order_type_id]=#{l[:order_type_id].to_s}"
+#    		logger.debug "l[:order_type_id]=#{l[:order_type_id].to_s}"
     		line.attrs=l
-    		logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
+#    		logger.debug "line.order_type_id=#{line.order_type_id.to_s}"
       	line.destroy if l[:delete_me]=='1' #<------------ Not sure if this will work right. It needs to stick, but cancel if theres errors
                                          # ALSO: NEED TO DO ACCOUNTING AND INVENTORY ON THIS LINE!!!!!
       end # if line = i[l[:id].to_i]
@@ -578,9 +582,9 @@ class Order < ActiveRecord::Base
 	# Receives a string and sets the client_id for the product to the entity with that name
 	###################################################################################
 	def client_name=(name)
-	  puts "name=" + name.to_s
+#	  puts "name=" + name.to_s
 		if !name.blank?
-	    puts "name(not blank)=" + name.to_s
+#	    puts "name(not blank)=" + name.to_s
 			self.client = Entity.find_by_name(name)
 			if !self.client
 			  self.client = Entity.create(:entity_type_id => 2,:name=> name, :price_group_name_id =>User.current_user.price_group_name_id, :user_id =>User.current_user.id, :state => State.first)
@@ -588,9 +592,9 @@ class Order < ActiveRecord::Base
 		end
 	end
 	def attrs=(a)
-		logger.debug "Saving VOID"
+#		logger.debug "Saving VOID"
 		self.void=a[:void]
-		logger.debug "Saving Other values"
+#		logger.debug "Saving Other values"
 		self.attributes=a
 	end
 	###################################################################################
@@ -609,12 +613,7 @@ class Order < ActiveRecord::Base
 					product_lines = {}
 					for l in self.lines
 						if l.serialized_product and l.product_id == line.product_id
-							#make sure the s/n wasnt put elsewhere on the count too.
-							if product_lines[l.serialized_product.serial_number]
-								self.lines.delete(l) 
-							else
-								product_lines[l.serialized_product.serial_number] = l
-							end
+							product_lines[l.serialized_product.serial_number] = l	
 						end
 					end
 					# Add serials found
@@ -624,19 +623,25 @@ class Order < ActiveRecord::Base
 							if old_loc.id != self.vendor_id # It was not already here
 								if old_loc.entity_type== 3 # It was in a different site
 									# Make a movement to take it out of the other site
-									e=Movement.create(:created_at=>date,:entity_id => old_loc.id, :comments => self.comments, :product_id => l.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
-#									self.cost = Cost.consume(Product.find(l.product_id), 1, old_loc)
+									logger.debug "removing " + l.serialized_product.serial_number + " from " + old_loc.name
+									cost = Cost.consume(Product.find(l.product_id), 1, old_loc)
+									e=Movement.create(:cost=> cost,:created_at=>date,:entity_id => old_loc.id, :comments => self.comments, :product_id => l.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
+									cost = Cost.consume(Product.find(l.product_id), 1, old_loc)
 									logger.debug "e=#{e.to_s}"
 								end
 								# Make a movement to bring it here
-								e=Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
-#								Cost.create(:order=>self, :product=>self.product, :quantity=>qty, :value=>self.price, :entity=>self.order.client)
+								logger.debug "adding " + l.serialized_product.serial_number + " to " + self.vendor.name
+								cost = cost || l.price
+								e = Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
+								Cost.create(:product=>l.product, :quantity=>1, :value=>cost, :entity=>self.vendor)
 								i=l.product.inventories.find_by_entity_id(self.vendor_id)
 								i.update_attribute(:quantity, i.quantity+1)
 							end
 						else	# This serial was just created
 							# Make a movement to put it here
+							logger.debug "creating " + l.serialized_product.serial_number + " in " + self.vendor.name
 							e=Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
+							Cost.create(:product=>l.product, :quantity=>1, :value=>l.price, :entity=>self.vendor)
 							logger.debug "e=#{e.to_s}"
 						end
 					end
@@ -648,21 +653,23 @@ class Order < ActiveRecord::Base
 					for s in line.product.get_serials_here(self.vendor_id)
 						if !product_lines[s.serial_number]
 							# Make a movement to remove it from here
+							logger.debug "deleting " + l.serialized_product.serial_number + " from " + self.vendor.name
 							e=Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => s.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
-							logger.debug "e=#{e.to_s}"
+#							logger.debug "e=#{e.to_s}"
 							# Make movement to move it to Internal Consumption
+							puts "moving " + l.serialized_product.serial_number + " to Internal Consumption"
 							e=Movement.create(:created_at=>date,:entity_id => 1, :comments => self.comments, :product_id => s.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
-							logger.debug "e=#{e.to_s}"
+#							logger.debug "e=#{e.to_s}"
 						end
 					end
-	        for s, l in product_lines
-	          l.previous_qty = old_qty
-	          l.price = l.product.cost
-	        end
-	        if old_loc.id
+	                for s, l in product_lines
+                        l.previous_qty = old_qty
+                        l.price = l.product.cost
+	                end
+	                if old_loc
 						l.product.inventories.find_by_entity_id(old_loc.id).update_attribute(:quantity, product_lines.length)
 					end
-				  accounting_diff=(product_lines.length-old_qty) * line.product.cost
+				    accounting_diff=(product_lines.length-old_qty) * line.product.cost
 				else
 					line.previous_qty = line.product.quantity
 					if (line.quantity != line.product.quantity) and line.quantity
@@ -670,10 +677,10 @@ class Order < ActiveRecord::Base
 					  if qty > 0
   					  Cost.create(:order=>self, :product=>line.product, :quantity=>qty, :value=>line.price*qty, :entity=>self.client)
   					else
-  					  puts "Consuming:"
-  					  puts "line.price=#{line.price.to_s}"
+#  					  puts "Consuming:"
+#  					  puts "line.price=#{line.price.to_s}"
   					  line.price = Cost.consume(line.product, -qty, self.client)
-  					  puts "line.price=#{line.price.to_s}"
+#  					  puts "line.price=#{line.price.to_s}"
   					  line.send(:update_without_callbacks)
   					end					  
 						m=Movement.create(:cost=>line.price, :created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => qty, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)

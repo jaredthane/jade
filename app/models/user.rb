@@ -43,7 +43,7 @@ class User < ActiveRecord::Base
   #validates_length_of       :email,    :within => 3..100
   validates_uniqueness_of   :login, :case_sensitive => false
   before_save :encrypt_password
-  
+  attr_accessor :_rights
   # prevents a user from submitting a crafted form that bypasses activation
   # anything else you want your user to change should be added here.
   attr_accessible :login, :email, :password, :password_confirmation, :do_accounting, :name, :date, :today, :roles, :roles_users, :personal_account_id, :cash_account_id, :revenue_account_id, :default_received, :location, :price_group_name
@@ -200,20 +200,20 @@ class User < ActiveRecord::Base
 #		return reps
 #	end
 	def rights
-		dict={}
-		for r in roles
-			dict[r.title]=r
-			for t in r.rights
-				dict[t.id]=t
-			end
+	    return self._rights if self._rights
+	    list=Right.find(:all, 
+			:conditions=>"user_id=#{self.id}",
+			:joins=>"inner join rights_roles on rights_roles.right_id=rights.id inner join roles_users on roles_users.role_id=rights_roles.role_id"
+			)
+	    dict={}
+		for r in list
+			dict[r.id]=r
 		end
+		self._rights=dict
 		return dict
 	end
 	def has_right(id)
-		return Right.find(:all, 
-			:conditions=>"user_id=#{self.id} AND rights.id='#{id}'",
-			:joins=>"inner join rights_roles on rights_roles.right_id=rights.id inner join roles_users on roles_users.role_id=rights_roles.role_id"
-			).length >0 ? true : false
+		return self.rights.keys.include?(id) ? true : false
 	end
 	def has_rights(needed)
 		r = rights

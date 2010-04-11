@@ -12,6 +12,10 @@ class ReportTemplatesController < ApplicationController
       format.html
     end
   end
+  def background
+    @report=ReportTemplate.find(params[:id])
+    send_file @report.background, :type => 'application/png', :disposition => 'inline'  #, :x_sendfile=>true
+  end
   def edit
     @report=ReportTemplate.find(params[:id])
   end

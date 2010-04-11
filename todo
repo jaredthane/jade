@@ -3,9 +3,13 @@ remove balances from tables
 counts and serials!!!
 fix searches
 fix selects on product page
-acordian on left side
 fix users pages
-move logout to top
+fix links to change price group and site
+**OSCAR allow filtering movements by "compra" and show product numbers, cost, and sale price on print out with full header
+**OSCAR only add tax to purchases from certain vendors
+**OSCAR should be able to do auto payment for purchase without it being converted into a sale
+
+
 
 FUTURE FEATURES:
 	clean up line errors

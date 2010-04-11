@@ -18,6 +18,7 @@
 # Likewise, all the methods added will be available for all controllers.
 
 class Product < ActiveRecord::Base
+    liquid_methods :name, :upc, :unit
 
 	HUMANIZED_ATTRIBUTES = {
     :unit => "Unidad",

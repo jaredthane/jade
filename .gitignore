@@ -8,3 +8,4 @@ receipts/consumidor_final.pdf.prawn
 receipts/credito_fiscal.pdf.prawn
 formats.rb
 public/barcodes/*
+invoice_pdfs/*

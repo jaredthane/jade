@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100403205028) do
+ActiveRecord::Schema.define(:version => 20100411050312) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -352,8 +352,12 @@ ActiveRecord::Schema.define(:version => 20100403205028) do
   end
 
   create_table "report_templates", :force => true do |t|
-    t.string "name"
-    t.text   "content"
+    t.string  "name"
+    t.text    "content"
+    t.integer "background_id"
+    t.string  "background_content_type"
+    t.string  "background_file_name"
+    t.integer "background_file_size"
   end
 
   create_table "reports", :force => true do |t|

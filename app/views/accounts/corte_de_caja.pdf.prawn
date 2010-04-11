@@ -77,7 +77,7 @@ def show_orders_info(tipo, title)
 	series=Order.find(:all, :conditions=>c, :joins=>j, :order=>'receipt_number')
 	group_total=0
 	for group in series_to_list(series)
-		c="orders.receipt_number in(#{group.collect{|a| "'" + a.to_s + "', "}.to_s.chop.chop}) and order_type_id=1"
+		c="orders.receipt_number in(#{group.collect{|a| "'" + a.to_s + "', "}.to_s.chop.chop}) and order_type_id=1 and entities.entity_type_id=#{tipo}"
 #		total=Order.find(:all, :conditions=>(c + cc), :joins=>j, :select=>'sum(grand_total) total')
 		total=Order.sum(:grand_total, :conditions=>(c), :joins=>j)
 		revenue += Order.sum(:total_revenue, :conditions=>(c), :joins=>j)

@@ -34,6 +34,7 @@
 #
 #
 class Entity < ActiveRecord::Base
+    liquid_methods :name, :full_address, :nit
 	ANONIMO=3
 	ANULADO=9
 	CONSUMIDOR_FINAL=2

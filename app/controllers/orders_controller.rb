@@ -138,6 +138,20 @@ class OrdersController < ApplicationController
   end
   def show_receipt
     @order = Order.find(params[:id])
+    logger.debug "cehcking receipt_generated" + @order.receipt_generated.to_s
+    logger.debug "@order.receipt_generated" + @order.receipt_generated.to_s
+    if !@order
+        redirect_back_or_default(@order)
+		flash[:error] = "No se pudo encontrar el pedido specidicado"
+	    return false
+	end
+#    if !@order.receipt_generated
+        logger.debug "receipt generated is not null"
+        generate_receipt(@order) 
+#    elsif @order.updated_at > @order.receipt_generated
+#        logger.debug "receipt generated is not null"
+#        generate_receipt(@order) 
+#    end
   	#logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
     return false if !allowed(@order.order_type_id, 'view')
     if FileTest.exists?(@order.receipt_filename+".pdf"||'')
@@ -278,6 +292,16 @@ class OrdersController < ApplicationController
         return false if !allowed(params["order"]["order_type_id"], 'edit')
         params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
         params[:order][:received]=untranslate_month(params[:order][:received]) if params[:order][:received]
+        if params[:order][:plines][:new]
+            for line in params[:order][:plines][:new] 
+                line[:received]=untranslate_month(line[:received]) if line[:received]
+            end
+        end
+        if params[:order][:plines][:old]
+            for line in params[:order][:plines][:old]
+                line[:received]=untranslate_month(line[:received]) if line[:received]
+            end
+        end
         @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
         @order.attrs = params["order"]
         errors = false
@@ -285,16 +309,11 @@ class OrdersController < ApplicationController
         respond_to do |format|
             if !errors
               	@order.save
-              	@order.pay_off  if params[:immediate_payment]=='1' and @order.order_type_id == Order::SALE
+              	@order.pay_off  if params[:immediate_payment]=='1'
               	@order.post if params[:submit_type] == 'post'
-                generate_receipt(@order, true)
+#                generate_receipt(@order, true)
               	flash[:notice] = 'Pedido ha sido creado exitosamente.'
-                format.html { 
-                	if SHOW_RECEIPT_ON_CREATE
-                		redirect_to(show_receipt_url(@order))
-                	else
-                		redirect_to(@order) 
-                	end }
+                format.html { redirect_to(@order) }
                 format.xml  { render :xml => @order, :status => :created, :location => @order }
             else
                 @order.lines.each {|l| logger.debug "LINES ERRORS" + l.errors.inspect}
@@ -307,11 +326,20 @@ class OrdersController < ApplicationController
     end
 
   def update
-    puts params.inspect
     @order = Order.find(params[:id])
     return false if !allowed(@order.order_type_id, 'edit')
     params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
     params[:order][:received]=untranslate_month(params[:order][:received]) if params[:order][:received]
+    if params[:order][:plines][:new]
+        for line in params[:order][:plines][:new] 
+            line[:received]=untranslate_month(line[:received]) if line[:received]
+        end
+    end
+    if params[:order][:plines][:old]
+        for line in params[:order][:plines][:old]
+            line[:received]=untranslate_month(line[:received]) if line[:received]
+        end
+    end
     errors = false
     @order.attrs=params[:order]
 		errors = true if !@order.save
@@ -319,7 +347,7 @@ class OrdersController < ApplicationController
 			errors = true if !@order.post
 		end
 		
-    generate_receipt(@order)
+#    generate_receipt(@order)
     respond_to do |format|
       if !errors
         flash[:notice] = 'Pedido ha sido actualizado exitosamente.'

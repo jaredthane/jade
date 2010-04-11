@@ -16,6 +16,7 @@
 
 
 class Line < ActiveRecord::Base
+    liquid_methods :product, :quantity, :price, :total_price
 	belongs_to :order
 	belongs_to :warranty
 	belongs_to :product	
@@ -380,11 +381,11 @@ class Line < ActiveRecord::Base
 	def total_price
 		if order_type_id==Order::COUNT 
 			return 0 if !self.quantity
-			puts "self.price=#{self.price.to_s}"
-			puts "self.quantity=#{self.quantity.to_s}"
-			puts "self.previous_qty=#{self.previous_qty.to_s}"
-			puts "((self.quantity || 0) - (self.previous_qty || 0))=#{((self.quantity || 0) - (self.previous_qty || 0)).to_s}"
-			puts "self.price * ((self.quantity || 0) - (self.previous_qty || 0))=#{(self.price * ((self.quantity || 0) - (self.previous_qty || 0))).to_s}"
+#			puts "self.price=#{self.price.to_s}"
+#			puts "self.quantity=#{self.quantity.to_s}"
+#			puts "self.previous_qty=#{self.previous_qty.to_s}"
+#			puts "((self.quantity || 0) - (self.previous_qty || 0))=#{((self.quantity || 0) - (self.previous_qty || 0)).to_s}"
+#			puts "self.price * ((self.quantity || 0) - (self.previous_qty || 0))=#{(self.price * ((self.quantity || 0) - (self.previous_qty || 0))).to_s}"
 			return self.price * ((self.quantity || 0) - (self.previous_qty || 0))
 		elsif order_type_id==Order::LABELS
 			return 0

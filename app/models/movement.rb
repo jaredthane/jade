@@ -57,7 +57,7 @@ class Movement < ActiveRecord::Base
 		end
 	end
 	def post_create
-		logger.debug "woking here"
+#		logger.debug "woking here"
 		if e=product.inventory(entity)
 			e.quantity+=quantity
 			e.save

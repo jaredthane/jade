@@ -60,6 +60,7 @@ ActionController::Routing::Routes.draw do |map|
     map.resources :discounts
     map.resources :combos
     map.erase_order 'orders/:id/erase', :controller => 'orders', :action => 'erase'
+    map.template_background 'report_templates/:id/background', :controller => 'report_templates', :action => 'background'
     #	map.erase_receipt 'receipts/:id/erase', :controller => 'receipts', :action => 'erase'
     map.new_user_role 'user/new_role', :controller => 'users', :action => 'new_role', :format =>'js'
     map.my_clients 'entities/my_clients', :controller => 'entities', :action => 'my_clients', :filter => ' tipo:cliente'
