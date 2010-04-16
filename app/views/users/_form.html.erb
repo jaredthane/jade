@@ -93,13 +93,15 @@
 	<p>
 		<b>Papeles de este usuario:</b>
 	</p>
-	<div>			
+	<div>
 	<div class="table_header_row">
 		<div class="table_cell_80">Papel</div>
 		<div class="table_cell">Acciones </div>
 	</div>
 	<div id="roles">
-		<%= render :partial => 'role', :collection => @user.roles_users %>
+		<% f.fields_for :roles do |child_form| %>
+			<%= render :partial => "role", :locals => {:child_form=>child_form} %>
+		<% end %>
 	</div>
 	<div id="roles_errors"></div>
 </div>

@@ -17,14 +17,13 @@
 
 class UsersController < ApplicationController
   # Be sure to include AuthenticationSystem in Application Controller instead
-	before_filter :login_required
-  
 	def index
-    search=(params[:search]||'') + ' ' + (params[:q]||'')
-    @users = User.search(search.rstrip, params[:page])
-		if !current_user.has_rights(['Admin','Gerente'])
+        search=(params[:search]||'') + ' ' + (params[:q]||'')
+        @users = User.search(search.rstrip, params[:page])
+		if !current_user.has_right('VIEW_USERS')
 			redirect_back_or_default('/products')
-			flash[:error] = "No tiene los derechos suficientes para alistar los usuarios"
+			flash[:error] = "No tiene los derechos suficientes para ver la lista de usuarios"
+			return false
 		end
     respond_to do |format|
       format.html # index.html.erb
@@ -114,25 +113,14 @@ class UsersController < ApplicationController
 			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
 		end
   end
-	def new_role	
-		@role = RolesUser.new(:user_id => params[:roles_user][:user_id], :role_id => params[:roles_user][:role_id])
-#		logger.debug "@role.user_id=#{@role.user_id.to_s}"
-#		logger.debug "@role.role_id=#{@role.role_id.to_s}"
-#		logger.debug "params[:format]=#{params[:format].to_s}"
-		respond_to do |format|
-			format.html do
-				logger.debug " ======================================>  html requested"
-				redirect_to '/users/' + @role.user_id.to_s + '/edit'
-			end
-			format.js do
-        render :update do |page|
-        	page.replace_html 'roles_errors', ""
-					puts @role.inspect
-          page.insert_html :bottom, :roles, :partial => 'role', :object => @role
+    def new_role	
+	    @role = RolesUser.new(:user_id => params[:roles_user][:user_id], :role_id => params[:roles_user][:role_id])
+	    respond_to do |format|
+		    format.html do
+			    render :layout => false
+		    end
         end
-      end
     end
-	end
   # PUT /users/1
   # PUT /users/1.xml
   def update

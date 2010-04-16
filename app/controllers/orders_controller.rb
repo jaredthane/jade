@@ -138,6 +138,7 @@ class OrdersController < ApplicationController
   end
   def show_receipt
     @order = Order.find(params[:id])
+    return false if !allowed(@order.order_type_id, 'view')
     logger.debug "cehcking receipt_generated" + @order.receipt_generated.to_s
     logger.debug "@order.receipt_generated" + @order.receipt_generated.to_s
     if !@order
@@ -153,7 +154,6 @@ class OrdersController < ApplicationController
 #        generate_receipt(@order) 
 #    end
   	#logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
-    return false if !allowed(@order.order_type_id, 'view')
     if FileTest.exists?(@order.receipt_filename+".pdf"||'')
     	#logger.debug "@order.receipt_filename=#{@order.receipt_filename.to_s}"
     	#logger.debug "could not find"
@@ -176,6 +176,7 @@ class OrdersController < ApplicationController
   end
   def show
     @order = Order.find_by_id(params[:id])
+    logger.debug "@order.order_type=#{@order.order_type.name}"
     if !@order
     	flash[:error] = "El pedido especificado no se encuentra entre los archivos."
     	redirect_back_or_default(orders_url)
@@ -303,17 +304,31 @@ class OrdersController < ApplicationController
             end
         end
         @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
+        logger.debug "before save"
+        logger.debug "params[''order''][''order_type_id'']=#{params["order"]["order_type_id"]}"
+        logger.debug "@order.order_type_id=#{@order.order_type_id}"
+        logger.debug "@order.order_type=#{@order.order_type}"
         @order.attrs = params["order"]
         errors = false
         errors = true if !@order.valid?
         respond_to do |format|
             if !errors
               	@order.save
+              	logger.debug "after save"
+              	logger.debug "Order.last.order_type_id=#{Order.last.order_type_id}"
+                logger.debug "Order.last.order_type=#{Order.last.order_type.name}"
               	@order.pay_off  if params[:immediate_payment]=='1'
+              	logger.debug "after apyoff"
+              	logger.debug "Order.last.order_type_id=#{Order.last.order_type_id}"
+                logger.debug "Order.last.order_type=#{Order.last.order_type.name}"
               	@order.post if params[:submit_type] == 'post'
+                logger.debug "Order.last.order_type=#{Order.last.order_type.name}"
 #                generate_receipt(@order, true)
               	flash[:notice] = 'Pedido ha sido creado exitosamente.'
-                format.html { redirect_to(@order) }
+              	logger.debug "=====================@order.order_type=#{@order.order_type.name}"
+                format.html { redirect_to(@order) 
+                logger.debug "=====================@order.order_type=#{@order.order_type.name}"
+                }
                 format.xml  { render :xml => @order, :status => :created, :location => @order }
             else
                 @order.lines.each {|l| logger.debug "LINES ERRORS" + l.errors.inspect}

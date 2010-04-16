@@ -85,16 +85,20 @@ def generate_receipt(order, sequels_too=false)
     logger.debug "about to generate receipt"
     @order = order # !This line is important for the render_to_string
     if order.order_type_id == Order::COUNT
-        html = Liquid::Template.parse(ReportTemplate.find_by_name('Count').content).render 'order' => order
+        pdf_string = render_to_string :template => 'counts/sheet.pdf.prawn', :layout => false    
+#        html = Liquid::Template.parse(ReportTemplate.find_by_name('Count').content).render 'order' => order
 #  	elsif order.order_type_id == Order::LABELS
 #  		pdf_string = render_to_string :template => 'labels/labels.pdf.prawn', :layout => false
   	else
-  	    template=ReportTemplate.find_by_name('Factura')
-	  	html = Liquid::Template.parse(template.content).render 'order' => @order, 'background'=>template_background_url(template.id), 'copies'=>['self', 'client']
+  	    pdf_string = render_to_string :template => 'orders/receipt.pdf.prawn', :layout => false
+#  	    template=ReportTemplate.find_by_name('Factura')
+#	  	html = Liquid::Template.parse(template.content).render 'order' => @order, 'background'=>template_background_url(template.id), 'copies'=>['self', 'client']
 	end
-    File.open(order.receipt_filename+".html", 'w') { |f| f.write(html) }
-logger.debug "order.receipt_filename+''.html''" + order.receipt_filename+".html"
-    system("htmldoc --cont --format pdf14 #{order.receipt_filename}.html > #{order.receipt_filename+".pdf"}")
+	logger.debug "here"
+    File.open(order.receipt_filename+".pdf", 'w') { |f| f.write(pdf_string) }
+#    logger.debug "order.receipt_filename+''.html''" + order.receipt_filename+".html"
+##    system("htmldoc --cont --format pdf14 #{order.receipt_filename}.html > #{order.receipt_filename+".pdf"}")
+#    system("prince #{order.receipt_filename}.html -o #{order.receipt_filename}.pdf")
 #    system("rm #{order.receipt_filename}.html")
     if sequels_too and order.sequel
 	    generate_receipt(order.sequel, true) 
