@@ -6,8 +6,8 @@ fix selects on product page
 fix users pages
 fix links to change price group and site
 **OSCAR allow filtering movements by "compra" and show product numbers, cost, and sale price on print out with full header
-**OSCAR only add tax to purchases from certain vendors
-**OSCAR should be able to do auto payment for purchase without it being converted into a sale
+**OSCAR only add tax to purchases when classified as grande and amount > $100
+**Borrar doesent remove from inventory and reidrects to bad page
 
 
 

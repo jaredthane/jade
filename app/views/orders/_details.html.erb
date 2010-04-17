@@ -16,7 +16,7 @@
 		<% if current_user.has_right(User::CHANGE_SALES) %>
     			<li><%= link_to 'Nueva Venta', new_sale_path %></li>
     			<li><%= link_to 'Cambiar', edit_order_path(@order) %></li>
-    			<% if current_user.has_rights(['Admin','Gerente']) %>
+    			<% if current_user.has_right('DELETE_SALES') %>
 						<li><%= link_to 'Borrar', erase_order_path(@order) %></li>
 					<% end %>
 		    <% if !@order.deleted %>
@@ -39,6 +39,9 @@
 		<% if current_user.has_right(User::CHANGE_PURCHASES) %>
     			<li><%= link_to 'Nueva Compra', new_purchase_path %></li>
 			    <li><%= link_to 'Cambiar', edit_order_path(@order) %></li>
+    			<% if current_user.has_right('DELETE_PURCHASES') %>
+						<li><%= link_to 'Borrar', erase_order_path(@order) %></li>
+					<% end %>
 		    <% if !@order.deleted %>
 			    <li><%= link_to 'Añadir Pago', new_payment_path(:order_id=>@order.id) %></li>
 			    <% if @order.amount_paid < @order.grand_total %>
@@ -92,7 +95,7 @@
   <b>Usuario Responsable:</b>
   <%=link_to @order.user.login, @order.user %>
 </p>
-<% if !(@order.order_type_id==2) or (current_user.has_rights(['Admin','Compras','Gerente'])) %>
+<% if !(@order.order_type_id==2) or (current_user.has_right(User::VIEW_PURCHASES)) %>
 	<p>
 		<b>Precio Total:</b>
 		<%=h number_to_currency(@order.total_price) %>

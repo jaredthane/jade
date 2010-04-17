@@ -41,7 +41,7 @@ for copy in ['cliente', 'vendor'] do
 			#pdf.line [pdf.bounds.width/3-40, pdf.bounds.top-25], [540, pdf.bounds.top-25]
 			# Put the client information in the top-right corner
 			#pdf.text "Cliente:",:at=>[pdf.bounds.width/3-20, pdf.bounds.top-37]
-			pdf.bounding_box([pdf.bounds.width/3+10, pdf.bounds.top-30], :width=>pdf.bounds.width/3, :height=>65) do
+			pdf.bounding_box([70, pdf.bounds.top-50], :width=>280, :height=>65) do
 				#pdf.stroke_bounds
 				pdf.font_size = 12
 				pdf.text client.name, :style=>:bold
