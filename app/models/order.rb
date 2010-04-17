@@ -100,7 +100,10 @@ class Order < ActiveRecord::Base
 	  if self.receipt_number and order_type_id == SALE
 	  	# Set next Receipt number
     	next_receipt=("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1)
-    	User.current_user.location.update_attribute(:next_receipt_number, next_receipt)
+    	loc=User.current_user.location
+    	loc.next_receipt_number= next_receipt
+    	loc.send(:update_without_callbacks) # This is also serving to save the sequel_id
+    	
     end
 	  save_related(movements, true)
 	  save_related(transactions, true)
