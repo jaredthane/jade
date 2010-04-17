@@ -84,6 +84,7 @@ class ApplicationController < ActionController::Base
 def generate_receipt(order, sequels_too=false)
     logger.debug "about to generate receipt"
     @order = order # !This line is important for the render_to_string
+    prawnto :prawn => {:skip_page_creation=>true}
     if order.order_type_id == Order::COUNT
         pdf_string = render_to_string :template => 'counts/sheet.pdf.prawn', :layout => false    
 #        html = Liquid::Template.parse(ReportTemplate.find_by_name('Count').content).render 'order' => order
