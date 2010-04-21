@@ -26,26 +26,26 @@ class Order < ActiveRecord::Base
 	belongs_to :prequel, :class_name => "Order", :foreign_key => 'prequel_id'
 #	# Paperclip
 	has_attached_file :scanned_receipt
-  SALE=1
-  PURCHASE=2
-  INTERNAL=3
-  TRANSFER=4
-  COUNT=5
-  LABELS=6
-#  def to_liquid
-#    { "receipt_number"  => self.receipt_number,
-#      "lines" => self.lines }
-#  end
+    SALE=1
+    PURCHASE=2
+    INTERNAL=3
+    TRANSFER=4
+    COUNT=5
+    LABELS=6
+    def to_liquid
+        { "receipt_number"  => self.receipt_number,
+        "lines" => self.lines }
+    end
 
 	##################################################################################################
 	# 
 	#################################################################################################
-  def validate
-  	logger.debug "validating order<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
-    errors.add "Cliente"," no es válido" if !client
-    errors.add "Proveedor"," no es válido" if !vendor
-    errors.add "Debe ingresarse al sistema antes de hacer cambios","" if !user
-  end
+    def validate
+        logger.debug "validating order<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<"
+        errors.add "Cliente"," no es válido" if !client
+        errors.add "Proveedor"," no es válido" if !vendor
+        errors.add "Debe ingresarse al sistema antes de hacer cambios","" if !user
+    end
   
 	belongs_to :vendor, :class_name => "Entity", :foreign_key => 'vendor_id'
 	belongs_to :client, :class_name => "Entity", :foreign_key => 'client_id'
@@ -278,7 +278,7 @@ class Order < ActiveRecord::Base
 			amount = self.grand_total
 		end
 	  if amount != 0 or (deleted and self.new_record?)
-	    tax = self.total_tax - (old('total_tax') || 0)
+	    dtax = self.total_tax - (old('total_tax') || 0)
 		  case order_type_id
 		  when 1 #Venta
 		  	if amount >=0 
@@ -292,8 +292,8 @@ class Order < ActiveRecord::Base
 		  	if User.current_user.do_accounting
 					sale=Trans.new(:user=>User.current_user,:created_at=>date, :description=> description, :direction=>Trans::FORWARD, :kind_id=>Trans::CONTRACT)
 		      sale.posts << Post.new(:account => self.client.cash_account,:created_at=>date, :value=>amount, :post_type_id =>Post::DEBIT)
-		      if tax != 0
-		      	sale.posts << Post.new(:account => self.vendor.tax_account,:created_at=>date, :value=>tax, :post_type_id =>Post::CREDIT)
+		      if dtax != 0
+		      	sale.posts << Post.new(:account => self.vendor.tax_account,:created_at=>date, :value=>dtax, :post_type_id =>Post::CREDIT)
 		      end
 		      # Here we have to make sure we multiply the quantities by order.active to make them zero if the order is deactivated
 		      revenue_accts={}
@@ -512,45 +512,29 @@ class Order < ActiveRecord::Base
 		return (total||0)
 	end
 	###################################################################################
+	# Original implementation removed now left for backwards compatability
 	# Returns the total tax to be charged the user.
 	###################################################################################
 	def total_tax
-		if client
-			if client.entity_type_id == 2
-				return 0
-			else
-				total=0
-				for l in self.lines
-					total = (total||0) + (l.tax||0)
-				end
-				return (total||0)
-			end
-		else
-			return 0
-		end
+        return tax_rate*total_price
 	end
-	
+#	###################################################################################
+#	# Sets the tax using a percentage
+#	###################################################################################
+#	def tax_rate=(rate)
+#        tax = total_price * rate.to_f
+#	end
+#	###################################################################################
+#	# Returns the percentage of tax to be charged the user.
+#	###################################################################################
+#	def tax_rate
+#        return tax / total_price
+#	end
 	###################################################################################
 	# Returns the total price of all of the products in the order plus tax
 	###################################################################################
 	def total_price_with_tax
-		total=0
-		if client
-			if client.entity_type_id == 2 or self.order_type_id==Order::COUNT
-				for l in self.lines
-					total = (total||0) + (l.total_price||0)
-				end
-			else
-				for l in self.lines
-					total = (total||0) + (l.total_price_with_tax||0)
-				end
-			end
-		else
-			for l in self.lines
-				total = (total||0) + (l.total_price||0)
-			end
-		end
-		return (total||0)
+		return total_price + total_tax
 	end
 	##################################################################################################
 	# Creates a payment equal to the total amount due on the order

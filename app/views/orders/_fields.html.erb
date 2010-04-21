@@ -50,6 +50,11 @@
 					<%= f.file_field :scanned_receipt, :size=>20 %>
 				</p>
 			<% end %>
+			
+			<p>
+				<b>Impuestos</b>
+				<%= f.text_field :tax_rate, :class=> 'field',:style=>'width:168px;'%>
+			</p>
 		</div>
 	<% when 1 %>
 		<div class="column3-unit-left">
@@ -65,6 +70,10 @@
 		    <b>Fecha de Pedido</b><br />
 		    <%= f.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>
 	    </p>
+		<p>
+			<b>Impuestos</b>
+			<%= f.text_field :tax_rate, :class=> 'field',:style=>'width:168px;'%>
+		</p>
 		</div>
     <% when 4 %>
 		<div class="column3-unit-left">
@@ -82,6 +91,11 @@
 		        <b>Fecha de Pedido</b><br />
 		        <%= f.text_field :created_at, :class=> 'field datepicker', :id => 'created_date_picker',:style=>'width:168px;' %>
 	        </p>
+	        
+			<p>
+				<b>Impuestos</b>
+				<%= f.text_field :tax_rate, :class=> 'field',:style=>'width:168px;'%>
+			</p>
 		</div>
 	<% when 3 %>
 		<%= f.hidden_field :vendor_id, :value => current_user.location.id %>
@@ -98,6 +112,11 @@
 			<p>
 				<b>Cliente</b><br />
 				<%= f.text_field :client_name, :class=> 'lookup field', :id => 'client_lookup',:style=>'width:168px;', :tabindex=>2 %>
+			</p>
+			
+			<p>
+				<b>Impuestos</b>
+				<%= f.text_field :tax_rate, :class=> 'field',:style=>'width:168px;'%>
 			</p>
 		</div>
 

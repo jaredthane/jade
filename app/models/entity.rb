@@ -87,17 +87,26 @@ class Entity < ActiveRecord::Base
 	has_many :products, :through => :movements
 
 	
-	after_create :create_price_groups
+	after_create :create_related_objects
 	##############################################################
 	# Creates a Price group for each price group name
 	##############################################################
-	def create_price_groups
-		for price_group_name in PriceGroupName.all
-			PriceGroup.create(:price_group_name=>price_group_name, :entity=> self)
-		end # for price_group_name in price_group_names
-	end # def create_price_groups
-	
-	
+	def create_related_objects
+	    if entity_type_id==SITE
+		    for price_group_name in PriceGroupName.all
+			    PriceGroup.create(:price_group_name=>price_group_name, :entity=> self)
+		    end # for price_group_name in price_group_names
+		    for p in Product.all
+	    		Inventory.create(:entity=>@entity, :product=>p, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
+	    	end  
+	    	for pg in price_groups
+              	for p in Product.all
+              		Price.create(:price_group=>pg, :product=>p, :fixed=>0, :relative=>0, :available=> false)
+              	end
+            end
+		end
+	end # def create_related_objects
+
 	has_many :movements, :dependent => :destroy, :order => 'created_at'
 	belongs_to :cash_account, :class_name => "Account", :foreign_key => "cash_account_id", :dependent => :destroy
 	belongs_to :inventory_account, :class_name => "Account", :foreign_key => "inventory_account_id", :dependent => :destroy
@@ -115,18 +124,18 @@ class Entity < ActiveRecord::Base
 	
 	validates_associated :movements
 	after_update :save_movements
-  after_create :save_movements
+    after_create :save_movements
   
   
 	def cash_account_name
- 	 cash_account.name if cash_account
+        cash_account.name if cash_account
 	end
 	def cash_account_name=(name)
 		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => false, :modifier=>Post::DEBIT}) unless name.blank?
 #		self.cash_account = Account.find_or_create_by_name(name) unless name.blank?
 	end
 	def client_account_name
- 	 cash_account.name if cash_account
+        cash_account.name if cash_account
 	end
 	def client_account_name=(name)
 		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => false, :modifier=>Post::DEBIT}) unless name.blank?

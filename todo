@@ -8,6 +8,10 @@ fix links to change price group and site
 **OSCAR allow filtering movements by "compra" and show product numbers, cost, and sale price on print out with full header
 **OSCAR only add tax to purchases when classified as grande and amount > $100
 **Borrar doesent remove from inventory and reidrects to bad page
+canceling order gives you a ugly page
+*** Not markling delivered
+** abonos de hoy salen en corte de ayer si lo sacamos hoy
+users lose rights when changing date
 
 
 
