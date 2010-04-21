@@ -13,6 +13,27 @@
 
 <%= error_messages_for :unit %>
 <script type="text/javascript">
+    function AddRole(role_id){
+	$.ajax({
+		type: 'POST',
+		url: "/users/add_role",
+  		data:{role_id:role_id, user_id:$('#user_id').val()},
+  		success: function(data){ 
+  			var d = $('<div/>').append(data);
+  			error=$('.error', d);
+  			if (error.length>0){
+  				$('#' + errors_div +':visible').slideUp('slow', function(){$(this).slideDown('slow')});
+  				$('#' + errors_div +':hidden').append(error).slideDown('slow');
+  			} else {
+  				$('#' + errors_div +':visible').slideUp('slow',delete_errors);
+				var new_task_id = "new_" + new Date().getTime();
+  				$('.line', d).html($('.line', d).html().replace(/\[0\]/gi, "["+new_task_id+"]"));
+  				$('.line', d).html($('.line', d).html().replace(/_0_/gi, "_"+new_task_id+"_"));
+  				$('.line', d).appendTo('#' + lines_div).hide().slideDown('slow');
+  			}
+		},
+	});
+}
 	$(document).ready(function(){
 	
 		$("#cash_account_lookup").autocomplete("/accounts.js",{matchSubset:0, autoFill:1}); 
@@ -90,22 +111,27 @@
 	</div>
   
 	<hr class="clear-contentunit" /><br />
+	<input type="hidden" value="<%= @user.id %>" id="user_id">
 	<p>
 		<b>Papeles de este usuario:</b>
 	</p>
 	<div>
-	<div class="table_header_row">
-		<div class="table_cell_80">Papel</div>
-		<div class="table_cell">Acciones </div>
-	</div>
-	<div id="roles">
-		<% f.fields_for :roles do |child_form| %>
-			<%= render :partial => "role", :locals => {:child_form=>child_form} %>
-		<% end %>
-	</div>
-	<div id="roles_errors"></div>
-</div>
+	    <div class="table_header_row">
+		    <div class="table_cell_80">Papel</div>
+		    <div class="table_cell">Acciones </div>
+	    </div>
+	    <div id="roles">
+		    <% f.fields_for :roles do |child_form| %>
+			    <%= render :partial => "role", :locals => {:child_form=>child_form} %>
+		    <% end %>
+	    </div>
+	    <div id="roles_errors"></div>
+    </div>
+    <select id="new_role_select" onchange="AddRole($('#new_role_select').val());">
+        <% for role in Role.all %>
+            <option value="<%= role.id %>"><%= role.title %></option>
+        <% end %>
+    </select>
 <% end %>
-<%= render :partial => 'new_role_form', :locals => { :user => @user} %>
 
 

@@ -113,16 +113,15 @@ class UsersController < ApplicationController
 			flash[:error] = "No tiene los derechos suficientes para modificar otros usuarios"
 		end
   end
-    def new_role	
-	    @role = RolesUser.new(:user_id => params[:roles_user][:user_id], :role_id => params[:roles_user][:role_id])
+    def add_role	
+        logger.debug "PRAMS:" + params.to_s
+	    @role = RolesUser.new(:user_id => params[:user_id], :role_id => params[:role_id])
 	    respond_to do |format|
 		    format.html do
 			    render :layout => false
 		    end
         end
     end
-  # PUT /users/1
-  # PUT /users/1.xml
     def update
         @user = User.find(params[:id])
         if @user!=current_user and !current_user.has_rights(['Admin','Gerente'])
@@ -131,35 +130,35 @@ class UsersController < ApplicationController
 		end
 		params[:user][:today]=untranslate_month(params[:user][:today]) if params[:user][:today]
 #		logger.debug "Month has been translated to:" + params[:user][:today]
-		to_delete=[]
+#		to_delete=[]
 		#Update existing reqs
-        for l in @user.roles_users
-		    if params['existing_roles']
-			    if params['existing_roles'][l.id.to_s]
-				    logger.debug "UPDATING l=#{l.inspect}"
-				    l.attributes = params['existing_roles'][l.id.to_s]
-			    else
-				    logger.debug "DELETING l=#{l.inspect}"
-				    @user.roles_users.delete(l)
-			    end
-		    else
-			    logger.debug "DELETING l=#{l.inspect}"
-			    @user.roles_users.delete(l)
-		    end
-	    end		
-		# Update New roles
-		list= params['new_roles'] || []
-      	for l in list
-      		logger.debug "ADDING l=#{l.inspect}"
-      		new_role = RolesUser.new(:user_id=>@user.id)
-      		new_role.update_attributes(l)
-      		@user.roles_users.push(new_role)
-      	end
-      	if current_user.has_rights(['Admin','Gerente','contabilidad'])
-            @user.cash_account_id = params[:user][:cash_account_id]
-            @user.revenue_account_id = params[:user][:revenue_account_id]
-            @user.personal_account_id = params[:user][:personal_account_id]
-      	end
+#        for l in @user.roles_users
+#		    if params['existing_roles']
+#			    if params['existing_roles'][l.id.to_s]
+#				    logger.debug "UPDATING l=#{l.inspect}"
+#				    l.attributes = params['existing_roles'][l.id.to_s]
+#			    else
+#				    logger.debug "DELETING l=#{l.inspect}"
+#				    @user.roles_users.delete(l)
+#			    end
+#		    else
+#			    logger.debug "DELETING l=#{l.inspect}"
+#			    @user.roles_users.delete(l)
+#		    end
+#	    end		
+#		# Update New roles
+#		list= params['new_roles'] || []
+#      	for l in list
+#      		logger.debug "ADDING l=#{l.inspect}"
+#      		new_role = RolesUser.new(:user_id=>@user.id)
+#      		new_role.update_attributes(l)
+#      		@user.roles_users.push(new_role)
+#      	end
+#      	if current_user.has_rights(['Admin','Gerente','contabilidad'])
+#            @user.cash_account_id = params[:user][:cash_account_id]
+#            @user.revenue_account_id = params[:user][:revenue_account_id]
+#            @user.personal_account_id = params[:user][:personal_account_id]
+#      	end
 		if  @user.update_attributes(params[:user])
 			flash[:notice] = 'Usuario ha sido actualizado exitosamente.'
 		end

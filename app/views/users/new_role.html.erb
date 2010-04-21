@@ -1,7 +1,0 @@
-<% form_for @role do |parent_form| %>
-    <div id="roles">
-		<% parent_form.fields_for :roles do |child_form| %>
-			<%= render :partial => "role", :locals => {:child_form=>child_form} %>
-		<% end %>
-	</div>
-<% end %>
