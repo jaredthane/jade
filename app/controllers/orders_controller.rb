@@ -296,6 +296,7 @@ class OrdersController < ApplicationController
         if params[:order][:plines][:new]
             for line in params[:order][:plines][:new] 
                 line[:received]=untranslate_month(line[:received]) if line[:received]
+                logger.debug "Here's DATEASDADADADADADADADADADADADADADAD'" + line[:received].to_s
             end
         end
         if params[:order][:plines][:old]
