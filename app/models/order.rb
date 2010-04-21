@@ -345,7 +345,7 @@ class Order < ActiveRecord::Base
   	sum=0
   	for line in self.lines
   		if line.product.product_type_id==1
-  			sum+=line.product.cost*line.quantity
+  			sum+=(line.product.cost||0)*(line.quantity||0)
   		end
   	end
   	return sum
