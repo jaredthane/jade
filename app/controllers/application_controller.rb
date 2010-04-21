@@ -133,6 +133,11 @@ end
 			return r
 		end
 	end
+	##################################################################################################
+	# accepts a date in string format
+	# returns same in dateTime format
+	# This is duplicated here and in the app controller
+	#################################################################################################
 	def untranslate_month(date)
 	  if date
 	    if date.class==String
@@ -147,7 +152,7 @@ end
         	  return nil
         	end
         end
-      elsif date.class==Date
+      elsif date.class==Date or date.class==DateTime
         return date
       end
     else

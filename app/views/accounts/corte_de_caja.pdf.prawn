@@ -12,8 +12,8 @@ pdf.font_size = 8
 pdf.text "NIT:" + @site.nit_number, :align => :center if @site.nit
 pdf.text "Registro:" + @site.register, :align => :center if @site.register
 pdf.text @site.giro, :align => :center if @site.giro
-revenue=0.00
-expenses=0.00
+@revenue=0.00
+@expenses=0.00
 
 pdf.text " "
 #def series_to_list(series)
@@ -80,8 +80,8 @@ def show_orders_info(tipo, title)
 		c="orders.receipt_number in(#{group.collect{|a| "'" + a.to_s + "', "}.to_s.chop.chop}) and order_type_id=1 and entities.entity_type_id=#{tipo}"
 #		total=Order.find(:all, :conditions=>(c + cc), :joins=>j, :select=>'sum(grand_total) total')
 		total=Order.sum(:grand_total, :conditions=>(c), :joins=>j)
-		revenue += Order.sum(:total_revenue, :conditions=>(c), :joins=>j)
-		expenses += Order.sum(:total_expense, :conditions=>(c), :joins=>j)
+		@revenue += Order.sum(:total_revenue, :conditions=>(c), :joins=>j)
+		@expenses += Order.sum(:total_expense, :conditions=>(c), :joins=>j)
 		@box << [title,"","del #{group.first} al #{group.last}",@x.number_to_currency(total)]
 		group_total += total
 		title=""

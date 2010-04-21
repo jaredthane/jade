@@ -51,7 +51,9 @@ class Line < ActiveRecord::Base
 #	    Cost.create(:product=>self.product, :entity=>self.order.client, :order=>self.order, :value=>self.price, :quantity=>self.quantity) if order_type_id = Order::PURCHASE
 #	end # def create_costs
 	##################################################################################################
-	# 
+	# accepts a date in string format
+	# returns same in dateTime format
+	# This is duplicated here and in the app controller
 	#################################################################################################
 	def untranslate_month(date)
 	    # logger.debug "HELOOOOOO"
