@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100421170243) do
+ActiveRecord::Schema.define(:version => 20100421165818) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -247,7 +247,7 @@ ActiveRecord::Schema.define(:version => 20100421170243) do
     t.integer  "scanned_receipt_file_size"
     t.decimal  "total_revenue",                             :precision => 8, :scale => 2
     t.decimal  "total_expense",                             :precision => 8, :scale => 2
-    t.decimal  "tax",                                       :precision => 8, :scale => 2, :default => 0.0
+    t.decimal  "tax_rate",                                  :precision => 8, :scale => 2, :default => 0.0
   end
 
   add_index "orders", ["client_id"], :name => "client_id"

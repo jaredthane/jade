@@ -102,16 +102,16 @@ for copy in ['cliente', 'vendor'] do
 				x = Object.new.extend(ActionView::Helpers::NumberHelper)
 				if l.product.serialized and l.serialized_product
 						#data << [l.quantity.to_s, l.product.name + " - " + l.serialized_product.serial_number, x.number_to_currency(l.price), x.number_to_currency(l.total_price)]
-          pdf.text_box l.quantity.to_s,:at=>[pdf.bounds.left + 35, pdf.bounds.bottom + 235 - (line*10)]
-	        pdf.text_box l.product.upc + " - " + l.product.name + " - " + l.serialized_product.serial_number,:at=>[pdf.bounds.left + 75, pdf.bounds.bottom + 235 - (line*10)]
-	        pdf.text_box x.number_to_currency(l.price).to_s,:at=>[pdf.bounds.left + 435, pdf.bounds.bottom + 235 - (line*10)]
-	        pdf.text_box x.number_to_currency(l.total_price).to_s,:at=>[pdf.bounds.left + 510, pdf.bounds.bottom + 235 - (line*10)]
+          pdf.text l.quantity.to_s,:at=>[pdf.bounds.left + 35, pdf.bounds.bottom + 235 - (line*10)]
+	        pdf.text l.product.upc + " - " + l.product.name + " - " + l.serialized_product.serial_number,:at=>[pdf.bounds.left + 75, pdf.bounds.bottom + 235 - (line*10)]
+	        pdf.text x.number_to_currency(l.price).to_s,:at=>[pdf.bounds.left + 435, pdf.bounds.bottom + 235 - (line*10)]
+	        pdf.text x.number_to_currency(l.total_price).to_s,:at=>[pdf.bounds.left + 510, pdf.bounds.bottom + 235 - (line*10)]
 				else
 					#data << [l.quantity.to_s, l.product.name, x.number_to_currency(l.price),  x.number_to_currency(l.total_price)]
-          pdf.text_box l.quantity.to_s,:at=>[pdf.bounds.left + 35, pdf.bounds.bottom + 235 - (line*10)]
-          pdf.text_box l.product.upc + " - " + l.product.name,:at=>[pdf.bounds.left + 75, pdf.bounds.bottom + 235 - (line*10)]
-          pdf.text_box x.number_to_currency(l.price).to_s,:at=>[pdf.bounds.left + 435, pdf.bounds.bottom + 235 - (line*10)]
-          pdf.text_box x.number_to_currency(l.total_price).to_s,:at=>[pdf.bounds.left + 510, pdf.bounds.bottom + 235 - (line*10)]
+          pdf.text l.quantity.to_s,:at=>[pdf.bounds.left + 35, pdf.bounds.bottom + 235 - (line*10)]
+          pdf.text l.product.upc + " - " + l.product.name,:at=>[pdf.bounds.left + 75, pdf.bounds.bottom + 235 - (line*10)]
+          pdf.text x.number_to_currency(l.price).to_s,:at=>[pdf.bounds.left + 435, pdf.bounds.bottom + 235 - (line*10)]
+          pdf.text x.number_to_currency(l.total_price).to_s,:at=>[pdf.bounds.left + 510, pdf.bounds.bottom + 235 - (line*10)]
   
 				end
 				total += l.total_price
@@ -128,9 +128,9 @@ for copy in ['cliente', 'vendor'] do
 			#	  :align => { 0 => :center, 1 => :left, 2 => :center, 3 => :center },
 			#	  :headers => ['', '', '',''],
 			#	  :column_widths => { 0 => 0.13*width, 1 => 0.6*width, 2 => 0.13*width, 3 => 0.13*width})	  
-                        pdf.text_box number_to_currency(total),:at=>[pdf.bounds.left + 500, pdf.bounds.bottom+57]
-                        pdf.text_box number_to_currency(iva),:at=>[pdf.bounds.left + 500, pdf.bounds.bottom+37]
-                        pdf.text_box number_to_currency(total+iva),:at=>[pdf.bounds.left + 500, pdf.bounds.bottom+17]
+                        pdf.text number_to_currency(total),:at=>[pdf.bounds.left + 500, pdf.bounds.bottom+57]
+                        pdf.text number_to_currency(iva),:at=>[pdf.bounds.left + 500, pdf.bounds.bottom+37]
+                        pdf.text number_to_currency(total+iva),:at=>[pdf.bounds.left + 500, pdf.bounds.bottom+17]
 
 #                        pdf.text 'a',:at=>[pdf.bounds.left + 35, pdf.bounds.bottom+250]
  #                       pdf.text 'b',:at=>[pdf.bounds.left + 75, pdf.bounds.bottom+250]
