@@ -15,7 +15,7 @@
 <script type="text/javascript">
     function AddRole(role_id){
 	$.ajax({
-		type: 'POST',
+		type: 'GET',
 		url: "/users/add_role",
   		data:{role_id:role_id, user_id:$('#user_id').val()},
   		success: function(data){ 

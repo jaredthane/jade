@@ -115,7 +115,8 @@ class UsersController < ApplicationController
   end
     def add_role	
         logger.debug "PRAMS:" + params.to_s
-	    @role = RolesUser.new(:user_id => params[:user_id], :role_id => params[:role_id])
+	    @user = User.find(params[:user_id])
+	    @role = Role.find(params[:role_id])
 	    respond_to do |format|
 		    format.html do
 			    render :layout => false

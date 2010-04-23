@@ -48,15 +48,14 @@
 .main-navigation {display:inline /*Fix IE floating margin bug*/; float:left; width:150px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/; background:rgb(245,245,245);}
 .nav-daddy{width:150px;float:left; }
 .main-nav-spacer {display:inline /*Fix IE floating margin bug*/; float:left; height:20px;width:200px; !important /*Firefox*/; overflow:hidden /*IE6*/;background:white;}
-.main-content {display:inline; /*Fix IE floating margin bug*/; float:left; width:730px; margin:0 0 0 10px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.main-content {display:inline; /*Fix IE floating margin bug*/; float:left; width:780px; margin:0 0 0 10px; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .footer {clear:both; width:954px; padding:1.0em 0 1.0em 0; border-top:solid 3px rgb(175,175,175); border-left:solid 3px rgb(175,175,175); border-right:solid 3px rgb(175,175,175); border-bottom:solid 3px rgb(175,175,175); background:rgb(225,225,225); font-size:1.0em; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 
 /* HEADER */
 .header {width:960px;padding:0px,0px,0px,50px;}
-.header-top {width:954px; height:90px; border-top:solid 3px rgb(175,175,175); border-left:solid 3px rgb(175,175,175); border-right:solid 3px rgb(175,175,175); margin-top:30px; background: #515147; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.header-top {width:954px; height:100px; border-top:solid 3px rgb(175,175,175); border-left:solid 3px rgb(175,175,175); border-right:solid 3px rgb(175,175,175); margin-top:30px; background: #515147; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .header-bottom {background:transparent url(../img/menu_bg.png) repeat-x scroll left top;width:954px; border-bottom:none; border-left:solid 3px rgb(175,175,175); border-right:solid 3px rgb(175,175,175); border-top:none;}
 .header-breadcrumbs {clear:both; width:954px; padding:1.0em 0 1.5em 0; border-left:solid 3px rgb(175,175,175); border-right:solid 3px rgb(175,175,175);}
-/*.header .round-border-topleft {width:25px; height:25px; position:absolute; z-index:100; background:url(../img/bg_head_corner_topleft_25px.gif) no-repeat; margin-top:-3px; margin-left:-3px;}*/
 .header .round-border-topright {width:25px; height:25px; position:absolute; z-index:100; background:url(../img/bg_head_corner_topright_25px.gif) no-repeat; margin-top:-3px; margin-left:932px;}
 
 /*************/
@@ -114,70 +113,30 @@ z-index:auto !important /*Non-IE6*/; z-index:1000 /*IE6*/; }
 .header-breadcrumbs ul a:hover {color:rgb(42,90,138); text-decoration:underline;}
 
 .user-info  {margin:10px 0 0 0;}
-/*.user-info  a {color:white; font-weight:normal; font-size:110%;text-decoration:none;}*/
-/*.user-info  a  ul{display:none;}*/
-/*.user-info  a:hover {color:white; font-weight:normal; font-size:110%;text-decoration:none;}*/
-/*.user-info li {}*/
-/*.user-info li ul {display:none;}*/
-/*.user-info li ul a:hover {display:block;}*/
-/*.user-info .site_switcher {color:white; font-weight:normal; font-size:110%; }*/
-.user-info h2 {color:white; font-weight:normal; font-size:110%; }
-
-
-#site-switcher {
-    margin: 0;
-    padding: 0;
-    color: white;
-    height: 1em; }
-#site-switcher li {
-    list-style: none;
-    float: left; }
-#site-switcher li a {
-/*    display: block;*/
-/*    padding: 3px 8px;*/
-/*    background-color: #5e8ce9;*/
-    color: white;
-    text-decoration: none; }
-/*Hide the options*/
-#site-switcher li ul {
-    display: none;
-    width: 10em; /* Width to help Opera out */
-/*    background-color: white;*/
-}
-/*Show the options when hovered*/
-#site-switcher li:hover ul {
-    display: block;
-    position: absolute;
-/*    margin: 0;*/
-/*    padding: 0; */
-    }
-#site-switcher li:hover li {
-    float: none; 
-    margin:1px;
-    border-style:solid;
-    border-width:1px;
-    border-color:black;
-    background-color:	#e1e1e1;
-    -moz-border-radius:4px;
-    }
-#site-switcher li:hover li a {
-/*    border-bottom: 1px solid #fff;*/
-    
-    width:100%;
-    margin:0.5px;
-    color:#646464;}
-#site-switcher li li a:hover {
-    background-color: 	#d7d7d7; }
 
 
 
 
 .right-side-header {float:right; width:250px; padding:0px 17px 0px 0px !important /*Non-IE6*/; padding:0 17px 0px 0px /*IE6*/;}
-.header-top .searchform {padding:10px 0px 0px 0px !important /*Non-IE6*/;}
+
+.user-info h2 {color:white; font-weight:normal; font-size:110%;}
+
+.header-top .searchform {padding:10px 0px 0px 0px !important /*Non-IE6*/;color:white;}
 .header-top .searchform form fieldset {float:right; border:none;}
 .header-top .searchform input.field {width:150px; padding:0.2em 0 0.2em 0; border:1px solid rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:120%; }
-.header-top .searchform input.button {width:50px; padding:1px !important /*Non-IE6*/; padding:0 /*IE6*/; background:rgb(230,230,230); border:solid 1px rgb(150,150,150); text-align:center; font-family:verdana,arial,sans-serif; color:rgb(150,150,150); font-size:120%;}
+.header-top .searchform input.button {padding:0 16px; !important /*Non-IE6*/; -moz-border-radius:4px;background:#008597; border:0 none; text-align:center; font-family:verdana,arial,sans-serif; color:white; font-size:120%;}
 .header-top .searchform input.button:hover {cursor:pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:rgb(80,80,80);}
+.header-top .searchform input.transparent {border:none;background:#515147;width:65px;font-size:10px;font-family:verdana,arial,sans-serif;color:white;}
+#site-switcher {margin: 0;padding: 0;color: white; }
+#site-switcher li {list-style: none;float: left; }
+#site-switcher li a {color: white;text-decoration: none; }
+/*Hide the options*/
+#site-switcher li ul {display: none;width: 10em; /* Width to help Opera ou */}
+/*Show the options when hovered*/
+#site-switcher li:hover ul {display: block;position: absolute;}
+#site-switcher li:hover li {float: none;margin:1px;border-style:solid;border-width:1px;border-color:black;background-color:	#e1e1e1;-moz-border-radius:4px;}
+#site-switcher li:hover li a {width:100%; margin:0.5px; color:#646464;}
+#site-switcher li li a:hover {background-color: #d7d7d7; }
 
 /******************/
 /*  MAIN SECTION  */

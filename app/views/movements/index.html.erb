@@ -9,49 +9,52 @@
 <% end %>
 
 <br />
-<%= render :partial => 'layouts/search', :locals => {:show_search => true, :show_sites=>true,  :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => movements_path,:sites=>current_user.location  } %>
 <%= will_paginate @movements, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
-    <div class="table_cell_10">ID</div>
+    <div class="table_cell_10">Fecha</div>
     <div class="table_cell_10">Tipo</div>
-    <div class="table_cell_15">Fecha</div>
     <div class="table_cell_10">Factura</div>
-    <div class="table_cell_20">Entidad</div>
-    <div class="table_cell_10">Producto</div>
+    <div class="table_cell_15">Entidad</div>
+    <div class="table_cell_10">UPC</div>
+    <div class="table_cell_15">Producto</div>
     <div class="table_cell_10">Cantidad</div>
-    <div class="table_cell">Valor</div>
+    <div class="table_cell_10">Precio</div>
+    <div class="table_cell">Costo</div>
   </div>
 
 <% for movement in @movements %>
   <div class="table_row">
     <% case movement.movement_type_id
      when Movement::SALE %>
-       <div class="table_cell_10"><%= link_to movement.order.id.to_s, movement.order %></div>
+       <div class="table_cell_10"><%= movement.created_at.to_date %></div>
        <div class="table_cell_10">Venta</div>
-       <div class="table_cell_15"><%= movement.created_at.to_date %></div>
        <div class="table_cell_10"><%= link_to movement.order.receipt_number, movement.order %></div>
-       <div class="table_cell_20"><%= link_to movement.order.client.name, movement.order.client %></div>
-       <div class="table_cell_10"><%= link_to movement.product.name, movement.product %></div>
+       <div class="table_cell_15"><%= link_to movement.order.client.name, movement.order.client %></div>
+       <div class="table_cell_10"><%= link_to movement.product.upc, movement.product %></div>
+       <div class="table_cell_15"><%= link_to movement.product.name, movement.product %></div>
        <div class="table_cell_10"><%= movement.quantity %></div>
+       <div class="table_cell_10"><%= number_to_currency(movement.price) %></div>
        <div class="table_cell"><%= number_to_currency(movement.cost) %></div>
      <% when Movement::PURCHASE %>
-       <div class="table_cell_10"><%= link_to movement.order.id.to_s, movement.order %></div>
+       <div class="table_cell_10"><%= movement.created_at.to_date %></div>
        <div class="table_cell_10">Compra</div>
-       <div class="table_cell_15"><%= movement.created_at.to_date %></div>
        <div class="table_cell_10"><%= link_to movement.order.receipt_number, movement.order %></div>
-       <div class="table_cell_20"><%= link_to movement.order.vendor.name, movement.order.vendor %></div>
-       <div class="table_cell_10"><%= link_to movement.product.name, movement.product %></div>
+       <div class="table_cell_15"><%= link_to movement.order.vendor.name, movement.order.vendor %></div>
+       <div class="table_cell_10"><%= link_to movement.product.upc, movement.product %></div>
+       <div class="table_cell_15"><%= link_to movement.product.name, movement.product %></div>
        <div class="table_cell_10"><%= movement.quantity %></div>
+       <div class="table_cell_10"><%= number_to_currency(movement.price) %></div>
        <div class="table_cell"><%= number_to_currency(movement.cost) %></div>
     <% when Movement::COUNT %>
-       <div class="table_cell_10"><%= link_to movement.order.id.to_s, movement.order %></div>
+       <div class="table_cell_10"><%= movement.created_at.to_date %></div>
        <div class="table_cell_10">Cuenta Fisica</div>
-       <div class="table_cell_15"><%= movement.created_at.to_date %></div>
        <div class="table_cell_10"></div>
-       <div class="table_cell_20"><%= link_to movement.order.client.name, movement.order.client %></div>
-       <div class="table_cell_10"><%= link_to movement.product.name, movement.product %></div>
+       <div class="table_cell_15"><%= link_to movement.order.client.name, movement.order.client %></div>
+       <div class="table_cell_10"><%= link_to movement.product.upc, movement.product %></div>
+       <div class="table_cell_15"><%= link_to movement.product.name, movement.product %></div>
        <div class="table_cell_10"><%= movement.quantity %></div>
+       <div class="table_cell_10"><%= number_to_currency(movement.price) %></div>
        <div class="table_cell"><%= number_to_currency(movement.cost) %></div>
     <% end %>
 	</div>

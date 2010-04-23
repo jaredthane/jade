@@ -84,10 +84,19 @@
 <p>
 	<b>Papeles:</b>
 	<div>
-		<% for role in @user.roles %>
-			<li><%=h role.title %></li>
-		<% end %>
-	</div>
+	    <div class="table_header_row">
+		    <div class="table_cell">Nombre</div>
+	    </div>
+	    <div id="roles">
+	        <% for role in @user.roles %>
+			    <div class="line">
+	                <div class="table_row">
+		                <div class="table_cell"><%= role.title %></div>
+	                </div>
+                </div>
+            <% end %>
+        </div>
+    </div>
 </p>
 	
 

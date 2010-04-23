@@ -457,6 +457,66 @@ class Product < ActiveRecord::Base
 			requirement.save(false)
 		end
 	end
+	
+#################################################################################################################################
+# UNFINISHED # UNFINISHED # UNFINISHED # UNFINISHED # UNFINISHED # UNFINISHED # UNFINISHED # UNFINISHED # UNFINISHED # UNFINISHED
+#################################################################################################################################
+#  def self.search(search, page)
+#  	search = search || ""  	
+#  	condition="("
+#  	fields_to_search=['products.name','vendors.name','products.upc','products.location','categories.name']
+#  	join=""
+#  	search_words=[]
+#  	words = search.downcase.split( / *"(.*?)" *| / ) 
+#  	for word in words
+#  		if word[0..3]=='name'
+#  			condition += ' AND products.name=' if word[6..word.length+1] == ':si'
+#  			condition += ' AND entities.active=FALSE' if word[6..word.length+1] == ':no'  	
+#  			
+#  				
+#  		elsif word[0..3]=='tipo'
+#  			if word[4..word.length+1] == ':simple'
+#  				fields_to_search << "entities.name"
+#  				fields_to_search << "client_group.name"
+#  				fields_to_search << "entities.id"
+##  				fields_to_search << "entities.oldid"
+#  				fields_to_search << "users.login"
+#  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND (entity_type_id = 2 OR entity_type_id = 5)"
+#  			elsif word[4..word.length+1] == ':credito' or word[4..word.length+1] == ':wholesale_clients'
+#  				fields_to_search << "entities.name"
+#  				fields_to_search << "client_group.name"
+#  				fields_to_search << "entities.id"
+##  				fields_to_search << "entities.oldid"
+#  				fields_to_search << "users.login"
+#  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 5"
+#  			elsif word[4..word.length+1] == ':consumidor' or word[4..word.length+1] == ':end_users'
+#  				fields_to_search << "entities.name"
+#  				fields_to_search << "client_group.name"
+#  				fields_to_search << "entities.id"
+##  				fields_to_search << "entities.oldid"
+#  				fields_to_search << "users.login"
+#  				condition += " AND (entities.site_id = " + User.current_user.location_id.to_s + " or entities.id=3 or entities.id=4) AND entity_type_id = 2"
+#  			elsif word[4..word.length+1] == ':proveedor' or word[4..word.length+1] == ':vendors' or word[4..word.length+1] == ':proveedores'
+#  				fields_to_search << "entities.name"
+#  				fields_to_search << "entities.id"
+##  				fields_to_search << "entities.oldid"
+#  				fields_to_search << "users.login"
+#  				condition += " AND entity_type_id = 1"
+#  			elsif word[4..word.length+1] == ':sitio' or word[4..word.length+1] == ':site'
+#  				fields_to_search << "entities.name"
+#  				fields_to_search << "site_group.name"
+#  				fields_to_search << "entities.id"
+#  				condition += " AND entity_type_id = 3"
+#  			end
+#  		elsif word[0..4]=='name:'
+#  			condition += ' AND products.name=' + word[5..word.length+1].to_s if word[5..word.length+1].to_s != ""
+#  		elsif word[0..5]=='limit:'
+#  			limit = word[6..word.length+1].to_s if word[6..word.length+1].to_s != ""
+#  		elsif word[0..2]=='id:'
+	
+	
+	
+	
    def self.search_all(search, page)
   	find 		 :all,
   					 :conditions => ['(products.name like :search OR products.model like :search OR description like :search OR vendors.name like :search OR product_categories.name like :search)', {:search => "%#{search}%"}],

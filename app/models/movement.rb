@@ -94,6 +94,58 @@ class Movement < ActiveRecord::Base
         find :all, :conditions => c, :order => o, :joins=>j
       end
     end
+    def self.clean_search(condition)
+       	condition =condition.gsub("( AND ", "(")
+       	condition =condition.gsub("( OR ", "(")
+       	condition =condition.gsub("()", "")
+       	condition =condition.gsub("()", "")
+       	condition =condition.gsub("()", "")
+       	condition =condition.gsub("AND )", ")")
+       	condition="" if condition == " AND "
+      	return condition
+    end
+    
+    def self.search(from, till, sites, search=nil, page=nil)
+    	till = till.to_date + 1
+		sites_string="(" + (sites ||[User.current_user.location_id]).collect{|a| a.to_s + ", "}.to_s.chop.chop + ")"
+#    	c="movements.created_at >= '#{from.to_s(:db)}' and movements.created_at < '#{till.to_s(:db)}' AND movements.entity_id in #{sites_string}"
+      	search = search || ""  	
+      	c="(movements.created_at >= '#{from.to_s(:db)}' and movements.created_at < '#{till.to_s(:db)}' AND movements.entity_id in #{sites_string}"
+      	fields_to_search=['products.name','products.upc','clients.name','vendors.name']
+      	j="inner join products on products.id=product_id inner join entities on entity_id=entities.id inner join movement_types on movement_types.id=movement_type_id inner join orders on orders.id=order_id inner join entities as vendors on vendors.id=orders.vendor_id inner join entities as clients on clients.id=client_id"
+      	search_words=[]
+      	words = search.downcase.split( / *"(.*?)" *| / ) 
+      	for word in words
+      	## Can filter for certain types of Movements thus: "tipo:Compra" or "tipo:Venta,Devolucion_de_Venta"
+      		if word[0..4]=='tipo:'
+      		    s = word[5..word.length+1]
+      		    s = "'" + s.gsub(",", "','") + "'"
+      		    s = s.gsub("_", " ")
+      		    c += " AND movement_types.name in (#{s})"	
+      		else
+      			search_words << word
+      		end
+        end
+        
+        #add in actual searching of fields
+      	c += " AND ("
+      	for word in search_words
+      		c+= " AND ("
+      		for field in fields_to_search
+      			c+= " OR " + field + " like '%" + word + "%'"
+      		end
+      		c += ")"
+      	end
+      	c += "))"
+      	c=clean_search(c)
+        o = "movements.created_at DESC"
+	    if page
+			paginate :per_page => 20, :page => page, :conditions => c, :order => o, :joins=>j
+		else
+			find :all, :conditions => c, :order => o, :joins=>j
+		end
+    end      			
+      				
 #    def self.search(search, page)
 #	    paginate :per_page => 20, :page => page,
 #		           :conditions => ['(products.name like :search OR users.login like :search OR products.upc like :search) AND (entities.id=:current_location)', {:search => "%#{search}%", :current_location => "#{User.current_user.location_id}"}],
@@ -101,18 +153,18 @@ class Movement < ActiveRecord::Base
 #		           :joins => 'inner join products on products.id = movements.product_id inner join users on users.id = movements.user_id inner join entities on entities.id = movements.entity_id'
 #    end
 
-    def self.search(from, till, sites, search=nil, page=nil)
-			till = till.to_date + 1
-			sites_string="(" + (sites ||[User.current_user.location_id]).collect{|a| a.to_s + ", "}.to_s.chop.chop + ")"
-    	c="movements.created_at >= '#{from.to_s(:db)}' and movements.created_at < '#{till.to_s(:db)}' AND movements.entity_id in #{sites_string}"
-    	c += " AND (products.name like '%#{search}%' OR products.upc like '%#{search}%')" if search
-    	j="inner join products on products.id = movements.product_id" if search
-	    o = "movements.created_at DESC"
-		  if page
-				paginate :per_page => 20, :page => page, :conditions => c, :order => o, :joins=>j
-			else
-				find :all, :conditions => c, :order => o, :joins=>j
-			end
-    end
+#    def self.search(from, till, sites, search=nil, page=nil)
+#			till = till.to_date + 1
+#			sites_string="(" + (sites ||[User.current_user.location_id]).collect{|a| a.to_s + ", "}.to_s.chop.chop + ")"
+#    	c="movements.created_at >= '#{from.to_s(:db)}' and movements.created_at < '#{till.to_s(:db)}' AND movements.entity_id in #{sites_string}"
+#    	c += " AND (products.name like '%#{search}%' OR products.upc like '%#{search}%')" if search
+#    	j="inner join products on products.id = movements.product_id" if search
+#	    o = "movements.created_at DESC"
+#		  if page
+#				paginate :per_page => 20, :page => page, :conditions => c, :order => o, :joins=>j
+#			else
+#				find :all, :conditions => c, :order => o, :joins=>j
+#			end
+#    end
 
 end

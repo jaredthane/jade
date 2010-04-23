@@ -169,8 +169,8 @@ end
 #################################################################################################
 @box << ["","","",""]
 @box << ["","","",""]
-@box << ["","","Total Ganancia",""]
-@box << ["","","Total Costo",""]
+@box << ["","","Total Ganancia",@x.number_to_currency(@revenue)]
+@box << ["","","Total Costo",@x.number_to_currency(@expense)]
 @box << ["","","Total",@x.number_to_currency(grand_total)]
 @box << ["Gastos Eventuales","","","($____.___)"]
 @box << ["Anticipos Sueldos","","","($____.___)"]

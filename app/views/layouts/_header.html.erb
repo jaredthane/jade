@@ -43,7 +43,7 @@
   <link rel="stylesheet" href="/css/jquery-ui-custom-theme/jquery-ui-1.7.2.custom.css" type="text/css"/>
 
   <%= stylesheet_link_tag 'jquery.autocomplete' %>
-  <%= stylesheet_link_tag 'jquery-ui' %>
+<!--  <%= stylesheet_link_tag 'jquery-ui' %>-->
 	<%= javascript_include_tag 'jquery' %>
 	<%= javascript_include_tag 'ui.datepicker-es' %>
   <%= javascript_include_tag 'jquery-ui' %>
@@ -75,29 +75,33 @@
             <div class="user-info">
                 <h2>Usuario: <%= current_user.name%> <a href="/logout" style="color:white;text-decoration:none;">(Salir)</a></h2>
                 <h2>Fecha: <%= current_user.date%></h2>
-                <div ><ul id="site-switcher"><li>Punto de vista: "</li>
-                <li>
-                    <a class="price_group_switch" href="#" title="<%= current_user.price_group_name.name%>"><%= current_user.price_group_name.name%></a>
-                    <ul>
-                        <% for location in get_locations %>
-        			        <li><a href="/entities/<%= location.id %>"><%= location.name %></a></li>
-              	        <% end %>
-        		    </ul>
-        		</li>
-                <li>"  en "</li>
-        		<li><a class="site_switch" href="#" title="<%= current_user.location.name%>"><%= current_user.location.name%></a>
-                    <ul>
-                        <% for location in get_locations %>
-        			        <li><a href="/entities/<%= location.id %>"><%= location.name %></a></li>
-              	        <% end %>
-        		    </ul>
-                </li><li>"</li></ul></div>
             </div>
             <div class="searchform">
-              <% form_tag search_path, :method =>'get', :id => 'search_form' do %>
-                <%= text_field_tag :search, params[:search], :class => 'field'%>
+                <% form_tag search_path, :method =>'get', :id => 'search_form' do %>
+                    <%= text_field_tag :search, params[:search], :class => 'field'%>
 		            <%= hidden_field_tag :filter, params[:filter], :class => 'field'%>
 		            <%= submit_tag "Buscar", :name => nil, :class => 'button' %>
+	                <ul id="site-switcher">
+	                    <li>Punto de vista: "</li>
+                        <li>
+                            <a class="price_group_switch" href="#" title="<%= current_user.price_group_name.name%>"><%= current_user.price_group_name.name%></a>
+                            <ul>
+                                <% for location in get_locations %>
+    			                    <li><a href="/entities/<%= location.id %>"><%= location.name %></a></li>
+          	                    <% end %>
+    		                </ul>
+    		            </li>
+                        <li>"  en "</li>
+    		            <li><a class="site_switch" href="#" title="<%= current_user.location.name%>"><%= current_user.location.name%></a>
+                            <ul>
+                                <% for location in get_locations %>
+                			        <li><a href="/entities/<%= location.id %>"><%= location.name %></a></li>
+                      	        <% end %>
+                		    </ul>
+                        </li>
+                        <li>"</li>
+                    </ul><br/>
+                    De: <%= text_field_tag :from, @from.to_s, :class => 'transparent'%> - Hasta: <%= text_field_tag :till, @till.to_s, :class => 'transparent'%>
               <% end %>
             </div>
         </div>
@@ -332,6 +336,10 @@
 		
 	<script type="text/javascript">
 		$(document).ready(function(){
+	        //Setup	date picker
+          $.datepicker.regional['en']
+         $("#from").datepicker();
+         $("#till").datepicker();
 	    	$("#accordion").accordion({ header: 'h2' });
 
 
