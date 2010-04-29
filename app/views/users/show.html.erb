@@ -1,9 +1,9 @@
 <% content_for :title do %><%=h @user.name %><% end %>
 <% content_for :actions do %>
-	<% if @user==current_user or current_user.has_rights(['Admin','Gerente']) %>
+	<% if @user==current_user or current_user.has_right('CHANGE_USERS') %>
 		<li><%= link_to 'Cambiar', edit_user_path(@user) %></li>
 	<% end %>
-	<% if current_user.has_rights(['Admin','Gerente']) %>
+	<% if current_user.has_right('VIEW_USERS') %>
 		<li><%= link_to 'Lista', users_path %></li>
 	<% end %>
 <% end %>

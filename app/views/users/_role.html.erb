@@ -8,7 +8,9 @@
 		<div class="table_cell_80"><%=h child_form.object.title %></div>
 		<div class="table_cell">
 			<%= child_form.check_box :_delete, :style=>'display:none;' %>
-            <%= link_to_function "Remover", 'check_box($(this))' %>
+			<% if current_user.has_right('CHANGE_USERS') %>
+                <%= link_to_function "Remover", 'check_box($(this))' %>
+            <% end %>
         </div>
 	</div>
 </div>

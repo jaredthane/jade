@@ -23,3 +23,8 @@ delete from `trans` where d=1;
 #Check for movements with cost_left but no quantity_left and vice-versa(almost: we have to allow for free stuff)
 delete from movements where cost_left>0 AND (quantity_left = 0 or quantity_left is null)
 delete from movements where quantity_left>0 AND cost_left is null
+
+# Remove duplicates from rights_roles
+CREATE TABLE temp_table as SELECT * FROM rights_roles WHERE 1 GROUP BY role_id, right_id;
+DROP TABLE rights_roles;
+RENAME TABLE temp_table TO rights_roles;

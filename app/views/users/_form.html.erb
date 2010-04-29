@@ -94,7 +94,7 @@
 		<p>
 			<%= f.check_box :default_received, :class => 'field' %><b> Marcar pedidos como Recibido como defecto?</b>
 		</p>
-		<% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
+		<% if current_user.has_right('VIEW_ACCOUNTS') %>
 		  <p>
 		    <b>Cuenta para Fondos Recibido por la Compañía</b><br />
 			  <%= f.text_field :cash_account, :class=> 'lookup field', :id => 'cash_account_lookup',:style=>'width:168px;' %>
@@ -127,11 +127,13 @@
 	    </div>
 	    <div id="roles_errors"></div>
     </div>
-    <select id="new_role_select" onchange="AddRole($('#new_role_select').val());">
-        <% for role in Role.all %>
-            <option value="<%= role.id %>"><%= role.title %></option>
-        <% end %>
-    </select>
+    <% if current_user.has_right('CHANGE_USERS') %>
+        <select id="new_role_select" onchange="AddRole($('#new_role_select').val());">
+            <% for role in Role.all %>
+                <option value="<%= role.id %>"><%= role.title %></option>
+            <% end %>
+        </select>
+    <% end %>
 <% end %>
 
 
