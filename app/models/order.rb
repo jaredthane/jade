@@ -301,7 +301,7 @@ class Order < ActiveRecord::Base
 		      	r=line.revenue_account(self).id
 		      	if line.old
 		      		if line.old.order
-		      			price = (line.price * self.active) - (line.old.total_price * line.old.order.active)
+		      			price = (line.price * self.active) - (line.old.price * line.old.order.active)
 		      	 	else
 		      			price = (line.price * self.active)
 		      		end
@@ -516,25 +516,25 @@ class Order < ActiveRecord::Base
 	# Returns the total tax to be charged the user.
 	###################################################################################
 	def total_tax
-        return tax_rate*total_price
+        return tax_rate*price
 	end
 #	###################################################################################
 #	# Sets the tax using a percentage
 #	###################################################################################
 #	def tax_rate=(rate)
-#        tax = total_price * rate.to_f
+#        tax = price * rate.to_f
 #	end
 #	###################################################################################
 #	# Returns the percentage of tax to be charged the user.
 #	###################################################################################
 #	def tax_rate
-#        return tax / total_price
+#        return tax / price
 #	end
 	###################################################################################
 	# Returns the total price of all of the products in the order plus tax
 	###################################################################################
 	def total_price_with_tax
-		return total_price + total_tax
+		return price + total_tax
 	end
 	##################################################################################################
 	# Creates a payment equal to the total amount due on the order
