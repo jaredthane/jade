@@ -2,9 +2,12 @@
 <% content_for :actions do %>
 	<% if current_user.has_right(User::CHANGE_PRODUCTS) %>
 		<li><%= link_to 'Nuevo producto', new_product_path, :class => 'action' %></li>
-		<li><%= link_to 'Cambiar', edit_product_path(@product), :class =>'action' %> </li>		
-		<li><%= link_to 'Codigo de Barra', show_barcode_path(@product), :class =>'action' %> </li>	
+		<li><%= link_to 'Cambiar', edit_product_path(@product), :class =>'action' %> </li>	
 	<% end %>
+	<% if current_user.has_right(User::DELETE_PRODUCTS) %>
+	    <li><%= link_to "Borrar", @product, :confirm => 'Esta seguro?', :method => :delete %></li>	
+	<% end %>
+	<li><%= link_to 'Codigo de Barra', show_barcode_path(@product), :class =>'action' %> </li>	
 	<% if current_user.has_right(User::CHANGE_PRICES) %>	
 		<li><%= link_to 'Cambiar Precio', :controller => "prices",:action => "index", :search => @product.upc, :class =>'action' %> </li>
 	<% end %>
