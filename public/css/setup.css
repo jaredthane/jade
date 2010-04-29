@@ -53,7 +53,7 @@
 
 /* HEADER */
 .header {width:960px;padding:0px,0px,0px,50px;}
-.header-top {width:954px; height:100px; border-top:solid 3px rgb(175,175,175); border-left:solid 3px rgb(175,175,175); border-right:solid 3px rgb(175,175,175); margin-top:30px; background: #515147; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
+.header-top {width:954px; height:90px; border-top:solid 3px rgb(175,175,175); border-left:solid 3px rgb(175,175,175); border-right:solid 3px rgb(175,175,175); margin-top:30px; background: #515147; overflow:visible !important /*Firefox*/; overflow:hidden /*IE6*/;}
 .header-bottom {background:transparent url(../img/menu_bg.png) repeat-x scroll left top;width:954px; border-bottom:none; border-left:solid 3px rgb(175,175,175); border-right:solid 3px rgb(175,175,175); border-top:none;}
 .header-breadcrumbs {clear:both; width:954px; padding:1.0em 0 1.5em 0; border-left:solid 3px rgb(175,175,175); border-right:solid 3px rgb(175,175,175);}
 .header .round-border-topright {width:25px; height:25px; position:absolute; z-index:100; background:url(../img/bg_head_corner_topright_25px.gif) no-repeat; margin-top:-3px; margin-left:932px;}
@@ -85,27 +85,15 @@
 .nav2 {white-space:nowrap /*IE hack*/; float:left; width:850px;  f/ont-size:130%;} /*Color navigation bar normal mode*/
 .nav2 li {background:#008597; color:white;-moz-border-radius-bottomleft:4px;-moz-border-radius-bottomright:4px;-moz-border-radius-topleft:4px;-moz-border-radius-topright:4px;}
 .nav2 ul {list-style-type:none;}
-.nav2 ul li {margin:1px;float:left; -moz-border-radius-bottomleft:4px;border:1px;border-color:#515147;border-style:solid; 
--moz-border-radius-bottomright:4px;
--moz-border-radius-topleft:4px;
--moz-border-radius-topright:4px;
-z-index:auto !important /*Non-IE6*/; z-index:1000 /*IE6*/; }
+.nav2 ul li {margin:1px;float:left; -moz-border-radius-bottomleft:4px;border:1px;border-color:#515147;border-style:solid; -moz-border-radius-bottomright:4px;-moz-border-radius-topleft:4px;-moz-border-radius-topright:4px;z-index:auto !important /*Non-IE6*/; z-index:1000 /*IE6*/; }
 .nav2 ul li a {float:none !important /*Non-IE6*/; float:left /*IE-6*/; display:block; height:2.1em; line-height:2.1em; padding:0 16px 0 16px; text-decoration:none; font-weight:normal; color: white;}
 .nav2 ul li ul {display:none; border:none;}
 
-/*Non-IE6 hovering*/
 .nav2 ul li:hover {position:relative;} /*Sylvain IE hack*/
 .nav2 ul li:hover a {background-color:#96c09c; text-decoration:none;} /*Color main cells hovering mode*/
 .nav2 ul li:hover ul {display:block; width:10.0em; position:absolute; z-index:999; top:2.0em; margin-top:0.1em; left:0;}
-.nav2 ul li:hover ul li a {white-space:normal; background-color:rgb(215,215,215); display:block; width:10.0em; height:auto; line-height:1.3em; margin-left:-1px; -moz-border-radius:4px; padding:4px 16px 4px 16px; background-color:rgb(240,240,240); font-weight:normal; color:rgb(100,100,100);} /*Color subcells normal mode*/
+.nav2 ul li:hover ul li a {white-space:normal; background-color:rgb(215,215,215); display:block; width:8.0em; height:auto; line-height:1.3em; -moz-border-radius:4px; padding:4px 16px 4px 16px; background-color:rgb(240,240,240); font-weight:normal; color:rgb(100,100,100);} /*Color subcells normal mode*/
 .nav2 ul li:hover ul li a:hover {background-color:rgb(215,215,215); text-decoration:none;} /*Color subcells hovering mode*/
-
-/*IE6 hovering*/
-.nav2 table {position:absolute; top:0; left:-1px; border-collapse:collapse;}
-.nav2 ul li a:hover {position:relative /*Sylvain IE hack*/; z-index:1000 /*Sylvain IE hack*/; background-color:rgb(215,215,215); text-decoration:none;} /*Color main cells hovering mode*/
-.nav2 ul li a:hover ul {display:block; width:10.0em; position:absolute; z-index:999; top:2.1em; t\op:2.0em; left:0; marg\in-top:0.1em;}
-.nav2 ul li a:hover ul li a {white-space:normal; display:block; w\idth:10.0em; height:1px; line-height:1.3em; padding:4px 16px 4px 16px; border-left:solid 1px rgb(175,175,175); border-bottom: solid 1px rgb(175,175,175); background-color:rgb(240,240,240); font-weight:normal; color:rgb(50,50,50);} /*Color subcells normal mode*/
-.nav2 ul li a:hover ul li a:hover {background-color:rgb(215,215,215); text-decoration:none;} /*Color subcells hovering mode*/
 
 .header-breadcrumbs ul {float:left; width:560px; list-style:none; padding:0 0 0 15px; font-family:verdana,arial,sans-serif;}
 .header-breadcrumbs ul li {display:inline; padding:0 0 0 10px; background:transparent url(../img/bg_bullet_arrow.gif) no-repeat 0 50%; font-weight:bold; color:rgb(125,125,125); font-size:100%;}
@@ -126,7 +114,7 @@ z-index:auto !important /*Non-IE6*/; z-index:1000 /*IE6*/; }
 .header-top .searchform input.field {width:150px; padding:0.2em 0 0.2em 0; border:1px solid rgb(200,200,200); font-family:verdana,arial,sans-serif; font-size:120%; }
 .header-top .searchform input.button {padding:0 16px; !important /*Non-IE6*/; -moz-border-radius:4px;background:#008597; border:0 none; text-align:center; font-family:verdana,arial,sans-serif; color:white; font-size:120%;}
 .header-top .searchform input.button:hover {cursor:pointer; border:solid 1px rgb(80,80,80); background:rgb(220,220,220); color:rgb(80,80,80);}
-.header-top .searchform input.transparent {border:none;background:#515147;width:65px;font-size:10px;font-family:verdana,arial,sans-serif;color:white;}
+input.transparent {border:none;background:#515147;width:65px;font-size:10px;font-family:verdana,arial,sans-serif;color:white;}
 #site-switcher {margin: 0;padding: 0;color: white; }
 #site-switcher li {list-style: none;float: left; }
 #site-switcher li a {color: white;text-decoration: none; }

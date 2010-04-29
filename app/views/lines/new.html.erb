@@ -9,7 +9,7 @@
 <% if @order_type_id == '5'  %>
 	<%= render :partial => 'physical_counts/line', :collection => @lines %>
 <% else %>
-	<%= render :partial => 'orders/line', :collection => @lines %>
+	<%= render :partial => 'orders/line', :collection => @lines, :locals => { :order_type_id => @order_type_id} %>
 <% end %>
 
 

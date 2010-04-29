@@ -38,18 +38,7 @@ class Line < ActiveRecord::Base
         { "product"  => self.product,
           "lines" => self.lines }
     end
-#	#################################################################################################
-#	# 
-#	#################################################################################################
-#	def set_cost
-#	    self.cost = Cost.consume(:product=>self.product, :quantity=>self.quantity, :entity=>self.order.client) / (self.quantity/0) if order_type_id == Order::SALE
-#	end # def set_cost
-#	#################################################################################################
-#	# 
-#	#################################################################################################
-#	def create_costs
-#	    Cost.create(:product=>self.product, :entity=>self.order.client, :order=>self.order, :value=>self.price, :quantity=>self.quantity) if order_type_id = Order::PURCHASE
-#	end # def create_costs
+
 	##################################################################################################
 	# accepts a date in string format
 	# returns same in dateTime format
@@ -91,79 +80,66 @@ class Line < ActiveRecord::Base
 	end
 	def attrs=(hash)
 		self.order_type_id = hash[:order_type_id] if hash[:order_type_id]
+		self.quantity = hash[:quantity] if hash[:quantity]
+		self.format_unit_price = hash[:format_unit_price] if hash[:format_unit_price]
 		self.format_price = hash[:format_price] if hash[:format_price]
 		self.warranty_months = hash[:warranty_months] if hash[:warranty_months]
-		self.quantity = hash[:quantity] if hash[:quantity]
+		self.cost = hash[:cost] if hash[:cost]
 		self.product_id = hash[:product_id] if hash[:product_id]
 		self.serial_number = hash[:serial_number] if hash[:serial_number]
 		# logger.debug "Before:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + hash[:received].to_s
 		self.received = untranslate_month(hash[:received]) if hash[:received]
 		# logger.debug "After:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::" + self.received.to_s
 	end
-	def format_price
-		return '$' + ("%5.2f" % self.price).strip
-	end
-	def format_price=(p)
-		self.price=p.gsub(',','_').gsub('$','_').to_f
-	end
-
-  ##################################################################################################
+    #################################################################################################
 	# Returns quantity if it was marked as received, 0 otherwise
 	#################################################################################################
-  def real_qty(line)
-    qty=0
-    if line
-      if line.received
-        qty=line.quantity
-      end
+    def real_qty(line)
+        qty=0
+        if line
+            if line.received
+                qty=line.quantity
+            end
+        end
+        return qty
     end
-    return qty
-  end
-###################################################################################
-  # prepares a single movement to be created but DOES NOT SAVE IT
+    ##################################################################################
+    # prepares a single movement to be created but DOES NOT SAVE IT
+    ##################################################################################
+    def new_movement(entity_id, movement_type_id, quantity)
+        value = total_price_with_tax_per_unit*quantity
+        if self.serialized_product_id
+            serial=self.serialized_product_id
+        else
+            serial = old.serialized_product_id
+        end
+        m=Movement.new(:created_at=>User.current_user.today,:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.order.id, :serialized_product_id => serial, :line_id => self.id)
+        return m
+    end
   ##################################################################################
-	def new_movement(entity_id, movement_type_id, quantity)
-	  value = total_price_with_tax_per_unit*quantity
-	  if self.serialized_product_id
-	  	serial=self.serialized_product_id
-	  else
-	  	serial = old.serialized_product_id
-	 	end
-		m=Movement.new(:created_at=>User.current_user.today,:entity_id => entity_id, :comments => self.order.comments, :product_id => self.product_id, :quantity => quantity, :movement_type_id => movement_type_id, :user_id => User.current_user.id,:order_id => self.id, :serialized_product_id => serial)
-		return m
-	end
-  ###################################################################################
   # prepares the movements to be created but DOES NOT SAVE THEM
   ##################################################################################
   MOVEMENT_TYPES=[[4,4],[5,1],[6,2],[9,8],[7,3],[4,4]]
-	def prepare_movements
+  def prepare_movements
     return 0 if self.product.product_type_id != 1
-    return 0 if real_qty(self) == real_qty(old) and self.quantity
+    new_qty=(real_qty(self)||0)
+    old_qty=(real_qty(old)||0)
+#    logger.debug("new_qty"+new_qty.to_s)
+#    logger.debug("old_qty"+old_qty.to_s)
+#    logger.debug("=="+(new_qty==old_qty).to_s)
+    return 0 if new_qty == old_qty
     
-    dir = (real_qty(self)-real_qty(old))/(real_qty(self)-real_qty(old)).abs
+    dir = (new_qty-old_qty)/((new_qty||0)-(old_qty||0)).abs
     move=MOVEMENT_TYPES[order_type_id.to_i][(dir+3)/2-1]
-    qty=(real_qty(self)-real_qty(old))
-    
-	  # First work with costs
-	  case move
-    when Movement::SALE
-      self.cost = Cost.consume(self.product, qty, self.order.vendor)
-    when Movement::INTERNAL_CONSUMPTION
-      self.cost = Cost.consume(self.product, qty, self.order.vendor)
-    when Movement::TRANSFER
-      self.cost = Cost.consume(self.product, qty, self.order.vendor)
-      Cost.create(:product=>self.product, :quantity=>qty, :value=>self.cost, :entity=>self.order.client)
-    when Movement::PURCHASE
-      self.cost=self.price * self.quantity
-      Cost.create(:product=>self.product, :quantity=>qty, :value=>self.price, :entity=>self.order.client)
-    when Movement::SALE_RETURN
-      Cost.create(:product=>self.product, :quantity=>-qty, :value=>self.cost, :entity=>self.order.vendor)
-    when Movement::INTERNAL_CONSUMPTION_RETURN
-      Cost.create(:product=>self.product, :quantity=>-qty, :value=>self.cost, :entity=>self.order.vendor)
-    when Movement::PURCHASE_RETURN
-      self.cost = Cost.consume_last(self.product, qty, self.order.vendor)
-    end 
-    if [1,2,3,8].include?(move)    	# These are normal movements
+    qty=(new_qty-old_qty)
+
+    if [Movement::SALE, Movement::PURCHASE, Movement::TRANSFER, Movement::INTERNAL_CONSUMPTION].include?(move)    	# These are normal movements
+        if move == Movement::PURCHASE
+            cost=self.price
+        else
+            cost = Movement.consume(self.product, qty, self.order.vendor)
+        end
+        self.cost=cost
     	self.movements << Movement.new(
             :created_at=>User.current_user.today,
             :entity_id => self.order.vendor_id, 
@@ -174,9 +150,11 @@ class Line < ActiveRecord::Base
             :user_id => User.current_user.id,
             :order_id => self.id, 
             :serialized_product_id => self.serialized_product_id, 
-            :cost => self.cost, 
-            :value_left => Cost.stock_value(product,self.order.vendor),
-            :quantity_left => (product.quantity(self.order.vendor_id)||0) - qty
+            :cost => cost, 
+            :price => self.price, 
+            :cost_left => nil,
+            :quantity_left => nil,
+            :line_id => self.id
   	  )
   		self.movements << Movement.new(
             :created_at=>User.current_user.today,
@@ -188,11 +166,20 @@ class Line < ActiveRecord::Base
             :user_id => User.current_user.id,
             :order_id => self.id, 
             :serialized_product_id => self.serialized_product_id,
-            :cost => self.cost, 
-            :value_left => Cost.stock_value(product,self.order.client_id),
-            :quantity_left => (product.quantity(self.order.client_id)||0) + qty
+            :cost => cost, 
+            :price => self.price,
+            :cost_left => cost,
+            :quantity_left => qty,
+            :line_id => self.id
   	  ) if move != 8 # Dont worry about the client for an internal consuption
 	elsif [5,6,7,9].include?(move) 	# These are returns, use old serial_number
+        if move == Movement::PURCHASE_RETURN
+            cost = Movement.consume(self.product, qty, self.order.vendor, :first=>false)
+        else
+            cost = self.cost
+        end
+	    cost = Movement.consume(self.product, qty, self.order.client)
+        self.cost=cost
   		self.movements << Movement.new(
             :created_at=>User.current_user.today,
             :entity_id => self.order.client_id, 
@@ -203,9 +190,11 @@ class Line < ActiveRecord::Base
             :user_id => User.current_user.id,
             :order_id => self.id, 
             :serialized_product_id => old.serialized_product_id,
-            :cost => self.cost, 
-            :value_left => Cost.stock_value(product,self.order.client_id),
-            :quantity_left => (product.quantity(self.order.client_id)||0) - qty
+            :cost => cost, 
+            :price => self.price,
+            :cost_left => nil,
+            :quantity_left => nil,
+            :line_id => self.id
   	  ) if move != 9 # Dont worry about the client for an internal consuption
     	self.movements << Movement.new(
             :created_at=>User.current_user.today,
@@ -217,11 +206,14 @@ class Line < ActiveRecord::Base
             :user_id => User.current_user.id,
             :order_id => self.id, 
             :serialized_product_id => old.serialized_product_id,
-            :cost => self.cost, 
-            :value_left => Cost.stock_value(product,self.order.vendor),
-            :quantity_left => (product.quantity(self.order.vendor)||0) + qty
+            :cost => cost, 
+            :price => self.price,
+            :cost_left => cost,
+            :quantity_left => qty,
+            :line_id => self.id
   	  )	
   	end
+  	logger.debug "=======================-----------------------------self.cost set to #{self.cost}"
 	end # prepare_movements
 	#################################################################################################
 	# Holds a copy of the old version of this object for reference
@@ -309,9 +301,9 @@ class Line < ActiveRecord::Base
   # Saves unsaved movements
   #################################################################################################
 	def save_movements()
+  	logger.debug "=======================-----------------------------self.cost set to #{self.cost}"
 	  for item in self.movements
 	  	if item
-    	  item.line_id=self.id
     	  item.order=self.order
 	  	  if !item.id or update
 				  if !item.save
@@ -322,6 +314,7 @@ class Line < ActiveRecord::Base
 				end # if !item.id or update
 			end # if item
 	  end # for item in list
+  	logger.debug "=======================-----------------------------self.cost set to #{self.cost}"
 	end # def save_related
 	###################################################################################
 	# Returns the revenue account where the value of the order should appear
@@ -365,6 +358,64 @@ class Line < ActiveRecord::Base
 		# If there are no other valid options, use the sites revenue account
 		return order.vendor.revenue_account
 	end
+
+#######################################################################################################
+# DEPRECATED # DEPRECATED # DEPRECATED # DEPRECATED # DEPRECATED # DEPRECATED # DEPRECATED # DEPRECATED
+#######################################################################################################
+# Now we will only handle full prices and costs.
+#######################################################################################################
+#	###################################################################################
+#	# Returns the total price of the products on this line
+#	###################################################################################
+#	def total_cost
+#	  return (self.cost||0) * (self.quantity||0)
+##	  if order_type_id==Order::COUNT 
+##	    total = (product.cost(self.order.client.site) ||0) * quantity
+##	  elsif order_type_id==Order::PURCHASE
+##	    total = (product.cost(self.order.vendor) ||0) * quantity
+##	  else
+##	    total = (product.cost(self.order.vendor) ||0) * quantity
+##	  end
+##		return total
+#	end
+#######################################################################################################
+# DEPRECATED # DEPRECATED # DEPRECATED # DEPRECATED # DEPRECATED # DEPRECATED # DEPRECATED # DEPRECATED
+#######################################################################################################
+## Now we will only handle full prices and costs.
+########################################################################################################
+#  ###################################################################################
+#	# Returns the total price of the products on this line
+#	###################################################################################
+#	def total_price
+#		if order_type_id==Order::COUNT 
+#			return 0 if !self.quantity
+##			puts "self.price=#{self.price.to_s}"
+##			puts "self.quantity=#{self.quantity.to_s}"
+##			puts "self.previous_qty=#{self.previous_qty.to_s}"
+##			puts "((self.quantity || 0) - (self.previous_qty || 0))=#{((self.quantity || 0) - (self.previous_qty || 0)).to_s}"
+##			puts "self.price * ((self.quantity || 0) - (self.previous_qty || 0))=#{(self.price * ((self.quantity || 0) - (self.previous_qty || 0))).to_s}"
+#			return self.price * ((self.quantity || 0) - (self.previous_qty || 0))
+#		elsif order_type_id==Order::LABELS
+#			return 0
+#		else
+#			## logger.debug "CALCULATING TOTAL PRICE &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7"
+#			## logger.debug "price=#{price.to_s}"
+#			## logger.debug "warranty_price=#{warranty_price.to_s}"
+#			## logger.debug "quantity=#{quantity.to_s}"
+#			## logger.debug "((price ||0) + (warranty_price || 0)) * (quantity || 0)=#{(((price ||0) + (warranty_price || 0)) * (quantity || 0)).to_s}"
+#			return ((price ||0) + (warranty_price || 0)) * (quantity || 0)
+#			## logger.debug "total=#{total.to_s}"
+#		end
+#	end
+
+    #######################################################################################
+    # A Note on prices terminology:
+    #######################################################################################
+    # "price" and "cost" and "tax" are the total values for the quantity specified
+    # "with tax" means the value includes tax
+    # "full" means it includes tax and warranty
+    # "unit" means its been divided per unit
+    #######################################################################################
 	#################################################################################################
 	# Returns the amount of tax per unit
 	#################################################################################################
@@ -372,62 +423,76 @@ class Line < ActiveRecord::Base
 		if self.order
 			if self.order.client
 				if self.order.client.entity_type_id == Entity::CREDITO_FISCAL or self.order.client.entity_type_id == Entity::SITE
-					return self.total_price * TAX
+					return self.price * TAX
 				end
 			end
 		end
 		return 0
 	end
 	###################################################################################
-	# Returns the total price of the products on this line
+	# Returns the total price of the products on this line plus tax
 	###################################################################################
-	def total_cost
-	  return (self.cost||0) * (self.quantity||0)
-#	  if order_type_id==Order::COUNT 
-#	    total = (product.cost(self.order.client.site) ||0) * quantity
-#	  elsif order_type_id==Order::PURCHASE
-#	    total = (product.cost(self.order.vendor) ||0) * quantity
-#	  else
-#	    total = (product.cost(self.order.vendor) ||0) * quantity
-#	  end
-#		return total
+	def price_with_tax
+		return (self.price||0) + (self.tax||0)
 	end
-  ###################################################################################
-	# Returns the total price of the products on this line
 	###################################################################################
-	def total_price
-		if order_type_id==Order::COUNT 
-			return 0 if !self.quantity
-#			puts "self.price=#{self.price.to_s}"
-#			puts "self.quantity=#{self.quantity.to_s}"
-#			puts "self.previous_qty=#{self.previous_qty.to_s}"
-#			puts "((self.quantity || 0) - (self.previous_qty || 0))=#{((self.quantity || 0) - (self.previous_qty || 0)).to_s}"
-#			puts "self.price * ((self.quantity || 0) - (self.previous_qty || 0))=#{(self.price * ((self.quantity || 0) - (self.previous_qty || 0))).to_s}"
-			return self.price * ((self.quantity || 0) - (self.previous_qty || 0))
-		elsif order_type_id==Order::LABELS
-			return 0
+	# Returns the price of a single item
+	###################################################################################
+	def unit_price
+	    if (self.quantity||0) > 0
+		    return (self.price||0) / (self.quantity||0)
 		else
-			## logger.debug "CALCULATING TOTAL PRICE &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&7"
-			## logger.debug "price=#{price.to_s}"
-			## logger.debug "warranty_price=#{warranty_price.to_s}"
-			## logger.debug "quantity=#{quantity.to_s}"
-			## logger.debug "((price ||0) + (warranty_price || 0)) * (quantity || 0)=#{(((price ||0) + (warranty_price || 0)) * (quantity || 0)).to_s}"
-			return ((price ||0) + (warranty_price || 0)) * (quantity || 0)
-			## logger.debug "total=#{total.to_s}"
+		    return 0
+		end
+	end
+	###################################################################################
+	# Sets the price of a line using a single price
+	###################################################################################
+	def unit_price=(value)
+	    if (self.quantity||0) > 0
+		    self.price = (value||0) * (self.quantity||0)
+		else
+		    self.price = value
+		end
+	end
+	###################################################################################
+	# Returns the cost of a single item
+	###################################################################################
+	def unit_cost
+	    if (self.quantity||0) > 0
+		    return (self.cost||0) / (self.quantity||0)
+		else
+		    return 0
+		end
+	end
+	
+	###################################################################################
+	# Returns the price of a single item
+	###################################################################################
+	def unit_cost=(value)
+	    if (self.quantity||0) > 0
+		    self.cost = (value||0) * (self.quantity||0)
+		else
+		    self.cost = value
 		end
 	end
 	###################################################################################
 	# Returns the total price of the products on this line plus tax
 	###################################################################################
-	def total_price_with_tax
-		total = (self.total_price||0) + (self.tax||0)
-		return total
-	end
-	###################################################################################
-	# Returns the total price of the products on this line plus tax
-	###################################################################################
-	def total_price_with_tax_per_unit
+	def full_unit_price
 		return (price ||0) + (warranty_price || 0) * (1+TAX)
+	end
+	def format_unit_price
+		return '$' + ("%5.2f" % self.unit_price).strip
+	end
+	def format_unit_price=(p)
+		self.unit_price=p.gsub(',','_').gsub('$','_').to_f
+	end
+	def format_price
+		return '$' + ("%5.2f" % self.price).strip
+	end
+	def format_price=(p)
+		self.price=p.gsub(',','_').gsub('$','_').to_f
 	end
 	###################################################################################
 	# Returns Si or No depending on whether the line has been marked as received
@@ -593,7 +658,7 @@ class Line < ActiveRecord::Base
 	# Returns the name of the bar code as a string
 	###################################################################################
 	def bar_code
- 	 product.upc if product
+	    product.upc if product
 	end
 	###################################################################################
 	# sets the product and price by searching for a product by the given string

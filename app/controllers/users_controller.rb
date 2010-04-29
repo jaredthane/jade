@@ -35,10 +35,16 @@ class UsersController < ApplicationController
 #  def new
 #  end
 	def update_scope
-    current_user.price_group_name_id = params[:user][:price_group_name_id].to_i if params[:user][:price_group_name_id]
-    current_user.location_id = params[:user][:location_id].to_i if params[:user][:location_id]
+    current_user.price_group_name_id = params[:price_group_name_id].to_i if params[:price_group_name_id]
+    current_user.location_id = params[:location_id].to_i if params[:location_id]
+     if params[:today]
+    current_user.today = untranslate_month(params[:today])
+    logger.debug "changing date"
+    logger.debug "new date will be #{untranslate_month(params[:today])}"
+    end
     current_user.save()
-		redirect_to(params[:redirect_url])
+    logger.debug "date is now #{current_user.today}"
+	redirect_to(params[:come_back_url])
   end
   def create
 #    cookies.delete :auth_token

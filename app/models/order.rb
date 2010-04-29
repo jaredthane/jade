@@ -124,7 +124,7 @@ class Order < ActiveRecord::Base
 		end
 		o.save
 		return o
-	end
+	end	
 	#################################################################################################
 	# Returns 1 if deleted_at is set 0 if its null
 	#################################################################################################
@@ -301,12 +301,12 @@ class Order < ActiveRecord::Base
 		      	r=line.revenue_account(self).id
 		      	if line.old
 		      		if line.old.order
-		      			price = (line.total_price * self.active) - (line.old.total_price * line.old.order.active)
+		      			price = (line.price * self.active) - (line.old.total_price * line.old.order.active)
 		      	 	else
-		      			price = (line.total_price * self.active)
+		      			price = (line.price * self.active)
 		      		end
 		      	else
-		      		price = (line.total_price * self.active)
+		      		price = (line.price * self.active)
 		      	end
 		      	if revenue_accts[r]
 		      		revenue_accts[r] += price
@@ -497,7 +497,7 @@ class Order < ActiveRecord::Base
 	def total_price
 		total=0
 		for l in self.lines
-			total = (total||0) + (l.total_price||0)
+			total = (total||0) + (l.price||0)
 		end
 		return (total||0)
 	end
@@ -507,7 +507,7 @@ class Order < ActiveRecord::Base
 	def total_cost
 		total=0
 		for l in self.lines
-			total = (total||0) + (l.total_cost||0)
+			total = (total||0) + (l.cost||0)
 		end
 		return (total||0)
 	end
@@ -588,7 +588,7 @@ class Order < ActiveRecord::Base
 	###################################################################################
 	# Posts a physical count, saving previous qtys, creating movements, updating inventories and costs
 	###################################################################################
-	def post
+	def post(style='count')
 		products_done = []
 		date=User.current_user.today
 		for line in self.lines
@@ -612,24 +612,21 @@ class Order < ActiveRecord::Base
 								if old_loc.entity_type== 3 # It was in a different site
 									# Make a movement to take it out of the other site
 									logger.debug "removing " + l.serialized_product.serial_number + " from " + old_loc.name
-									cost = Cost.consume(Product.find(l.product_id), 1, old_loc)
-									e=Movement.create(:cost=> cost,:created_at=>date,:entity_id => old_loc.id, :comments => self.comments, :product_id => l.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
-									cost = Cost.consume(Product.find(l.product_id), 1, old_loc)
+									cost = Movement.consume(Product.find(l.product_id), 1, old_loc)
+									e=Movement.create(:price=>cost, :cost=> cost, :created_at=>date, :entity_id => old_loc.id, :comments => self.comments, :product_id => l.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
 									logger.debug "e=#{e.to_s}"
 								end
 								# Make a movement to bring it here
 								logger.debug "adding " + l.serialized_product.serial_number + " to " + self.vendor.name
 								cost = cost || l.price
-								e = Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
-								Cost.create(:product=>l.product, :quantity=>1, :value=>cost, :entity=>self.vendor)
+								e = Movement.create(:price=>cost, :cost=> cost, :cost_left=>cost, :quantity_left=> 1, :created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
 								i=l.product.inventories.find_by_entity_id(self.vendor_id)
 								i.update_attribute(:quantity, i.quantity+1)
 							end
 						else	# This serial was just created
 							# Make a movement to put it here
 							logger.debug "creating " + l.serialized_product.serial_number + " in " + self.vendor.name
-							e=Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
-							Cost.create(:product=>l.product, :quantity=>1, :value=>l.price, :entity=>self.vendor)
+							e=Movement.create(:price=>l.price, :cost=> l.price, :cost_left=>l.price, :quantity_left=> 1, :created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => l.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => l.serialized_product.id)
 							logger.debug "e=#{e.to_s}"
 						end
 					end
@@ -641,12 +638,13 @@ class Order < ActiveRecord::Base
 					for s in line.product.get_serials_here(self.vendor_id)
 						if !product_lines[s.serial_number]
 							# Make a movement to remove it from here
+							cost = Movement.consume(Product.find(l.product_id), 1, self.vendor_id)
 							logger.debug "deleting " + l.serialized_product.serial_number + " from " + self.vendor.name
-							e=Movement.create(:created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => s.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
+							e=Movement.create(:price=>cost, :cost=> cost, :created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => s.product_id, :quantity => -1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
 #							logger.debug "e=#{e.to_s}"
 							# Make movement to move it to Internal Consumption
 							puts "moving " + l.serialized_product.serial_number + " to Internal Consumption"
-							e=Movement.create(:created_at=>date,:entity_id => 1, :comments => self.comments, :product_id => s.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
+							e=Movement.create(:price=>cost, :cost=> cost, :cost_left=>cost, :quantity_left=> 1, :created_at=>date,:entity_id => 1, :comments => self.comments, :product_id => s.product_id, :quantity => 1, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => l.id, :serialized_product_id => s.id)
 #							logger.debug "e=#{e.to_s}"
 						end
 					end
@@ -657,32 +655,36 @@ class Order < ActiveRecord::Base
 	                if old_loc
 						l.product.inventories.find_by_entity_id(old_loc.id).update_attribute(:quantity, product_lines.length)
 					end
-				    accounting_diff=(product_lines.length-old_qty) * line.product.cost
+				    accounting_diff=(product_lines.length-old_qty) * line.unit_cost
 				else
-					line.previous_qty = line.product.quantity
+                    line.previous_qty = line.product.quantity
 					if (line.quantity != line.product.quantity) and line.quantity
-					  qty=line.quantity - line.product.quantity
-					  if qty > 0
-  					  Cost.create(:order=>self, :product=>line.product, :quantity=>qty, :value=>line.price*qty, :entity=>self.client)
-  					else
-#  					  puts "Consuming:"
-#  					  puts "line.price=#{line.price.to_s}"
-  					  line.price = Cost.consume(line.product, -qty, self.client)
-#  					  puts "line.price=#{line.price.to_s}"
-  					  line.send(:update_without_callbacks)
-  					end					  
-						m=Movement.create(:cost=>line.price, :created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => qty, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id, :line_id => line.id)
-						line.product.inventories.find_by_entity_id(self.vendor_id).update_attribute(:quantity, line.quantity)
-						products_done << line.product_id
+					    qty=line.quantity - line.product.quantity
+					    if qty > 0
+					        logger.debug "Creating new cost"
+					        m=Movement.create(:cost=>line.price, :cost_left=>line.price, :quantity_left=>qty, :price=>line.price, :created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => qty, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id)
+					        line.cost=line.price
+                            line.send(:update_without_callbacks)
+                        else
+#                            puts "Consuming:"
+#                            puts "line.price=#{line.price.to_s}"
+                            line.price = Movement.consume(line.product, -qty, self.client)
+                            m=Movement.create(:cost=>line.price, :price=>line.price, :created_at=>date,:entity_id => self.vendor_id, :comments => self.comments, :product_id => line.product_id, :quantity => qty, :movement_type_id => 4, :user_id => User.current_user.id,:order_id => self.id)
+                            line.cost=line.price
+                        #  	 puts "line.price=#{line.price.to_s}"
+                            line.send(:update_without_callbacks)
+                        end					  
+                        line.product.inventories.find_by_entity_id(self.vendor_id).update_attribute(:quantity, line.quantity)
+                        products_done << line.product_id
 					end
-			    accounting_diff = qty * line.price
+			    accounting_diff = line.price
 				end
 				
 				# Do Accounting
 				if accounting_diff != 0
 					inventory = Trans.new(:order_id=>self.id, :user=>User.current_user,:created_at=>date, :description=> 'Cuenta Fisica', :kind_id=>Trans::INVENTORY, :direction => Trans::FORWARD)
 					inventory.posts << Post.new(:account => self.vendor.inventory_account,:created_at=>date, :value=>accounting_diff, :post_type_id => Post::DEBIT)
-					inventory.posts << Post.new(:account => self.vendor.expense_account,:created_at=>date, :value=>accounting_diff, :post_type_id => Post::CREDIT)
+					inventory.posts << Post.new(:account => account_to_charge,:created_at=>date, :value=>accounting_diff, :post_type_id => Post::CREDIT)
 					inventory.save
 				end
 			end

@@ -21,15 +21,18 @@ class Cost < ActiveRecord::Base
             quantity -= amt
             puts "cost.value=#{cost.value.to_s}"
             puts "total=#{total.to_s}"
-            total += cost.value * amt
+            cost_taken=(cost.value/cost.quantity*amt).round(2)
+            total += cost_taken
             puts "total=#{total.to_s}"
             puts "cost.quantity == amt=#{(cost.quantity == amt).to_s}"
             if cost.quantity == amt
                 cost.destroy
             else
-                cost.update_attribute(:quantity, cost.quantity - amt)
+                cost.quantity -= amt
+                cost.value -= cost_taken
+                cost.save
             end
-            cost = first(:conditions=>"product_id=#{product.id} AND entity_id=#{site.id}")
+            cost = first(:conditions=>"product_id=#{product.id} AND entity_id=#{site.id}") if quantity > 0
         end
         puts "total=#{total.to_s}"
         return total
@@ -48,13 +51,14 @@ class Cost < ActiveRecord::Base
         while quantity > 0 and cost
             amt = [quantity, cost.quantity].min
             quantity -= amt
-            total += cost.value * amt
+            cost_taken=(cost.value/cost.quantity*amt).round(2)
+            total += cost_taken
             if cost.quantity == amt
                 cost.destroy
             else
                 cost.update_attribute(:quantity, cost.quantity - amt)
             end
-            cost = last(:conditions=>"product_id=#{product.id} AND entity_id=#{site.id}")
+            cost = last(:conditions=>"product_id=#{product.id} AND entity_id=#{site.id}") if quantity > 0
         end
         return total
     end # def self.consume(product, quantity, site)

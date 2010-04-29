@@ -81,8 +81,7 @@
 		<% when 5%>
 			<div class="table_cell_20">Sitio</div>
 		<% else %>
-			<% content_for :title do %>Lista de Pedidos en <%= current_user.location.name %><% end %>
-			<%= render :partial => 'layouts/search', :locals => {:show_search => true, :show_sites=>true,  :search => @search, :filter => @filter,:from => @from,:till => @till,:search_path => orders_path,:sites=>@sites  } %>
+			<div class="table_cell_20">Entidad</div>
 		<% end %>
 		<% case @order_type_id 
 			 when 4 %>

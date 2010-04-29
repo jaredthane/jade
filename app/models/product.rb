@@ -101,10 +101,7 @@ class Product < ActiveRecord::Base
 		self.cost * TAX
 	end
 	def total_value_of_inventory(site)
-	  val=Cost.sum('value*quantity', :conditions=>"entity_id=#{site.id} AND product_id=#{self.id}").to_d
-	  qty=Cost.sum(:quantity, :conditions=>"entity_id=#{site.id} AND product_id=#{self.id}")
-	  raise "Costs out of sync" if qty != self.quantity(site)
-	  return val
+	    return Movement.stock_value(self, site)
 	end
 	##################################################################################################
 	# Creates Inventories, Prices, and Warranties
@@ -395,9 +392,8 @@ class Product < ActiveRecord::Base
 		end
 	end
 	def cost(site = User.current_user.location)
-		c=Cost.first(:conditions=>"product_id=#{self.id} AND entity_id = #{site.id}")
-#		puts Cost.first(:conditions=>"product_id=#{self.id} AND entity_id = #{site.id}")
-		return c.value if c
+		c=Movement.first(:conditions=>"product_id=#{self.id} AND entity_id = #{site.id} AND cost_left > 0")
+		return c.cost_left/c.quantity_left if c
 		i = self.inventories.find_by_entity_id(site.id)
 		return i.default_cost if i
 		raise "Unable to find inventory for product##{self.id} in site ##{site.id}"

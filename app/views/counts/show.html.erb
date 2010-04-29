@@ -3,7 +3,7 @@
 	<% if current_user.has_right(User::VIEW_COUNTS) %>
 		<% if @order.last_received == nil %>
 			<li><%= link_to 'Cambiar', edit_order_path(@order), :class => 'action' %></li>
-			<li><%= link_to 'Procesar', post_count_path(@order), :class => 'action' %></li>
+			<li><%= link_to 'Procesar', edit_order_path(@order, :submit_type=>'post_as_sale'), :class => 'action' %></li>
 		<% end %>
 		<li><%= link_to 'Nueva Cuenta Fisica', '/count/new', :class => 'action' %></li>
 		<li><%= link_to 'Imprimir', count_sheet_url, :class => 'action' %></li>
@@ -11,16 +11,20 @@
 	<% end %>
 <% end %>
 <% if @order.deleted %><p class="error_message" >Este pedido ha sido anulado.</p><% end %>
+<script type="text/javascript">
+    
+
+</script>
 <div class="column2-unit-left">
 
 	<p>
-    <b>Sitio</b><br />
-    <%=h @order.vendor.name %>
-  </p>
+        <b>Sitio</b><br />
+        <%=h @order.vendor.name %>
+    </p>
 	<p>
-    <b>Description</b><br />
-    <%=h @order.comments %>
-  </p>
+        <b>Descripción</b><br />
+        <%=h @order.comments %>
+    </p>
 	<p>
 		<b>Fecha Aplicado:</b>
 		<% if @order.received != nil %>
@@ -76,7 +80,7 @@
 				<% else %>
 					<div class="table_cell_15">N/A</div>
 				<% end %>
-				<div class="table_cell_15"><%=h number_to_currency(line.total_price||0) %></div>
+				<div class="table_cell_15"><%=h number_to_currency(line.price||0) %></div>
 				<div class="table_cell"><% if line.received %><%=h line.received.to_date.to_s %><% end %></div>
 			</div>
 		<% end %>

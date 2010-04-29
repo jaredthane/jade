@@ -235,20 +235,21 @@ class OrdersController < ApplicationController
       format.xml  { render :xml => @order }
     end
   end
-  ##################################################################################################
-  # Post a Physical Count
-  #################################################################################################
-  def post
-		return false if !check_user(User::POST_COUNTS,'No tiene los derechos suficientes para procesar cuentas fisicas.')
-    @order = Order.find(params[:id])
-    if @order.post
-    	@order.save
-      flash[:notice] = 'Cuenta Fisica ha sido procesado exitosamente.'
-      redirect_to(@order)
-    else
-      format.html { render :action => "edit" }
+    ##################################################################################################
+    # Post a Physical Count
+    #################################################################################################
+    def post
+        return false if !check_user(User::POST_COUNTS,'No tiene los derechos suficientes para procesar cuentas fisicas.')
+        @order = Order.find(params[:id])
+        account_to_charge = params[:account_to_charge_id] ? Account.find(params[:account_to_charge_id]) : nil
+        if @order.post(account_to_charge)
+            @order.save
+            flash[:notice] = 'Cuenta Fisica ha sido procesado exitosamente.'
+            redirect_to(@order)
+        else
+            format.html { render :action => "edit" }
+        end
     end
-  end
   ##################################################################################################
   # 
   #################################################################################################
@@ -358,10 +359,23 @@ class OrdersController < ApplicationController
     end
     errors = false
     @order.attrs=params[:order]
-		errors = true if !@order.save
-		if params[:submit_type] == 'post' and !errors
-			errors = true if !@order.post
+    xx=@order.save
+    logger.debug "@order.save=#{xx}" 
+	errors = true if !xx
+	logger.debug "params[:submit_type]:#{params[:submit_type]}"
+	logger.debug "params[:submit_type] == 'post':#{params[:submit_type] == 'post'}"
+	logger.debug "errors#{errors}"
+	logger.debug "params[:submit_type] == 'post' and !errors:#{params[:submit_type] == 'post' and !errors}"
+	if params[:submit_type]  and !errors
+	    if params[:submit_type]=='post'
+	        logger.debug "Posting Too"
+		    errors = true if !@order.post
+		else params[:submit_type]=='post_as_sale'
+	        logger.debug "Posting As Sale Too"
+		    errors = true if !@order.post('sale')
 		end
+		@order.save if !errors
+	end
 		
 #    generate_receipt(@order)
     respond_to do |format|

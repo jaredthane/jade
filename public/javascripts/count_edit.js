@@ -11,7 +11,7 @@ function submit(form_name){
 	$("#"+form_name).submit();
 }
 function post_count(){
-	$('#submit_type').val("post")
+	$('#submit_type').val("post");
   $('#counts_form').submit();
 }
 //function calc_dif(e) {

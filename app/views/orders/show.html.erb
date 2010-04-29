@@ -30,8 +30,8 @@
 			<div class="table_cell_30">Producto</div>
 			<div class="table_cell_10">Cantidad</div>
 			<div class="table_cell_15">Numero de Serie</div>
-			<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
-				<div class="table_cell_15">Precio<br />(Garantía) </div>
+			<% if !(@order.order_type_id==2) or (current_user.has_right('VIEW_COSTS')) %>
+				<div class="table_cell_15">Precio Total<br />(Garantía) </div>
 			<% end %>
 			<div class="table_cell_15">Garantía Expira</div>
 			<div class="table_cell">Entregado</div>
@@ -49,7 +49,7 @@
 				<% else %>
 					<div class="table_cell_15">N/A</div>
 				<% end %>
-				<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
+				<% if !(@order.order_type_id==2) or (current_user.has_right('VIEW_COSTS')) %>
 					<div class="table_cell_15">
 					  <% if line.product.product_type_id==2 %>
 					    <%=h '-' + number_to_currency(line.price) %>

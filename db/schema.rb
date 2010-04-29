@@ -9,7 +9,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20100421165818) do
+ActiveRecord::Schema.define(:version => 20100424163310) do
 
   create_table "accounts", :force => true do |t|
     t.string  "name"
@@ -199,11 +199,11 @@ ActiveRecord::Schema.define(:version => 20100421165818) do
     t.integer  "order_id"
     t.integer  "serialized_product_id"
     t.text     "comments"
-    t.integer  "line_id"
+    t.decimal  "price",                 :precision => 8, :scale => 2
     t.decimal  "quantity_left",         :precision => 8, :scale => 2
     t.decimal  "cost",                  :precision => 8, :scale => 2
-    t.integer  "cost_ref"
-    t.decimal  "value_left",            :precision => 8, :scale => 2
+    t.decimal  "cost_left",             :precision => 8, :scale => 2
+    t.integer  "line_id"
   end
 
   add_index "movements", ["entity_id"], :name => "entity_id"
@@ -337,6 +337,7 @@ ActiveRecord::Schema.define(:version => 20100421165818) do
   create_table "price_groups", :force => true do |t|
     t.integer "price_group_name_id"
     t.integer "entity_id"
+    t.boolean "d"
   end
 
   create_table "prices", :force => true do |t|
@@ -345,6 +346,7 @@ ActiveRecord::Schema.define(:version => 20100421165818) do
     t.decimal "fixed",          :precision => 8, :scale => 2
     t.decimal "relative",       :precision => 8, :scale => 2
     t.boolean "available"
+    t.boolean "d"
   end
 
   add_index "prices", ["price_group_id"], :name => "price_group_id"

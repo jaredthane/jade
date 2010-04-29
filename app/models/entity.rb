@@ -92,12 +92,14 @@ class Entity < ActiveRecord::Base
 	# Creates a Price group for each price group name
 	##############################################################
 	def create_related_objects
+	    logger.debug 'BAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAMBAM'
 	    if entity_type_id==SITE
 		    for price_group_name in PriceGroupName.all
 			    PriceGroup.create(:price_group_name=>price_group_name, :entity=> self)
 		    end # for price_group_name in price_group_names
+		    logger.debug "Creating Inventoriess"
 		    for p in Product.all
-	    		Inventory.create(:entity=>@entity, :product=>p, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
+	    		Inventory.create(:entity=>self, :product=>p, :quantity=>0, :min=>0, :max=>0, :to_order=>0)
 	    	end  
 	    	for pg in price_groups
               	for p in Product.all

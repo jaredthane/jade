@@ -56,6 +56,55 @@ class Movement < ActiveRecord::Base
 			end
 		end
 	end
+	#################################################################################################
+    # Removes costs that have been sold
+    # And returns the total cost
+    #################################################################################################
+    def self.consume(product, quantity, site, get_first=true)
+       #puts "product=#{product.inspect}"
+       #puts "site=#{site.inspect}"
+       #puts "quantity=#{quantity.to_s}"
+        c="product_id=#{product.id} AND entity_id=#{site.id} AND cost_left > 0"
+        if get_first
+            cost = first(:conditions=>c)
+        else
+            cost=last(:conditions=>c)
+        end
+        total=0
+       #puts "cost=#{cost.inspect}"
+        while quantity > 0 and cost
+           #puts "quantity=#{quantity.to_s}"
+           #puts "cost.quantity=#{cost.quantity.to_s}"
+            amt = [quantity, cost.quantity_left].min
+           #puts "amt=#{amt.to_s}"
+            quantity -= amt
+           #puts "cost.value=#{cost.value.to_s}"
+           #puts "total=#{total.to_s}"
+            cost_taken=(cost.cost_left/cost.quantity_left*amt).round(2)
+            total += cost_taken
+           #puts "total=#{total.to_s}"
+           #puts "cost.quantity == amt=#{(cost.quantity == amt).to_s}"
+            cost.quantity_left -= amt
+            cost.cost_left -= cost_taken
+            cost.save
+            cost = first(:conditions=>"product_id=#{product.id} AND entity_id=#{site.id} AND cost_left > 0") 
+            if quantity > 0
+                if get_first
+                    cost = first(:conditions=>c)
+                else
+                    cost=last(:conditions=>c)
+                end
+            end
+        end
+       #puts "total=#{total.to_s}"
+        return total
+    end # def self.consume(product, quantity, site)
+    #################################################################################################
+    # 
+    #################################################################################################
+    def self.stock_value(product, site)
+        return sum('value_left * quantity_left', :conditions=>"product_id=#{product.id} AND entity_id=#{site.id}")
+    end # def stock_value()
 	def post_create
 #		logger.debug "woking here"
 		if e=product.inventory(entity)
@@ -65,7 +114,7 @@ class Movement < ActiveRecord::Base
 	end
 	def product_name
  	    product.name if product
- 	    puts "++"+product.name
+ 	   #puts "++"+product.name
 	end
 	def product_name=(name)
 		self.product = Product.find_by_name(name) unless name.blank?
@@ -83,8 +132,8 @@ class Movement < ActiveRecord::Base
 	    self.user = User.find_by_login(name) unless name.blank?
     end
     def self.for_product_in_site(product_id, page=nil, site_id = User.current_user.location_id)
-#        puts "product_id"+product_id.to_s
-#        puts "site_id"+site_id.to_s
+#       #puts "product_id"+product_id.to_s
+#       #puts "site_id"+site_id.to_s
       c="(products.id = #{product_id}) AND (entities.id=#{site_id})"
       o='movements.created_at'
       j='inner join products on products.id = movements.product_id inner join users on users.id = movements.user_id inner join entities on entities.id = movements.entity_id'

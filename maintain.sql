@@ -19,3 +19,7 @@ alter table `trans` add column d tinyint(1);
 update `trans` set d=0;
 update `trans` left join orders on order_id=orders.id set `trans`.d=1 where orders.id is null;
 delete from `trans` where d=1;
+
+#Check for movements with cost_left but no quantity_left and vice-versa(almost: we have to allow for free stuff)
+delete from movements where cost_left>0 AND (quantity_left = 0 or quantity_left is null)
+delete from movements where quantity_left>0 AND cost_left is null
