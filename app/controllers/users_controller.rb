@@ -78,6 +78,7 @@ class UsersController < ApplicationController
 		if @user!=current_user and !current_user.has_rights(['Admin','Gerente'])
 			redirect_back_or_default('/products')
 			flash[:error] = "No tiene los derechos suficientes para ver otros usuarios"
+			return false;
 		end
     respond_to do |format|
       format.html # show.html.erb
