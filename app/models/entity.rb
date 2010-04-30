@@ -394,15 +394,19 @@ class Entity < ActiveRecord::Base
   	self.office_phone=number
   end
   def full_address
+  	if !self.address return nil
+  	if self.address.strip == '' return nil
   	address=''
-  	if self.address
-  	  address += self.address
-  	end
+    address += self.address
   	if self.city
-  	 	address+=", "+self.city
+  	    if self.city.strip != ''
+  	 	    address+=", "+self.city
+  	 	end
   	end
-  	if self.state and address != ''
-  	 	address += ", " + self.state.name
+  	if self.state
+  	    if self.state.strip != ''
+  	 	    address += ", " + self.state.name
+  	 	end
   	end
   	return address
   end
