@@ -516,7 +516,7 @@ class Order < ActiveRecord::Base
 	# Returns the total tax to be charged the user.
 	###################################################################################
 	def total_tax
-        return tax_rate*price
+        return tax_rate*self.total_price
 	end
 #	###################################################################################
 #	# Sets the tax using a percentage
