@@ -141,7 +141,9 @@
 </div>
 
 <hr class="clear-contentunit" />
-
+<% if @order_type_id==Order::PURCHASE %>
+    NOTA: Asegurese de engresar el precio <b>total</b> para la cantidad del producto o servicio comprado.
+<% end %>
 <div>
 	<div class="table_header_row">
 		<div class="table_cell_30">Producto</div>

@@ -270,86 +270,86 @@ class Order < ActiveRecord::Base
 	# Adds a transaction to reflect the creation of the order if necissary
 	#################################################################################################
 	def main_transaction(date=User.current_user.today)
-		return nil if !User.current_user.do_accounting
-		# Grand total is 0 when the order is deactivated, so we dont have to worry about that here
-		if old
-		  amount = self.grand_total - old.grand_total 
-		else
-			amount = self.grand_total
-		end
-	  if amount != 0 or (deleted and self.new_record?)
-	    dtax = self.total_tax - (old('total_tax') || 0)
-		  case order_type_id
-		  when 1 #Venta
-		  	if amount >=0 
-		  		description = 'Venta'
-		  		d=Trans::FORWARD
-		  	else
-		  		description = 'Cancelacion de Venta'
-		  		
-		  		d=Trans::REVERSE
-		  	end
-		  	if User.current_user.do_accounting
-					sale=Trans.new(:user=>User.current_user,:created_at=>date, :description=> description, :direction=>Trans::FORWARD, :kind_id=>Trans::CONTRACT)
-		      sale.posts << Post.new(:account => self.client.cash_account,:created_at=>date, :value=>amount, :post_type_id =>Post::DEBIT)
-		      if dtax != 0
-		      	sale.posts << Post.new(:account => self.vendor.tax_account,:created_at=>date, :value=>dtax, :post_type_id =>Post::CREDIT)
-		      end
-		      # Here we have to make sure we multiply the quantities by order.active to make them zero if the order is deactivated
-		      revenue_accts={}
-		      for line in self.lines
-		      	r=line.revenue_account(self).id
-		      	if line.old
-		      		if line.old.order
-		      			price = (line.price * self.active) - (line.old.price * line.old.order.active)
-		      	 	else
-		      			price = (line.price * self.active)
-		      		end
-		      	else
-		      		price = (line.price * self.active)
-		      	end
-		      	if revenue_accts[r]
-		      		revenue_accts[r] += price
-		      	else
-		      		revenue_accts[r] = price
-		      	end
-		      end
-		      revenue_accts.each { |key, value| 
-		      	acct= Account.find(key)
-						sale.posts << Post.new(:account => acct, :value=>value,:created_at=>date, :post_type_id =>Post::CREDIT)
-					}    
-					return sale
-				else
-					return nil
-				end
-		  when 2 # Compra
-		  	if amount >=0 
-		  		description = 'Compra'
-		  		d=Trans::FORWARD
-		  	else
-		  		description = 'Cancelacion de Compra'
-		  		d=Trans::REVERSE
-		  	end
-	      purchase = Trans.new(:user=>User.current_user,:created_at=>date, :description=> description, :direction=>d, :kind_id=>Trans::CONTRACT)
-	      purchase.posts << Post.new(:account => self.vendor.cash_account,:created_at=>date, :value => amount, :post_type_id =>Post::CREDIT)
-        purchase.posts << Post.new(:account => self.client.inventory_account,:created_at=>date, :value => amount, :post_type_id =>Post::DEBIT)
-			  return purchase
-      end
-    end
-    return nil
+        return nil if !User.current_user.do_accounting
+        # Grand total is 0 when the order is deactivated, so we dont have to worry about that here
+        if old
+            amount = self.grand_total - old.grand_total 
+        else
+            amount = self.grand_total
+        end
+        if amount != 0 or (deleted and self.new_record?)
+            dtax = self.total_tax - (old('total_tax') || 0)
+            case order_type_id
+            when 1 #Venta
+                if amount >=0 
+                    description = 'Venta'
+                    d=Trans::FORWARD
+                else
+                    description = 'Cancelacion de Venta'
+                    d=Trans::REVERSE
+                end
+                if User.current_user.do_accounting
+                    sale=Trans.new(:user=>User.current_user,:created_at=>date, :description=> description, :direction=>Trans::FORWARD, :kind_id=>Trans::CONTRACT)
+                    sale.posts << Post.new(:account => self.client.cash_account,:created_at=>date, :value=>amount, :post_type_id =>Post::DEBIT)
+                    if dtax != 0
+                        sale.posts << Post.new(:account => self.vendor.tax_account,:created_at=>date, :value=>dtax, :post_type_id =>Post::CREDIT)
+                    end
+                    # Here we have to make sure we multiply the quantities by order.active to make them zero if the order is deactivated
+                    revenue_accts={}
+                    # TODO This section had some total_prices, we need to check if any .prices should be changed to .unit_price
+                    for line in self.lines
+                        r=line.revenue_account(self).id
+                        if line.old
+                            if line.old.order
+                                price = (line.price * self.active) - (line.old.price * line.old.order.active)
+                            else
+                                price = (line.price * self.active)
+                            end
+                        else
+                            price = (line.price * self.active)
+                        end
+                        if revenue_accts[r]
+                            revenue_accts[r] += price
+                        else
+                            revenue_accts[r] = price
+                        end
+                    end
+                    revenue_accts.each { |key, value| 
+                        acct= Account.find(key)
+                        sale.posts << Post.new(:account => acct, :value=>value,:created_at=>date, :post_type_id =>Post::CREDIT)
+                    }    
+                    return sale
+                else
+                    return nil
+                end
+            when 2 # Compra
+                if amount >=0 
+                    description = 'Compra'
+                    d=Trans::FORWARD
+                else
+                    description = 'Cancelacion de Compra'
+                    d=Trans::REVERSE
+                end
+                purchase = Trans.new(:user=>User.current_user,:created_at=>date, :description=> description, :direction=>d, :kind_id=>Trans::CONTRACT)
+                purchase.posts << Post.new(:account => self.vendor.cash_account,:created_at=>date, :value => amount, :post_type_id =>Post::CREDIT)
+                purchase.posts << Post.new(:account => self.client.inventory_account,:created_at=>date, :value => amount, :post_type_id =>Post::DEBIT)
+                return purchase
+            end
+        end
+        return nil
 	end
 	###################################################################################
 	# Returns total quantity of an item contained in this order
 	###################################################################################
-  def inventory_value
-  	sum=0
-  	for line in self.lines
-  		if line.product.product_type_id==1
-  			sum+=(line.product.cost||0)*(line.quantity||0)
-  		end
-  	end
-  	return sum
-  end
+    def inventory_value
+        sum=0
+        for line in self.lines
+            if line.product.product_type_id==1
+                sum+=(line.product.cost||0)*(line.quantity||0)
+            end
+        end
+        return sum
+    end
 	###################################################################################
 	# Returns transaction for inventory movement if any is necissary
 	###################################################################################
@@ -534,7 +534,7 @@ class Order < ActiveRecord::Base
 	# Returns the total price of all of the products in the order plus tax
 	###################################################################################
 	def total_price_with_tax
-		return price + total_tax
+		return self.price + self.total_tax
 	end
 	##################################################################################################
 	# Creates a payment equal to the total amount due on the order
