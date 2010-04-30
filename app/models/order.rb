@@ -894,7 +894,7 @@ class Order < ActiveRecord::Base
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
 	def total_as_text
-	    return currency_as_text(self.grand_total)
+	    return self.currency_as_text(self.grand_total)
 	end
 	def currency_as_text(num, add_end=true)
     msg= ''
