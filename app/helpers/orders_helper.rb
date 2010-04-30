@@ -58,67 +58,134 @@ module OrdersHelper
 			end
 		end
 	end
-	def currency_to_text(num, prefixed=true)
-	    if num > 1000
-	    elsif num > 100
-	    elsif num > 20
-	    elsif num < 1
-	    elsif num == 1
-            return 'un'
-	    elsif num == 2
-            return 'dos'
-	    elsif num == 3
-            return 'tres'
-	    elsif num == 4
-            return 'cuatro'
-	    elsif num == 5
-            return 'cinco'
-	    elsif num == 6
-            return 'seis'
-	    elsif num == 7
-            return 'siete'
-	    elsif num == 8
-            return 'ocho'
-	    elsif num == 9
-            return 'nueve'
-	    elsif num == 10
-            return 'diez'
-	    elsif num == 11
-            return 'once'
-	    elsif num == 12
-            return 'doce'
-	    elsif num == 13
-            return 'trece'
-	    elsif num == 14
-            return 'catorce'
-	    elsif num == 15
-            return 'quince'
-	    elsif num == 16
-            return 'dieziséis'
-	    elsif num == 17
-            return 'diecisiete'
-	    elsif num == 18
-            return 'dieciocho'
-	    elsif num == 19
-            return 'diecinueve'
-	    elsif num == 20
-            return prefixed ?'veinte':'veinti'
-	    elsif num == 30
-            return 'treinta'
-	    elsif num == 40
-            return 'cuarenta'
-	    elsif num == 50
-            return 'cincuenta'
-	    elsif num == 60
-            return 'sesenta'
-	    elsif num == 70
-            return 'setenta'
-	    elsif num == 80
-            return 'ochenta'
-	    elsif num == 90
-            return 'noventa'
-	    elsif num == 100
-            return 'cien'
+	def currency_to_text(num, add_end=true)
+        msg= ''
+        if num > 1000
+            msg= (num >= 2000 ? self.currency_to_text((num/1000).to_i,false) + ' mil ' + (self.currency_to_text(num % 1000,false)||'') : 'mil ' + (self.currency_to_text(num % 1000,false)||'')).strip
+        elsif num == 1000
+            msg='mil'
+        elsif num == 100
+            msg= 'cien'
+        elsif num > 100
+            case (num/100).to_i*100
+            when 100
+                msg= ('ciento ' + currency_to_text((num % 100).to_i,false)).strip
+            when 200
+                msg= ('doscientos ' + currency_to_text((num % 100).to_i,false)).strip
+            when 300
+                msg= ('trescientos ' + currency_to_text((num % 100).to_i,false)).strip
+            when 400
+                msg= ('cuatrocientos ' + currency_to_text((num % 100).to_i,false)).strip
+            when 500
+                msg= ('quinientos ' + currency_to_text((num % 100).to_i,false)).strip
+            when 600
+                msg= ('seiscientos ' + currency_to_text((num % 100).to_i,false)).strip
+            when 700
+                msg= ('setecientos ' + currency_to_text((num % 100).to_i,false)).strip
+            when 800
+                msg= ('ochocientos ' + currency_to_text((num % 100).to_i,false)).strip
+            when 900
+                msg= ('novecientos ' + currency_to_text((num % 100).to_i,false)).strip
+            end
+        elsif num >= 30
+            msg= 'cien' if num == 100
+            case (num/10).to_i*10
+            when 30
+                msg= num % 10>0 ? 'treinta y ' + (currency_to_text((num % 10).to_i,false)).strip : 'treinta'
+            when 40
+                msg= num % 10>0 ?  'cuarenta y ' + (currency_to_text((num % 10).to_i,false)).strip : 'cuarenta'
+            when 50
+                msg= num % 10>0 ?  'cincuenta y ' + (currency_to_text((num % 10).to_i,false)).strip : 'cincuenta'
+            when 60
+                msg= num % 10>0 ?  'sesenta y ' + (currency_to_text((num % 10).to_i,false)).strip : 'sesenta'
+            when 70
+                msg= num % 10>0 ?  'setenta y ' + (currency_to_text((num % 10).to_i,false)).strip : 'setenta'
+            when 80
+                msg= num % 10>0 ?  'ochenta y ' + (currency_to_text((num % 10).to_i,false)).strip : 'ochenta'
+            when 90
+                msg= num % 10>0 ?  'noventa y ' + (currency_to_text((num % 10).to_i,false)).strip : 'noventa'
+            end
+        elsif num > 19
+            case num
+            when 20
+                msg= "veinte"
+            when 21
+                msg= "veintiun"
+            when 22
+                msg= "veintidós"
+            when 23
+                msg= "veintitrés"
+            when 24
+                msg= "veinticuatro"
+            when 25
+                msg= "veinticinco"
+            when 26
+                msg= "veintiséis"
+            when 27
+                msg= "veintisiete"
+            when 28
+                msg= "veintiocho"
+            when 29
+                msg= "veintinueve"
+            end
+        elsif num >= 1
+            case num.to_i
+            when 1
+                msg= 'un'
+            when 2
+                msg= 'dos'
+            when 3
+                msg= 'tres'
+            when 4
+                msg= 'cuatro'
+            when 5
+                msg= 'cinco'
+            when 6
+                msg= 'seis'
+            when 7
+                msg= 'siete'
+            when 8
+                msg= 'ocho'
+            when 9
+                msg= 'nueve'
+            when 10
+                msg= 'diez'
+            when 11
+                msg= 'once'
+            when 12
+                msg= 'doce'
+            when 13
+                msg= 'trece'
+            when 14
+                msg= 'catorce'
+            when 15
+                msg= 'quince'
+            when 16
+                msg= 'dieciséis'
+            when 17
+                msg= 'diecisiete'
+            when 18
+                msg= 'dieciocho'
+            when 19
+                msg= 'diecinueve'
+            end
+        end 
+        if add_end
+            if msg.length>=2
+                if msg[-2..-1]=='un'
+                    msg += ' dolar'
+                else
+                    msg += ' dolares' 
+                end
+            end
+            if num % 1 != 0 and msg != ''
+                return msg + ' con ' + currency_to_text(num % 1 * 100,false) + ' centavos'
+            elsif msg == ''
+                return currency_to_text(num % 1 * 100,false) + ' centavos'
+            end
+        else
+            return msg
         end
-	end
+        return msg
+    end
 end
