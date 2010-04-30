@@ -893,7 +893,10 @@ class Order < ActiveRecord::Base
 		         :order => 'created_at',
 						 :joins => "inner join entities as vendors on vendors.id = orders.vendor_id inner join entities as clients on clients.id = orders.client_id"
 	end
-	def total_as_text(num, add_end=true)
+	def total_as_text
+	    return currency_as_text(self.total)
+	end
+	def currency_as_text(num, add_end=true)
     msg= ''
     if num > 1000
         msg= (num >= 2000 ? currency_to_text((num/1000).to_i,false) + ' mil ' + (currency_to_text(num % 1000,false)||'') : 'mil ' + (currency_to_text(num % 1000,false)||'')).strip
