@@ -534,7 +534,7 @@ class Order < ActiveRecord::Base
 	# Returns the total price of all of the products in the order plus tax
 	###################################################################################
 	def total_price_with_tax
-		return self.price + self.total_tax
+		return self.total_price + self.total_tax
 	end
 	##################################################################################################
 	# Creates a payment equal to the total amount due on the order
