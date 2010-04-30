@@ -58,5 +58,67 @@ module OrdersHelper
 			end
 		end
 	end
-	
+	def currency_to_text(num, prefixed=true)
+	    if num > 1000
+	    elsif num > 100
+	    elsif num > 20
+	    elsif num < 1
+	    elsif num == 1
+            return 'un'
+	    elsif num == 2
+            return 'dos'
+	    elsif num == 3
+            return 'tres'
+	    elsif num == 4
+            return 'cuatro'
+	    elsif num == 5
+            return 'cinco'
+	    elsif num == 6
+            return 'seis'
+	    elsif num == 7
+            return 'siete'
+	    elsif num == 8
+            return 'ocho'
+	    elsif num == 9
+            return 'nueve'
+	    elsif num == 10
+            return 'diez'
+	    elsif num == 11
+            return 'once'
+	    elsif num == 12
+            return 'doce'
+	    elsif num == 13
+            return 'trece'
+	    elsif num == 14
+            return 'catorce'
+	    elsif num == 15
+            return 'quince'
+	    elsif num == 16
+            return 'dieziséis'
+	    elsif num == 17
+            return 'diecisiete'
+	    elsif num == 18
+            return 'dieciocho'
+	    elsif num == 19
+            return 'diecinueve'
+	    elsif num == 20
+            return prefixed ?'veinte':'veinti'
+	    elsif num == 30
+            return 'treinta'
+	    elsif num == 40
+            return 'cuarenta'
+	    elsif num == 50
+            return 'cincuenta'
+	    elsif num == 60
+            return 'sesenta'
+	    elsif num == 70
+            return 'setenta'
+	    elsif num == 80
+            return 'ochenta'
+	    elsif num == 90
+            return 'noventa'
+	    elsif num == 100
+            return 'cien'
+        end
+	end
 end
