@@ -21,15 +21,15 @@
 <% content_for :actions do %>
 	<% case @entity_type
 		 when 'sites' %>
-		 	<% if current_user.has_rights(['Admin','Gerente']) %>
+		 	<% if current_user.has_right('CREATE_SITES') %>
 				<li><%= link_to 'Nuevo sitio', "/sites/new", :class => 'action' %></li>
 			<% end %>
 		<% when 'vendors' %>
-		 	<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
+		 	<% if current_user.has_right('CREATE_VENDORS') %>
 				<li><%= link_to 'Nuevo proveedor', "/vendors/new", :class => 'action' %></li>
 			<% end %>
 		<% when 'clients' %>
-		 	<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
+		 	<% if current_user.has_right('CREATE_CLIENTS') %>
 				<li><%= link_to 'Nuevo cliente', "/clients/new", :class => 'action' %></li>
 				<li><%= link_to 'Provisionar', preview_process_path(:search=>(params[:search]||"")), :class => 'action' %></li>
 			<% end %>

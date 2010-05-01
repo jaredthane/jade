@@ -2,7 +2,7 @@
   <%= javascript_include_tag "submit_link" %>
 <% end %>
 
-<% if current_user.has_rights(['Suscripciones']) %>
+<% if current_user.has_right('VIEW_SUBSCRIPTIONS') %>
 	<% content_for :more_search do %>
 		<%= text_field_tag :sub_day, params[:sub_day], :class => 'dayfield'%>
 	<% end %>
@@ -103,7 +103,7 @@
 </div>
 <div class="column2-unit-right">
   <% if @entity.entity_type.id == 3 %>
-	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+	  <% if current_user.has_rights('VIEW_ACCOUNTS') %>
 		  <p>
 		    <b>Cuenta de Ingresos</b><br />
 			  <%= f.text_field :revenue_account_name, :class=> 'lookup field', :id => 'revenue_account_lookup',:style=>'width:281px;' %>
@@ -141,7 +141,7 @@
 		<%= f.hidden_field :entity_type_id, :value => @entity.entity_type_id %>
 	<% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
-	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+	  <% if current_user.has_rights('VIEW_ACCOUNTS') %>
 	    <p>
 	    	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
         	<b>Cuenta del Cliente</b><br />

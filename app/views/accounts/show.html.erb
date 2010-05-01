@@ -1,6 +1,6 @@
 <% content_for :title do %>Cuenta: <%=h @account.name %> - #<%=h @account.number %><% end %>
 <% content_for :actions do %>
-	<% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
+	<% if current_user.has_right('CHANGE_ACCOUNTS') %>
 		<li><%= link_to 'Nueva cuenta', new_account_path  %></li>
 		<li><%= link_to 'Cambiar', edit_account_path(@account) %> </li>
 		<li><%= link_to 'Nueva Transaccion', new_tran_path  %></li>

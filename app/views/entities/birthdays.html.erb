@@ -1,11 +1,11 @@
 <% content_for :title do %>Lista de Clientes Cumpliendo Anos Este Dia<% end %>
 <% content_for :actions do %>
-	<% if current_user.has_rights(['admin','compras','gerente','ventas']) %>
+	<% if current_user.has_rights('CREATE_CLIENTS') %>
 		<li> <%= link_to 'Nuevo cliente', "/clients/new", :class => 'action' %> </li>
 	<% end %>
 <% end %>
 
-<% if current_user.has_rights(['Suscripciones']) %>
+<% if current_user.has_rights('VIEW_SUBSCRIPTIONS') %>
 	<% content_for :more_search do %>
 		<%= text_field_tag :sub_day, params[:sub_day], :class => 'dayfield'%>
 	<% end %>

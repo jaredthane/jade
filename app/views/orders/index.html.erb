@@ -6,41 +6,41 @@
 <% content_for :actions do %>
 	<% case @order_type_id
 	when 1%>
-		<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
+		<% if current_user.has_right('CREATE_SALES') %>
 			<li><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %></li>
 			<li><%= link_to 'Anular No. de Factura', new_nul_receipt_number_url, :class => 'action' %></li>
-			<% if current_user.has_rights(['Suscripciones','Admin']) %>
+			<% if current_user.has_right('VIEW_SUBSCRIPTIONS') %>
 			  <li><%= link_to 'Lista de Suscripciones', subscriptions_url %></li>
 			<% end %>
 		<% end %>
 	 <% when 2 %>
-		<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
+		<% if current_user.has_right('CREATE_PURCHASES') %>
 			<li><%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %></li>
 		<% end %>
 	<% when 6 %>
-		<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
+		<% if current_user.has_right('CREATE_LABELS') %>
 			<li><%= link_to 'Nuevas Etiquetas', '/labels/new', :class => 'action' %></li>
 		<% end %>
 	<% when 3%>
-		<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
+		<% if current_user.has_right('CREATE_INTERNAL_CONSUMPTIONS') %>
 			<li><%= link_to 'Nuevo Consumo Interno', '/internal/new', :class => 'action' %></li>
 		<% end %>	
 	<% when 4%>
-		<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
+		<% if current_user.has_right('CREATE_TRANSACTIONS') %>
 			<li><%= link_to 'Nueva Transferencia', '/transfer/new', :class => 'action' %></li>
 		<% end %>	
 	<% when 5%>
-		<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
+		<% if current_user.has_right('CREATE_COUNTS') %>
 			<li><%= link_to 'Nueva Cuenta Fisica', '/count/new', :class => 'action' %></li>
 		<% end %>	
 	<% else %>
-		<% if current_user.has_rights(['Admin','Compras','Gerente']) %>
+		<% if current_user.has_right('CREATE_PURCHASES') %>
 			<li><%= link_to 'Nueva Compra', '/purchases/new', :class => 'action' %></li>
 		<% end %>
-		<% if current_user.has_rights(['Admin','Compras','Gerente','Ventas']) %>
+		<% if current_user.has_right(['Admin','Compras','Gerente','Ventas']) %>
 			<li><%= link_to 'Nuevo Consumo Interno', '/internal/new', :class => 'action' %></li>
 		<% end %>	
-		<% if current_user.has_rights(['Admin','Gerente','Ventas']) %>
+		<% if current_user.has_right('CREATE_SALES') %>
 			<li><%= link_to 'Nueva Venta', '/sales/new', :class => 'action' %></li>
 			<li><%= link_to 'Anular No. de Factura', new_nul_receipt_number_url, :class => 'action' %></li>
 		<% end %>

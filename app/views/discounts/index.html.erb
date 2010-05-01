@@ -1,5 +1,5 @@
 <% content_for :actions do %>
-	<% if current_user.has_rights(['admin','gerente']) %>
+	<% if current_user.has_right('CREATE_DISCOUNTS') %>
 		<li> <%= link_to 'Nuevo descuento', new_discount_path, :class => 'action' %> </li>
 	<% end %>
 <% end %>

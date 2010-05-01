@@ -57,7 +57,7 @@
 			<% end %>
 				<div class="table_cell_10">Cuenta</div>
 			<div class="table_cell_15">Numero de Serie</div>
-			<% if !(@order.order_type_id==2) or (current_user.has_rights(['admin','compras','gerente'])) %>
+			<% if !(@order.order_type_id==2) or (current_user.has_right('VIEW_COSTS')) %>
 				<div class="table_cell_15">Valor de Differencia</div>
 			<% end %>
 			<div class="table_cell">Aplicado</div>

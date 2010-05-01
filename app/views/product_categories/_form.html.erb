@@ -22,7 +22,7 @@
 		</p>
 	</div>
 	<div class="column2-unit-right">
-	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+	  <% if current_user.has_right('CHANGE_ACCOUNTS') %>
 			<p>
 				<b>Cuenta de Ingresos</b><br />
 				Si desea, puede especificar una cuenta en que poner los ingresos de productos en esta categoria.<br />

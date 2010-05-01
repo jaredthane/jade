@@ -36,7 +36,7 @@
     <div class="table_cell_5">Max</div>
     <div class="table_cell_10">Cantidad</div>
     <div class="table_cell_10">Precio</div>
-    <% if current_user.has_rights(['admin','compras','gerente']) %>
+    <% if current_user.has_right('VIEW_COSTS') %>
     	<div class="table_cell_10">Costo</div>
     <% end %>
     <div class="table_cell">Upc</div>
@@ -56,7 +56,7 @@
 		  	<% end %>  
 		  </div>
 		  <div class="table_cell_10"><%=h number_to_currency(product.price) %></div>
-		  <% if current_user.has_rights(['admin','compras','gerente']) %>
+		  <% if current_user.has_right('VIEW_COSTS') %>
 			  <div class="table_cell_10"><%=h number_to_currency(product.cost) %></div>
 		  <% end %>
 		  <div class="table_cell"><%=h product.upc %></div>

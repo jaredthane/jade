@@ -20,7 +20,7 @@
 <%= will_paginate @product_categories, :class => 'pagination' %>
 <div>
   <div class="table_header_row">
-	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+	  <% if current_user.has_right('VIEW_ACCOUNTS') %>
 		  <div class="table_cell_50">Categoría</div>
 		  <div class="table_cell">Cuenta de Ingresos</div>
     <% else %>
@@ -31,7 +31,7 @@
 
 <% for product_category in @product_categories %>
   <div class="table_row">
-	  <% if current_user.has_rights(['admin','contabilidad','gerente']) %>
+	  <% if current_user.has_right('VIEW_ACCOUNTS') %>
 		  <div class="table_cell_50"><%= link_to product_category.name, product_category %></div>
 		  <div class="table_cell">
 		  	<% if product_category.revenue_account %>

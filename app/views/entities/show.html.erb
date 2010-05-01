@@ -3,7 +3,7 @@
 <% else %>
 	<% content_for :title do %>Detalles del <%= @entity.entity_type.name %> "<%= @entity.name %>" #<%= @entity.id %><% end %>
 <% end %>
-<% if current_user.has_rights(['Ver Suscripciones']) %>
+<% if current_user.has_right('VIEW_SUBSCRIPTIONS') %>
 	<% content_for :more_search do %>
 		<%= text_field_tag :sub_day, params[:sub_day], :class => 'dayfield'%>
 	<% end %>
@@ -57,7 +57,7 @@
 		<%=h @entity.name %>
 	</p>
 	<% if @entity.entity_type_id == 3 %>
-	  <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
+	  <% if current_user.has_right('VIEW_ACCOUNTS') %>
 	    <p>
 			  <b>Cuenta de Efectivo</b><br />
 			  <% if @entity.cash_account %>
@@ -147,7 +147,7 @@
 		<% end %>
 	</p>
   <% if @entity.entity_type_id == 3 %>
-	  <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
+	  <% if current_user.has_right('VIEW_ACCOUNTS') %>
       <p>
 			  <b>Cuenta de Ingresos</b><br />
 			  <% if @entity.revenue_account %>
@@ -173,7 +173,7 @@
 		<% end %>
   <% end %>
   <% if @entity.entity_type_id == 1 %>
-    <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
+    <% if current_user.has_right('VIEW_ACCOUNTS') %>
       <p>
 				<b>Cuenta para Pagar</b><br />
 				<% if @entity.cash_account %>
@@ -183,7 +183,7 @@
     <% end %>
   <% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
-	  <% if current_user.has_rights(['Admin','Contabilidad','Gerente']) %>
+	  <% if current_user.has_right('VIEW_ACCOUNTS') %>
 			<p>
 				<b>Cuenta para Cobrar</b><br />
 				<% if @entity.cash_account %>

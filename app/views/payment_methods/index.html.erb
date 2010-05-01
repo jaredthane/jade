@@ -1,4 +1,4 @@
-<% if current_user.has_rights(['admin','gerente']) %>
+<% if current_user.has_right('CREATE_PAYMENTS') %>
 	<% content_for :new do %><%= link_to 'Nuevo Metodo de Pago', new_payment_method_path %><% end %>
 <% end %>
 <h1>Listing payment_methods</h1>

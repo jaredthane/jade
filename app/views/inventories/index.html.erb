@@ -3,7 +3,7 @@
 <% end %>
 <% content_for :title do %>Lista de Inventario para <%= current_user.location.name %><% end %>
 <% content_for :actions do %>
-	<% if current_user.has_rights(['admin','compras','gerente']) %>
+	<% if current_user.has_right('CHANGE_INVENTORIES') %>
 		<li><%= link_to_function 'Guardar', 'submit("inventory_form")', :class => 'action' %></li>
 		<li><%= link_to_function 'Generar Pedidos', 'generate_orders()', :class => 'action' %></li>
 		<li><%= link_to "Dar Recomendaciones", 'inventories/recommend?search=' + @search, :class => 'action' %></li>
