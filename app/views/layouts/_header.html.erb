@@ -103,9 +103,9 @@
 		            <%= hidden_field_tag :filter, params[:filter], :class => 'field'%>
 		            
 		            <%= submit_tag "Buscar", :name => nil, :class => 'button' %>
-	                
-                    De: <input type="text" onchange="$('#search_form').submit();" value="<%= @from.to_s %>" name="from" id="from" class="transparent"> - Hasta: <input type="text" onchange="$('#search_form').submit();" value="<%= @till.to_s %>" name="till" id="till" class="transparent">
-                    
+	                <% if @from and @till %>
+                        De: <input type="text" onchange="$('#search_form').submit();" value="<%= @from.to_s %>" name="from" id="from" class="transparent"> - Hasta: <input type="text" onchange="$('#search_form').submit();" value="<%= @till.to_s %>" name="till" id="till" class="transparent">
+                    <% end %>
               <% end %>
             </div>
         </div>

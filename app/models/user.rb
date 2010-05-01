@@ -215,13 +215,13 @@ class User < ActiveRecord::Base
 	def has_right(id)
 		return self.rights.keys.include?(id) ? true : false
 	end
-	def has_rights(needed)
-		r = rights
-		for n in needed
-			return true if r.include?(n) 
-		end
-		return false
-	end
+#	def has_rights(needed)
+#		r = rights
+#		for n in needed
+#			return true if r.include?(n) 
+#		end
+#		return false
+#	end
   # Authenticates a user by their login name and unencrypted password.  Returns the user or nil.
   def self.authenticate(login, password)
     u = find_by_login(login) # need to get the salt
