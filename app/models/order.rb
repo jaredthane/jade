@@ -145,24 +145,31 @@ class Order < ActiveRecord::Base
 			deleted_at=nil
 		end
 	end # def deleted
-	##################################################################################################
-	# Will split a large order into smaller ones; works recursively
-	#################################################################################################
-	def split_over_sized_order
-	  if lines.length > MAX_LINES_PER_ORDER and MAX_LINES_PER_ORDER > 0 and order_type_id==1
-#	  	logger.debug "self.attributes=#{self.attributes.to_s}"
-	    self.sequel = Order.new(self.attributes)
-	    self.sequel.receipt_number = ("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1) if self.receipt_number
-#	    logger.debug "-----------------------------------------"
-#	  	logger.debug "self.sequel=#{self.sequel.to_s}"
-      for line in self.lines[MAX_LINES_PER_ORDER..-1]
-      	l=Line.new(line.attributes)
-      	l.order=self.sequel
-        self.sequel.lines << l
-      end
-      self.lines=self.lines[0..MAX_LINES_PER_ORDER-1]	    
-	  end
-	end
+    ##################################################################################################
+    # Will split a large order into smaller ones; works recursively
+    #################################################################################################
+    def split_over_sized_order
+        if order_type_id==SALE
+            max=MAX_LINES_PER_ORDER
+        elsif order_type_id==COUNT
+            max=MAX_LINES_PER_COUNT
+        else
+            max=0
+        end
+        if lines.length > max and max > 0
+            #	  	logger.debug "self.attributes=#{self.attributes.to_s}"
+            self.sequel = Order.new(self.attributes)
+            self.sequel.receipt_number = ("%0" + self.receipt_number.length.to_s + "d") % (self.receipt_number.to_i + 1) if self.receipt_number
+            #	    logger.debug "-----------------------------------------"
+            #	  	logger.debug "self.sequel=#{self.sequel.to_s}"
+            for line in self.lines[max..-1]
+                l=Line.new(line.attributes)
+                l.order=self.sequel
+                self.sequel.lines << l
+            end
+            self.lines=self.lines[0..max-1]	    
+        end
+    end
   ##################################################################################################
   # Receives a list of related objects and saves them
   # Can be used for movements, transactions, lines, or other objects

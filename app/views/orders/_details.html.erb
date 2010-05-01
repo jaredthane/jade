@@ -8,7 +8,7 @@
 	<% when 3 %>
 		<% content_for :title do %>Detalles de Consumo Interno #<%= @order.id %><% end %>
 	<% else %>
-		<% content_for :title do %>Detalles de Pedido #<%= @order.id %><% end %>
+		<% content_for :title do %>Detalles de Pedido #<%= @order.id %>:<%= @order.order_type_id %><% end %>
 <% end %>
 <% content_for :actions do %>
 	<% case @order.order_type_id

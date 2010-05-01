@@ -80,6 +80,7 @@ Audit = AuditLogger.new(logfile)
 #Date::ABBR_DAYNAMES  	=  	%w(Dom Lun Mar Mie Jue Vie Sab)
 
 COMPANY_NAME="Ferretería Salazar Barrera"
+MAX_LINES_PER_COUNT = 30
 MAX_LINES_PER_ORDER = 17
 AUTO_PAY_OFF = true
 CREDITO_FISCAL_LINES_PER_RECEIPT = 6

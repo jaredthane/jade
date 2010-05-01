@@ -74,32 +74,32 @@ class OrdersController < ApplicationController
             }
         end
     end
-  def show_todays_sales
+    def show_todays_sales
 		return false if !allowed(1, 'view')
 		@order_type_id=1
-    @orders = Order.search_todays_sales(params[:search], params[:page])
+        @orders = Order.search_todays_sales(params[:search], params[:page])
 		if @orders.length == 1
 			@order=@orders[0]
 			return false if !allowed(@order.order_type_id, 'view')
 			render :action => 'show_products'
 			return false
 		end
-    respond_to do |format|
-      format.html { render :action => 'index' }
-      format.xml  { render :xml => @orders }
+        respond_to do |format|
+            format.html { render :action => 'index' }
+            format.xml  { render :xml => @orders }
+        end
     end
-  end
-  def pay_off
-		@order = Order.find(params[:id])
-    if @order
-      @order.pay_off
-			flash[:info] = "Pago se ha hecho exitosamente"
-    else
-			flash[:error] = "No hay ningun pedido en el sistema con ese numero"
+    def pay_off
+        @order = Order.find(params[:id])
+        if @order
+            @order.pay_off
+            flash[:info] = "Pago se ha hecho exitosamente"
+        else
+            flash[:error] = "No hay ningun pedido en el sistema con ese numero"
+        end
+        redirect_back_or_default(@order)
+        return false
     end
-    redirect_back_or_default(@order)
-    return false
-  end
   ###################################################################################################
   # Allows user to create a count based on a product listing
   #################################################################################################
@@ -196,45 +196,45 @@ class OrdersController < ApplicationController
       format.xml  { render :xml => @order }
     end
   end
-	def show_history
-    @order = Order.find(params[:id])
-		return false if !allowed(@order.order_type_id, 'view')
-    respond_to do |format|
-      format.html # show_history.html.erb
-      format.xml  { render :xml => @order }
+    def show_history
+        @order = Order.find(params[:id])
+        return false if !allowed(@order.order_type_id, 'view')
+        respond_to do |format|
+            format.html # show_history.html.erb
+            format.xml  { render :xml => @order }
+        end
     end
-  end
 
-  def show_payments
-    @order = Order.find(params[:id])
-		return false if !allowed(@order.order_type_id, 'view')
-    @payments = @order.recent_payments(10)
-    respond_to do |format|
-      format.html # show_payments.html.erb
-      format.xml  { render :xml => @order }
+    def show_payments
+        @order = Order.find(params[:id])
+        return false if !allowed(@order.order_type_id, 'view')
+        @payments = @order.recent_payments(10)
+        respond_to do |format|
+            format.html # show_payments.html.erb
+            format.xml  { render :xml => @order }
+        end
     end
-  end
-  def new
-		return false if !allowed(params[:order_type_id], 'edit')
-		@order_type_id=params[:order_type_id]
-    @order = Order.new(:created_at=>User.current_user.today, :receipt_number=>(User.current_user.location.next_receipt_number||''))
-		if @order_type_id == 1
-			@order.client_id = 3
-		elsif @order_type_id == 2
-			@order.vendor_id = 4
-		end
-    if @order_type_id==5
-    	render :template=>'counts/new'
-    	return false
-    elsif @order_type_id == Order::LABELS
-    	render :template=>'labels/new'
-    	return false
+    def new
+	    return false if !allowed(params[:order_type_id], 'edit')
+	    @order_type_id=params[:order_type_id]
+        @order = Order.new(:created_at=>User.current_user.today, :receipt_number=>(User.current_user.location.next_receipt_number||''))
+	    if @order_type_id == 1
+		    @order.client_id = 3
+	    elsif @order_type_id == 2
+		    @order.vendor_id = 4
+	    end
+        if @order_type_id==5
+	        render :template=>'counts/new'
+	        return false
+        elsif @order_type_id == Order::LABELS
+	        render :template=>'labels/new'
+	        return false
+        end
+        respond_to do |format|
+            format.html # new.html.erb
+            format.xml  { render :xml => @order }
+        end
     end
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @order }
-    end
-  end
     ##################################################################################################
     # Post a Physical Count
     #################################################################################################
@@ -250,23 +250,23 @@ class OrdersController < ApplicationController
             format.html { render :action => "edit" }
         end
     end
-  ##################################################################################################
-  # 
-  #################################################################################################
-  def edit
-    @order = Order.find(params[:id])
-    return false if !allowed(@order.order_type_id, 'edit')
-    if @order.order_type_id == 5
-    	render :template=>'counts/edit'
-    	return false
-    elsif @order.order_type_id == 6
-    	render :template=>'labels/edit'
-    	return false
+    ##################################################################################################
+    # 
+    #################################################################################################
+    def edit
+        @order = Order.find(params[:id])
+        return false if !allowed(@order.order_type_id, 'edit')
+        if @order.order_type_id == 5
+	        render :template=>'counts/edit'
+	        return false
+        elsif @order.order_type_id == 6
+	        render :template=>'labels/edit'
+	        return false
+        end
     end
-  end
-  #################################################################################################
-  # 
-  #################################################################################################
+    #################################################################################################
+    # 
+    #################################################################################################
 	def new_nul_number
 		if User.current_user.location
 			@next = User.current_user.location.next_receipt_number
@@ -287,9 +287,9 @@ class OrdersController < ApplicationController
 		redirect_to orders_url
 		return false
 	end
-  #################################################################################################
-  # 
-  #################################################################################################
+    #################################################################################################
+    # 
+    #################################################################################################
     def create
         return false if !allowed(params["order"]["order_type_id"], 'edit')
         params[:order][:created_at]=untranslate_month(params[:order][:created_at]) if params[:order][:created_at]
@@ -297,7 +297,6 @@ class OrdersController < ApplicationController
         if params[:order][:plines][:new]
             for line in params[:order][:plines][:new] 
                 line[:received]=untranslate_month(line[:received]) if line[:received]
-                logger.debug "Here's DATEASDADADADADADADADADADADADADADAD'" + line[:received].to_s
             end
         end
         if params[:order][:plines][:old]
@@ -306,10 +305,10 @@ class OrdersController < ApplicationController
             end
         end
         @order = Order.new(:order_type_id => params["order"]["order_type_id"], :created_at=>User.current_user.today)
-        logger.debug "before save"
-        logger.debug "params[''order''][''order_type_id'']=#{params["order"]["order_type_id"]}"
-        logger.debug "@order.order_type_id=#{@order.order_type_id}"
-        logger.debug "@order.order_type=#{@order.order_type}"
+#        logger.debug "before save"
+#        logger.debug "params[''order''][''order_type_id'']=#{params["order"]["order_type_id"]}"
+#        logger.debug "@order.order_type_id=#{@order.order_type_id}"
+#        logger.debug "@order.order_type=#{@order.order_type}"
         @order.attrs = params["order"]
         errors = false
         errors = true if !@order.valid?
@@ -359,9 +358,9 @@ class OrdersController < ApplicationController
     end
     errors = false
     @order.attrs=params[:order]
-    xx=@order.save
-    logger.debug "@order.save=#{xx}" 
-	errors = true if !xx
+#    xx=@order.save
+#    logger.debug "@order.save=#{xx}" 
+	errors = true if !@order.save
 	logger.debug "params[:submit_type]:#{params[:submit_type]}"
 	logger.debug "params[:submit_type] == 'post':#{params[:submit_type] == 'post'}"
 	logger.debug "errors#{errors}"
