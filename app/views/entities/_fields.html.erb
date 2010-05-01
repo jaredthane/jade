@@ -103,7 +103,7 @@
 </div>
 <div class="column2-unit-right">
   <% if @entity.entity_type.id == 3 %>
-	  <% if current_user.has_rights('VIEW_ACCOUNTS') %>
+	  <% if current_user.has_right('VIEW_ACCOUNTS') %>
 		  <p>
 		    <b>Cuenta de Ingresos</b><br />
 			  <%= f.text_field :revenue_account_name, :class=> 'lookup field', :id => 'revenue_account_lookup',:style=>'width:281px;' %>

@@ -205,7 +205,7 @@ class OrdersController < ApplicationController
     end
   end
 
-	def show_payments
+  def show_payments
     @order = Order.find(params[:id])
 		return false if !allowed(@order.order_type_id, 'view')
     @payments = @order.recent_payments(10)

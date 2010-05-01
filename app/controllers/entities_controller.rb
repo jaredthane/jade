@@ -324,6 +324,7 @@ class EntitiesController < ApplicationController
     params[:entity][:birth]=untranslate_month(params[:entity][:birth]) if params[:entity][:birth]
     respond_to do |format|
       if @entity.update_attributes(params[:entity])
+        logger.debug "Saved cash_account_name #{@entity.cash_account.id} : #{@entity.cash_account.name}"
         logger.debug "entity_type="+ @entity.entity_type_id.to_s
         logger.debug "entity_type="+ Entity.find(@entity.id).entity_type_id.to_s
         

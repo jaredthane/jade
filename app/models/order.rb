@@ -679,12 +679,12 @@ class Order < ActiveRecord::Base
 					end
 			    accounting_diff = line.price
 				end
-				
+				account_to_charge = self.vendor.expense_account
 				# Do Accounting
 				if accounting_diff != 0
 					inventory = Trans.new(:order_id=>self.id, :user=>User.current_user,:created_at=>date, :description=> 'Cuenta Fisica', :kind_id=>Trans::INVENTORY, :direction => Trans::FORWARD)
 					inventory.posts << Post.new(:account => self.vendor.inventory_account,:created_at=>date, :value=>accounting_diff, :post_type_id => Post::DEBIT)
-					inventory.posts << Post.new(:account => account_to_charge,:created_at=>date, :value=>accounting_diff, :post_type_id => Post::CREDIT)
+					inventory.posts << Post.new(:account => account_to_charge, :created_at=>date, :value=>accounting_diff, :post_type_id => Post::CREDIT)
 					inventory.save
 				end
 			end

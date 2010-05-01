@@ -133,13 +133,16 @@ class Entity < ActiveRecord::Base
         cash_account.name if cash_account
 	end
 	def cash_account_name=(name)
+	    logger.debug "Saving cash_account_name #{name}"
 		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => false, :modifier=>Post::DEBIT}) unless name.blank?
+	    logger.debug "Saved cash_account_name #{self.cash_account.id} : #{self.cash_account.name}"
 #		self.cash_account = Account.find_or_create_by_name(name) unless name.blank?
 	end
 	def client_account_name
         cash_account.name if cash_account
 	end
 	def client_account_name=(name)
+	    logger.debug "Saving cash_account_name #{name}"
 		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => false, :modifier=>Post::DEBIT}) unless name.blank?
 #		self.cash_account = Account.find_or_create_by_name(name) unless name.blank?
 	end
@@ -147,6 +150,7 @@ class Entity < ActiveRecord::Base
  	 cash_account.name if cash_account
 	end
 	def vendor_account_name=(name)
+	    logger.debug "Saving cash_account_name #{name}"
 		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => false, :modifier=>Post::DEBIT}) unless name.blank?
 #		self.cash_account = Account.find_or_create_by_name(name) unless name.blank?
 	end
@@ -168,63 +172,63 @@ class Entity < ActiveRecord::Base
  	 tax_account.name if tax_account
 	end
 	def tax_account_name=(name)
-		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => false, :modifier=>Post::CREDIT}) unless name.blank?
+		self.tax_account = Account.find_by_name_or_create({:name=>name, :is_parent => false, :modifier=>Post::CREDIT}) unless name.blank?
 #		self.tax_account = Account.find_or_create_by_name(name) unless name.blank?
 	end
 	def expense_account_name
  	 expense_account.name if expense_account
 	end
 	def expense_account_name=(name)
-		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => false, :modifier=>Post::DEBIT}) unless name.blank?
+		self.expense_account = Account.find_by_name_or_create({:name=>name, :is_parent => false, :modifier=>Post::DEBIT}) unless name.blank?
 #		self.expense_account = Account.find_or_create_by_name(name) unless name.blank?
 	end
 	def new_individual_client_accounts_parent_name
  	 new_individual_client_accounts_parent.name if new_individual_client_accounts_parent
 	end
 	def new_individual_client_accounts_parent_name=(name)
-		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::DEBIT}) unless name.blank?
+		self.new_individual_client_accounts_parent = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::DEBIT}) unless name.blank?
 #		self.new_individual_client_accounts_parent = Account.find_or_create_by_name(name) unless name.blank?
 	end
 	def new_corporate_client_accounts_parent_name
  	 new_corporate_client_accounts_parent.name if new_corporate_client_accounts_parent
 	end
 	def new_corporate_client_accounts_parent_name=(name)
-		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::DEBIT}) unless name.blank?
+		self.new_corporate_client_accounts_parent = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::DEBIT}) unless name.blank?
 #		self.new_corporate_client_accounts_parent = Account.find_or_create_by_name(name) unless name.blank?
 	end
 	def new_vendor_accounts_parent_name
  	 new_vendor_accounts_parent.name if new_vendor_accounts_parent
 	end
 	def new_vendor_accounts_parent_name=(name)
-		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::CREDIT}) unless name.blank?
+		self.new_vendor_accounts_parent = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::CREDIT}) unless name.blank?
 #		self.new_vendor_accounts_parent = Account.find_or_create_by_name(name) unless name.blank?
 	end
 	def new_employee_accounts_parent_name
  	 new_employee_accounts_parent.name if new_employee_accounts_parent
 	end
 	def new_employee_accounts_parent_name=(name)
-		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::CREDIT}) unless name.blank?
+		self.new_employee_accounts_parent = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::CREDIT}) unless name.blank?
 #		self.new_employee_accounts_parent = Account.find_or_create_by_name(name) unless name.blank?
 	end
 	def client_accounts_group_name
  	 client_accounts_group.name if client_accounts_group
 	end
 	def client_accounts_group_name=(name)
-		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::DEBIT}) unless name.blank?
+		self.client_accounts_group = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::DEBIT}) unless name.blank?
 #		self.client_accounts_group = Account.find_or_create_by_name(name) unless name.blank?
 	end
 	def vendor_accounts_group_name
  	 vendor_accounts_group.name if vendor_accounts_group
 	end
 	def vendor_accounts_group_name=(name)
-		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::CREDIT}) unless name.blank?
+		self.vendor_accounts_group = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::CREDIT}) unless name.blank?
 #		self.vendor_accounts_group = Account.find_or_create_by_name(name) unless name.blank?
 	end
 	def employee_accounts_group_name
  	 employee_accounts_group.name if employee_accounts_group
 	end
 	def employee_accounts_group_name=(name)
-		self.cash_account = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::CREDIT}) unless name.blank?
+		self.employee_accounts_group = Account.find_by_name_or_create({:name=>name, :is_parent => true, :modifier=>Post::CREDIT}) unless name.blank?
 #		self.employee_accounts_group = Account.find_or_create_by_name(name) unless name.blank?
 	end
 	
