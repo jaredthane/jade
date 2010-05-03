@@ -303,7 +303,6 @@ class Order < ActiveRecord::Base
                     end
                     # Here we have to make sure we multiply the quantities by order.active to make them zero if the order is deactivated
                     revenue_accts={}
-                    # TODO This section had some total_prices, we need to check if any .prices should be changed to .unit_price
                     for line in self.lines
                         r=line.revenue_account(self).id
                         if line.old

@@ -13,7 +13,8 @@ pdf.text "NIT:" + @site.nit_number, :align => :center if @site.nit
 pdf.text "Registro:" + @site.register, :align => :center if @site.register
 pdf.text @site.giro, :align => :center if @site.giro
 @revenue=0.00
-@expenses=0.00
+@expense=0.00
+@tax=0.00
 
 pdf.text " "
 #def series_to_list(series)
@@ -81,7 +82,8 @@ def show_orders_info(tipo, title)
 #		total=Order.find(:all, :conditions=>(c + cc), :joins=>j, :select=>'sum(grand_total) total')
 		total=Order.sum(:grand_total, :conditions=>(c), :joins=>j)
 		@revenue += Order.sum(:total_revenue, :conditions=>(c), :joins=>j)
-		@expenses += Order.sum(:total_expense, :conditions=>(c), :joins=>j)
+		@expense += Order.sum(:total_expense, :conditions=>(c), :joins=>j)
+		@tax += Order.sum('total_revenue*tax_rate', :conditions=>(c), :joins=>j).to_f
 		@box << [title,"","del #{group.first} al #{group.last}",@x.number_to_currency(total)]
 		group_total += total
 		title=""
@@ -157,10 +159,10 @@ for order in series
 		@box << ["","",order.receipt_number,"(#{@x.number_to_currency(value)})"]
 	end
 end
-@box << ["","","Total","(#{@x.number_to_currency(total)})"] if series.length>1
+@box << ["","","Total:","(#{@x.number_to_currency(total)})"] if series.length>1
 grand_total-=total
 if series.length==0
-  @box << ["Devoluciones","","Total","$0.00"]
+  @box << ["Devoluciones","","Total:","$0.00"]
 end
 
 
@@ -169,9 +171,10 @@ end
 #################################################################################################
 @box << ["","","",""]
 @box << ["","","",""]
-@box << ["","","Total Ganancia",@x.number_to_currency(@revenue)]
-@box << ["","","Total Costo",@x.number_to_currency(@expense)]
-@box << ["","","Total",@x.number_to_currency(grand_total)]
+@box << ["","","Total Ganancia:",@x.number_to_currency(@revenue)]
+@box << ["","","Total Costo:",@x.number_to_currency(@expense)]
+@box << ["","","Total Impuestos:",@x.number_to_currency(@tax)]
+@box << ["","","Total:",@x.number_to_currency(grand_total)]
 @box << ["Gastos Eventuales","","","($____.___)"]
 @box << ["Anticipos Sueldos","","","($____.___)"]
 @box << ["Total de Corte","","","$____.___"]
