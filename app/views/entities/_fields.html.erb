@@ -141,7 +141,7 @@
 		<%= f.hidden_field :entity_type_id, :value => @entity.entity_type_id %>
 	<% end %>
 	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 or @entity.entity_type_id == 1 %>
-	  <% if current_user.has_rights('VIEW_ACCOUNTS') %>
+	  <% if current_user.has_right('VIEW_ACCOUNTS') %>
 	    <p>
 	    	<% if @entity.entity_type_id == 2 or @entity.entity_type_id == 5 %>
         	<b>Cuenta del Cliente</b><br />
